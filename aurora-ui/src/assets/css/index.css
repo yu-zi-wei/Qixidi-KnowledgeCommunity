@@ -1,0 +1,207 @@
+
+/* ------------------------------------全局定义---------------------------------------- */
+
+/* 将具有默认margin和padding的标记置零，所有标记的margin、padding都在使用时具体定义 */
+
+*{ margin:0;padding:0;}
+
+/* 修正IE5.x和IE6的斜体溢出bug */
+
+* html body{ overflow:visible;}
+
+* html iframe, * html frame{ overflow:auto;}
+
+* html frameset{ overflow:hidden;}
+
+/* 常用标签，基本标签默认样式取消，HTML标签，取消基本标签默认样式，防止不同浏览器显示效果不同，text-align:center; 解决不同浏览器居中问题 */
+
+body{ color:#000;
+  background:#f4f5f5;
+  /*font:12px/22px Verdana,Arial,sans-serif,"Times New Roman",宋体; */
+  text-align:center;}
+
+body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div,tr{ margin:0; padding:0;}
+input,select{ font-size:12px; vertical-align:middle;}
+/* 设置内容左对齐，恢复因BODY设置剧中产生的继承 */
+
+body div{ text-align:left;}
+/* 标签属性，textarea,input 强制输入时内容超出时换行 */
+
+textarea,input{ word-wrap:break-word; word-break:break-all; padding:0px;}
+
+/* 清除ul列表标记的样式，ul列表更多的用在不需要列表前置符号的样式里 */
+
+li{ list-style-type:none;}
+
+/* 定义图片边框，当图片作为链接内容被填充时，会有默认边框出现，重定义掉 */
+
+img{ border:0 none;}
+
+/* 定义默认的链接样式，仅仅是作为默认样式提供，可以在各自的实例中覆盖掉 */
+
+/* 去掉链接的虚线框 */
+
+a { outline:none; star:expression(this.onFocus=this.blur());}
+
+/* 定义H系列标签，覆盖H系列标签默认属性 */
+
+h1{ font-size:24px;}
+
+h2{ font-size:20px;}
+
+h3{ font-size:18px;}
+
+h4{ font-size:16px;}
+
+h5{ font-size:14px;}
+
+h6{ font-size:12px;}
+
+.mt-1{
+  margin-top: 1px;
+}
+.mt-2{
+  margin-top: 2px;
+}
+.mt-3{
+  margin-top: 3px;
+}
+.mt-4{
+  margin-top: 4px;
+}
+.mt-5{
+  margin-top: 5px;
+}
+.mt-6{
+  margin-top: 6px;
+}
+.mt-7{
+  margin-top: 7px;
+}
+.mt-8{
+  margin-top: 8px;
+}
+.mt-9{
+  margin-top: 9px;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.mt-15{
+  margin-top: 15px;
+}
+.mt-20{
+  margin-top: 20px;
+}
+
+.mb-1{
+  margin-bottom: 1px;
+}
+.mb-2{
+  margin-bottom: 2px;
+}
+.mb-3{
+  margin-bottom: 3px;
+}
+.mb-4{
+  margin-bottom: 4px;
+}
+.mb-5{
+  margin-bottom: 5px;
+}
+.mb-6{
+  margin-bottom: 6px;
+}
+.mb-7{
+  margin-bottom: 7px;
+}
+.mb-8{
+  margin-bottom: 8px;
+}
+.mb-9{
+  margin-bottom: 9px;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+.mb-15{
+  margin-bottom: 15px;
+}
+.mb-20{
+  margin-bottom: 20px;
+}
+
+
+.ml-1{
+  margin-left: 1px;
+}
+.ml-2{
+  margin-left: 2px;
+}
+.ml-3{
+  margin-left: 3px;
+}
+.ml-4{
+  margin-left: 4px;
+}
+.ml-5{
+  margin-left: 5px;
+}
+.ml-6{
+  margin-left: 6px;
+}
+.ml-7{
+  margin-left: 7px;
+}
+.ml-8{
+  margin-left: 8px;
+}
+.ml-9{
+  margin-left: 9px;
+}
+.ml-10{
+  margin-left: 10px;
+}
+.ml-15{
+  margin-left: 15px;
+}
+.ml-20{
+  margin-left: 20px;
+}
+
+.mr-1{
+  margin-right: 1px;
+}
+.mr-2{
+  margin-right: 2px;
+}
+.mr-3{
+  margin-right: 3px;
+}
+.mr-4{
+  margin-right: 4px;
+}
+.mr-5{
+  margin-right: 5px;
+}
+.mr-6{
+  margin-right: 6px;
+}
+.mr-7{
+  margin-right: 7px;
+}
+.mr-8{
+  margin-right: 8px;
+}
+.mr-9{
+  margin-right: 9px;
+}
+.mr-10{
+  margin-right: 10px;
+}
+.mr-15{
+  margin-right: 15px;
+}
+.mr-20{
+  margin-right: 20px;
+}
