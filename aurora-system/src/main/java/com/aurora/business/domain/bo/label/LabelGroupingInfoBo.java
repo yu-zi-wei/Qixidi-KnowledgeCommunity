@@ -23,7 +23,7 @@ import javax.validation.constraints.*;
 public class LabelGroupingInfoBo extends BaseEntity {
 
     /**
-     * id
+     * id。
      */
     @ApiModelProperty(value = "id", required = true)
     @NotNull(message = "id不能为空", groups = { EditGroup.class })
@@ -46,7 +46,7 @@ public class LabelGroupingInfoBo extends BaseEntity {
     /**
      * 描述
      */
-    @ApiModelProperty(value = "描述", required = true)
+    @ApiModelProperty(value = "描述", required  = true)
     @NotBlank(message = "描述不能为空", groups = { AddGroup.class, EditGroup.class })
     private String groupingDescribe;
 

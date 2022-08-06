@@ -1,32 +1,32 @@
 package com.aurora.web.controller.business.label;
 
 
-import java.util.List;
-import java.util.Arrays;
-
 import com.aurora.business.domain.bo.label.LabelGroupingInfoBo;
 import com.aurora.business.domain.vo.label.LabelGroupingInfoVo;
 import com.aurora.business.service.label.ILabelGroupingInfoService;
-import lombok.RequiredArgsConstructor;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.*;
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
-import com.aurora.common.annotation.RepeatSubmit;
 import com.aurora.common.annotation.Log;
+import com.aurora.common.annotation.RepeatSubmit;
 import com.aurora.common.core.controller.BaseController;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
+import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import com.aurora.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 标签分组信息Controller
