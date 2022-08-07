@@ -175,7 +175,7 @@ public class SysLoginController {
     }
 
     /**
-     * 第三方登录d
+     * 第三方登录
      *
      * @param response
      * @throws IOException
@@ -187,7 +187,7 @@ public class SysLoginController {
             return R.fail("请勿重复登录！");
         }
         AuthRequest authRequest = getAuthRequest(source);
-        //生成gitee的授权url
+        //生成授权url
         String authorizeUrl = authRequest.authorize(AuthStateUtils.createState());
         //将这个url返回给前端Vue,由Vue去执行 授权页
         Map<String, String> map = new HashMap<>();
@@ -259,11 +259,19 @@ public class SysLoginController {
      */
     @RequestMapping("/oauth/isLogin")
     public SaResult isLogin() {
+        Map<String, Object> map = new HashMap<>();
         System.out.println("获取当前会话的token信息参数======>" + StpUtil.getTokenInfo());
         System.out.println("uuid======>" + StpUtil.getLoginIdAsString());
         System.out.println("token信息参数======>" + StpUtil.getTokenInfo());
         System.out.println("tripartiteUser信息======>" + LoginHelper.getTripartiteUser());
-        return SaResult.ok("是否登录：" + StpUtil.isLogin()).setData(StpUtil.isLogin());
+        System.out.println("user信息======>" + LoginHelper.getLoginUser());
+        Boolean isBackstage = LoginHelper.getLoginUser() == null ? false : true;
+        map.put("uuid", StpUtil.getLoginIdAsString());
+        map.put("tokenInfo", StpUtil.getTokenInfo());
+        map.put("isLogin", StpUtil.isLogin());
+        map.put("isBackstage", isBackstage);
+        return SaResult.ok().setData(map);
+
     }
 
 }
