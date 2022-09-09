@@ -1,18 +1,18 @@
 package com.aurora.common.core.domain.entity;
 
 
+import com.aurora.common.helper.LoginHelper;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.aurora.common.core.validate.AddGroup;
-import com.aurora.common.core.validate.EditGroup;
-import com.aurora.common.helper.LoginHelper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -25,20 +25,28 @@ public class TripartiteUser {
     /**
      * 用户第三方系统的唯一id
      */
-    @ApiModelProperty(value = "用户第三方系统的唯一id", required = true)
-    @NotBlank(message = "用户第三方系统的唯一id不能为空", groups = {EditGroup.class})
     @TableId(value = "uuid")
     private String uuid;
     /**
      * 用户名
      */
-    @ApiModelProperty(value = "用户名", required = true)
-    @NotBlank(message = "用户名不能为空", groups = {AddGroup.class, EditGroup.class})
     private String username;
     /**
      * 用户昵称
      */
     private String nickname;
+    /**
+     * 手机号
+     */
+    private String phone;
+    /**
+     * 密码
+     */
+    private String password;
+    /**
+     * 盐
+     */
+    private String salt;
     /**
      * 用户头像
      */
@@ -70,13 +78,37 @@ public class TripartiteUser {
     /**
      * 用户来源
      */
-    @ApiModelProperty(value = "用户来源", required = true)
-    @NotBlank(message = "用户来源不能为空", groups = {AddGroup.class, EditGroup.class})
     private String source;
     /**
      * 用户类型
      */
     private String userType;
+    /**
+     * 用户状态（0：正常，1：冻结，2：已删除）
+     */
+    private Integer state;
+    /**
+     * 最后登录ip
+     */
+    private String loginIp;
+    /**
+     * 角色（1，普通用户，2，vip用户）
+     */
+    private Long roleId;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * 获取登录id

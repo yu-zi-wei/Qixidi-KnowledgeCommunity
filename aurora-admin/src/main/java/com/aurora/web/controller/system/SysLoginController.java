@@ -4,14 +4,17 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.common.constant.Constants;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.domain.entity.SysMenu;
 import com.aurora.common.core.domain.entity.SysUser;
 import com.aurora.common.core.domain.entity.TripartiteUser;
 import com.aurora.common.core.domain.model.LoginBody;
+import com.aurora.common.core.domain.model.LoginUserMain;
+import com.aurora.common.core.domain.model.RegisterUserMain;
 import com.aurora.common.core.domain.model.SmsLoginBody;
-import com.aurora.common.core.domain.vo.TripartiteUserVo;
+import com.aurora.common.enums.UserStatus;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.system.domain.vo.RouterVo;
 import com.aurora.system.service.*;
@@ -92,6 +95,24 @@ public class SysLoginController {
         return R.ok(ajax);
     }
 
+    @ApiOperation("前台密码登录")
+    @PostMapping("/oauth/front-desk/login")
+    public R<Map<String, Object>> frontDeskLogin(@Validated @RequestBody LoginUserMain loginUserMain) {
+        Map<String, Object> ajax = new HashMap<>();
+        // 登录
+        iTripartiteUserService.frontDeskLogin(loginUserMain);
+        //返回token
+        ajax.put(Constants.TOKEN, StpUtil.getTokenValue());
+        return R.ok(ajax);
+    }
+
+    @ApiOperation("前台注册")
+    @PostMapping("/oauth/front-desk/register")
+    public R register(@Validated @RequestBody RegisterUserMain registerUserMain) {
+        registerUserMain.setUserType(tripartiteUserType);
+        return iTripartiteUserService.register(registerUserMain);
+    }
+
     /**
      * 小程序登录(示例)
      *
@@ -138,10 +159,14 @@ public class SysLoginController {
     @ApiOperation("获取用户信息")
     @GetMapping("getInfo")
     public R<Map<String, Object>> getInfo() {
-        Map<String, String> userMap = LoginHelper.getUserMapId();
-        String userType = userMap.get("userType");
-        if (userType.equals(tripartiteUserType)) {
-            TripartiteUserVo tripartiteUser = iTripartiteUserService.queryById(userMap.get("uuId"));
+        if (!StpUtil.isLogin()) return null;
+        String uuidString = StpUtil.getLoginIdAsString();
+        if (uuidString == null) return null;
+        int index = uuidString.indexOf(":");
+        String uuid = uuidString.substring(index + 1);
+        String type = uuidString.substring(0, index);
+        if (type.equals(tripartiteUserType)) {
+            TripartiteUserVo tripartiteUser = iTripartiteUserService.queryById(uuid);
             Map<String, Object> ajax = new HashMap<>();
             Set<String> roles = new HashSet<>();
             ajax.put("user", tripartiteUser);
@@ -213,10 +238,13 @@ public class SysLoginController {
             .setGender(authResponse.getData().getGender().getCode())
             .setRemark(authResponse.getData().getRemark())
             .setSource(authResponse.getData().getSource())
+            .setUpdateTime(new Date())
+            .setRoleId(UserStatus.GENERAL_USER.getLogCode())
             .setUserType(tripartiteUserType);
         iTripartiteUserService.oauthLogin(tripartiteUser);
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
         response.sendRedirect(url + "/index/transfer?key=" + authResponse.getData().getUuid() + "&token=" + saTokenInfo.getTokenValue());
+        System.out.println("response:" + response);
         return authResponse;
     }
 
@@ -259,19 +287,12 @@ public class SysLoginController {
      */
     @RequestMapping("/oauth/isLogin")
     public SaResult isLogin() {
-        Map<String, Object> map = new HashMap<>();
-        System.out.println("获取当前会话的token信息参数======>" + StpUtil.getTokenInfo());
-        System.out.println("uuid======>" + StpUtil.getLoginIdAsString());
-        System.out.println("token信息参数======>" + StpUtil.getTokenInfo());
-        System.out.println("tripartiteUser信息======>" + LoginHelper.getTripartiteUser());
-        System.out.println("user信息======>" + LoginHelper.getLoginUser());
-        Boolean isBackstage = LoginHelper.getLoginUser() == null ? false : true;
-        map.put("uuid", StpUtil.getLoginIdAsString());
-        map.put("tokenInfo", StpUtil.getTokenInfo());
-        map.put("isLogin", StpUtil.isLogin());
-        map.put("isBackstage", isBackstage);
-        return SaResult.ok().setData(map);
-
+        String loginIdAsString = StpUtil.getLoginIdAsString();
+        if (loginIdAsString == null) {
+            return null;
+        }
+        int index = loginIdAsString.indexOf(":");
+        String after = loginIdAsString.substring(index + 1);
+        return SaResult.ok().setData(iTripartiteUserService.isLogin());
     }
-
 }

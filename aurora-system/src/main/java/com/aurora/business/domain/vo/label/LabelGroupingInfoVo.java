@@ -8,12 +8,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 
 /**
  * 标签分组信息视图对象 label_grouping_info
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 @Data
 @ApiModel("标签分组信息视图对象")
@@ -51,6 +53,8 @@ public class LabelGroupingInfoVo {
     @ApiModelProperty("描述")
     private String groupingDescribe;
 
+    private Long createBy;
+
+    private Date createTime;
 
 }
-

@@ -8,7 +8,7 @@ RUN mkdir -p /aurora/server/temp
 
 WORKDIR /aurora/server
 
-EXPOSE 8080
+EXPOSE 9001
 
 ADD ./target/aurora-admin.jar ./app.jar
 

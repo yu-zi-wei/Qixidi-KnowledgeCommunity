@@ -2,8 +2,8 @@ package com.aurora.business.service.label;
 
 import com.aurora.business.domain.bo.label.LabelGroupingInfoBo;
 import com.aurora.business.domain.vo.label.LabelGroupingInfoVo;
-import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * 标签分组信息Service接口
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 public interface ILabelGroupingInfoService {
 
@@ -65,4 +65,3 @@ public interface ILabelGroupingInfoService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 }
-

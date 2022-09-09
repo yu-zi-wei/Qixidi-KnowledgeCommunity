@@ -3,8 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aurora.business.mapper.label.LabelGroupingInfoMapper">
-
-    <resultMap type="com.aurora.business.domain.label.LabelGroupingInfo" id="LabelGroupingInfoResult">
+    <resultMap type="com.aurora.business.domain.entity.label.LabelGroupingInfo" id="LabelGroupingInfoResult">
         <result property="id" column="id"/>
         <result property="groupingName" column="grouping_name"/>
         <result property="state" column="state"/>
@@ -12,6 +11,4 @@
         <result property="createTime" column="create_time"/>
         <result property="createBy" column="create_by"/>
     </resultMap>
-
-
 </mapper>

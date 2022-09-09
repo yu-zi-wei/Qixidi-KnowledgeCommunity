@@ -1,7 +1,7 @@
 --- # 监控中心配置
 spring.boot.admin.client:
   # 增加客户端开关
-  enabled: true
+  enabled: false
   url: http://localhost:9090/admin
   instance:
     service-host-type: IP
@@ -48,9 +48,9 @@ spring:
           driverClassName: com.mysql.cj.jdbc.Driver
           # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
           # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
-          url: jdbc:mysql://47.99.193.119:3306/aurora_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
+          url: jdbc:mysql://localhost:3306/aurora_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
           username: root
-          password: root
+          password: 123
         # 从库数据源
         slave:
           lazy: true
@@ -125,14 +125,14 @@ spring.datasource.druid:
 spring:
   redis:
     # 地址
-#    host: 127.0.0.1
-    host: 47.99.193.119
+    host: 127.0.0.1
+    #    host: 47.99.193.119
     # 端口，默认为6379
     port: 6379
     # 数据库索引
     database: 1
     # 密码
-    password: 123456
+    #    password: 123456
     # 连接超时时间 -
     timeout: 10s
     # 是否开启ssl
@@ -157,3 +157,20 @@ redisson:
     timeout: 3000
     # 发布和订阅连接池大小
     subscriptionConnectionPoolSize: 50
+
+--- # JustAuth 第三方登录配置
+JustAuth:
+  # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
+  callBackBaseUrl: http://127.0.0.1:9001/oauth/callback
+  # 前端中转地址 与前端默认地址保持一致
+  url: http://localhost
+  # 第三方登录类型 用于获取用户信息方式判断
+  tripartiteUserType: tripartite_user
+--- # JustAuth 第三方登录配置
+#JustAuth:
+#  # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
+#  callBackBaseUrl: http://47.99.193.119:9001/oauth/callback
+#  # 前端中转地址 与前端默认地址保持一致
+#  url: http://47.99.193.119:9001
+#  # 第三方登录类型 用于获取用户信息方式判断 P
+#  tripartiteUserType: tripartite_user

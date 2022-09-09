@@ -1,4 +1,4 @@
-package com.aurora.common.core.domain.vo;
+package com.aurora.business.domain.vo.user;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -19,6 +19,7 @@ import lombok.Data;
 @ApiModel("【请填写功能名称】视图对象")
 @ExcelIgnoreUnannotated
 public class TripartiteUserVo {
+
 
     private static final long serialVersionUID = 1L;
 
@@ -42,6 +43,27 @@ public class TripartiteUserVo {
     @ExcelProperty(value = "用户昵称")
     @ApiModelProperty("用户昵称")
     private String nickname;
+
+    /**
+     * 手机号
+     */
+    @ExcelProperty(value = "手机号")
+    @ApiModelProperty("手机号")
+    private String phone;
+
+    /**
+     * 密码
+     */
+    @ExcelProperty(value = "密码")
+    @ApiModelProperty("密码")
+    private String password;
+
+    /**
+     * 盐
+     */
+    @ExcelProperty(value = "盐")
+    @ApiModelProperty("盐")
+    private String salt;
 
     /**
      * 用户头像
@@ -103,6 +125,31 @@ public class TripartiteUserVo {
     /**
      * 用户类型
      */
+    @ExcelProperty(value = "用户类型")
+    @ApiModelProperty("用户类型")
     private String userType;
+
+    /**
+     * 用户状态（0：正常，1：冻结，2：已删除）
+     */
+    @ExcelProperty(value = "用户状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：正常，1：冻结，2：已删除")
+    @ApiModelProperty("用户状态（0：正常，1：冻结，2：已删除）")
+    private Integer state;
+
+    /**
+     * 最后登录ip
+     */
+    @ExcelProperty(value = "最后登录ip")
+    @ApiModelProperty("最后登录ip")
+    private String loginIp;
+
+    /**
+     * 角色（1，普通用户，2，vip用户）
+     */
+    @ExcelProperty(value = "角色", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "1=，普通用户，2，vip用户")
+    @ApiModelProperty("角色（1，普通用户，2，vip用户）")
+    private Long roleId;
 
 }

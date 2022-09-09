@@ -38,6 +38,7 @@
         <dynamic-ds.version>3.5.1</dynamic-ds.version>
         <tlog.version>1.3.6</tlog.version>
         <xxl-job.version>2.3.0</xxl-job.version>
+        <JustAuth.version>1.16.5</JustAuth.version>
 
         <!-- jdk11 缺失依赖 jaxb-->
         <jaxb.version>3.0.1</jaxb.version>
@@ -61,12 +62,11 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
-
             <!--        JustAuth第三方登录开放平台-->
             <dependency>
                 <groupId>me.zhyd.oauth</groupId>
                 <artifactId>JustAuth</artifactId>
-                <version>1.16.5</version>
+                <version>${JustAuth.version}</version>
             </dependency>
 
             <!-- SpringBoot的依赖配置-->

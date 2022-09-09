@@ -65,7 +65,6 @@ public class SysOssController extends BaseController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "file", value = "文件", paramType = "query", dataTypeClass = File.class, required = true)
     })
-    @SaCheckPermission("system:oss:upload")
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping("/upload")
     public R<Map<String, String>> upload(@RequestPart("file") MultipartFile file) {
@@ -112,8 +111,8 @@ public class SysOssController extends BaseController {
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")
     public R<Void> remove(@ApiParam("OSS对象ID串")
-                                   @NotEmpty(message = "主键不能为空")
-                                   @PathVariable Long[] ossIds) {
+                          @NotEmpty(message = "主键不能为空")
+                          @PathVariable Long[] ossIds) {
         return toAjax(iSysOssService.deleteWithValidByIds(Arrays.asList(ossIds), true) ? 1 : 0);
     }
 

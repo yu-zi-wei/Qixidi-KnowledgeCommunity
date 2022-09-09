@@ -1,6 +1,6 @@
 package com.aurora.web.controller.business.label;
 
-
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aurora.business.domain.bo.label.LabelGroupingInfoBo;
 import com.aurora.business.domain.vo.label.LabelGroupingInfoVo;
 import com.aurora.business.service.label.ILabelGroupingInfoService;
@@ -31,8 +31,8 @@ import java.util.List;
 /**
  * 标签分组信息Controller
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 @Validated
 @Api(value = "标签分组信息控制器", tags = {"标签分组信息管理"})
@@ -56,6 +56,7 @@ public class LabelGroupingInfoController extends BaseController {
      * 导出标签分组信息列表
      */
     @ApiOperation("导出标签分组信息列表")
+    @SaCheckPermission("system:groupingInfo:export")
     @Log(title = "标签分组信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated LabelGroupingInfoBo bo, HttpServletResponse response) {
@@ -67,6 +68,7 @@ public class LabelGroupingInfoController extends BaseController {
      * 获取标签分组信息详细信息
      */
     @ApiOperation("获取标签分组信息详细信息")
+    @SaCheckPermission("system:groupingInfo:query")
     @GetMapping("/{id}")
     public R<LabelGroupingInfoVo> getInfo(@ApiParam("主键")
                                           @NotNull(message = "主键不能为空")
@@ -78,6 +80,7 @@ public class LabelGroupingInfoController extends BaseController {
      * 新增标签分组信息
      */
     @ApiOperation("新增标签分组信息")
+    @SaCheckPermission("system:groupingInfo:add")
     @Log(title = "标签分组信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -89,6 +92,7 @@ public class LabelGroupingInfoController extends BaseController {
      * 修改标签分组信息
      */
     @ApiOperation("修改标签分组信息")
+    @SaCheckPermission("system:groupingInfo:edit")
     @Log(title = "标签分组信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -100,6 +104,7 @@ public class LabelGroupingInfoController extends BaseController {
      * 删除标签分组信息
      */
     @ApiOperation("删除标签分组信息")
+    @SaCheckPermission("system:groupingInfo:remove")
     @Log(title = "标签分组信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public R<Void> remove(@ApiParam("主键串")

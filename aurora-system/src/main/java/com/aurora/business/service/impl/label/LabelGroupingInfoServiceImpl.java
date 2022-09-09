@@ -2,28 +2,30 @@ package com.aurora.business.service.impl.label;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.aurora.business.domain.bo.label.LabelGroupingInfoBo;
-import com.aurora.business.domain.label.LabelGroupingInfo;
+import com.aurora.business.domain.entity.label.LabelGroupingInfo;
 import com.aurora.business.domain.vo.label.LabelGroupingInfoVo;
 import com.aurora.business.mapper.label.LabelGroupingInfoMapper;
 import com.aurora.business.service.label.ILabelGroupingInfoService;
-import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.domain.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.aurora.common.core.page.TableDataInfo;
+import com.aurora.common.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 标签分组信息Service业务层处理
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 @RequiredArgsConstructor
 @Service
@@ -38,7 +40,7 @@ public class LabelGroupingInfoServiceImpl implements ILabelGroupingInfoService {
      * @return 标签分组信息
      */
     @Override
-    public LabelGroupingInfoVo queryById(Long id){
+    public LabelGroupingInfoVo queryById(Long id) {
         return baseMapper.selectVoById(id);
     }
 
@@ -111,8 +113,9 @@ public class LabelGroupingInfoServiceImpl implements ILabelGroupingInfoService {
      *
      * @param entity 实体类数据
      */
-    private void validEntityBeforeSave(LabelGroupingInfo entity){
-        //TODO 做一些数据校验,如唯一约束
+    private void validEntityBeforeSave(LabelGroupingInfo entity) {
+        entity.setCreateTime(new Date());
+        entity.setCreateBy(LoginHelper.getUserId());
     }
 
     /**
@@ -123,7 +126,7 @@ public class LabelGroupingInfoServiceImpl implements ILabelGroupingInfoService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;

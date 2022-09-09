@@ -1,14 +1,18 @@
 package com.aurora.system.service;
 
 
+import com.aurora.business.domain.bo.user.TripartiteUserBo;
+import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.common.core.domain.PageQuery;
-import com.aurora.common.core.domain.bo.TripartiteUserBo;
+import com.aurora.common.core.domain.R;
 import com.aurora.common.core.domain.entity.TripartiteUser;
-import com.aurora.common.core.domain.vo.TripartiteUserVo;
+import com.aurora.common.core.domain.model.LoginUserMain;
+import com.aurora.common.core.domain.model.RegisterUserMain;
 import com.aurora.common.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 【请填写功能名称】Service接口
@@ -63,4 +67,10 @@ public interface ITripartiteUserService {
     Boolean deleteWithValidByIds(Collection<String> ids, Boolean isValid);
 
     void oauthLogin(TripartiteUser tripartiteUser);
+
+    Map isLogin();
+
+    void frontDeskLogin(LoginUserMain loginUserMain);
+
+    R register(RegisterUserMain registerUserMain);
 }

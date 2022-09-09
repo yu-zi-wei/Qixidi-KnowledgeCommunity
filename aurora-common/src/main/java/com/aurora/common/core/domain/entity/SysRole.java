@@ -2,10 +2,7 @@ package com.aurora.common.core.domain.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.aurora.common.annotation.ExcelDictFormat;
 import com.aurora.common.constant.UserConstants;
 import com.aurora.common.convert.ExcelDictConvert;
@@ -37,7 +34,7 @@ public class SysRole extends BaseEntity {
      */
     @ApiModelProperty(value = "角色ID")
     @ExcelProperty(value = "角色序号")
-    @TableId(value = "role_id")
+    @TableId(value = "role_id", type = IdType.AUTO)
     private Long roleId;
 
     /**

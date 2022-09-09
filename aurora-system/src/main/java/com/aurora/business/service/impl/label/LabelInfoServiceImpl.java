@@ -1,35 +1,42 @@
 package com.aurora.business.service.impl.label;
 
+
 import cn.hutool.core.bean.BeanUtil;
 import com.aurora.business.domain.bo.label.LabelInfoBo;
-import com.aurora.business.domain.label.LabelInfo;
+import com.aurora.business.domain.entity.label.LabelGroupingInfo;
+import com.aurora.business.domain.entity.label.LabelInfo;
 import com.aurora.business.domain.vo.label.LabelInfoVo;
+import com.aurora.business.mapper.label.LabelGroupingInfoMapper;
 import com.aurora.business.mapper.label.LabelInfoMapper;
 import com.aurora.business.service.label.ILabelInfoService;
-import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.domain.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.aurora.common.core.page.TableDataInfo;
+import com.aurora.common.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * 标签信息Service业务层处理
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 @RequiredArgsConstructor
 @Service
 public class LabelInfoServiceImpl implements ILabelInfoService {
 
     private final LabelInfoMapper baseMapper;
+    private final LabelGroupingInfoMapper labelGroupingInfoMapper;
 
     /**
      * 查询标签信息
@@ -38,7 +45,7 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
      * @return 标签信息
      */
     @Override
-    public LabelInfoVo queryById(Long id){
+    public LabelInfoVo queryById(Long id) {
         return baseMapper.selectVoById(id);
     }
 
@@ -52,6 +59,13 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
     public TableDataInfo<LabelInfoVo> queryPageList(LabelInfoBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<LabelInfo> lqw = buildQueryWrapper(bo);
         Page<LabelInfoVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        List<LabelGroupingInfo> labelGroupingInfos = labelGroupingInfoMapper.selectList();
+        Map<Long, String> collect = labelGroupingInfos.stream().collect(Collectors.toMap(LabelGroupingInfo::getId, LabelGroupingInfo::getGroupingName));
+        result.getRecords().forEach(item -> {
+            if (collect.get(item.getLabelGroupingId()) != null) {
+                item.setGroupingName(collect.get(item.getLabelGroupingId()));
+            }
+        });
         return TableDataInfo.build(result);
     }
 
@@ -113,8 +127,9 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
      *
      * @param entity 实体类数据
      */
-    private void validEntityBeforeSave(LabelInfo entity){
-        //TODO 做一些数据校验,如唯一约束
+    private void validEntityBeforeSave(LabelInfo entity) {
+        entity.setCreateTime(new Date());
+        entity.setCreateBy(LoginHelper.getUserId());
     }
 
     /**
@@ -125,7 +140,7 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;

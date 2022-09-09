@@ -6,7 +6,11 @@ package com.aurora.common.enums;
  * @author ruoyi
  */
 public enum UserStatus {
-    OK("0", "正常"), DISABLE("1", "停用"), DELETED("2", "删除");
+    OK("0", "正常"),
+    DISABLE("1", "停用"),
+    DELETED("2", "删除"),
+    GENERAL_USER("1", "普通用户"),
+    VIP_USER("2", "vip用户");
 
     private final String code;
     private final String info;
@@ -18,6 +22,14 @@ public enum UserStatus {
 
     public String getCode() {
         return code;
+    }
+
+    public Long getLogCode() {
+        return Long.valueOf(code);
+    }
+
+    public Integer getIntegerCode() {
+        return Integer.valueOf(code);
     }
 
     public String getInfo() {

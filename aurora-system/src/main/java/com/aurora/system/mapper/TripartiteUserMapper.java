@@ -1,7 +1,7 @@
 package com.aurora.system.mapper;
 
 import com.aurora.common.core.domain.entity.TripartiteUser;
-import com.aurora.common.core.domain.vo.TripartiteUserVo;
+import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.common.core.mapper.BaseMapperPlus;
 
 /**

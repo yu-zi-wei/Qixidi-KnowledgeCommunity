@@ -2,6 +2,7 @@ package com.aurora.framework.handler;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpStatus;
+import com.aurora.common.core.domain.entity.TripartiteUser;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.aurora.common.core.domain.BaseEntity;
 import com.aurora.common.core.domain.model.LoginUser;
@@ -32,7 +33,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 baseEntity.setCreateTime(current);
                 baseEntity.setUpdateTime(current);
                 String username = StringUtils.isNotBlank(baseEntity.getCreateBy())
-                    ? baseEntity.getCreateBy() : getLoginUsername();
+                    ? baseEntity.getCreateBy() : getLoginUsername() == null ? getTripartiteUserName() : getLoginUsername();
                 // 当前已登录 且 创建人为空 则填充
                 baseEntity.setCreateBy(username);
                 // 当前已登录 且 更新人为空 则填充
@@ -73,7 +74,21 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
             log.warn("自动注入警告 => 用户未登录");
             return null;
         }
-        return loginUser.getUsername();
+        return loginUser == null ? null : loginUser.getUsername();
+    }
+
+    /**
+     * 获取前台登录用户名
+     */
+    private String getTripartiteUserName() {
+        TripartiteUser tripartiteUser;
+        try {
+            tripartiteUser = LoginHelper.getTripartiteUser();
+        } catch (Exception e) {
+            log.warn("自动注入警告 => 用户未登录");
+            return null;
+        }
+        return tripartiteUser == null ? null : tripartiteUser.getUsername();
     }
 
 }

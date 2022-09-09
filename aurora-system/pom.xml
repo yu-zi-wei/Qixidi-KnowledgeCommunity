@@ -28,9 +28,15 @@
             <groupId>com.aurora</groupId>
             <artifactId>aurora-oss</artifactId>
         </dependency>
+
+        <!--测试依赖-->
         <dependency>
-            <groupId>com.aurora</groupId>
-            <artifactId>aurora-oss</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
     </dependencies>

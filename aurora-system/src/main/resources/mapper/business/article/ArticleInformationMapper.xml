@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.article.ArticleInformationMapper">
+    <resultMap type="com.aurora.business.domain.entity.article.ArticleInformation" id="ArticleInformationResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="articleCover" column="article_cover"/>
+        <result property="articleAbstract" column="article_abstract"/>
+        <result property="articleContent" column="article_content"/>
+        <result property="type" column="type"/>
+        <result property="reprintUrl" column="reprint_url"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="specialId" column="special_id"/>
+        <result property="babelId" column="babel_id"/>
+        <result property="likeTimes" column="like_times"/>
+        <result property="numberTimes" column="number_times"/>
+        <result property="isPublic" column="is_public"/>
+        <result property="auditStatus" column="audit_status"/>
+        <result property="auditTime" column="audit_time"/>
+    </resultMap>
+
+    <select id="selectIndex" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select ai.id,
+               ai.user_id,
+               ai.article_title,
+               ai.article_cover,
+               ai.article_abstract,
+               ai.`type`,
+               ai.`state`,
+               ai.create_time,
+               ai.special_id,
+               ai.babel_id,
+               ai.grouping_id,
+               ai.like_times,
+               ai.number_times,
+               ai.audit_status,
+               ai.audit_time,
+               um.username,
+               um.nickname,
+               um.avatar
+        from article_information as ai
+                 left join user_main as um on ai.user_id = um.uuid
+            ${ew.getCustomSqlSegment}
+    </select>
+
+    <!--    <select id="selectIndex" resultMap="ArticleInformationResult">-->
+    <!--        select *-->
+    <!--        from article_information-->
+    <!--    </select>-->
+</mapper>

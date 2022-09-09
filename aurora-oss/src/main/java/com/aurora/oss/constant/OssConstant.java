@@ -13,12 +13,12 @@ public interface OssConstant {
     /**
      * OSS模块KEY
      */
-    String SYS_OSS_KEY = "sys_oss:";
+    String SYS_OSS_KEY = "LTAI4GAZGQHBeSTzhPEHdSJF:";
 
     /**
      * 对象存储配置KEY
      */
-    String OSS_CONFIG_KEY = "OssConfig";
+    String OSS_CONFIG_KEY = "Feu30IEHQW2pON8vIOl9eZQMhW4lAk";
 
     /**
      * 缓存配置KEY

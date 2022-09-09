@@ -7,8 +7,8 @@ import com.aurora.common.annotation.RepeatSubmit;
 import com.aurora.common.core.controller.BaseController;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
-import com.aurora.common.core.domain.bo.TripartiteUserBo;
-import com.aurora.common.core.domain.vo.TripartiteUserVo;
+import com.aurora.business.domain.bo.user.TripartiteUserBo;
+import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
@@ -48,7 +48,7 @@ public class TripartiteUserController extends BaseController {
      * 查询【请填写功能名称】列表
      */
     @ApiOperation("查询【请填写功能名称】列表")
-    @SaCheckPermission("system:user:list")
+    @SaCheckPermission("system:main:list")
     @GetMapping("/list")
     public TableDataInfo<TripartiteUserVo> list(@Validated(QueryGroup.class) TripartiteUserBo bo, PageQuery pageQuery) {
         return iTripartiteUserService.queryPageList(bo, pageQuery);
@@ -58,7 +58,7 @@ public class TripartiteUserController extends BaseController {
      * 导出【请填写功能名称】列表
      */
     @ApiOperation("导出【请填写功能名称】列表")
-    @SaCheckPermission("system:user:export")
+    @SaCheckPermission("system:main:export")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated TripartiteUserBo bo, HttpServletResponse response) {
@@ -70,11 +70,11 @@ public class TripartiteUserController extends BaseController {
      * 获取【请填写功能名称】详细信息
      */
     @ApiOperation("获取【请填写功能名称】详细信息")
-    @SaCheckPermission("system:user:query")
+    @SaCheckPermission("system:main:query")
     @GetMapping("/{uuid}")
     public R<TripartiteUserVo> getInfo(@ApiParam("主键")
-                                                  @NotNull(message = "主键不能为空")
-                                                  @PathVariable("uuid") String uuid) {
+                                       @NotNull(message = "主键不能为空")
+                                       @PathVariable("uuid") String uuid) {
         return R.ok(iTripartiteUserService.queryById(uuid));
     }
 
@@ -82,7 +82,7 @@ public class TripartiteUserController extends BaseController {
      * 新增【请填写功能名称】
      */
     @ApiOperation("新增【请填写功能名称】")
-    @SaCheckPermission("system:user:add")
+    @SaCheckPermission("system:main:add")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -94,7 +94,7 @@ public class TripartiteUserController extends BaseController {
      * 修改【请填写功能名称】
      */
     @ApiOperation("修改【请填写功能名称】")
-    @SaCheckPermission("system:user:edit")
+    @SaCheckPermission("system:main:edit")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -106,12 +106,12 @@ public class TripartiteUserController extends BaseController {
      * 删除【请填写功能名称】
      */
     @ApiOperation("删除【请填写功能名称】")
-    @SaCheckPermission("system:user:remove")
+    @SaCheckPermission("system:main:remove")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
     @DeleteMapping("/{uuids}")
     public R<Void> remove(@ApiParam("主键串")
-                                       @NotEmpty(message = "主键不能为空")
-                                       @PathVariable String[] uuids) {
+                          @NotEmpty(message = "主键不能为空")
+                          @PathVariable String[] uuids) {
         return toAjax(iTripartiteUserService.deleteWithValidByIds(Arrays.asList(uuids), true) ? 1 : 0);
     }
 }
