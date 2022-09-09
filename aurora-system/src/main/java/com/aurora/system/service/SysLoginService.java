@@ -208,6 +208,7 @@ public class SysLoginService {
         loginUser.setRoles(roles);
         return loginUser;
     }
+
     /**
      * 记录登录信息
      *

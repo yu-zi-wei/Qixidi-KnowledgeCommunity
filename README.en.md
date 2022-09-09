@@ -7,7 +7,7 @@ Aurora社区
 Software architecture description
 
 #### Installation
-
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
 1.  xxxx
 2.  xxxx
 3.  xxxx

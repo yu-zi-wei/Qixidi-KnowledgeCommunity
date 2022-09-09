@@ -174,14 +174,14 @@ public class LoginHelper {
      * 获取后台用户账户
      */
     public static String getUsername() {
-        return getLoginUser().getUsername();
+        return getLoginUser() == null ? null : getLoginUser().getUsername();
     }
 
     /**
      * 获取前台用户账户
      */
     public static String getTripartiteUsername() {
-        return getTripartiteUser().getUsername();
+        return getTripartiteUser() == null ? null : getTripartiteUser().getUsername();
     }
 
     /**

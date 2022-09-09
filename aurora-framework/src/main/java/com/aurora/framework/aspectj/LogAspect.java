@@ -67,7 +67,7 @@ public class LogAspect {
             String ip = ServletUtils.getClientIP();
             operLog.setOperIp(ip);
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
-            operLog.setOperName(LoginHelper.getUsername());
+            operLog.setOperName(LoginHelper.getUsername() == null ? LoginHelper.getTripartiteUsername() : LoginHelper.getUsername());
 
             if (e != null) {
                 operLog.setStatus(BusinessStatus.FAIL.ordinal());

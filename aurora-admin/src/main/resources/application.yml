@@ -70,6 +70,7 @@ spring:
       max-file-size: 10MB
       # 设置总上传的文件大小
       max-request-size: 20MB
+      location: /aurora/service/temp
   # 服务模块
   devtools:
     restart:
@@ -95,10 +96,10 @@ spring:
 sa-token:
   # token名称 (同时也是cookie名称)
   token-name: Authorization
-  # token有效期 设为一天 (必定过期) 单位: 秒
-  timeout: 86400
-  # token临时有效期 (指定时间无操作就过期) 单位: 秒
-  activity-timeout: 1800
+  # token有效期 设为七天 (必定过期) 单位: 秒
+  timeout: 604800
+  # token临时有效期 (指定时间无操作就过期) 单位: 秒：一天
+  activity-timeout: 86400
   # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
   is-concurrent: true
   # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
@@ -124,6 +125,7 @@ security:
     - /logout
     - /register
     - /captchaImage
+    # 前台登录注册
     - /oauth/**
     # 静态资源
     - /*.html
@@ -191,7 +193,7 @@ swagger:
   # 是否开启swagger
   enabled: true
   # 请求前缀
-  pathMapping: /dev-api
+  pathMapping:
   # 标题
   title: '标题：${ruoyi.name}后台管理系统_接口文档'
   # 描述
@@ -282,12 +284,3 @@ management:
   endpoint:
     logfile:
       external-file: ./logs/sys-console.log
-
---- # JustAuth 第三方登录配置
-JustAuth:
-  # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
-  callBackBaseUrl: http://127.0.0.1:9001/oauth/callback
-  # 前端中转地址 与前端默认地址保持一致
-  url: http://localhost
-  # 第三方登录类型 用于获取用户信息方式判断
-  tripartiteUserType: tripartite_user

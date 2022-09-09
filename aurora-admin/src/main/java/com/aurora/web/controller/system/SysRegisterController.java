@@ -27,8 +27,8 @@ public class SysRegisterController extends BaseController {
     private final SysRegisterService registerService;
     private final ISysConfigService configService;
 
-    @ApiOperation("用户注册")
-    @PostMapping("/register")
+    @ApiOperation("后台用户注册")
+    @PostMapping("/admin/register")
     public R<Void> register(@Validated @RequestBody RegisterBody user) {
         if (!("true".equals(configService.selectConfigByKey("sys.account.registerUser")))) {
             return R.fail("当前系统没有开启注册功能！");

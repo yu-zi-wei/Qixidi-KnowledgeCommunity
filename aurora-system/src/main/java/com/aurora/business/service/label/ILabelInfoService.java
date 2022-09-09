@@ -1,8 +1,9 @@
 package com.aurora.business.service.label;
+
 import com.aurora.business.domain.bo.label.LabelInfoBo;
 import com.aurora.business.domain.vo.label.LabelInfoVo;
-import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.List;
 /**
  * 标签信息Service接口
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 public interface ILabelInfoService {
 
@@ -26,7 +27,7 @@ public interface ILabelInfoService {
     /**
      * 查询标签信息列表
      *
-     * @param bo 标签信息
+     * @param pageQuery 标签信息
      * @return 标签信息集合
      */
     TableDataInfo<LabelInfoVo> queryPageList(LabelInfoBo bo, PageQuery pageQuery);
@@ -64,4 +65,3 @@ public interface ILabelInfoService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 }
-

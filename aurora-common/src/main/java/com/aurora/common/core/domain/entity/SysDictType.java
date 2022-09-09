@@ -2,6 +2,7 @@ package com.aurora.common.core.domain.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.aurora.common.annotation.ExcelDictFormat;
@@ -34,7 +35,7 @@ public class SysDictType extends BaseEntity {
      */
     @ApiModelProperty(value = "字典主键")
     @ExcelProperty(value = "字典主键")
-    @TableId(value = "dict_id")
+    @TableId(value = "dict_id", type = IdType.AUTO)
     private Long dictId;
 
     /**

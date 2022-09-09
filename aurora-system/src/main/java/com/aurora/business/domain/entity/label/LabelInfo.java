@@ -1,26 +1,29 @@
-package com.aurora.business.domain.label;
+package com.aurora.business.domain.entity.label;
 
-import com.aurora.common.core.domain.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.util.Date;
 
 
 /**
  * 标签信息对象 label_info
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 @Data
 @TableName("label_info")
-public class LabelInfo extends BaseEntity {
+public class LabelInfo {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * id
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 分组id
@@ -43,4 +46,8 @@ public class LabelInfo extends BaseEntity {
      */
     private Integer state;
 
+    private Long createBy;
+
+    private Date createTime;
 }
+

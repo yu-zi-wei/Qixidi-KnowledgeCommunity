@@ -4,7 +4,7 @@ spring.servlet.multipart.location: /ruoyi/server/temp
 --- # 监控中心配置
 spring.boot.admin.client:
   # 增加客户端开关
-  enabled: true
+  enabled: false
   url: http://172.30.0.90:9090/admin
   instance:
     service-host-type: IP
@@ -14,7 +14,7 @@ spring.boot.admin.client:
 --- # xxl-job 配置
 xxl.job:
   # 执行器开关
-  enabled: true
+  enabled: false
   # 调度中心地址：如调度中心集群部署存在多个地址则用逗号分隔。
   admin-addresses: http://172.30.0.92:9100/xxl-job-admin
   # 执行器通讯TOKEN：非空时启用
@@ -51,9 +51,9 @@ spring:
           driverClassName: com.mysql.cj.jdbc.Driver
           # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
           # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
-          url: jdbc:mysql://47.99.193.119:3306/ry-vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
+          url: jdbc:mysql://47.99.193.119:3310/aurora_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
           username: root
-          password: root
+          password: aurora123456
         # 从库数据源
         slave:
           lazy: true
@@ -61,23 +61,23 @@ spring:
           url:
           username:
           password:
-#        oracle:
-#          driverClassName: oracle.jdbc.OracleDriver
-#          url: jdbc:oracle:thin:@//172.30.0.36:1521/XE
-#          username: ROOT
-#          password: root
-#          druid:
-#            validationQuery: SELECT 1 FROM DUAL
-#        postgres:
-#          driverClassName: org.postgresql.Driver
-#          url: jdbc:postgresql://172.30.0.36:5432/postgres?useUnicode=true&characterEncoding=utf8&useSSL=true&autoReconnect=true&reWriteBatchedInserts=true
-#          username: root
-#          password: root
-#        sqlserver:
-#          driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-#          url: jdbc:sqlserver://172.30.0.36:1433;DatabaseName=tempdb;SelectMethod=cursor;rewriteBatchedStatements=true
-#          username: SA
-#          password: root
+      #        oracle:
+      #          driverClassName: oracle.jdbc.OracleDriver
+      #          url: jdbc:oracle:thin:@//172.30.0.36:1521/XE
+      #          username: ROOT
+      #          password: root
+      #          druid:
+      #            validationQuery: SELECT 1 FROM DUAL
+      #        postgres:
+      #          driverClassName: org.postgresql.Driver
+      #          url: jdbc:postgresql://172.30.0.36:5432/postgres?useUnicode=true&characterEncoding=utf8&useSSL=true&autoReconnect=true&reWriteBatchedInserts=true
+      #          username: root
+      #          password: root
+      #        sqlserver:
+      #          driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      #          url: jdbc:sqlserver://172.30.0.36:1433;DatabaseName=tempdb;SelectMethod=cursor;rewriteBatchedStatements=true
+      #          username: SA
+      #          password: root
       druid:
         # 初始连接数
         initialSize: 5
@@ -159,3 +159,12 @@ redisson:
     timeout: 3000
     # 发布和订阅连接池大小
     subscriptionConnectionPoolSize: 50
+
+--- # JustAuth 第三方登录配置
+JustAuth:
+  # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
+  callBackBaseUrl: http://127.0.0.1:9001/oauth/callback
+  # 前端中转地址 与前端默认地址保持一致
+  url: https://petrichor.ren
+  # 第三方登录类型 用于获取用户信息方式判断
+  tripartiteUserType: tripartite_user

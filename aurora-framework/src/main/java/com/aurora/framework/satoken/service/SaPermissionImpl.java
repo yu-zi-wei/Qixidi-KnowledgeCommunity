@@ -1,8 +1,10 @@
 package com.aurora.framework.satoken.service;
 
 import cn.dev33.satoken.stp.StpInterface;
+import com.aurora.common.core.domain.entity.TripartiteUser;
 import com.aurora.common.core.domain.model.LoginUser;
 import com.aurora.common.enums.UserType;
+import com.aurora.common.exception.ServiceException;
 import com.aurora.common.helper.LoginHelper;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,11 @@ public class SaPermissionImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         LoginUser loginUser = LoginHelper.getLoginUser();
+        if (loginUser == null) {
+            TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+            if (tripartiteUser == null) throw new ServiceException("获取用户信息异常！");
+            return new ArrayList<>();
+        }
         UserType userType = UserType.getUserType(loginUser.getUserType());
         if (userType == UserType.SYS_USER) {
             return new ArrayList<>(loginUser.getMenuPermission());
@@ -38,6 +45,11 @@ public class SaPermissionImpl implements StpInterface {
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
         LoginUser loginUser = LoginHelper.getLoginUser();
+        if (loginUser == null) {
+            TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+            if (tripartiteUser == null) throw new ServiceException("获取用户信息异常！");
+            return new ArrayList<>();
+        }
         UserType userType = UserType.getUserType(loginUser.getUserType());
         if (userType == UserType.SYS_USER) {
             return new ArrayList<>(loginUser.getRolePermission());

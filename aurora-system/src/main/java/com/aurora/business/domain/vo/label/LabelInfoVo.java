@@ -8,12 +8,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 
 /**
  * 标签信息视图对象 label_info
  *
- * @author ruoyi
- * @date 2022-07-09
+ * @author aurora
+ * @date 2022-08-16
  */
 @Data
 @ApiModel("标签信息视图对象")
@@ -65,6 +67,16 @@ public class LabelInfoVo {
     @ApiModelProperty("状态（0：正常，1：已删除）")
     private Integer state;
 
+    private Long createBy;
 
+    @ExcelDictFormat(readConverterExp = "创建时间")
+    @ApiModelProperty("创建时间")
+    private Date createTime;
+
+    /**
+     * 分组名称
+     */
+    @ExcelDictFormat(readConverterExp = "分组名称")
+    @ApiModelProperty("分组名称")
+    private String groupingName;
 }
-
