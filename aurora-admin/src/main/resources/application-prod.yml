@@ -163,7 +163,7 @@ redisson:
 --- # JustAuth 第三方登录配置
 JustAuth:
   # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
-  callBackBaseUrl: http://127.0.0.1:9001/oauth/callback
+  callBackBaseUrl: http://47.99.193.119:9001/oauth/callback
   # 前端中转地址 与前端默认地址保持一致
   url: https://petrichor.ren
   # 第三方登录类型 用于获取用户信息方式判断

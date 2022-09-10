@@ -1,15 +1,12 @@
-FROM anapsix/alpine-java:8_server-jre_unlimited
-
-MAINTAINER Lion Li
-
-RUN mkdir -p /aurora/server
-RUN mkdir -p /aurora/server/logs
-RUN mkdir -p /aurora/server/temp
-
-WORKDIR /aurora/server
-
+# 基础镜像使用java
+FROM java:8
+# VOLUME 指定了临时文件目录为/tmp。
+# 作者
+MAINTAINER petrichor <tomorrow@qq.com>
+# 将xxxxxx.jar包添加到容器中并更名为app.jar
+ADD aurora-admin.jar app.jar
+# 运行jar包
+RUN bash -c 'touch /app.jar'
+ENTRYPOINT ["java","-jar","/app.jar"]
+###声明启动端口号
 EXPOSE 9001
-
-ADD ./target/aurora-admin.jar ./app.jar
-
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
