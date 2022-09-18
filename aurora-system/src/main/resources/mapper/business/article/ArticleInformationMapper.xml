@@ -45,8 +45,23 @@
                um.nickname,
                um.avatar
         from article_information as ai
-                 left join user_main as um on ai.user_id = um.uuid
+                 inner join user_main as um on ai.user_id = um.uuid
             ${ew.getCustomSqlSegment}
+    </select>
+
+    <select id="selectTypeSort" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select id,user_id,article_title,article_cover,article_abstract,`type`,like_times,number_times
+        from article_information
+        <if test="bo.numberTimes!=null and bo.numberTimes!=''">
+            ORDER BY number_times DESC
+        </if>
+        <if test="bo.likeTimes!=null and bo.likeTimes!=''">
+            ORDER BY like_times DESC
+        </if>
+        <if test="bo.createTime!=null and bo.createTime!=''">
+            ORDER BY create_time DESC
+        </if>
+        LIMIT 0,10
     </select>
 
     <!--    <select id="selectIndex" resultMap="ArticleInformationResult">-->

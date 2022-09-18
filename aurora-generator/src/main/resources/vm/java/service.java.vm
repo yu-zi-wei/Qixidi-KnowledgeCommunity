@@ -31,7 +31,7 @@ public interface I${ClassName}Service {
     /**
      * 查询${functionName}列表
      *
-     * @param ${className} ${functionName}
+     * @param bo ${functionName}
      * @return ${functionName}集合
      */
     TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery);
@@ -40,7 +40,7 @@ public interface I${ClassName}Service {
     /**
      * 查询${functionName}列表
      *
-     * @param ${className} ${functionName}
+     * @param bo ${functionName}
      * @return ${functionName}集合
      */
     List<${ClassName}Vo> queryList(${ClassName}Bo bo);
@@ -48,7 +48,7 @@ public interface I${ClassName}Service {
     /**
      * 修改${functionName}
      *
-     * @param ${className} ${functionName}
+     * @param bo ${functionName}
      * @return 结果
      */
     Boolean insertByBo(${ClassName}Bo bo);
@@ -56,7 +56,7 @@ public interface I${ClassName}Service {
     /**
      * 修改${functionName}
      *
-     * @param ${className} ${functionName}
+     * @param bo ${functionName}
      * @return 结果
      */
     Boolean updateByBo(${ClassName}Bo bo);

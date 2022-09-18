@@ -1,6 +1,7 @@
 package com.aurora.business.service.article;
 
 import com.aurora.business.domain.bo.article.ArticleInformationBo;
+import com.aurora.business.domain.bo.article.SortTypeBo;
 import com.aurora.business.domain.vo.article.ArticleInformationVo;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.page.TableDataInfo;
@@ -63,5 +64,7 @@ public interface IArticleInformationService {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     TableDataInfo<ArticleInformationVo> index(ArticleInformationBo bo, PageQuery pageQuery);
+
+    List<ArticleInformationVo> sortIndex(SortTypeBo bo);
 }
 

@@ -5,7 +5,7 @@ spring.boot.admin.client:
   url: http://localhost:9090/admin
   instance:
     service-host-type: IP
-  username: ruoyi
+  username: aurora
   password: 123456
 
 --- # xxl-job 配置
@@ -108,7 +108,7 @@ spring.datasource.druid:
     allow:
     url-pattern: /druid/*
     # 控制台管理用户名和密码
-    login-username: ruoyi
+    login-username: aurora
     login-password: 123456
   filter:
     stat:

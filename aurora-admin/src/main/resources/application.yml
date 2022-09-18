@@ -1,9 +1,9 @@
 # 项目相关配置
 ruoyi:
   # 名称
-  name: RuoYi-Vue-Plus
+  name: Aurora-Vue-Plus
   # 版本
-  version: ${ruoyi-vue-plus.version}
+  version: ${aurora-vue-plus.version}
   # 版权年份
   copyrightYear: 2022
   # 实例演示开关
@@ -127,6 +127,8 @@ security:
     - /captchaImage
     # 前台登录注册
     - /oauth/**
+    # 网站基本配置
+    - /white/**
     # 静态资源
     - /*.html
     - /**/*.html
@@ -199,18 +201,22 @@ swagger:
   # 描述
   description: '描述：用于管理集团旗下公司的人员信息,具体包括XXX,XXX模块...'
   # 版本
-  version: '版本号: ${ruoyi-vue-plus.version}'
+  version: '版本号: ${aurora-vue-plus.version}'
   # 作者信息
   contact:
-    name: Lion Li
-    email: crazylionli@163.com
-    url: https://gitee.com/JavaLionLi/RuoYi-Vue-Plus
+    name: 钰紫薇
+    email: 2978824265@qq.com.com
+    url: https://petrichor.ren
   groups:
     - name: 1.演示案例
       basePackage: com.aurora.demo
     - name: 2.系统模块
-      basePackage: com.aurora.web
-    - name: 3.代码生成模块
+      basePackage: com.aurora.web.controller.system
+    - name: 3.业务模块
+      basePackage: com.aurora.web.controller.business
+    - name: 4.前台业务
+      basePackage: com.aurora.web.controller.frontDesk
+    - name: 5.代码生成模块
       basePackage: com.aurora.generator
 
 knife4j:
@@ -220,7 +226,7 @@ knife4j:
   production: @knife4j.production@
   basic:
     enable: true
-    username: ruoyi
+    username: aurora
     password: 123456
   # 前端Ui的个性化配置属性
   setting:

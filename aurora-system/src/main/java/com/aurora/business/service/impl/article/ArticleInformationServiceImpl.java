@@ -2,6 +2,7 @@ package com.aurora.business.service.impl.article;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.aurora.business.domain.bo.article.ArticleInformationBo;
+import com.aurora.business.domain.bo.article.SortTypeBo;
 import com.aurora.business.domain.entity.article.ArticleInformation;
 import com.aurora.business.domain.vo.article.ArticleInformationVo;
 import com.aurora.business.mapper.article.ArticleInformationMapper;
@@ -129,5 +130,11 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         System.out.println(index);
         return TableDataInfo.build(index);
     }
+
+    @Override
+    public List<ArticleInformationVo> sortIndex(SortTypeBo bo) {
+        return baseMapper.selectTypeSort(bo);
+    }
 }
+
 
