@@ -1,8 +1,10 @@
 package com.aurora.business.mapper.article;
 
+import com.aurora.business.domain.bo.article.ArticleInformationBo;
 import com.aurora.business.domain.bo.article.SortTypeBo;
 import com.aurora.business.domain.entity.article.ArticleInformation;
 import com.aurora.business.domain.vo.article.ArticleInformationVo;
+import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.mapper.BaseMapperPlus;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -20,8 +22,14 @@ import java.util.List;
  */
 public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformationMapper, ArticleInformation, ArticleInformationVo> {
 
-    IPage<ArticleInformationVo> selectIndex(Page<ArticleInformation> build,  @Param(Constants.WRAPPER) QueryWrapper<ArticleInformation> wrapper);
+    IPage<ArticleInformationVo> selectIndex(Page<ArticleInformation> build, @Param(Constants.WRAPPER) QueryWrapper<ArticleInformation> wrapper);
 
-    List<ArticleInformationVo> selectTypeSort(@Param("bo")  SortTypeBo bo);
+    List<ArticleInformationVo> selectTypeSort(@Param("bo") SortTypeBo bo);
+
+    List<ArticleInformationVo> articleList(@Param("bo") ArticleInformationBo bo, @Param("pageQuery") PageQuery pageQuery);
+
+    ArticleInformationVo details(@Param("id") Long id);
+
+    List<ArticleInformationVo> relatedList(@Param("bo")  ArticleInformationBo bo, @Param("pageQuery")  PageQuery pageQuery);
 }
 

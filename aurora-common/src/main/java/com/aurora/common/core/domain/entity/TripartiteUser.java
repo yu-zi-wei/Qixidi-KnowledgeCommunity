@@ -1,6 +1,7 @@
 package com.aurora.common.core.domain.entity;
 
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.aurora.common.helper.LoginHelper;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -109,6 +110,10 @@ public class TripartiteUser {
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+    
+    @ExcelProperty(value = "职业")
+    @ApiModelProperty("职业")
+    private String occupation;
 
     /**
      * 获取登录id

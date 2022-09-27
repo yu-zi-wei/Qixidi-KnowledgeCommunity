@@ -135,6 +135,22 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public List<ArticleInformationVo> sortIndex(SortTypeBo bo) {
         return baseMapper.selectTypeSort(bo);
     }
+
+    @Override
+    public List<ArticleInformationVo> articleList(ArticleInformationBo bo, PageQuery pageQuery) {
+        pageQuery.setPageNum((pageQuery.getPageNum() - 1) * pageQuery.getPageSize());
+        return baseMapper.articleList(bo, pageQuery);
+    }
+
+    @Override
+    public ArticleInformationVo details(Long id) {
+        return baseMapper.details(id);
+    }
+
+    @Override
+    public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
+        return baseMapper.relatedList(bo, pageQuery);
+    }
 }
 
 

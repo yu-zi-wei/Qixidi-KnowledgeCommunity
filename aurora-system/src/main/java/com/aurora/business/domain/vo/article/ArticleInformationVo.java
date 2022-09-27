@@ -71,6 +71,10 @@ public class ArticleInformationVo {
     @ApiModelProperty("文章内容md")
     private String articleContentMd;
 
+    @ExcelProperty(value = "主题")
+    @ApiModelProperty("主题")
+    private String theme;
+
     /**
      * 文章类型（1：原创，2：转载）
      */
@@ -164,6 +168,10 @@ public class ArticleInformationVo {
     @ExcelProperty(value = "创建时间")
     @ApiModelProperty("创建时间")
     private Date createTime;
+
+    @ExcelProperty(value = "职业")
+    @ApiModelProperty("职业")
+    private String occupation;
 
     private String username;
     private String nickname;
