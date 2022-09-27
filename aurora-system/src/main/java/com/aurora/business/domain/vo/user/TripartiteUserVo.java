@@ -152,4 +152,7 @@ public class TripartiteUserVo {
     @ApiModelProperty("角色（1，普通用户，2，vip用户）")
     private Long roleId;
 
+    @ExcelProperty(value = "职业")
+    @ApiModelProperty("职业")
+    private String occupation;
 }

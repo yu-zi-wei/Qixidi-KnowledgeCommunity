@@ -49,6 +49,10 @@ public class ArticleInformation {
      */
     private String articleContentMd;
     /**
+     * 主题
+     */
+    private String theme;
+    /**
      * 文章类型（1：原创，2：转载）
      */
     private Integer type;

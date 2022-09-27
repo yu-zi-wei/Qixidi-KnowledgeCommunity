@@ -12,7 +12,7 @@
         <result property="articleContent" column="article_content"/>
         <result property="type" column="type"/>
         <result property="reprintUrl" column="reprint_url"/>
-        <result property="status" column="status"/>
+        <result property="state" column="state"/>
         <result property="createTime" column="create_time"/>
         <result property="updateId" column="update_id"/>
         <result property="updateTime" column="update_time"/>
@@ -24,8 +24,7 @@
         <result property="auditStatus" column="audit_status"/>
         <result property="auditTime" column="audit_time"/>
     </resultMap>
-
-    <select id="selectIndex" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+    <sql id="ArticleInformationVo">
         select ai.id,
                ai.user_id,
                ai.article_title,
@@ -43,14 +42,81 @@
                ai.audit_time,
                um.username,
                um.nickname,
-               um.avatar
+               um.avatar,
+               um.occupation
         from article_information as ai
-                 left join user_main as um on ai.user_id = um.uuid
-            ${ew.getCustomSqlSegment}
+                 inner join user_main as um on ai.user_id = um.uuid
+    </sql>
+    <select id="selectIndex" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        ${ew.getCustomSqlSegment}
     </select>
 
-    <!--    <select id="selectIndex" resultMap="ArticleInformationResult">-->
-    <!--        select *-->
-    <!--        from article_information-->
-    <!--    </select>-->
+    <select id="selectTypeSort" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select id,user_id,article_title,article_cover,article_abstract,`type`,like_times,number_times
+        from article_information
+        <if test="bo.numberTimes!=null and bo.numberTimes!=''">
+            ORDER BY number_times DESC
+        </if>
+        <if test="bo.likeTimes!=null and bo.likeTimes!=''">
+            ORDER BY like_times DESC
+        </if>
+        <if test="bo.createTime!=null and bo.createTime!=''">
+            ORDER BY create_time DESC
+        </if>
+        LIMIT 0,10
+    </select>
+
+    <select id="articleList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            <if test="bo.articleTitle!=null and bo.articleTitle!=''">
+                ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%')
+            </if>
+            <!--            and ai.id>=(select id from article_information limit #{pageQuery.pageNum},1)-->
+        </where>
+        order by ai.create_time desc
+        limit #{pageQuery.pageNum}, #{pageQuery.pageSize};
+    </select>
+
+    <select id="details" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select ai.id,
+               ai.user_id,
+               ai.article_title,
+               ai.article_cover,
+               ai.article_abstract,
+               ai.article_content,
+               ai.theme,
+               ai.`type`,
+               ai.`state`,
+               ai.create_time,
+               ai.special_id,
+               ai.babel_id,
+               ai.grouping_id,
+               ai.like_times,
+               ai.number_times,
+               ai.audit_status,
+               ai.audit_time,
+               um.username,
+               um.nickname,
+               um.avatar,
+               um.occupation
+        from article_information as ai
+                 inner join user_main as um on ai.user_id = um.uuid
+        where ai.id = #{id}
+    </select>
+
+    <select id="relatedList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            <if test="bo.articleTitle!=null and bo.articleTitle!=''">
+                ai.id!=#{bo.id}
+                and ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%')
+            </if>
+        </where>
+        order by ai.create_time desc
+        limit #{pageQuery.pageNum}, #{pageQuery.pageSize};
+    </select>
 </mapper>

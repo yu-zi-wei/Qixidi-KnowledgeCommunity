@@ -34,4 +34,9 @@ public class text {
         TableDataInfo<SysUser> sysUserTableDataInfo = sysUserService.selectAllocatedList(new SysUser(), pageQuery);
         sysUserTableDataInfo.getRows().forEach(s -> System.out.println(s));
     }
+    @Test
+    public void text3() {
+
+    }
+
 }

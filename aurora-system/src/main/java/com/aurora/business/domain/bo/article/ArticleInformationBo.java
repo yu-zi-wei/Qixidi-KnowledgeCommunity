@@ -23,7 +23,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("文章信息业务对象")
 public class ArticleInformationBo extends BaseEntity {
-
     /**
      * 文章id
      */
@@ -69,6 +68,9 @@ public class ArticleInformationBo extends BaseEntity {
     @ApiModelProperty(value = "文章内容md", required = true)
     @NotBlank(message = "请填写文章内容", groups = {AddGroup.class, EditGroup.class})
     private String articleContentMd;
+
+    @ApiModelProperty(value = "主题", required = true)
+    private String theme;
 
 
     /**
