@@ -130,6 +130,12 @@ public class ArticleInformationVo {
     @ExcelProperty(value = "点赞次数")
     @ApiModelProperty("点赞次数")
     private Long likeTimes;
+    /**
+     * 评论次数
+     */
+    @ExcelProperty(value = "评论次数")
+    @ApiModelProperty("评论次数")
+    private Long commentTimes;
 
     /**
      * 浏览次数
@@ -176,5 +182,30 @@ public class ArticleInformationVo {
     private String username;
     private String nickname;
     private String avatar;
+
+    //------------------------
+    @ApiModelProperty("点赞数")
+    private int fabulousCount;
+
+    @ApiModelProperty("收藏数")
+    private int collectionCount;
+
+    @ApiModelProperty("关注数")
+    private int followCount;
+
+    @ApiModelProperty("被关注数")
+    private int fansCount;
+
+    @ApiModelProperty("评论数")
+    private int commentCount;
+
+    @ApiModelProperty("文章数")
+    private int articleCount;
+
+    @ApiModelProperty("专栏数")
+    private int specialColumnCount;
+
+    @ApiModelProperty("圈子数")
+    private int circleCount;
 }
 

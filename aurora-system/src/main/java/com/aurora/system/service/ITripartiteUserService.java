@@ -73,4 +73,8 @@ public interface ITripartiteUserService {
     void frontDeskLogin(LoginUserMain loginUserMain);
 
     R register(RegisterUserMain registerUserMain);
+
+    TripartiteUserVo websiteInfo();
+
+    TripartiteUserVo getWebsiteInfo(String uuid);
 }

@@ -155,4 +155,30 @@ public class TripartiteUserVo {
     @ExcelProperty(value = "职业")
     @ApiModelProperty("职业")
     private String occupation;
+    //------------------------
+    @ApiModelProperty("点赞数")
+    private int fabulousCount;
+
+    @ApiModelProperty("收藏数")
+    private int collectionCount;
+
+    @ApiModelProperty("关注数")
+    private int followCount;
+
+    @ApiModelProperty("被关注数")
+    private int fansCount;
+
+    @ApiModelProperty("评论数")
+    private int commentCount;
+
+    @ApiModelProperty("文章数")
+    private int articleCount;
+
+    @ApiModelProperty("专栏数")
+    private int specialColumnCount;
+
+    @ApiModelProperty("圈子数")
+    private int circleCount;
+
+
 }

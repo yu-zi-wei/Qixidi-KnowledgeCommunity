@@ -160,7 +160,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             baseMapper.insert(tripartiteUser);
         }
         //记录用户信息，登录
-        LoginHelper.tripartiteLoginByDevice(uuidInfo, DeviceType.PC);
+        LoginHelper.tripartiteLoginByDevice(tripartiteUser, DeviceType.PC);
     }
 
     @Override
@@ -223,6 +223,19 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             .setSource("平台注册");
         int insert = baseMapper.insert(tripartiteUser);
         return insert > 0 ? R.ok("注册成功！") : R.fail("注册异常！");
+    }
+
+
+    @Override
+    public TripartiteUserVo websiteInfo() {
+        String tripartiteUuid = LoginHelper.getTripartiteUuid();
+        if (tripartiteUuid == null) return null;
+        return baseMapper.selectWebInfo(tripartiteUuid);
+    }
+
+    @Override
+    public TripartiteUserVo getWebsiteInfo(String uuid) {
+        return baseMapper.selectWebInfo(uuid);
     }
 
 }
