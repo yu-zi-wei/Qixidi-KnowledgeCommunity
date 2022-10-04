@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -30,6 +32,13 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     ArticleInformationVo details(@Param("id") Long id);
 
-    List<ArticleInformationVo> relatedList(@Param("bo")  ArticleInformationBo bo, @Param("pageQuery")  PageQuery pageQuery);
+    List<ArticleInformationVo> relatedList(@Param("bo") ArticleInformationBo bo, @Param("pageQuery") PageQuery pageQuery);
+
+    @Update("update article_information set like_times = like_times+1 where id=#{id}")
+    Integer updateLikeTimes(Long id);
+
+    @Select("")
+    Long selectByUid(Long id);
 }
+
 

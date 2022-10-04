@@ -222,6 +222,19 @@ public class SysLoginController {
         return R.ok(map);
     }
 
+    /**
+     * 取消回调
+     *
+     * @param response
+     * @param source
+     * @throws IOException
+     */
+    @RequestMapping("/render/{source}")
+    public void renderAuth(HttpServletResponse response, @PathVariable("source") String source) throws IOException {
+        AuthRequest authRequest = getAuthRequest(source);
+        response.sendRedirect(authRequest.authorize(AuthStateUtils.createState()));
+    }
+
     @RequestMapping("/oauth/callback/{source}")
     public Object login(@PathVariable("source") String source, AuthCallback callback, HttpServletResponse response) throws IOException {
         AuthRequest authRequest = getAuthRequest(source);

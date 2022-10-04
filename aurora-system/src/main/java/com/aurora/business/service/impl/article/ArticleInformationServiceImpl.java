@@ -8,6 +8,7 @@ import com.aurora.business.domain.vo.article.ArticleInformationVo;
 import com.aurora.business.mapper.article.ArticleInformationMapper;
 import com.aurora.business.service.article.IArticleInformationService;
 import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.common.utils.StringUtils;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class ArticleInformationServiceImpl implements IArticleInformationService {
 
     private final ArticleInformationMapper baseMapper;
+//    private final CountUserWebsiteMapper countUserWebsiteMapper;
 
     /**
      * 查询文章信息
@@ -104,7 +106,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      * @param entity 实体类数据
      */
     private void validEntityBeforeSave(ArticleInformation entity) {
-        String uuid = LoginHelper.getTripartiteUser().getUuid();
+        String uuid = LoginHelper.getTripartiteUuid();
         entity.setUserId(Long.valueOf(uuid));
         entity.setCreateTime(new Date());
     }
@@ -150,6 +152,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
         return baseMapper.relatedList(bo, pageQuery);
+    }
+
+    @Override
+    public R fabulousAdd(Long id) {
+        Long uid = baseMapper.selectByUid(id);
+//        countUserWebsiteMapper.UpFabulousCount(Long.valueOf(LoginHelper.getTripartiteUuid()));
+        return baseMapper.updateLikeTimes(id) > 0 ? R.ok() : R.fail();
     }
 }
 

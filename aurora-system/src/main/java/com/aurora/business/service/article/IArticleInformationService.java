@@ -4,6 +4,7 @@ import com.aurora.business.domain.bo.article.ArticleInformationBo;
 import com.aurora.business.domain.bo.article.SortTypeBo;
 import com.aurora.business.domain.vo.article.ArticleInformationVo;
 import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 
 import java.util.Collection;
@@ -72,5 +73,7 @@ public interface IArticleInformationService {
     ArticleInformationVo details(Long id);
 
     List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery);
+
+    R fabulousAdd(Long id);
 }
 

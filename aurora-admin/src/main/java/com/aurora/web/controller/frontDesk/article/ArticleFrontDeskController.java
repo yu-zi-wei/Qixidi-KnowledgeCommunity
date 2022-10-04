@@ -6,6 +6,7 @@ import com.aurora.business.domain.bo.article.SortTypeBo;
 import com.aurora.business.domain.vo.article.ArticleInformationVo;
 import com.aurora.business.service.article.IArticleInformationService;
 import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.QueryGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,9 +52,16 @@ public class ArticleFrontDeskController {
 
     @ApiOperation("查询文章详情")
     @GetMapping("/details/{id}")
-    public ArticleInformationVo details(@NotNull(message = "id不能为空")
-                                        @PathVariable("id") String id) {
+    public ArticleInformationVo details(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
         return iArticleInformationService.details(Long.valueOf(id));
+    }
+
+
+    @ApiOperation("文章点赞")
+    @GetMapping("/fabulous/{id}")
+    public R fabulousAdd(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id) {
+
+       return iArticleInformationService.fabulousAdd(id);
     }
 
 }
