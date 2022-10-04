@@ -114,4 +114,5 @@ public class TripartiteUserController extends BaseController {
                           @PathVariable String[] uuids) {
         return toAjax(iTripartiteUserService.deleteWithValidByIds(Arrays.asList(uuids), true) ? 1 : 0);
     }
+
 }

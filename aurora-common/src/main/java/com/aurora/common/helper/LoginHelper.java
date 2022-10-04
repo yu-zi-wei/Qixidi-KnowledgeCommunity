@@ -184,6 +184,10 @@ public class LoginHelper {
         return getTripartiteUser() == null ? null : getTripartiteUser().getUsername();
     }
 
+    public static String getTripartiteUuid() {
+        return getTripartiteUser() == null ? null : getTripartiteUser().getUuid();
+    }
+
     /**
      * 获取用户类型
      */

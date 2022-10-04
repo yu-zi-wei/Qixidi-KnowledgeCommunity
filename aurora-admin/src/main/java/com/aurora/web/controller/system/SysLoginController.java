@@ -26,7 +26,9 @@ import me.zhyd.oauth.exception.AuthException;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
+import me.zhyd.oauth.request.AuthBaiduRequest;
 import me.zhyd.oauth.request.AuthGiteeRequest;
+import me.zhyd.oauth.request.AuthQqRequest;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -220,6 +222,19 @@ public class SysLoginController {
         return R.ok(map);
     }
 
+    /**
+     * 取消回调
+     *
+     * @param response
+     * @param source
+     * @throws IOException
+     */
+    @RequestMapping("/render/{source}")
+    public void renderAuth(HttpServletResponse response, @PathVariable("source") String source) throws IOException {
+        AuthRequest authRequest = getAuthRequest(source);
+        response.sendRedirect(authRequest.authorize(AuthStateUtils.createState()));
+    }
+
     @RequestMapping("/oauth/callback/{source}")
     public Object login(@PathVariable("source") String source, AuthCallback callback, HttpServletResponse response) throws IOException {
         AuthRequest authRequest = getAuthRequest(source);
@@ -265,10 +280,17 @@ public class SysLoginController {
                     .build());
                 break;
             case "qq":
-                authRequest = new AuthGiteeRequest(AuthConfig.builder()
+                authRequest = new AuthQqRequest(AuthConfig.builder()
                     .clientId("")
                     .clientSecret("")
                     .redirectUri(callBackBaseUrl + "/qq")
+                    .build());
+                break;
+            case "baidu":
+                authRequest = new AuthBaiduRequest(AuthConfig.builder()
+                    .clientId("f7GYTxb23u4ijdxFbQykU0NI")
+                    .clientSecret("89uK1SIUSLLjPpGXaxhebYQuh2PkbuFs")
+                    .redirectUri(callBackBaseUrl + "/baidu")
                     .build());
                 break;
             default:
