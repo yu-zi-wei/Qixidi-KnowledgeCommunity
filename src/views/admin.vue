@@ -131,7 +131,7 @@
               </svg>
             </div>
             <div class="fl-left ml-20" style="line-height: 68px">
-              <div class="hover-cl font-s-16">相册集</div>
+              <div class="hover-cl font-s-16">时光相册</div>
             </div>
           </div>
         </router-link>
