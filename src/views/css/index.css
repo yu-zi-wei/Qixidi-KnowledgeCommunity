@@ -1,0 +1,57 @@
+
+.grid-demo2 .arco-col {
+    /*height: 240px;*/
+    /*line-height: 240px;*/
+    text-align: center;
+    /*background-color: red;*/
+}
+
+
+.lo-card {
+    /*9733EE*/
+    background-image: linear-gradient(to right, #DA22FF 0%, #9733EE 51%, #DA22FF 100%);
+    height: 68px;
+    padding-left: 6%;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+
+.lo-card:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.grid-demo-grid {
+    padding: 0 20%;
+    margin-top: 20px;
+}
+
+.grid-demo-grid .demo-item,
+.grid-demo-grid .demo-suffix {
+    height: 68px;
+    line-height: 48px;
+    text-align: center;
+    border-radius: 4px;
+    color: #fefefe;
+}
+
+.grid-demo-grid .demo-item {
+    background-color: #be2edd;
+
+}
+
+.avatar-name {
+    font-size: 18px;
+    color: #fefefe;
+    font-weight: bold;
+    margin-top: 10px;
+    /*letter-spacing: 6px;*/
+}
