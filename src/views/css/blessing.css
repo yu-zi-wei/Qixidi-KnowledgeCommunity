@@ -1,0 +1,167 @@
+.barrageBox {
+    width: 100%;
+    height: 400px;
+    /*margin-top: 200px;*/
+    /*border: 1px solid orange;*/
+    /*background-color: #fefefe;*/
+    box-sizing: border-box;
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+}
+
+.box {
+    position: absolute;
+    visibility: hidden;
+    animation: barrage 10s linear 0s;
+    /* 这个是循环播放的属性，需要就加上 */
+    /* animation-play-state: paused;*/
+    cursor: pointer;
+}
+
+/* 鼠标划入时暂停动画 */
+.box:hover {
+    animation-play-state: paused;
+}
+
+@keyframes barrage {
+    from {
+        left: 100%;
+        visibility: visible;
+        transform: translateX(0);
+    }
+
+    to {
+        left: 0%;
+        visibility: visible;
+        transform: translateX(-100%);
+    }
+}
+
+.barrageButton {
+    /*margin-right: 10%;*/
+    text-align: center;
+}
+
+/* From www.lingdaima.com */
+.add-button {
+    position: relative;
+    padding: 10px 20px;
+    display: block;
+    width: 100px;
+    cursor: pointer;
+    margin: auto;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    border-radius: 40px;
+    border: none;
+}
+
+.add-button span {
+    position: relative;
+    color: #fff;
+    font-family: Arial;
+    letter-spacing: 3px;
+    z-index: 1;
+}
+
+.add-button .liquid {
+    position: absolute;
+    top: -80px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: #ce5fee;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+    transition: .5s;
+}
+
+.add-button .liquid::after,
+.add-button .liquid::before {
+    content: '';
+    width: 200%;
+    height: 200%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -75%);
+    background: #fff;
+}
+
+.add-button .liquid::before {
+    border-radius: 45%;
+    background: #fefefe;
+    animation: animate 5s linear infinite;
+}
+
+.add-button .liquid::after {
+    border-radius: 40%;
+    background: rgba(20, 20, 20, .5);
+    animation: animate 10s linear infinite;
+}
+
+.add-button:hover .liquid {
+    top: -120px;
+}
+
+@keyframes animate {
+    0% {
+        transform: translate(-50%, -75%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -75%) rotate(360deg);
+    }
+}
+
+/* From www.lingdaima.com */
+.send-button {
+    --color: #fefefe;
+    --color2: #ce5fee;
+    padding: 0.6em 1.8em;
+    background-color: #be2edd;
+    font-size: 14px;
+    border-radius: 40px;
+    border-radius: 30px;
+    border: 1.5px solid var(--color);
+    transition: .5s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 1;
+    color: #fefefe;
+    font-weight: 300;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    color: var(--color);
+}
+
+.send-button::before {
+    content: '';
+    display: block;
+    height: 110%;
+    width: 310%;
+    transform: translate(0, -50%);
+    position: absolute;
+    top: 50%;
+    left: -5%;
+    z-index: -1;
+    transition: .7s;
+    background: -moz-linear-gradient(45deg, var(--color2) 33%, #5d2671 66%);
+    background: -webkit-linear-gradient(45deg, var(--color2) 33%, #5d2671 66%);
+    background: linear-gradient(45deg, var(--color2) 33%, #5d2671 66%);
+}
+
+.send-button:hover::before {
+    left: -200%;
+}
+
+.send-button:hover {
+    color: #fefefe;
+}
+
+.send-button:active {
+    transform: scale(.98);
+    filter: brightness(.8);
+}

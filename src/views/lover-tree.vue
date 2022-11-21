@@ -57,16 +57,13 @@ export default {
     },
   },
   mounted() {
-    // let timer = setInterval(() => {
-    //   this.difference('2022-4-3 20:00:00'); //每秒更新一次时间
-    // }, 1000);
   }
 }
 </script>
 
 <style>
 body {
-  background-color: #b20cd3;
+  background-color: #be2edd;
 }
 
 /* From www.lingdaima.com */

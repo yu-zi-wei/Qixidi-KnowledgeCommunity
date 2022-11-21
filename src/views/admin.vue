@@ -28,7 +28,7 @@
           <div class="lo-card">
             <div class="btn-grad">
               <div class="fl-left">
-                <svg t="1668591837943" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                <svg t="1668591837943" class="icon icon-transform" viewBox="0 0 1024 1024" version="1.1"
                      xmlns="http://www.w3.org/2000/svg" p-id="702" width="44" height="64">
                   <path
                       d="M482.771007 675.222579c65.026299 9.85247 231.204618-9.85247 321.847338-184.569596 89.985888-174.717126-27.586915-394.098781-27.586915-394.098782s18.391276 138.591405-58.457985 137.277743c-199.676716-3.940988-478.173188 1.313663-451.243105 254.193713 11.822963 112.318153 102.465683 170.119307 215.440667 187.196922"
@@ -65,9 +65,9 @@
         <router-link to="/record">
           <div class="lo-card">
             <div class="fl-left">
-              <svg t="1668589585311" class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1668589585311" class="icon icon-transform" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="37761" data-spm-anchor-id="a313x.7781069.0.i45" width="42"
-                   height="64">
+                   height="64" >
                 <path
                     d="M638.46 298.5h-369a30 30 0 0 0 0 60h369a30 30 0 0 0 0-60zM651.44 539.05L665.51 525a30 30 0 0 0-27.05-43h-369a30 30 0 0 0 0 60h369a29.87 29.87 0 0 0 12.98-2.95zM538.1 665.5H269.46a30 30 0 0 0 0 60H510.4zM623.11 715.78l-21.05 9.72h36.4A30 30 0 0 0 662 676.9z"
                     p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#fefefe"></path>
@@ -89,7 +89,7 @@
         <router-link to="/detailed-list">
           <div class="lo-card">
             <div class="fl-left">
-              <svg t="1668518697387" class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1668518697387" class="icon icon-transform" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
                    p-id="24987" width="42" height="68">
                 <path
@@ -107,7 +107,7 @@
         <router-link to="/album">
           <div class="lo-card">
             <div class="fl-left">
-              <svg t="1668518781897" class="icon" viewBox="0 0 1235 1024" version="1.1"
+              <svg t="1668518781897" class="icon icon-transform" viewBox="0 0 1235 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
                    p-id="29893" width="42" height="68">
                 <path
@@ -140,7 +140,7 @@
         <router-link to="/lover-tree">
           <div class="lo-card">
             <div class="fl-left">
-              <svg t="1668590300920" class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1668590300920" class="icon icon-transform" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="44562" width="42" height="64">
                 <path
                     d="M464.213333 667.818667s227.157333 156.672 426.666667-223.232c0 0-421.205333-69.290667-426.666667 223.232m34.133334 194.218666c-68.266667-81.237333-126.293333-215.893333-15.872-401.237333C674.645333 138.069333 429.909333 78.848 429.909333 78.848s207.530667 80.554667 11.093334 354.304C499.541333 203.093333 133.12 134.997333 133.12 134.997333c6.826667 346.965333 203.264 358.4 268.458667 351.573334-120.832 166.4-85.333333 296.448-34.133334 376.832-85.333333 11.264-147.968 41.642667-155.648 79.018666h452.437334c-8.192-38.741333-76.117333-70.314667-166.058667-80.384"
@@ -157,7 +157,7 @@
         <router-link to="/about">
           <div class="lo-card">
             <div class="fl-left">
-              <svg t="1668589503813" class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1668589503813" class="icon icon-transform" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="34308" data-spm-anchor-id="a313x.7781069.0.i42" width="42"
                    height="64">
                 <path

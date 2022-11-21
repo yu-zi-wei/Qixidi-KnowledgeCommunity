@@ -1,23 +1,25 @@
 <template>
   <div class="mt-20">
     <div style="margin-bottom: 60px">
-      <div style="margin: auto" class="dd-button">
-        <span>
-        <svg t="1668589585311" class="icon" viewBox="0 0 1024 1024" version="1.1"
-             xmlns="http://www.w3.org/2000/svg" p-id="37761" data-spm-anchor-id="a313x.7781069.0.i45" width="42"
-             height="50">
-          <path
-              d="M638.46 298.5h-369a30 30 0 0 0 0 60h369a30 30 0 0 0 0-60zM651.44 539.05L665.51 525a30 30 0 0 0-27.05-43h-369a30 30 0 0 0 0 60h369a29.87 29.87 0 0 0 12.98-2.95zM538.1 665.5H269.46a30 30 0 0 0 0 60H510.4zM623.11 715.78l-21.05 9.72h36.4A30 30 0 0 0 662 676.9z"
-              p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#fefefe"></path>
-          <path
-              d="M730 608.94V774a49.06 49.06 0 0 1-49 49H227a49.06 49.06 0 0 1-49-49V250a49.06 49.06 0 0 1 49-49h454a49.06 49.06 0 0 1 49 49v210.53l60-60V250a109.12 109.12 0 0 0-109-109H227a109.12 109.12 0 0 0-109 109v524a109.12 109.12 0 0 0 109 109h454a109.12 109.12 0 0 0 109-109V548.94zM930.73 401.81A48 48 0 0 0 862.89 334z"
-              p-id="37763" data-spm-anchor-id="a313x.7781069.0.i46" class="" fill="#fff200"></path>
-          <path
-              d="M558.106 638.704l292.742-292.742 67.882 67.882-292.742 292.743zM513.06 730.84l-12.87 26.63a5.37 5.37 0 0 0 7.18 7.18L534 751.78zM541.63 748.09l68.64-33.18-60.35-60.35-33.17 68.65 24.88 24.88z"
-              p-id="37764" data-spm-anchor-id="a313x.7781069.0.i48" class="" fill="#55efc4"></path>
-        </svg>
-        </span>
-        <span style="line-height: 50px">点点滴滴</span>
+      <div class="text-center">
+        <button class="record-button">
+          <span class="fl-left">
+          <svg t="1668589585311" class="icon" viewBox="0 0 1024 1024" version="1.1"
+               xmlns="http://www.w3.org/2000/svg" p-id="37761" data-spm-anchor-id="a313x.7781069.0.i45" width="40"
+               height="36">
+            <path
+                d="M638.46 298.5h-369a30 30 0 0 0 0 60h369a30 30 0 0 0 0-60zM651.44 539.05L665.51 525a30 30 0 0 0-27.05-43h-369a30 30 0 0 0 0 60h369a29.87 29.87 0 0 0 12.98-2.95zM538.1 665.5H269.46a30 30 0 0 0 0 60H510.4zM623.11 715.78l-21.05 9.72h36.4A30 30 0 0 0 662 676.9z"
+                p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#fefefe"></path>
+            <path
+                d="M730 608.94V774a49.06 49.06 0 0 1-49 49H227a49.06 49.06 0 0 1-49-49V250a49.06 49.06 0 0 1 49-49h454a49.06 49.06 0 0 1 49 49v210.53l60-60V250a109.12 109.12 0 0 0-109-109H227a109.12 109.12 0 0 0-109 109v524a109.12 109.12 0 0 0 109 109h454a109.12 109.12 0 0 0 109-109V548.94zM930.73 401.81A48 48 0 0 0 862.89 334z"
+                p-id="37763" data-spm-anchor-id="a313x.7781069.0.i46" class="" fill="#fff200"></path>
+            <path
+                d="M558.106 638.704l292.742-292.742 67.882 67.882-292.742 292.743zM513.06 730.84l-12.87 26.63a5.37 5.37 0 0 0 7.18 7.18L534 751.78zM541.63 748.09l68.64-33.18-60.35-60.35-33.17 68.65 24.88 24.88z"
+                p-id="37764" data-spm-anchor-id="a313x.7781069.0.i48" class="" fill="#55efc4"></path>
+          </svg>
+          </span>
+          <span style="line-height: 36px; letter-spacing: 3px;">点点滴滴</span>
+        </button>
       </div>
     </div>
     <div>
@@ -238,6 +240,32 @@ export default {
 .dd-button:hover::before {
   clip-path: polygon(0 30%, 9% 34%, 7% 39%, 11% 43%, 13% 33%, 17% 30%, 24% 34%, 25% 35%, 30% 31%, 30% 38%, 39% 33%, 35% 43%, 43% 45%, 55% 46%, 65% 74%, 67% 66%, 81% 57%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
   height: 80%;
+}
+
+/* From www.lingdaima.com */
+.record-button {
+  --color-1: rgb(178, 12, 211);
+  --color-2: rgb(5, 252, 248);
+  --color-3: rgb(28, 0, 48);
+  border: none;
+  padding: 4px 10px;
+  overflow: hidden;
+  color: var(--color-2);
+  background: #c23be1;
+  box-shadow: -10px -10px var(--color-1),
+  15px 10px var(--color-2);
+  font-weight: bold;
+  transition: box-shadow 0.1s ease-in-out,
+  transform 0.1s ease-in-out;
+}
+
+.record-button:hover {
+  box-shadow: -8.275px -8.275px var(--color-1),
+  10.4px 8.275px var(--color-2);
+}
+
+.record-button:active {
+  transform: scale(0.975);
 }
 
 

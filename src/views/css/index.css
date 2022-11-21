@@ -55,3 +55,11 @@
     margin-top: 10px;
     /*letter-spacing: 6px;*/
 }
+
+.icon-transform {
+    transition: all 0.4s;
+}
+
+.icon-transform:hover {
+    transform: scale(1.2);
+}

@@ -12,35 +12,45 @@
     </div>
     <a-grid :cols="{ xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 2 }" :colGap="40" :rowGap="16" class="grid-demo-grid">
       <a-grid-item class="list-cl" v-for="item of detailedList">
-        <a-checkbox :model-value="item.state==0">
-          <a-collapse :default-active-key="[1]" accordion>
-            <a-collapse-item :header="item.name" key="1">
-              <div v-if="item.state==0">
-                {{ item.name }}
-                <div style="font-size: 10px;margin-top: 10px;margin-bottom: 4px;overflow:hidden;">
-                  <svg t="1668670124651" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                       xmlns="http://www.w3.org/2000/svg" p-id="7732" data-spm-anchor-id="a313x.7781069.0.i3" width="12"
-                       height="12" style="float: left">
-                    <path d="M480 896h64v128h-64zM0 480h128v64H0zM768 544h-288V256h64v224h224v64z" fill="#f4ea2a"
-                          p-id="7733" data-spm-anchor-id="a313x.7781069.0.i4" class="selected"></path>
-                    <path d="M512 1024v-64A448 448 0 1 0 64 512H0A512 512 0 0 1 512 0a512 512 0 0 1 0 1024z"
-                          fill="#fefefe"
-                          p-id="7734" data-spm-anchor-id="a313x.7781069.0.i5" class=""></path>
-                    <path
-                        d="M0 546.24V512h64v29.76zM411.2 1014.08a544 544 0 0 1-64-17.28l20.48-60.48a475.2 475.2 0 0 0 56.64 15.04z m-126.08-42.88A523.84 523.84 0 0 1 227.2 937.6l35.52-53.12a472.32 472.32 0 0 0 50.56 29.44zM174.4 896A472.64 472.64 0 0 1 128 849.6l48-42.24a506.24 506.24 0 0 0 41.28 41.6zM86.4 796.8a523.84 523.84 0 0 1-33.6-57.92l57.28-28.48a416 416 0 0 0 29.44 50.56zM27.2 677.12a506.88 506.88 0 0 1-17.28-64l64-12.48a470.08 470.08 0 0 0 15.04 56.32zM512 1024h-33.92l3.84-64H512z"
-                        fill="#f4ea2a" p-id="7735"></path>
-                  </svg>
-                  <div style="float: left;line-height: 12px;margin-left: 6px">
-                    {{ item.updateTime }}
-                  </div>
+        <div class="box-gou" v-if="item.state==0">
+          <span style="line-height: 28px">
+            <svg t="1668952537738" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg" p-id="3765" width="16" height="16"><path
+                d="M60.217477 633.910561c0 0 250.197342 104.557334 374.563838 330.628186 149.378146-279.762705 436.109566-540.713972 521.05012-560.013527 0-115.776863 0-163.394371 0-341.442486-342.237595 226.070852-506.576477 642.342604-506.576477 642.342604l-180.049702-191.614086L60.217477 633.910561z"
+                p-id="3766" data-spm-anchor-id="a313x.7781069.0.i0" class="selected" fill="#ffffff"></path></svg>
+          </span>
+        </div>
+        <div class="box-gou" v-else>
+          <div class="box-out"></div>
+        </div>
+        <a-collapse :default-active-key="[1]" accordion>
+          <a-collapse-item :header="item.name" key="1">
+            <div v-if="item.state==0">
+              {{ item.name }}
+              <div style="font-size: 10px;margin-top: 10px;margin-bottom: 4px;overflow:hidden;">
+                <svg t="1668670124651" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="7732" data-spm-anchor-id="a313x.7781069.0.i3" width="12"
+                     height="12" style="float: left">
+                  <path d="M480 896h64v128h-64zM0 480h128v64H0zM768 544h-288V256h64v224h224v64z" fill="#f4ea2a"
+                        p-id="7733" data-spm-anchor-id="a313x.7781069.0.i4" class="selected"></path>
+                  <path d="M512 1024v-64A448 448 0 1 0 64 512H0A512 512 0 0 1 512 0a512 512 0 0 1 0 1024z"
+                        fill="#fefefe"
+                        p-id="7734" data-spm-anchor-id="a313x.7781069.0.i5" class=""></path>
+                  <path
+                      d="M0 546.24V512h64v29.76zM411.2 1014.08a544 544 0 0 1-64-17.28l20.48-60.48a475.2 475.2 0 0 0 56.64 15.04z m-126.08-42.88A523.84 523.84 0 0 1 227.2 937.6l35.52-53.12a472.32 472.32 0 0 0 50.56 29.44zM174.4 896A472.64 472.64 0 0 1 128 849.6l48-42.24a506.24 506.24 0 0 0 41.28 41.6zM86.4 796.8a523.84 523.84 0 0 1-33.6-57.92l57.28-28.48a416 416 0 0 0 29.44 50.56zM27.2 677.12a506.88 506.88 0 0 1-17.28-64l64-12.48a470.08 470.08 0 0 0 15.04 56.32zM512 1024h-33.92l3.84-64H512z"
+                      fill="#f4ea2a" p-id="7735"></path>
+                </svg>
+                <div style="float: left;line-height: 12px;margin-left: 6px">
+                  {{ item.updateTime }}
                 </div>
               </div>
-              <div v-else>
-                待完成！
-              </div>
-            </a-collapse-item>
-          </a-collapse>
-        </a-checkbox>
+            </div>
+            <div v-else>
+              待完成！
+            </div>
+          </a-collapse-item>
+        </a-collapse>
+        <!--        </a-checkbox>-->
         <div></div>
       </a-grid-item>
     </a-grid>
@@ -85,6 +95,45 @@ export default {
 </script>
 
 <style>
+.box-out {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  /*background: linear-gradient(0deg, rgba(211, 226, 219, 1) 0%, rgba(223, 187, 237, 1) 22%, rgba(254, 254, 254, 1) 100%);*/
+  background: #d980fa;
+  margin: 6px 0 0 6px;
+  transition: all 0.4s;
+}
+
+.box-out:hover {
+  transform: scale(1.4);
+  background: #ce5fee;
+}
+
+.box-gou {
+  margin-top: 8px;
+  margin-right: 6px;
+  overflow: hidden;
+  background-color: #be2edd;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+}
+
+.container {
+  left: 0.45em;
+  top: 0.25em;
+  width: 0.25em;
+  height: 0.5em;
+  border: solid #f0f0f0;
+  border-width: 0 0.15em 0.15em 0;
+  transform: rotate(45deg);
+}
+
+
 .list-cl {
   background-color: #ce5fee;
   margin-top: 15px;
@@ -114,6 +163,10 @@ export default {
 .arco-collapse-item .arco-collapse-item-expand-icon {
   /*color: #be2edd;*/
   color: #fefefe;
+}
+
+.arco-collapse-item .arco-collapse-item-expand-icon:hover {
+
 }
 
 .arco-collapse-item-active > .arco-collapse-item-header {

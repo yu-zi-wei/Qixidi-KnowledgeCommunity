@@ -43,6 +43,11 @@ const routes = [
         name: 'lover-tree',
         component: () => import('@/views/lover-tree')
     },
+    // {
+    //     path: '/blessing',
+    //     name: 'blessing',
+    //     component: () => import('@/views/blessing')
+    // },
 
 ]
 
