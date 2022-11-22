@@ -3,12 +3,12 @@ const modeUrlObj = {
     // 生产环境
     'production': {
         // baseURL: 'http://47.99.193.119:9001/',
-        baseURL: 'http://127.0.0.1:9001/',
+        baseURL: 'http://127.0.0.1:9001/prod-api/',
         authBaseURL: ''
     },
     // 开发环境
     'development': {
-        baseURL: 'http://127.0.0.1:9001/',
+        baseURL: 'http://127.0.0.1:9001/dev-api/',
         authBaseURL: ''
     },
     // 测试环境

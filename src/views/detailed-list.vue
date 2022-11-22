@@ -10,7 +10,7 @@
   </span>
       </button>
     </div>
-    <a-grid :cols="{ xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 2 }" :colGap="40" :rowGap="16" class="grid-demo-grid">
+    <a-grid :cols="{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }" :colGap="40" :rowGap="16" class="grid-demo-grid">
       <a-grid-item class="list-cl" v-for="item of detailedList">
         <div class="box-gou" v-if="item.state==0">
           <span style="line-height: 28px">
