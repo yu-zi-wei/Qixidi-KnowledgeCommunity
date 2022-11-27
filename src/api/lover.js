@@ -6,4 +6,5 @@ export function listSidebar(query) {
         method: 'get',
         params: query
     })
+
 }
