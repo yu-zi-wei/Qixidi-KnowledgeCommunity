@@ -330,6 +330,9 @@ mr-auto {
 .padding-10 {
     padding: 10px;
 }
+.padding-20 {
+    padding: 20px;
+}
 
 
 .fl-right {
@@ -442,4 +445,40 @@ a {
 .router-link-active {
     text-decoration: none;
     color: #606266;
+}
+
+/*内容隐藏展示*/
+.content-cl {
+    max-height: 400px;
+    overflow-y: auto
+}
+
+.content-cl::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: #ce5fee;
+}
+
+.content-cl::-webkit-scrollbar-track {
+    background: #fefefe;
+    border-radius: 2px;
+}
+
+.content-cl::-webkit-scrollbar-thumb {
+    background: #ce5fee;
+    border-radius: 2px;
+}
+
+/*回到顶部就*/
+.go-top-cl {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ce5fee;
+    width: 40px;
+    height: 40px;
+    line-height: 46px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
 }

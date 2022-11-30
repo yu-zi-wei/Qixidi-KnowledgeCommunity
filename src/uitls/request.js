@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from '../config/index' // 路径配置
+// import {Msg} from './tools';
 
 // 创建axios 实例
 const service = axios.create({
@@ -18,6 +19,8 @@ service.interceptors.request.use(res => {
         // if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
         //     return res.data
         // }
+
+        // Msg.loading()
         return res
     }, error => {
         //  这里处理一些请求出错的情况

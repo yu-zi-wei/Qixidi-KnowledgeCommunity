@@ -67,7 +67,7 @@
             <div class="fl-left">
               <svg t="1668589585311" class="icon icon-transform" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="37761" data-spm-anchor-id="a313x.7781069.0.i45" width="42"
-                   height="64" >
+                   height="64">
                 <path
                     d="M638.46 298.5h-369a30 30 0 0 0 0 60h369a30 30 0 0 0 0-60zM651.44 539.05L665.51 525a30 30 0 0 0-27.05-43h-369a30 30 0 0 0 0 60h369a29.87 29.87 0 0 0 12.98-2.95zM538.1 665.5H269.46a30 30 0 0 0 0 60H510.4zM623.11 715.78l-21.05 9.72h36.4A30 30 0 0 0 662 676.9z"
                     p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#fefefe"></path>
@@ -188,6 +188,7 @@
 
 <script>
 import './css/index.css'
+import {listInfo} from "@/api/lover";
 
 export default {
   name: "admin",
@@ -202,9 +203,17 @@ export default {
     return {
       images,
       SampLingTime: '第 999天 00小时 00分钟 00秒',
+      listInfoData: {},
     }
   },
   methods: {
+    listInfos() {
+      let data = {state: 0}
+      listInfo(data).then(res => {
+        this.listInfoData = res;
+        this.loading = false;
+      })
+    },
     // 时间差计算
     difference(beginTime) {
       let dateBegin = new Date(beginTime);
@@ -222,12 +231,12 @@ export default {
       let leave3 = leave2 % (60 * 1000); //计算分钟数后剩余的毫秒数
       let seconds = Math.round(leave3 / 1000);
       this.SampLingTime = "第 " + dayDiff + "天 " + hours + "小时 " + minutes + "分钟 " + seconds + "秒";
-      console.log(this.SampLingTime);
     },
   },
   mounted() {
+    this.listInfos()
     let timer = setInterval(() => {
-      this.difference('2022-4-3 20:00:00'); //每秒更新一次时间
+      this.difference(this.listInfoData.loveTime); //每秒更新一次时间
     }, 1000);
   },
   destroyed() {

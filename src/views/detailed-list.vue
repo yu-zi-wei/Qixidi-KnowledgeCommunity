@@ -26,22 +26,49 @@
         <a-collapse :default-active-key="[1]" accordion>
           <a-collapse-item :header="item.name" key="1">
             <div v-if="item.state==0">
-              {{ item.name }}
+              <div class="content-cl" v-html="item.content"></div>
               <div style="font-size: 10px;margin-top: 10px;margin-bottom: 4px;overflow:hidden;">
-                <svg t="1668670124651" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="7732" data-spm-anchor-id="a313x.7781069.0.i3" width="12"
-                     height="12" style="float: left">
-                  <path d="M480 896h64v128h-64zM0 480h128v64H0zM768 544h-288V256h64v224h224v64z" fill="#f4ea2a"
-                        p-id="7733" data-spm-anchor-id="a313x.7781069.0.i4" class="selected"></path>
-                  <path d="M512 1024v-64A448 448 0 1 0 64 512H0A512 512 0 0 1 512 0a512 512 0 0 1 0 1024z"
-                        fill="#fefefe"
-                        p-id="7734" data-spm-anchor-id="a313x.7781069.0.i5" class=""></path>
-                  <path
-                      d="M0 546.24V512h64v29.76zM411.2 1014.08a544 544 0 0 1-64-17.28l20.48-60.48a475.2 475.2 0 0 0 56.64 15.04z m-126.08-42.88A523.84 523.84 0 0 1 227.2 937.6l35.52-53.12a472.32 472.32 0 0 0 50.56 29.44zM174.4 896A472.64 472.64 0 0 1 128 849.6l48-42.24a506.24 506.24 0 0 0 41.28 41.6zM86.4 796.8a523.84 523.84 0 0 1-33.6-57.92l57.28-28.48a416 416 0 0 0 29.44 50.56zM27.2 677.12a506.88 506.88 0 0 1-17.28-64l64-12.48a470.08 470.08 0 0 0 15.04 56.32zM512 1024h-33.92l3.84-64H512z"
-                      fill="#f4ea2a" p-id="7735"></path>
-                </svg>
-                <div style="float: left;line-height: 12px;margin-left: 6px">
-                  {{ item.updateTime }}
+                <div v-if="item.address" class="fl-left mr-15" style="height: 20px">
+                  <span class="fl-left">
+                    <svg t="1669690071448" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
+                         width="16" height="16" style="margin-top: 1px"><path
+                        d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
+                        fill="#ffffff" p-id="6301"></path><path
+                        d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
+                        fill="#ffffff" p-id="6302"></path><path
+                        d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
+                        fill="#f4ea2a" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
+                        class="selected"></path></svg>
+                  </span>
+                  <span style="line-height: 20px;font-size: 12px;margin-left: 4px" v-text="item.address"></span>
+                </div>
+                <div v-if="item.address" class="fl-left mr-10" style="height: 20px">
+                <span style="line-height: 20px" class="fl-left">
+<!--                <svg t="1668670124651" class="icon" viewBox="0 0 1024 1024" version="1.1"-->
+                  <!--                     xmlns="http://www.w3.org/2000/svg" p-id="7732" data-spm-anchor-id="a313x.7781069.0.i3" width="13"-->
+                  <!--                     height="13" style="margin-top: 4px">-->
+                  <!--                  <path d="M480 896h64v128h-64zM0 480h128v64H0zM768 544h-288V256h64v224h224v64z" fill="#f4ea2a"-->
+                  <!--                        p-id="7733" data-spm-anchor-id="a313x.7781069.0.i4" class="selected"></path>-->
+                  <!--                  <path d="M512 1024v-64A448 448 0 1 0 64 512H0A512 512 0 0 1 512 0a512 512 0 0 1 0 1024z"-->
+                  <!--                        fill="#fefefe"-->
+                  <!--                        p-id="7734" data-spm-anchor-id="a313x.7781069.0.i5" class=""></path>-->
+                  <!--                  <path-->
+                  <!--                      d="M0 546.24V512h64v29.76zM411.2 1014.08a544 544 0 0 1-64-17.28l20.48-60.48a475.2 475.2 0 0 0 56.64 15.04z m-126.08-42.88A523.84 523.84 0 0 1 227.2 937.6l35.52-53.12a472.32 472.32 0 0 0 50.56 29.44zM174.4 896A472.64 472.64 0 0 1 128 849.6l48-42.24a506.24 506.24 0 0 0 41.28 41.6zM86.4 796.8a523.84 523.84 0 0 1-33.6-57.92l57.28-28.48a416 416 0 0 0 29.44 50.56zM27.2 677.12a506.88 506.88 0 0 1-17.28-64l64-12.48a470.08 470.08 0 0 0 15.04 56.32zM512 1024h-33.92l3.84-64H512z"-->
+                  <!--                      fill="#f4ea2a" p-id="7735"></path>-->
+                  <!--                </svg>-->
+                  <svg t="1669798181975" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="9622" width="16" height="16" style="margin-top: 1px;"><path
+                      d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
+                      fill="#ffffff" p-id="9623"></path><path
+                      d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
+                      fill="#ffffff" p-id="9624"></path><path
+                      d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
+                      fill="#ffffff" p-id="9625"></path><path
+                      d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
+                      fill="#ffffff" p-id="9626"></path></svg>
+                </span>
+                  <span style="line-height: 20px;font-size: 12px;margin-left: 4px">{{ item.updateTime }}</span>
                 </div>
               </div>
             </div>
@@ -50,7 +77,6 @@
             </div>
           </a-collapse-item>
         </a-collapse>
-        <!--        </a-checkbox>-->
         <div></div>
       </a-grid-item>
     </a-grid>
@@ -58,38 +84,59 @@
 </template>
 
 <script>
+import {listRepertoire} from "@/api/lover";
+
 export default {
   name: "detailedList",
-  setup() {
+  data() {
     return {
       complete: false,
-      detailedList: [
-        {name: '一起做饭', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起爬山', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起看电影', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起看过生日', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起看看星星', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起给对方写信，然后读给对方听', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起去旅游', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起坐一次摩天轮', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起去看一次海，牵着手沙滩散步', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起看书，分享自己喜欢的书籍', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起看烟花', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起去一次教堂', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起换发型，剪头发', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起露营，住一次帐篷', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起去上过的小学，中学，大学', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起睡个懒觉，赖个床', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起放一次风筝', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起敷面膜', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起去看一场演唱会', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起玩一次真心话大冒险', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起去见父母', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起挑选戒指', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '一起挑选婚纱', state: 1, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-        {name: '在一起啊，也不算太久，就余生吧', state: 0, createTime: '2022年11月18日', updateTime: '2022年11月18日'},
-      ]
+      detailedList: [],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      total: 0,
+      scrollLoading: true,
     }
+  },
+  methods: {
+    getData() {
+      let scrollTop = document.documentElement.scrollTop
+      let clientHeight = document.documentElement.clientHeight
+      let scrollHeight = document.documentElement.scrollHeight
+      if (scrollHeight - (scrollTop + clientHeight) <= 1) {
+        if (!this.scrollLoading) return;
+        if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+          this.scrollLoading = false;
+          this.queryParams.pageNum = this.queryParams.pageNum + 1;
+          listRepertoire(this.queryParams).then(res => {
+            res.rows.forEach(item => {
+              this.detailedList.push(item)
+            })
+            this.total = res.total;
+          }).finally(() => this.scrollLoading = true)
+        }
+      }
+    },
+    listRepertoires() {
+      this.queryParams.pageNum = 1;
+      listRepertoire(this.queryParams).then(res => {
+        this.detailedList = res.rows;
+        this.total = res.total;
+      })
+    },
+  },
+  mounted() {
+    this.listRepertoires();
+  },
+  created() {
+    //添加滚动监听事件
+    window.addEventListener('scroll', this.getData, true);
+  },
+  destroyed() {
+    //离开页面时删除该监听
+    window.removeEventListener('scroll', this.getData, true)
   }
 }
 </script>

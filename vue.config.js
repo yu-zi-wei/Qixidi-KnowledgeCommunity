@@ -21,7 +21,7 @@ module.exports = {
             port: 1029,
             proxy: {
                 '/prod-api': {
-                    target: 'http://127.0.0.1:9001',
+                    target: 'http://127.0.0.1:8082',
                     changeOrigin: true, // 这个参数可以让target参数是域名
 
                 }

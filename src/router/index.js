@@ -25,6 +25,7 @@ const routes = [
                 path: '/album',
                 name: 'album',
                 component: () => import('@/views/album')
+                // component: () => import('@/views/test')
             },
             {
                 path: '/detailed-list',
