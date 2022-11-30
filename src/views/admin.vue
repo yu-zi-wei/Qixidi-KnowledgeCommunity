@@ -14,7 +14,8 @@
               show-arrow="never"
               indicator-position="outer"
               :style="{ width: '100%',height: '240px',}">
-            <a-carousel-item v-for="image in images" :style="{ width: '60%' }">
+            <!-- eslint-disable-next-line vue/valid-v-for -->
+            <a-carousel-item v-for="(image,key) in images" :style="{ width: '60%' }" :key="key">
               <img :src="image" :style="{width: '100%',}"/>
             </a-carousel-item>
           </a-carousel>
@@ -193,15 +194,21 @@ import {listInfo} from "@/api/lover";
 export default {
   name: "admin",
   data() {
-    const images = [
-      'https://img1.baidu.com/it/u=2396953492,2676732410&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
-      'https://img1.baidu.com/it/u=3860651256,646223370&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500  ',
-      'https://img0.baidu.com/it/u=3830011798,3816529183&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-      'https://img1.baidu.com/it/u=2655530031,3824072509&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-      'https://img2.baidu.com/it/u=888374811,3745866117&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=312',
-    ];
+    // const images = [
+    //   'https://img1.baidu.com/it/u=2396953492,2676732410&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
+    //   'https://img1.baidu.com/it/u=3860651256,646223370&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500  ',
+    //   'https://img0.baidu.com/it/u=3830011798,3816529183&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
+    //   'https://img1.baidu.com/it/u=2655530031,3824072509&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
+    //   'https://img2.baidu.com/it/u=888374811,3745866117&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=312',
+    // ];
     return {
-      images,
+      images: [
+        'https://img1.baidu.com/it/u=2396953492,2676732410&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
+        'https://img1.baidu.com/it/u=3860651256,646223370&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500  ',
+        'https://img0.baidu.com/it/u=3830011798,3816529183&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
+        'https://img1.baidu.com/it/u=2655530031,3824072509&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
+        'https://img2.baidu.com/it/u=888374811,3745866117&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=312',
+      ],
       SampLingTime: '第 999天 00小时 00分钟 00秒',
       listInfoData: {},
     }

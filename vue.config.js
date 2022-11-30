@@ -14,7 +14,7 @@ module.exports = {
     assetsDir: 'assets',
     // publicPath: './',
     transpileDependencies: true,
-    lintOnSave: true, // 是否开启编译时是否不符合eslint提示
+    lintOnSave: false, // 是否开启编译时是否不符合eslint提示   关闭Eslint代码检查
     configureWebpack: {
         devServer: {
             host: '0.0.0.0',  // 解决在局域网下无法访问
