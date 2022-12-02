@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import {listLoverTree} from "@/api/lover";
 
 export default {
   name: "loverTree",
@@ -30,10 +31,15 @@ export default {
       hours: '',
       minutes: '',
       seconds: '',
+      info: null,
     }
   },
   methods: {
-
+    listLoverTrees() {
+      listLoverTree().then(res => {
+        this.info = res;
+      })
+    },
     // 时间差计算
     difference(beginTime) {
       let dateBegin = new Date(beginTime);
@@ -57,6 +63,7 @@ export default {
     },
   },
   mounted() {
+    this.listLoverTrees();
   }
 }
 </script>

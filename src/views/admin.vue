@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-center font-s-18 mt-20" style="color: #fefefe">
+    <div class="text-center font-s-18 mt-20 mb-40" style="color: #fefefe">
       今天是我们在一起的
       <p style="line-height: 40px">{{ SampLingTime }}</p>
     </div>
@@ -14,9 +14,8 @@
               show-arrow="never"
               indicator-position="outer"
               :style="{ width: '100%',height: '240px',}">
-            <!-- eslint-disable-next-line vue/valid-v-for -->
             <a-carousel-item v-for="(image,key) in images" :style="{ width: '60%' }" :key="key">
-              <img :src="image" :style="{width: '100%',}"/>
+              <img :src="image.img" :style="{width: '100%',}"/>
             </a-carousel-item>
           </a-carousel>
         </div>
@@ -189,31 +188,28 @@
 
 <script>
 import './css/index.css'
-import {listInfo} from "@/api/lover";
+import {listInfo, listCarousel} from "@/api/lover";
 
 export default {
   name: "admin",
   data() {
-    // const images = [
-    //   'https://img1.baidu.com/it/u=2396953492,2676732410&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
-    //   'https://img1.baidu.com/it/u=3860651256,646223370&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500  ',
-    //   'https://img0.baidu.com/it/u=3830011798,3816529183&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-    //   'https://img1.baidu.com/it/u=2655530031,3824072509&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-    //   'https://img2.baidu.com/it/u=888374811,3745866117&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=312',
-    // ];
     return {
-      images: [
-        'https://img1.baidu.com/it/u=2396953492,2676732410&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
-        'https://img1.baidu.com/it/u=3860651256,646223370&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500  ',
-        'https://img0.baidu.com/it/u=3830011798,3816529183&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-        'https://img1.baidu.com/it/u=2655530031,3824072509&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-        'https://img2.baidu.com/it/u=888374811,3745866117&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=312',
-      ],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 5,
+        state: 0,
+      },
+      images: [],
       SampLingTime: '第 999天 00小时 00分钟 00秒',
       listInfoData: {},
     }
   },
   methods: {
+    listCarousels() {
+      listCarousel(this.queryParams).then(res => {
+        this.images = res;
+      })
+    },
     listInfos() {
       let data = {state: 0}
       listInfo(data).then(res => {
@@ -242,6 +238,7 @@ export default {
   },
   mounted() {
     this.listInfos()
+    this.listCarousels()
     let timer = setInterval(() => {
       this.difference(this.listInfoData.loveTime); //每秒更新一次时间
     }, 1000);

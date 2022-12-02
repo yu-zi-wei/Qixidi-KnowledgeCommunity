@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-20 mb-20">
+  <div class="mt-20 mb-40">
     <div style="text-align: center;margin-bottom: 20px">
       <div style="margin: auto" class="album-button">
             <span>
@@ -40,8 +40,7 @@
             <div class="album-thumb">
               <a-image
                   width="300"
-                  :title="item.address"
-                  :description="item.createTime"
+                  :description="item.address"
                   style="border-radius: 4px"
                   :preview-visible="visible1"
                   @preview-visible-change="() => { visible1= false }"

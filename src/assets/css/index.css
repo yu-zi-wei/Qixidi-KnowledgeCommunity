@@ -148,6 +148,10 @@ mr-auto {
     margin-top: 20px;
 }
 
+.mb-40 {
+    margin-bottom: 40px;
+}
+
 
 .mt-26 {
     margin-top: 26px;
@@ -330,6 +334,7 @@ mr-auto {
 .padding-10 {
     padding: 10px;
 }
+
 .padding-20 {
     padding: 20px;
 }
