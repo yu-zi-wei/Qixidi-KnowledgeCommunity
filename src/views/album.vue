@@ -42,17 +42,21 @@
                   width="300"
                   :description="item.address"
                   style="border-radius: 4px"
-                  :preview-visible="visible1"
-                  @preview-visible-change="() => { visible1= false }"
+                  :preview-visible="item.states"
+                  @preview-visible-change="() => { item.states= false }"
                   :src="item.img"
-              />
+              >
+                <template #preview-actions>
+                  <!--                  <a-image-preview-action name="下载" @click="downCom(item.img,'时光相册')">下载</a-image-preview-action>-->
+                </template>
+              </a-image>
               <div class="view-icon">
                 <div class="content-album-cl">{{ item.remarks }}</div>
                 <div class="work-tag">
                   <a href="#" class="mr-10">{{ item.address }}</a>
                   <a href="#">{{ item.createTime }}</a>
                 </div>
-                <div @click="() => { visible1 = true }" class="cursor-pointer" title="查看大图">
+                <div @click="() => { item.states = true }" class="cursor-pointer" title="查看大图">
                   <svg t="1669720960035" class="icon" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="13368" width="22" height="22">
                     <path
@@ -66,6 +70,14 @@
         </div>
       </div>
     </div>
+    <div @click="getData" v-if="isList" style="margin: auto;text-align: center;">
+      <div class="mt-20">
+        <button class="button-bo-cl">
+          <span class="fl-left">查看更多</span>
+          <span class="fl-left ml-2">...</span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -74,6 +86,8 @@ import './css/album.css'
 import './css/responsive.css'
 import './css/style.css'
 import {listAlbum} from "@/api/lover";
+import {downloadByBlob} from "@/uitls/imgUitls";
+import './css/button.css'
 
 export default {
   name: "album",
@@ -88,9 +102,14 @@ export default {
       },
       total: 0,
       scrollLoading: true,
+      isList: false,
     }
   },
   methods: {
+    //下载图片
+    downCom(url, name) {
+      downloadByBlob(url, name);
+    },
     judge(i) {
       let number = i % 3;
       if (number == 0) {
@@ -120,6 +139,11 @@ export default {
           }).finally(() => {
             this.scrollLoading = true
             this.setUpActive();
+            if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+              this.isList = true;
+              return;
+            }
+            this.isList = false;
           })
         }
       }
@@ -130,6 +154,11 @@ export default {
         this.imgList = res.rows;
         this.total = res.total;
         // this.setUpActive();
+        if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+          this.isList = true;
+          return;
+        }
+        this.isList = false;
       })
     },
     setUpActive() {

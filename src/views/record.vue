@@ -31,7 +31,9 @@
             <div class="card">
               <h2>{{ item.title }}</h2>
               <hr class="hr-twill-colorful"/>
-              <div style="padding: 0 10px 10px 6px" class="content-cl" v-html="item.content"></div>
+              <div @click="recordIndex(item.id)" style="padding: 0 10px 10px 6px" class="content-cl cursor-pointer"
+                   title="点击查看"
+                   v-html="item.content"></div>
             </div>
             <div style="height: 20px;overflow: hidden">
               <div class="fl-left mr-15" v-if="item.address">
@@ -66,9 +68,8 @@
                       d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
                       fill="#ffffff" p-id="9626"></path>
                 </svg>
-                <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px">{{
-                    item.updateTime
-                  }}</span>
+                <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px"
+                      v-text=" item.createTime"></span>
               </div>
             </div>
           </div>
@@ -86,7 +87,9 @@
             <div class="card">
               <h2>{{ item.title }}</h2>
               <hr class="hr-twill-colorful"/>
-              <div style="padding: 0 10px 10px 6px" class="content-cl" v-html="item.content"></div>
+              <div style="padding: 0 10px 10px 6px" @click="recordIndex(item.id)" class="content-cl cursor-pointer"
+                   title="点击查看"
+                   v-html="item.content"></div>
             </div>
             <div style="height: 20px;overflow: hidden">
               <div class="fl-left mr-15" v-if="item.address">
@@ -120,9 +123,8 @@
                       d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
                       fill="#ffffff" p-id="9626"></path>
                 </svg>
-                <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px">{{
-                    item.updateTime
-                  }}</span>
+                <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px"
+                      v-text="item.createTime"></span>
               </div>
             </div>
           </div>
@@ -132,11 +134,20 @@
 
       </a-row>
     </div>
+    <div @click="getData" v-if="isList" style="margin: auto;text-align: center;">
+      <div class="mt-20">
+        <button class="button-bo-cl">
+          <span class="fl-left">查看更多</span>
+          <span class="fl-left ml-2">...</span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import {listRecord} from "@/api/lover";
+import './css/button.css'
 
 export default {
   name: "record",
@@ -150,9 +161,16 @@ export default {
       },
       total: 0,
       scrollLoading: true,
+      isList: false,
     }
   },
   methods: {
+    recordIndex(id) {
+      this.$router.push({
+        path: '/record-index',
+        query: {id: id}
+      })
+    },
     getData() {
       let scrollTop = document.documentElement.scrollTop
       let clientHeight = document.documentElement.clientHeight
@@ -167,7 +185,14 @@ export default {
               this.recordList.push(item)
             })
             this.total = res.total;
-          }).finally(() => this.scrollLoading = true)
+          }).finally(() => {
+            this.scrollLoading = true;
+            if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+              this.isList = true;
+              return;
+            }
+            this.isList = false;
+          })
         }
       }
     },
@@ -176,6 +201,11 @@ export default {
       listRecord(this.queryParams).then(res => {
         this.recordList = res.rows;
         this.total = res.total;
+        if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+          this.isList = true;
+          return;
+        }
+        this.isList = false;
       })
     }
   },

@@ -14,6 +14,12 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 
+    <!--    margin: auto;-->
+    <!--    position: absolute;-->
+    <!--    top: 0;-->
+    <!--    bottom: 0;-->
+    <!--    left: 0;-->
+    <!--    right: 0 ;-->
     <style>
 
         #loader-wrapper {
@@ -39,8 +45,8 @@
         }
 
         .single {
-        / / 调整缩放至合适的大小 transform: scale(0.6) rotate(0);
-        / / 添加旋转动画 animation: spin 2 s ease-in-out infinite;
+            transform: scale(0.6) rotate(0);
+            animation: spin 2s ease-in-out infinite;
         }
 
         @keyframes spin {
@@ -49,120 +55,69 @@
             }
         }
 
-        /*
-            margin: auto;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0
-                ;*/
-        .loading,
-        .loading > div {
-            position: relative;
-            box-sizing: border-box;
-        }
-
         .loading {
-            display: block;
-            font-size: 0;
-            color: #ce5fee;
+            width: 48px;
+            height: 48px;
             margin: auto;
             position: absolute;
             top: 0;
             bottom: 0;
             left: 0;
-            right: 0
-        }
-
-        .loading.la-dark {
-            color: #333;
-        }
-
-        .loading > div {
+            right: 0;
+            border-radius: 50%;
             display: inline-block;
-            float: none;
-            background-color: currentColor;
-            border: 0 solid currentColor;
+            /*position: relative;*/
+            border: 3px solid;
+            border-color: #fefefe #ce5fee transparent transparent;
+            animation: rotation 1s linear infinite;
         }
 
-        .loading {
+        .loading:after,
+        .loading:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            border: 3px solid;
+            border-color: transparent transparent #fefefe #ce5fee;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            -webkit-animation: rotationBack 0.5s linear infinite;
+            animation: rotationBack 0.5s linear infinite;
+            transform-origin: center center;
+        }
+
+        .loading:before {
             width: 32px;
             height: 32px;
+            border-color: #ce5fee #fefefe transparent transparent;
+            -webkit-animation: rotation 1.5s linear infinite;
+            animation: rotation 1.5s linear infinite;
         }
 
-        .loading > div:nth-child(1) {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            z-index: 1;
-            width: 60%;
-            height: 60%;
-            background: #fefefe;
-            opacity: 0.8;
-            border-radius: 100%;
-            transform: translate(-50%, -50%);
-            animation: ball-atom-shrink 4.5s infinite linear;
-        }
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
 
-        .loading > div:not(:nth-child(1)) {
-            position: absolute;
-            left: 0;
-            z-index: 0;
-            width: 100%;
-            height: 100%;
-            background: none;
-            animation: ball-atom-zindex 1.5s 0s infinite steps(2, end);
-        }
-
-        .loading > div:not(:nth-child(1)):before {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 10px;
-            height: 10px;
-            margin-top: -5px;
-            margin-left: -5px;
-            content: "";
-            background: currentColor;
-            border-radius: 50%;
-            opacity: 0.75;
-            animation: ball-atom-position 1.5s 0s infinite ease,
-            ball-atom-size 1.5s 0s infinite ease;
-        }
-
-        .loading > div:nth-child(2) {
-            animation-delay: 0.75s;
-        }
-
-        .loading > div:nth-child(2):before {
-            animation-delay: 0s, -1.125s;
-        }
-
-        .loading > div:nth-child(3) {
-            transform: rotate(120deg);
-            animation-delay: -0.25s;
-        }
-
-        .loading > div:nth-child(3):before {
-            animation-delay: -1s, -0.75s;
-        }
-
-        .loading > div:nth-child(4) {
-            transform: rotate(240deg);
-            animation-delay: 0.25s;
-        }
-
-        .loading > div:nth-child(4):before {
-            animation-delay: -0.5s, -0.125s;
-        }
-
-        @keyframes ball-atom-position {
-            50% {
-                top: 100%;
-                left: 100%;
+            100% {
+                transform: rotate(360deg);
             }
         }
+
+        @keyframes rotationBack {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -173,12 +128,7 @@
 <div id="app">
     <div id="loader-wrapper">
         <div class="loader-section">
-            <div class="loading">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+            <div class="loading"></div>
         </div>
     </div>
 </div>

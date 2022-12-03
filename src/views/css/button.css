@@ -1,0 +1,35 @@
+/* From www.lingdaima.com */
+.button-bo-cl {
+    padding: 1em 2em;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #fefefe;
+    background-color: #ce5fee;
+    border: none;
+    overflow: hidden;
+    border-radius: 45px;
+    -webkit-box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+
+.button-bo-cl:hover {
+    background-color: #ce5fee;
+    -webkit-box-shadow: 0px 15px 20px #c84be7;
+    box-shadow: 0px 15px 20px #c84be7;
+    color: #fff200;
+    -webkit-transform: translateY(-7px);
+    -ms-transform: translateY(-7px);
+    transform: translateY(-7px);
+}
+
+.button-bo-cl:active {
+    -webkit-transform: translateY(-1px);
+    -ms-transform: translateY(-1px);
+    transform: translateY(-1px);
+}

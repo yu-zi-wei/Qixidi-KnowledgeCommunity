@@ -28,6 +28,14 @@ export function listRecord(query) {
     })
 }
 
+// 查询爱情记录列表
+export function listRecordInfo(id) {
+    return request({
+        url: '/api/lover/loverRecord/' + id,
+        method: 'get',
+    })
+}
+
 // 查询爱情清单列表
 export function listRepertoire(query) {
     return request({

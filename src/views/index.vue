@@ -1,7 +1,7 @@
 <template>
   <div class="index-admin">
     <div class="index-2">
-      <a-row style="height: 80px">
+      <a-row style="min-height: 100px;margin-bottom: 20px">
         <a-col :flex="1"></a-col>
         <a-col :flex="6">
           <div style="font-size: 28px; font-weight: bold;cursor: pointer">

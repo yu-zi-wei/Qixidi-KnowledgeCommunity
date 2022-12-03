@@ -45,18 +45,6 @@
                 </div>
                 <div v-if="item.address" class="fl-left mr-10" style="height: 20px">
                 <span style="line-height: 20px" class="fl-left">
-<!--                <svg t="1668670124651" class="icon" viewBox="0 0 1024 1024" version="1.1"-->
-                  <!--                     xmlns="http://www.w3.org/2000/svg" p-id="7732" data-spm-anchor-id="a313x.7781069.0.i3" width="13"-->
-                  <!--                     height="13" style="margin-top: 4px">-->
-                  <!--                  <path d="M480 896h64v128h-64zM0 480h128v64H0zM768 544h-288V256h64v224h224v64z" fill="#f4ea2a"-->
-                  <!--                        p-id="7733" data-spm-anchor-id="a313x.7781069.0.i4" class="selected"></path>-->
-                  <!--                  <path d="M512 1024v-64A448 448 0 1 0 64 512H0A512 512 0 0 1 512 0a512 512 0 0 1 0 1024z"-->
-                  <!--                        fill="#fefefe"-->
-                  <!--                        p-id="7734" data-spm-anchor-id="a313x.7781069.0.i5" class=""></path>-->
-                  <!--                  <path-->
-                  <!--                      d="M0 546.24V512h64v29.76zM411.2 1014.08a544 544 0 0 1-64-17.28l20.48-60.48a475.2 475.2 0 0 0 56.64 15.04z m-126.08-42.88A523.84 523.84 0 0 1 227.2 937.6l35.52-53.12a472.32 472.32 0 0 0 50.56 29.44zM174.4 896A472.64 472.64 0 0 1 128 849.6l48-42.24a506.24 506.24 0 0 0 41.28 41.6zM86.4 796.8a523.84 523.84 0 0 1-33.6-57.92l57.28-28.48a416 416 0 0 0 29.44 50.56zM27.2 677.12a506.88 506.88 0 0 1-17.28-64l64-12.48a470.08 470.08 0 0 0 15.04 56.32zM512 1024h-33.92l3.84-64H512z"-->
-                  <!--                      fill="#f4ea2a" p-id="7735"></path>-->
-                  <!--                </svg>-->
                   <svg t="1669798181975" class="icon" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="9622" width="16" height="16" style="margin-top: 1px;"><path
                       d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
@@ -80,11 +68,20 @@
         <div></div>
       </a-grid-item>
     </a-grid>
+    <div @click="getData" v-if="isList" style="margin: auto;text-align: center;">
+      <div class="mt-20">
+        <button class="button-bo-cl">
+          <span class="fl-left">查看更多</span>
+          <span class="fl-left ml-2">...</span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import {listRepertoire} from "@/api/lover";
+import './css/button.css'
 
 export default {
   name: "detailedList",
@@ -98,6 +95,7 @@ export default {
       },
       total: 0,
       scrollLoading: true,
+      isList: false,
     }
   },
   methods: {
@@ -115,7 +113,14 @@ export default {
               this.detailedList.push(item)
             })
             this.total = res.total;
-          }).finally(() => this.scrollLoading = true)
+          }).finally(() => {
+            this.scrollLoading = true
+            if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+              this.isList = true;
+              return;
+            }
+            this.isList = false;
+          })
         }
       }
     },
@@ -124,6 +129,11 @@ export default {
       listRepertoire(this.queryParams).then(res => {
         this.detailedList = res.rows;
         this.total = res.total;
+        if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+          this.isList = true;
+          return;
+        }
+        this.isList = false;
       })
     },
   },
