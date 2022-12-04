@@ -1,14 +1,49 @@
 <template>
   <div>
     <a-spin :loading="loading" tip="加速获取祝福中..." style="width: 100%" :size="28">
-      <div class="mb-40">
-        <div class="barrageBox">
-          <div class="barrageButton" @click="handleClick">
-        <span class="add-button">
+      <div class="ml-15">
+        <a-space size="large" title="切换样式">
+          <a-switch checked-color="#ffc312" unchecked-color="#ce5fee" v-model="isList"/>
+        </a-space>
+      </div>
+      <div>
+        <div class="barrageButton">
+        <span class="add-button" @click="handleClick" title="送上祝福">
           <span>送上祝福</span>
           <div class="liquid"></div>
         </span>
-          </div>
+        </div>
+        <!--        弹幕区-->
+        <div class="barrageBox" v-if="!isList"></div>
+        <!--        列表区-->
+        <div class="listBox" v-if="isList">
+          <a-row :gutter="24">
+            <a-col :span="2" style="height: 1px">
+            </a-col>
+            <a-col :span="20">
+              <div class="comment-list-cl">
+                <div class="overflow-hidden">
+                  <div class="item-list" v-for="item of barrageList">
+                    <a-trigger trigger="hover">
+                      <div>
+                        <span>{{ item.name }}：</span>
+                        <span v-text="item.content"></span>
+                      </div>
+                      <template #content>
+                        <div class="hover-content">
+                          <div class="mb-6">祝福人：{{ item.name }}</div>
+                          <div>时间：{{ item.createTime }}</div>
+                        </div>
+                      </template>
+                    </a-trigger>
+                  </div>
+                </div>
+
+              </div>
+            </a-col>
+            <a-col :span="2" style="height: 1px">
+            </a-col>
+          </a-row>
         </div>
         <a-modal v-model:visible="visible" @ok="addComment(value)" v-if="barrageList.length>0">
           <template #title>
@@ -80,25 +115,41 @@ export default {
         name: null,
       },
       visible: false,
-      // 频率4秒执行一次
-      frequency: 4,
+      // 执行频率
+      frequency: 10,
       barrageList: [],
       // 随机与顶部的距离
-      topLists: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360],
+      topLists: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300,
+        320, 340, 360, 380, 400, 420, 440, 460, 480],
       // 随机评论颜色
       colorss: ["#fefefe", "#ffc312", "#fefefe",
         "#fff200", "#eb2f06", "#2f3542",
         "#eb2f06", "#2f3542", "#fff200"],
+      //以列表展示
+      isList: false,
+    }
+  },
+  watch: {
+    isList: {
+      handler: function () {
+        this.listComments();
+      }
     }
   },
   methods: {
     listComments() {
       listComment().then(res => {
         this.barrageList = res.rows;
+        this.createBarrage();
+        this.loading = false;
       })
     },
     handleClick() {
       this.visible = true;
+    },
+    colorRandom() {
+      let string = this.colorss[Math.floor((Math.random() * colors.length))];
+
     },
     addComment() {
       if (!this.form.name) {
@@ -128,23 +179,25 @@ export default {
         // barrageBox.innerHTML = ''
         this.createBarrage()
       }, (barrageList.length + 1) * 1000);
-
-      commentAdd(this.form).then(res => {
-        if (res.code == 200) {
-          Notification.info({
-            title: '成功',
-            content: '感谢您的祝福',
-            showIcon: false,
-            closable: true,
-            style: {background: "#ce5fee", border: "none", color: "#fefefe"}
-          })
-        }
-      })
+      // commentAdd(this.form).then(res => {
+      //   if (res.code == 200) {
+      //     Notification.info({
+      //       title: '成功',
+      //       content: '感谢您的祝福',
+      //       showIcon: false,
+      //       closable: true,
+      //       style: {background: "#ce5fee", border: "none", color: "#fefefe"}
+      //     })
+      //   }
+      // });
       let formatDate1 = formatDate(new Date(), "yyyy-MM-dd hh:mm");
       let data = {content: this.form.content, createTime: formatDate1};
       this.barrageList.push(data)
       this.visible = false;
-      let num = Math.floor(Math.random() * 10)
+      let num = Math.floor(Math.random() * topList.length)
+      //控制弹幕展示
+      if (this.isList) return;
+
       let div = document.createElement('div')
       div.innerHTML = this.form.name + "：" + this.form.content
       // + '<p/>' + '<span style="font-size: 10px">' + formatDate1 + '</span>';
@@ -163,7 +216,6 @@ export default {
       } else {
         div.style.minWidth = '200px'
       }
-
       this.form.content = '';
       barrageBox.appendChild(div)
       clearInterval(my_set)
@@ -188,14 +240,13 @@ export default {
       for (let index = 0; index < barrageList.length; index++) {
         (function (index) {
           setTimeout(() => {
-            let num = Math.floor(Math.random() * 10)
+            let num = Math.floor(Math.random() * topList.length)
             let div = document.createElement('div')
             div.innerHTML = barrageList[index].name + "：" + barrageList[index].content
             // + '<p/>' + '<span style="font-size: 10px">' + barrageList[index].createTime + '</span>';
             div.classList.add('box')
             //距离顶部的距离
             div.style.top = topList[num] + 'px'
-            // div.style.top = '300px'
             // 随机获得一个颜色
             div.style.color = '' + colors[Math.floor((Math.random() * colors.length))] + ''
             //设置div样式
@@ -224,11 +275,15 @@ export default {
   },
   mounted() {
     this.listComments();
-    this.createBarrage();
     setInterval(() => {
       // barrageBox.innerHTML = ''
-      this.createBarrage()
-      this.loading = false;
+      if (this.isList) {
+        this.loading = false;
+        return;
+      } else {
+        this.createBarrage()
+        this.loading = false;
+      }
     }, (this.barrageList.length + this.frequency) * 1000);
   }
 }

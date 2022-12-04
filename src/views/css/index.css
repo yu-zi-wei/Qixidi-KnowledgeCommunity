@@ -63,3 +63,9 @@
 .icon-transform:hover {
     transform: scale(1.2);
 }
+
+.info-admin {
+    font-size: 20px;
+    line-height: 40px;
+    color: #fefefe;
+}

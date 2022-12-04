@@ -1,6 +1,6 @@
 .barrageBox {
     width: 100%;
-    height: 400px;
+    height: 520px;
     /*margin-top: 200px;*/
     /*border: 1px solid orange;*/
     /*background-color: #fefefe;*/
@@ -8,6 +8,72 @@
     position: relative;
     margin: auto;
     overflow: hidden;
+}
+
+.comment-list-cl {
+    background-color: #ce5fee;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 20px 40px;
+    height: 500px;
+    color: #fefefe;
+    overflow-y: auto
+}
+
+.comment-list-cl::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: #ce5fee;
+}
+
+.comment-list-cl::-webkit-scrollbar-track {
+    background: #fefefe;
+    border-radius: 2px;
+}
+
+.comment-list-cl::-webkit-scrollbar-thumb {
+    background: #ce5fee;
+    border-radius: 2px;
+}
+
+.comment-list {
+    background-color: #b20cd3;
+    margin: 10px 0px;
+    padding: 10px 20px;
+    width: 100px;
+}
+
+.item-list {
+    background-color: #c84be7;
+    min-height: 20px;
+    min-width: 120px;
+    margin: 10px 10px;
+    float: left;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.hover-content {
+    min-height: 20px;
+    min-width: 120px;
+    margin: 10px 10px;
+    padding: 10px;
+    background-color: #be2edd;
+    color: #fefefe;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.item-list:hover {
+    background-color: #be2edd;
+    font-weight: bold;
+}
+
+.listBox {
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .box {

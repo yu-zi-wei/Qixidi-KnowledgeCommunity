@@ -13,8 +13,8 @@
         </button>
       </router-link>
     </div>
-    <div style="width: 100%;height: 100%;">
-      <iframe style="width: 100%; height: 800px;" src="https://jade_purple.gitee.io/lover-1l/"
+    <div>
+      <iframe ref="iframe" style="width: 100%; height: 800px;" src="static/html/tree-index.html"
               allowfullscreen="allowfullscreen" frameborder="0" data-id="1"></iframe>
     </div>
   </div>
@@ -31,13 +31,43 @@ export default {
       hours: '',
       minutes: '',
       seconds: '',
-      info: null,
+      treeInfo: {
+        content: null,
+        loverTime: null,
+        loverPrefix: null,
+      },
+      loverPrefix: "丫头，我们已经在一起",
     }
   },
+  // watch: {
+  //   'treeInfo.info': {
+  //     handler: function () {
+  //       console.log("触发S")
+  //       this.vueSendMsg()
+  //     }
+  //   }
+  // },
   methods: {
+    vueSendMsg() {
+      const iframeWindow = this.$refs.iframe.contentWindow;
+      setTimeout(
+          () => {
+            iframeWindow.postMessage({
+              cmd: 200,
+              params: {
+                content: this.treeInfo.content,
+                loverTime: this.treeInfo.loverTime,
+                loverPrefix: this.treeInfo.loverPrefix == "" ? this.loverPrefix : this.treeInfo.loverPrefix,
+              }
+            }, '*')
+            console.log("传参 ")
+          }, 1000);
+    },
+
     listLoverTrees() {
       listLoverTree().then(res => {
-        this.info = res;
+        this.treeInfo = res;
+        this.vueSendMsg()
       })
     },
     // 时间差计算
@@ -62,6 +92,7 @@ export default {
       this.seconds = seconds;
     },
   },
+
   mounted() {
     this.listLoverTrees();
   }

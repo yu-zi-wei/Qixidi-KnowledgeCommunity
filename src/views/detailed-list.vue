@@ -102,7 +102,7 @@ export default {
       detailedList: [],
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 18,
       },
       total: 0,
       scrollLoading: true,

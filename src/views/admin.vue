@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div class="text-center font-s-18 mt-20 mb-40" style="color: #fefefe">
-      今天是我们在一起的
-      <p style="line-height: 40px">{{ SampLingTime }}</p>
+    <div class="text-center info-admin">
+      <p v-text="listInfoData.loverPrefix" v-if="listInfoData.loverPrefix"></p>
+      <p v-else>今天是我们在一起的</p>
+      <p v-text="SampLingTime"></p>
     </div>
     <a-grid :cols="{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }" :colGap="40" :rowGap="16"
             class="grid-demo-grid">
@@ -240,7 +241,7 @@ export default {
     this.listInfos()
     this.listCarousels()
     let timer = setInterval(() => {
-      this.difference(this.listInfoData.loveTime); //每秒更新一次时间
+      this.difference(this.listInfoData.loverTime); //每秒更新一次时间
     }, 1000);
   },
   destroyed() {

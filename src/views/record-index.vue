@@ -5,8 +5,8 @@
       </a-col>
       <a-col :span="20">
         <div class="content-index-cl">
-          <div class="button-return">
-            <router-link to="/record">
+          <router-link to="/record">
+            <div class="button-return">
               <svg t="1670076593666" class="icon" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
                    p-id="15532" width="12" height="12">
@@ -15,8 +15,8 @@
                     fill="#ffffff" p-id="15533"></path>
               </svg>
               <span style="color: #fefefe"> 返回</span>
-            </router-link>
-          </div>
+            </div>
+          </router-link>
 
           <h2 class="mb-10" v-text="info.title"></h2>
           <div class="overflow-hidden mb-20">
