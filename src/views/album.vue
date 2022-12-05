@@ -95,7 +95,7 @@ import './css/album.css'
 import './css/responsive.css'
 import './css/style.css'
 import {listAlbum} from "@/api/lover";
-import {downloadByBlob} from "@/uitls/imgUitls";
+import {downloadByBlob} from "@/utils/imgUitls";
 import './css/button.css'
 
 export default {

@@ -13,6 +13,7 @@ import './assets/css/index.css'
 //顶部页面加载条
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+
 NProgress.configure({
     easing: 'ease',
     speed: 500,

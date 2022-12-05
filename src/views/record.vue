@@ -69,7 +69,7 @@
                       fill="#ffffff" p-id="9626"></path>
                 </svg>
                 <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px"
-                      v-text=" item.createTime"></span>
+                      v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@
                       fill="#ffffff" p-id="9626"></path>
                 </svg>
                 <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px"
-                      v-text="item.createTime"></span>
+                      v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
               </div>
             </div>
           </div>
@@ -157,6 +157,7 @@
 <script>
 import {listRecord} from "@/api/lover";
 import './css/button.css'
+import {parseTime} from '@/utils/dateUitls';
 
 export default {
   name: "record",
@@ -174,6 +175,9 @@ export default {
     }
   },
   methods: {
+    parseTimes(value, args) {
+      return parseTime(value, args);
+    },
     recordIndex(id) {
       this.$router.push({
         path: '/record-index',

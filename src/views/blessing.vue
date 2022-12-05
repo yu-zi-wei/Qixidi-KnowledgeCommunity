@@ -32,7 +32,7 @@
                       <template #content>
                         <div class="hover-content">
                           <div class="mb-6">祝福人：{{ item.name }}</div>
-                          <div>时间：{{ item.createTime }}</div>
+                          <div>时间：{{ parseTimes(item.createTime, '{y}-{m}-{d} {h}:{i}') }}</div>
                         </div>
                       </template>
                     </a-trigger>
@@ -98,7 +98,7 @@
 import './css/blessing.css'
 import {commentAdd, listComment} from "@/api/lover";
 import {Notification} from '@arco-design/web-vue';
-import {formatDate} from "@/uitls/dateUitls";
+import {formatDate, parseTime} from "@/utils/dateUitls";
 
 export default {
   name: 'blessing',
@@ -137,6 +137,9 @@ export default {
     }
   },
   methods: {
+    parseTimes(value, args) {
+      return parseTime(value, args);
+    },
     listComments() {
       listComment().then(res => {
         this.barrageList = res.rows;

@@ -115,7 +115,6 @@ export default {
       listInfo(data).then(res => {
         this.listInfoData = res;
         this.loading = false;
-        console.log("this.listInfoData:", this.listInfoData)
       })
     },
   },

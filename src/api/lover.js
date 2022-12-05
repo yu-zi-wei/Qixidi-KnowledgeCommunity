@@ -1,4 +1,4 @@
-import request from '../uitls/request'
+import request from '../utils/request'
 
 // 查询网站基本信息列表
 export function listInfo(query) {

@@ -44,7 +44,7 @@
                   </span>
                   <span style="line-height: 20px;font-size: 12px;margin-left: 4px" v-text="item.address"></span>
                 </div>
-                <div v-if="item.address" class="fl-left mr-10" style="height: 20px">
+                <div v-if="item.updateTime" class="fl-left mr-10" style="height: 20px">
                 <span style="line-height: 20px" class="fl-left">
                   <svg t="1669798181975" class="icon" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="9622" width="16" height="16" style="margin-top: 1px;"><path
@@ -57,7 +57,10 @@
                       d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
                       fill="#ffffff" p-id="9626"></path></svg>
                 </span>
-                  <span style="line-height: 20px;font-size: 12px;margin-left: 4px">{{ item.updateTime }}</span>
+                  <span
+                      style="line-height: 20px;font-size: 12px;margin-left: 4px">
+                    {{ parseTimes(item.updateTime, '{y}-{m}-{d}') }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -92,6 +95,7 @@
 <script>
 import {listRepertoire} from "@/api/lover";
 import './css/button.css'
+import {parseTime} from '@/utils/dateUitls';
 
 export default {
   name: "detailedList",
@@ -110,6 +114,9 @@ export default {
     }
   },
   methods: {
+    parseTimes(value, args) {
+      return parseTime(value, args);
+    },
     getData() {
       let scrollTop = document.documentElement.scrollTop
       let clientHeight = document.documentElement.clientHeight
