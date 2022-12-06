@@ -182,17 +182,17 @@ export default {
         // barrageBox.innerHTML = ''
         this.createBarrage()
       }, (barrageList.length + 1) * 1000);
-      // commentAdd(this.form).then(res => {
-      //   if (res.code == 200) {
-      //     Notification.info({
-      //       title: '成功',
-      //       content: '感谢您的祝福',
-      //       showIcon: false,
-      //       closable: true,
-      //       style: {background: "#ce5fee", border: "none", color: "#fefefe"}
-      //     })
-      //   }
-      // });
+      commentAdd(this.form).then(res => {
+        if (res.code == 200) {
+          Notification.info({
+            title: '成功',
+            content: '感谢您的祝福',
+            showIcon: false,
+            closable: true,
+            style: {background: "#ce5fee", border: "none", color: "#fefefe"}
+          })
+        }
+      });
       let formatDate1 = formatDate(new Date(), "yyyy-MM-dd hh:mm");
       let data = {content: this.form.content, createTime: formatDate1};
       this.barrageList.push(data)

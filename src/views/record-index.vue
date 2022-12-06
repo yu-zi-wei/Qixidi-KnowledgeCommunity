@@ -18,8 +18,8 @@
             </div>
           </router-link>
 
-          <h2 class="mb-10" v-text="info.title"></h2>
-          <div class="overflow-hidden mb-20">
+          <h2 class="mb-10 text-center" v-text="info.title"></h2>
+          <div class="overflow-hidden mb-20 text-center">
             <div style="float: left;height: 30px;min-width: 10px;margin-left: 40%" v-if="info.address">
              <span style="float: left">
                     <svg t="1669690071448" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -115,7 +115,6 @@ export default {
 .content-index-cl {
   background-color: #c84be7;
   border-radius: 10px;
-  text-align: center;
   color: #fefefe;
   padding: 20px 40px;
   margin-bottom: 40px;
