@@ -2,13 +2,13 @@
 const modeUrlObj = {
     // 生产环境
     'production': {
-        baseURL: 'http://47.99.193.119:8082/',
-        authBaseURL: ''
+        baseURL: 'https://petrichor.ren/prod-api',
+        authBaseURL: '/prod-api'
     },
     // 开发环境
     'development': {
-        baseURL: 'http://127.0.0.1:8082/',
-        authBaseURL: ''
+        baseURL: 'http://127.0.0.1:8082',
+        authBaseURL: '/dev-api'
     },
     // 测试环境
     'test': {

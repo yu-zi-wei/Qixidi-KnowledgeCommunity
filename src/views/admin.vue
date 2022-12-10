@@ -5,23 +5,25 @@
       <p v-else>今天是我们在一起的</p>
       <p v-text="SampLingTime"></p>
     </div>
-    <a-grid :cols="{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }" :colGap="40" :rowGap="16"
-            class="grid-demo-grid">
-      <a-grid-item>
-        <div style="margin: 20px 0 80px 0">
-          <a-carousel
-              :auto-play="true"
-              animation-name="card"
-              show-arrow="never"
-              indicator-position="outer"
-              :style="{ width: '100%',height: '240px',}">
-            <a-carousel-item v-for="(image,key) in images" :style="{ width: '60%' }" :key="key">
-              <img :src="image.img" :style="{width: '100%',}"/>
-            </a-carousel-item>
-          </a-carousel>
-        </div>
-      </a-grid-item>
-    </a-grid>
+    <a-spin :loading="imageLoading" tip="正在加载..." style="width: 100%;" :size="28">
+      <a-grid :cols="{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }" :colGap="40" :rowGap="16"
+              class="grid-demo-grid">
+        <a-grid-item>
+          <div style="margin: 20px 0 80px 0">
+            <a-carousel
+                :auto-play="true"
+                animation-name="card"
+                show-arrow="never"
+                indicator-position="outer"
+                :style="{ width: '100%',height: '240px',}">
+              <a-carousel-item v-for="(image,key) in images" :style="{ width: '60%' }" :key="key">
+                <img :src="image.img" :style="{width: '100%',}"/>
+              </a-carousel-item>
+            </a-carousel>
+          </div>
+        </a-grid-item>
+      </a-grid>
+    </a-spin>
 
     <a-grid :cols="{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 6 }" :colGap="40" :rowGap="16" class="grid-demo-grid">
       <a-grid-item class="demo-item">
@@ -203,12 +205,14 @@ export default {
       images: [],
       SampLingTime: '第 999天 00小时 00分钟 00秒',
       listInfoData: {},
+      imageLoading: true,
     }
   },
   methods: {
     listCarousels() {
       listCarousel(this.queryParams).then(res => {
         this.images = res;
+        this.imageLoading = false;
       })
     },
     listInfos() {
@@ -253,6 +257,11 @@ export default {
 
 </script>
 
-<style scoped>
-
+<style>
+.arco-spin-tip, .arco-spin-icon {
+  color: #fefefe;
+}
+.arco-spin-mask{
+  background-color: transparent;
+}
 </style>

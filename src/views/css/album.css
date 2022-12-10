@@ -4,21 +4,6 @@
     text-align: center;
 }
 
-.ims {
-    max-width: 260px;
-    padding: 18px;
-    margin: 30px;
-    background-color: #ce5fee;
-    border-radius: 4px;
-    transition: all 1s;
-    -webkit-transform: transform 0.8s;
-}
-
-.ims:hover {
-    background-color: transparent;
-    transform: scale(1.5) rotate(0deg) !important;
-}
-
 .hr-wavy {
     border: 0;
     color: #ce5fee;
@@ -98,8 +83,8 @@
 
 
 .container {
-    resize: both;
-    position: relative;
+    /*resize: both;*/
+    /*position: relative;*/
     overflow: hidden;
     z-index: 2;
     display: grid;

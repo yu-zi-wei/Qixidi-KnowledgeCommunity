@@ -20,10 +20,12 @@ module.exports = {
             host: '0.0.0.0',  // 解决在局域网下无法访问
             port: 1029,
             proxy: {
-                '/prod-api': {
+                ['/prod-api']: {
                     target: 'http://127.0.0.1:8082',
                     changeOrigin: true, // 这个参数可以让target参数是域名
-
+                    pathRewrite: {
+                        ['^' + '/prod-api']: ''
+                    }
                 }
             },
         },

@@ -80,7 +80,7 @@
             </div>
           </div>
         </a-modal>
-        <div v-else class="text-center" style="color: #fefefe;font-size: 18px">
+        <div v-if="!loading && barrageList.length==0" class="text-center" style="color: #fefefe;font-size: 18px">
           <svg t="1670079174437" class="icon" viewBox="0 0 1567 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                p-id="11978" width="54" height="54">
             <path
