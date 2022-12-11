@@ -11,6 +11,7 @@
       </button>
     </div>
     <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;" :size="28">
+<!--      <div style="max-height: 280px;overflow: auto">-->
       <a-grid :cols="{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }" :colGap="40" :rowGap="16" class="grid-demo-grid"
               v-if="detailedList.length>0">
         <a-grid-item class="list-cl" v-for="item of detailedList">
@@ -73,7 +74,7 @@
           <div></div>
         </a-grid-item>
       </a-grid>
-      <div v-if="!loading && detailedList.length>0" class="text-center" style="color: #fefefe;font-size: 18px">
+      <div v-if="!loading && detailedList.length==0" class="text-center" style="color: #fefefe;font-size: 18px">
         <svg t="1670079174437" class="icon" viewBox="0 0 1567 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
              p-id="11978" width="54" height="54">
           <path
@@ -90,6 +91,7 @@
           </button>
         </div>
       </div>
+<!--      </div>-->
     </a-spin>
   </div>
 </template>
@@ -300,7 +302,8 @@ export default {
 .arco-spin-tip, .arco-spin-icon {
   color: #fefefe;
 }
-.arco-spin-mask{
+
+.arco-spin-mask {
   background-color: transparent;
 }
 
