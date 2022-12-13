@@ -200,7 +200,8 @@ export default {
 .arco-spin-tip, .arco-spin-icon {
   color: #fefefe;
 }
-.arco-spin-mask{
+
+.arco-spin-mask {
   background-color: transparent;
 }
 </style>

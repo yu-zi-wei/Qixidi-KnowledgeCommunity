@@ -11,7 +11,6 @@
       </button>
     </div>
     <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;" :size="28">
-<!--      <div style="max-height: 280px;overflow: auto">-->
       <a-grid :cols="{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }" :colGap="40" :rowGap="16" class="grid-demo-grid"
               v-if="detailedList.length>0">
         <a-grid-item class="list-cl" v-for="item of detailedList">
@@ -91,7 +90,6 @@
           </button>
         </div>
       </div>
-<!--      </div>-->
     </a-spin>
   </div>
 </template>

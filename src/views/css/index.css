@@ -13,6 +13,16 @@
     100px 100px 80px rgba(0, 0, 0, 0.07)
 }
 
+.title-two-cl {
+    /*font-size: 24px;*/
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    float: left;
+    /*line-height: 70px;*/
+    margin-left: 20px;
+}
+
 .index-2 {
     background-color: #c84be7;
     border: none;
