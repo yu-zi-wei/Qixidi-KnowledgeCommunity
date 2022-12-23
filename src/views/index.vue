@@ -26,7 +26,7 @@
               <!--                </router-link>-->
               <!--              </div>-->
               <div class="fl-right">
-                <a-avatar :size="topScrollBar.isTop?100:70">
+                <a-avatar :size="topScrollBar.isTop?100:60">
                   <img v-if="listInfoData.leftImg" alt="avatar" :src="listInfoData.leftImg"/>
                   <img v-else alt="avatar"
                        src="https://img1.baidu.com/it/u=2238292066,3745763495&fm=253&app=53&size=w500&n=0&g=0n&f=jpeg?sec=1671286226&t=476fc00114ed522fbb164fa0e186d921"/>
@@ -69,7 +69,7 @@
                 <div v-if="!topScrollBar.isTop">
                   <svg t="1669797596503" class="icon" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg"
-                       p-id="20301" width="90" height="70">
+                       p-id="20301" width="80" height="60">
                     <path
                         d="M5.1 831.1h253.5c2.8 0 5.1-2.3 5.1-5.1s-2.3-5.1-5.1-5.1H5.1c-2.8 0-5.1 2.3-5.1 5.1 0 2.9 2.3 5.1 5.1 5.1z m314.3 0h55.8c2.8 0 5.1-2.3 5.1-5.1s-2.3-5.1-5.1-5.1h-55.8c-2.8 0-5.1 2.3-5.1 5.1 0.1 2.9 2.3 5.1 5.1 5.1z m106.5 0h253.5c2.8 0 5.1-2.3 5.1-5.1s-2.3-5.1-5.1-5.1H425.9c-2.8 0-5.1 2.3-5.1 5.1 0 2.9 2.3 5.1 5.1 5.1z m314.4 0H796c2.8 0 5.1-2.3 5.1-5.1s-2.3-5.1-5.1-5.1h-55.8c-2.8 0-5.1 2.3-5.1 5.1 0.1 2.9 2.4 5.1 5.2 5.1z m106.4 0h172.4c2.8 0 5.1-2.3 5.1-5.1s-2.3-5.1-5.1-5.1H846.7c-2.8 0-5.1 2.3-5.1 5.1 0.1 2.9 2.3 5.1 5.1 5.1z"
                         fill="#3B0404" p-id="20302"></path>
@@ -100,7 +100,7 @@
             </a-col>
             <a-col :flex="5">
               <div class="fl-left">
-                <a-avatar :size="topScrollBar.isTop?100:70">
+                <a-avatar :size="topScrollBar.isTop?100:60">
                   <img v-if="listInfoData.rightImg" alt="avatar" :src="listInfoData.rightImg"/>
                   <img v-else alt="avatar"
                        src="https://img1.baidu.com/it/u=4010544844,625971989&fm=253&app=53&size=w500&n=0&g=0n&f=jpeg?sec=1671286226&t=cda94a523e0bc745eaee361c472dae94"/>
@@ -118,7 +118,7 @@
     <div>
       <router-view></router-view>
     </div>
-    <div class="go-top-cl" @click="goTop" title="回到顶部">
+    <div class="go-top-cl" @click="goTop" title="回到顶部" v-if="!topScrollBar.isTop">
       <svg t="1669603221736" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
            p-id="1303" width="20" height="20">
         <path
@@ -154,16 +154,20 @@ export default {
           position: 'fixed',
           width: '100%',
           zIndex: '99',
-          opacity: '0.9',
-          boxShadow: '6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),\n' +
-              '    22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),\n' +
-              '    100px 100px 80px rgba(0, 0, 0, 0.07)',
+          boxShadow:
+              ' 0.6px 2.3px 2.2px rgba(0, 0, 0, 0.02),\n' +
+              '  1.3px 5.6px 5.3px rgba(0, 0, 0, 0.028),\n' +
+              '  2.5px 10.5px 10px rgba(0, 0, 0, 0.035),\n' +
+              '  4.5px 18.8px 17.9px rgba(0, 0, 0, 0.042),\n' +
+              '  8.4px 35.1px 33.4px rgba(0, 0, 0, 0.05),\n' +
+              '  20px 84px 80px rgba(0, 0, 0, 0.07)'
         },
         isTop: true,
         noneTop: {
-          // position: 'fixed',
-          // width: '100%',
-          // zIndex: '99',
+          position: 'fixed',
+          width: '100%',
+          zIndex: '99',
+          backgroundColor: '#3498db',
           visibility: 'hidden',
         },
         inlineTop: '',

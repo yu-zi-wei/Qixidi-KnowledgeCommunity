@@ -124,3 +124,60 @@ flex-shrink：指定如果宽度不足，项目是否可以缩小 */
 .content-album-cl {
     font-size: 16px;
 }
+
+.search-box {
+    /* 绝对定位 水平垂直居中 */
+    position: absolute;
+    left: 50%;
+    outline: none;
+    transform: translate(-50%, -50%);
+    background-color: #fefefe;
+    height: 30px;
+    padding: 6px;
+    border-radius: 30px;
+}
+
+.search-txt {
+    border: none;
+    background: none;
+    outline: none;
+    float: left;
+    padding: 0;
+    color: #fff;
+    font-size: 14px;
+    line-height: 30px;
+    width: 0;
+    /* 动画过渡 */
+    transition: 0.6s;
+}
+
+.search-txt::-webkit-input-placeholder {
+    color: #636e72;
+    font-size: 14px;
+}
+
+.search-btn {
+    float: right;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ce5fee;
+    /* 弹性布局 水平垂直居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    /* 动画过渡 */
+    transition: 0.4s;
+}
+
+.search-box:hover .search-txt {
+    width: 140px;
+    padding: 0 6px;
+}
+
+.search-box:hover .search-btn {
+    background-color: #bc2dda;
+}
+
+/*--------------------------*/

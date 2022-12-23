@@ -52,7 +52,8 @@
               <span class="span-2-cl" v-text="info.createTime"></span>
             </div>
           </div>
-          <div style="font-size: 16px;line-height: 20px" v-html=" info.content"></div>
+          <div class="content-img-cl" v-html=" info.content">
+          </div>
         </div>
       </a-col>
       <a-col :span="2" style="height: 1px">
@@ -91,6 +92,17 @@ export default {
 </script>
 
 <style>
+.content-img-cl {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.content-img-cl img {
+  border: none;
+  max-width: 100%;
+  padding: 20px 0;
+}
+
 .span-2-cl {
   font-size: 12px;
   margin-left: 4px;

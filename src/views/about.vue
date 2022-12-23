@@ -19,7 +19,7 @@
             <div class="mb-20" v-if="listInfoData.title">
               <h2>{{ listInfoData.title }}</h2>
             </div>
-            <div v-html="listInfoData.content"></div>
+            <div class="content-img-cl" v-html="listInfoData.content"></div>
           </a-col>
           <a-col :span="3">
           </a-col>
@@ -68,6 +68,12 @@ export default {
 }
 </script>
 <style>
+.content-img-cl img {
+  border: none;
+  max-width: 100%;
+  padding: 20px 0;
+}
+
 .about-text {
   text-align: center;
   background-color: #ce5fee;
@@ -185,7 +191,8 @@ export default {
 .arco-spin-tip, .arco-spin-icon {
   color: #fefefe;
 }
-.arco-spin-mask{
+
+.arco-spin-mask {
   background-color: transparent;
 }
 

@@ -7,6 +7,10 @@
     padding: 0;
 }
 
+input {
+    outline: none;
+}
+
 /*页面永远保持有滚动条*/
 body {
     overflow: scroll;
@@ -222,6 +226,13 @@ mr-auto {
     margin-bottom: 20px;
 }
 
+.mb-26 {
+    margin-bottom: 26px;
+}
+
+.mb-32 {
+    margin-bottom: 32px;
+}
 
 .ml-1 {
     margin-left: 1px;

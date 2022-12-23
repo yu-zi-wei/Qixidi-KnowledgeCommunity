@@ -22,7 +22,21 @@
         </button>
       </div>
     </div>
-    <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;" :size="28">
+    <div class="text-center">
+      <div class="search-box" tabindex="1">
+        <input v-model="queryParams.title" type="text" class="search-txt" placeholder="标题关键字..."
+               style="color:#636e72;outline:none;"/>
+        <a class="search-btn">
+          <svg t="1671602595081" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               p-id="1401" width="16" height="16">
+            <path
+                d="M953.474215 908.234504l-152.576516-163.241391c61.92508-74.48211 95.81186-167.36973 95.81186-265.073744 0-229.294809-186.63531-415.930119-416.102133-415.930119-229.294809 0-415.930119 186.63531-415.930119 415.930119s186.63531 415.930119 415.930119 415.930119c60.032925 0 118.00168-12.55703 172.186125-37.327062 16.169326-7.396607 23.221905-26.318159 15.825298-42.315471-7.396607-16.169326-26.318159-23.221905-42.315471-15.825298-45.927768 20.813707-94.951789 31.478582-145.695952 31.478582-194.031917 0-351.94087-157.908953-351.94087-351.94087 0-194.031917 157.908953-351.94087 351.94087-351.94087 194.031917 0 351.94087 157.908953 351.94087 351.94087 0 91.339493-34.918864 177.86259-98.048043 243.743995-12.213002 12.729044-11.868974 33.026709 0.860071 45.239711 1.032085 0.860071 2.236183 1.204099 3.268268 2.064169 0.860071 1.204099 1.376113 2.752226 2.408198 3.956325l165.477574 177.00252c6.192508 6.70855 14.793214 10.148833 23.393919 10.148833 7.912649 0 15.653284-2.92424 21.845792-8.600706C964.827146 941.433227 965.515202 921.135562 953.474215 908.234504z"
+                fill="#ffffff" p-id="1402"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 40px" :size="28">
       <div v-if="recordList.length>0">
         <a-row v-for="(item,i) in  recordList" style="width: 100%;margin: auto;color: #fefefe">
           <a-col :span="3">
@@ -170,11 +184,19 @@ export default {
         pageNum: 1,
         pageSize: 10,
         state: 0,
+        title: null,
       },
       total: 0,
       scrollLoading: true,
       isList: false,
       loading: true,
+    }
+  },
+  watch: {
+    'queryParams.title': {
+      handler: function () {
+        this.listRecords();
+      }
     }
   },
   methods: {
@@ -241,6 +263,70 @@ export default {
 </script>
 
 <style>
+.search-box {
+  /* 绝对定位 水平垂直居中 */
+  position: absolute;
+  left: 50%;
+  outline: none;
+  transform: translate(-50%, -50%);
+  background-color: #05fcf8;
+  height: 30px;
+  padding: 6px;
+  border-radius: 30px;
+}
+
+.search-txt {
+  border: none;
+  background: none;
+  outline: none;
+  float: left;
+  padding: 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 30px;
+  width: 0;
+  /* 动画过渡 */
+  transition: 0.6s;
+}
+
+.search-txt::-webkit-input-placeholder {
+  color: #636e72;
+  font-size: 14px;
+}
+
+.search-btn {
+  float: right;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ce5fee;
+  /* 弹性布局 水平垂直居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  /* 动画过渡 */
+  transition: 0.4s;
+}
+
+.search-box:hover .search-txt {
+  width: 140px;
+  padding: 0 6px;
+}
+
+.search-box:hover .search-btn {
+  background-color: #bc2dda;
+}
+
+/*--------------------------*/
+
+.content-cl img {
+  border: none;
+  max-width: 100%;
+  padding: 20px 0;
+}
+
+
 @-webkit-keyframes rotate {
   from {
     -webkit-transform: rotate(0deg)
