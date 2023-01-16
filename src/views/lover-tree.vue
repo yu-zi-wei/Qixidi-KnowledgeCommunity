@@ -36,7 +36,7 @@ export default {
         loverTime: null,
         loverPrefix: null,
       },
-      loverPrefix: "丫头，我们已经在一起",
+      loverPrefix: "丫头，我们已经相爱",
     }
   },
   // watch: {
@@ -60,7 +60,6 @@ export default {
                 loverPrefix: this.treeInfo.loverPrefix == "" ? this.loverPrefix : this.treeInfo.loverPrefix,
               }
             }, '*')
-            console.log("传参 ")
           }, 1000);
     },
 

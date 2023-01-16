@@ -196,10 +196,10 @@ export default {
       } else {
         this.topScrollBar.isTop = true;
       }
-      console.log('底部:', "scrollTop:", scrollTop,
-          "this.availHeight:", this.availHeight,
-          " this.topScrollBar.isTop:", this.topScrollBar.isTop,
-      )
+      // console.log('底部:', "scrollTop:", scrollTop,
+      //     "this.availHeight:", this.availHeight,
+      //     " this.topScrollBar.isTop:", this.topScrollBar.isTop,
+      // )
     },
   },
   mounted() {
