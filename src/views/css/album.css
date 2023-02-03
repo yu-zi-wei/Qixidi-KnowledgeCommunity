@@ -83,8 +83,6 @@
 
 
 .container {
-    /*resize: both;*/
-    /*position: relative;*/
     overflow: hidden;
     z-index: 2;
     display: grid;
@@ -105,20 +103,21 @@ flex-grow：指定如果有多余宽度，项目是否可以扩大。
 flex-shrink：指定如果宽度不足，项目是否可以缩小 */
 .box {
     font-size: 2rem;
-    padding: 10px;
     border-radius: 10px;
-    background-color: #ce5fee;
-    border: 1px solid #ce5fee;
-    margin: 10px 10px;
-    flex: 1 1 150px;
-    flex: 0 1 150px;
-    display: grid;
-    transition: .4s;
-    place-items: center;
+    margin: 30px 30px;
+    float: right;
+}
+
+.img-li {
+    border-radius: 4px;
+    background-color: #be2edd;
+    padding: 6px;
+    border: 6px solid #ce5fee;
 }
 
 .box:hover {
     background: #be2edd none repeat scroll 0 0;
+    /*border: 1px solid #ce5fee;*/
 }
 
 .content-album-cl {

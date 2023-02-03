@@ -90,3 +90,18 @@
     line-height: 40px;
     color: #fefefe;
 }
+
+.top-la-cl {
+    background-color: #be2edd;
+    padding: 8px 0;
+    top: 0px;
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    box-shadow: 0.6px 2.3px 2.2px rgba(0, 0, 0, 0.02),
+    1.3px 5.6px 5.3px rgba(0, 0, 0, 0.028),
+    2.5px 10.5px 10px rgba(0, 0, 0, 0.035),
+    4.5px 18.8px 17.9px rgba(0, 0, 0, 0.042),
+    8.4px 35.1px 33.4px rgba(0, 0, 0, 0.05),
+    20px 84px 80px rgba(0, 0, 0, 0.07);
+}
