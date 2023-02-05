@@ -105,3 +105,36 @@
     8.4px 35.1px 33.4px rgba(0, 0, 0, 0.05),
     20px 84px 80px rgba(0, 0, 0, 0.07);
 }
+
+.filings-info {
+    margin-top: 60px;
+    text-align: center;
+    height: 40px;
+    width: 100%;
+    border-radius: 4px;
+    color: #fefefe;
+    font-size: 13px;
+    line-height: 40px;
+    letter-spacing: 0.6px;
+    background-color: #bf48dd;
+    box-shadow: 0.6px 2.3px 2.2px rgba(0, 0, 0, 0.02),
+    1.3px 5.6px 5.3px rgba(0, 0, 0, 0.028),
+    2.5px 10.5px 10px rgba(0, 0, 0, 0.035),
+    4.5px 18.8px 17.9px rgba(0, 0, 0, 0.042),
+    8.4px 35.1px 33.4px rgba(0, 0, 0, 0.05),
+    20px 84px 80px rgba(0, 0, 0, 0.07);
+}
+
+.filings-info i {
+    cursor: pointer;
+    margin-right: 16px;
+}
+
+.filings-info i:hover,
+.filings-info a:hover {
+    color: #efe925;
+}
+
+.filings-info a {
+    color: #fefefe;
+}

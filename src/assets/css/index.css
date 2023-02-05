@@ -19,7 +19,6 @@ body {
     overflow-x: hidden;
     letter-spacing: 2px;
     background-color: #be2edd;
-    /*background-image: url("");*/
 }
 
 body::-webkit-scrollbar {

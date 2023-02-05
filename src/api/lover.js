@@ -87,3 +87,11 @@ export function listCarousel(query) {
         params: query
     })
 }
+
+// 查询网站基本配置
+export function configInfo() {
+    return request({
+        url: '/api/lover/config',
+        method: 'get',
+    })
+}
