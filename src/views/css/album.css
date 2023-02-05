@@ -101,7 +101,7 @@
 /* flex-basis：项目的初始宽度。
 flex-grow：指定如果有多余宽度，项目是否可以扩大。
 flex-shrink：指定如果宽度不足，项目是否可以缩小 */
-.box {
+.box-album {
     font-size: 2rem;
     border-radius: 10px;
     margin: 30px 30px;
@@ -115,7 +115,7 @@ flex-shrink：指定如果宽度不足，项目是否可以缩小 */
     border: 6px solid #ce5fee;
 }
 
-.box:hover {
+.box-album:hover {
     background: #be2edd none repeat scroll 0 0;
     /*border: 1px solid #ce5fee;*/
 }

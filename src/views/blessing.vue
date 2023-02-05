@@ -203,7 +203,6 @@ export default {
 
       let div = document.createElement('div')
       div.innerHTML = this.form.name + "：" + this.form.content
-      // + '<p/>' + '<span style="font-size: 10px">' + formatDate1 + '</span>';
       div.classList.add('box')
       div.style.top = topList[num] + 'px'
 
@@ -225,7 +224,6 @@ export default {
       // 因为清除的话会重新计算时间，会造成一段时间的空白期，所以需要渲染一次。
       this.createBarrage()
       my_set = setInterval(() => {
-        // barrageBox.innerHTML = ''
         this.createBarrage()
       }, (barrageList.length + this.frequency) * 1000);
 
@@ -279,7 +277,6 @@ export default {
   mounted() {
     this.listComments();
     setInterval(() => {
-      // barrageBox.innerHTML = ''
       if (this.isList) {
         this.loading = false;
         return;

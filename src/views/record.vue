@@ -94,6 +94,7 @@
             <a-col :span="1">
             </a-col>
             <a-col :span="1">
+              <!--              旋转-->
               <div class="outer" id="xuanzhun">
                 <div class="inner"></div>
               </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-20 mb-40">
+  <div class="mt-20 mb-40 overflow-hidden">
     <div style="text-align: center;margin-bottom: 20px">
       <div style="margin: auto" class="album-button">
             <span>
@@ -50,7 +50,7 @@
     <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 10px;" :size="28">
       <div class="container" v-if="imgList.length!=0">
         <div class="parent">
-          <div class="box" v-for="item of imgList">
+          <div class="box-album" v-for="item of imgList">
             <div class="album-wrapper" :style="imgRotate(item.id)">
               <div class="album-thumb">
                 <a-image
@@ -171,7 +171,7 @@ export default {
             this.total = res.total;
           }).finally(() => {
             this.scrollLoading = true
-            this.setUpActive();
+            // this.setUpActive();
             if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
               this.isList = true;
               return;

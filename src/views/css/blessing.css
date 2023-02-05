@@ -81,7 +81,7 @@
     visibility: hidden;
     animation: barrage 10s linear 0s;
     /* 这个是循环播放的属性，需要就加上 */
-    /* animation-play-state: paused;*/
+    /*animation-play-state: paused;*/
     cursor: pointer;
 }
 
