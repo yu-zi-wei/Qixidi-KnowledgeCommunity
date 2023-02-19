@@ -48,12 +48,10 @@
                       d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
                       fill="#ffffff" p-id="9626"></path></svg>
                 </span>
-
               <span class="span-2-cl" v-text="info.createTime"></span>
             </div>
           </div>
-          <div class="content-img-cl" v-html=" info.content">
-          </div>
+          <div class="content-img-cl" v-html=" info.content"></div>
         </div>
       </a-col>
       <a-col :span="2" style="height: 1px">
@@ -94,13 +92,23 @@ export default {
 <style>
 .content-img-cl {
   font-size: 16px;
+  text-align: center;
   line-height: 20px;
+
 }
 
 .content-img-cl img {
   border: none;
-  max-width: 100%;
-  padding: 20px 0;
+  max-width: 600px;
+  max-height: 400px;
+  padding: 20px;
+  overflow: hidden;
+  transition: 0.6s;
+  cursor: pointer;
+}
+
+.content-img-cl img:hover {
+  transform: scale(1.1);
 }
 
 .span-2-cl {

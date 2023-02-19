@@ -2,8 +2,7 @@
 const modeUrlObj = {
     // 生产环境
     'production': {
-        // baseURL: 'https://petrichor.ren/prod-api',
-        baseURL: 'http://47.108.184.199:8082',
+        baseURL: 'https://huibao.love/prod-api',
         authBaseURL: '/prod-api'
     },
     // 开发环境

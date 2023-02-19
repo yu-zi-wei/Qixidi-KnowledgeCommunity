@@ -324,10 +324,14 @@ export default {
 
 /*--------------------------*/
 
+.content-cl {
+  text-align: center;
+}
+
 .content-cl img {
   border: none;
-  max-width: 100%;
-  padding: 20px 0;
+  max-width: 86%;
+  padding: 20px;
 }
 
 
