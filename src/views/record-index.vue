@@ -99,15 +99,17 @@ export default {
 
 .content-img-cl img {
   border: none;
-  max-width: 600px;
+  max-width: 60%;
   max-height: 400px;
   padding: 20px;
-  overflow: hidden;
-  transition: 0.6s;
+  object-fit: cover;
+  object-position: left top;
+  transition: 1s;
   cursor: pointer;
 }
 
 .content-img-cl img:hover {
+  object-position: right bottom;
   transform: scale(1.1);
 }
 
