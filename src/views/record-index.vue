@@ -104,7 +104,7 @@ export default {
   padding: 20px;
   object-fit: cover;
   object-position: left top;
-  transition: 1s;
+  transition: 0.6s;
   cursor: pointer;
 }
 
