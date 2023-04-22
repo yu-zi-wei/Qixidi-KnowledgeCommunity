@@ -65,16 +65,16 @@
                     <!--                  <a-image-preview-action name="下载" @click="downCom(item.img,'时光相册')">下载</a-image-preview-action>-->
                   </template>
                 </a-image>
-                <div class="font-s-14 ml-8 mr-8">
+                <div class="font-s-14 ml-8 mr-8 color-2c3e50">
                   <p style="text-align: right">
                     Date:{{ parseTimes(item.createTime, '{y}-{m}-{d}') }}
                   </p>
                   <p style="text-align: left">“{{ item.remarks }}”</p>
                 </div>
                 <div class="view-icon">
-                  <div class="content-album-cl">{{ item.remarks }}</div>
+                  <div class="content-album-cl color-2c3e50 ">{{ item.remarks }}</div>
                   <div class="work-tag">
-                    <a href="#" class="mr-10">{{ item.address }}</a>
+                    <a href="#" class="mr-10 color-2c3e50">{{ item.address }}</a>
                     <a href="#">{{ parseTimes(item.createTime, '{y}-{m}-{d} {h}:{i}') }}</a>
                   </div>
                   <div @click="() => { item.states = true }" class="cursor-pointer" title="查看大图">
