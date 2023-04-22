@@ -9,13 +9,13 @@
                height="36">
             <path
                 d="M638.46 298.5h-369a30 30 0 0 0 0 60h369a30 30 0 0 0 0-60zM651.44 539.05L665.51 525a30 30 0 0 0-27.05-43h-369a30 30 0 0 0 0 60h369a29.87 29.87 0 0 0 12.98-2.95zM538.1 665.5H269.46a30 30 0 0 0 0 60H510.4zM623.11 715.78l-21.05 9.72h36.4A30 30 0 0 0 662 676.9z"
-                p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#fefefe"></path>
+                p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#7bed9f"></path>
             <path
                 d="M730 608.94V774a49.06 49.06 0 0 1-49 49H227a49.06 49.06 0 0 1-49-49V250a49.06 49.06 0 0 1 49-49h454a49.06 49.06 0 0 1 49 49v210.53l60-60V250a109.12 109.12 0 0 0-109-109H227a109.12 109.12 0 0 0-109 109v524a109.12 109.12 0 0 0 109 109h454a109.12 109.12 0 0 0 109-109V548.94zM930.73 401.81A48 48 0 0 0 862.89 334z"
-                p-id="37763" data-spm-anchor-id="a313x.7781069.0.i46" class="" fill="#fff200"></path>
+                p-id="37763" data-spm-anchor-id="a313x.7781069.0.i46" class="" fill="#2ed573"></path>
             <path
                 d="M558.106 638.704l292.742-292.742 67.882 67.882-292.742 292.743zM513.06 730.84l-12.87 26.63a5.37 5.37 0 0 0 7.18 7.18L534 751.78zM541.63 748.09l68.64-33.18-60.35-60.35-33.17 68.65 24.88 24.88z"
-                p-id="37764" data-spm-anchor-id="a313x.7781069.0.i48" class="" fill="#55efc4"></path>
+                p-id="37764" data-spm-anchor-id="a313x.7781069.0.i48" class="" fill="#2ed573"></path>
           </svg>
           </span>
           <span style="line-height: 36px; letter-spacing: 3px;">点点滴滴</span>
@@ -39,118 +39,140 @@
     <!--    </div>-->
     <div class="mb-20">
       <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 40px" :size="28">
+        <div class="disappear-789-an">
+          <div v-for="(items,index) in  recordList" style="width: 80%;margin: auto">
+            <div style="margin-bottom: 60px">
+              <div class="card">
+                <h2 class="text-center">{{ items.title }}</h2>
+                <hr class="hr-twill-colorful"/>
+                <div @click="recordIndex(items.id)" style="padding: 0 10px 10px 6px" class="content-cl cursor-pointer"
+                     title="点击查看"
+                     v-html="items.content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div v-if="recordList.length>0">
-          <a-row v-for="(item,i) in  recordList" style="width: 100%;margin: auto;color: #fefefe">
-            <a-col :span="3">
-            </a-col>
-            <a-col :span="8">
-              <div v-if="i % 2 ==1" class="padding-10 mt-2">
-                <div class="card">
-                  <h2>{{ item.title }}</h2>
-                  <hr class="hr-twill-colorful"/>
-                  <div @click="recordIndex(item.id)" style="padding: 0 10px 10px 6px" class="content-cl cursor-pointer"
-                       title="点击查看"
-                       v-html="item.content"></div>
-                </div>
-                <div style="height: 20px;overflow: hidden">
-                  <div class="fl-left mr-15" v-if="item.address">
-                 <span class="fl-left">
-                    <svg t="1669690071448" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
-                         width="20" height="20"><path
-                        d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
-                        fill="#ffffff" p-id="6301"></path><path
-                        d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
-                        fill="#ffffff" p-id="6302"></path><path
-                        d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
-                        fill="#f4ea2a" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
-                        class="selected"></path></svg>
-                  </span>
-                    <span style="font-size: 14px;margin-left: 4px;line-height: 20px" v-text="item.address"></span>
+          <div class="disappear-789">
+            <a-row v-for="(item,i) in  recordList"
+                   style="width: 100%;margin: auto;color: #fefefe">
+              <a-col :span="3">
+              </a-col>
+              <a-col :span="8">
+                <div v-if="i % 2 ==1" class="padding-10 mt-2">
+                  <div class="card">
+                    <h2 class="text-center">{{ item.title }}</h2>
+                    <hr class="hr-twill-colorful"/>
+                    <div @click="recordIndex(item.id)" style="padding: 0 10px 10px 6px"
+                         class="content-cl cursor-pointer"
+                         title="点击查看"
+                         v-html="item.content"></div>
                   </div>
-                  <div>
-                    <svg t="1669798181975" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="9622" width="18" height="18"
-                         style="float: left">
-                      <path
-                          d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
-                          fill="#ffffff" p-id="9623"></path>
-                      <path
-                          d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
-                          fill="#ffffff" p-id="9624"></path>
-                      <path
-                          d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
-                          fill="#ffffff" p-id="9625"></path>
-                      <path
-                          d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
-                          fill="#ffffff" p-id="9626"></path>
-                    </svg>
-                    <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px"
-                          v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
-                  </div>
-                </div>
-              </div>
-            </a-col>
-            <a-col :span="1">
-            </a-col>
-            <a-col :span="1">
-              <!--              旋转-->
-              <div class="outer" id="xuanzhun">
-                <div class="inner"></div>
-              </div>
-              <div style="background-color: #05fcf8;min-height: 250px;width: 2px;border-radius: 2px;margin: 10px"></div>
-            </a-col>
-            <a-col :span="8">
-              <div v-if="i % 2 ==0" class="padding-10 mt-2">
-                <div class="card">
-                  <h2>{{ item.title }}</h2>
-                  <hr class="hr-twill-colorful"/>
-                  <div style="padding: 0 10px 10px 6px" @click="recordIndex(item.id)" class="content-cl cursor-pointer"
-                       title="点击查看"
-                       v-html="item.content"></div>
-                </div>
-                <div style="height: 20px;overflow: hidden">
-                  <div class="fl-left mr-15" v-if="item.address">
-                 <span class="fl-left">
-                    <svg t="1669690071448" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
-                         width="20" height="20"><path
-                        d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
-                        fill="#ffffff" p-id="6301"></path><path
-                        d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
-                        fill="#ffffff" p-id="6302"></path><path
-                        d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
-                        fill="#f4ea2a" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
-                        class="selected"></path></svg>
-                  </span>
-                    <span style="font-size: 14px;margin-left: 4px;line-height: 20px" v-text="item.address"></span>
-                  </div>
-                  <div>
-                    <svg t="1669798181975" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="9622" width="18" height="18" style="float: left">
-                      <path
-                          d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
-                          fill="#ffffff" p-id="9623"></path>
-                      <path
-                          d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
-                          fill="#ffffff" p-id="9624"></path>
-                      <path
-                          d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
-                          fill="#ffffff" p-id="9625"></path>
-                      <path
-                          d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
-                          fill="#ffffff" p-id="9626"></path>
-                    </svg>
-                    <span style="line-height: 20px;margin-left: 4px;float: left;font-size: 13px"
-                          v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
-                  </div>
-                </div>
-              </div>
-            </a-col>
-            <a-col :span="3">
-            </a-col>
+                  <div style="color: #2c3e50;display: flex;justify-content: left;">
+                    <div class="mr-10" v-if="item.address">
+                      <svg t="1669690071448" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
+                           width="20" height="20">
+                        <path
+                            d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
+                            fill="#bdc3c7" p-id="6301"></path>
+                        <path
+                            d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
+                            fill="#95a5a6" p-id="6302"></path>
+                        <path
+                            d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
+                            fill="#95a5a6" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
+                            class="selected"></path>
+                      </svg>
+                      <span class="ml-4" v-text="item.address"></span>
+                    </div>
 
-          </a-row>
+                    <div v-if="item.createTime">
+                      <svg t="1669798181975" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg" p-id="9622" width="20" height="20">
+                        <path
+                            d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
+                            fill="#95a5a6" p-id="9623"></path>
+                        <path
+                            d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
+                            fill="#f39c12" p-id="9624"></path>
+                        <path
+                            d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
+                            fill="#95a5a6" p-id="9625"></path>
+                        <path
+                            d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
+                            fill="#95a5a6" p-id="9626"></path>
+                      </svg>
+                      <span  class="ml-4" v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
+                    </div>
+                  </div>
+
+                </div>
+              </a-col>
+              <a-col :span="1">
+              </a-col>
+              <a-col :span="1">
+                <!--              旋转-->
+                <div class="outer" id="xuanzhun">
+                  <div class="inner"></div>
+                </div>
+                <div class="hi-cl"></div>
+              </a-col>
+              <a-col :span="8">
+                <div v-if="i % 2 ==0" class="padding-10 mt-2">
+                  <div class="card">
+                    <h2 class="text-center">{{ item.title }}</h2>
+                    <hr class="hr-twill-colorful"/>
+                    <div style="padding: 0 10px 10px 6px" @click="recordIndex(item.id)"
+                         class="content-cl cursor-pointer"
+                         title="点击查看"
+                         v-html="item.content"></div>
+                  </div>
+                  <div style="color: #2c3e50;display: flex;justify-content: left;">
+                    <div class="mr-10" v-if="item.address">
+                      <svg t="1669690071448" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
+                           width="20" height="20">
+                        <path
+                            d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
+                            fill="#bdc3c7" p-id="6301"></path>
+                        <path
+                            d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
+                            fill="#95a5a6" p-id="6302"></path>
+                        <path
+                            d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
+                            fill="#95a5a6" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
+                            class="selected"></path>
+                      </svg>
+                      <span class="ml-4" v-text="item.address"></span>
+                    </div>
+
+                    <div v-if="item.createTime">
+                      <svg t="1669798181975" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg" p-id="9622" width="20" height="20">
+                        <path
+                            d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
+                            fill="#95a5a6" p-id="9623"></path>
+                        <path
+                            d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
+                            fill="#f39c12" p-id="9624"></path>
+                        <path
+                            d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
+                            fill="#95a5a6" p-id="9625"></path>
+                        <path
+                            d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
+                            fill="#95a5a6" p-id="9626"></path>
+                      </svg>
+                      <span  class="ml-4" v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
+                    </div>
+                  </div>
+                </div>
+              </a-col>
+              <a-col :span="3">
+              </a-col>
+
+            </a-row>
+          </div>
         </div>
         <div v-if="!loading && recordList.length==0" class="text-center" style="color: #fefefe;font-size: 18px">
           <svg t="1670079174437" class="icon" viewBox="0 0 1567 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -386,8 +408,16 @@ export default {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2px solid #05fcf8;
+  border: 2px solid #7ed6df;
   border-style: dashed;
+}
+
+.hi-cl {
+  background-color: #7ed6df;
+  min-height: 250px;
+  width: 2px;
+  border-radius: 2px;
+  margin: 10px;
 }
 
 .outer .inner {
@@ -397,7 +427,7 @@ export default {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #05fcf8;
+  background-color: #7ed6df;
   transform: translate(-50%, -50%);
 }
 
@@ -406,7 +436,7 @@ export default {
   border: 0;
   margin: 10px 0 20px 0;
   padding: 3px;
-  background: linear-gradient(135deg, #fefefe, #fff200, #05fcf8, #fff200, #fefefe);
+  background: linear-gradient(135deg, #9b59b6, #ff4757, #05fcf8, #fff200, #1e90ff);
   --mask-image: repeating-linear-gradient(135deg, #000 0px, #000 1px, transparent 1px, transparent 6px);
   -webkit-mask-image: var(--mask-image);
   mask-image: var(--mask-image);
@@ -473,14 +503,14 @@ export default {
 
 /* From www.lingdaima.com */
 .record-button {
-  --color-1: rgb(178, 12, 211);
+  --color-1: #7ed6df;
   --color-2: rgb(5, 252, 248);
   --color-3: rgb(28, 0, 48);
   border: none;
   padding: 4px 10px;
   overflow: hidden;
-  color: var(--color-2);
-  background: #c23be1;
+  color: black;
+  background: #dff9fb;
   box-shadow: -10px -10px var(--color-1),
   15px 10px var(--color-2);
   font-weight: bold;
@@ -501,13 +531,14 @@ export default {
 /* From www.lingdaima.com */
 .card {
   padding: 6px;
-  --color-1: rgb(178, 12, 211);
-  --color-2: rgb(5, 252, 248);
+  --color-1: #c7ecee;
+  --color-2: #c7ecee;
   --color-3: rgb(28, 0, 48);
   min-width: 40px;
+  color: black;
   min-height: 154px;
   margin-bottom: 20px;
-  background: #c23be1;
+  background: #fefefe;
   box-shadow: -10px -10px var(--color-1),
   15px 10px var(--color-2);
   transition: box-shadow 0.25s ease-in-out,
@@ -522,7 +553,7 @@ export default {
 
 
 .arco-timeline-item-label {
-  color: #fefefe;
+  color: #42b983;
 }
 
 .arco-card {

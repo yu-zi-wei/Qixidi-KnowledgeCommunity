@@ -30,7 +30,6 @@
         <div id="text">
             <div id="code">
                 <div id="content">
-
                 </div>
                 <!--                <font color="#fff200">-->
                 <!--                <span class="say">亲爱的宝宝，我爱你</span><br>-->
@@ -42,7 +41,7 @@
             </div>
         </div>
         <div id="clock-box">
-            <span class="STYLE1"></span><font color="#18dcff"><span id="titleLover"></span></font>
+            <span class="STYLE1"></span><font color="#ffa502"><span id="titleLover"></span></font>
             <div id="clock"></div>
         </div>
         <canvas id="canvas" width="1100" height="680"></canvas>
@@ -75,7 +74,8 @@
         var opts = {
             seed: {
                 x: width / 2 - 20,
-                color: "#fefefe",
+                //爱心颜色
+                color: "#8e44ad",
                 scale: 2
             },
             branch: [
@@ -171,7 +171,7 @@
 
             // 会有闪烁不得意这样做, (＞﹏＜)
             canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
-            canvas.css("background", "#be2edd");
+            // canvas.css("background", "#27ae60");
             $await(Jscex.Async.sleep(300));
             canvas.css("background", "none");
         }));

@@ -9,17 +9,9 @@
 
     <!--    <meta http-equiv="Content-Security-Policy"-->
     <!--          content="connect-src *; default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">-->
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-
-    <!--    margin: auto;-->
-    <!--    position: absolute;-->
-    <!--    top: 0;-->
-    <!--    bottom: 0;-->
-    <!--    left: 0;-->
-    <!--    right: 0 ;-->
     <style>
 
         #loader-wrapper {
@@ -36,7 +28,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: #be2edd;
+            /*background: #be2edd;*/
             z-index: 1000;
             /*opacity: 0.6;*/
             -webkit-transform: translateX(0);
@@ -68,7 +60,7 @@
             display: inline-block;
             /*position: relative;*/
             border: 3px solid;
-            border-color: #fefefe #ce5fee transparent transparent;
+            border-color: #81ecec #9b59b6 transparent transparent;
             animation: rotation 1s linear infinite;
         }
 
@@ -82,7 +74,7 @@
             bottom: 0;
             margin: auto;
             border: 3px solid;
-            border-color: transparent transparent #fefefe #ce5fee;
+            border-color: transparent transparent #81ecec #9b59b6;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -94,7 +86,7 @@
         .loading:before {
             width: 32px;
             height: 32px;
-            border-color: #ce5fee #fefefe transparent transparent;
+            border-color: #9b59b6 #81ecec transparent transparent;
             -webkit-animation: rotation 1.5s linear infinite;
             animation: rotation 1.5s linear infinite;
         }

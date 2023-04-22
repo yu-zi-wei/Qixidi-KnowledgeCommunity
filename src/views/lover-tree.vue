@@ -100,7 +100,7 @@ export default {
 
 <style>
 body {
-  background-color: #be2edd;
+  background-color: #42b983;
 }
 
 /* From www.lingdaima.com */
@@ -116,7 +116,8 @@ body {
   transition: all 0.2s linear;
   cursor: pointer;
   border: none;
-  background: #b20cd3;
+  background: #9b59b6;
+  opacity: 0.6;
 }
 
 .tree-button > svg {
@@ -132,7 +133,6 @@ body {
 }
 
 .tree-button:hover {
-  box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
   transform: translateY(-2px);
 }
 </style>

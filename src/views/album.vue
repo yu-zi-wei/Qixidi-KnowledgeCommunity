@@ -8,7 +8,7 @@
                p-id="29893" width="46" height="50" style="margin-top: 10px">
                     <path
                         d="M828.662132 617.650794m-406.349207 0a406.349206 406.349206 0 1 0 812.698413 0 406.349206 406.349206 0 1 0-812.698413 0Z"
-                        fill="#f368e0" p-id="29894"></path>
+                        fill="#22a6b3" p-id="29894"></path>
                     <path
                         d="M116.099773 116.099773m-116.099773 0a116.099773 116.099773 0 1 0 232.199546 0 116.099773 116.099773 0 1 0-232.199546 0Z"
                         fill="#daeff7" p-id="29895"></path>
@@ -65,18 +65,24 @@
                     <!--                  <a-image-preview-action name="下载" @click="downCom(item.img,'时光相册')">下载</a-image-preview-action>-->
                   </template>
                 </a-image>
+                <div class="font-s-14 ml-8 mr-8">
+                  <p style="text-align: right">
+                    Date:{{ parseTimes(item.createTime, '{y}-{m}-{d}') }}
+                  </p>
+                  <p style="text-align: left">“{{ item.remarks }}”</p>
+                </div>
                 <div class="view-icon">
                   <div class="content-album-cl">{{ item.remarks }}</div>
                   <div class="work-tag">
                     <a href="#" class="mr-10">{{ item.address }}</a>
-                    <a href="#">{{ item.createTime }}</a>
+                    <a href="#">{{ parseTimes(item.createTime, '{y}-{m}-{d} {h}:{i}') }}</a>
                   </div>
                   <div @click="() => { item.states = true }" class="cursor-pointer" title="查看大图">
                     <svg t="1669720960035" class="icon" viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="13368" width="22" height="22">
                       <path
                           d="M917.1 59.5H712.4c-19.3 0-35 15.7-35 35s15.7 35 35 35h169.8v169.8c0 19.3 15.7 35 35 35s35-15.7 35-35V94.5c-0.1-19.3-15.7-35-35.1-35zM106.9 334.3c19.3 0 35-15.7 35-35V129.5h169.8c19.3 0 35-15.7 35-35s-15.7-35-35-35H106.9c-19.3 0-35 15.7-35 35v204.8c0 19.3 15.6 35 35 35zM311.6 894.5H141.9V724.7c0-19.3-15.7-35-35-35s-35 15.7-35 35v204.8c0 19.3 15.7 35 35 35h204.8c19.3 0 35-15.7 35-35s-15.7-35-35.1-35zM917.1 689.7c-19.3 0-35 15.7-35 35v169.8H712.4c-19.3 0-35 15.7-35 35s15.7 35 35 35h204.8c19.3 0 35-15.7 35-35V724.7c-0.1-19.3-15.7-35-35.1-35zM769.1 794.7c9.2 0 18.4-3.6 25.3-10.8 13.3-14 12.8-36.1-1.2-49.5L705 650.2c26.3-37.5 43-82.4 46-131.5 9-141.6-98.7-263.7-240.3-272.6-5.5-0.3-10.9-0.5-16.3-0.5-134.6 0-247.7 104.8-256.3 241-8.9 141.7 98.8 263.7 240.4 272.6 5.5 0.3 10.9 0.5 16.3 0.5 61.3 0 118.1-21.7 162.6-58.2l87.5 83.5c6.8 6.5 15.5 9.7 24.2 9.7z m-87.9-280.3c-3 47.8-23.9 92.1-58.8 124.8-34.8 32.6-80.1 50.5-127.6 50.5-4 0-8-0.1-12-0.4-49.9-3.1-95.5-25.5-128.6-63-33-37.5-49.5-85.6-46.4-135.4 3-47.8 23.9-92.1 58.8-124.8 34.8-32.6 80.1-50.5 127.6-50.5 4 0 8 0.1 11.9 0.4 49.9 3.1 95.5 25.5 128.6 63 33.2 37.4 49.7 85.5 46.5 135.4z"
-                          p-id="13369" fill="#b20cd3"></path>
+                          p-id="13369" fill="#00cec9"></path>
                     </svg>
                   </div>
                 </div>
@@ -113,6 +119,7 @@ import './css/style.css'
 import {listAlbum} from "@/api/lover";
 import {downloadByBlob} from "@/utils/imgUitls";
 import './css/button.css'
+import {parseTime} from "@/utils/dateUitls";
 
 export default {
   name: "album",
@@ -140,6 +147,9 @@ export default {
     }
   },
   methods: {
+    parseTimes(value, args) {
+      return parseTime(value, args);
+    },
     //下载图片
     downCom(url, name) {
       downloadByBlob(url, name);

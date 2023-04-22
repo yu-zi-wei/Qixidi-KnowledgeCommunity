@@ -6,7 +6,7 @@
 
 .hr-wavy {
     border: 0;
-    color: #ce5fee;
+    color: #7ed6df;
     height: .5em;
     white-space: nowrap;
     letter-spacing: 100vw;
@@ -30,7 +30,7 @@
     color: #fff;
     z-index: 1;
     display: flex;
-    background: #ce5fee;
+    background: #7ed6df;
     position: relative;
     border-radius: 6px;
 }
@@ -51,7 +51,7 @@
     height: 10%;
     bottom: 0;
     clip-path: polygon(0% 74%, 4% 75%, 8% 76%, 11% 77%, 15% 78%, 20% 78%, 25% 77%, 32% 77%, 37% 75%, 40% 74%, 43% 74%, 46% 73%, 52% 72%, 57% 72%, 65% 74%, 66% 75%, 71% 78%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
-    background: #b20cd3;
+    background: #22a6b3;
     transition: 0.2s ease;
     border-radius: 6px;
 }
@@ -67,7 +67,7 @@
     /*   bottom:; */
     z-index: -1;
     clip-path: polygon(0% 74%, 4% 75%, 8% 76%, 11% 77%, 15% 78%, 20% 78%, 25% 77%, 32% 77%, 37% 75%, 40% 74%, 43% 74%, 46% 73%, 52% 72%, 57% 72%, 65% 74%, 66% 75%, 71% 78%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
-    background: #b20cd3;
+    background: #22a6b3;
     border-radius: 6px;
 }
 
@@ -104,20 +104,21 @@ flex-shrink：指定如果宽度不足，项目是否可以缩小 */
 .box-album {
     font-size: 2rem;
     border-radius: 10px;
-    margin: 30px 30px;
+    margin: 60px 50px;
     float: right;
+}
+
+@media (max-width: 787px) {
+    .box-album {
+        margin: 30px;
+    }
 }
 
 .img-li {
     border-radius: 4px;
-    background-color: #be2edd;
+    background-color: #c7ecee;
     padding: 6px;
-    border: 6px solid #ce5fee;
-}
-
-.box-album:hover {
-    background: #be2edd none repeat scroll 0 0;
-    /*border: 1px solid #ce5fee;*/
+    border: 4px solid #7ed6df;
 }
 
 .content-album-cl {
@@ -176,7 +177,7 @@ flex-shrink：指定如果宽度不足，项目是否可以缩小 */
 }
 
 .search-box:hover .search-btn {
-    background-color: #bc2dda;
+    background-color: #22a6b3;
 }
 
 /*--------------------------*/

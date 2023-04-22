@@ -3,7 +3,7 @@
     <a-spin :loading="loading" tip="加速获取祝福中..." style="width: 100%" :size="28">
       <div class="ml-15">
         <a-space size="large" title="切换样式">
-          <a-switch checked-color="#ffc312" unchecked-color="#ce5fee" v-model="isList"/>
+          <a-switch checked-color="#9b59b6" unchecked-color="#00cec9" v-model="isList"/>
         </a-space>
       </div>
       <div>
@@ -122,9 +122,9 @@ export default {
       topLists: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300,
         320, 340, 360, 380, 400, 420, 440, 460, 480],
       // 随机评论颜色
-      colorss: ["#fefefe", "#ffc312", "#fefefe",
-        "#fff200", "#eb2f06", "#2f3542",
-        "#eb2f06", "#2f3542", "#fff200"],
+      colorss: ["#fefefe", "#ffa801", "#fefefe",
+        "#ffa801", "#eb2f06", "#8e44ad",
+        "#eb2f06", "#2f3542", "#6c5ce7"],
       //以列表展示
       isList: false,
     }
@@ -158,20 +158,20 @@ export default {
       if (!this.form.name) {
         Notification.info({
           title: '提示',
-          content: '昵称不能为空噢',
+          content: '昵称不能为空噢！',
           showIcon: false,
           closable: true,
-          style: {background: "#ce5fee", border: "none", color: "#fefefe"}
+          style: {background: "#fefefe", border: "none", color: "#00b894"}
         })
         return;
       }
       if (!this.form.content) {
         Notification.info({
           title: '提示',
-          content: '祝福语不能为空噢',
+          content: '祝福语不能为空噢！',
           showIcon: false,
           closable: true,
-          style: {background: "#ce5fee", border: "none", color: "#fefefe"}
+          style: {background: "#fefefe", border: "none", color: "#00b894"}
         })
         return;
       }
@@ -251,7 +251,7 @@ export default {
             // 随机获得一个颜色
             div.style.color = '' + colors[Math.floor((Math.random() * colors.length))] + ''
             //设置div样式
-            div.style.background = '#ce5fee'
+            div.style.background = '#7ed6df'
             // div.style.opacity = '0.6'
             div.style.padding = '8px 10px';
             div.style.fontSize = '14px'
@@ -290,20 +290,20 @@ export default {
 </script>
 <style>
 .arco-modal {
-  background-color: #be2edd;
+  background-color: #fefefe;
 }
 
 .arco-modal-header {
-  border-bottom: 1px solid #ce5fee;
+  border-bottom: 1px solid #55efc4;
 }
 
 .arco-modal-footer {
   display: none;
-  border-top: 1px solid #ce5fee;
+  border-top: 1px solid #fefefe;
 }
 
 .arco-btn-primary, .arco-btn-primary[type='button'], .arco-btn-primary[type='submit'] {
-  background-color: #be2edd;
+  background-color: #fefefe;
 }
 
 .arco-spin-tip, .arco-spin-icon {

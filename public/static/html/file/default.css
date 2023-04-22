@@ -4,11 +4,11 @@ body {
     font-family: '宋体';
     color: #231F20;
     overflow: auto;
-    background-color: #be2edd;
+    /*background-color: #be2edd;*/
 }
 
 a {
-    color: #fefefe;
+    color: #b20cd3;
     font-size: 14px;
 }
 
@@ -35,6 +35,7 @@ a {
 #code {
     display: none;
     font-size: 16px;
+    color: #8e44ad;
 }
 
 #clock-box {
@@ -56,11 +57,11 @@ a {
 
 .digit {
     font-size: 64px;
-    color: #fff200;
+    color: #8e44ad;
 }
 
 .style1 {
-    color: #26de81;
+    color: #2c3e50;
 }
 
 #canvas {
@@ -103,7 +104,6 @@ a {
     transition: all 0.2s linear;
     cursor: pointer;
     border: none;
-    background: #b20cd3;
 }
 
 .tree-button > svg {

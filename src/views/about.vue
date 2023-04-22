@@ -76,17 +76,18 @@ export default {
 
 .about-text {
   text-align: center;
-  background-color: #ce5fee;
+  background: radial-gradient(#22a6b3, #00cec9, #22a6b3, #7ed6df);
   padding: 20px 10px 20px 40px;
   letter-spacing: 4px;
   line-height: 2;
-  border-radius: 4px;
+  border-radius: 10px;
   color: #fefefe;
+  border: 3px solid #22a6b3;
 }
 
 /* From www.lingdaima.com */
 .fancy {
-  background-color: transparent;
+  background-color: #00cec9;
   border: 2px solid #fefefe;
   border-radius: 0;
   box-sizing: border-box;
@@ -138,7 +139,7 @@ export default {
   top: -2px;
   left: 0.625rem;
   position: absolute;
-  background: #be2edd;
+  background: #00cec9;
   transition: width 0.5s ease-out, left 0.3s ease-out;
 }
 
@@ -148,7 +149,7 @@ export default {
   right: 1.875rem;
   bottom: -2px;
   position: absolute;
-  background: #be2edd;
+  background: #00cec9;
   transition: width 0.5s ease-out, right 0.3s ease-out;
 }
 
@@ -158,13 +159,13 @@ export default {
   right: 0.625rem;
   bottom: -2px;
   position: absolute;
-  background: #be2edd;
+  background: #00cec9;
   transition: width 0.5s ease-out, right 0.3s ease-out;
 }
 
 .fancy:hover {
   color: white;
-  background: #ce5fee;
+  background: #22a6b3;
 }
 
 .fancy:hover::before {

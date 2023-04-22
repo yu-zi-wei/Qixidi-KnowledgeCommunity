@@ -1,0 +1,82 @@
+.wave-cl {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+}
+
+@media (max-width: 789px) {
+    .wave-cl {
+        height: 60px;
+    }
+}
+
+#shape {
+    position: absolute;
+    left: 0;
+    bottom: -2vw;
+}
+
+.wave-cl img:not(#shape) {
+    position: absolute;
+    left: 0;
+}
+
+.wave-cl img:nth-child(1) {
+    opacity: 0.6;
+    bottom: -0.1vw;
+    animation: move-1 5s infinite;
+}
+
+@keyframes move-1 {
+    50% {
+        transform: translateY(15px);
+    }
+}
+
+.wave-cl img:nth-child(2) {
+    opacity: 0.5;
+    bottom: 0.5vw;
+    animation: move-2 4s infinite;
+}
+
+@keyframes move-2 {
+    50% {
+        transform: translateY(35px);
+    }
+}
+
+.wave-cl img:nth-child(3) {
+    bottom: 0.3rem;
+    opacity: 0.4;
+    animation: move-3 3.5s infinite;
+}
+
+@keyframes move-3 {
+    50% {
+        transform: translateY(25px);
+    }
+}
+
+.wave-cl img:nth-child(4) {
+    bottom: 0.1vw;
+    opacity: 0.3;
+    animation: move-4 3s infinite;
+}
+
+@keyframes move-4 {
+    50% {
+        transform: translateY(20px);
+    }
+}
+
+.wave-cl img:nth-child(5) {
+    bottom: 0.1vw;
+    opacity: 0.3;
+    animation: move-5 3s infinite;
+}
+
+@keyframes move-5 {
+    50% {
+        transform: translateY(55px);
+    }
+}

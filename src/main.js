@@ -9,6 +9,7 @@ import ArcoVue from '@arco-design/web-vue';
 import '@arco-design/web-vue/dist/arco.css';
 
 import './assets/css/index.css'
+import './assets/css/index-media.css'
 
 //顶部页面加载条
 import NProgress from 'nprogress';
