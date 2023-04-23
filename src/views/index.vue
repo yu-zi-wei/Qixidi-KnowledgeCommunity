@@ -80,8 +80,6 @@
       </div>
     </div>
     <div>
-      <div class="bg-grid"></div>
-      <div class="bg-grid1"></div>
       <router-view></router-view>
     </div>
     <div class="go-top-cl" @click="goTop" title="回到顶部" v-show="!topScrollBar.isTop">

@@ -1,6 +1,7 @@
 const {defineConfig} = require('@vue/cli-service')
 const path = require('path');
-
+const webpack = require('webpack')
+let timeStamp = new Date().getTime();
 
 function resolve(dir) {
     return path.join(__dirname, './', dir)
@@ -11,6 +12,8 @@ module.exports = defineConfig({
 })
 
 module.exports = {
+    filenameHashing: false,
+    outputDir: 'dist',
     assetsDir: 'assets',
     // publicPath: './',
     transpileDependencies: true,
@@ -29,6 +32,16 @@ module.exports = {
                 }
             },
         },
+        output: { // 输出重构 打包编译后的js文件名称,添加时间戳.
+            filename: `js/js[name].${timeStamp}.js`,
+            chunkFilename: `js/chunk.[id].${timeStamp}.js`,
+        },
+    },
+    css: {
+        extract: { // 打包后css文件名称添加时间戳
+            filename: `css/[name].${timeStamp}.css`,
+            chunkFilename: `css/chunk.[id].${timeStamp}.css`,
+        }
     },
     pwa: {
         iconPaths: {
@@ -39,21 +52,6 @@ module.exports = {
             msTileImage: 'favicon.ico'
         }
     },
-    // css: {
-    //     loaderOptions: {
-    //         // pass options to sass-loader
-    //         sass: {
-    //             // @/ is an alias to src/
-    //             // so this assumes you have a file named `src/variables.scss`
-    //             data: `
-    //              @import "@/assets/css/variable.scss";
-    //              @import "@/assets/css/common.scss";
-    //              @import "@/assets/css/mixin.scss";
-    //             `
-    //         }
-    //     }
-    // },
-
     // 配置
     chainWebpack: (config) => {
 // 配置别名
@@ -66,5 +64,5 @@ module.exports = {
             .set('static', resolve('src/static'))
             .set('store', resolve('src/store'))
             .set('views', resolve('src/views'))
-    }
+    },
 }
