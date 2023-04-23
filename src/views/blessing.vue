@@ -45,16 +45,16 @@
             </a-col>
           </a-row>
         </div>
-        <a-modal v-model:visible="visible" @ok="addComment(value)" v-if="barrageList.length>0">
+        <a-modal width="auto" v-model:visible="visible" @ok="addComment(value)" v-if="barrageList.length>0">
           <template #title>
-            祝福语
+            送上祝福
           </template>
           <div class="overflow-hidden">
             <a-form :model="form">
               <a-row>
                 <a-col :span="12">
-                  <a-form-item field="value" label="头像">
-                    <a-select :style="{width:'160px'}" placeholder="头像">
+                  <a-form-item field="value">
+                    <a-select placeholder="头像">
                       <a-option v-for="item of headPortrait">
                         <span>{{ item }}</span>
                       </a-option>
@@ -62,7 +62,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col :span="12">
-                  <a-form-item field="value" label="昵称">
+                  <a-form-item field="value">
                     <a-input v-model="form.name" placeholder="昵称"/>
                   </a-form-item>
                 </a-col>
@@ -185,11 +185,11 @@ export default {
       commentAdd(this.form).then(res => {
         if (res.code == 200) {
           Notification.info({
-            title: '成功',
-            content: '感谢您的祝福',
+            title: '祝福成功',
+            content: '感谢您的祝福！',
             showIcon: false,
             closable: true,
-            style: {background: "#ce5fee", border: "none", color: "#fefefe"}
+            style: {background: "#fefefe", border: "none", color: "#00b894"}
           })
         }
       });
@@ -207,12 +207,12 @@ export default {
       div.style.top = topList[num] + 'px'
 
       // 加上边框，醒目标志
-      div.style.border = '1px solid red'
+      div.style.border = '2px solid #e74c3c'
       div.style.borderRadius = '40px'
       div.style.padding = '8px 10px'
       div.style.fontSize = '14px'
       div.style.letterSpacing = '3px'
-      div.style.color = '#fefefe'
+      div.style.color = '#2c3e50'
       if ((this.form.content.length * 17) > 200) {
         div.style.minWidth = ((this.form.content.length) * 17) + 'px'
       } else {

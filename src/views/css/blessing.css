@@ -18,9 +18,9 @@
 }
 
 .comment-list-cl::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-    background-color: #ce5fee;
+    width: 2px;
+    height: 2px;
+    background-color: #7ed6df;
 }
 
 .comment-list-cl::-webkit-scrollbar-track {
@@ -29,12 +29,11 @@
 }
 
 .comment-list-cl::-webkit-scrollbar-thumb {
-    background: #ce5fee;
+    background: #7ed6df;
     border-radius: 2px;
 }
 
 .comment-list {
-    background-color: #b20cd3;
     margin: 10px 0px;
     padding: 10px 20px;
     width: 100px;
