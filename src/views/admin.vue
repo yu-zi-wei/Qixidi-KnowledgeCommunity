@@ -191,6 +191,7 @@
 
 <script>
 import './css/index.css'
+import './css/index-media.css'
 import {listInfo, listCarousel} from "@/api/lover";
 
 export default {

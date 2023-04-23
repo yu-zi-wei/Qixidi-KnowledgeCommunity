@@ -1,67 +1,63 @@
-/*@media (max-width: 1023px) {*/
+@media (max-width: 789px) {
+    .middle-info {
+        width: 90%;
+        border-radius: 30px;
+        padding: 1rem 0.75rem;
+    }
 
-/*}*/
+    .index-title {
+        margin-bottom: 40px;
+        font-size: 14px;
+        justify-content: center;
+        padding: 10px 10px;
+    }
 
-/*@media (max-width: 789px) {*/
-/*    .middle-info {*/
-/*        width: 90%;*/
-/*        border-radius: 30px;*/
-/*        padding: 1rem 0.75rem;*/
-/*    }*/
+    .aixing-cl {
+        margin-top: 10px;
+        height: 60px;
+        width: 60px;
+    }
 
-/*    .index-title {*/
-/*        margin-bottom: 40px;*/
-/*        font-size: 14px;*/
-/*        justify-content: center;*/
-/*        padding: 10px 10px;*/
-/*    }*/
+    .aixing-cl-xhua {
+        margin-top: 4px;
+        height: 40px;
+        width: 40px;
+    }
 
-/*    .aixing-cl {*/
-/*        margin-top: 10px;*/
-/*        height: 60px;*/
-/*        width: 60px;*/
-/*    }*/
+    .avatar-img-xhua {
+        width: 40px;
+        height: 40px;
+    }
 
-/*    .aixing-cl-xhua {*/
-/*        margin-top: 4px;*/
-/*        height: 40px;*/
-/*        width: 40px;*/
-/*    }*/
+    .aixing-ma-cl {
+        margin: 0 20px;
+    }
 
-/*    .avatar-img-xhua {*/
-/*        width: 40px;*/
-/*        height: 40px;*/
-/*    }*/
+    .svg-xiahua {
+        width: 40px;
+        height: 40px;
+    }
 
-/*    .aixing-ma-cl {*/
-/*        margin: 0 20px;*/
-/*    }*/
+    .avatar-img {
+        width: 60px;
+        height: 60px;
+    }
 
-/*    .svg-xiahua {*/
-/*        width: 40px;*/
-/*        height: 40px;*/
-/*    }*/
+    .avatar-name {
+        width: 60px;
+        font-size: 13px;
+    }
 
-/*    .avatar-img {*/
-/*        width: 60px;*/
-/*        height: 60px;*/
-/*    }*/
+    .svg-ax {
+        width: 60px;
+        height: 60px;
+    }
 
-/*    .avatar-name {*/
-/*        width: 60px;*/
-/*        font-size: 13px;*/
-/*    }*/
+    .button-list-cl {
+        grid-template-columns: repeat(1, 100%);
+    }
 
-/*    .svg-ax {*/
-/*        width: 60px;*/
-/*        height: 60px;*/
-/*    }*/
-
-/*    .button-list-cl {*/
-/*        grid-template-columns: repeat(1, 100%);*/
-/*    }*/
-
-/*    .button-admin {*/
-/*        margin-top: 20px;*/
-/*    }*/
-/*}*/
+    .button-admin {
+        margin-top: 20px;
+    }
+}

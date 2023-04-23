@@ -30,16 +30,11 @@ body {
 /*首页二级页面*/
 .background-color-top-2 {
     background: url(https://huibao-lover.oss-cn-chengdu.aliyuncs.com/lover/er-bj.png) no-repeat center;
-    /* 背景图垂直、水平均居中 */
-    background-position: center center;
-    /* 背景图不平铺 */
-    background-repeat: no-repeat;
-    /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
-    background-attachment: fixed;
-    /* 让背景图基于容器大小伸缩 */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
     background-size: cover;
-    /* 设置背景颜色，背景图加载过程中会显示背景色 */
-    /*background-color: #fefefe;*/
+    /*或者background-size: 100 %;*/
 }
 
 /*底部备案信息*/
@@ -572,39 +567,4 @@ a {
 .svg-20-f {
     position: relative;
     bottom: -2.8px;
-}
-
-
-@media (max-width: 789px) {
-    .disappear-789 {
-        display: none;
-    }
-
-    .disappear-789-an {
-        display: block;
-    }
-
-    .font-s-16 {
-        font-size: 13px;
-    }
-
-    .font-s-14 {
-        font-size: 12px;
-    }
-
-    .font-s-24 {
-        font-size: 18px;
-    }
-
-    .font-s-20 {
-        font-size: 16px;
-    }
-
-    .font-s-46 {
-        font-size: 28px;
-    }
-
-    .font-s-28 {
-        font-size: 20px;
-    }
 }
