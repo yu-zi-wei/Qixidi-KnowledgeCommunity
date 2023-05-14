@@ -23,11 +23,12 @@
           <a-grid-item>
             <div style="margin: 1.25rem 0 5rem 0">
               <a-carousel
+                  indicator-type="line"
                   :auto-play="true"
                   animation-name="card"
                   show-arrow="never"
                   indicator-position="outer"
-                  :style="{ width: '100%',height: '240px',}">
+                  :style="{ width: '100%',height: '260px',}">
                 <a-carousel-item v-for="(image,key) in images" :style="{ width: '60%' }" :key="key">
                   <img :src="image.img" :style="{width: '100%',}"/>
                 </a-carousel-item>
@@ -268,6 +269,16 @@ export default {
 </script>
 
 <style>
+.arco-carousel-card .arco-carousel-item-current {
+  border-radius: 4px;
+}
+
+.arco-carousel-card .arco-carousel-item-current img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .arco-spin-tip, .arco-spin-icon {
   color: #fefefe;
 }
