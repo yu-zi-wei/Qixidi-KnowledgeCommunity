@@ -112,18 +112,31 @@ export default {
 
 .content-img-cl img {
   border: none;
-  max-width: 60%;
+  max-width: 100%;
   max-height: 400px;
   padding: 20px;
   object-fit: cover;
   object-position: left top;
-  transition: 0.6s;
+  transition: 0.4s;
   cursor: pointer;
+  border-radius: 4px;
+}
+
+@media (max-width: 400px) {
+  .content-img-cl img {
+    padding: 4px;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 400px) {
+  .content-img-cl img {
+    padding: 10px;
+  }
 }
 
 .content-img-cl img:hover {
   object-position: right bottom;
-  transform: scale(1.1);
+  transform: scale(1.01);
 }
 
 .span-2-cl {
