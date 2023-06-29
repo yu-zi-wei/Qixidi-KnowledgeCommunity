@@ -52,7 +52,6 @@
         <div class="" v-if="imgList.length!=0">
           <div class="content">
             <div class="img-div" v-for="item of imgList">
-              <!--                        <img class="" :src="item.img" alt="">-->
               <a-image
                   class="cursor-pointer"
                   :title="item.remarks==null?parseTimes(item.createTime, '{y}-{m}-{d}'):item.remarks"

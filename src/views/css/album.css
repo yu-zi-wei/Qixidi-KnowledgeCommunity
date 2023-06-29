@@ -10,11 +10,23 @@
 
 .img-div {
     margin-bottom: 15px;
+    border: 3px solid #37acb8;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    padding: 1px;
 }
 
+
 .img-div img {
+    transition: transform 0.3s ease; /* 添加过渡效果 */
     width: 100%;
+    object-fit: cover;
     height: auto;
+}
+
+.img-div img:hover {
+    transform: scale(1.2);
 }
 
 @media (max-width: 400px) {
@@ -211,7 +223,7 @@ flex-shrink：指定如果宽度不足，项目是否可以缩小 */
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: #ce5fee;
+    background-color: #37acb8;
     /* 弹性布局 水平垂直居中 */
     display: flex;
     justify-content: center;

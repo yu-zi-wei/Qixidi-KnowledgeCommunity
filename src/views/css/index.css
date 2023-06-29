@@ -54,7 +54,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 100px;
-    background-color: #99abb9;
+    /*background-color: #99abb9;*/
     padding: 20px 0 20px 20px;
     font-size: 18px;
     box-shadow: 6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
@@ -233,13 +233,13 @@
 }
 
 .top-la-cl {
-    background: #99abb9;
-    padding: 8px 0;
+    background: #c0d3e3;
+    padding: 5px 0;
     top: 0px;
     position: fixed;
     width: 100%;
     z-index: 99;
-    opacity: 0.8;
+    opacity: 0.95;
     box-shadow: 0.6px 2.3px 2.2px rgba(0, 0, 0, 0.02),
     1.3px 5.6px 5.3px rgba(0, 0, 0, 0.028),
     2.5px 10.5px 10px rgba(0, 0, 0, 0.035),
