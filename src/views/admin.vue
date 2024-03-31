@@ -225,6 +225,7 @@ export default {
       let data = {state: 0}
       listInfo(data).then(res => {
         this.listInfoData = res;
+        this.difference(this.listInfoData.loverTime);
         this.loading = false;
       })
     },

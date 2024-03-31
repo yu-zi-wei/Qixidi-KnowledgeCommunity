@@ -20,8 +20,19 @@ npm run dev
 
 ## 生产环境打包
 
-```
-npm run build:prod
+```bash
+npm run build
+
+# 重启nginx
+/data/app/nginx/sbin/nginx -s reload
+
+# nginx启动停止命令
+./sbin/nginx   ##命令启动
+./sbin/nginx -s stop  ## 停止命令
+
+## 用于重启
+./sbin/nginx -t   ##检查 配置是否正确
+./sbin/nginx -s reload  ## 重启
 ```
 
 ### Lints and fixes files
