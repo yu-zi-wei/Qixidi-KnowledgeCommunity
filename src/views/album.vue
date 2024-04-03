@@ -1,5 +1,16 @@
 <template>
   <div class="mt-20 mb-40 overflow-hidden">
+    <h1>瀑布流布局</h1>
+    <div class="content">
+      <div class="img-div" v-for="(item,index) in 10" :key="index">
+        {{index}}
+        <a-image
+            class="cursor-pointer"
+            show-loader
+            src="https://img0.baidu.com/it/u=741268616,1401664941&fm=253&fmt=auto&app=138&f=JPEG?w=748&h=500">
+        </a-image>
+      </div>
+    </div>
     <div style="text-align: center;margin-bottom: 20px">
       <div style="margin: auto" class="album-button">
             <span>
@@ -51,7 +62,7 @@
       <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 10px;" :size="28">
         <div class="" v-if="imgList.length!=0">
           <div class="content">
-            <div class="img-div" v-for="item of imgList">
+            <div class="img-div" v-for="(item,index) in imgList" :key="index">
               <a-image
                   class="cursor-pointer"
                   :title="item.remarks==null?parseTimes(item.createTime, '{y}-{m}-{d}'):item.remarks"
