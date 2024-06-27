@@ -203,7 +203,7 @@ export default {
     //添加滚动监听事件
     window.addEventListener('scroll', this.getTopData, true);
   },
-  destroyed() {
+  unmounted() {
     //离开页面时删除该监听
     window.removeEventListener('scroll', this.getTopData, true)
   }

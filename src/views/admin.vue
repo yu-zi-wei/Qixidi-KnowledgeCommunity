@@ -256,11 +256,11 @@ export default {
   mounted() {
     this.listInfos()
     this.listCarousels()
-    let timer = setInterval(() => {
+    setInterval(() => {
       this.difference(this.listInfoData.loverTime); //每秒更新一次时间
     }, 1000);
   },
-  destroyed() {
+  unmounted() {
     if (this.timer) {  // 注意在vue实例销毁前，清除我们的定时器
       clearInterval(this.timer);
     }

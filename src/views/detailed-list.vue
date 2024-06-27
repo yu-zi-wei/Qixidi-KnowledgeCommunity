@@ -1,14 +1,6 @@
 <template>
   <div class="mt-20">
     <div class="text-center mb-32">
-      <button class="detailed-button">
-  <span class="button-content">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0H24V24H0z" fill="none"></path><path
-        d="M12.001 4.529c2.349-2.109 5.979-2.039 8.242.228 2.262 2.268 2.34 5.88.236 8.236l-8.48 8.492-8.478-8.492c-2.104-2.356-2.025-5.974.236-8.236 2.265-2.264 5.888-2.34 8.244-.228z"
-        fill="currentColor"></path></svg>
-    <span style="color: #ce5fee">爱情清单</span>
-  </span>
-      </button>
     </div>
     <!--    搜索-->
     <!--    <div class="text-center">-->
@@ -32,7 +24,7 @@
         <!--          <a-grid-item class="list-cl" v-for="(item,index) in detailedList">-->
         <div class="detalide-flex">
 
-          <div class="list-cl detalide-item" v-for="(item,index) in detailedList">
+          <div class="list-cl detalide-item" v-for="(item,index) in detailedList" :key="index">
             <div>
               <div class="box-gou" v-if="item.state==0">
           <span style="line-height: 28px">
@@ -209,7 +201,7 @@ export default {
     //添加滚动监听事件
     window.addEventListener('scroll', this.getData, true);
   },
-  destroyed() {
+  unmounted() {
     //离开页面时删除该监听
     window.removeEventListener('scroll', this.getData, true)
   }
@@ -408,41 +400,6 @@ export default {
 .arco-collapse {
   border: none;
   min-width: 160px;
-}
-
-/* From www.lingdaima.com */
-.detailed-button {
-  font-size: 17px;
-  font-family: inherit;
-  font-weight: 700;
-  padding: 4px;
-  border-radius: 20px;
-  border: none;
-  color: black;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-  background: linear-gradient(0deg, #ce5fee 0%, rgba(255, 213, 0, 1) 47%, #ce5fee 47%, #ce5fee 100%);
-}
-
-.detailed-button .button-content {
-  display: flex;
-  align-items: center;
-  background: white;
-  cursor: pointer;
-  padding: 0.7em 1.5em;
-  padding-left: 1.2em;
-  border-radius: 16px;
-}
-
-.detailed-button svg {
-  width: 22px;
-  height: 22px;
-  margin-right: 6px;
-  color: #8e44ad;
-  transition: transform 0.3s;
-}
-
-.detailed-button:hover svg {
-  transform: scale(1.2);
 }
 
 .arco-spin-tip, .arco-spin-icon {
