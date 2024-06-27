@@ -1,25 +1,15 @@
 <template>
   <div class="mt-20 mb-40">
-    <div class="text-center mb-20">
-      <a class="fancy" href="#">
-        <span class="top-key"></span>
-        <span class="text">关于
-          <span style="color: #fed330;font-size: 16px">❤</span>
-          我们</span>
-        <span class="bottom-key-1"></span>
-        <span class="bottom-key-2"></span>
-      </a>
-    </div>
     <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;" :size="28">
       <div v-if="listInfoData.content && listInfoData.title">
         <a-row>
           <a-col :span="3">
           </a-col>
-          <a-col :span="18" class="about-text">
-            <div class="mb-20" v-if="listInfoData.title">
-              <h2>{{ listInfoData.title }}</h2>
+          <a-col :span="18" class="letter-box">
+            <div class="letter-border" v-if="listInfoData.title">
+              <h2 class="text-center mb-20">{{ listInfoData.title }}</h2>
+              <div class="content-img-cl" v-html="listInfoData.content"></div>
             </div>
-            <div class="content-img-cl" v-html="listInfoData.content"></div>
           </a-col>
           <a-col :span="3">
           </a-col>
@@ -73,128 +63,26 @@ export default {
   max-width: 100%;
   padding: 20px 0;
 }
-
-.about-text {
-  text-align: center;
-  background: radial-gradient(#22a6b3, #00cec9, #22a6b3, #7ed6df);
-  padding: 20px 10px 20px 40px;
-  letter-spacing: 4px;
-  line-height: 2;
-  border-radius: 10px;
-  color: #fefefe;
-  border: 3px solid #22a6b3;
+.content-img-cl{
+  font-size: 16px;
+  line-height: 25px;
 }
 
-/* From www.lingdaima.com */
-.fancy {
-  background-color: #00cec9;
-  border: 2px solid #fefefe;
-  border-radius: 0;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  outline: none;
-  overflow: visible;
-  padding: 1.25em 2em;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  text-transform: none;
-  transition: all 0.3s ease-in-out;
-  user-select: none;
-  font-size: 13px;
+@keyframes ants {
+  to {
+    background-position: 10%;
+  }
 }
 
-.fancy::before {
-  content: " ";
-  width: 1.5625rem;
-  height: 2px;
-  background: #fefefe;
-  top: 50%;
-  left: 1.5em;
-  position: absolute;
-  transform: translateY(-50%);
-  transform-origin: center;
-  transition: background 0.3s linear, width 0.3s linear;
-}
-
-.fancy .text {
-  font-size: 1.125em;
-  line-height: 1.33333em;
-  padding-left: 2em;
+.letter-box {
+  padding: 15px;
   display: block;
-  text-align: left;
-  transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: #fefefe;
+  width: 100%;
+  height: 100%;
+  background-color: #ecf0f1;
+  border: 4px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+  repeating-linear-gradient(-45deg, #ff4757 0, #1e90ff 20%, transparent 0, transparent 25%, #fbfaf5 0, #1e90ff 44%, transparent 0, transparent 50%) 0/40px 40px;
+  animation: ants 12s linear infinite;
 }
-
-.fancy .top-key {
-  height: 2px;
-  width: 1.5625rem;
-  top: -2px;
-  left: 0.625rem;
-  position: absolute;
-  background: #00cec9;
-  transition: width 0.5s ease-out, left 0.3s ease-out;
-}
-
-.fancy .bottom-key-1 {
-  height: 2px;
-  width: 1.5625rem;
-  right: 1.875rem;
-  bottom: -2px;
-  position: absolute;
-  background: #00cec9;
-  transition: width 0.5s ease-out, right 0.3s ease-out;
-}
-
-.fancy .bottom-key-2 {
-  height: 2px;
-  width: 0.625rem;
-  right: 0.625rem;
-  bottom: -2px;
-  position: absolute;
-  background: #00cec9;
-  transition: width 0.5s ease-out, right 0.3s ease-out;
-}
-
-.fancy:hover {
-  color: white;
-  background: #22a6b3;
-}
-
-.fancy:hover::before {
-  width: 0.9375rem;
-  background: white;
-}
-
-.fancy:hover .text {
-  color: white;
-  padding-left: 1.5em;
-}
-
-.fancy:hover .top-key {
-  left: -2px;
-  width: 0px;
-}
-
-.fancy:hover .bottom-key-1,
-.fancy:hover .bottom-key-2 {
-  right: 0;
-  width: 0;
-}
-
-.arco-spin-tip, .arco-spin-icon {
-  color: #fefefe;
-}
-
-.arco-spin-mask {
-  background-color: transparent;
-}
-
 </style>

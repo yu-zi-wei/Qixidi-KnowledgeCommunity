@@ -1,27 +1,5 @@
 <template>
   <div class="mt-20">
-    <div style="margin-bottom: 60px">
-      <div class="text-center">
-        <button class="record-button">
-          <span class="fl-left">
-          <svg t="1668589585311" class="icon" viewBox="0 0 1024 1024" version="1.1"
-               xmlns="http://www.w3.org/2000/svg" p-id="37761" data-spm-anchor-id="a313x.7781069.0.i45" width="40"
-               height="36">
-            <path
-                d="M638.46 298.5h-369a30 30 0 0 0 0 60h369a30 30 0 0 0 0-60zM651.44 539.05L665.51 525a30 30 0 0 0-27.05-43h-369a30 30 0 0 0 0 60h369a29.87 29.87 0 0 0 12.98-2.95zM538.1 665.5H269.46a30 30 0 0 0 0 60H510.4zM623.11 715.78l-21.05 9.72h36.4A30 30 0 0 0 662 676.9z"
-                p-id="37762" data-spm-anchor-id="a313x.7781069.0.i47" class="selected" fill="#7bed9f"></path>
-            <path
-                d="M730 608.94V774a49.06 49.06 0 0 1-49 49H227a49.06 49.06 0 0 1-49-49V250a49.06 49.06 0 0 1 49-49h454a49.06 49.06 0 0 1 49 49v210.53l60-60V250a109.12 109.12 0 0 0-109-109H227a109.12 109.12 0 0 0-109 109v524a109.12 109.12 0 0 0 109 109h454a109.12 109.12 0 0 0 109-109V548.94zM930.73 401.81A48 48 0 0 0 862.89 334z"
-                p-id="37763" data-spm-anchor-id="a313x.7781069.0.i46" class="" fill="#2ed573"></path>
-            <path
-                d="M558.106 638.704l292.742-292.742 67.882 67.882-292.742 292.743zM513.06 730.84l-12.87 26.63a5.37 5.37 0 0 0 7.18 7.18L534 751.78zM541.63 748.09l68.64-33.18-60.35-60.35-33.17 68.65 24.88 24.88z"
-                p-id="37764" data-spm-anchor-id="a313x.7781069.0.i48" class="" fill="#2ed573"></path>
-          </svg>
-          </span>
-          <span style="line-height: 36px; letter-spacing: 3px;">点点滴滴</span>
-        </button>
-      </div>
-    </div>
     <!--    搜索-->
     <!--    <div class="text-center">-->
     <!--      <div class="search-box" tabindex="1">-->
@@ -37,141 +15,36 @@
     <!--        </a>-->
     <!--      </div>-->
     <!--    </div>-->
+    <!--    手机-->
     <div class="mb-20">
       <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 40px" :size="28">
         <div class="disappear-789-an">
-          <div v-for="(items,index) in  recordList" style="width: 80%;margin: auto">
+          <div v-for="(items,index) in  recordList" style="width: 80%;margin: auto" :key="index">
             <div style="margin-bottom: 60px">
               <div class="card">
                 <h2 class="text-center">{{ items.title }}</h2>
                 <hr class="hr-twill-colorful"/>
-                <div @click="recordIndex(items.id)" style="padding: 0 10px 10px 6px" class="content-cl cursor-pointer"
+                <div @click="recordIndex(items.id)"
+                     style="padding: 0 10px 10px 6px" class="content-cl cursor-pointer"
                      title="点击查看"
                      v-html="items.content"></div>
               </div>
             </div>
           </div>
         </div>
+        <!--        pc-->
         <div v-if="recordList.length>0">
           <div class="disappear-789">
-            <a-row v-for="(item,i) in  recordList"
-                   style="width: 100%;margin: auto;color: #fefefe">
-              <a-col :span="3">
-              </a-col>
-              <a-col :span="8">
-                <div v-if="i % 2 ==1" class="padding-10 mt-2">
-                  <div class="card">
-                    <h2 class="text-center">{{ item.title }}</h2>
-                    <hr class="hr-twill-colorful"/>
-                    <div @click="recordIndex(item.id)" style="padding: 0 10px 10px 6px"
-                         class="content-cl cursor-pointer"
-                         title="点击查看"
-                         v-html="item.content"></div>
-                  </div>
-                  <div style="color: #2c3e50;display: flex;justify-content: left;">
-                    <div class="mr-10" v-if="item.address">
-                      <svg t="1669690071448" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
-                           xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
-                           width="20" height="20">
-                        <path
-                            d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
-                            fill="#bdc3c7" p-id="6301"></path>
-                        <path
-                            d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
-                            fill="#95a5a6" p-id="6302"></path>
-                        <path
-                            d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
-                            fill="#95a5a6" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
-                            class="selected"></path>
-                      </svg>
-                      <span class="ml-4" v-text="item.address"></span>
-                    </div>
-
-                    <div v-if="item.createTime">
-                      <svg t="1669798181975" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
-                           xmlns="http://www.w3.org/2000/svg" p-id="9622" width="20" height="20">
-                        <path
-                            d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
-                            fill="#95a5a6" p-id="9623"></path>
-                        <path
-                            d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
-                            fill="#f39c12" p-id="9624"></path>
-                        <path
-                            d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
-                            fill="#95a5a6" p-id="9625"></path>
-                        <path
-                            d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
-                            fill="#95a5a6" p-id="9626"></path>
-                      </svg>
-                      <span  class="ml-4" v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
-                    </div>
-                  </div>
-
-                </div>
-              </a-col>
-              <a-col :span="1">
-              </a-col>
-              <a-col :span="1">
-                <!--              旋转-->
-                <div class="outer" id="xuanzhun">
-                  <div class="inner"></div>
-                </div>
-                <div class="hi-cl"></div>
-              </a-col>
-              <a-col :span="8">
-                <div v-if="i % 2 ==0" class="padding-10 mt-2">
-                  <div class="card">
-                    <h2 class="text-center">{{ item.title }}</h2>
-                    <hr class="hr-twill-colorful"/>
-                    <div style="padding: 0 10px 10px 6px" @click="recordIndex(item.id)"
-                         class="content-cl cursor-pointer"
-                         title="点击查看"
-                         v-html="item.content"></div>
-                  </div>
-                  <div style="color: #2c3e50;display: flex;justify-content: left;">
-                    <div class="mr-10" v-if="item.address">
-                      <svg t="1669690071448" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
-                           xmlns="http://www.w3.org/2000/svg" p-id="6300" data-spm-anchor-id="a313x.7781069.0.i4"
-                           width="20" height="20">
-                        <path
-                            d="M511.744 68.266667c-173.5168 0-314.026667 136.311467-314.7776 305.937066 0 60.910933 18.1248 118.903467 51.7632 168.465067l3.293867 4.693333 1.911466 3.1744 1.570134 2.389334c1.058133 1.553067 2.184533 3.037867 3.447466 4.5056l0.785067 0.853333 200.174933 232.823467a68.266667 68.266667 0 0 0 103.645867-0.170667L762.641067 558.08l-1.314134 1.450667a50.346667 50.346667 0 0 0 5.341867-6.621867l1.536-2.3552c0.631467-0.989867 1.860267-3.072 1.826133-3.003733 35.293867-49.322667 55.0912-109.431467 55.825067-172.782934C825.856 204.9536 684.970667 68.266667 511.744 68.266667z m0 68.266666c135.970133 0 245.845333 106.5984 245.845333 237.824a235.400533 235.400533 0 0 1-43.9808 134.775467l-2.952533 4.676267-198.997333 232.789333-200.192-232.823467-1.928534-3.191466-0.989866-1.450667a230.229333 230.229333 0 0 1-43.3152-134.775467C265.8304 242.858667 375.415467 136.533333 511.744 136.533333z"
-                            fill="#bdc3c7" p-id="6301"></path>
-                        <path
-                            d="M783.803733 714.734933a34.133333 34.133333 0 0 1 45.243734 10.018134l1.4336 2.2528 73.386666 125.730133a68.266667 68.266667 0 0 1-54.784 102.5536l-4.5568 0.119467-666.043733-3.6352a68.266667 68.266667 0 0 1-60.654933-98.850134l2.133333-3.9424 69.9392-119.261866a34.133333 34.133333 0 0 1 60.16 32.170666l-1.262933 2.3552-69.9392 119.261867 666.043733 3.6352-73.386667-125.730133a34.133333 34.133333 0 0 1 12.288-46.677334z"
-                            fill="#95a5a6" p-id="6302"></path>
-                        <path
-                            d="M512 243.950933a136.533333 136.533333 0 1 0 0.034133 273.1008A136.533333 136.533333 0 0 0 512 243.950933z m0 68.266667a68.266667 68.266667 0 1 1-0.034133 136.567467A68.266667 68.266667 0 0 1 512 312.2176z"
-                            fill="#95a5a6" p-id="6303" data-spm-anchor-id="a313x.7781069.0.i5"
-                            class="selected"></path>
-                      </svg>
-                      <span class="ml-4" v-text="item.address"></span>
-                    </div>
-
-                    <div v-if="item.createTime">
-                      <svg t="1669798181975" class="icon svg-20-f" viewBox="0 0 1024 1024" version="1.1"
-                           xmlns="http://www.w3.org/2000/svg" p-id="9622" width="20" height="20">
-                        <path
-                            d="M865.8 924.2H161.2c-34.3 0-62.2-27.9-62.2-62.2V217.2c0-34.3 27.9-62.2 62.2-62.2h704.6c34.3 0 62.2 27.9 62.2 62.2V862c0 34.3-27.9 62.2-62.2 62.2zM161.2 196.5c-11.4 0-20.7 9.3-20.7 20.7V862c0 11.4 9.3 20.7 20.7 20.7h704.6c11.4 0 20.7-9.3 20.7-20.7V217.2c0-11.4-9.3-20.7-20.7-20.7H161.2z"
-                            fill="#95a5a6" p-id="9623"></path>
-                        <path
-                            d="M119.8 390.2h772.6v41.4H119.8zM260 533.9h87.8v87.8H260zM469.6 533.9h87.8v87.8h-87.8zM679.3 533.9h87.8v87.8h-87.8z"
-                            fill="#f39c12" p-id="9624"></path>
-                        <path
-                            d="M260 685.8h87.8v87.8H260zM469.6 685.8h87.8v87.8h-87.8zM679.3 685.8h87.8v87.8h-87.8z"
-                            fill="#95a5a6" p-id="9625"></path>
-                        <path
-                            d="M333.6 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7zM693.5 251.7c-11.4 0-20.7-9.3-20.7-20.7V120.5c0-11.4 9.3-20.7 20.7-20.7s20.7 9.3 20.7 20.7V231c0 11.5-9.3 20.7-20.7 20.7z"
-                            fill="#95a5a6" p-id="9626"></path>
-                      </svg>
-                      <span  class="ml-4" v-text="parseTimes(item.createTime,'{y}-{m}-{d}')"></span>
-                    </div>
-                  </div>
-                </div>
-              </a-col>
-              <a-col :span="3">
-              </a-col>
-
-            </a-row>
+            <div class="record-pc-content">
+              <div v-for="(item,i) in recordList" :key="i" class="card">
+                <h2 class="text-center">{{ item.title }}</h2>
+                <hr class="hr-twill-colorful"/>
+                <div @click="recordIndex(item.id)" style="padding: 0 10px 10px 6px"
+                     class="content-cl cursor-pointer"
+                     title="点击查看"
+                     v-html="item.content"></div>
+              </div>
+            </div>
           </div>
         </div>
         <div v-if="!loading && recordList.length==0" class="text-center" style="color: #fefefe;font-size: 18px">
@@ -289,148 +162,15 @@ export default {
 </script>
 
 <style>
-.search-box {
-  /* 绝对定位 水平垂直居中 */
-  position: absolute;
-  left: 50%;
-  outline: none;
-  transform: translate(-50%, -50%);
-  background-color: #05fcf8;
-  height: 30px;
-  padding: 6px;
-  border-radius: 30px;
-}
-
-.search-txt {
-  border: none;
-  background: none;
-  outline: none;
-  float: left;
-  padding: 0;
-  color: #fff;
-  font-size: 14px;
-  line-height: 30px;
-  width: 0;
-  /* 动画过渡 */
-  transition: 0.6s;
-}
-
-.search-txt::-webkit-input-placeholder {
-  color: #636e72;
-  font-size: 14px;
-}
-
-.search-btn {
-  float: right;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #ce5fee;
-  /* 弹性布局 水平垂直居中 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  /* 动画过渡 */
-  transition: 0.4s;
-}
-
-.search-box:hover .search-txt {
-  width: 140px;
-  padding: 0 6px;
-}
-
-.search-box:hover .search-btn {
-  background-color: #bc2dda;
-}
-
-/*--------------------------*/
-
 .content-cl {
   text-align: center;
+  overflow-y: auto;
 }
 
 .content-cl img {
   border: none;
-  max-width: 86%;
-  padding: 20px;
+  max-width: 200px;
 }
-
-
-@-webkit-keyframes rotate {
-  from {
-    -webkit-transform: rotate(0deg)
-  }
-  to {
-    -webkit-transform: rotate(360deg)
-  }
-}
-
-@-moz-keyframes rotate {
-  from {
-    -moz-transform: rotate(0deg)
-  }
-  to {
-    -moz-transform: rotate(359deg)
-  }
-}
-
-@-o-keyframes rotate {
-  from {
-    -o-transform: rotate(0deg)
-  }
-  to {
-    -o-transform: rotate(359deg)
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg)
-  }
-  to {
-    transform: rotate(359deg)
-  }
-}
-
-#xuanzhun {
-  -webkit-transition-property: -webkit-transform;
-  -webkit-transition-duration: 1s;
-  -moz-transition-property: -moz-transform;
-  -moz-transition-duration: 1s;
-  -webkit-animation: rotate 3s linear infinite;
-  -moz-animation: rotate 3s linear infinite;
-  -o-animation: rotate 3s linear infinite;
-  animation: rotate 3s linear infinite;
-}
-
-.outer {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid #7ed6df;
-  border-style: dashed;
-}
-
-.hi-cl {
-  background-color: #7ed6df;
-  min-height: 250px;
-  width: 2px;
-  border-radius: 2px;
-  margin: 10px;
-}
-
-.outer .inner {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #7ed6df;
-  transform: translate(-50%, -50%);
-}
-
 /* 现代浏览器only */
 .hr-twill-colorful {
   border: 0;
@@ -442,103 +182,18 @@ export default {
   mask-image: var(--mask-image);
 }
 
-.dd-button {
-  border: none;
-  width: 140px;
-  height: 50px;
-  cursor: pointer;
-  color: #fff;
-  z-index: 1;
-  display: flex;
-  background: #8792eb;
-  position: relative;
-  border-radius: 6px;
-}
-
-.dd-button span {
-  margin: 0 auto;
-  align-self: center;
-  font-size: 17px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.dd-button::after {
-  position: absolute;
-  content: "";
-  width: 100%;
-  z-index: -1;
-  height: 10%;
-  bottom: 0;
-  clip-path: polygon(0% 74%, 4% 75%, 8% 76%, 11% 77%, 15% 78%, 20% 78%, 25% 77%, 32% 77%, 37% 75%, 40% 74%, 43% 74%, 46% 73%, 52% 72%, 57% 72%, 65% 74%, 66% 75%, 71% 78%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
-  background: #b20cd3;
-  transition: 0.2s ease;
-  border-radius: 6px;
-}
-
-.dd-button::before {
-  position: absolute;
-  content: "";
-  /*   bottom: 80%; */
-  transform: rotate(180deg);
-  width: 100%;
-  height: 10%;
-  transition: 0.2s ease;
-  /*   bottom:; */
-  z-index: -1;
-  clip-path: polygon(0% 74%, 4% 75%, 8% 76%, 11% 77%, 15% 78%, 20% 78%, 25% 77%, 32% 77%, 37% 75%, 40% 74%, 43% 74%, 46% 73%, 52% 72%, 57% 72%, 65% 74%, 66% 75%, 71% 78%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
-  background: #b20cd3;
-  border-radius: 6px;
-}
-
-.dd-button:hover::after {
-  clip-path: polygon(0 30%, 9% 34%, 7% 39%, 11% 43%, 13% 33%, 17% 30%, 24% 34%, 25% 35%, 30% 31%, 30% 38%, 39% 33%, 35% 43%, 43% 45%, 55% 46%, 65% 74%, 67% 66%, 81% 57%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
-  height: 80%;
-}
-
-.dd-button:hover::before {
-  clip-path: polygon(0 30%, 9% 34%, 7% 39%, 11% 43%, 13% 33%, 17% 30%, 24% 34%, 25% 35%, 30% 31%, 30% 38%, 39% 33%, 35% 43%, 43% 45%, 55% 46%, 65% 74%, 67% 66%, 81% 57%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
-  height: 80%;
-}
-
-/* From www.lingdaima.com */
-.record-button {
-  --color-1: #7ed6df;
-  --color-2: rgb(5, 252, 248);
-  --color-3: rgb(28, 0, 48);
-  border: none;
-  padding: 4px 10px;
-  overflow: hidden;
-  color: black;
-  background: #dff9fb;
-  box-shadow: -10px -10px var(--color-1),
-  15px 10px var(--color-2);
-  font-weight: bold;
-  transition: box-shadow 0.1s ease-in-out,
-  transform 0.1s ease-in-out;
-}
-
-.record-button:hover {
-  box-shadow: -8.275px -8.275px var(--color-1),
-  10.4px 8.275px var(--color-2);
-}
-
-.record-button:active {
-  transform: scale(0.975);
-}
-
-
 /* From www.lingdaima.com */
 .card {
   padding: 6px;
   --color-1: #c7ecee;
   --color-2: #c7ecee;
   --color-3: rgb(28, 0, 48);
-  min-width: 40px;
   color: black;
-  min-height: 154px;
-  margin-bottom: 20px;
+  min-height: 480px;
+  margin-bottom: 60px;
   background: #fefefe;
+  width: 500px;
+  height: 400px;
   box-shadow: -10px -10px var(--color-1),
   15px 10px var(--color-2);
   transition: box-shadow 0.25s ease-in-out,
@@ -546,31 +201,29 @@ export default {
 }
 
 .card:hover {
-  /*box-shadow: -10.275px -10.275px var(--color-1),*/
-  /*15.4px 10.275px var(--color-2);*/
   transform: scale(1.025);
 }
 
-
-.arco-timeline-item-label {
-  color: #42b983;
-}
-
-.arco-card {
-  background-color: #c84be7;
-  border: 1px solid #ce5fee;
-}
-
-.arco-card-header {
-  border-bottom: 1px solid #be2edd;
-}
-
-.arco-spin-tip, .arco-spin-icon {
+.record-pc-content {
+  width: 90%;
+  margin: auto;
   color: #fefefe;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-.arco-spin-mask {
-  background-color: transparent;
-}
+@media (max-width: 789px) {
+  .card {
+    max-width: 100%;
+  }
 
+  .record-pc-content {
+    padding: 0px;
+  }
+
+  .content-cl img {
+    max-width: 150px;
+  }
+}
 </style>

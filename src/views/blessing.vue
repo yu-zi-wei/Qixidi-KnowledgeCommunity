@@ -7,12 +7,6 @@
         </a-space>
       </div>
       <div>
-        <div class="barrageButton">
-        <span class="add-button" @click="handleClick" title="送上祝福">
-          <span>送上祝福</span>
-          <div class="liquid"></div>
-        </span>
-        </div>
         <!--        弹幕区-->
         <div class="barrageBox" v-if="!isList"></div>
         <!--        列表区-->
@@ -38,7 +32,6 @@
                     </a-trigger>
                   </div>
                 </div>
-
               </div>
             </a-col>
             <a-col :span="2" style="height: 1px">
@@ -150,10 +143,6 @@ export default {
     handleClick() {
       this.visible = true;
     },
-    colorRandom() {
-      let string = this.colorss[Math.floor((Math.random() * colors.length))];
-
-    },
     addComment() {
       if (!this.form.name) {
         Notification.info({
@@ -185,8 +174,8 @@ export default {
       commentAdd(this.form).then(res => {
         if (res.code == 200) {
           Notification.info({
-            title: '祝福成功',
-            content: '感谢您的祝福！',
+            title: '留言成功',
+            content: '',
             showIcon: false,
             closable: true,
             style: {background: "#fefefe", border: "none", color: "#00b894"}
@@ -219,7 +208,9 @@ export default {
         div.style.minWidth = '200px'
       }
       this.form.content = '';
-      barrageBox.appendChild(div)
+      if (barrageBox) {
+        barrageBox.appendChild(div)
+      }
       clearInterval(my_set)
       // 因为清除的话会重新计算时间，会造成一段时间的空白期，所以需要渲染一次。
       this.createBarrage()
@@ -263,7 +254,9 @@ export default {
             } else {
               div.style.minWidth = '140px'
             }
-            barrageBox.appendChild(div)
+            if (barrageBox) {
+              barrageBox.appendChild(div)
+            }
             //到底删除div
             setTimeout(function () {
               div.remove();
@@ -289,28 +282,4 @@ export default {
 }
 </script>
 <style>
-.arco-modal {
-  background-color: #fefefe;
-}
-
-.arco-modal-header {
-  border-bottom: 1px solid #55efc4;
-}
-
-.arco-modal-footer {
-  display: none;
-  border-top: 1px solid #fefefe;
-}
-
-.arco-btn-primary, .arco-btn-primary[type='button'], .arco-btn-primary[type='submit'] {
-  background-color: #fefefe;
-}
-
-.arco-spin-tip, .arco-spin-icon {
-  color: #fefefe;
-}
-
-.arco-spin-mask {
-  background-color: transparent;
-}
 </style>

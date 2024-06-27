@@ -512,7 +512,7 @@ a {
 
 /*内容隐藏展示*/
 .content-cl {
-    max-height: 8.75rem;
+    max-height: 400px;
     overflow-y: auto
 }
 
