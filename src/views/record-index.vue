@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: auto">
+  <div style="margin: auto;">
     <a-row :gutter="24">
       <a-col :span="2" style="height: 1px">
       </a-col>
@@ -17,8 +17,7 @@
               <span style="color: #fefefe"> 返回</span>
             </div>
           </router-link>
-
-          <h2 class="mb-10 text-center" v-text="info.title"></h2>
+          <h2 class="mb-10 text-center">《{{info.title}}》</h2>
           <div class="overflow-hidden mb-20 text-center flex-cl-index">
             <div v-if="info.address">
               <div>
@@ -104,17 +103,17 @@ export default {
 }
 
 .content-img-cl {
-  font-size: 16px;
-  text-align: center;
-  line-height: 20px;
+  font-size: 1rem;
+  line-height: 1.25rem;
 
 }
 
 .content-img-cl img {
   border: none;
   max-width: 100%;
-  max-height: 400px;
-  padding: 20px;
+  max-height: 260px;
+  /*text-align: left;*/
+  padding: 10px;
   object-fit: cover;
   object-position: left top;
   transition: 0.4s;
@@ -124,13 +123,13 @@ export default {
 
 @media (max-width: 400px) {
   .content-img-cl img {
-    padding: 4px;
+    padding: 2px;
   }
 }
 
 @media (max-width: 1200px) and (min-width: 400px) {
   .content-img-cl img {
-    padding: 10px;
+    padding: 5px;
   }
 }
 
@@ -146,13 +145,12 @@ export default {
 }
 
 .button-return {
-  background-color: #81ecec;
+  background-color: var(--color-thme);
   border-radius: 14px;
   padding: 8px 16px;
   cursor: pointer;
   width: 50px;
   font-size: 12px;
-  margin-bottom: 10px;
   transition: 0.1s;
 }
 
@@ -161,7 +159,8 @@ export default {
 }
 
 .content-index-cl {
-  background-color: #f1f2f6;
+  margin-top: 20px;
+  background-color: rgba(175, 92, 209, 0.1);
   border-radius: 10px;
   color: #2f3542;
   padding: 20px 40px;

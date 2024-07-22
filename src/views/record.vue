@@ -1,5 +1,11 @@
 <template>
-  <div class="mt-20">
+  <div class="mt-20" v-if="!loading">
+    <div class="disappear-789 record-main">
+      <optical-axis :data="recordList" :number="4"></optical-axis>
+    </div>
+    <div class="disappear-789-an record-main">
+      <optical-axis :data="timeAxis" :number="2"></optical-axis>
+    </div>
     <!--    搜索-->
     <!--    <div class="text-center">-->
     <!--      <div class="search-box" tabindex="1">-->
@@ -15,38 +21,9 @@
     <!--        </a>-->
     <!--      </div>-->
     <!--    </div>-->
-    <!--    手机-->
     <div class="mb-20">
       <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 40px" :size="28">
-        <div class="disappear-789-an">
-          <div v-for="(items,index) in  recordList" style="width: 80%;margin: auto" :key="index">
-            <div style="margin-bottom: 60px">
-              <div class="card">
-                <h2 class="text-center">{{ items.title }}</h2>
-                <hr class="hr-twill-colorful"/>
-                <div @click="recordIndex(items.id)"
-                     style="padding: 0 10px 10px 6px" class="content-cl cursor-pointer"
-                     title="点击查看"
-                     v-html="items.content"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--        pc-->
-        <div v-if="recordList.length>0">
-          <div class="disappear-789">
-            <div class="record-pc-content">
-              <div v-for="(item,i) in recordList" :key="i" class="card">
-                <h2 class="text-center">{{ item.title }}</h2>
-                <hr class="hr-twill-colorful"/>
-                <div @click="recordIndex(item.id)" style="padding: 0 10px 10px 6px"
-                     class="content-cl cursor-pointer"
-                     title="点击查看"
-                     v-html="item.content"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!--        <div v-if="recordList.length>0">-->
         <div v-if="!loading && recordList.length==0" class="text-center" style="color: #fefefe;font-size: 18px">
           <svg t="1670079174437" class="icon" viewBox="0 0 1567 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                p-id="11978" width="54" height="54">
@@ -73,15 +50,46 @@
 import {listRecord} from "@/api/lover";
 import './css/button.css'
 import {parseTime} from '@/utils/dateUitls';
+import OpticalAxis from "@/components/optical-axis";
 
 export default {
   name: "record",
+  components: {OpticalAxis},
   data() {
     return {
+      timeAxis: [{title: '吉照亮1', createTime: '2024-07-12 :23:12:00'}, {
+        title: '吉照亮2',
+        createTime: '2024-07-12 :23:12:00'
+      },
+        {title: '吉照亮3', createTime: '2024-07-12 :23:12:00'},
+        {title: '吉照亮4', createTime: '2024-07-12 :23:12:00'},
+        {title: '吉照亮5', createTime: '2024-07-12 :23:12:00'}
+        , {title: '吉照亮6', createTime: '2024-07-12 :23:12:00'}, {
+          title: '吉照亮7',
+          createTime: '2024-07-12 :23:12:00'
+        }, {title: '吉照亮8', createTime: '2024-07-12 :23:12:00'},
+        {title: '吉照亮9', createTime: '2024-07-12 :23:12:00'}, {title: '吉照亮10', createTime: '2024-07-12 :23:12:00'}
+        , {title: '吉照亮11', createTime: '2024-07-12 :23:12:00'}, {
+          title: '吉照亮12',
+          createTime: '2024-07-12 :23:12:00'
+        }, {title: '吉照亮13', createTime: '2024-07-12 :23:12:00'},
+        {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}, {
+          title: '吉照亮14',
+          createTime: '2024-07-12 :23:12:00'
+        }, {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}
+        , {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}, {
+          title: '吉照亮14',
+          createTime: '2024-07-12 :23:12:00'
+        }, {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}
+
+        , {title: '吉照亮11', createTime: '2024-07-12 :23:12:00'}, {
+          title: '吉照亮12',
+          createTime: '2024-07-12 :23:12:00'
+        }, {title: '吉照亮13', createTime: '2024-07-12 :23:12:00'},],
       recordList: [],
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 40,
         state: 0,
         title: null,
       },
@@ -154,7 +162,7 @@ export default {
     //添加滚动监听事件
     window.addEventListener('scroll', this.getData, true);
   },
-  unmounted() {
+  destroyed() {
     //离开页面时删除该监听
     window.removeEventListener('scroll', this.getData, true)
   }
@@ -162,68 +170,27 @@ export default {
 </script>
 
 <style>
-.content-cl {
-  text-align: center;
-  overflow-y: auto;
+.record-main {
+  padding: 0px 60px;
 }
 
 .content-cl img {
   border: none;
-  max-width: 200px;
-}
-/* 现代浏览器only */
-.hr-twill-colorful {
-  border: 0;
-  margin: 10px 0 20px 0;
-  padding: 3px;
-  background: linear-gradient(135deg, #9b59b6, #ff4757, #05fcf8, #fff200, #1e90ff);
-  --mask-image: repeating-linear-gradient(135deg, #000 0px, #000 1px, transparent 1px, transparent 6px);
-  -webkit-mask-image: var(--mask-image);
-  mask-image: var(--mask-image);
+  max-width: 86%;
+  padding: 20px;
 }
 
-/* From www.lingdaima.com */
-.card {
-  padding: 6px;
-  --color-1: #c7ecee;
-  --color-2: #c7ecee;
-  --color-3: rgb(28, 0, 48);
-  color: black;
-  min-height: 480px;
-  margin-bottom: 60px;
-  background: #fefefe;
-  width: 500px;
-  height: 400px;
-  box-shadow: -10px -10px var(--color-1),
-  15px 10px var(--color-2);
-  transition: box-shadow 0.25s ease-in-out,
-  transform 0.25s ease-in-out;
-}
-
-.card:hover {
-  transform: scale(1.025);
-}
-
-.record-pc-content {
-  width: 90%;
-  margin: auto;
-  color: #fefefe;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 789px) {
-  .card {
-    max-width: 100%;
-  }
-
-  .record-pc-content {
+@media (max-width: 400px) {
+  .record-main {
     padding: 0px;
   }
+}
 
-  .content-cl img {
-    max-width: 150px;
+@media (max-width: 1200px) and (min-width: 500px) {
+  .record-main {
+    padding: 0px 40px;
   }
 }
+
+
 </style>

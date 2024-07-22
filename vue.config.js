@@ -24,7 +24,7 @@ module.exports = {
             port: 1029,
             proxy: {
                 ['/api']: {
-                    // target: 'http://127.0.0.1:9001',
+                    // target: 'http://127.0.0.1:9003',
                     target: 'http://server.qixidi.top',
                     changeOrigin: true, // 这个参数可以让target参数是域名
                     pathRewrite: {

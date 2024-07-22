@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-20 mb-40 overflow-hidden">
-    <div class="mb-20">
+  <div class="mt-10 mb-40 overflow-hidden">
+    <div class="mb-10">
       <hr class="hr-wavy">
     </div>
     <div style="padding: 0 10px">
@@ -19,10 +19,11 @@
       <!--        </a>-->
       <!--      </div>-->
       <!--    </div>-->
-      <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;margin-top: 10px;" :size="28">
+      <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;" :size="28">
         <div class="" v-if="imgList.length!=0">
           <div class="content">
             <div class="img-div" v-for="(item,index) in imgList" :key="index">
+              <!--              {{index}}-->
               <a-image
                   class="cursor-pointer"
                   :title="item.remarks==null?parseTimes(item.createTime, '{y}-{m}-{d}'):item.remarks"
@@ -240,5 +241,8 @@ export default {
 
 .arco-image {
   display: block;
+}
+.arco-image-footer-caption-title{
+  font-size: 0.8rem;
 }
 </style>

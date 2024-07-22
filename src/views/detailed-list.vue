@@ -19,29 +19,30 @@
     <!--    </div>-->
     <div class="mb-20">
       <a-spin :loading="loading" tip="正在赶来的路上..." style="width: 100%;" :size="28">
-        <!--        <a-grid :cols="{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }" :colGap="40" :rowGap="16" class="grid-demo-grid"-->
-        <!--                v-if="detailedList.length>0">-->
-        <!--          <a-grid-item class="list-cl" v-for="(item,index) in detailedList">-->
         <div class="detalide-flex">
-
           <div class="list-cl detalide-item" v-for="(item,index) in detailedList" :key="index">
-            <div>
+
               <div class="box-gou" v-if="item.state==0">
           <span style="line-height: 28px">
-            <svg t="1668952537738" class="icon" viewBox="0 0 1024 1024" version="1.1"
+            <svg v-if="item.isComplete==1" t="1668952537738" class="icon" viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg" p-id="3765" width="16" height="16"><path
                 d="M60.217477 633.910561c0 0 250.197342 104.557334 374.563838 330.628186 149.378146-279.762705 436.109566-540.713972 521.05012-560.013527 0-115.776863 0-163.394371 0-341.442486-342.237595 226.070852-506.576477 642.342604-506.576477 642.342604l-180.049702-191.614086L60.217477 633.910561z"
                 p-id="3766" data-spm-anchor-id="a313x.7781069.0.i0" class="selected" fill="#ffffff"></path></svg>
+<svg v-else t="1721444671582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     p-id="10282" width="16" height="16"><path
+    d="M225.28 512m-81.92 0a81.92 81.92 0 1 0 163.84 0 81.92 81.92 0 1 0-163.84 0Z" p-id="10283" fill="#fefefe"></path><path
+    d="M512 512m-81.92 0a81.92 81.92 0 1 0 163.84 0 81.92 81.92 0 1 0-163.84 0Z" p-id="10284" fill="#fefefe"></path><path
+    d="M798.72 512m-81.92 0a81.92 81.92 0 1 0 163.84 0 81.92 81.92 0 1 0-163.84 0Z" p-id="10285" fill="#fefefe"></path></svg>
           </span>
               </div>
               <div class="box-gou" v-else>
                 <div class="box-out"></div>
               </div>
               <a-collapse :default-active-key="['1']" accordion>
-                <a-collapse-item class="font-s-24" :header="item.name" :key="item.state==0?'1':'2'">
+                <a-collapse-item class="font-s-24" :header="item.name" :key="item.isComplete==1?'1':'2'">
                   <template #extra>
                     <div class="font-s-13 disappear-789" style="color:#95a5a6;">
-                    <span v-if="item.state==0">
+                    <span v-if="item.isComplete==1">
                       {{ parseTimes(item.updateTime, '{y}-{m}-{d}') }}
                     </span>
                       <span v-else>
@@ -49,7 +50,7 @@
                     </span>
                     </div>
                   </template>
-                  <div v-if="item.state==0">
+                  <div v-if="item.isComplete==1">
                     <div class="content-cl" v-html="item.content"></div>
                   </div>
                   <div v-else>
@@ -97,7 +98,7 @@
                   </div>
                 </div>
               </a-collapse>
-            </div>
+
           </div>
         </div>
         <div v-if="!loading && detailedList.length==0" class="text-center" style="color: #fefefe;font-size: 18px">

@@ -63,7 +63,8 @@ export default {
   max-width: 100%;
   padding: 20px 0;
 }
-.content-img-cl{
+
+.content-img-cl {
   font-size: 16px;
   line-height: 25px;
 }
@@ -78,8 +79,9 @@ export default {
   padding: 15px;
   display: block;
   width: 100%;
+  font-size: 1rem;
   height: 100%;
-  background-color: #ecf0f1;
+  /*background-color: rgba(254, 254, 254, 0.3);*/
   border: 4px solid transparent;
   background: linear-gradient(white, white) padding-box,
   repeating-linear-gradient(-45deg, #ff4757 0, #1e90ff 20%, transparent 0, transparent 25%, #fbfaf5 0, #1e90ff 44%, transparent 0, transparent 50%) 0/40px 40px;
