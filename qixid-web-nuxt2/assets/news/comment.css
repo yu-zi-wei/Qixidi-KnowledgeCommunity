@@ -1,0 +1,14 @@
+.ri-ioc:hover {
+  color: #00afff;
+  fill: #00afff;
+}
+
+.for-div {
+  background-color: #fefefe;
+  padding: 16px 40px 8px 20px;
+  border-radius: 4px;
+}
+
+.comment-div {
+  margin-left: 40px;
+}

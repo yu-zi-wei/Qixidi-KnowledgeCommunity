@@ -1,0 +1,158 @@
+package com.aurora.business.service.impl.dictum;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.aurora.business.domain.bo.dictum.DictumInfoBo;
+import com.aurora.business.domain.entity.dictum.DictumInfo;
+import com.aurora.business.domain.vo.dictum.DictumInfoVo;
+import com.aurora.business.mapper.dictum.DictumGroupMapper;
+import com.aurora.business.mapper.dictum.DictumInfoMapper;
+import com.aurora.business.service.dictum.IDictumInfoService;
+import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.page.TableDataInfo;
+import com.aurora.common.helper.LoginHelper;
+import com.aurora.common.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+
+/**
+ * 名言信息Service业务层处理
+ *
+ * @author aurora
+ * @date 2023-04-24
+ */
+@RequiredArgsConstructor
+@Service
+public class DictumInfoServiceImpl implements IDictumInfoService {
+
+    private final DictumInfoMapper baseMapper;
+    private final DictumGroupMapper dictumGroupMapper;
+
+    /**
+     * 查询名言信息
+     *
+     * @param id 名言信息主键
+     * @return 名言信息
+     */
+    @Override
+    public DictumInfoVo queryById(Long id) {
+        return baseMapper.selectVoById(id);
+    }
+
+    /**
+     * 查询名言信息列表
+     *
+     * @param bo 名言信息
+     * @return 名言信息
+     */
+    @Override
+    public TableDataInfo<DictumInfoVo> queryPageList(DictumInfoBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<DictumInfo> lqw = buildQueryWrapper(bo);
+        IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
+        result.getRecords().forEach(item -> {
+            if (StringUtils.isNotEmpty(item.getLabel())) {
+                List<String> labelList = Arrays.asList(item.getLabel().split(","));
+                item.setLabelList(labelList);
+            }
+            if (StringUtils.isNotEmpty(item.getPicture())) {
+                List<String> pictureList = Arrays.asList(item.getPicture().split(","));
+                item.setPictureList(pictureList);
+            }
+        });
+        return TableDataInfo.build(result);
+    }
+
+    /**
+     * 查询名言信息列表
+     *
+     * @param bo 名言信息
+     * @return 名言信息
+     */
+    @Override
+    public List<DictumInfoVo> queryList(DictumInfoBo bo) {
+        LambdaQueryWrapper<DictumInfo> lqw = buildQueryWrapper(bo);
+        return baseMapper.selectVoList(lqw);
+    }
+
+    private LambdaQueryWrapper<DictumInfo> buildQueryWrapper(DictumInfoBo bo) {
+        Map<String, Object> params = bo.getParams();
+        LambdaQueryWrapper<DictumInfo> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getUid()), DictumInfo::getUid, bo.getUid());
+        lqw.eq(StringUtils.isNotBlank(bo.getContent()), DictumInfo::getContent, bo.getContent());
+        lqw.eq(bo.getGroupId() != null, DictumInfo::getGroupId, bo.getGroupId());
+        lqw.eq(StringUtils.isNotBlank(bo.getLabel()), DictumInfo::getLabel, bo.getLabel());
+        lqw.eq(bo.getHelpSum() != null, DictumInfo::getHelpSum, bo.getHelpSum());
+        lqw.eq(bo.getCommentSum() != null, DictumInfo::getCommentSum, bo.getCommentSum());
+        lqw.eq(StringUtils.isNotBlank(bo.getPicture()), DictumInfo::getPicture, bo.getPicture());
+        lqw.eq(bo.getDictumState() != null, DictumInfo::getDictumState, bo.getDictumState());
+        lqw.eq(bo.getState() != null, DictumInfo::getState, bo.getState());
+        return lqw;
+    }
+
+    /**
+     * 新增名言信息
+     *
+     * @param bo 名言信息
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Boolean insertByBo(DictumInfoBo bo) {
+        DictumInfo add = BeanUtil.toBean(bo, DictumInfo.class);
+        add.setUid(LoginHelper.getTripartiteUuid());
+        add.setCreateTime(new Date());
+        add.setUpdateTime(new Date());
+        boolean flag = baseMapper.insert(add) > 0;
+        dictumGroupMapper.addEmploySum(bo.getGroupId());
+        if (ObjectUtils.isNotEmpty(bo.getAlbumId())) {
+            baseMapper.addEmploy(bo.getAlbumId());
+        }
+        if (flag) {
+            bo.setId(add.getId());
+        }
+        return flag;
+    }
+
+    /**
+     * 修改名言信息
+     *
+     * @param bo 名言信息
+     * @return 结果
+     */
+    @Override
+    public Boolean updateByBo(DictumInfoBo bo) {
+        DictumInfo update = BeanUtil.toBean(bo, DictumInfo.class);
+        update.setUpdateTime(new Date());
+        return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 批量删除名言信息
+     *
+     * @param ids 需要删除的名言信息主键
+     * @return 结果
+     */
+    @Override
+    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+        return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteWithValidById(Long id, Long groupId) {
+        dictumGroupMapper.deleteEmploySum(groupId);
+        DictumInfoVo dictumInfoVo = baseMapper.selectVoOne(new QueryWrapper<DictumInfo>().eq("id", id));
+        if (ObjectUtils.isNotEmpty(dictumInfoVo.getAlbumId())) {
+            baseMapper.deleteEmploy(dictumInfoVo.getAlbumId());
+        }
+        return baseMapper.deleteById(id) > 0;
+    }
+}
+

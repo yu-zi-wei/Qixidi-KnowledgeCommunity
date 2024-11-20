@@ -1,0 +1,262 @@
+.article-content {
+  background-color: #fefefe;
+  padding: 40px 0 40px 20px;
+  z-index: 10;
+  width: 900px;
+}
+
+/*关于作者*/
+.article-content-introduce {
+  background-color: #fefefe;
+  padding: 30px 0 40px 20px;
+  z-index: 10;
+  width: 1070px;
+}
+
+.left-content-auto {
+  width: 46px;
+  height: 46px;
+  margin: auto;
+}
+
+.fa-li-class {
+  background-color: #fefefe;
+  -webkit-box-shadow: 0px 2px 2px #d7d5f7;
+  -moz-box-shadow: 0px 1px 1px #d7d5f7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  border-radius: 50%;
+  width: 46px;
+  height: 46px;
+  transition: all 0.1s linear 0s;
+  color: #757e8d;
+  cursor: pointer;
+  /*margin: auto;*/
+  margin-bottom: 24px;
+}
+
+.fa-li-class:hover {
+  background-color: #f1f2f6;
+}
+
+.fa-li-div {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+.left-content-ul {
+  position: fixed;
+  margin-top: 100px;
+}
+
+.left-content-width {
+  width: 80px;
+}
+
+.article-title {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.article-user-info-two {
+  margin-top: 20px;
+  margin-right: 10px;
+  border-radius: 4px;
+  background-color: #f6f7f7;
+  padding: 10px 10px 10px 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.label-top-cl {
+  font-size: 14px;
+  color: #747d8c;
+}
+
+.label-top-cl-list {
+  font-size: 14px;
+  background-color: #F5F6FA;
+  margin-right: 10px;
+  padding: 4px 6px 4px 6px;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #667182;
+}
+
+.label-top-cl-list:hover {
+  color: var(--theme-color);
+}
+
+.right-content-width {
+  width: 260px;
+  position: relative;
+  max-height: 100vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+/*设置滚动条高宽为0*/
+.right-content-width::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.right-content-div {
+  position: fixed;
+}
+
+.index-right-cl-true {
+  transform: translateY(-5rem);
+  transition: 0.4s;
+}
+
+.index-right-cl-false {
+  transform: translateY(0rem);
+  transition: 0.4s;
+}
+
+.left-catalogue-list-li {
+  margin: 4px 0;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  padding: 6px 6px 6px 0;
+  border-left: 2px solid #fefefe;
+}
+
+.left-catalogue-list-li:hover {
+  border-left: 3px solid var(--theme-color);
+  background-color: #f4f5f5;
+  font-weight: bold;
+}
+
+.introduce-cl {
+  /*超出的文本隐藏*/
+  overflow: hidden;
+  /*  溢出用省略号显示*/
+  text-overflow: ellipsis;
+  /*  默认不换行*/
+  white-space: nowrap;
+}
+
+.article-catalogue {
+  overflow: auto;
+  max-height: 600px;
+  padding: 10px;
+}
+
+.article-catalogue::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background-color: #ced6e0;
+}
+
+.article-catalogue::-webkit-scrollbar-track {
+  background: #fefefe;
+  border-radius: 2px;
+}
+
+.article-catalogue::-webkit-scrollbar-thumb {
+  background: #ced6e0;
+  border-radius: 2px;
+}
+
+.sum-span-div {
+  line-height: 16px;
+  letter-spacing: 0px;
+  color: #fefefe;
+}
+
+.circular-div {
+  position: fixed;
+  border-radius: 50%;
+  display: inline-block;
+  font-size: 12px;
+  height: 16px;
+  min-width: 16px;
+  margin-left: 20px;
+  margin-top: 0px;
+  padding: 2px;
+  text-align: center;
+  justify-items: center;
+}
+
+.comment-input-div {
+  background-color: #F2F3F5;
+  margin: 10px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.comment-li {
+  margin-left: 32px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.el-collapse-item__header {
+  line-height: 16px;
+  border: none;
+  height: initial;
+  background-color: initial;
+}
+
+.el-collapse {
+  width: initial;
+  border: none;
+}
+
+.content-div {
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/*=======================评论框样式=====================*/
+
+.news-comment-cl {
+  width: 100%;
+  white-space: pre-wrap;
+  border: unset;
+  font-size: 16px;
+  padding: unset;
+  margin: unset;
+  resize: none;
+}
+
+.comment-li-cl::-webkit-scrollbar,
+.news-comment-cl::-webkit-scrollbar,
+.user-list-left::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #ced6e0;
+  border-radius: 4px;
+}
+
+.comment-li-cl::-webkit-scrollbar-track,
+.news-comment-cl::-webkit-scrollbar-track,
+.user-list-left::-webkit-scrollbar-track {
+  background: #fefefe;
+  border-radius: 4px;
+}
+
+.comment-li-cl::-webkit-scrollbar-thumb,
+.news-comment-cl::-webkit-scrollbar-thumb,
+.user-list-left::-webkit-scrollbar-thumb {
+  background: #ced6e0;
+  border-radius: 4px;
+}
+
+.comment-import {
+  border: 1px solid #dfe4ea;
+  border-radius: 4px;
+  margin: 10px 15px 15px 10px;
+  padding: 6px 6px 0px 6px;
+  /*改宽度改动会导致二级评论末尾被遮挡*/
+  width: 90%;
+}
+
+/*隐藏折叠面板 尖括号图标*/
+.el-collapse-item__arrow {
+  display: none;
+}

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.count.CountUserWebsiteMapper">
+    <update id="updateAdd">
+        update count_user_website
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code==1">
+                fabulous_count=fabulous_count+1
+            </if>
+            <if test="code==2">
+                fans_fabulous_count=fans_fabulous_count+1
+            </if>
+            <if test="code==3">
+                collection_count=collection_count+1
+            </if>
+            <if test="code==4">
+                follow_count=follow_count+1
+            </if>
+            <if test="code==5">
+                fans_follow_count=fans_follow_count+1
+            </if>
+            <if test="code==6">
+                comment_count=comment_count+1
+            </if>
+            <if test="code==7">
+                fans_comment_count=fans_comment_count+1
+            </if>
+            <if test="code==8">
+                article_count=article_count+1
+            </if>
+            <if test="code==9">
+                special_column_count=special_column_count+1
+            </if>
+            <if test="code==10">
+                fans_special_column=fans_special_column+1
+            </if>
+            <if test="code==11">
+                circle_count=circle_count+1
+            </if>
+        </trim>
+        where uuid=#{uuid}
+    </update>
+
+    <update id="updateDelete">
+        update count_user_website
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code==1">
+                fabulous_count=fabulous_count-1
+            </if>
+            <if test="code==2">
+                fans_fabulous_count=fans_fabulous_count-1
+            </if>
+            <if test="code==3">
+                collection_count=collection_count-1
+            </if>
+            <if test="code==4">
+                follow_count=follow_count-1
+            </if>
+            <if test="code==5">
+                fans_follow_count=fans_follow_count-1
+            </if>
+            <if test="code==6">
+                comment_count=comment_count-1
+            </if>
+            <if test="code==7">
+                fans_comment_count=fans_comment_count-1
+            </if>
+            <if test="code==8">
+                article_count=article_count-1
+            </if>
+            <if test="code==9">
+                special_column_count=special_column_count-1
+            </if>
+            <if test="code==10">
+                fans_special_column=fans_special_column-1
+            </if>
+            <if test="code==11">
+                circle_count=circle_count-1
+            </if>
+        </trim>
+        where uuid=#{uuid}
+    </update>
+
+    <select id="selectCensus" resultType="com.aurora.business.domain.vo.CountUserWebsiteVo">
+        select uuid,
+               fabulous_count,
+               fans_fabulous_count,
+               collection_count,
+               follow_count,
+               fans_follow_count,
+               comment_count,
+               fans_comment_count,
+               article_count,
+               special_column_count,
+               fans_special_column,
+               circle_count,
+               album_count,
+               dictum_count,
+               update_time
+        from count_user_website
+        where uuid = #{uid} LIMIT 1;
+    </select>
+
+    <update id="updateList">
+        <!--        文章-->
+        <if test="code==8">
+            <foreach collection="list" item="item" separator=";">
+                update count_user_website
+                set`article_count` = #{item.articleCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+        <!--      关注  -->
+        <if test="code==4">
+            <foreach collection="list" item="item" separator=";">
+                update count_user_website
+                set`follow_count` = #{item.followCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+        <!--        收藏-->
+        <if test="code==3">
+            <foreach collection="list" item="item" separator=";">
+                update count_user_website
+                set`collection_count` = #{item.collectionCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+        <!--        专栏-->
+        <if test="code==9">
+            <foreach collection="list" item="item" separator=";">
+                update count_user_website
+                set`special_column_count` = #{item.specialColumnCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+        <!--        专辑-->
+        <if test="code==12">
+            <foreach collection="list" item="item" separator=";">
+                update count_user_website
+                set`album_count` = #{item.albumCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+        <!--        名言-->
+        <if test="code==13">
+            <foreach collection="list" item="item" separator=";">
+                update count_user_website
+                set`dictum_count` = #{item.dictumCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updateExtremelyDate">
+        update count_user_website
+        set follow_count=0
+        WHERE follow_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set fabulous_count=0
+        WHERE fabulous_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set fans_fabulous_count=0
+        WHERE fans_fabulous_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set collection_count=0
+        WHERE collection_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set fans_follow_count=0
+        WHERE fans_follow_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set comment_count=0
+        WHERE comment_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set fans_comment_count=0
+        WHERE fans_comment_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set article_count=0
+        WHERE article_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set special_column_count=0
+        WHERE special_column_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set fans_special_column=0
+        WHERE fans_special_column <![CDATA[ < ]]> 0;
+        update count_user_website
+        set circle_count=0
+        WHERE circle_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set album_count=0
+        WHERE album_count <![CDATA[ < ]]> 0;
+        update count_user_website
+        set dictum_count=0
+        WHERE dictum_count <![CDATA[ < ]]> 0;
+    </update>
+</mapper>

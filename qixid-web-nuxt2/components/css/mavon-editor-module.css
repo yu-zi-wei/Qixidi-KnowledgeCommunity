@@ -1,0 +1,31 @@
+.v-note-show li {
+  list-style-type: disc !important;
+}
+
+sup {
+  color: #e67e22 !important;
+}
+
+sub {
+  color: #05c46b !important;
+}
+
+.markdown-body blockquote {
+  border-left: .25em solid var(--theme-color) !important;
+  background-color: #EEF7FA !important;
+  padding: 6px !important;
+}
+
+.hljs {
+  border-radius: 4px !important;
+  padding: 12px !important;
+}
+
+.el-dropdown-menu::-webkit-scrollbar {
+  width: 0px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 0px;
+}
+
+.button-item {
+  cursor: pointer;
+}

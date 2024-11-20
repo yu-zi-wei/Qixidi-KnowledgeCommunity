@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.news.NewsUserInfoMapper">
+    <select id="userList" resultType="com.aurora.business.domain.vo.news.NewsUserInfoVo">
+        SELECT
+        distinct
+        nui.id,
+        nui.news_content,
+        nui.type,
+        nui.been_read,
+        nui.sender_id,
+        nui.recipient_id,
+        nui.works_id,
+        nui.works_type,
+        nui.works_content,
+        nui.works_parent_id,
+        nui.works_parent_uid,
+        nui.prn_news_works_id,
+        um.nickname as senderName,
+        um.avatar as senderAvatar,
+        nui.create_time
+        FROM
+        `news_user_info` AS nui
+        LEFT JOIN user_main AS um ON nui.sender_id = um.uuid
+        <where>
+            nui.type=#{bo.type}
+            and nui.recipient_id=#{bo.recipientId}
+            <if test="bo.beenRead!='' and bo.beenRead!=null">
+                and nui.been_read=#{bo.beenRead}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectArticleNews" resultType="com.aurora.business.domain.vo.news.ArticleCommentNewsVo">
+        SELECT nur.id           as newsId,
+               ac.id,
+               ac.article_id    as articleId,
+               ac.parent_id     as parentId,
+               ac.comment_grade as commentGrade,
+               ac.comment_uid   as commentUid,
+               ac.target_id     as targetId,
+               ac.target_uid    as targetUid,
+               ac.content       as content,
+               ac.type          as type,
+               ai.article_title AS articleTitle,
+               nur.been_read    as beenRead,
+               nur.create_time  as createTime,
+               um.nickname      AS commentName,
+               um.avatar        AS commentAvatar
+        FROM news_user_record AS nur
+                 LEFT JOIN article_comment AS ac ON nur.news_id = ac.id
+                 LEFT JOIN article_information AS ai ON ai.id = ac.article_id
+                 LEFT JOIN user_main AS um ON ac.comment_uid = um.uuid
+        where ac.state = 0
+          and nur.type = #{type}
+          and nur.uid = #{uid}
+        ORDER BY nur.create_time DESC
+    </select>
+
+    <select id="selectFollowNews" resultType="com.aurora.business.domain.vo.news.NewsUserInfoVo">
+        SELECT nur.id          as newsId,
+               nur.type        as type,
+               nur.uid         as recipientId,
+               nur.been_read   as beenRead,
+               nur.create_time as createTime,
+               um.uuid         as senderId,
+               um.nickname     AS senderName,
+               um.avatar       AS senderAvatar
+        from news_user_record AS nur
+                 LEFT JOIN user_main AS um ON nur.target_uid = um.uuid
+        where um.state = 0
+          and nur.type = #{type}
+          and nur.uid = #{uid}
+        ORDER BY nur.create_time DESC
+    </select>
+
+    <select id="selectFabulousNews" resultType="com.aurora.business.domain.vo.news.NewsUserInfoVo">
+        SELECT nur.id          as newsId,
+               nur.type        as type,
+               nur.uid         as recipientId,
+               nur.been_read   as beenRead,
+               nur.content     as newsContent,
+               nur.target_id     as targetId,
+               nur.create_time as createTime,
+               um.uuid         as senderId,
+               um.nickname     AS senderName,
+               um.avatar       AS senderAvatar
+        from news_user_record AS nur
+                 LEFT JOIN user_main AS um ON nur.target_uid = um.uuid
+        where um.state = 0
+          and nur.type = #{type}
+          and nur.uid = #{uid}
+        ORDER BY nur.create_time DESC
+    </select>
+</mapper>

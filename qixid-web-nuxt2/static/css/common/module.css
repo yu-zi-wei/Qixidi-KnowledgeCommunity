@@ -1,0 +1,12 @@
+.auroora-card {
+  background-color: #fefefe;
+  padding: 10px;
+  border-radius: 2px;
+  border:  1px solid #ecf0f1;
+}
+
+.aurora-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%
+}

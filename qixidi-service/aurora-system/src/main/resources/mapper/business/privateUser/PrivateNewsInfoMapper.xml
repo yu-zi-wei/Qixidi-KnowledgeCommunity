@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.privateUser.PrivateNewsInfoMapper">
+    <select id="selectListXml" resultType="com.aurora.business.domain.vo.privateUser.PrivateNewsInfoVo">
+        SELECT pni.id,
+               pni.uid,
+               pni.news_comment,
+               pni.create_time,
+               pni.time_mark,
+               um.nickname,
+               um.avatar as userAvatar,
+               pni.create_time
+        FROM private_news_info AS pni
+                 LEFT JOIN user_main AS um ON pni.uid = um.uuid
+        WHERE pni.uid = #{bo.uid}
+            AND pni.reply_target_uid = #{bo.replyTargetUid}
+           OR pni.uid = #{bo.replyTargetUid}
+            AND pni.reply_target_uid = #{bo.uid}
+        ORDER BY pni.create_time
+    </select>
+
+    <select id="selectRead" resultType="com.aurora.business.domain.entity.news.NewsUserInfo">
+        select id, been_read
+        from private_news_info
+        where reply_target_uid = #{uid}
+          and been_read = 1;
+    </select>
+
+    <select id="selectLast" resultType="com.aurora.business.domain.vo.privateUser.PrivateNewsInfoVo">
+        select id, create_time
+        from private_news_info
+        where uid = #{uuid}
+            and reply_target_uid = #{replyTargetUid}
+           or uid = #{replyTargetUid} and reply_target_uid = #{uuid}
+        order by create_time desc LIMIT 1
+    </select>
+
+    <select id="selectBeenReadList" resultType="com.aurora.business.domain.vo.privateUser.PrivateUserVo">
+        SELECT uid as targetUid,
+        count(reply_target_uid) as unreadCount
+        FROM private_news_info
+        WHERE reply_target_uid = #{uid}
+        AND been_read = 1
+        AND uid IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.targetUid}
+        </foreach>
+        GROUP BY uid
+    </select>
+</mapper>

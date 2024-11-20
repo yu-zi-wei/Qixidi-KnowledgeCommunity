@@ -1,0 +1,561 @@
+<template>
+  <div>
+    <div class="main-div">
+      <div :class="{'main':true, 'hide-div':goTopLoading,'appear-div':!goTopLoading}">
+        <div class="main-nav">
+          <div class="logo cursor-pointer" :title="websiteName">
+            <nuxt-link to="/">
+              <div class="flex-right align-items-center svg-translateY-3" style="height: 50px;">
+                <el-image style="height: 40px;width: 40px" src="/img/logo.png"/>
+                <!--                <svg t="1726902880139" class="icon icon-theme" viewBox="0 0 1024 1024" version="1.1"-->
+                <!--                     xmlns="http://www.w3.org/2000/svg" p-id="4593" width="38" height="38">-->
+                <!--                  <path-->
+                <!--                    d="M839.446 839.453v-218.307h109.152l-72.768-181.914h36.399l-109.149-291.074-72.783 254.683h36.384l-87.617 175.171-57.917-175.171 36.384 36.39-145.533-436.606-109.149 363.83h36.383l-72.767 218.307-72.524-152.215 36.14 6.684-109.148-291.074-72.768 254.683h36.369l-109.151 218.305h109.151v181.925c0 0-143.503 63.137-181.916 109.151 60.689-27.678 123.863-21.389 218.315-36.384-28.458 17.268-54.764 20.359-72.768 36.384-39.838 35.39-109.149 109.156-109.149 109.156h436.599c0 0-149.701-68.932-145.534-109.156 2.454-23.769 49.734-55.493 72.768-72.768 22.486-1.175 49.52 0.395 72.768 0v72.768h72.767v-72.768c183.173 6.114 371.090 26.261 472.995 72.768-33.792-40.468-181.932-72.768-181.932-72.768zM475.617 766.686c-72.345 1.636-156.55 24.807-218.301 36.383v-181.925h72.767l-36.382 36.39h181.916v109.151zM766.683 803.069c-61.811-13.933-143.821-32.974-218.299-36.383v-109.151h181.914l-36.382-36.39h72.767v181.925z"-->
+                <!--                    p-id="4594"></path>-->
+                <!--                </svg>-->
+
+              </div>
+            </nuxt-link>
+          </div>
+          <div class="nav-list">
+            <ul class="main-nav-list">
+              <el-menu
+                :default-active="activeIndex"
+                mode="horizontal"
+                class="el-menu-vertical-demo"
+                @select="handleSelect"
+                :router="true"
+                text-color="#2f3542"
+                :active-text-color="themeColor">
+                <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
+                  <nuxt-link :to="item.route">
+                    <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"
+                       v-html="item.navigationIcon"></i>
+                    {{ item.navigationName }}
+                  </nuxt-link>
+                </el-menu-item>
+                <!--                存在下拉的菜单-->
+                <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
+                            style="border-bottom-color: snow;border-bottom: none">
+                  <template slot="title">
+                    <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"
+                       v-html="item.navigationIcon"></i>
+                    {{ item.navigationName }}
+                  </template>
+                  <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
+                    <nuxt-link :to="item1.route">
+                      <i v-if="item1.navigationIcon!=null" :class="$route.path==item1.route?'icon-theme':''"
+                         v-html="item1.navigationIcon"></i>
+                      {{ item1.navigationName }}
+                    </nuxt-link>
+                  </el-menu-item>
+                </el-submenu>
+                <el-menu-item :index="$route.path">
+                  <a href="http://love.qixidi.top/" target="_blank" style="color: var(--default-color);">
+                    <svg t="1729751692083" class="icon svg-translateY-1-" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="7008" width="20" height="20">
+                      <path
+                        d="M979.626667 390.656a27.733333 27.733333 0 0 1-55.338667 4.138667c-7.68-102.442667-49.664-165.546667-124.373333-193.493334-79.274667-20.053333-136.874667 0.554667-193.706667 53.290667-7.466667 6.912-14.677333 14.08-23.552 23.381333 2.517333-2.645333-16.384 17.194667-20.906667 21.76-19.584 19.797333-32.085333 28.885333-53.077333 30.165334-17.493333-1.024-30.976-10.24-51.2-29.568-2.005333-1.92-35.584-35.541333-47.018667-45.952C343.381333 193.152 281.6 174.592 201.898667 210.346667 127.872 257.962667 98.090667 318.890667 101.888 387.584c2.730667 49.109333 25.088 101.205333 42.88 118.528 22.314667 21.717333 143.146667 142.421333 363.093333 362.752a27.733333 27.733333 0 0 1-39.253333 39.210667c-219.477333-219.861333-340.48-340.778667-362.496-362.154667C18.944 461.184 8.277333 269.013333 175.445333 161.706667c106.624-48.170667 190.592-22.997333 272.426667 51.712 12.544 11.477333 46.72 45.653333 47.829333 46.762666 10.538667 10.026667 16.896 14.378667 12.672 14.378667-1.408 0.085333 4.266667-4.010667 13.909334-13.824 4.138667-4.138667 22.442667-23.381333 20.309333-21.162667 9.6-10.026667 17.493333-17.92 25.898667-25.642666 69.504-64.426667 145.365333-91.690667 247.893333-65.493334 99.157333 36.821333 154.026667 119.253333 163.242667 242.218667z"
+                        fill="#f777a3" p-id="7009"></path>
+                      <path
+                        d="M488.96 448.128c54.826667-20.224 116.608 7.253333 185.813333 80.426667l1.109334 1.28c3.2 3.797333 5.802667 6.741333 7.893333 8.96 2.261333-2.730667 6.314667-7.253333 11.946667-14.122667 67.157333-76.672 135.552-103.04 203.904-70.058667 102.485333 64.384 98.986667 148.821333 47.146666 216.533334l-3.2 3.498666c-23.808 22.101333-160 155.776-224.384 217.301334-25.344 18.944-56.832 17.92-84.181333-3.797334-131.754667-121.386667-203.776-195.712-221.44-230.698666-58.752-89.045333-18.901333-177.578667 75.392-209.322667z m18.432 52.309333c-63.104 21.248-85.077333 70.741333-46.72 127.701334l2.176 3.882666c11.093333 24.021333 82.944 98.56 208.128 213.973334 6.4 5.034667 10.154667 5.162667 12.373333 3.754666 59.861333-57.514667 191.872-187.050667 220.714667-214.058666 33.152-44.544 34.218667-91.306667-31.146667-132.565334-39.125333-18.773333-82.944-1.877333-134.826666 57.344-39.168 47.914667-66.901333 49.749333-104.149334 5.632-55.381333-58.368-96.682667-76.672-126.549333-65.664z"
+                        fill="#ffd32a" p-id="7010"></path>
+                    </svg>
+                    爱情小站</a>
+                </el-menu-item>
+                <!--                <el-menu-item index="/test">测试</el-menu-item>-->
+              </el-menu>
+            </ul>
+            <ul class="nav-right-ul">
+              <!--          搜索-->
+              <el-autocomplete
+                style="width: 280px"
+                class="inline-input"
+                value-key="content"
+                v-model="search.keyword"
+                :fetch-suggestions="querySearch"
+                @keyup.enter.native="searchAurora"
+                :placeholder="'探索'+websiteName"
+                @select="handleSelect"
+                clearable>
+                <i class="el-icon-search el-input__icon" slot="suffix"></i>
+              </el-autocomplete>
+
+              <!--        创作者中心-->
+              <li>
+                <el-dropdown split-button type="primary" @click="routeJumpUrl('/user_admin/data-index')">
+                  创造者中心
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item class="text-center mb-6" @click.native="publishData('/article/publish-article')">
+                      <div>
+                        写文章
+                        <svg t="1719580641624" class="icon icon-theme svg-translateY-2" viewBox="0 0 1024 1024"
+                             version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" p-id="4652" width="18" height="18">
+                          <path
+                            d="M972.146238 0.005962h-3.629346c-15.683959 0.907336-246.277047 15.683959-374.341111 93.714898-27.479334 16.850535-36.16384 49.12579-41.867098 104.602935a94.362995 94.362995 0 0 0-67.920617-31.627158 85.16001 85.16001 0 0 0-52.625517 18.924447c-47.051878 37.330416-207.391197 171.356977-277.256107 332.862872C68.698334 717.320267 82.826859 863.66068 83.474957 869.752797c0 1.555434 0.907336 2.981248 1.166575 4.536682-47.959214 61.439642-77.123602 104.732555-80.364089 109.398857a25.9239 25.9239 0 0 0 7.129073 35.515743A25.9239 25.9239 0 0 0 25.9239 1024a25.9239 25.9239 0 0 0 21.387217-11.406516c0-1.036956 27.479334-40.830142 72.716539-98.899677h1.685053A250.295251 250.295251 0 0 0 181.467298 920.304401c99.547775 0 305.902016-38.88585 570.325793-296.958271C987.570958 393.012282 1019.716594 99.294498 1023.086701 58.723595A47.829595 47.829595 0 0 0 1023.994038 51.853762a51.070082 51.070082 0 0 0-51.8478-51.8478zM716.406968 586.404573C461.575034 835.533249 267.405025 868.456602 181.467298 868.456602c-10.499179 0-18.794827 0-25.9239-1.166576 87.363542-107.195325 220.353147-251.202588 368.378615-349.972645a25.9239 25.9239 0 0 0-28.51629-42.644815c-145.173838 97.214624-272.200947 232.148522-361.89764 338.825369a795.215623 795.215623 0 0 1 67.531759-274.274859c64.809749-151.136335 221.001245-280.626214 262.220245-312.901469a33.182592 33.182592 0 0 1 20.998359-8.166029c45.237205 0 81.401045 108.750759 100.195872 108.75076h1.944293c16.202437-7.517931 9.591843-173.560508 34.349167-188.72599C741.034672 64.815712 972.146238 51.853762 972.146238 51.853762s-19.054066 303.180007-255.73927 534.550811z"
+                            p-id="4653"></path>
+                        </svg>
+                      </div>
+                    </el-dropdown-item>
+                    <el-dropdown-item class="text-center" @click.native="routeJumpUrl('/dictum/release-dictum')">
+                      记录名言
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </li>
+              <!--        消息-->
+              <li style="margin-top: 4px">
+                <el-dropdown>
+                  <div class="cursor-pointer flex-left" @click="newsJump">
+                    <svg t="1672211911610" class="icon icon-size-28" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="2568">
+                      <path
+                        d="M544 161.536a330.666667 330.666667 0 0 1 298.666667 329.130667h-0.341334c0.213333 1.493333 0.341333 2.986667 0.341334 4.565333v219.434667h39.68a32 32 0 0 1 0 64h-212.053334a160 160 0 0 1-316.586666 0H141.909333a32 32 0 1 1 0-64h39.424v-219.434667c0-1.578667 0.128-3.072 0.341334-4.565333H181.333333a330.666667 330.666667 0 0 1 298.666667-329.130667V128a32 32 0 1 1 64 0v33.536z m-298.666667 553.130667h533.333334v-219.434667c0-1.578667 0.128-3.072 0.341333-4.565333h-0.341333a266.666667 266.666667 0 1 0-533.333334 0h-0.341333c0.213333 1.493333 0.341333 2.986667 0.341333 4.565333v219.434667z m359.765334 64H418.901333a96 96 0 0 0 186.197334 0z"
+                        fill="#8a919f" p-id="2569"></path>
+                    </svg>
+                    <div class="circular-div-admin" v-if="userNewsSum>0">
+                      <span class="sum-span-div-admin" v-text="userNewsSum"></span>
+                    </div>
+                  </div>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(items,index) in userNewsList" :key="index">
+                      <div class="flex-left" @click="$router.push(items.route)">
+                        <div v-text="items.typeInfo"></div>
+                        <div v-if="items.newsSum>0" v-text="items.newsSum" class="badge-news"></div>
+                      </div>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </li>
+              <!--        用户信息模块-->
+              <li class="main-nav-left">
+                <div v-if="this.isLogin">
+                  <el-dropdown trigger="click">
+                    <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
+                      <el-avatar v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                      <el-avatar v-else src="/img/tx.jpg"></el-avatar>
+                    </div>
+                    <el-dropdown-menu slot="dropdown" style="padding: 15px">
+                      <div class="data-info-dev">
+                        <div class="flex-left ">
+                          <div class="mr-10" v-if="userInfo!=null">
+                            <el-avatar v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                            <el-avatar v-else src="/img/tx.jpg"></el-avatar>
+                          </div>
+                          <div>
+                            <p class="mb-4 font-bold overflow-nowrap-1">{{ userInfo.nickname }}</p>
+                            <p class="font-s-14 color-grey">
+                              {{ userInfo.occupation == null ? '职业-~-' : userInfo.occupation }}</p>
+                          </div>
+                        </div>
+                        <hr class="hr-item mt-10 mb-15"/>
+                        <div class="flex-space-between padding-le-ri-10 mb-20">
+                          <div class="cursor-pointer">
+                            <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
+                                       rel="noopener">
+                              <p class="hover-cl">关注</p>
+                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.fansFollowCount }}</p>
+                            </nuxt-link>
+                          </div>
+                          <div class="cursor-pointer">
+                            <nuxt-link :to="`/user_home/collection?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
+                                       rel="noopener">
+                              <p class="hover-cl">收藏</p>
+                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.collectionCount }}</p>
+                            </nuxt-link>
+                          </div>
+                          <div class="cursor-pointer">
+                            <nuxt-link :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
+                                       rel="noopener">
+                              <p class="hover-cl">文章</p>
+                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.articleCount }}</p>
+                            </nuxt-link>
+                          </div>
+                          <div class="cursor-pointer">
+                            <nuxt-link :to="`/dictum/space/content-list?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
+                                       rel="noopener">
+                              <p class="hover-cl">名言</p>
+                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.dictumCount }}</p>
+                            </nuxt-link>
+                          </div>
+                        </div>
+                        <div class="mt-26">
+                          <ul class="flex-space-between flex-wrap-wrap">
+                            <li class="function-li-dev" @click="routeJumpUuid('/user_home/article',userInfo.uuid)">
+                              <svg t="1720603953455" class="icon-theme icon-size-24 svg-translateY-1- mr-4"
+                                   viewBox="0 0 1024 1024" version="1.1"
+                                   xmlns="http://www.w3.org/2000/svg" p-id="14832" id="mx_n_1720603953456">
+                                <path
+                                  d="M853.333333 443.733333c-17.066667 0-29.866667 12.8-29.866666 25.6v302.933334c0 64-51.2 115.2-115.2 115.2H315.733333c-64 0-115.2-51.2-115.2-115.2V469.333333c0-17.066667-12.8-25.6-25.6-25.6s-29.866667 12.8-29.866666 25.6v302.933334c0 93.866667 76.8 170.666667 170.666666 170.666666h392.533334c93.866667 0 170.666667-76.8 170.666666-170.666666V469.333333c0-12.8-12.8-25.6-25.6-25.6zM947.2 392.533333L644.266667 128c-76.8-68.266667-192-68.266667-268.8 0l-298.666667 264.533333c-12.8 8.533333-12.8 25.6-4.266667 38.4 4.266667 4.266667 12.8 8.533333 21.333334 8.533334s12.8-4.266667 17.066666-8.533334l302.933334-264.533333c55.466667-46.933333 140.8-46.933333 196.266666 0l302.933334 264.533333c12.8 8.533333 29.866667 8.533333 38.4-4.266666 8.533333-4.266667 8.533333-21.333333-4.266667-34.133334z"
+                                  p-id="14833"></path>
+                                <path
+                                  d="M610.133333 780.8c17.066667 0 29.866667-12.8 29.866667-29.866667v-140.8c0-59.733333-46.933333-102.4-106.666667-102.4h-38.4c-59.733333 0-102.4 46.933333-102.4 102.4v140.8c0 17.066667 12.8 29.866667 25.6 29.866667s25.6-12.8 25.6-29.866667v-140.8c0-25.6 21.333333-46.933333 46.933334-46.933333h38.4c25.6 0 46.933333 21.333333 46.933333 46.933333v140.8c4.266667 17.066667 17.066667 29.866667 34.133333 29.866667z"
+                                  p-id="14834"></path>
+                              </svg>
+                              我的主页
+                            </li>
+                            <li class="function-li-dev"
+                                @click="routeJumpUuid('/dictum/space/content-list',userInfo.uuid)">
+                              <svg t="1720603401642" class="icon-theme icon-size-24 mr-4" viewBox="0 0 1024 1024"
+                                   version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                   p-id="8008">
+                                <path
+                                  d="M648.64 366.4S538.56 87.36 512 87.36 375.36 366.4 375.36 366.4 80 387.52 70.08 411.2s220.96 217.28 220.96 217.28-68.16 293.76-52.16 306.72S512 790.4 512 790.4s256 163.04 273.28 144.8c12.8-13.28-20.16-166.56-39.52-251.2a148 148 0 0 1 29.28-8.32 78.4 78.4 0 0 0 25.6-9.44s-61.44 13.92-241.92 17.76-231.36-5.12-231.36-5.12l254.4-190.88s-79.04-14.56-139.04-20c-85.92-7.84-161.12-7.68-151.68-10.08A1320.32 1320.32 0 0 1 512 448a1475.84 1475.84 0 0 1 184.96 20.16L442.72 650.88s55.52 8.48 101.6 10.4c87.84 3.36 195.04 0.8 194.88 0-3.36-14.08-6.24-32-6.24-32S962.24 434.88 954.08 411.2s-305.44-44.8-305.44-44.8z"
+                                  p-id="8009"></path>
+                              </svg>
+                              名言空间
+                            </li>
+                            <li class="function-li-dev" @click="routeJumpUuid('/user_home/follow',userInfo.uuid)">
+                              <svg t="1704636202856" class="icon-theme-stand-out icon-size-24 svg-translateY-2- mr-4"
+                                   viewBox="0 0 1024 1024" version="1.1"
+                                   xmlns="http://www.w3.org/2000/svg" p-id="5600">
+                                <path
+                                  d="M512 85.333333c129.6 0 234.666667 105.066667 234.666667 234.666667 0 84.256-44.394667 158.133333-111.072 199.52a425.28 425.28 0 0 1 152.853333 83.466667 32 32 0 1 1-41.493333 48.736A361.045333 361.045333 0 0 0 512 565.333333c-188.672 0-345.429333 144.672-361.344 331.413334a32 32 0 0 1-63.765333-5.429334c15.114667-177.322667 138.048-322.346667 301.546666-371.786666C321.76 478.165333 277.333333 404.266667 277.333333 320c0-129.6 105.066667-234.666667 234.666667-234.666667z m415.946667 627.381334l1.066666 1.013333a29.824 29.824 0 0 1 0 43.413333l-162.261333 152.96a31.925333 31.925333 0 0 1-22.762667 8.704 31.925333 31.925333 0 0 1-22.773333-8.704l-93.184-87.84a29.824 29.824 0 0 1 0-43.413333l1.077333-1.013333a32 32 0 0 1 43.904 0l70.976 66.901333 140.053334-132.021333a32 32 0 0 1 43.904 0zM512 149.333333c-94.261333 0-170.666667 76.405333-170.666667 170.666667s76.405333 170.666667 170.666667 170.666667 170.666667-76.405333 170.666667-170.666667-76.405333-170.666667-170.666667-170.666667z"
+                                  p-id="5601"></path>
+                              </svg>
+                              我的关注
+                            </li>
+                            <li class="function-li-dev" @click="routeJumpUuid('/user_home/special',userInfo.uuid)">
+                              <svg t="1704636239327" class="icon icon-size-24 svg-translateY-1- mr-4 icon-theme"
+                                   viewBox="0 0 1024 1024" version="1.1"
+                                   xmlns="http://www.w3.org/2000/svg" p-id="6694">
+                                <path
+                                  d="M539.8 558.3c-7.2-7.2-28.2-10-39.2 0.9L228.2 831.8V205.5c0-13.4 11-24.3 24.7-24.3h517.7c13.6 0 24.6 10.9 24.6 24.3v306.2c0 12 8.8 21.7 19.6 21.7s19.6-9.7 19.6-21.7v-322c0-26.3-21.4-47.7-47.8-47.7H236.8c-26.4 0-47.8 21.4-47.8 47.7V884.9c0 10.7 8.6 19.3 19.3 19.3h5c8.7 0 15.1-6.4 15.1-6.5l292.2-292.4 97.7 97.5c9.1 9.1 23.9 9.1 33 0 9.1-9.1 9.1-23.9 0-33L539.8 558.3zM928.6 748.2h-94.2v-93.5c0-12.9-8.8-23.4-19.6-23.4s-19.6 10.5-19.6 23.4v93.5h-93.6c-13 0-23.5 8.8-23.5 19.6s10.5 19.6 23.5 19.6h93.6v94.1c0 13 8.8 23.5 19.6 23.5s19.6-10.5 19.6-23.5v-94.1h94.2c13 0 23.5-8.8 23.5-19.6s-10.5-19.6-23.5-19.6z"
+                                  p-id="6695"></path>
+                              </svg>
+                              我的专栏
+                            </li>
+                            <li class="function-li-dev" @click="routeJumpUuid('/user_home/fabulous',userInfo.uuid)">
+                              <svg t="1704636283898" class="icon icon-size-24 svg-translateY-2- icon-theme mr-4"
+                                   viewBox="0 0 1024 1024" version="1.1"
+                                   xmlns="http://www.w3.org/2000/svg" p-id="7693">
+                                <path
+                                  d="M132.096 998.4c-9.216 0-18.432-3.072-25.6-10.24-14.336-14.336-14.336-36.864 0-50.176l306.176-306.176c14.336-14.336 36.864-14.336 50.176 0 14.336 14.336 14.336 36.864 0 50.176L156.672 988.16c-6.144 6.144-15.36 10.24-24.576 10.24z"
+                                  fill="#f9ca24" p-id="7694"></path>
+                                <path
+                                  d="M544.768 876.544H542.72c-12.288-1.024-22.528-8.192-27.648-19.456l-87.04-199.68-214.016-41.984c-12.288-2.048-21.504-11.264-24.576-22.528-3.072-11.264 1.024-24.576 9.216-32.768l162.816-144.384-26.624-216.064c-1.024-12.288 4.096-23.552 14.336-30.72 10.24-7.168 23.552-7.168 33.792-1.024l188.416 110.592 197.632-92.16c11.264-5.12 23.552-4.096 33.792 4.096 9.216 7.168 14.336 20.48 11.264 31.744L768 435.2l148.48 159.744c8.192 9.216 11.264 21.504 6.144 32.768s-14.336 19.456-26.624 20.48l-217.088 20.48L573.44 860.16c-6.144 10.24-16.384 16.384-28.672 16.384zM290.816 565.248l166.912 32.768c10.24 2.048 19.456 9.216 23.552 18.432l67.584 155.648 82.944-148.48c5.12-9.216 14.336-15.36 24.576-16.384l168.96-16.384-115.712-123.904c-7.168-8.192-10.24-18.432-8.192-28.672l36.864-165.888-154.624 71.68c-9.216 4.096-20.48 4.096-29.696-1.024L407.552 256l20.48 168.96c1.024 10.24-3.072 20.48-10.24 27.648l-126.976 112.64z"
+                                  p-id="7695"></path>
+                                <path
+                                  d="M582.656 187.392c-17.408 0-31.744-14.336-31.744-31.744v-47.104c0-17.408 14.336-31.744 31.744-31.744S614.4 90.112 614.4 108.544v47.104c0 17.408-14.336 31.744-31.744 31.744zM843.776 424.96c-15.36 0-28.672-10.24-31.744-25.6-3.072-17.408 8.192-33.792 25.6-37.888L956.416 337.92c17.408-3.072 33.792 8.192 37.888 25.6 3.072 17.408-8.192 33.792-25.6 37.888L849.92 423.936c-2.048 1.024-4.096 1.024-6.144 1.024zM820.224 900.096c-10.24 0-20.48-5.12-26.624-14.336l-95.232-142.336c-10.24-14.336-6.144-34.816 9.216-44.032 14.336-10.24 34.816-6.144 44.032 9.216L846.848 849.92c10.24 14.336 6.144 34.816-9.216 44.032-5.12 4.096-11.264 6.144-17.408 6.144z"
+                                  p-id="7696"></path>
+                              </svg>
+                              我的点赞
+                            </li>
+                            <li class="function-li-dev" @click="routeJumpUuid('/user_home/lately',userInfo.uuid)">
+                              <svg t="1704636371057" class="icon icon-size-24 svg-translateY-2- mr-4"
+                                   viewBox="0 0 1024 1024" version="1.1"
+                                   xmlns="http://www.w3.org/2000/svg" p-id="9933">
+                                <path
+                                  d="M620.958574 383.566886c1.533936 0.741897 3.076058 1.394766 4.650927 1.955538 0.020466 0.007163 0.020466 0.007163 0.020466 0.007163 28.879748 10.285251 63.605643-10.212596 82.518389-48.753377 19.896142-40.460504 12.735046-83.322707-16.273638-97.583502-29.638017-14.173814-67.228147 6.144954-87.188758 46.756907-8.619308 17.568121-12.539594 36.500309-11.007705 53.328579C595.516112 359.812879 605.481068 375.968837 620.958574 383.566886zM644.593877 305.556161c10.199293-20.74037 24.723078-27.288506 27.635407-26.468838 2.527566 1.832741 6.240121 17.295921-3.977591 38.087457-10.188037 20.709671-24.609491 27.293623-27.682479 26.473955C638.065184 341.686033 634.44882 326.211597 644.593877 305.556161z"
+                                  p-id="9934"></path>
+                                <path
+                                  d="M709.882859 447.871447c2.772136 1.794879 5.774517 3.266393 8.883321 4.373611 0.020466 0.007163 0.020466 0.007163 0.020466 0.007163 23.970948 8.537444 52.750411-4.190439 69.983911-30.965246 19.72218-30.658254 16.013719-67.034742-8.488325-82.813101-24.031323-15.484669-59.372226-3.685949-78.882582 26.574239C681.651888 395.71046 685.379793 432.092066 709.882859 447.871447zM738.780003 389.125485c6.747681-10.467399 15.521508-13.682627 17.195637-13.46671 1.420349 1.77339 2.160199 11.083429-4.591575 21.562085-6.438643 9.991562-14.738679 13.362332-17.392112 13.178137C732.7251 408.067906 732.337267 399.126256 738.780003 389.125485z"
+                                  p-id="9935"></path>
+                                <path
+                                  d="M849.594855 465.871403c-13.326517-23.736611-50.072419-29.795607-79.622432-13.157671-30.777981 17.305131-44.0124 50.194192-30.146601 74.874291 5.189186 9.245572 13.566994 16.136515 24.177656 19.926842 16.669658 5.937223 37.412075 3.413749 55.481615-6.745634 13.400195-7.534604 24.124444-18.557658 30.157857-31.032784C856.902284 494.79413 856.884888 478.793714 849.594855 465.871403zM797.702997 502.012532c-7.661494 4.295839-15.015995 4.891404-18.681478 3.63069 0.375553-2.717901 3.824095-9.171893 12.737092-14.183024 7.717775-4.327562 15.116279-4.9088 18.86158-4.425799C810.823829 489.180272 807.415196 496.55217 797.702997 502.012532z"
+                                  p-id="9936"></path>
+                                <path
+                                  d="M626.872261 407.602302l-150.978597-92.975555-3.108804-1.591241c-39.237653-16.60212-82.194-13.796214-117.144 6.55223-30.54876 17.791202-51.474348 47.295166-57.403385 80.963986-6.356778 36.132942 5.65172 76.376505 17.272385 115.292839 12.71151 42.577724 25.846668 86.620823 11.729136 117.294426-14.262842 30.989805-35.348066 44.245713-59.761082 59.565631-26.155706 16.430204-55.810097 35.046191-77.259618 76.567863-16.449647 31.823799-18.729573 68.348668-6.252401 100.196003 9.957793 25.39539 34.367739 60.202127 94.121658 81.806167l0.695848 0.24764c0.010233 0.004093 0 0 0.010233 0.004093 72.417333 25.791409 146.981563-32.166607 175.894056-72.828702 0.449231-0.474814 0.706081-1.109264 1.11438-1.627057 0.960885-1.39579 2.01489-2.827395 2.861164-4.173043l-0.260943-0.152473c0.337691-0.708128 0.919952-1.221828 1.189082-1.977028 4.218068-11.841699-1.963725-24.861224-13.807471-29.079292-9.821693-3.497661-20.154016 0.414439-25.900903 8.519024l-0.280386-0.164752c-39.869033 44.026726-79.69918 76.047-126.382409 59.420321-34.926464-12.623505-58.379619-32.06223-67.855434-56.225559-7.80271-19.925818-6.227842-43.081191 4.341888-63.539128 15.888875-30.733978 36.984333-43.985794 61.415768-59.323107 26.573215-16.695241 56.707536-35.625382 76.515674-78.653361 21.129226-45.899376 5.547343-98.119715-9.521864-148.60248-10.602476-35.523051-20.62883-69.079308-16.092513-94.855368 3.654226-20.74344 16.769942-39.062668 35.986609-50.241264 21.511943-12.517081 48.028876-14.654768 72.757071-5.848195 1.124614 0.401136 2.252297 0.825808 3.373841 1.270946l148.697647 91.551112c54.338582 36.453237 66.301032 81.554434 37.682227 141.851729-34.492582 71.88726-78.214363 114.12627-117.170606 150.628626l0.10847 0.110517c-2.364861 2.332115-4.367471 5.069459-5.556553 8.408507-4.218068 11.843746 1.962701 24.863271 13.805424 29.080316 8.373715 2.981914 17.194614 0.569982 23.216771-5.169743l0.138146 0.14224c38.988989-36.756135 89.212858-88.24174 125.585253-164.046217C718.897164 525.4575 700.546214 457.004455 626.872261 407.602302z"
+                                  p-id="9937"></path>
+                                <path
+                                  d="M370.909611 297.807686c5.810333 2.069125 11.861142 3.324722 17.965164 3.724835 48.374754 3.145643 89.645716-46.145993 93.955882-112.220874 3.675716-56.459896-21.259186-105.683994-60.641125-119.710452-5.819542-2.072195-11.861142-3.324722-17.963117-3.723811-24.394596-1.590218-48.533366 10.694573-66.222237 33.69952-15.935947 20.7373-25.791409 48.606021-27.733645 78.486562-3.673669 56.484456 21.25714 105.718787 60.629869 119.742175C370.909611 297.807686 370.909611 297.807686 370.909611 297.807686zM354.643136 180.959422c1.358951-20.869307 8.142447-40.660048 18.614963-54.273091 4.987594-6.497994 15.277962-17.272385 28.072359-16.437367 2.036379 0.137123 3.978614 0.541329 5.941316 1.240247 17.323551 6.169513 33.732266 35.878139 31.187303 74.925457-2.826372 43.302225-26.878161 72.03871-46.687322 70.745251-2.036379-0.137123-3.978614-0.541329-5.942339-1.24127C368.504842 249.749134 352.105337 220.020042 354.643136 180.959422z"
+                                  p-id="9938"></path>
+                                <path
+                                  d="M520.159844 323.5817c32.121582 11.440563 69.803809-14.734586 85.778642-59.588143 15.96767-44.834114 3.307326-88.914052-28.815279-100.354616s-69.796646 14.713097-85.764316 59.547211C475.384058 268.039709 488.037239 312.141136 520.159844 323.5817zM562.205449 205.525933c3.958148 1.409093 10.739599 18.575054 1.845021 43.548842-8.904811 25.004487-25.01472 34.029024-28.971845 32.619932-3.958148-1.410116-10.735505-18.585287-1.829671-43.589774C542.141484 213.131145 558.2473 204.116841 562.205449 205.525933z"
+                                  p-id="9939"></path>
+                              </svg>
+                              我的足迹
+                            </li>
+                          </ul>
+                        </div>
+                        <hr class="hr-item mt-20 mb-10 padding-le-ri-10"/>
+                        <div class="flex-space-between padding-le-ri-10">
+                          <div class="cursor-pointer hover-cl">
+                            <nuxt-link to="/user_info/settings" target="_blank" rel="noopener">
+                              我的设置
+                            </nuxt-link>
+                          </div>
+                          <div class="cursor-pointer hover-cl" @click="oauthLogout">退出</div>
+                        </div>
+                      </div>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+                <div v-else>
+                  <div @click="loginWindow" class="cursor-pointer">
+                    <el-avatar>登录</el-avatar>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <LoginModule :isLogin="isLoginBinlog" @loginDialogMethod="loginDialogMethod"></LoginModule>
+    </div>
+    <div>
+      <!--    回到顶部-->
+      <transition name="el-zoom-in-bottom">
+        <div class="go-top" @click="goTop" v-show="goTopLoadingButton">
+          <div title="回到顶部">
+            <svg t="1699162903436" class="icon icon-size-32 icon-theme" viewBox="0 0 1365 1024" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg" p-id="10006">
+              <path
+                d="M97.52381 975.238095L704.707048 390.095238 1267.809524 975.238095c-241.468952-167.253333-433.980952-250.928762-577.536-250.928762C546.718476 724.309333 349.135238 807.936 97.52381 975.238095z"
+                p-id="10007"></path>
+              <path
+                d="M683.154286 284.281905a70.070857 70.070857 0 0 0-57.051429 19.846095L69.144381 856.990476a68.949333 68.949333 0 0 0 0 97.962667 70.119619 70.119619 0 0 0 98.694095 0L683.154286 443.928381l515.169524 511.463619c27.696762 26.575238 71.875048 25.795048 98.645333-1.706667a68.900571 68.900571 0 0 0 0-96.256L740.10819 304.566857a70.070857 70.070857 0 0 0-56.953904-20.23619zM174.421333 48.761905h1018.88c38.521905 0 69.729524 31.012571 69.729524 69.241905 0 38.278095-31.207619 69.339429-69.729524 69.339428H174.421333c-38.521905 0-69.778286-31.061333-69.778285-69.290667 0-38.278095 31.207619-69.290667 69.778285-69.290666z"
+                fill="#F2F3F5" p-id="10008"></path>
+            </svg>
+          </div>
+        </div>
+      </transition>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "navigationBarModule",
+  props: {
+    // 是否允许滚动条下滑隐藏导航栏
+    isConceal: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data() {
+    return {
+      websiteName: process.env.PROJECT_NAME,
+      themeColor: process.env.THEME_COLOR,
+      restaurants: [],
+      activeIndex: '/',
+      search: {
+        keyword: null,
+      },
+      userInfo: null,
+      isLogin: false,
+      isLoginBinlog: false,
+      goTopLoading: false,
+      goTopLoadingButton: false,
+      navigationList: [],
+      userNewsSum: 0,
+      userNewsList: [],
+      //搜索展示路由
+      url: [
+        '/search/data',
+        '/search/article',
+        '/search/label',
+        '/search/user',
+      ],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        uid: null,
+      },
+    };
+  },
+
+  methods: {
+    getNavigationList(isList) {
+      return this.navigationList.filter(item => item.isList == isList);
+    },
+    routeJumpUuid(url, id) {
+      this.$router.push({
+        path: url,
+        query: {uuid: this.$base64.encode(id)}
+      })
+    },
+    newsJump() {
+      if (this.isLogin) {
+        this.$router.push('/news/comment')
+        return;
+      }
+      this.isLoginBinlog = true;
+    },
+    routeJumpUrl(url) {
+      if (this.isLogin) {
+        this.$router.push(url)
+        return;
+      }
+      this.isLoginBinlog = true;
+    },
+    publishData(url) {
+      if (this.isLogin) {
+        let routeInfo = this.$router.resolve({
+          path: url
+        });
+        window.open(routeInfo.href, '_blank');
+        return;
+      }
+      this.isLoginBinlog = true;
+    },
+
+    goTop() {
+      window.scrollTo({top: 0, behavior: "smooth"})
+    },
+    //退出登录
+    oauthLogout() {
+      this.$confirm('确定要离开吗!', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$API("/oauth/logout", this.$post()).then(res => {
+          this.pathname = this.$route.fullPath;
+          //保存当前url
+          sessionStorage.setItem('url', this.pathname);
+          this.$router.push(process.env.LOG_OUT_TRANSFER);
+        })
+        this.notRefreshLogOut();
+        this.onMounted()
+      }).catch(() => {
+      });
+    },
+
+    querySearch(queryString, cb) {
+      cb(this.restaurants);
+    },
+    loginWindow() {
+      this.isLoginBinlog = true;
+    },
+    loginDialogMethod(val) {
+      this.isLoginBinlog = val;
+    },
+    handleSelect(item) {
+      this.search.keyword = item.content;
+      this.searchAurora()
+    },
+    searchAurora() {
+      if (this.search.keyword == null || this.search.keyword == '') {
+        return;
+      }
+      let pth = this.$route.path;
+      let patns = '/search/data';
+      if (this.url.indexOf(pth) !== -1) {
+        patns = pth;
+      }
+      this.$router.push({
+        path: patns,
+        query: {
+          data: this.search.keyword,
+        }
+      })
+    },
+    navigationFun() {
+      //导航栏菜单保存到本地，解决页面切换导航栏闪烁问题
+      let navigationList = localStorage.getItem('navigationList');
+      if (navigationList != null) {
+        this.navigationList = JSON.parse(navigationList);
+      }
+      this.$API("/white/configure/navigation/list", this.$get(), {type: 1, status: 0}).then(res => {
+        this.navigationList = res.rows;
+        localStorage.setItem("navigationList", JSON.stringify(this.navigationList));
+      })
+    },
+    gitUserInfo() {
+      this.$API("/oauth/getInfo", this.$get()).then(res => {
+        this.userInfo = res.data.user;
+        this.isLogin = res.data.isLogin;
+      }).finally(() => {
+        if (!this.isLogin) {
+          this.$store.commit('removeToken');
+        }
+        this.$emit('update:userInfo', this.userInfo)
+        if (this.userInfo != null) {
+          this.connectWebSocket(this.userInfo.uuid)
+          this.queryParams.uid = this.userInfo.uuid;
+          this.$API("/frontDesk/search/records/list", "get", this.queryParams).then(res => {
+            this.restaurants = res.rows;
+          })
+        }
+      });
+    },
+    //建立webSocket连接
+    connectWebSocket(uuid) {
+      if (uuid == null) return;
+      const url = 'ws://' + process.env.SERVER_URL + `/websocket/${uuid}/${1}`;
+      this.socket = new WebSocket(url);
+      this.socket.onopen = () => {
+        // 在这里可以执行连接成功后的操作
+      };
+
+      this.socket.onmessage = (event) => {
+        let parse = JSON.parse(event.data);
+        this.userNewsList = parse;
+        let newsSums = 0;
+        this.userNewsList.forEach(item => {
+          newsSums += item.newsSum;
+        })
+        this.userNewsSum = newsSums;
+      };
+      this.socket.onclose = (event) => {
+        //链接关闭操作
+      };
+    },
+
+    handleScroll() {
+      let scrollTop = document.documentElement.scrollTop
+      let clientHeight = document.documentElement.clientHeight
+      if (this.isConceal) {
+        if (scrollTop > (clientHeight / 2)) {
+          this.goTopLoading = true;
+        } else {
+          this.goTopLoading = false;
+        }
+      }
+      if (scrollTop > (clientHeight / 2)) {
+        this.goTopLoadingButton = true;
+      } else {
+        this.goTopLoadingButton = false;
+      }
+    },
+  },
+  mounted() {
+    this.navigationFun();
+    window.addEventListener('scroll', this.handleScroll, true);// 向页面添加滚动事件
+  },
+  created() {
+    this.activeIndex = this.$route.path;
+    this.gitUserInfo();
+  },
+  beforeDestroy() { //离开这个界面之后，删除滚动事件,
+    window.removeEventListener('scroll', this.handleScroll, true)
+  },
+
+  watch: {
+    $route(to) {
+      this.activeIndex = to.path;
+    }
+  }
+}
+</script>
+
+<style>
+@import url("components/css/pc/navigation-bar-module.css");
+
+/*搜索框历史记录*/
+.el-autocomplete-suggestion li {
+  font-size: 12px;
+  float: left;
+  padding: 7px 14px;
+  line-height: 12px;
+  border: 1px solid #dfe4ea;
+  margin: 4px;
+  border-radius: 20px;
+}
+
+.qixidi-name {
+  width: 60px;
+  margin-left: 6px;
+  font-size: 16px;
+}
+
+.el-menu--popup {
+  padding: 0px;
+}
+
+</style>

@@ -1,0 +1,49 @@
+/*去掉导航栏边框线*/
+.el-menu {
+  border: none;
+  /*设置导航栏背景颜色为空*/
+  background-color: transparent;
+}
+
+/*去掉下拉框小三角*/
+.el-popper {
+  overflow: auto;
+}
+
+.el-menu-item {
+  border-radius: 2px;
+}
+
+/*去做导航栏选择后底部边框线*/
+.el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
+
+/* 取消菜单项的下划线 */
+.el-menu-item.is-active::after {
+  display: none !important;
+}
+
+/*去做导航栏（带下拉框）选择后底部边框线*/
+.el-menu--horizontal > .el-submenu .el-submenu__title {
+  border-bottom: none;
+}
+
+.el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
+  border: none;
+}
+
+/*设置到导航栏下拉框的最下宽度*/
+.el-menu--popup {
+  min-width: 125px;
+}
+
+.el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: none;
+  border-bottom-color: snow;
+}
+
+/* 取消 el-menu切换时底部边框闪烁问题 */
+.el-menu--horizontal > .el-menu-item {
+  border: none;
+}

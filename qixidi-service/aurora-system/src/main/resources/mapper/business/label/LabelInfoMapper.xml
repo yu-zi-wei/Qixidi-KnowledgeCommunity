@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.label.LabelInfoMapper">
+    <resultMap type="com.aurora.business.domain.entity.label.LabelInfo" id="LabelInfoResult">
+        <result property="id" column="id"/>
+        <result property="labelGroupingId" column="label_grouping_id"/>
+        <result property="labelName" column="label_name"/>
+        <result property="labelDescribe" column="label_describe"/>
+        <result property="labelCover" column="label_cover"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+    </resultMap>
+
+    <update id="updateAddFollow">
+        update label_info
+        set follow_number=follow_number + 1
+        where id = #{id}
+    </update>
+
+    <update id="updateDeleteFollow">
+        update label_info
+        set follow_number=follow_number - 1
+        where id = #{id}
+    </update>
+
+    <select id="selectVoPages" resultType="com.aurora.business.domain.vo.label.LabelInfoVo">
+        SELECT
+        li.id,
+        li.label_name,
+        li.label_describe,
+        li.label_cover,
+        li.follow_number,
+        li.article_number,
+        li.state,
+        li.create_time,
+        lgi.grouping_name
+        FROM
+        label_info AS li
+        LEFT JOIN label_grouping_info AS lgi ON li.label_grouping_id = lgi.id
+        <where>
+            <if test="bo.state!=null and bo.state!=''">
+                and li.state=#{bo.state}
+            </if>
+            <if test="bo.labelName!=null and bo.groupingName!=''">
+                and li.label_name like concat('%' ,#{bo.labelName},'%')
+            </if>
+            <if test="bo.groupingName!=null and bo.groupingName!=''">
+                and lgi.grouping_name like concat('%' ,#{bo.groupingName},'%')
+            </if>
+        </where>
+    </select>
+
+    <update id="updateTaskList">
+        <foreach collection="list" item="item" separator=";">
+            update label_info
+            set`follow_number` = ifnull(#{item.followNumber},0),
+            `article_number` = ifnull(#{item.articleNumber},0)
+            where `id` = #{item.id}
+        </foreach>
+    </update>
+</mapper>

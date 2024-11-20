@@ -1,0 +1,493 @@
+/* ------------------------------------全局定义---------------------------------------- */
+
+/* 将具有默认margin和padding的标记置零，所有标记的margin、padding都在使用时具体定义 */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*!* 常用标签，基本标签默认样式取消，HTML标签，取消基本标签默认样式，防止不同浏览器显示效果不同，text-align:center; 解决不同浏览器居中问题 *!*/
+
+input, select {
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+/*!* 标签属性，textarea,input 强制输入时内容超出时换行 *!*/
+
+textarea, input {
+  word-wrap: break-word;
+  word-break: break-all;
+  padding: 0px;
+}
+
+/*!* 清除ul列表标记的样式，ul列表更多的用在不需要列表前置符号的样式里 *!*/
+
+li {
+  list-style-type: none;
+}
+
+/*!* 定义图片边框，当图片作为链接内容被填充时，会有默认边框出现，重定义掉 *!*/
+
+img {
+  border: 0 none;
+}
+
+/*!* 定义默认的链接样式，仅仅是作为默认样式提供，可以在各自的实例中覆盖掉 *!*/
+
+/*!* 去掉链接的虚线框 *!*/
+
+a {
+  outline: none;
+  star: expression(this.onFocus=this.blur());
+}
+
+/*!* 定义H系列标签，覆盖H系列标签默认属性 *!*/
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+mr-auto {
+  margin: auto;
+}
+
+.mt-1 {
+  margin-top: 1px;
+}
+
+.mt-2 {
+  margin-top: 2px;
+}
+
+.mt-3 {
+  margin-top: 3px;
+}
+
+.mt-4 {
+  margin-top: 4px;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mt-6 {
+  margin-top: 6px;
+}
+
+.mt-7 {
+  margin-top: 7px;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+
+.mt-9 {
+  margin-top: 9px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-1 {
+  margin-bottom: 1px;
+}
+
+.mb-2 {
+  margin-bottom: 2px;
+}
+
+.mb-3 {
+  margin-bottom: 3px;
+}
+
+.mb-4 {
+  margin-bottom: 4px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-6 {
+  margin-bottom: 6px;
+}
+
+.mb-7 {
+  margin-bottom: 7px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mb-9 {
+  margin-bottom: 9px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+
+.ml-1 {
+  margin-left: 1px;
+}
+
+.ml-2 {
+  margin-left: 2px;
+}
+
+.ml-3 {
+  margin-left: 3px;
+}
+
+.ml-4 {
+  margin-left: 4px;
+}
+
+.ml-5 {
+  margin-left: 5px;
+}
+
+.ml-6 {
+  margin-left: 6px;
+}
+
+.ml-7 {
+  margin-left: 7px;
+}
+
+.ml-8 {
+  margin-left: 8px;
+}
+
+.ml-9 {
+  margin-left: 9px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.ml-15 {
+  margin-left: 15px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mr-1 {
+  margin-right: 1px;
+}
+
+.mr-2 {
+  margin-right: 2px;
+}
+
+.mr-3 {
+  margin-right: 3px;
+}
+
+.mr-4 {
+  margin-right: 4px;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.mr-6 {
+  margin-right: 6px;
+}
+
+.mr-7 {
+  margin-right: 7px;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+.mr-9 {
+  margin-right: 9px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mr-12 {
+  margin-right: 12px;
+}
+
+.mr-15 {
+  margin-right: 15px;
+}
+
+.mr-18 {
+  margin-right: 18px;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+.fl-right {
+  float: right;
+}
+
+.fl-left {
+  float: left;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.element.style {
+  box-shadow: none;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.color-blue {
+  color: #6e5df0;
+}
+
+.color-error {
+  color: #e74c3c;
+}
+
+.color-huang {
+  color: #f39c12;
+}
+
+.color-grey {
+  color: #747d8c;
+}
+
+
+.font-s-12 {
+  font-size: 12px;
+}
+
+.font-s-13 {
+  font-size: 13px;
+}
+
+.font-s-14 {
+  font-size: 14px;
+}
+
+.font-s-15 {
+  font-size: 15px;
+}
+
+.font-s-16 {
+  font-size: 16px;
+}
+
+.font-s-18 {
+  font-size: 18px;
+}
+
+.font-s-20 {
+  font-size: 20px;
+}
+
+.text-underline-hover {
+  transition: .2s;
+}
+
+/*下划线*/
+.text-underline-hover:hover {
+  text-decoration: underline;
+}
+
+.font-s-24 {
+  font-size: 24px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.svg-text-center-20 {
+  position: relative;
+  bottom: -0.374em;
+}
+
+.svg-text-center-24-f {
+  position: relative;
+  bottom: -0.214em;
+}
+
+.svg-text-center-24 {
+  position: relative;
+  bottom: 0.163em;
+}
+
+.svg-text-center-20-z {
+  position: relative;
+  bottom: 0.143em;
+}
+
+.svg-text-center-32-f {
+  position: relative;
+  bottom: -0.56em;
+}
+
+.overflow-nowrap {
+  /*超出的文本隐藏*/
+  overflow: hidden;
+  /*  溢出用省略号显示*/
+  text-overflow: ellipsis;
+  /*  默认不换行*/
+  white-space: nowrap;
+}
+
+.overflow-nowrap-2 {
+  /*超出的文本隐藏*/
+  overflow: hidden;
+  /*  溢出用省略号显示*/
+  text-overflow: ellipsis;
+  /*  默认不换行*/
+  /*white-space: nowrap;*/
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.hr-item {
+  border: 0;
+  height: 1px;
+  background: #dcdfe6;
+}
+
+.border-ts-class {
+  text-align: center;
+  font-size: 13px;
+  color: #8a919f;
+}
+
+.height-1 {
+  min-height: 1px;
+}
+
+.border-ts-class {
+  text-align: center;
+  font-size: 13px;
+  color: #8a919f;
+}
+
+/*垂直居中*/
+.align-items-center {
+  align-items: center;
+}
+
+/*水平居中*/
+.justify-content-center {
+  justify-content: center;
+}
+
+
+.flex-left {
+  display: flex;
+  justify-content: left;
+
+}
+
+.flex-space-around {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.flex-right {
+  display: flex;
+  justify-content: right;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+.text-underline {
+  text-decoration: underline
+}
+
+.text-underline-hover {
+  transition: .2s;
+}
+
+.text-underline-hover:hover {
+  text-decoration: underline
+}
+
+.transform-translateY-hover-4,
+.transform-translateY-hover-2 {
+  transition: .2s;
+}
+
+.transform-translateY-hover-2:hover {
+  transform: translateY(-2px);
+}
+
+.transform-translateY-hover-4:hover {
+  transform: translateY(-4px);
+}

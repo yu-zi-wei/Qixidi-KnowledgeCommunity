@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.article.ArticleInformationMapper">
+    <resultMap type="com.aurora.business.domain.entity.article.ArticleInformation" id="ArticleInformationResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="articleCover" column="article_cover"/>
+        <result property="articleAbstract" column="article_abstract"/>
+        <result property="articleContent" column="article_content"/>
+        <result property="type" column="type"/>
+        <result property="reprintUrl" column="reprint_url"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="specialId" column="special_id"/>
+        <result property="labelId" column="label_id"/>
+        <result property="likeTimes" column="like_times"/>
+        <result property="numberTimes" column="number_times"/>
+        <result property="isPublic" column="is_public"/>
+        <result property="auditState" column="audit_state"/>
+        <result property="auditTime" column="audit_time"/>
+    </resultMap>
+    <sql id="ArticleInformationVo">
+        select ai.id,
+               ai.user_id,
+               ai.article_title,
+               ai.article_cover,
+               ai.article_abstract,
+               ai.`type`,
+               ai.`state`,
+               ai.create_time,
+               ai.special_id,
+               ai.label_id,
+               ai.grouping_id,
+               ai.like_times,
+               ai.comment_times,
+               ai.number_times,
+               ai.label_id,
+               ai.audit_state,
+               ai.audit_time,
+               lgi.grouping_name,
+               um.username,
+               um.nickname,
+               um.avatar,
+               um.occupation
+        from article_information as ai
+                 left join user_main as um on ai.user_id = um.uuid
+                 left join label_grouping_info as lgi on lgi.id = ai.grouping_id
+    </sql>
+    <select id="selectIndex" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        ${ew.getCustomSqlSegment}
+    </select>
+
+    <select id="selectTypeSort" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        where ai.audit_state=2 and ai.`state`=0 and ai.platform_type =1
+        <if test="bo.numberTimes!=null and bo.numberTimes!=''">
+            ORDER BY ai.number_times DESC
+        </if>
+        <if test="bo.likeTimes!=null and bo.likeTimes!=''">
+            ORDER BY ai.like_times DESC
+        </if>
+        <if test="bo.createTime!=null and bo.createTime!=''">
+            ORDER BY ai.create_time DESC
+        </if>
+    </select>
+
+    <select id="articleList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            ai.state=0
+            and ai.platform_type =1
+            and ai.`audit_state`=2
+            <if test="bo.articleTitle!=null and bo.articleTitle!=''">
+                and (ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%'))
+            </if>
+            <if test="bo.labelId!=null and bo.labelId!=''">
+                and ai.label_id like concat('%' ,#{bo.labelId},'%')
+            </if>
+            <if test="bo.specialId!=null and bo.specialId!=''">
+                and ai.special_id = #{bo.specialId}
+            </if>
+            <if test="bo.groupingId!=null and bo.groupingId!=''">
+                and ai.grouping_id = #{bo.groupingId}
+            </if>
+        </where>
+        order by ai.heat_weight desc, ai.create_time desc
+    </select>
+    <select id="articleRecommendList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            ai.state=0
+            and ai.platform_type =1
+            and ai.`audit_state`=2
+        </where>
+        order by #{labelResult} LIKE concat('%' ,label_id,'%') desc,
+        ai.heat_weight desc,
+        ai.create_time desc
+    </select>
+    <select id="details" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select ai.id,
+               ai.user_id,
+               ai.article_title,
+               ai.article_cover,
+               ai.article_abstract,
+               ai.article_content,
+               ai.theme,
+               ai.`type`,
+               ai.`state`,
+               ai.create_time,
+               ai.special_id,
+               ai.label_id,
+               ai.grouping_id,
+               ai.like_times,
+               ai.comment_times,
+               ai.number_times,
+               ai.audit_state,
+               ai.collection_times,
+               ai.audit_time,
+               um.username,
+               um.nickname,
+               um.avatar,
+               um.occupation,
+               cuw.fabulous_count,
+               cuw.fans_fabulous_count,
+               cuw.collection_count,
+               cuw.follow_count,
+               cuw.fans_follow_count,
+               cuw.comment_count,
+               cuw.fans_comment_count,
+               cuw.article_count,
+               cuw.special_column_count,
+               cuw.fans_special_column,
+               cuw.circle_count
+        from article_information as ai
+                 left join user_main as um on ai.user_id = um.uuid
+                 left JOIN count_user_website AS cuw ON ai.user_id = cuw.uuid
+        where ai.id = #{id}
+    </select>
+
+    <select id="relatedList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            ai.audit_state=2 and ai.platform_type =1
+            <if test="bo.articleTitle!=null and bo.articleTitle!=''">
+                and ai.id!=#{bo.id}
+                and ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%')
+            </if>
+        </where>
+        order by ai.create_time desc
+        limit #{pageQuery.pageNum}, #{pageQuery.pageSize};
+    </select>
+
+    <select id="getArticleInfo" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            ai.state = 0 and ai.platform_type =1
+            <if test="bo.articleTitle !='' and bo.articleTitle !=null">
+                and ai.article_title like concat(#{bo.articleTitle},'%')
+            </if>
+            <if test="bo.auditState !='' and bo.auditState !=null">
+                and ai.audit_state=#{bo.auditState}
+            </if>
+            <if test="bo.userId !='' and bo.userId !=null">
+                and ai.user_id = #{bo.userId}
+            </if>
+            <if test="bo.specialId !='' and bo.specialId !=null">
+                and ai.special_id = #{bo.specialId}
+            </if>
+        </where>
+        order by ai.update_time desc
+    </select>
+
+    <update id="updateAdd">
+        update article_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code==1">
+                like_times=like_times+1
+            </if>
+            <if test="code==2">
+                comment_times=comment_times+1
+            </if>
+            <if test="code==3">
+                collection_times=collection_times+1
+            </if>
+            <if test="code==4">
+                number_times=number_times+1
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <update id="updateDelete">
+        update article_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code==1">
+                like_times=like_times-1
+            </if>
+            <if test="code==2">
+                comment_times=comment_times-1
+            </if>
+            <if test="code==3">
+                collection_times=collection_times-1
+            </if>
+            <if test="code==4">
+                number_times=number_times-1
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <select id="selectVoByIds" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select id,
+               user_id,
+               article_title,
+               article_cover,
+               article_abstract,
+               article_content,
+               theme,
+               `type`,
+               `state`,
+               create_time,
+               reprint_url,
+               special_id,
+               label_id,
+               grouping_id,
+               like_times,
+               comment_times,
+               number_times,
+               audit_state,
+               collection_times
+        from article_information
+        where id = #{id}
+          and `state` !=1
+    </select>
+
+    <update id="updateSpecial">
+        update article_information set special_id=#{id} where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleteNumber">
+        update article_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code==1">
+                like_times=like_times-#{size}
+            </if>
+            <if test="code==2">
+                comment_times=comment_times-#{size}
+            </if>
+            <if test="code==3">
+                collection_times=collection_times-#{size}
+            </if>
+            <if test="code==4">
+                number_times=number_times-#{size}
+            </if>
+        </trim>
+        where id=#{articleId}
+    </update>
+
+    <select id="selected" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        SELECT id,
+               user_id,
+               article_title,
+               `type`,
+               number_times,
+               like_times,
+               comment_times,
+               create_time
+        FROM article_information
+        WHERE audit_state = 2
+          AND `state` = 0
+          AND platform_type = 1
+        ORDER BY heat_weight DESC,
+                 like_times DESC,
+                 collection_times DESC LIMIT 0,8
+    </select>
+
+    <select id="selectCensusMonth" resultType="com.aurora.common.core.domain.vo.CensusVo">
+        SELECT
+        id,
+        article_title as title,
+        substring( `create_time`, 1, 7 ) AS dateTimes
+        FROM
+        article_information
+        <where>
+            state =0
+            and substring( `create_time`, 1, 7)=#{bo.month}
+        </where>
+    </select>
+
+    <select id="selectCensusYear" resultType="com.aurora.common.core.domain.vo.CensusVo">
+        SELECT
+        id,
+        article_title as title,
+        substring( `create_time`, 1, 4 ) AS dateTimes
+        FROM
+        article_information
+        <where>
+            state =0
+            and substring( `create_time`, 1, 4)=#{bo.year}
+        </where>
+    </select>
+
+    <select id="articleCensus" resultType="com.aurora.business.domain.vo.article.ArticleCensusVo">
+        SELECT
+        id,
+        article_title,
+        special_id,
+        create_time
+        FROM
+        article_information
+        <where>
+            state =0
+            and user_id=#{bo.uid} and special_id!=null
+        </where>
+    </select>
+
+    <select id="selectData" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select id, article_title, like_times, comment_times, collection_times, number_times, create_time
+        from article_information
+        where `state` = 0
+          and audit_state = 2
+          AND id > #{id} LIMIT #{size};
+    </select>
+
+    <update id="updateListHeatWeight">
+        <foreach collection="list" item="item" separator=";">
+            update
+            `article_information`
+            set
+            `heat_weight` = #{item.heatWeight}
+            where `id` = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="selectUserArticleTask" resultType="com.aurora.business.domain.vo.CountUserWebsiteVo">
+        SELECT user_id as uuid, count(user_id) as articleCount
+        FROM `article_information`
+        where state = 0
+          and audit_state = 2
+        GROUP BY user_id
+    </select>
+
+    <select id="FollowArticleInfoList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        SELECT uf.uid,
+        uf.target_id,
+        ai.id,
+        ai.user_id,
+        ai.article_title,
+        ai.article_abstract,
+        ai.theme,
+        ai.`type`,
+        ai.`state`,
+        ai.create_time,
+        ai.special_id,
+        ai.label_id,
+        ai.grouping_id,
+        ai.like_times,
+        ai.comment_times,
+        ai.number_times,
+        ai.audit_state,
+        ai.collection_times,
+        ai.audit_time,
+        um.username,
+        um.nickname,
+        um.avatar,
+        um.occupation
+        FROM user_follow AS uf
+        LEFT JOIN article_information AS ai ON ai.user_id = uf.target_id
+        LEFT JOIN user_main AS um ON ai.user_id = um.uuid
+        WHERE uf.uid = #{bo.uid}
+        AND uf.type = 1
+        AND uf.state = 0
+        AND ai.state = 0
+        AND um.state = 0
+        AND ai.audit_state = 2
+        <if test="bo.sortType==1">
+            order by ai.heat_weight desc
+        </if>
+        <if test="bo.sortType==2">
+            order by ai.update_time desc
+        </if>
+    </select>
+
+    <select id="LabelGArticleInfoList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        WHERE ai.state = 0
+        AND um.state = 0
+        AND ai.audit_state = 2
+        and ai.platform_type =1
+        and grouping_id = #{bo.groupingId}
+        <if test="bo.sortType==1">
+            order by ai.heat_weight desc
+        </if>
+        <if test="bo.sortType==2">
+            order by ai.update_time desc
+        </if>
+    </select>
+
+    <select id="submissionCensus" resultType="com.aurora.common.core.domain.vo.CensusVo">
+        SELECT DATE_FORMAT(create_time, '%Y-%m-%d') as dateTimes, count(id) as censusSum
+        from article_information
+        where DATE_FORMAT(create_time, '%Y-%m-%d')<![CDATA[ >= ]]>#{time}
+          and user_id = #{uuid}
+          and platform_type = 1
+          and `state` = 0
+          and audit_state = 2
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
+        ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d');
+    </select>
+
+    <select id="latelyArticleList" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
+        select
+        id,
+        user_id as userId,
+        article_title as articleTitle,
+        type as type,
+        like_times as likeTimes,
+        comment_times as commentTimes,
+        collection_times as collectionTimes,
+        number_times as numberTimes,
+        audit_state as auditState,
+        create_time as createTime,
+        update_time as updateTime
+        from article_information
+        <where>
+            and `state`=0
+            and `platform_type`=1
+            and user_id=#{bo.userId}
+            <if test="bo.auditState!=null and bo.auditState!=-1">
+                and `audit_state`= #{bo.auditState}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+</mapper>

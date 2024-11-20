@@ -1,0 +1,104 @@
+/*主题颜色配置*/
+:root {
+  /*主题颜色*/
+  --theme-color: #5C56E3;
+  /*  hover-color*/
+  --hover-color: #706be8;
+  /*  active-color*/
+  --active-color: #4f49e3;
+  /*forbidden-color*/
+  --theme-background_color: #fefefe;
+  /*禁用按钮底色*/
+  --forbidden-color: #7b75ff;
+  /*默认颜色*/
+  --default-color: #2c3e50;
+  /*背景颜色*/
+  --backdrop-color: #F2F3F5;
+
+  /*-----------------------------特殊处理---------------------------------*/
+  /*导航栏 hover背景颜色*/
+  --el-menu-item-color-hover: #ecf0f1;
+
+  --sys-font-family: "JetBrainsMono Regular", Menlo, Monaco;
+}
+
+a, p, h1, h2, h3, h4 {
+  /*color: var(--default-color);*/
+}
+
+body {
+  color: var(--default-color);
+  font-family: var(--sys-font-family)
+}
+
+/*默认颜色*/
+.icon {
+  fill: #444e57;
+}
+
+.icon-hover {
+  transition: .2s;
+}
+
+.icon-hover:hover {
+  fill: var(--theme-color);
+}
+
+/*icon-主题颜色*/
+.icon-theme {
+  fill: var(--theme-color);
+}
+
+.icon-theme .icon {
+  fill: var(--theme-color);
+}
+
+.color-theme {
+  color: var(--theme-color);
+}
+
+.icon-theme-1 {
+  fill: #818e8f;
+}
+
+.icon-hover-theme-stand-out {
+  transition: .2s;
+}
+
+.icon-hover-theme-stand-out:hover {
+  fill: #ff793f;
+}
+
+.icon-theme-stand-out {
+  fill: #ff793f;
+}
+
+.icon-theme-green {
+  fill: #16a085;
+}
+
+.icon-theme-blue {
+  fill: #1e90ff;
+}
+
+.svg-d63031 {
+  stroke: #d63031;
+}
+
+/*背景颜色*/
+.background-color-theme {
+  background-color: var(--theme-color);
+}
+
+/*主题颜色2*/
+.background-color-theme-2 {
+  background-color: #E8F3FF;
+}
+
+.hover-cl:hover {
+  color: var(--theme-color);
+}
+
+.border-left-3-solid {
+  border-left: 3px solid var(--theme-color);
+}

@@ -1,0 +1,59 @@
+.tool-index {
+  padding: 20px;
+  border-radius: 4px;
+  overflow: scroll;
+  overflow-x: hidden;
+  height: 70vh;
+}
+
+/*设置滚动条高宽为0*/
+.tool-index::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.tool-ui {
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+}
+
+.tool-list {
+  width: 280px;
+  height: 90px;
+  background-color: #fefefe;
+  color: #130f40;
+  cursor: pointer;
+  transition: all 0.1s linear 0s;
+  padding: 10px 10px 20px 10px;
+  border-radius: 4px;
+  margin: 0px 25px 25px 0px;
+  border: 1px solid #dfe4ea;
+}
+
+.tool-list:hover {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+}
+
+.tool-describe {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  padding-top: 6px 4px 0 4px;
+}
+
+.tool-toolName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+li {
+  list-style-type: none;
+}

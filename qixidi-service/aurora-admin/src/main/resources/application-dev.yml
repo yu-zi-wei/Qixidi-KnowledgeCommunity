@@ -1,0 +1,193 @@
+--- # 数据源配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 动态数据源文档 https://www.kancloud.cn/tracy5546/dynamic-datasource/content
+    dynamic:
+      # 性能分析插件(有性能损耗 不建议生产环境使用)
+      p6spy: true
+      # 设置默认的数据源或者数据源组,默认值即为 master
+      primary: master
+      # 严格模式 匹配不到数据源则报错
+      strict: true
+      datasource:
+        # 主库数据源
+        master:
+          driverClassName: com.mysql.cj.jdbc.Driver
+          # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
+          # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题) serverTimezone=Asia/Shanghai
+          url: ${datasource.datasource.master.url}/aurora_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&rewriteBatchedStatements=true&allowMultiQueries=true
+          username: ${datasource.datasource.master.username}
+          password: ${datasource.datasource.master.password}
+        # 从库数据源
+        slave_lover:
+          lazy: true
+          driverClassName: com.mysql.cj.jdbc.Driver
+          url: ${datasource.datasource.slave_lover.url}/lover_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&rewriteBatchedStatements=true&allowMultiQueries=true
+          username: ${datasource.datasource.slave_lover.username}
+          password: ${datasource.datasource.slave_lover.password}
+      druid:
+        # 初始连接数
+        initialSize: 5
+        # 最小连接池数量
+        minIdle: 10
+        # 最大连接池数量
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 配置一个连接在池中最大生存的时间，单位是毫秒
+        maxEvictableIdleTimeMillis: 900000
+        # 配置检测连接是否有效
+        validationQuery: SELECT 1
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        # 注意这个值和druid原生不一致，默认启动了stat
+        filters: stat
+
+--- # druid 配置
+spring.datasource.druid:
+  webStatFilter:
+    enabled: true
+  statViewServlet:
+    enabled: true
+    # 设置白名单，不填则允许所有访问
+    allow:
+    url-pattern: /druid/*
+    # 控制台管理用户名和密码
+    login-username: aurora
+    login-password: 123456
+  filter:
+    stat:
+      enabled: true
+      # 慢SQL记录
+      log-slow-sql: true
+      slow-sql-millis: 1000
+      merge-sql: true
+    wall:
+      config:
+        multi-statement-allow: true
+
+--- # redis 单机配置(单机与集群只能开启一个另一个需要注释掉)
+spring:
+  redis:
+    # 地址
+    host: ${config.redis.host}
+    # 端口，默认为6379
+    port: ${config.redis.port}
+    # 数据库索引
+    database: ${config.redis.database}
+    # 密码
+    #    password:
+    # 连接超时时间
+    timeout: 10s
+    # 是否开启ssl
+    ssl: false
+
+redisson:
+  # 线程池数量
+  threads: 4
+  # Netty线程池数量
+  nettyThreads: 8
+  # 单节点配置
+  singleServerConfig:
+    # 客户端名称
+    clientName: ${ruoyi.name}
+    # 最小空闲连接数
+    connectionMinimumIdleSize: 8
+    # 连接池大小
+    connectionPoolSize: 32
+    # 连接空闲超时，单位：毫秒
+    idleConnectionTimeout: 10000
+    # 命令等待超时，单位：毫秒
+    timeout: 3000
+    # 发布和订阅连接池大小
+    subscriptionConnectionPoolSize: 50
+
+#--- # mail 邮件发送
+mail:
+  enabled: true
+  host: ${config.mail.host}
+  port: ${config.mail.port}
+  # 是否需要用户名密码验证
+  auth: true
+  # 发送方，遵循RFC-822标准
+  from: ${config.mail.from}
+  # 用户名（注意：如果使用foxmail邮箱，此处user为qq号）
+  user: ${config.mail.user}
+  # 密码（注意，某些邮箱需要为SMTP服务单独设置密码，详情查看相关帮助）
+  pass: ${config.mail.pass}
+  # 使用 STARTTLS安全连接，STARTTLS是对纯文本通信协议的扩展。
+  starttlsEnable: true
+  # 使用SSL安全连接
+  sslEnable: true
+  # SMTP超时时长，单位毫秒，缺省值不超时
+  timeout: 0
+  # Socket连接超时值，单位毫秒，缺省值不超时
+  connectionTimeout: 0
+
+--- # sms 短信
+sms:
+  enabled: false
+  # 阿里云 dysmsapi.aliyuncs.com
+  # 腾讯云 sms.tencentcloudapi.com
+  endpoint: ${config.sms.endpoint}
+  accessKeyId: ${config.sms.accessKeyId}
+  accessKeySecret: ${config.sms.accessKeySecret}
+  signName: ${config.sms.signName}
+  # 腾讯专用
+  sdkAppId:
+
+--- # JustAuth 第三方登录配置
+JustAuth:
+  # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
+  # 本项目为：http://127.0.0.1:9001/oauth/callback
+  callBackBaseUrl: ${config.JustAuth.callBackBaseUrl}
+  # 前端中转地址 与前端默认地址保持一致
+  # 本项目为：http://localhost:3000/transfer/login
+  url: ${config.JustAuth.url}
+  # 第三方登录类型 用于获取用户信息方式判断
+  tripartiteUserType: tripartite_user
+  #  平台APPID信息
+  platform:
+    gitee:
+      clientId: ${config.JustAuth.platform.gitee.clientId}
+      clientSecret: ${config.JustAuth.platform.gitee.clientSecret}
+      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.gitee.redirectUri}
+    baidu:
+      clientId: ${config.JustAuth.platform.baidu.clientId}
+      clientSecret: ${config.JustAuth.platform.baidu.clientSecret}
+      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.baidu.redirectUri}
+    weibo:
+      clientId: ${config.JustAuth.platform.weibo.clientId}
+      clientSecret: ${config.JustAuth.platform.weibo.clientSecret}
+      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.weibo.redirectUri}
+    zhifubao:
+      clientId: ${config.JustAuth.platform.zhifubao.clientId}
+      clientSecret: ${config.JustAuth.platform.zhifubao.clientSecret}
+      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.zhifubao.redirectUri}
+
+--- # 支付宝支付配置
+lipay:
+  #APPID
+  appId: ${config.lipay.appId}
+  #应用私钥对应的应用私钥（在支付宝开放平台密钥工具里获取）
+  appPrivateKey: ${config.lipay.appPrivateKey}
+  #支付宝公钥
+  alipayPublicKey: ${config.lipay.alipayPublicKey}
+  #回调地址：http://k2rgn4.natappfree.cc/white/payment/aply
+  notifyUrl: ${config.lipay.notifyUrl}
+  # 支付成功的跳转地址，本项目为：http://localhost:9002/transfer/payment_callback
+  returnUrl: ${config.lipay.returnUrl}
+  #网关地址：https://openapi.alipay.com/gateway.do
+  serverUrl: ${config.lipay.serverUrl}
+  #数据格式，推荐：json
+  format: JSON
+  #编码格式 推荐：utf-8
+  charset: UTF-8
+  #签名方式,签名算法，推荐：RSA2
+  signType: RSA2

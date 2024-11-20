@@ -1,0 +1,39 @@
+{
+  "name": "aurora-nuxtv2",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nuxt",
+    "test": "cross-env NODE_ENV=test nuxt",
+    "build": "cross-env NODE_ENV=prod nuxt build",
+    "start": "cross-env NODE_ENV=prod nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@antv/g2plot": "^2.4.31",
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/proxy": "^2.1.0",
+    "aieditor": "^1.2.2",
+    "base-64": "^1.0.0",
+    "cookie-universal-nuxt": "^2.2.2",
+    "core-js": "^3.25.3",
+    "cross-env": "^7.0.3",
+    "element-ui": "^2.15.14",
+    "moment": "^2.30.1",
+    "nuxt": "^2.15.8",
+    "vue": "^2.7.10",
+    "vue-image-crop-upload": "^3.0.3",
+    "vue-native-websocket": "^2.0.15",
+    "vue-server-renderer": "^2.7.10",
+    "vue-template-compiler": "^2.7.10",
+    "webpack": "^4.46.0",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@babel/preset-env": "^7.23.7",
+    "babel-loader": "^8.3.0"
+  }
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aurora.business.mapper.stat.StatTheDataMapper">
+
+    <insert id="insertLists">
+        INSERT INTO stat_the_data (stat_time, user_count, onLine_user_count, article_count, special_count,
+                                   favorites_count, dictum_group_count, dictum_album_count, dictum_count)
+        VALUES (#{statDataInfo.statTime}, #{statDataInfo.userCount}, #{statDataInfo.onlineUserCount},
+                #{statDataInfo.articleCount}, #{statDataInfo.specialCount},
+                #{statDataInfo.favoritesCount}, #{statDataInfo.dictumGroupCount}, #{statDataInfo.dictumAlbumCount}
+                   , #{statDataInfo.dictumCount}) on duplicate key
+        update
+            user_count= ifnull(#{statDataInfo.userCount},0),
+            onLine_user_count=ifnull(#{statDataInfo.onlineUserCount},0),
+            article_count=ifnull(#{statDataInfo.articleCount},0),
+            special_count=ifnull(#{statDataInfo.specialCount},0),
+            favorites_count=ifnull(#{statDataInfo.favoritesCount},0),
+            dictum_group_count=ifnull(#{statDataInfo.dictumGroupCount},0),
+            dictum_album_count=ifnull(#{statDataInfo.dictumAlbumCount},0),
+            dictum_count=ifnull(#{statDataInfo.dictumCount},0)
+    </insert>
+
+    <select id="selectVoLists" resultType="com.aurora.business.domain.vo.stat.StatTheDataVo">
+        SELECT stat_time,
+               user_count,
+               onLine_user_count,
+               article_count,
+               special_count,
+               favorites_count,
+               dictum_group_count,
+               dictum_album_count,
+               dictum_count
+        FROM stat_the_data
+        ORDER BY stat_time DESC LIMIT 6;
+    </select>
+</mapper>

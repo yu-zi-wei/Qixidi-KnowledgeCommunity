@@ -1,0 +1,10 @@
+.article-list-admin {
+  background-color: #fefefe;
+  padding: 20px 10px;
+}
+
+.article-list-li {
+  margin-bottom: 10px;
+  border-radius: 2px;
+  padding: 6px;
+}
