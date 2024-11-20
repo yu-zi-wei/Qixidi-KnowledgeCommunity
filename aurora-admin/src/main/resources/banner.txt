@@ -1,9 +1,0 @@
-Application Version: ${aurora-vue-plus.version}
-Spring Boot Version: ${spring-boot.version}
-
-   _____
-  /  _  \  __ _________  ________________
- /  /_\  \|  |  \_  __ \/  _ \_  __ \__  \
-/    |    \  |  /|  | \(  <_> )  | \// __ \_
-\____|__  /____/ |__|   \____/|__|  (____  /
-        \/                               \/
