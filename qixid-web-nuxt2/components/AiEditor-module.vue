@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div :id="aiEditorId" class="aiEditor-class" :style="{height:editorHeight==''?'':editorHeight}">
-      <div class="aie-container" style="overflow: hidden">
+    <div :id="aiEditorId" class="aiEditor-class" :style="{'height':editorHeight==''?'':editorHeight}">
+      <div :class="{'aie-container':true, 'aie-container-default-height':editorHeight=='100%'}"
+           style="overflow: hidden">
         <!--        &lt;!&ndash;        头部&ndash;&gt;-->
         <div class="aie-container-header" :style="{'display':editable?'block':'none'}"></div>
         <!--        &lt;!&ndash;        底部&ndash;&gt;-->
@@ -63,6 +64,9 @@ export default {
       this.AiEditorEvn = new AiEditor({
         element: "#" + this.aiEditorId,//挂载
         content: this.content,//内容
+        draggable: false,//是否可拖拽
+        textCounter: false,//是否显示字数
+        contentIsMarkdown: true,
         theme: "light",//主题 支持配置为 "light"（亮色） 或者 "dark"（暗色）
         placeholder: "支持Markdown...",
         contentRetention: false,//是否自动保存
@@ -130,35 +134,37 @@ export default {
         onChange: (aiEditor) => {
           this.$emit('update:mdContent', aiEditor.getMarkdown());
           this.$emit('update:htmlContent', aiEditor.getHtml());
+          //自定义获取目录逻辑
+          this.$emit('update:outline', this.generateDirectory(this.aiEditorId));
         },
         //实例被创建
         onCreated: (aiEditor) => {
           //获取目录列表(api)
           // this.$emit('update:outline', aiEditor.getOutline());
           //自定义获取目录逻辑
-          let container = document.querySelector('#' + this.aiEditorId);
-          let childNodes = container.children[0].children[2].children[0].childNodes;
-          let tocArray = [];
-          childNodes.forEach(item => {
-            let tagName = item.tagName;
-            //是否包含 tocTags存在的标签
-            if (tagName == undefined || !this.tocTags.includes(tagName.toUpperCase())) {
-              return true;
-            }
-            tocArray.push({
-              id: item.id,
-              text: item.innerText,
-              level: Number.parseInt(tagName.substring(1)),
-              pos: item.offsetTop,
-            })
-          });
-          this.$emit('update:outline', tocArray);
+          this.$emit('update:outline', this.generateDirectory(this.aiEditorId));
         },
       });
     },
-    save() {
+    generateDirectory(aiEditorId) {
+      let container = document.querySelector('#' + aiEditorId);
+      let childNodes = container.children[0].children[2].children[0].childNodes;
+      let tocArray = [];
+      childNodes.forEach(item => {
+        let tagName = item.tagName;
+        //是否包含 tocTags存在的标签
+        if (tagName == undefined || !this.tocTags.includes(tagName.toUpperCase())) {
+          return true;
+        }
+        tocArray.push({
+          id: item.id,
+          text: item.innerText,
+          level: Number.parseInt(tagName.substring(1)),
+          pos: item.offsetTop,
+        })
+      });
+      return tocArray;
     },
-
   },
   mounted() {
     this.init();
@@ -170,6 +176,13 @@ export default {
 /*关闭字数计数器*/
 aie-footer {
   display: none;
+}
+
+/**
+ 当editorHeight=100%时， 编辑器默认高度
+ */
+.aie-container-default-height {
+  min-height: 80vh !important;
 }
 
 .aie-container {
@@ -234,19 +247,10 @@ mark {
 
 /*标注*/
 .aie-content blockquote {
-  border-left: 0.3rem solid var(--theme-color) !important;
+  border-left: 0.2rem solid var(--theme-color) !important;
   background-color: #eef7fa !important;
   padding: 4px 6px !important;
-  border-radius: 2px
 }
 
-/*图片*/
-.aie-content img {
-  max-width: 95%;
-}
 
-/*表格*/
-.aie-content table {
-  width: 95%;
-}
 </style>

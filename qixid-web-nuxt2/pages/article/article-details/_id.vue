@@ -66,24 +66,24 @@
 
                 </div>
               </li>
-<!--              <li class="fa-li-class" title="举报">-->
-<!--                <div class="fa-li-div">-->
-<!--                  <svg t="1700407568823" class="icon icon-size-24 mt-10 svg-d63031 icon-hover" viewBox="0 0 1024 1024"-->
-<!--                       version="1.1"-->
-<!--                       xmlns="http://www.w3.org/2000/svg" p-id="13346">-->
-<!--                    <path-->
-<!--                      d="M924.8 908H284v-32h640.8c8 0 15.2-4 20-11.2 4-7.2 4-15.2 0-22.4L532 128c-4-7.2-11.2-11.2-20-11.2-8 0-15.2 4-20 11.2l-320 555.2-28-16L464.8 112c9.6-16.8 27.2-27.2 47.2-27.2 20 0 37.6 10.4 47.2 27.2l412.8 714.4c9.6 16.8 9.6 37.6 0 54.4-9.6 17.6-27.2 27.2-47.2 27.2z"-->
-<!--                      p-id="13347"></path>-->
-<!--                    <path d="M517.6 737.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" p-id="13348"></path>-->
-<!--                    <path-->
-<!--                      d="M517.6 672c-17.6 0-32-14.4-32-32V416c0-17.6 14.4-32 32-32s32 14.4 32 32v224c0 17.6-14.4 32-32 32z"-->
-<!--                      p-id="13349"></path>-->
-<!--                    <path d="M158.4 675.2m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13350"></path>-->
-<!--                    <path d="M284 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13351"></path>-->
-<!--                    <path d="M208 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13352"></path>-->
-<!--                  </svg>-->
-<!--                </div>-->
-<!--              </li>-->
+              <!--              <li class="fa-li-class" title="举报">-->
+              <!--                <div class="fa-li-div">-->
+              <!--                  <svg t="1700407568823" class="icon icon-size-24 mt-10 svg-d63031 icon-hover" viewBox="0 0 1024 1024"-->
+              <!--                       version="1.1"-->
+              <!--                       xmlns="http://www.w3.org/2000/svg" p-id="13346">-->
+              <!--                    <path-->
+              <!--                      d="M924.8 908H284v-32h640.8c8 0 15.2-4 20-11.2 4-7.2 4-15.2 0-22.4L532 128c-4-7.2-11.2-11.2-20-11.2-8 0-15.2 4-20 11.2l-320 555.2-28-16L464.8 112c9.6-16.8 27.2-27.2 47.2-27.2 20 0 37.6 10.4 47.2 27.2l412.8 714.4c9.6 16.8 9.6 37.6 0 54.4-9.6 17.6-27.2 27.2-47.2 27.2z"-->
+              <!--                      p-id="13347"></path>-->
+              <!--                    <path d="M517.6 737.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" p-id="13348"></path>-->
+              <!--                    <path-->
+              <!--                      d="M517.6 672c-17.6 0-32-14.4-32-32V416c0-17.6 14.4-32 32-32s32 14.4 32 32v224c0 17.6-14.4 32-32 32z"-->
+              <!--                      p-id="13349"></path>-->
+              <!--                    <path d="M158.4 675.2m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13350"></path>-->
+              <!--                    <path d="M284 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13351"></path>-->
+              <!--                    <path d="M208 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13352"></path>-->
+              <!--                  </svg>-->
+              <!--                </div>-->
+              <!--              </li>-->
             </ul>
           </div>
         </div>
@@ -149,7 +149,7 @@
                                       :htmlContent.sync="comment.content"
                                       :content="comment.content" :editor-height="'200px'">
                     </ai-editor-module>
-                    <div class="overflow-hidden mb-6">
+                    <div class="overflow-hidden mb-6 mt-6">
                       <el-button plain type="primary" class="fl-right" size="small"
                                  :disabled="comment.content==null ||comment.content==''"
                                  :loading="buttonLoading"
@@ -225,7 +225,7 @@
                                                     :htmlContent.sync="item.recoverContent"
                                                     :content="item.recoverContent" :editor-height="'160px'">
                                   </ai-editor-module>
-                                  <div class="overflow-hidden mb-6">
+                                  <div class="overflow-hidden mb-6 mt-6">
                                     <el-button plain type="primary" class="fl-right" size="small"
                                                :disabled="item.recoverContent==null || item.recoverContent==''"
                                                :loading="buttonLoading"
@@ -266,7 +266,7 @@
                                 <el-tag v-if="items.targetUid==articleInfo.userId" size="mini" class="ml-4">作者
                                 </el-tag>
                               </div>
-<!--                              <span class="color-grey ml-10 mr-8 font-s-13">|</span>-->
+                              <!--                              <span class="color-grey ml-10 mr-8 font-s-13">|</span>-->
                               <span class="color-grey-2 font-s-13 ml-6"
                                     v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                             </div>
@@ -435,20 +435,13 @@
               <ul class="article-catalogue">
                 <el-timeline>
                   <el-timeline-item v-for="(item, index) in tocArray" :key="index"
-                                    :size="item.level<=2?'normal':'large'"
+                                    :size="item.level<=2?'large':'normal'"
                                     :type="highlightType()==index?'primary':''">
                     <span @click="gotoAnchor(item.pos)" class="font-s-14">
                     {{ item.text }}
                     </span>
                   </el-timeline-item>
                 </el-timeline>
-
-                <!--                <li class="left-catalogue-list-li" v-for="item of tocArray"-->
-                <!--                    @click="gotoAnchor(item.pos)" :key=" item.pos" :title="item.text">-->
-                <!--                  <div class="introduce-cl" :style="{'padding-left':item.level==2?'10px':item.level*8+'px'}">-->
-                <!--                    {{ item.text }}-->
-                <!--                  </div>-->
-                <!--                </li>-->
               </ul>
             </div>
             <!--                相关文章-->
@@ -951,7 +944,7 @@ li {
 }
 
 .el-timeline-item__wrapper :hover {
-  font-weight: bold;
+  color: var(--theme-color);
   cursor: pointer;
 }
 </style>
