@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 网站基本信息Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-21
  */
 public interface IBasicInfoService {

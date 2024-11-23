@@ -13,7 +13,7 @@ import com.aurora.common.config.AlipayConfig;
 import com.aurora.common.enums.PaymentStateEnums;
 import com.aurora.common.utils.DateUtils;
 import com.aurora.common.utils.RandomNumberUtils;
-import com.aurora.system.mapper.TripartiteUserMapper;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

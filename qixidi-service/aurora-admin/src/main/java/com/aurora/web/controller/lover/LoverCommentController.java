@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * 爱情祝福语
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 @Validated

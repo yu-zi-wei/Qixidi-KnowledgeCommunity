@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * 网站基本信息业务对象 basic_info
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-21
  */
 

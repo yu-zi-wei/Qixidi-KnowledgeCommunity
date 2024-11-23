@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 爱情轮播图业务对象 lover_carousel
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-29
  */
 

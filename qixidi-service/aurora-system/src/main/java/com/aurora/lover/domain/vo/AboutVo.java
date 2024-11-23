@@ -17,7 +17,7 @@ import lombok.Data;
 /**
  * 关于我们视图对象 about
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 @Data

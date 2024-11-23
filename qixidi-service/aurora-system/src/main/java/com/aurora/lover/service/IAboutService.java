@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 关于我们Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 public interface IAboutService {

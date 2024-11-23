@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 爱情清单业务对象 repertoire
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-22
  */
 

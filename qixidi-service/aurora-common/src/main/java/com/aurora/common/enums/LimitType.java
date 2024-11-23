@@ -3,7 +3,7 @@ package com.aurora.common.enums;
 /**
  * 限流类型
  *
- * @author ruoyi
+ * @author ziwei
  */
 
 public enum LimitType {

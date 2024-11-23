@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * 爱情轮播图
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-29
  */
 @Validated

@@ -17,7 +17,7 @@ import lombok.Data;
 /**
  * 爱情祝福语视图对象 lover_comment
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 @Data

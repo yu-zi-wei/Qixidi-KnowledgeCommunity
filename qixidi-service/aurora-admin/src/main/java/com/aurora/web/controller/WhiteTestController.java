@@ -1,7 +1,10 @@
 package com.aurora.web.controller;
 
+import com.aurora.common.config.justAuth.JustAuthConfig;
+import com.aurora.common.config.justAuth.WeiBoPlatformConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class WhiteTestController {
 
     @Value("${spring.redis.host}")
-//    @Value("${sa-token.activity-timeout}")
     private String name;
+
+    @Autowired
+    private JustAuthConfig justAuthConfig;
+
+    @Autowired
+    private WeiBoPlatformConfig weiBoPlatformConfig;
 
     @GetMapping("/name")
     public String list() {
-        return name;
+        log.info("weiBoPlatformConfig:{}", weiBoPlatformConfig.toString());
+        return "xx";
     }
 }

@@ -14,7 +14,7 @@ import com.aurora.lover.domain.vo.RepertoireVo;
 /**
  * 爱情清单Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-22
  */
 public interface RepertoireMapper extends BaseMapperPlus<RepertoireMapper, Repertoire, RepertoireVo> {

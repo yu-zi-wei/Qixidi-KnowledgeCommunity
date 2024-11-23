@@ -15,7 +15,7 @@ import com.aurora.lover.domain.vo.LoverRecordVo;
 /**
  * 爱情记录Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-21
  */
 public interface LoverRecordMapper extends BaseMapperPlus<LoverRecordMapper, LoverRecord, LoverRecordVo> {

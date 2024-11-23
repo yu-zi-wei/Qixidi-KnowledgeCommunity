@@ -8,7 +8,7 @@ spring:
     # 动态数据源文档 https://www.kancloud.cn/tracy5546/dynamic-datasource/content
     dynamic:
       # 性能分析插件(有性能损耗 不建议生产环境使用)
-      p6spy: true
+      p6spy: false
       # 设置默认的数据源或者数据源组,默认值即为 master
       primary: master
       # 严格模式 匹配不到数据源则报错
@@ -93,17 +93,17 @@ spring:
 
 redisson:
   # 线程池数量
-  threads: 4
+  threads: 16
   # Netty线程池数量
-  nettyThreads: 8
+  nettyThreads: 32
   # 单节点配置
   singleServerConfig:
     # 客户端名称
     clientName: ${ruoyi.name}
     # 最小空闲连接数
-    connectionMinimumIdleSize: 8
+    connectionMinimumIdleSize: 32
     # 连接池大小
-    connectionPoolSize: 32
+    connectionPoolSize: 64
     # 连接空闲超时，单位：毫秒
     idleConnectionTimeout: 10000
     # 命令等待超时，单位：毫秒
@@ -147,12 +147,9 @@ sms:
 
 --- # JustAuth 第三方登录配置
 JustAuth:
-  # 登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
-  # 本项目为：http://127.0.0.1:9001/oauth/callback
-  callBackBaseUrl: ${config.JustAuth.callBackBaseUrl}
   # 前端中转地址 与前端默认地址保持一致
   # 本项目为：http://localhost:3000/transfer/login
-  url: ${config.JustAuth.url}
+  transferUrl: ${config.JustAuth.url}
   # 第三方登录类型 用于获取用户信息方式判断
   tripartiteUserType: tripartite_user
   #  平台APPID信息
@@ -160,19 +157,21 @@ JustAuth:
     gitee:
       clientId: ${config.JustAuth.platform.gitee.clientId}
       clientSecret: ${config.JustAuth.platform.gitee.clientSecret}
-      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.gitee.redirectUri}
+#      登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
+      redirectUrl: ${config.JustAuth.platform.gitee.redirectUrl}
     baidu:
       clientId: ${config.JustAuth.platform.baidu.clientId}
       clientSecret: ${config.JustAuth.platform.baidu.clientSecret}
-      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.baidu.redirectUri}
+      redirectUrl: ${config.JustAuth.platform.baidu.redirectUrl}
     weibo:
       clientId: ${config.JustAuth.platform.weibo.clientId}
       clientSecret: ${config.JustAuth.platform.weibo.clientSecret}
-      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.weibo.redirectUri}
+      redirectUrl: ${config.JustAuth.platform.weibo.redirectUrl}
     zhifubao:
       clientId: ${config.JustAuth.platform.zhifubao.clientId}
       clientSecret: ${config.JustAuth.platform.zhifubao.clientSecret}
-      redirectUri: ${config.JustAuth.callBackBaseUrl}/${config.JustAuth.platform.zhifubao.redirectUri}
+      alipayPublicKey: ${config.JustAuth.platform.zhifubao.alipayPublicKey}
+      redirectUrl: ${config.JustAuth.platform.zhifubao.redirectUrl}
 
 --- # 支付宝支付配置
 lipay:
@@ -182,7 +181,7 @@ lipay:
   appPrivateKey: ${config.lipay.appPrivateKey}
   #支付宝公钥
   alipayPublicKey: ${config.lipay.alipayPublicKey}
-  #回调地址：http://k2rgn4.natappfree.cc/white/payment/aply
+  #回调地址：http://server.qixidi.top/white/payment/aply
   notifyUrl: ${config.lipay.notifyUrl}
   # 支付成功的跳转地址，本项目为：http://localhost:9002/transfer/payment_callback
   returnUrl: ${config.lipay.returnUrl}

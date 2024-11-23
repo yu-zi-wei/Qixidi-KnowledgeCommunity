@@ -18,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * 爱情记录业务对象 lover_record
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-21
  */
 

@@ -1,4 +1,4 @@
-package com.aurora.system.service;
+package com.aurora.business.service;
 
 
 import com.aurora.business.domain.bo.user.TripartiteUserBo;
@@ -14,57 +14,58 @@ import com.aurora.common.core.domain.model.LoginUserMain;
 import com.aurora.common.core.domain.model.PhoneBinding;
 import com.aurora.common.core.domain.model.RegisterUserMain;
 import com.aurora.common.core.page.TableDataInfo;
+import me.zhyd.oauth.request.AuthRequest;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 【请填写功能名称】Service接口
+ * 平台用户Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-06-12
  */
 public interface ITripartiteUserService {
 
     /**
-     * 查询【请填写功能名称】
+     * 查询平台用户
      *
-     * @param uuid 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param uuid 平台用户主键
+     * @return 平台用户
      */
     TripartiteUserVo queryById(String uuid);
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询平台用户列表
      *
-     * @return 【请填写功能名称】集合
+     * @return 平台用户集合
      */
     TableDataInfo<TripartiteUserVo> queryPageList(TripartiteUserBo bo, PageQuery pageQuery);
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询平台用户列表
      *
-     * @return 【请填写功能名称】集合
+     * @return 平台用户集合
      */
     List<TripartiteUserVo> queryList(TripartiteUserBo bo);
 
     /**
-     * 修改【请填写功能名称】
+     * 修改平台用户
      *
      * @return 结果
      */
     Boolean insertByBo(TripartiteUserBo bo);
 
     /**
-     * 修改【请填写功能名称】
+     * 修改平台用户
      *
      * @return 结果
      */
     Boolean updateByBo(TripartiteUserBo bo);
 
     /**
-     * 校验并批量删除【请填写功能名称】信息
+     * 校验并批量删除平台用户信息
      *
      * @param isValid 是否校验,true-删除前校验,false-不校验
      * @return 结果
@@ -106,4 +107,6 @@ public interface ITripartiteUserService {
     Boolean phoneNumberBinding(PhoneBinding phoneBinding);
 
     Boolean bindEmail(UserBindBo bo);
+
+   AuthRequest getAuthRequest(String source);
 }

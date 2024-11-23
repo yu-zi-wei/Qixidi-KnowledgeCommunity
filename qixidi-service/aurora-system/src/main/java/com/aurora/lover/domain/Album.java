@@ -18,7 +18,7 @@ import java.util.Date;
 /**
  * 时光相册对象 album
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-20
  */
 @Data

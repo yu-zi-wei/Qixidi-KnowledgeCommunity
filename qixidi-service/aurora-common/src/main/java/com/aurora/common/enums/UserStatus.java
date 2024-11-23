@@ -3,7 +3,7 @@ package com.aurora.common.enums;
 /**
  * 用户状态
  *
- * @author ruoyi
+ * @author ziwei
  */
 public enum UserStatus {
     OK("0", "正常"),

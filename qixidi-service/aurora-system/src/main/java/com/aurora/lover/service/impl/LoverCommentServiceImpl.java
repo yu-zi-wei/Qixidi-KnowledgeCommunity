@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * 爱情祝福语Service业务层处理
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 @DS("slave_lover")

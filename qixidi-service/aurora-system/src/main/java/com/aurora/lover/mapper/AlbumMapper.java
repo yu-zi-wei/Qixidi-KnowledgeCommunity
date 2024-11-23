@@ -14,7 +14,7 @@ import com.aurora.lover.domain.vo.AlbumVo;
 /**
  * 时光相册Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-20
  */
 public interface AlbumMapper extends BaseMapperPlus<AlbumMapper, Album, AlbumVo> {

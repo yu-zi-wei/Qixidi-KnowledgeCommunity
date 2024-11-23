@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 基本配置Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-12-02
  */
 public interface ILoverConfigService {

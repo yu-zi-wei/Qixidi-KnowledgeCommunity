@@ -3,7 +3,7 @@ package com.aurora.common.enums;
 /**
  * 操作人类别
  *
- * @author ruoyi
+ * @author ziwei
  */
 public enum OperatorType {
     /**

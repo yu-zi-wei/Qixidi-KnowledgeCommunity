@@ -38,7 +38,7 @@ nbdist/
 # Others
 #*.log
 logs/
-config/
+/config
 *.xml.versionsBackup
 *.swp
 

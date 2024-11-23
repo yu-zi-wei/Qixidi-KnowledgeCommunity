@@ -14,7 +14,7 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.system.domain.SysOss;
 import com.aurora.system.service.ISysOssService;
-import com.aurora.system.service.ITripartiteUserService;
+import com.aurora.business.service.ITripartiteUserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

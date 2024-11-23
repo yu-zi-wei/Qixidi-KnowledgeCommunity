@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 爱情轮播图Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-29
  */
 public interface LoverCarouselMapper extends BaseMapperPlus<LoverCarouselMapper, LoverCarousel, LoverCarouselVo> {

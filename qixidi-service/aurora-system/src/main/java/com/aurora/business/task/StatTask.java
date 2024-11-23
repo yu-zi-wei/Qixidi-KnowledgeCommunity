@@ -15,7 +15,7 @@ import com.aurora.common.enums.SystemTaskEnums;
 import com.aurora.common.enums.article.ArticleAuditStateType;
 import com.aurora.common.utils.DateUtils;
 import com.aurora.common.utils.email.MailUtils;
-import com.aurora.system.mapper.TripartiteUserMapper;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

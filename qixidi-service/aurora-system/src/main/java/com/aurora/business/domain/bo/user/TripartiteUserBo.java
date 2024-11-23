@@ -11,15 +11,15 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotBlank;
 
 /**
- * 【请填写功能名称】业务对象 tripartite_user
+ * 平台用户业务对象 tripartite_user
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-06-12
  */
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("【请填写功能名称】业务对象")
+@ApiModel("平台用户业务对象")
 public class TripartiteUserBo extends BaseEntity {
 
     /**

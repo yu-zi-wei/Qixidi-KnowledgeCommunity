@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * 基本配置业务对象 lover_congfig
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-12-02
  */
 

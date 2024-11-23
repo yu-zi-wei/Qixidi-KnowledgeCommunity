@@ -3,7 +3,7 @@ package com.aurora.common.enums;
 /**
  * 业务操作类型
  *
- * @author ruoyi
+ * @author ziwei
  */
 public enum BusinessType {
     /**

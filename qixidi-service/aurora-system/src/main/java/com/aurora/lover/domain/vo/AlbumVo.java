@@ -18,7 +18,7 @@ import lombok.Data;
 /**
  * 时光相册视图对象 album
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-20
  */
 @Data

@@ -13,13 +13,13 @@ import java.util.Date;
 
 
 /**
- * 【请填写功能名称】视图对象 tripartite_user
+ * 平台用户视图对象 tripartite_user
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-06-12
  */
 @Data
-@ApiModel("【请填写功能名称】视图对象")
+@ApiModel("平台用户视图对象")
 @ExcelIgnoreUnannotated
 public class TripartiteUserVo extends CountUserWebsiteEntity {
 

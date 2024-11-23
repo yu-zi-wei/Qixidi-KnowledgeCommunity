@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 /**
  * 基本配置Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-12-02
  */
 public interface LoverCongfigMapper extends BaseMapperPlus<LoverCongfigMapper, LoverConfig, LoverConfigVo> {

@@ -11,7 +11,7 @@ import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.common.utils.StringUtils;
-import com.aurora.system.mapper.TripartiteUserMapper;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;

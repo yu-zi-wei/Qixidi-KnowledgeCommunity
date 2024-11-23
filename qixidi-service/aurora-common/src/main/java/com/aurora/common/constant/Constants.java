@@ -3,7 +3,7 @@ package com.aurora.common.constant;
 /**
  * 通用常量信息
  *
- * @author ruoyi
+ * @author ziwei
  */
 public interface Constants {
 

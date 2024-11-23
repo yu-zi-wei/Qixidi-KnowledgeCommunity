@@ -1,4 +1,4 @@
-package com.aurora.system.service.impl;
+package com.aurora.business.service.impl;
 
 
 import cn.dev33.satoken.stp.StpUtil;
@@ -16,10 +16,16 @@ import com.aurora.business.domain.vo.CountUserWebsiteVo;
 import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.business.domain.vo.user.UserFollowVo;
 import com.aurora.business.domain.vo.user.UserSimpleInfoVo;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.aurora.business.mapper.count.CountUserWebsiteMapper;
 import com.aurora.business.mapper.user.UserFollowMapper;
 import com.aurora.business.mapper.user.UserInformationMapper;
+import com.aurora.business.service.ITripartiteUserService;
 import com.aurora.common.config.SmsSendingConfig;
+import com.aurora.common.config.justAuth.BaiDuPlatformConfig;
+import com.aurora.common.config.justAuth.GiteePlatformConfig;
+import com.aurora.common.config.justAuth.WeiBoPlatformConfig;
+import com.aurora.common.config.justAuth.ZhiFuBaoPlatformConfig;
 import com.aurora.common.constant.SystemConstant;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
@@ -35,8 +41,6 @@ import com.aurora.common.utils.RandomNumberUtils;
 import com.aurora.common.utils.StringUtils;
 import com.aurora.common.utils.email.MailUtils;
 import com.aurora.common.utils.redis.RedisUtils;
-import com.aurora.system.mapper.TripartiteUserMapper;
-import com.aurora.system.service.ITripartiteUserService;
 import com.aurora.utils.SecureUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -49,6 +53,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.zhyd.oauth.config.AuthConfig;
+import me.zhyd.oauth.exception.AuthException;
+import me.zhyd.oauth.request.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,9 +69,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * 【请填写功能名称】Service业务层处理
+ * 平台用户Service业务层处理
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-06-12
  */
 @RequiredArgsConstructor
@@ -80,12 +87,20 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     private ExecutorService executorService;
     @Autowired
     private SmsSendingConfig smsSendingConfig;
+    @Autowired
+    private GiteePlatformConfig giteePlatformConfig;
+    @Autowired
+    private BaiDuPlatformConfig baiDuPlatformConfig;
+    @Autowired
+    private WeiBoPlatformConfig weiBoPlatformConfig;
+    @Autowired
+    private ZhiFuBaoPlatformConfig zhiFuBaoPlatformConfig;
 
     /**
-     * 查询【请填写功能名称】
+     * 查询平台用户
      *
-     * @param uuid 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param uuid 平台用户主键
+     * @return 平台用户
      */
     @Override
     public TripartiteUserVo queryById(String uuid) {
@@ -96,10 +111,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询平台用户列表
      *
-     * @param bo 【请填写功能名称】
-     * @return 【请填写功能名称】
+     * @param bo 平台用户
+     * @return 平台用户
      */
     @Override
     public TableDataInfo<TripartiteUserVo> queryPageList(TripartiteUserBo bo, PageQuery pageQuery) {
@@ -109,10 +124,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询平台用户列表
      *
-     * @param bo 【请填写功能名称】
-     * @return 【请填写功能名称】
+     * @param bo 平台用户
+     * @return 平台用户
      */
     @Override
     public List<TripartiteUserVo> queryList(TripartiteUserBo bo) {
@@ -137,9 +152,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增平台用户
      *
-     * @param bo 【请填写功能名称】
+     * @param bo 平台用户
      * @return 结果
      */
     @Override
@@ -154,9 +169,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改平台用户
      *
-     * @param bo 【请填写功能名称】
+     * @param bo 平台用户
      * @return 结果
      */
     @Override
@@ -176,7 +191,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     }
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除平台用户
      *
      * @return 结果
      */
@@ -547,5 +562,55 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             return update > 0;
         }
         return false;
+    }
+
+    @Override
+    public AuthRequest getAuthRequest(String source) {
+        AuthRequest authRequest = null;
+        switch (source) {
+            case "gitee":
+                authRequest = new AuthGiteeRequest(AuthConfig.builder()
+                    .clientId(giteePlatformConfig.getClientId())
+                    .clientSecret(giteePlatformConfig.getClientSecret())
+                    .redirectUri(giteePlatformConfig.getRedirectUrl())
+                    .build());
+                break;
+            case "qq":
+                authRequest = new AuthQqRequest(AuthConfig.builder()
+                    .clientId("")
+                    .clientSecret("")
+                    .redirectUri("")
+                    .build());
+                break;
+            case "baidu":
+                authRequest = new AuthBaiduRequest(AuthConfig.builder()
+                    .clientId(baiDuPlatformConfig.getClientId())
+                    .clientSecret(baiDuPlatformConfig.getClientSecret())
+                    .redirectUri(baiDuPlatformConfig.getRedirectUrl())
+                    .build());
+                break;
+            case "weibo":
+                authRequest = new AuthWeiboRequest(AuthConfig.builder()
+                    .clientId(weiBoPlatformConfig.getClientId())
+                    .clientSecret(weiBoPlatformConfig.getClientSecret())
+                    .redirectUri(weiBoPlatformConfig.getRedirectUrl())
+                    .build());
+                break;
+            case "zhifubao":
+                authRequest = new AuthAlipayRequest(AuthConfig.builder()
+                    .clientId(zhiFuBaoPlatformConfig.getClientId())
+                    .clientSecret(zhiFuBaoPlatformConfig.getClientSecret())
+                    .alipayPublicKey(zhiFuBaoPlatformConfig.getAlipayPublicKey())
+                    .redirectUri(zhiFuBaoPlatformConfig.getRedirectUrl())
+                    .build());
+                break;
+
+            default:
+                break;
+        }
+        if (null == authRequest) {
+            throw new AuthException("未获取到有效的Auth配置");
+        }
+        return authRequest;
     }
 }

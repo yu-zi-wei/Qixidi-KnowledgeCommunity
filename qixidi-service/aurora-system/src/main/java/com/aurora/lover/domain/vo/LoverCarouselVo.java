@@ -17,7 +17,7 @@ import lombok.Data;
 /**
  * 爱情轮播图视图对象 lover_carousel
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-29
  */
 @Data

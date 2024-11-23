@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 爱情清单Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-22
  */
 public interface IRepertoireService {

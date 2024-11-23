@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 爱情记录Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-21
  */
 public interface ILoverRecordService {

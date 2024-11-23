@@ -5,7 +5,7 @@ import com.aurora.business.domain.vo.user.UserSimpleInfoVo;
 import com.aurora.business.service.news.INewsUserInfoService;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.utils.SseEmitterUtil;
-import com.aurora.system.service.ITripartiteUserService;
+import com.aurora.business.service.ITripartiteUserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

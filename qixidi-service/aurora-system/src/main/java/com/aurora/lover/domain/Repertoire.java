@@ -20,7 +20,7 @@ import java.util.Date;
 /**
  * 爱情清单对象 repertoire
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-22
  */
 @Data

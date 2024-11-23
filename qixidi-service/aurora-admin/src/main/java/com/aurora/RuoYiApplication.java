@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * 启动程序
  *
- * @author ruoyi
+ * @author ziwei
  * @EnableAsync 异步支持
  */
 @EnableTransactionManagement

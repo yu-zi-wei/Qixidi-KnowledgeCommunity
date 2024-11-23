@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * 基本配置Service业务层处理
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-12-02
  */
 @DS("slave_lover")

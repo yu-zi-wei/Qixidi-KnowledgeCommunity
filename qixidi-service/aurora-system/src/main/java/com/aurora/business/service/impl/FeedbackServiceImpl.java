@@ -18,7 +18,7 @@ import com.aurora.common.enums.FeedbackStatus;
 import com.aurora.common.enums.WebSocketEnum;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.common.utils.StringUtils;
-import com.aurora.system.mapper.TripartiteUserMapper;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;

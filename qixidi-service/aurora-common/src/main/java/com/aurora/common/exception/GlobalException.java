@@ -3,7 +3,7 @@ package com.aurora.common.exception;
 /**
  * 全局异常
  *
- * @author ruoyi
+ * @author ziwei
  */
 public class GlobalException extends RuntimeException {
 

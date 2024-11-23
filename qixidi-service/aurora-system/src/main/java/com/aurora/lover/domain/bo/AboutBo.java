@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 关于我们业务对象 about
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 

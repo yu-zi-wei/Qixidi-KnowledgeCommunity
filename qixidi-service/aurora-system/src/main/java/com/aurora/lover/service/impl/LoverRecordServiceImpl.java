@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * 爱情记录Service业务层处理
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-21
  */
 @DS("slave_lover")

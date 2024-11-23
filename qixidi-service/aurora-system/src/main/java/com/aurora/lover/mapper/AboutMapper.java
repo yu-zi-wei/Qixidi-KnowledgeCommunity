@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Select;
 /**
  * 关于我们Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 public interface AboutMapper extends BaseMapperPlus<AboutMapper, About, AboutVo> {

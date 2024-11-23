@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 时光相册Service接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-20
  */
 public interface IAlbumService {

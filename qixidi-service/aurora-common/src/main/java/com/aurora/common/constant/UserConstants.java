@@ -3,7 +3,7 @@ package com.aurora.common.constant;
 /**
  * 用户常量信息
  *
- * @author ruoyi
+ * @author ziwei
  */
 public interface UserConstants {
 

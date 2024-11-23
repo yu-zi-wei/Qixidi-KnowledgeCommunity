@@ -18,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * 时光相册业务对象 album
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-20
  */
 

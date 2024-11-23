@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 爱情祝福语业务对象 lover_comment
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-30
  */
 

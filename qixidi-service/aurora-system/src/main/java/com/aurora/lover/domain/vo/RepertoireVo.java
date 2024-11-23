@@ -18,7 +18,7 @@ import lombok.Data;
 /**
  * 爱情清单视图对象 repertoire
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-11-22
  */
 @Data

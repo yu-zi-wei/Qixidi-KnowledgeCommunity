@@ -3,7 +3,7 @@ package com.aurora.common.enums;
 /**
  * 操作状态
  *
- * @author ruoyi
+ * @author ziwei
  */
 public enum BusinessStatus {
     /**

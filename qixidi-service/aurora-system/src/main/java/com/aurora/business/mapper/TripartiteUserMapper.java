@@ -1,4 +1,4 @@
-package com.aurora.system.mapper;
+package com.aurora.business.mapper;
 
 import com.aurora.business.domain.bo.user.UserInfoBo;
 import com.aurora.business.domain.vo.user.TripartiteUserVo;
@@ -11,9 +11,9 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 【请填写功能名称】Mapper接口
+ * 平台用户Mapper接口
  *
- * @author ruoyi
+ * @author ziwei
  * @date 2022-06-12
  */
 @Mapper
