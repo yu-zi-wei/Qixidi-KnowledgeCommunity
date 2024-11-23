@@ -551,7 +551,6 @@ export default {
       loading: true,
       goTopLoading: false,
       scrollTops: 0,
-      highlightTypeValue: 0,
       collectionList: [],
       collectionLoading: false,
       createCoDialog: false,

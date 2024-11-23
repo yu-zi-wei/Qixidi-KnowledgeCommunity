@@ -288,6 +288,7 @@ export default {
         pageSize: 10,
         auditState: -1,
       },
+      scrollTops: 0,
     }
   },
   methods: {
@@ -298,6 +299,8 @@ export default {
       });
     },
     highlightType() {
+      let scrollTop = document.documentElement.scrollTop
+      this.scrollTops = scrollTop;
       let scrollTops = this.scrollTops + 1;
       if (scrollTops <= this.tocArray[0].pos) {
         return 0;
@@ -455,6 +458,11 @@ export default {
   },
   mounted() {
     this.loadBasicData();
+    window.addEventListener('scroll', this.highlightType, true);// 向页面添加滚动事件
+  },
+  destroyed() {
+    //离开页面时删除该监听
+    window.removeEventListener('scroll', this.highlightType, true)
   },
 }
 </script>
