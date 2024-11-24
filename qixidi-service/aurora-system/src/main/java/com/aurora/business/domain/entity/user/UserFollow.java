@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 用户关注对象 user_follow
+ * 用户关注对象 b_user_follow
  *
  * @author aurora
  * @date 2023-02-13
  */
 @Data
-@TableName("user_follow")
+@TableName("b_user_follow")
 public class UserFollow {
 
     private static final long serialVersionUID = 1L;

@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 私信记录对象 private_news_info
+ * 私信记录对象 b_private_news_info
  *
  * @author aurora
  * @date 2023-03-23
  */
 @Data
-@TableName("private_news_info")
+@TableName("b_private_news_info")
 public class PrivateNewsInfo {
 
     private static final long serialVersionUID = 1L;

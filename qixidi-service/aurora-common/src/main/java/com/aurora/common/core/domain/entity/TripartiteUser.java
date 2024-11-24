@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@TableName("user_main")
+@TableName("b_user_main")
 @ApiModel("第三方登录用户")
 @Accessors(chain = true)
 public class TripartiteUser {

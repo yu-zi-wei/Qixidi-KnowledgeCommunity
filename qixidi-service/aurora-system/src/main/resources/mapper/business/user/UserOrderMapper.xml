@@ -33,8 +33,8 @@
                uo.payment_state,
                uo.payment_time,
                uo.create_time
-        from user_order as uo
-                 left join user_main as um on uo.uid = um.uuid
+        from b_user_order as uo
+                 left join b_user_main as um on uo.uid = um.uuid
             ${ew.getCustomSqlSegment}
     </select>
 </mapper>

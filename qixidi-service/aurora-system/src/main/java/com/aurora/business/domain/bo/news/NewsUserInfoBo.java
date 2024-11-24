@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 
 /**
- * 用户消息业务对象 news_user_info
+ * 用户消息业务对象 b_news_user_info
  *
  * @author aurora
  * @date 2022-11-03

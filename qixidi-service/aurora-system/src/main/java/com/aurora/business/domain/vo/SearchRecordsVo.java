@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 /**
- * 搜索记录视图对象 search_records
+ * 搜索记录视图对象 b_search_records
  *
  * @author aurora
  * @date 2023-04-18

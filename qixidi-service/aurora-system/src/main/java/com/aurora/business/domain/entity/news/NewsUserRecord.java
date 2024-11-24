@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("news_user_record")
+@TableName("b_news_user_record")
 public class NewsUserRecord {
     /**
      * id

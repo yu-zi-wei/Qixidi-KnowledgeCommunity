@@ -13,14 +13,14 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
- * 业务表 gen_table
+ * 业务表 b_gen_table
  *
  * @author Lion Li
  */
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("gen_table")
+@TableName("b_gen_table")
 public class GenTable extends BaseEntity {
 
     /**

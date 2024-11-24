@@ -7,14 +7,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 统计数据信息对象 stat_data_info
+ * 统计数据信息对象 b_stat_data_info
  *
  * @author aurora
  * @date 2023-03-14
  */
 @Data
 @Accessors(chain = true)
-@TableName("stat_data_info")
+@TableName("b_stat_data_info")
 public class StatDataInfo {
 
     private static final long serialVersionUID = 1L;

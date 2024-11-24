@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 /**
- * 用户反馈视图对象 feedback
+ * 用户反馈视图对象 Feedback
  *
  * @author aurora
  * @date 2023-04-17
@@ -48,7 +48,7 @@ public class FeedbackVo {
      */
     @ExcelProperty(value = "反馈内容")
     @ApiModelProperty("反馈内容")
-    private String feedbackContent;
+    private String FeedbackContent;
 
     private Date createTime;
 
@@ -56,7 +56,7 @@ public class FeedbackVo {
     /**
      * 反馈标题
      */
-    private String feedbackTitle;
+    private String FeedbackTitle;
 
     /**
      * 状态

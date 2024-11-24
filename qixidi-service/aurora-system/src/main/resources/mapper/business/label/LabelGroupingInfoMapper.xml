@@ -18,11 +18,11 @@
                li.grouping_describe,
                li.icon,
                lis.weight
-        FROM label_grouping_info AS li
+        FROM b_label_grouping_info AS li
                  LEFT JOIN (
             SELECT label_grouping_id,
                    sum(follow_number * 4 + article_number * 6) AS weight
-            FROM label_info
+            FROM b_label_info
             WHERE state = 0
               AND label_grouping_id IS NOT NULL
             GROUP BY label_grouping_id
@@ -33,8 +33,8 @@
     <select id="selectStatData" resultType="com.aurora.business.domain.vo.stat.StatReturnDataVo">
         SELECT lgi.grouping_name as name,
                count(ai.id)      as data
-        FROM label_grouping_info AS lgi
-                 LEFT JOIN article_information AS ai ON lgi.id = ai.grouping_id
+        FROM b_label_grouping_info AS lgi
+                 LEFT JOIN b_article_information AS ai ON lgi.id = ai.grouping_id
         WHERE lgi.state = 0
         GROUP BY lgi.grouping_name
     </select>

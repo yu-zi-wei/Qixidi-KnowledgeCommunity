@@ -10,13 +10,13 @@ import java.util.Date;
 
 
 /**
- * 私信记录对象 private_user
+ * 私信记录对象 b_private_user
  *
  * @author aurora
  * @date 2023-03-23
  */
 @Data
-@TableName("private_user")
+@TableName("b_private_user")
 @Accessors(chain = true)
 public class PrivateUser {
 

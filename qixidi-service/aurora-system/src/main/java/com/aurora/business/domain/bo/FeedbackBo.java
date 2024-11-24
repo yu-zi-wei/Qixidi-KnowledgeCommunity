@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 
 /**
- * 用户反馈业务对象 feedback
+ * 用户反馈业务对象 Feedback
  *
  * @author aurora
  * @date 2023-04-17
@@ -45,13 +45,13 @@ public class FeedbackBo extends BaseEntity {
      * 反馈内容
      */
     @ApiModelProperty(value = "反馈内容", required = true)
-    private String feedbackContent;
+    private String FeedbackContent;
 
     /**
      * 反馈标题
      */
     @NotBlank(message = "标题不能为空", groups = {AddGroup.class, EditGroup.class})
-    private String feedbackTitle;
+    private String FeedbackTitle;
 
     /**
      * 状态

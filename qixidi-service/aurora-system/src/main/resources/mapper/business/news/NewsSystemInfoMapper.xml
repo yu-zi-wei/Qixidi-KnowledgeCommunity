@@ -15,13 +15,13 @@
 
     <select id="selectBaseUid" resultType="com.aurora.business.domain.vo.news.NewsSystemInfoVo">
         SELECT id
-        FROM news_system_info
+        FROM b_news_system_info
         WHERE state = 0
           AND type = 2
           AND is_mass_air = 1
         UNION
         SELECT id
-        FROM news_system_info
+        FROM b_news_system_info
         WHERE state = 0
           AND type = 2
           AND is_mass_air = 2
@@ -35,7 +35,7 @@
                is_details,
                uid,
                create_time
-        FROM news_system_info
+        FROM b_news_system_info
         WHERE state = 0
           AND type = 2
           AND is_mass_air = 2
@@ -47,7 +47,7 @@
                is_details,
                uid,
                create_time
-        FROM news_system_info
+        FROM b_news_system_info
         WHERE state = 0
           AND type = 2
           AND is_mass_air = 1

@@ -7,13 +7,13 @@ import java.util.Date;
 
 
 /**
- * 点赞对象 fabulous_record
+ * 点赞对象 b_fabulous_record
  *
  * @author aurora
  * @date 2022-10-01
  */
 @Data
-@TableName("fabulous_record")
+@TableName("b_fabulous_record")
 public class FabulousRecord {
 
     private static final long serialVersionUID = 1L;

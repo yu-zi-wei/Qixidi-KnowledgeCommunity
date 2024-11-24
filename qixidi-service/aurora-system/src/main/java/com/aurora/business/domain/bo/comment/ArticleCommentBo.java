@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 文章评论业务对象 article_comment
+ * 文章评论业务对象 b_article_comment
  *
  * @author aurora
  * @date 2022-11-03

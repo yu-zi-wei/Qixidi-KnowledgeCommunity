@@ -10,13 +10,13 @@ import java.util.Date;
 
 
 /**
- * 标签信息对象 label_info
+ * 标签信息对象 b_label_info
  *
  * @author aurora
  * @date 2022-08-16
  */
 @Data
-@TableName("label_info")
+@TableName("b_label_info")
 public class LabelInfo {
 
     private static final long serialVersionUID = 1L;

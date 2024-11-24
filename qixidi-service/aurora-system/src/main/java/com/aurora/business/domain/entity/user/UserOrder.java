@@ -10,13 +10,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 用户订单对象 user_order
+ * 用户订单对象 b_user_order
  *
  * @author aurora
  * @date 2023-04-04
  */
 @Data
-@TableName("user_order")
+@TableName("b_user_order")
 @Accessors(chain = true)
 public class UserOrder {
 

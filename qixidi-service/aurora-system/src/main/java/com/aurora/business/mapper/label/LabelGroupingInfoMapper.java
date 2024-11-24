@@ -24,7 +24,7 @@ import java.util.List;
 @Mapper
 public interface LabelGroupingInfoMapper extends BaseMapperPlus<LabelGroupingInfoMapper, LabelGroupingInfo, LabelGroupingInfoVo> {
 
-    @Select("select grouping_name from label_grouping_info where id=#{groupingId}")
+    @Select("select grouping_name from b_label_grouping_info where id=#{groupingId}")
     String selectNameById(@Param("groupingId") Long groupingId);
 
     IPage<LabelGroupingInfoVo> fdkGroupingList(@Param("bo") LabelGroupingInfoBo bo, Page<LabelGroupingInfo> build);

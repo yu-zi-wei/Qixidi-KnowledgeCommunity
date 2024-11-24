@@ -21,14 +21,14 @@
                dg.employ_sum,
                dg.create_time,
                dg.update_time
-        from dictum_group as dg
+        from b_dictum_group as dg
         where dg.state = 0
         order by dg.update_time desc
     </select>
 
     <update id="updateList">
         <foreach collection="list" item="item" separator=";">
-            update dictum_group
+            update b_dictum_group
             set`employ_sum` = #{item.sum}
             where `id` = #{item.groupId}
         </foreach>

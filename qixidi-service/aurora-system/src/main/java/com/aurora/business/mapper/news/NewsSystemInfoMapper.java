@@ -26,7 +26,7 @@ public interface NewsSystemInfoMapper extends BaseMapperPlus<NewsSystemInfoMappe
 
     IPage<NewsUserInfoVo> selectUid(@Param("uid") String uid, Page<NewsUserInfo> build);
 
-    @Select("select id from news_system_info where state=0 and type=2")
+    @Select("select id from b_news_system_info where state=0 and type=2")
     List<NewsSystemInfoVo> selectBase();
 }
 

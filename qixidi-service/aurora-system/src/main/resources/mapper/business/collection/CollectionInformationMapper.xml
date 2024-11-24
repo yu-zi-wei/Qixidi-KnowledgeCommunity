@@ -26,9 +26,9 @@
         cr.collection_id,
         cr.id as collectionRecordId,
         cr.create_time
-        FROM collection_record AS cr
-        LEFT JOIN article_information AS ai ON cr.target_id = ai.id
-        LEFT join user_main as um on ai.user_id = um.uuid
+        FROM b_collection_record AS cr
+        LEFT JOIN b_article_information AS ai ON cr.target_id = ai.id
+        LEFT join b_user_main as um on ai.user_id = um.uuid
         <where>
             cr.state=0
             and ai.state=0
@@ -50,26 +50,26 @@
                ci.included_count,
                ci.update_time,
                um.nickname as username
-        from collection_information as ci
-                 inner join user_main as um on ci.uid = um.uuid
+        from b_collection_information as ci
+                 inner join b_user_main as um on ci.uid = um.uuid
             ${ew.getCustomSqlSegment}
     </select>
 
     <update id="updateDelete">
-        update collection_information
+        update b_collection_information
         set included_count=included_count - 1
         where id = #{collectionId};
     </update>
 
     <update id="updateAdd">
-        update collection_information
+        update b_collection_information
         set included_count=included_count + 1
         where id = #{collectionId};
     </update>
 
     <select id="selectCensus" resultType="com.aurora.business.domain.vo.collection.CollectionInformationVo">
         select id, collection_name, create_time, uid
-        from collection_information
+        from b_collection_information
         where state = 0
           and uid = #{bo.uid}
     </select>
@@ -78,9 +78,9 @@
         SELECT ci.collection_name as title,
                ci.create_time     as dateTime,
                t.censusSum        as censusSum
-        FROM collection_information AS ci
+        FROM b_collection_information AS ci
                  left JOIN (SELECT collection_id, count(id) AS censusSum
-                            FROM collection_record
+                            FROM b_collection_record
                             where uid = #{bo.uid}
                               and `state` = 0
                             GROUP BY collection_id) AS t

@@ -8,7 +8,7 @@ import lombok.Data;
 
 
 /**
- * 网站数据月统计视图对象 stat_the_data
+ * 网站数据月统计视图对象 b_stat_data
  *
  * @author aurora
  * @date 2023-03-14

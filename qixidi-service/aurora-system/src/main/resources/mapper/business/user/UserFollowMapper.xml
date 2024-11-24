@@ -11,8 +11,8 @@
                li.follow_number,
                li.article_number,
                uf.create_time
-        FROM user_follow AS uf
-                 LEFT JOIN label_info AS li ON uf.target_id = li.id
+        FROM b_user_follow AS uf
+                 LEFT JOIN b_label_info AS li ON uf.target_id = li.id
         WHERE uf.type = #{type}
           AND uf.state = 0
           and uf.uid = #{uid}
@@ -27,8 +27,8 @@
                um.occupation,
                um.user_type,
                uf.create_time
-        FROM user_follow AS uf
-                 LEFT JOIN user_main AS um ON uf.target_id = um.uuid
+        FROM b_user_follow AS uf
+                 LEFT JOIN b_user_main AS um ON uf.target_id = um.uuid
         WHERE uf.type = #{type}
           AND uf.state = 0
           and uf.uid = #{uid}
@@ -36,7 +36,7 @@
 
     <select id="selectFollowTask" resultType="com.aurora.business.domain.vo.CountUserWebsiteVo">
         SELECT uid as uuid, count(uid) as followCount
-        FROM `user_follow`
+        FROM `b_user_follow`
         where state = 0
           and type = 1
         GROUP BY uid
@@ -44,7 +44,7 @@
 
     <select id="selectVoLabelGroup" resultType="com.aurora.business.domain.vo.user.UserFollowVo">
         SELECT target_id as targetId, count(target_id) as `sum`
-        FROM `user_follow`
+        FROM `b_user_follow`
         where state = 0
           and type = 2
         GROUP BY target_id

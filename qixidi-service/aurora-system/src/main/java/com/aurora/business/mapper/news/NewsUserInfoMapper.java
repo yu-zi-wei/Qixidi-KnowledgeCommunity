@@ -20,7 +20,7 @@ import java.util.List;
  */
 public interface NewsUserInfoMapper extends BaseMapperPlus<NewsUserInfoMapper, NewsUserInfo, NewsUserInfoVo> {
 
-    @Select("SELECT type,state,been_read from news_user_info where been_read=0 and state=0 and recipient_id=#{uid}")
+    @Select("SELECT type,state,been_read from b_news_user_info where been_read=0 and state=0 and recipient_id=#{uid}")
     List<NewsUserInfo> selectLists(@Param("uid") String uid);
 
     IPage<NewsUserInfoVo> userList(@Param("bo") NewsUserInfoBo bo, Page<NewsUserInfo> build);

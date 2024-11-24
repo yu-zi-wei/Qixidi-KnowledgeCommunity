@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface SystemTaskConfigMapper extends BaseMapperPlus<SystemTaskConfigMapper, SystemTaskConfig, SystemTaskConfigVo> {
 
-    @Update("update system_task_config set task_execution_sum = task_execution_sum + 1 where id = #{taskId}")
+    @Update("update b_system_task_config set task_execution_sum = task_execution_sum + 1 where id = #{taskId}")
     int addExecutionSum(Integer taskId);
 }

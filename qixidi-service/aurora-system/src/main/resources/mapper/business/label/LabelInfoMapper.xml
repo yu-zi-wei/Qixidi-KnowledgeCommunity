@@ -15,13 +15,13 @@
     </resultMap>
 
     <update id="updateAddFollow">
-        update label_info
+        update b_label_info
         set follow_number=follow_number + 1
         where id = #{id}
     </update>
 
     <update id="updateDeleteFollow">
-        update label_info
+        update b_label_info
         set follow_number=follow_number - 1
         where id = #{id}
     </update>
@@ -38,8 +38,8 @@
         li.create_time,
         lgi.grouping_name
         FROM
-        label_info AS li
-        LEFT JOIN label_grouping_info AS lgi ON li.label_grouping_id = lgi.id
+        b_label_info AS li
+        LEFT JOIN b_label_grouping_info AS lgi ON li.label_grouping_id = lgi.id
         <where>
             <if test="bo.state!=null and bo.state!=''">
                 and li.state=#{bo.state}
@@ -55,7 +55,7 @@
 
     <update id="updateTaskList">
         <foreach collection="list" item="item" separator=";">
-            update label_info
+            update b_label_info
             set`follow_number` = ifnull(#{item.followNumber},0),
             `article_number` = ifnull(#{item.articleNumber},0)
             where `id` = #{item.id}

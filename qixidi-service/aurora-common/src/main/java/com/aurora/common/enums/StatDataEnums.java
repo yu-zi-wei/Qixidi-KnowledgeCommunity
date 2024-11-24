@@ -6,8 +6,8 @@ public enum StatDataEnums {
     ARTICLE_COUNT("articleCount", "文章总数"),
     SPECIAL_COUNT("specialCount", "专栏总数"),
     FAVORITES_COUNT("favoritesCount", "收藏夹总数"),
-    DICTUM_GROUP_COUNT("dictumGroupCount", "名言分类总数"),
-    DICTUM_ALBUM_COUNT("dictumAlbumCount", "名言专辑总数"),
+    b_dictum_group_COUNT("dictumGroupCount", "名言分类总数"),
+    b_dictum_album_COUNT("dictumAlbumCount", "名言专辑总数"),
     DICTUM_COUNT("dictumCount", "名言总数"),
     ;
     private String code;

@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 标签分组信息对象 label_grouping_info
+ * 标签分组信息对象 b_label_grouping_info
  *
  * @author aurora
  * @date 2022-08-16
  */
 @Data
-@TableName("label_grouping_info")
+@TableName("b_label_grouping_info")
 public class LabelGroupingInfo {
 
     private static final long serialVersionUID = 1L;

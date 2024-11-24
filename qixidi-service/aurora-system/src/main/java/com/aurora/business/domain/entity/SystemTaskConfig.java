@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("system_task_config")
+@TableName("b_system_task_config")
 public class SystemTaskConfig {
 
     /**

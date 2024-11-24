@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 /**
- * 点赞视图对象 fabulous_record
+ * 点赞视图对象 b_fabulous_record
  *
  * @author aurora
  * @date 2022-10-01

@@ -77,6 +77,6 @@ public class LabelTask {
             log.error("同步标签信息数据异常：时间：{}", DateUtils.getTime());
             e.printStackTrace();
         }
-        systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCHRONIZE_LABEL_INFORMATION_DATA.getCode());
+        systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCHRONIZE_b_label_infoRMATION_DATA.getCode());
     }
 }

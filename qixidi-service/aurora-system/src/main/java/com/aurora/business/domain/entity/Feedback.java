@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 用户反馈对象 feedback
+ * 用户反馈对象 Feedback
  *
  * @author aurora
  * @date 2023-04-17
  */
 @Data
-@TableName("feedback")
+@TableName("b_feedback")
 public class Feedback {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +36,7 @@ public class Feedback {
     /**
      * 反馈内容
      */
-    private String feedbackContent;
+    private String FeedbackContent;
     /**
      * 反馈时间
      */
@@ -45,7 +45,7 @@ public class Feedback {
     /**
      * 反馈标题
      */
-    private String feedbackTitle;
+    private String FeedbackTitle;
 
     /**
      * 状态（1-待处理，2-进行中，3-已完成，4-已关闭）

@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * 文章评论视图对象 article_comment
+ * 文章评论视图对象 b_article_comment
  *
  * @author aurora
  * @date 2022-11-03

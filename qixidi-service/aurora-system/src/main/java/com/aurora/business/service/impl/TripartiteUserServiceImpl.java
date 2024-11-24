@@ -336,7 +336,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new QueryWrapper<UserFollow>()
             .eq("target_id", uuid)
-            .eq("type", UserFollowType.USER_FOLLOW.getCode())
+            .eq("type", UserFollowType.b_user_follow.getCode())
             .eq("uid", uuid1));
         if (ObjectUtils.isNotEmpty(userFollow) && userFollow.getTargetId().equals(uuid)) {
             tripartiteUserVo.setIsFollow(true);

@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 用户签到对象 user_report
+ * 用户签到对象 b_user_report
  *
  * @author aurora
  * @date 2023-04-10
  */
 @Data
-@TableName("user_report")
+@TableName("b_user_report")
 public class UserReport {
 
     private static final long serialVersionUID = 1L;

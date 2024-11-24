@@ -14,7 +14,7 @@ public enum SystemTaskEnums {
     SYNC_ARTICLE_CLICK_LIKE(2, "同步文章点赞任务"),
     SYNCING_QUOTES_DATA(3, "同步名言数据任务"),
     CALCULATING_HOT_DATA(4, "计算热门数据任务"),
-    SYNCHRONIZE_LABEL_INFORMATION_DATA(5, "同步标签信息数据任务"),
+    SYNCHRONIZE_b_label_infoRMATION_DATA(5, "同步标签信息数据任务"),
     SYNC_NUMBER_COLUMNS(6, "同步专栏文章数任务"),
     UPDATE_WEBSITE_DAILY_DATA(7, "更新网站每日数据任务"),
     UPDATE_WEBSITE_MONTHLY_DATA(8, "更新网站每月数据任务"),

@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 专栏信息对象 special_information
+ * 专栏信息对象 b_special_information
  *
  * @author aurora
  * @date 2022-08-19
  */
 @Data
-@TableName("special_information")
+@TableName("b_special_information")
 public class SpecialInformation {
 
     private static final long serialVersionUID = 1L;

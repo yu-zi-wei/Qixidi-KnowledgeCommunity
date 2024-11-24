@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 
 /**
- * 名言分组业务对象 dictum_group
+ * 名言分组业务对象 b_dictum_group
  *
  * @author aurora
  * @date 2023-04-24

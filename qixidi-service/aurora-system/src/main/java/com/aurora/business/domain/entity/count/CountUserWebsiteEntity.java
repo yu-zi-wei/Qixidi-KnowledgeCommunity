@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @ApiModel("用户网站信息统计表")
 @ExcelIgnoreUnannotated
-@TableName("count_user_website")
+@TableName("b_count_user_website")
 @Accessors(chain = true)
 public class CountUserWebsiteEntity implements Serializable {
 

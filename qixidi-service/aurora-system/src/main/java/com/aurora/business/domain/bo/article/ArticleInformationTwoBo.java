@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
- * 文章信息业务对象 article_information
+ * 文章信息业务对象 b_article_information
  *
  * @author aurora
  * @date 2022-08-16

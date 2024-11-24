@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 用户浏览历史
  * <p>
- * 业务对象 browsing_history
+ * 业务对象 b_browsing_history
  *
  * @author aurora
  * @date 2023-04-24

@@ -7,13 +7,13 @@ import lombok.Data;
 
 
 /**
- * 网站数据月统计对象 stat_the_data
+ * 网站数据月统计对象 b_stat_data
  *
  * @author aurora
  * @date 2023-03-14
  */
 @Data
-@TableName("stat_the_data")
+@TableName("b_stat_data")
 public class StatTheData {
 
     private static final long serialVersionUID = 1L;

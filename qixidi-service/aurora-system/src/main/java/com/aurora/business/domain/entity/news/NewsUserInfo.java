@@ -10,14 +10,14 @@ import java.util.Date;
 
 
 /**
- * 用户消息对象 news_user_info
+ * 用户消息对象 b_news_user_info
  *
  * @author aurora
  * @date 2022-11-03
  */
 @Data
 @Accessors(chain = true)
-@TableName("news_user_info")
+@TableName("b_news_user_info")
 public class NewsUserInfo {
 
     private static final long serialVersionUID = 1L;

@@ -14,7 +14,7 @@ import java.util.Date;
 
 
 /**
- * 用户签到业务对象 user_report
+ * 用户签到业务对象 b_user_report
  *
  * @author aurora
  * @date 2023-04-10

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * 名言信息视图对象 dictum_info
+ * 名言信息视图对象 b_dictum_info
  *
  * @author aurora
  * @date 2023-04-24

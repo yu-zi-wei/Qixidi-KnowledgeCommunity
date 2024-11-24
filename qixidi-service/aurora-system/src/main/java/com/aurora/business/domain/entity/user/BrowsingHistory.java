@@ -9,13 +9,13 @@ import java.util.Date;
 /**
  * 用户浏览历史
  * <p>
- * 对象 browsing_history
+ * 对象 b_browsing_history
  *
  * @author aurora
  * @date 2023-04-24
  */
 @Data
-@TableName("browsing_history")
+@TableName("b_browsing_history")
 public class BrowsingHistory {
 
     private static final long serialVersionUID = 1L;

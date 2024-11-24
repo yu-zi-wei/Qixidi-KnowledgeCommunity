@@ -31,8 +31,8 @@
         um.occupation,
         um.location,
         um.role_id
-        from dictum_album as da
-        left join user_main as um
+        from b_dictum_album as da
+        left join b_user_main as um
         on da.uid = um.uuid
         <where>
             da.state=0
@@ -49,7 +49,7 @@
 
     <update id="updateList">
         <foreach collection="list" item="item" separator=";">
-            update dictum_album
+            update b_dictum_album
             set`employ_sum` = #{item.sum}
             where `id` = #{item.albumId}
         </foreach>
@@ -57,7 +57,7 @@
 
     <select id="selectAlbumTask" resultType="com.aurora.business.domain.vo.CountUserWebsiteVo">
         SELECT uid as uuid, count(uid) as albumCount
-        FROM `dictum_album`
+        FROM `b_dictum_album`
         where state = 0
         GROUP BY uid
     </select>

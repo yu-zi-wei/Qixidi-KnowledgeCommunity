@@ -44,7 +44,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
         bo.setUid(LoginHelper.getTripartiteUuid());
         UserFollow add = BeanUtil.toBean(bo, UserFollow.class);
 
-        if (bo.getType().equals(UserFollowType.USER_FOLLOW.getCode())) {//  用户关注
+        if (bo.getType().equals(UserFollowType.b_user_follow.getCode())) {//  用户关注
             countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserType.FOLLOW_COUNT.getCode());
             countUserWebsiteMapper.updateAdd(bo.getTargetId(), CountUserType.FANS_FOLLOW_COUNT.getCode());
 //            发送消息
@@ -75,7 +75,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
     @Override
     public boolean cancelFollow(UserFollowBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        if (bo.getType().equals(UserFollowType.USER_FOLLOW.getCode())) { //用户关注取消
+        if (bo.getType().equals(UserFollowType.b_user_follow.getCode())) { //用户关注取消
             countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserType.FOLLOW_COUNT.getCode());
             countUserWebsiteMapper.updateDelete(bo.getTargetId(), CountUserType.FANS_FOLLOW_COUNT.getCode());
             //发送消息
@@ -101,7 +101,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
 
     @Override
     public Object followList(String uid, Integer type) {
-        if (type.equals(UserFollowType.USER_FOLLOW.getCode())) { //用户关注列表
+        if (type.equals(UserFollowType.b_user_follow.getCode())) { //用户关注列表
             return baseMapper.followUserList(uid, type);
         } else if (type.equals(UserFollowType.LABEL_FOLLOW.getCode())) {//标签关注列表
             return baseMapper.followLabelList(uid, type);
@@ -112,7 +112,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
     @Override
     public Object followRoleList(Integer type) {
         String uid = LoginHelper.getTripartiteUuid();
-        if (type.equals(UserFollowType.USER_FOLLOW.getCode())) { //用户关注列表
+        if (type.equals(UserFollowType.b_user_follow.getCode())) { //用户关注列表
             return baseMapper.followUserList(uid, type);
         } else if (type.equals(UserFollowType.LABEL_FOLLOW.getCode())) {//标签关注列表
             return baseMapper.followLabelList(uid, type);

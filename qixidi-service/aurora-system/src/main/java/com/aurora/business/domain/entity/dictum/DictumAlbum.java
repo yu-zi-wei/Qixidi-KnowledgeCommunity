@@ -10,13 +10,13 @@ import java.util.Date;
 
 
 /**
- * 名言专辑对象 dictum_album
+ * 名言专辑对象 b_dictum_album
  *
  * @author aurora
  * @date 2023-04-24
  */
 @Data
-@TableName("dictum_album")
+@TableName("b_dictum_album")
 public class DictumAlbum {
 
     private static final long serialVersionUID = 1L;

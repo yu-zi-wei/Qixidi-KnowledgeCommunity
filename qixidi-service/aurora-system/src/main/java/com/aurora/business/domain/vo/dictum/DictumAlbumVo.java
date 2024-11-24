@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 /**
- * 名言专辑视图对象 dictum_album
+ * 名言专辑视图对象 b_dictum_album
  *
  * @author aurora
  * @date 2023-04-24

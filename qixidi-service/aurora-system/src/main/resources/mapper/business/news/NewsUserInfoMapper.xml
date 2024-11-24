@@ -22,8 +22,8 @@
         um.avatar as senderAvatar,
         nui.create_time
         FROM
-        `news_user_info` AS nui
-        LEFT JOIN user_main AS um ON nui.sender_id = um.uuid
+        `b_news_user_info` AS nui
+        LEFT JOIN b_user_main AS um ON nui.sender_id = um.uuid
         <where>
             nui.type=#{bo.type}
             and nui.recipient_id=#{bo.recipientId}
@@ -50,10 +50,10 @@
                nur.create_time  as createTime,
                um.nickname      AS commentName,
                um.avatar        AS commentAvatar
-        FROM news_user_record AS nur
-                 LEFT JOIN article_comment AS ac ON nur.news_id = ac.id
-                 LEFT JOIN article_information AS ai ON ai.id = ac.article_id
-                 LEFT JOIN user_main AS um ON ac.comment_uid = um.uuid
+        FROM b_news_user_record AS nur
+                 LEFT JOIN b_article_comment AS ac ON nur.news_id = ac.id
+                 LEFT JOIN b_article_information AS ai ON ai.id = ac.article_id
+                 LEFT JOIN b_user_main AS um ON ac.comment_uid = um.uuid
         where ac.state = 0
           and nur.type = #{type}
           and nur.uid = #{uid}
@@ -69,8 +69,8 @@
                um.uuid         as senderId,
                um.nickname     AS senderName,
                um.avatar       AS senderAvatar
-        from news_user_record AS nur
-                 LEFT JOIN user_main AS um ON nur.target_uid = um.uuid
+        from b_news_user_record AS nur
+                 LEFT JOIN b_user_main AS um ON nur.target_uid = um.uuid
         where um.state = 0
           and nur.type = #{type}
           and nur.uid = #{uid}
@@ -88,8 +88,8 @@
                um.uuid         as senderId,
                um.nickname     AS senderName,
                um.avatar       AS senderAvatar
-        from news_user_record AS nur
-                 LEFT JOIN user_main AS um ON nur.target_uid = um.uuid
+        from b_news_user_record AS nur
+                 LEFT JOIN b_user_main AS um ON nur.target_uid = um.uuid
         where um.state = 0
           and nur.type = #{type}
           and nur.uid = #{uid}

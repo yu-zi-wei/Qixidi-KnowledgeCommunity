@@ -9,7 +9,7 @@ import lombok.Data;
 
 
 /**
- * 私信记录视图对象 private_news_info
+ * 私信记录视图对象 b_private_news_info
  *
  * @author aurora
  * @date 2023-03-23

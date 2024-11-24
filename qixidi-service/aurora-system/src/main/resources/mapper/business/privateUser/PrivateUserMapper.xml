@@ -11,8 +11,8 @@
                um.nickname   as targetName,
                um.avatar     as targetAvatar,
                um.occupation as targetOccupation
-        FROM private_user AS pu
-                 LEFT JOIN user_main AS um ON pu.target_uid = um.uuid
+        FROM b_private_user AS pu
+                 LEFT JOIN b_user_main AS um ON pu.target_uid = um.uuid
         where pu.uid = #{bo.uid}
     </select>
 </mapper>

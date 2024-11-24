@@ -9,13 +9,13 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 
 /**
- * 系统消息对象 news_system_info
+ * 系统消息对象 b_news_system_info
  *
  * @author aurora
  * @date 2023-04-23
  */
 @Data
-@TableName("news_system_info")
+@TableName("b_news_system_info")
 @Accessors(chain = true)
 public class NewsSystemInfo {
 

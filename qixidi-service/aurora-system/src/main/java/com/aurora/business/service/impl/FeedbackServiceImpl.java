@@ -55,11 +55,11 @@ public class FeedbackServiceImpl implements IFeedbackService {
      */
     @Override
     public FeedbackVo queryById(Long id) {
-        FeedbackVo feedbackVo = baseMapper.selectVoById(id);
+        FeedbackVo FeedbackVo = baseMapper.selectVoById(id);
         TripartiteUser tripartiteUser = tripartiteUserMapper.selectOne(new LambdaQueryWrapper<TripartiteUser>()
-            .eq(TripartiteUser::getUuid, feedbackVo.getUpdateBy()));
-        feedbackVo.setUpdateName(tripartiteUser.getNickname());
-        return feedbackVo;
+            .eq(TripartiteUser::getUuid, FeedbackVo.getUpdateBy()));
+        FeedbackVo.setUpdateName(tripartiteUser.getNickname());
+        return FeedbackVo;
     }
 
     /**
@@ -150,43 +150,43 @@ public class FeedbackServiceImpl implements IFeedbackService {
         boolean isSucceed = update > 0;
         if (isSucceed) {
             TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
-            FeedbackVo feedbackVo = baseMapper.selectVoById(id);
+            FeedbackVo FeedbackVo = baseMapper.selectVoById(id);
             //发送系统消息
-            String content = String.format("%s 修改了任务：#%s 状态为-[%s]", tripartiteUser.getNickname(), feedbackVo.getFeedbackTitle(), FeedbackStatus.acquireStatusMessage(status));
+            String content = String.format("%s 修改了任务：#%s 状态为-[%s]", tripartiteUser.getNickname(), FeedbackVo.getFeedbackTitle(), FeedbackStatus.acquireStatusMessage(status));
             NewsSystemInfo newsSystemInfo = new NewsSystemInfo()
                 .setNewsTitle(content)
                 .setNewsContent(content)
                 .setIsDetails(1L)
                 .setType(2L)
                 .setIsMassAir(2L)
-                .setUid(feedbackVo.getUid())
+                .setUid(FeedbackVo.getUid())
                 .setCreateTime(new Date());
             newsSystemInfoMapper.insert(newsSystemInfo);
             //WebSocket推送消息
-            WebSocketSelector.execute(feedbackVo.getUid(), WebSocketEnum.INSIDE_NOTICE);
+            WebSocketSelector.execute(FeedbackVo.getUid(), WebSocketEnum.INSIDE_NOTICE);
         }
         return isSucceed;
     }
 
     @Override
     public FeedbackStatusSumVo statusSum() {
-        FeedbackStatusSumVo feedbackStatusSumVo = new FeedbackStatusSumVo();
-        List<Feedback> feedbacks = baseMapper.selectList(new LambdaQueryWrapper<Feedback>().select(Feedback::getStatus, Feedback::getId));
-        if (CollectionUtil.isEmpty(feedbacks)) return feedbackStatusSumVo;
-        Map<Integer, Long> collect = feedbacks.stream().collect(Collectors.groupingBy(Feedback::getStatus, Collectors.counting()));
+        FeedbackStatusSumVo FeedbackStatusSumVo = new FeedbackStatusSumVo();
+        List<Feedback> Feedbacks = baseMapper.selectList(new LambdaQueryWrapper<Feedback>().select(Feedback::getStatus, Feedback::getId));
+        if (CollectionUtil.isEmpty(Feedbacks)) return FeedbackStatusSumVo;
+        Map<Integer, Long> collect = Feedbacks.stream().collect(Collectors.groupingBy(Feedback::getStatus, Collectors.counting()));
         collect.forEach((k, v) -> {
             if (k.equals(FeedbackStatus.TO_BE_PROCESSED.getCode())) {
-                feedbackStatusSumVo.setToBeProcessed(v);
+                FeedbackStatusSumVo.setToBeProcessed(v);
             } else if (k.equals(FeedbackStatus.UNDER_WAY.getCode())) {
-                feedbackStatusSumVo.setUnderWay(v);
+                FeedbackStatusSumVo.setUnderWay(v);
             } else if (k.equals(FeedbackStatus.COMPLETED.getCode())) {
-                feedbackStatusSumVo.setCompleted(v);
+                FeedbackStatusSumVo.setCompleted(v);
             } else if (k.equals(FeedbackStatus.CLOSED.getCode())) {
-                feedbackStatusSumVo.setClosed(v);
+                FeedbackStatusSumVo.setClosed(v);
             }
         });
-        feedbackStatusSumVo.setAllData(Long.valueOf(feedbacks.size()));
-        return feedbackStatusSumVo;
+        FeedbackStatusSumVo.setAllData(Long.valueOf(Feedbacks.size()));
+        return FeedbackStatusSumVo;
     }
 }
 

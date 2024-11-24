@@ -18,7 +18,7 @@
         SELECT id,
                uid,
                target_id
-        FROM browsing_history
+        FROM b_browsing_history
         WHERE uid = #{uuid}
           and target_type = #{targetType}
           and target_id = #{targetId}
@@ -27,7 +27,7 @@
     </select>
 
     <insert id="insertOrUpdates">
-        insert into browsing_history (uid, target_id, target_title, target_uid, target_type, create_time, update_time)
+        insert into b_browsing_history (uid, target_id, target_title, target_uid, target_type, create_time, update_time)
         values (#{add.uid}, #{add.targetId}, #{add.targetTitle}, #{add.targetUid}, #{add.targetType}, #{add.createTime},
                 #{add.updateTime}) ON DUPLICATE KEY
         UPDATE update_time =

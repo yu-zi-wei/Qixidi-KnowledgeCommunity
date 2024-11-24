@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 
 
 /**
- * 点赞业务对象 fabulous_record
+ * 点赞业务对象 b_fabulous_record
  *
  * @author aurora
  * @date 2022-10-01

@@ -7,13 +7,13 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 文章收藏关联对象 collection_record
+ * 文章收藏关联对象 b_collection_record
  *
  * @author aurora
  * @date 2022-11-10
  */
 @Data
-@TableName("collection_record")
+@TableName("b_collection_record")
 public class CollectionRecord {
 
     private static final long serialVersionUID = 1L;

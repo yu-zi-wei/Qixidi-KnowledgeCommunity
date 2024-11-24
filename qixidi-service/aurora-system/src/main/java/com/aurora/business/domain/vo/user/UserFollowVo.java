@@ -10,7 +10,7 @@ import lombok.Data;
 
 
 /**
- * 用户关注视图对象 user_follow
+ * 用户关注视图对象 b_user_follow
  *
  * @author aurora
  * @date 2023-02-13

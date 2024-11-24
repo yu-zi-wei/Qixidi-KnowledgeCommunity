@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 /**
- * 收藏夹信息视图对象 collection_information
+ * 收藏夹信息视图对象 b_collection_information
  *
  * @author aurora
  * @date 2022-09-29

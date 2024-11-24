@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 /**
- * 私信记录视图对象 private_user
+ * 私信记录视图对象 b_private_user
  *
  * @author aurora
  * @date 2023-03-23

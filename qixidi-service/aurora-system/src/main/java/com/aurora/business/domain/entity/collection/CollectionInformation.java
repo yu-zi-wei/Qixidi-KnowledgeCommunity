@@ -7,13 +7,13 @@ import java.util.Date;
 
 
 /**
- * 收藏夹信息对象 collection_information
+ * 收藏夹信息对象 b_collection_information
  *
  * @author aurora
  * @date 2022-09-29
  */
 @Data
-@TableName("collection_information")
+@TableName("b_collection_information")
 public class CollectionInformation {
 
     private static final long serialVersionUID = 1L;

@@ -13,6 +13,6 @@ import java.util.List;
  */
 @Mapper
 public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
-    @Select("SELECT type,been_read,news_id from news_user_record where been_read=0 and uid=#{uid}")
+    @Select("SELECT type,been_read,news_id from b_news_user_record where been_read=0 and uid=#{uid}")
     List<NewsUserRecord> selectLists(String uid);
 }

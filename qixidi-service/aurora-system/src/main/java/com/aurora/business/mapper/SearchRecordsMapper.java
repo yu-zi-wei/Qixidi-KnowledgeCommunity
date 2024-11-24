@@ -19,7 +19,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface SearchRecordsMapper extends BaseMapperPlus<SearchRecordsMapper, SearchRecords, SearchRecordsVo> {
 
-    @Select("select content from search_records where uid=#{bo.uid} order by create_time desc")
+    @Select("select content from b_search_records where uid=#{bo.uid} order by create_time desc")
     IPage<SearchRecordsVo> selectContent(@Param("bo") SearchRecordsBo bo, Page<SearchRecords> build);
 }
 

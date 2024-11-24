@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 
 /**
- * 文章收藏关联业务对象 collection_record
+ * 文章收藏关联业务对象 b_collection_record
  *
  * @author aurora
  * @date 2022-11-10

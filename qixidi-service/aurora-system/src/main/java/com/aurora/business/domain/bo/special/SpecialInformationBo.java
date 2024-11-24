@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 
 /**
- * 专栏信息业务对象 special_information
+ * 专栏信息业务对象 b_special_information
  *
  * @author aurora
  * @date 2022-08-19

@@ -77,9 +77,10 @@ export default {
       let uuid = this.$base64.decode(this.$route.query.uuid);
       this.queryParams.uid = uuid;
       this.$API("/frontDesk/browsing/history/list", "get", this.queryParams).then(res => {
-        this.latelyList = res.rows;
-        this.total = res.data.total;
-        this.loading = false;
+        if (res.code == 200) {
+          this.latelyList = res.rows;
+          this.total = res.data.total;
+        }
       }).finally(() => this.loading = false)
     }
   },

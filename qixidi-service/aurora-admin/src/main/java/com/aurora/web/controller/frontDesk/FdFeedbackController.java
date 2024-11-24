@@ -38,12 +38,12 @@ import java.util.Arrays;
 @RequestMapping
 public class FdFeedbackController extends BaseController {
 
-    private final IFeedbackService iFeedbackService;
+    private final IFeedbackService IFeedbackService;
 
     @ApiOperation("查询用户状态总和")
     @GetMapping("/white/feedback/status/sum")
     public R<FeedbackStatusSumVo> statusSum() {
-        return R.ok(iFeedbackService.statusSum());
+        return R.ok(IFeedbackService.statusSum());
     }
 
     /**
@@ -52,16 +52,16 @@ public class FdFeedbackController extends BaseController {
     @ApiOperation("查询用户反馈列表")
     @GetMapping("/white/feedback/list")
     public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) FeedbackBo bo, PageQuery pageQuery) {
-        return iFeedbackService.queryPageList(bo, pageQuery);
+        return IFeedbackService.queryPageList(bo, pageQuery);
     }
 
     /**
      * 获取反馈详情
      */
     @ApiOperation("获取反馈详情")
-    @GetMapping("/white/feedback/byId/{id}")
+    @GetMapping("/white/Feedback/byId/{id}")
     public R<FeedbackVo> queryById(@PathVariable("id") Long id) {
-        return R.ok(iFeedbackService.queryById(id));
+        return R.ok(IFeedbackService.queryById(id));
     }
 
     /**
@@ -70,9 +70,9 @@ public class FdFeedbackController extends BaseController {
     @ApiOperation("新增用户反馈")
     @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PostMapping("/frontDesk/feedback/add")
+    @PostMapping("/frontDesk/Feedback/add")
     public R<Void> add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
-        return toAjax(iFeedbackService.insertByBo(bo) ? 1 : 0);
+        return toAjax(IFeedbackService.insertByBo(bo) ? 1 : 0);
     }
 
     /**
@@ -81,9 +81,9 @@ public class FdFeedbackController extends BaseController {
     @ApiOperation("更新用户反馈")
     @Log(title = "更新用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PostMapping("/frontDesk/feedback/update")
+    @PostMapping("/frontDesk/Feedback/update")
     public R<Void> update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
-        return toAjax(iFeedbackService.updateByBo(bo) ? 1 : 0);
+        return toAjax(IFeedbackService.updateByBo(bo) ? 1 : 0);
     }
 
     /**
@@ -91,9 +91,9 @@ public class FdFeedbackController extends BaseController {
      */
     @ApiOperation("更新用户反馈状态")
     @RepeatSubmit()
-    @GetMapping("/frontDesk/feedback/update/status/{id}/{status}")
+    @GetMapping("/frontDesk/Feedback/update/status/{id}/{status}")
     public R<Void> updateStatus(@PathVariable Long id, @PathVariable Integer status) {
-        return toAjax(iFeedbackService.updateStatus(id, status) ? 1 : 0);
+        return toAjax(IFeedbackService.updateStatus(id, status) ? 1 : 0);
     }
 
     /**
@@ -101,10 +101,10 @@ public class FdFeedbackController extends BaseController {
      */
     @ApiOperation("删除用户反馈")
     @RepeatSubmit()
-    @DeleteMapping("/frontDesk/feedback/delete/{ids}")
+    @DeleteMapping("/frontDesk/Feedback/delete/{ids}")
     public R<Void> delete(@ApiParam("主键串")
                           @NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] ids) {
-        return toAjax(iFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+        return toAjax(IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

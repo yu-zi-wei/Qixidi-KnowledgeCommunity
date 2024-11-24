@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface UserReportMapper extends BaseMapperPlus<UserReportMapper, UserReport, UserReportVo> {
 
-    @Select("select left(report_time,10) as reportTime from user_report where uid=#{uid} ORDER BY report_time desc")
+    @Select("select left(report_time,10) as reportTime from b_user_report where uid=#{uid} ORDER BY report_time desc")
     List<String> selectReportTime(@Param("uid") String uid);
 
-    @Select("select  COUNT(id) from user_report WHERE left(report_time,10)=#{reportTime}")
+    @Select("select  COUNT(id) from b_user_report WHERE left(report_time,10)=#{reportTime}")
     Integer selectIsReportTime(@Param("reportTime") Date reportTime);
 }

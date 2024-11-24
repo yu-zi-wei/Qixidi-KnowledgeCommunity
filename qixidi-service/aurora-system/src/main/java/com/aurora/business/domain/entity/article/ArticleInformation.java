@@ -10,14 +10,14 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 
 /**
- * 文章信息对象 article_information
+ * 文章信息对象 b_article_information
  *
  * @author aurora
  * @date 2022-08-16
  */
 @Data
 @Accessors(chain = true)
-@TableName("article_information")
+@TableName("b_article_information")
 public class ArticleInformation {
 
     private static final long serialVersionUID = 1L;

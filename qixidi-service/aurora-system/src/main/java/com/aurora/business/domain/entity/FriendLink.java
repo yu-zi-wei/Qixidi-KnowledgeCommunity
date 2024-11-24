@@ -14,7 +14,7 @@ import java.util.Date;
  * @date 2024年09月17日
  */
 @Data
-@TableName("friend_link")
+@TableName("b_friend_link")
 public class FriendLink {
     @TableId(type = IdType.AUTO)
     private Long id;

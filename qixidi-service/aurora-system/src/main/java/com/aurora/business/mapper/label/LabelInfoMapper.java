@@ -25,7 +25,7 @@ public interface LabelInfoMapper extends BaseMapperPlus<LabelInfoMapper, LabelIn
 
     Page<LabelInfoVo> selectVoPages(@Param("bo") LabelInfoBo bo, Page<LabelInfo> build);
 
-    @Select("select id,label_name from label_info where `state`=0")
+    @Select("select id,label_name from b_label_info where `state`=0")
     List<LabelInfoVo> selectSimpleList();
 
     int updateTaskList(@Param("list") List<LabelInfoVo> list1);

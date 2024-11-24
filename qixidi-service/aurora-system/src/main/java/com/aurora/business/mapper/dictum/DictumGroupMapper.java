@@ -24,10 +24,10 @@ public interface DictumGroupMapper extends BaseMapperPlus<DictumGroupMapper, Dic
 
     IPage<DictumGroupVo> selectVoPageXml(@Param("bo") DictumGroupBo bo, Page<Object> build);
 
-    @Update("update dictum_group set employ_sum=employ_sum+1 where id=#{id}")
+    @Update("update b_dictum_group set employ_sum=employ_sum+1 where id=#{id}")
     Integer addEmploySum(@Param("id") Long groupId);
 
-    @Update("update dictum_group set employ_sum=employ_sum-1 where id=#{id}")
+    @Update("update b_dictum_group set employ_sum=employ_sum-1 where id=#{id}")
     Integer deleteEmploySum(@Param("id") Long groupId);
 
     Integer updateList(@Param("list") List<DictumInfoVo> dictumInfoVos);

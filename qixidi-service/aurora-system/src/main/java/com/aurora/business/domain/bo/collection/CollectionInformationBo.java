@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 
 
 /**
- * 收藏夹信息业务对象 collection_information
+ * 收藏夹信息业务对象 b_collection_information
  *
  * @author aurora
  * @date 2022-09-29

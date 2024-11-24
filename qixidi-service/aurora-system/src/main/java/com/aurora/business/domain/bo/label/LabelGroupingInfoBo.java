@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 
 /**
- * 标签分组信息业务对象 label_grouping_info
+ * 标签分组信息业务对象 b_label_grouping_info
  *
  * @author aurora
  * @date 2022-08-16

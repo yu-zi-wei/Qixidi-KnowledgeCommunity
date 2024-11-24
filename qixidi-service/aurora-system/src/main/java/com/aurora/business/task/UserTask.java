@@ -57,7 +57,7 @@ public class UserTask {
     }
 
     /**
-     * 用户网站数据同步（count_user_website）
+     * 用户网站数据同步（b_count_user_website）
      * 每小时同步一次
      *
      * @throws Exception
@@ -94,7 +94,7 @@ public class UserTask {
 
             //            用户名言总数
             List<CountUserWebsiteVo> dictumInfo = dictumInfoMapper.selectDictumInfo();
-            Integer dictumInfoSum = countUserWebsiteMapper.updateList(dictumInfo, CountUserType.DICTUM_INFO_COUNT.getCode());
+            Integer dictumInfoSum = countUserWebsiteMapper.updateList(dictumInfo, CountUserType.b_dictum_info_COUNT.getCode());
             log.info("用户名言总数同步完成，同步数：{}", dictumInfoSum);
 
             //  修复异常数据
@@ -105,7 +105,7 @@ public class UserTask {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("用户网站数据同步  执行异常异常：{}", e.getMessage());
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "用户网站数据同步（count_user_website,useWebsiteSync）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "用户网站数据同步（b_count_user_website,useWebsiteSync）任务异常", e.getMessage());
         }
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCING_USER_SITE_DATA.getCode());
     }

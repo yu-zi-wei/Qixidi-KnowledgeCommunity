@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 /**
- * 用户订单视图对象 user_order
+ * 用户订单视图对象 b_user_order
  *
  * @author aurora
  * @date 2023-04-04

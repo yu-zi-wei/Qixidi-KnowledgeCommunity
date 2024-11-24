@@ -27,10 +27,10 @@ public interface TripartiteUserMapper extends BaseMapperPlus<TripartiteUserMappe
 
     int updateACurrency(@Param("uid") String uid, @Param("rechargeCurrency") Long rechargeCurrency);
 
-    @Select("select a_currency from user_main where uuid=#{uuid}")
+    @Select("select a_currency from b_user_main where uuid=#{uuid}")
     Long selectAcurrency(@Param("uuid") String uuid);
 
-    @Select("select nickname,email from user_main where phone=#{phone} and state=0")
+    @Select("select nickname,email from b_user_main where phone=#{phone} and state=0")
     TripartiteUser selectPhone(@Param("phone") String phone);
 
     List<TripartiteUserVo> selectPrivacy();

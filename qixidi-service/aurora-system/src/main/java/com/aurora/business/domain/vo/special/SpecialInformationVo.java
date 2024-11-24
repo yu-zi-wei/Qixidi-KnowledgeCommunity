@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 /**
- * 专栏信息视图对象 special_information
+ * 专栏信息视图对象 b_special_information
  *
  * @author aurora
  * @date 2022-08-19

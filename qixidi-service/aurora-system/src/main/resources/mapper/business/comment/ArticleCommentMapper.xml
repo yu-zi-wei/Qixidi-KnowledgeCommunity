@@ -19,9 +19,9 @@
                ac.type,
                ac.create_time,
                ac.comment_grade
-        FROM article_comment AS ac
-                 LEFT JOIN user_main AS um ON ac.target_uid = um.uuid
-                 LEFT JOIN user_main AS um2 ON ac.comment_uid = um2.uuid
+        FROM b_article_comment AS ac
+                 LEFT JOIN b_user_main AS um ON ac.target_uid = um.uuid
+                 LEFT JOIN b_user_main AS um2 ON ac.comment_uid = um2.uuid
         where ac.state = 0
           and ac.article_id = #{articleId}
         order by ac.create_time desc
@@ -29,6 +29,6 @@
 
     <select id="selectBasicsLis" resultType="com.aurora.business.domain.vo.comment.ArticleCommentVo">
         select *
-        from article_information ;
+        from b_article_information ;
     </select>
 </mapper>

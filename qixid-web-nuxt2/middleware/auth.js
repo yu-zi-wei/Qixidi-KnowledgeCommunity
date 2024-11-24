@@ -15,6 +15,8 @@ const whiteList = [
   '/dictum',
   '/xxx',
   '/transfer/**',
+  '/last-article',
+  '/user_home/**',
   '/popular-group/**',
   '/article/article-details/**',
   '/external_info/**',

@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@TableName("user_information")
+@TableName("b_user_information")
 @ApiModel("前台用户基本")
 @Accessors(chain = true)
 public class UserInformation {

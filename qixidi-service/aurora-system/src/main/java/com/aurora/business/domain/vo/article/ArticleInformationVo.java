@@ -17,7 +17,7 @@ import java.util.Set;
 
 
 /**
- * 文章信息视图对象 article_information
+ * 文章信息视图对象 b_article_information
  *
  * @author aurora
  * @date 2022-08-16

@@ -469,7 +469,9 @@ export default {
     fdUserDatas() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
       this.$API("/white/user/data/" + uuid, "get").then(res => {
-        this.userData = res.data;
+        if (res.code == 200) {
+          this.userData = res.data;
+        }
       }).finally(() => this.userDataLoading = false)
     }
     ,
@@ -486,7 +488,9 @@ export default {
           this.currentUser = false;
           return;
         }
-        this.userInfos = res.data;
+        if (res.code == 200) {
+          this.userInfos = res.data;
+        }
         if (res.data != null && res.data.uuid == uuid) {
           this.currentUser = true;
           return;

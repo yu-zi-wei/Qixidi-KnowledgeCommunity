@@ -8,13 +8,13 @@ import java.util.Date;
 
 
 /**
- * 名言信息对象 dictum_info
+ * 名言信息对象 b_dictum_info
  *
  * @author aurora
  * @date 2023-04-24
  */
 @Data
-@TableName("dictum_info")
+@TableName("b_dictum_info")
 public class DictumInfo {
 
     private static final long serialVersionUID = 1L;

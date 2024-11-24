@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * 用户浏览历史
  * <p>
- * 视图对象 browsing_history
+ * 视图对象 b_browsing_history
  *
  * @author aurora
  * @date 2023-04-24

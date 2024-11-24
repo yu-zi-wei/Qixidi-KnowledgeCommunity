@@ -47,9 +47,9 @@
                um.nickname,
                um.avatar,
                um.occupation
-        from article_information as ai
-                 left join user_main as um on ai.user_id = um.uuid
-                 left join label_grouping_info as lgi on lgi.id = ai.grouping_id
+        from b_article_information as ai
+                 left join b_user_main as um on ai.user_id = um.uuid
+                 left join b_label_grouping_info as lgi on lgi.id = ai.grouping_id
     </sql>
     <select id="selectIndex" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
         <include refid="ArticleInformationVo"/>
@@ -138,9 +138,9 @@
                cuw.special_column_count,
                cuw.fans_special_column,
                cuw.circle_count
-        from article_information as ai
-                 left join user_main as um on ai.user_id = um.uuid
-                 left JOIN count_user_website AS cuw ON ai.user_id = cuw.uuid
+        from b_article_information as ai
+                 left join b_user_main as um on ai.user_id = um.uuid
+                 left JOIN b_count_user_website AS cuw ON ai.user_id = cuw.uuid
         where ai.id = #{id}
     </select>
 
@@ -179,7 +179,7 @@
     </select>
 
     <update id="updateAdd">
-        update article_information
+        update b_article_information
         <trim prefix="SET" suffixOverrides=",">
             <if test="code==1">
                 like_times=like_times+1
@@ -198,7 +198,7 @@
     </update>
 
     <update id="updateDelete">
-        update article_information
+        update b_article_information
         <trim prefix="SET" suffixOverrides=",">
             <if test="code==1">
                 like_times=like_times-1
@@ -236,20 +236,20 @@
                number_times,
                audit_state,
                collection_times
-        from article_information
+        from b_article_information
         where id = #{id}
           and `state` !=1
     </select>
 
     <update id="updateSpecial">
-        update article_information set special_id=#{id} where id in
+        update b_article_information set special_id=#{id} where id in
         <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>
 
     <update id="updateDeleteNumber">
-        update article_information
+        update b_article_information
         <trim prefix="SET" suffixOverrides=",">
             <if test="code==1">
                 like_times=like_times-#{size}
@@ -276,7 +276,7 @@
                like_times,
                comment_times,
                create_time
-        FROM article_information
+        FROM b_article_information
         WHERE audit_state = 2
           AND `state` = 0
           AND platform_type = 1
@@ -291,7 +291,7 @@
         article_title as title,
         substring( `create_time`, 1, 7 ) AS dateTimes
         FROM
-        article_information
+        b_article_information
         <where>
             state =0
             and substring( `create_time`, 1, 7)=#{bo.month}
@@ -304,7 +304,7 @@
         article_title as title,
         substring( `create_time`, 1, 4 ) AS dateTimes
         FROM
-        article_information
+        b_article_information
         <where>
             state =0
             and substring( `create_time`, 1, 4)=#{bo.year}
@@ -318,7 +318,7 @@
         special_id,
         create_time
         FROM
-        article_information
+        b_article_information
         <where>
             state =0
             and user_id=#{bo.uid} and special_id!=null
@@ -327,7 +327,7 @@
 
     <select id="selectData" resultType="com.aurora.business.domain.vo.article.ArticleInformationVo">
         select id, article_title, like_times, comment_times, collection_times, number_times, create_time
-        from article_information
+        from b_article_information
         where `state` = 0
           and audit_state = 2
           AND id > #{id} LIMIT #{size};
@@ -336,7 +336,7 @@
     <update id="updateListHeatWeight">
         <foreach collection="list" item="item" separator=";">
             update
-            `article_information`
+            `b_article_information`
             set
             `heat_weight` = #{item.heatWeight}
             where `id` = #{item.id}
@@ -345,7 +345,7 @@
 
     <select id="selectUserArticleTask" resultType="com.aurora.business.domain.vo.CountUserWebsiteVo">
         SELECT user_id as uuid, count(user_id) as articleCount
-        FROM `article_information`
+        FROM `b_article_information`
         where state = 0
           and audit_state = 2
         GROUP BY user_id
@@ -375,9 +375,9 @@
         um.nickname,
         um.avatar,
         um.occupation
-        FROM user_follow AS uf
-        LEFT JOIN article_information AS ai ON ai.user_id = uf.target_id
-        LEFT JOIN user_main AS um ON ai.user_id = um.uuid
+        FROM b_user_follow AS uf
+        LEFT JOIN b_article_information AS ai ON ai.user_id = uf.target_id
+        LEFT JOIN b_user_main AS um ON ai.user_id = um.uuid
         WHERE uf.uid = #{bo.uid}
         AND uf.type = 1
         AND uf.state = 0
@@ -409,7 +409,7 @@
 
     <select id="submissionCensus" resultType="com.aurora.common.core.domain.vo.CensusVo">
         SELECT DATE_FORMAT(create_time, '%Y-%m-%d') as dateTimes, count(id) as censusSum
-        from article_information
+        from b_article_information
         where DATE_FORMAT(create_time, '%Y-%m-%d')<![CDATA[ >= ]]>#{time}
           and user_id = #{uuid}
           and platform_type = 1
@@ -432,7 +432,7 @@
         audit_state as auditState,
         create_time as createTime,
         update_time as updateTime
-        from article_information
+        from b_article_information
         <where>
             and `state`=0
             and `platform_type`=1

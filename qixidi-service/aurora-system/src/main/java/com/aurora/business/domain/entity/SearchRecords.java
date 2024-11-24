@@ -9,13 +9,13 @@ import java.util.Date;
 
 
 /**
- * 搜索记录对象 search_records
+ * 搜索记录对象 b_search_records
  *
  * @author aurora
  * @date 2023-04-18
  */
 @Data
-@TableName("search_records")
+@TableName("b_search_records")
 public class SearchRecords {
 
     private static final long serialVersionUID = 1L;

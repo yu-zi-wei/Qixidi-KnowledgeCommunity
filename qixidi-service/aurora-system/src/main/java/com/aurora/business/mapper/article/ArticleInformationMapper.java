@@ -40,13 +40,13 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     List<ArticleInformationVo> relatedList(@Param("bo") ArticleInformationBo bo, @Param("pageQuery") PageQuery pageQuery);
 
-    @Update("update article_information set like_times = like_times+1 where id=#{id}")
+    @Update("update b_article_information set like_times = like_times+1 where id=#{id}")
     Integer updateLikeTimes(Long id);
 
     @Select("")
     Long selectByUid(Long id);
 
-    @Select("select id,user_id,article_title,audit_state,update_time from article_information where id=#{id}")
+    @Select("select id,user_id,article_title,audit_state,update_time from b_article_information where id=#{id}")
     ArticleInformationVo basicInfo(@Param("id") Long id);
 
     Page<ArticleInformationVo> getArticleInfo(@Param("bo") ArticleInformationBo bo, Page<ArticleInformation> build);
@@ -61,12 +61,12 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     ArticleInformationVo selectVoByIds(@Param("id") Long id);
 
-    @Select("select id,user_id,article_title,update_time from article_information where user_id=#{bo.userId} and state=0 ")
+    @Select("select id,user_id,article_title,update_time from b_article_information where user_id=#{bo.userId} and state=0 ")
     List<ArticleInformationVo> selectTime(@Param("bo") ArticleInformationBo bo);
 
     int updateSpecial(@Param("ids") List<String> ids, @Param("id") Long id);
 
-    @Select("select id,user_id,article_title,update_time from article_information " +
+    @Select("select id,user_id,article_title,update_time from b_article_information " +
         "where user_id=#{uid} and special_id=#{id} and state=0")
     List<ArticleInformationVo> selectSpecial(@Param("id") Long id, @Param("uid") String uid);
 
@@ -86,14 +86,14 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     List<CountUserWebsiteVo> selectUserArticleTask();
 
-    @Select("select audit_state,is_public from article_information where id=#{id} and state=0")
+    @Select("select audit_state,is_public from b_article_information where id=#{id} and state=0")
     ArticleInformationVo selectAuditStatus(@Param("id") Long id);
 
     Page<ArticleInformationVo> FollowArticleInfoList(@Param("bo") SortTypeBo bo, Page<ArticleInformation> build);
 
     Page<ArticleInformationVo> LabelGArticleInfoList(@Param("bo") SortTypeBo bo, Page<ArticleInformation> build);
 
-    @Select("select label_id from article_information where audit_state=2 and state=0 and label_id is not null and label_id!=''")
+    @Select("select label_id from b_article_information where audit_state=2 and state=0 and label_id is not null and label_id!=''")
     List<String> selectLabel();
 
     IPage<ArticleInformationVo> articleRecommendList(@Param("bo") ArticleInformationBo bo,@Param("labelResult") String labelResult, Page<Object> build);

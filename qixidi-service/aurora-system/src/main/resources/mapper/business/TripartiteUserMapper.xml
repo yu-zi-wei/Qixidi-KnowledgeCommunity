@@ -30,8 +30,8 @@
                         cuw.circle_count,
                         cuw.album_count,
                         cuw.dictum_count
-        FROM user_main AS um
-                 LEFT JOIN count_user_website AS cuw ON um.uuid = cuw.uuid
+        FROM b_user_main AS um
+                 LEFT JOIN b_count_user_website AS cuw ON um.uuid = cuw.uuid
     </sql>
     <select id="selectWebInfo" resultType="com.aurora.business.domain.vo.user.TripartiteUserVo">
         SELECT um.uuid,
@@ -67,9 +67,9 @@
                ui.empirical,
                ui.grade,
                ui.user_state
-        FROM user_main AS um
-                 LEFT JOIN count_user_website AS cuw ON um.uuid = cuw.uuid
-                 LEFT JOIN user_information as ui on ui.uuid = um.uuid
+        FROM b_user_main AS um
+                 LEFT JOIN b_count_user_website AS cuw ON um.uuid = cuw.uuid
+                 LEFT JOIN b_user_information as ui on ui.uuid = um.uuid
         WHERE um.uuid = #{uuid}
           and um.state = 0;
     </select>
@@ -97,8 +97,8 @@
                cuw.special_column_count,
                cuw.special_column_count,
                cuw.circle_count
-        FROM user_main AS um
-                 LEFT JOIN count_user_website AS cuw ON um.uuid = cuw.uuid
+        FROM b_user_main AS um
+                 LEFT JOIN b_count_user_website AS cuw ON um.uuid = cuw.uuid
         WHERE um.uuid = #{uuid}
           AND um.state = 0
     </select>
@@ -113,7 +113,7 @@
     </select>
 
     <update id="updateACurrency">
-        update user_main
+        update b_user_main
         set a_currency=a_currency + #{rechargeCurrency}
         where uuid = #{uid}
     </update>
@@ -130,7 +130,7 @@
                um.role_id,
                um.create_time,
                um.phone
-        FROM user_main AS um
+        FROM b_user_main AS um
         WHERE um.state = 0 and um.email!=null
     </select>
 </mapper>

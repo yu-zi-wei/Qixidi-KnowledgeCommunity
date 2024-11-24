@@ -14,7 +14,7 @@ import java.util.Date;
 
 
 /**
- * 文章收藏关联视图对象 collection_record
+ * 文章收藏关联视图对象 b_collection_record
  *
  * @author aurora
  * @date 2022-11-10

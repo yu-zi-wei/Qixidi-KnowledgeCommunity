@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 
 /**
- * 名言专辑业务对象 dictum_album
+ * 名言专辑业务对象 b_dictum_album
  *
  * @author aurora
  * @date 2023-04-24

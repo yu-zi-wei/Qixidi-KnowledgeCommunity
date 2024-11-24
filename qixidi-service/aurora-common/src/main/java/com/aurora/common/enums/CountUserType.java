@@ -14,7 +14,7 @@ public enum CountUserType {
     FANS_SPECIAL_COLUMN(10, "被关注专栏数 "),
     CIRCLE_COUNT(11, "圈子数 "),
     ALBUM_COUNT(12, "专辑数"),
-    DICTUM_INFO_COUNT(13, "名言数"),
+    b_dictum_info_COUNT(13, "名言数"),
     ;
     private Integer code;
     private String value;

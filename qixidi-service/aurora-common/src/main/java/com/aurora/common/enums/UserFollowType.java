@@ -1,7 +1,7 @@
 package com.aurora.common.enums;
 
 public enum UserFollowType {
-    USER_FOLLOW(1, "用户关注"),
+    b_user_follow(1, "用户关注"),
     LABEL_FOLLOW(2, "标签关注"),
     ACTIVITY_FOLLOW(3, "活动关注"),
     CIRCLE_FOLLOW(4, "圈子关注"),

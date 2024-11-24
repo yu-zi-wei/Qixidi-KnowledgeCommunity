@@ -16,5 +16,5 @@ mvn clean package -P prod
 ```
 
 ### 数据表文档
-- article_information
+- b_article_information
 > id：（-11：关于作者）
