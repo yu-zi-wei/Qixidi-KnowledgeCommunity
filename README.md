@@ -23,7 +23,6 @@
 ### 目录结构
 ```text
 qixidi/
-│
 └── qixidi-service  # 项目后端（SpringBoot）
     │
     ├── aurora-admin # 后台启动模块
