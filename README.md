@@ -22,12 +22,41 @@
 
 ### 目录结构
 ```text
-qixidi
-├── qixidi-service  # 项目后端（SpringBoot）
+qixidi/
+│
+└── qixidi-service  # 项目后端（SpringBoot）
+    │
+    ├── aurora-admin # 后台启动模块
+    │
+    ├── aurora-common # 公共模块
+    │
+    ├── aurora-framework # 框架核心
+    │
+    ├── aurora-oss # 云存储模块
+    │
+    ├── aurora-system # 项目业务模块
+    │
+    ├── sql  # sql文件
+    │
 ├── qixid-web-nuxt2  # 项目前台（Nuxt）
+│
 └── qixidi-web-admin  # 项目后台（Vue）
 
 ```
+> **数据库中提供了默认登录账号**
+> 
+> **前台账号：**
+> 
+> 账号：2978824265@qq.com
+> 
+> 密码：123456
+> 
+> **后台账号：**
+> 
+> 账号：admin
+> 
+> 密码：123456
+
 ## 主要技术栈🏮
 
 ### 后端
