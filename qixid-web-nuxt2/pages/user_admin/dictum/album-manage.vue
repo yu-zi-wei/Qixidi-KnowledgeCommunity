@@ -175,6 +175,9 @@ export default {
   methods: {
     updateAlbums() {
       this.buttonLoading = true;
+      if (this.albumValue.length != 0) {
+        this.albumInfo.cover = this.albumValue[0].url;
+      }
       this.$API("/frontDesk/dictum/album", "put", null, this.albumInfo).then(res => {
         if (res.cone = 200) {
           this.$modal.msgSuccess("更新成功!");
@@ -225,11 +228,12 @@ export default {
   margin-bottom: 15px;
   transition: .2s;
   border-radius: 4px;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  border: 1px solid #fef0f0;
 }
 
 .album-info-cl:hover {
-  transform: translateY(-2px);
+  border: 1px solid var(--theme-color);
 }
 
 .home-top-index {

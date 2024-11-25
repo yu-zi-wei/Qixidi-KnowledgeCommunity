@@ -56,7 +56,7 @@
                           @click="deletePrivate(item)"></i></div>
                 </div>
               </el-menu-item>
-              <div v-if="privateUserList.length==0" class="color-grey5 font-s-14 text-center">
+              <div v-if="privateUserList.length==0" class="color-grey-2 mt-20 font-s-14 text-center">
                 暂无私信!
               </div>
             </el-menu>

@@ -8,7 +8,9 @@
           <div class="fl-li-cl">
             邮箱绑定
             <span class="font-s-14 color-grey ml-20">
-              {{ (userInfo.email == null || userInfo.email == '') ? '未绑定' : $utils.handleEmail(userInfo.email) }}</span>
+              {{
+                (userInfo.email == null || userInfo.email == '') ? '未绑定' : $utils.handleEmail(userInfo.email)
+              }}</span>
           </div>
           <div class="fr-li-cl">
             <el-button type="text" v-if="userInfo.email==null ||userInfo.email==''" @click="emailBinding(1)">
@@ -23,7 +25,9 @@
         <div class="flex-space-between">
           <div class="fl-li-cl">手机号换绑
             <span class="font-s-14 color-grey ml-20">
-              {{ (userInfo.phone == null || userInfo.phone == '') ? '未绑定' : $utils.handlePhone(userInfo.phone) }}</span>
+              {{
+                (userInfo.phone == null || userInfo.phone == '') ? '未绑定' : $utils.handlePhone(userInfo.phone)
+              }}</span>
           </div>
           <div>
             <el-button type="text" v-if="userInfo.phone==null  ||userInfo.phone==''" @click="phoneBinding(4)">
@@ -97,13 +101,13 @@
           <el-input v-model="userBindBo.phone" placeholder="手机号"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-row>
+          <el-row v-if="userBindBo.type==3">
             <el-col :span="15">
               <el-input v-model="userBindBo.code" placeholder="验证码"></el-input>
             </el-col>
             <el-col :span="1" style="height: 1px">
             </el-col>
-            <el-col :span="8" v-if="userBindBo.type==3">
+            <el-col :span="8">
               <el-button :loading="registerLoading" type="primary" key="key" :disabled="disable"
                          @click="setPhoneCode(userBindBo.originalData,'手机号绑定')">{{ getCode }}
               </el-button>
@@ -159,7 +163,7 @@ export default {
       registerLoading: false,
       emailLoading: false,
       phoneLoading: false,
-      getCode: '获取验证码',
+        getCode: '获取验证码',
       count: 60,
       disable: false,
       userInfo: {},
@@ -198,6 +202,10 @@ export default {
   },
   methods: {
     passwordReset() {
+      if (this.userInfo.phone == null || this.userInfo.phone == '') {
+        this.$modal.notifyError("请先绑定手机号！");
+        return;
+      }
       this.dialogVisible = true;
       this.registerFrom.phone = this.userInfo.phone;
     },
@@ -209,6 +217,10 @@ export default {
       this.phoneLoading = true;
     },
     emailBinding(type) {
+      if (this.userInfo.phone == null || this.userInfo.phone == '') {
+        this.$modal.notifyError("请先绑定手机号！");
+        return;
+      }
       if (type == 2) {
         this.userBindBo.originalData = this.userInfo.email;
       }
@@ -220,7 +232,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           this.$API("/update/user/email", "put", null, this.userBindBo).then(res => {
-            if (res.code = 200) {
+            if (res.code == 200) {
               this.$modal.notifySuccess("绑定成功！");
               this.emailLoading = false;
               this.phoneLoading = false;
@@ -266,7 +278,7 @@ export default {
             code: this.registerFrom.code == null ? null : this.$base64.encode(this.registerFrom.code),
             registerType: 2
           }
-          this.$API("/oauth/reset/password", "get", fromData).then(res => {
+          this.$API("/oauth/reset/password", "post", null, fromData).then(res => {
             if (res.code === 200) {
               this.$modal.notifySuccess("密码重置成功，重新登录生效！");
             }
@@ -280,12 +292,15 @@ export default {
     getVerifyCodes(phone, mag) {
       this.$refs['registerFrom'].validate((valid) => {
         if (valid) {
-          console.log("phone:", phone)
           this.setPhoneCode(phone, mag);
         }
       });
     },
     setPhoneCode(phone, mag) {
+      if (phone == "" || phone == null) {
+        this.$modal.notifyError("请先绑定手机号！");
+        return;
+      }
       this.registerLoading = true;
       this.getCode = "发送中";
       this.$API(`/oauth/phone/code/${phone}/${mag}`, "get").then().finally(() => this.registerLoading = false)

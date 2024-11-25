@@ -150,6 +150,8 @@ export default {
       loading: true,
       scrollLoading: true,
       moreLoading: true,
+      debounceTimer: null,//防抖
+      debounceTime: 400,//防抖时间
     }
   },
   watch: {
@@ -177,14 +179,17 @@ export default {
       }).finally(() => this.loading = false)
     },
     dictumInfoRoleLists() {
-      this.queryParams.pageNum = 1;
-      this.queryParams.dictumState = this.state;
-      this.queryParams.articleTitle = this.keyword;
-      this.loading = true;
-      this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
-        this.dictumList = res.rows;
-        this.total = res.total;
-      }).finally(() => this.loading = false);
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        this.queryParams.pageNum = 1;
+        this.queryParams.dictumState = this.state;
+        this.queryParams.articleTitle = this.keyword;
+        this.loading = true;
+        this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
+          this.dictumList = res.rows;
+          this.total = res.total;
+        }).finally(() => this.loading = false);
+      }, this.debounceTime);
     },
 
     getData() {

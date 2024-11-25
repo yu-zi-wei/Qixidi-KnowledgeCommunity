@@ -160,10 +160,10 @@ export default {
   },
   watch: {
     state() {
-      this.getArticleInfos();
+      this.getArticleInfosDebounce();
     },
     keyword() {
-      this.getArticleInfos();
+      this.getArticleInfosDebounce();
     },
   },
   methods: {

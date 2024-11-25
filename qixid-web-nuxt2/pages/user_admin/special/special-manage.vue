@@ -162,6 +162,8 @@ export default {
         specialName: null,
       },
       value: [],
+      debounceTimer: null,//防抖
+      debounceTime: 400,//防抖时间
     }
   },
   watch: {
@@ -264,10 +266,13 @@ export default {
       });
     },
     specialListUids() {
-      this.$API("/white/special/list", "get", this.queryParams).then(res => {
-        this.specialUserList = res.data;
-        this.loading = false;
-      })
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        this.$API("/white/special/list", "get", this.queryParams).then(res => {
+          this.specialUserList = res.data;
+          this.loading = false;
+        })
+      }, this.debounceTime);
     }
   },
   mounted() {
