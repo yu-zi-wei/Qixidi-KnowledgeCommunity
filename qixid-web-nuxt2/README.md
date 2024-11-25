@@ -1,4 +1,4 @@
-# aurora-nuxtv2
+# aurora-nuxt2
 
 ## 启动，部署文档
 

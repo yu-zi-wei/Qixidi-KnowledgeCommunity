@@ -72,6 +72,10 @@
   transform: translateY(0.1875rem);
 }
 
+.svg-translateY-1 {
+  transform: translateY(1px);
+}
+
 .svg-translateY-2 {
   transform: translateY(2px);
 }
