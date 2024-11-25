@@ -1,6 +1,4 @@
 package com.aurora.business.service.impl;
-
-
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
@@ -382,7 +380,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         mags.append("<div style=\"text-align: center\">");
         mags.append("<p>验证码</p>");
         mags.append("<p style=\"font-weight: bold;font-size: 26px\">" + code + "</p>");
-        mags.append("<p>【Aurora】您正在进行" + mag + "，您的验证码为：<b>" + code + "</b>,转发他人可能导致账号被盗，请勿泄露，谨防被骗；</p>");
+        mags.append("<p>【栖息地】您正在进行" + mag + "，您的验证码为：<b>" + code + "</b>,转发他人可能导致账号被盗，请勿泄露，谨防被骗；</p>");
         mags.append("</div>");
         log.info("操作类型：{}，验证码：{}", mag, code);
         try {
@@ -442,7 +440,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
                 mags.append("<div style=\"text-align: center\">");
                 mags.append("<p>密码重置</p>");
                 mags.append("<p style=\"font-weight: bold;font-size: 26px\">" + tripartiteUser.getNickname() + "</p>");
-                mags.append("<p>【Aurora】您的密码已重置成功，请牢记密码，若不是本人操作可前往官网反馈！</p>");
+                mags.append("<p>【栖息地】您的密码已重置成功，请牢记密码，若不是本人操作可前往官网反馈！</p>");
                 mags.append("</div>");
                 try {
                     MailUtils.sendHtml(tripartiteUser.getEmail(), "密码重置", mags.toString());
@@ -557,6 +555,15 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             String redisKey = String.format(RedisKeyEnums.PHONE_CAPTCHA.getKey(), bo.getOriginalData());
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
+            int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
+                .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
+            return update > 0;
+        }
+        if (bo.getType().equals(4)) {// 手机号绑定
+            phoneMatches(bo.getPhone(), 1);
+            Map<String, String> collect = tripartiteUserVo.stream().collect(Collectors.toMap(TripartiteUserVo::getPhone, TripartiteUserVo::getPhone));
+            if (collect.get(bo.getPhone()) != null && !collect.get(bo.getPhone()).equals(bo.getUuid()))
+                throw new ServiceException("手机号已被使用");
             int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
                 .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
             return update > 0;

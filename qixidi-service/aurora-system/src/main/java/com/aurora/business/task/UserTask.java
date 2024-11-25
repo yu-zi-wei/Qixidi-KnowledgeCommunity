@@ -1,5 +1,6 @@
 package com.aurora.business.task;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.aurora.business.domain.vo.CountUserWebsiteVo;
 import com.aurora.business.mapper.SystemTaskConfigMapper;
 import com.aurora.business.mapper.article.ArticleInformationMapper;
@@ -67,36 +68,44 @@ public class UserTask {
         try {
 //        查询用户文章总数
             List<CountUserWebsiteVo> articleTask = articleInformationMapper.selectUserArticleTask();
-            Integer articleTaskSum = countUserWebsiteMapper.updateList(articleTask, CountUserType.ARTICLE_COUNT.getCode());
-            log.info("用户文章总数同步完成，同步数：{}", articleTaskSum);
-
+            if (CollectionUtil.isNotEmpty(articleTask)) {
+                Integer articleTaskSum = countUserWebsiteMapper.updateList(articleTask, CountUserType.ARTICLE_COUNT.getCode());
+                log.info("用户文章总数同步完成，同步数：{}", articleTaskSum);
+            }
 //        查询用户评论总数
 
 //         查询关注总数
             List<CountUserWebsiteVo> followTask = userFollowMapper.selectFollowTask();
-            Integer followTaskSum = countUserWebsiteMapper.updateList(followTask, CountUserType.FOLLOW_COUNT.getCode());
-            log.info("用户关注总数同步完成，同步数：{}", followTaskSum);
+            if (CollectionUtil.isNotEmpty(followTask)) {
+                Integer followTaskSum = countUserWebsiteMapper.updateList(followTask, CountUserType.FOLLOW_COUNT.getCode());
+                log.info("用户关注总数同步完成，同步数：{}", followTaskSum);
+            }
 
 //         查询专栏总数
             List<CountUserWebsiteVo> specialTask = specialInformationMapper.selectSpecialTask();
-            Integer specialTaskSum = countUserWebsiteMapper.updateList(specialTask, CountUserType.SPECIAL_COLUMN_COUNT.getCode());
-            log.info("用户专栏总数同步完成，同步数：{}", specialTaskSum);
-
+            if (CollectionUtil.isNotEmpty(specialTask)) {
+                Integer specialTaskSum = countUserWebsiteMapper.updateList(specialTask, CountUserType.SPECIAL_COLUMN_COUNT.getCode());
+                log.info("用户专栏总数同步完成，同步数：{}", specialTaskSum);
+            }
 //            用户收藏夹总数
             List<CountUserWebsiteVo> collectionTask = collectionRecordMapper.selectCollectionTask();
-            Integer collectionTaskSum = countUserWebsiteMapper.updateList(collectionTask, CountUserType.COLLECTION_COUNT.getCode());
-            log.info("收藏夹总数同步完成，同步数：{}", collectionTaskSum);
+            if (CollectionUtil.isNotEmpty(collectionTask)) {
+                Integer collectionTaskSum = countUserWebsiteMapper.updateList(collectionTask, CountUserType.COLLECTION_COUNT.getCode());
+                log.info("收藏夹总数同步完成，同步数：{}", collectionTaskSum);
+            }
 
             //            用户专辑总数
             List<CountUserWebsiteVo> albumTask = dictumAlbumMapper.selectAlbumTask();
-            Integer albumTaskSum = countUserWebsiteMapper.updateList(albumTask, CountUserType.ALBUM_COUNT.getCode());
-            log.info("专辑总数同步完成，同步数：{}", albumTaskSum);
-
+            if (CollectionUtil.isNotEmpty(albumTask)) {
+                Integer albumTaskSum = countUserWebsiteMapper.updateList(albumTask, CountUserType.ALBUM_COUNT.getCode());
+                log.info("专辑总数同步完成，同步数：{}", albumTaskSum);
+            }
             //            用户名言总数
             List<CountUserWebsiteVo> dictumInfo = dictumInfoMapper.selectDictumInfo();
-            Integer dictumInfoSum = countUserWebsiteMapper.updateList(dictumInfo, CountUserType.b_dictum_info_COUNT.getCode());
-            log.info("用户名言总数同步完成，同步数：{}", dictumInfoSum);
-
+            if (CollectionUtil.isNotEmpty(dictumInfo)) {
+                Integer dictumInfoSum = countUserWebsiteMapper.updateList(dictumInfo, CountUserType.b_dictum_info_COUNT.getCode());
+                log.info("用户名言总数同步完成，同步数：{}", dictumInfoSum);
+            }
             //  修复异常数据
             Integer extremelyInteger = countUserWebsiteMapper.updateExtremelyDate();
             log.info("异常数据完成，修复完成数：{}", extremelyInteger);
