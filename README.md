@@ -94,7 +94,7 @@ qixidi/
 ![前台功能.png](img%2F%E5%89%8D%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
 
 ### 前台页面截图
-![登录.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%99%BB%E5%BD%95.png)
+![登录页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%99%BB%E5%BD%95%E9%A1%B5.png)
 ![首页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%A6%96%E9%A1%B5.png)
 ![名言广场.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA.png)
 ![工具.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%B7%A5%E5%85%B7.png)
