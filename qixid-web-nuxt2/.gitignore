@@ -8,7 +8,7 @@ yarn-error.log*
 tests/**/coverage/
 tests/e2e/reports
 selenium-debug.log
-
+env.js
 # Editor directories and files
 .idea
 .nuxt
