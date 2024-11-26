@@ -25,6 +25,7 @@ public enum MsgEnums {
     CAPTCHA_ALREADY_EXISTS(5001, "短信发送太频繁,请稍后再试"),
     VERIFICATION_CODE_ERROR(5002, "验证码错误"),
     VERIFICATION_CODE_EXPIRED(5003, "验证码已过期"),
+    VERIFICATION_CODE_UNDERCOUNT(5004, "今日验证码次数已达上限"),
     ;
     private Integer code;
     private String value;

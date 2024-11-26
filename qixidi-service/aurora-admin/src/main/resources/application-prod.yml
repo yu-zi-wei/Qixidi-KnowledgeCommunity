@@ -181,7 +181,7 @@ lipay:
   appPrivateKey: ${config.lipay.appPrivateKey}
   #支付宝公钥
   alipayPublicKey: ${config.lipay.alipayPublicKey}
-  #回调地址：http://server.qixidi.top/white/payment/aply
+  #回调地址：http://127.0.0.1:9001/white/payment/aply
   notifyUrl: ${config.lipay.notifyUrl}
   # 支付成功的跳转地址，本项目为：http://localhost:9002/transfer/payment_callback
   returnUrl: ${config.lipay.returnUrl}

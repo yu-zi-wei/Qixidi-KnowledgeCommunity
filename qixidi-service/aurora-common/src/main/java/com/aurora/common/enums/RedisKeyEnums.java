@@ -18,6 +18,8 @@ public enum RedisKeyEnums {
      */
     MAIL_CAPTCHA("MAIL_CAPTCHA:%s", "邮箱验证码:邮箱"),
     PHONE_CAPTCHA("PHONE_CAPTCHA:%s", "手机验证码:手机号"),
+    CAPTCHA_DAILY_LIMIT_PHONE("CAPTCHA_DAILY_LIMIT_PHONE:%s", "验证码每日限制:手机号"),
+    CAPTCHA_DAILY_LIMIT_IP("CAPTCHA_DAILY_LIMIT_IP:%s", "验证码每日限制:IP地址"),
 
     /**
      * 导航栏配置

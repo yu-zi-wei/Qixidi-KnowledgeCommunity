@@ -1,5 +1,6 @@
 package com.aurora.common.utils;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -207,6 +208,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Calendar end = Calendar.getInstance();
         end.setTime(endTime);
         return date.after(begin) && date.before(end);
+    }
+
+    /**
+     * 获取当天剩余的秒
+     *
+     * @return
+     */
+    public static long getRemainingTime() {
+        long now = System.currentTimeMillis();
+        // 获取当天最后一秒的时间戳（即当天的 23:59:59）
+        long endOfDay = DateUtil.endOfDay(DateUtil.date(now)).getTime();
+        // 计算当天剩余的毫秒数
+        long remainingMilliseconds = endOfDay - now;
+        // 将毫秒数转换为秒数
+        long remainingSeconds = remainingMilliseconds / 1000;
+        return remainingSeconds;
     }
 
 }

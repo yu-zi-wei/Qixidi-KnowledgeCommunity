@@ -1,4 +1,5 @@
 package com.aurora.business.service.impl;
+
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
@@ -35,9 +36,11 @@ import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.enums.*;
 import com.aurora.common.exception.ServiceException;
 import com.aurora.common.helper.LoginHelper;
+import com.aurora.common.utils.DateUtils;
 import com.aurora.common.utils.RandomNumberUtils;
 import com.aurora.common.utils.StringUtils;
 import com.aurora.common.utils.email.MailUtils;
+import com.aurora.common.utils.ip.AddressUtils;
 import com.aurora.common.utils.redis.RedisUtils;
 import com.aurora.utils.SecureUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -60,6 +63,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -216,7 +220,17 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
                 .setNickname(tripartiteUser.getUsername())
                 .setCreateTime(new Date())
                 .setUpdateId(tripartiteUser.getUuid());
-            userInformationMapper.insert(userInformation);
+            int insert = userInformationMapper.insert(userInformation);
+            if (insert > 0) {
+                //            发送邮件
+                executorService.execute(() -> {
+                    StringBuffer mags = new StringBuffer();
+                    mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，手机号：%s，密码：%s",
+                        tripartiteUser.getSource(),
+                        tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
+                    MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
+                });
+            }
         }
 //        更新用户数据
         baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
@@ -295,8 +309,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
 //            发送邮件
             executorService.execute(() -> {
                 StringBuffer mags = new StringBuffer();
-                mags.append(String.format("【栖息地】新用户注册；用户名：%s，手机号：%s，密码：%s",
-                    tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
+                mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，手机号：%s，密码：%s",
+                    "平台注册", tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
                 MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
             });
         }
@@ -471,14 +485,27 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     }
 
     @Override
-    public R sendPhoneCode(String phone, String mag) throws Exception {
+    public R sendPhoneCode(String phone, String mag, HttpServletRequest request) throws Exception {
+        String CAPTCHA_DAILY_LIMIT_PHONE = String.format(RedisKeyEnums.CAPTCHA_DAILY_LIMIT_PHONE.getKey(), phone);
+        String ip = AddressUtils.gainIp(request);
+        String CAPTCHA_DAILY_LIMIT_IP = String.format(RedisKeyEnums.CAPTCHA_DAILY_LIMIT_IP.getKey(), ip);
+        Long phoneLimit = RedisUtils.getCacheObject(CAPTCHA_DAILY_LIMIT_PHONE);
+        Long ipLimit = RedisUtils.getCacheObject(CAPTCHA_DAILY_LIMIT_IP);
+        if (phoneLimit == null) phoneLimit = 0L;
+        if (ipLimit == null) ipLimit = 0L;
+        if (phoneLimit >= 10 || ipLimit >= 10) {
+            throw new ServiceException(MsgEnums.VERIFICATION_CODE_UNDERCOUNT.getValue());
+        }
         String mailCaptchaKey = String.format(RedisKeyEnums.PHONE_CAPTCHA.getKey(), phone);
         if (RedisUtils.hasKey(mailCaptchaKey)) throw new ServiceException(MsgEnums.CAPTCHA_ALREADY_EXISTS.getValue());
         String code = RandomUtil.randomNumbers(5);
         Boolean aBoolean = smsSendingConfig.SendSmsCode(phone, code);
         if (aBoolean) {
+            long remainingTime = DateUtils.getRemainingTime();//今日剩余秒
+            RedisUtils.setCacheObject(CAPTCHA_DAILY_LIMIT_PHONE, phoneLimit + 1, remainingTime, TimeUnit.SECONDS);
+            RedisUtils.setCacheObject(CAPTCHA_DAILY_LIMIT_IP, ipLimit + 1, remainingTime, TimeUnit.SECONDS);
             //        存入redis有效期60秒
-            RedisUtils.setCacheObject(mailCaptchaKey, code, 60, TimeUnit.SECONDS);
+            RedisUtils.setCacheObject(mailCaptchaKey, code, 180, TimeUnit.SECONDS);
         }
         return R.ok();
     }

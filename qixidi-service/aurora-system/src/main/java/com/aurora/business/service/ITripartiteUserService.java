@@ -16,6 +16,7 @@ import com.aurora.common.core.domain.model.RegisterUserMain;
 import com.aurora.common.core.page.TableDataInfo;
 import me.zhyd.oauth.request.AuthRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +103,7 @@ public interface ITripartiteUserService {
 
     boolean accountCancellation(String uuid);
 
-    R sendPhoneCode(String phone, String mag) throws Exception;
+    R sendPhoneCode(String phone, String mag, HttpServletRequest request) throws Exception;
 
     Boolean phoneNumberBinding(PhoneBinding phoneBinding);
 

@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -101,8 +102,8 @@ public class LoginController extends BaseController {
     @RepeatSubmit()
     @GetMapping("/oauth/phone/code/{phone}/{mag}")
     public R sendPhoneCode(@NotNull(message = "手机号不能为空") @PathVariable("phone") String phone,
-                           @NotNull(message = "当前操作异常") @PathVariable("mag") String mag) throws Exception {
-        return iTripartiteUserService.sendPhoneCode(phone, mag);
+                           @NotNull(message = "当前操作异常") @PathVariable("mag") String mag, HttpServletRequest request) throws Exception {
+        return iTripartiteUserService.sendPhoneCode(phone, mag,request);
     }
 
     @ApiOperation("前台登出方法")
