@@ -403,7 +403,7 @@
             order by ai.heat_weight desc
         </if>
         <if test="bo.sortType==2">
-            order by ai.update_time desc
+            order by ai.create_time desc
         </if>
     </select>
 
