@@ -59,7 +59,7 @@ public class FdFeedbackController extends BaseController {
      * 获取反馈详情
      */
     @ApiOperation("获取反馈详情")
-    @GetMapping("/white/Feedback/byId/{id}")
+    @GetMapping("/white/feedback/byId/{id}")
     public R<FeedbackVo> queryById(@PathVariable("id") Long id) {
         return R.ok(IFeedbackService.queryById(id));
     }
@@ -70,7 +70,7 @@ public class FdFeedbackController extends BaseController {
     @ApiOperation("新增用户反馈")
     @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PostMapping("/frontDesk/Feedback/add")
+    @PostMapping("/frontDesk/feedback/add")
     public R<Void> add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
         return toAjax(IFeedbackService.insertByBo(bo) ? 1 : 0);
     }
@@ -81,7 +81,7 @@ public class FdFeedbackController extends BaseController {
     @ApiOperation("更新用户反馈")
     @Log(title = "更新用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PostMapping("/frontDesk/Feedback/update")
+    @PostMapping("/frontDesk/feedback/update")
     public R<Void> update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
         return toAjax(IFeedbackService.updateByBo(bo) ? 1 : 0);
     }
@@ -91,7 +91,7 @@ public class FdFeedbackController extends BaseController {
      */
     @ApiOperation("更新用户反馈状态")
     @RepeatSubmit()
-    @GetMapping("/frontDesk/Feedback/update/status/{id}/{status}")
+    @GetMapping("/frontDesk/feedback/update/status/{id}/{status}")
     public R<Void> updateStatus(@PathVariable Long id, @PathVariable Integer status) {
         return toAjax(IFeedbackService.updateStatus(id, status) ? 1 : 0);
     }
@@ -101,7 +101,7 @@ public class FdFeedbackController extends BaseController {
      */
     @ApiOperation("删除用户反馈")
     @RepeatSubmit()
-    @DeleteMapping("/frontDesk/Feedback/delete/{ids}")
+    @DeleteMapping("/frontDesk/feedback/delete/{ids}")
     public R<Void> delete(@ApiParam("主键串")
                           @NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] ids) {
