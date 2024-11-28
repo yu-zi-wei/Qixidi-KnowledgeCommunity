@@ -50,7 +50,7 @@ export default {
   },
   async asyncData({app, params}) {
     console.log("执行 asyncData。。。。。", process.env.SERVER_URL)
-    const response = await fetch(`https://${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`);
+    const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`);
     const data = await response.json();
     return {
       toolList: data,

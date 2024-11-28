@@ -31,6 +31,8 @@ export default {
     ARTICLE_SHARE_URL: env[process.env.NODE_ENV].ARTICLE_SHARE_URL,
     //主题颜色
     THEME_COLOR: env[process.env.NODE_ENV].THEME_COLOR,
+    //服务端协议
+    SERVICE_PROTOCOL: env[process.env.NODE_ENV].SERVICE_PROTOCOL,
     //项目名称
     PROJECT_NAME: "栖息地",
     //登录中转地址
@@ -91,7 +93,7 @@ export default {
   proxy: { // axios 配置
     '/api': {
       changeOrigin: true, // 是否跨域
-      target: "http://" + env[process.env.NODE_ENV].SERVER_URL,
+      target:  env[process.env.NODE_ENV].SERVICE_PROTOCOL + env[process.env.NODE_ENV].SERVER_URL,
       pathRewrite: {
         '^/api': '', //请求前缀规则匹配
       }

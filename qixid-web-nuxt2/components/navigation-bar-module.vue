@@ -477,7 +477,7 @@ export default {
     //建立webSocket连接
     connectWebSocket(uuid) {
       if (uuid == null) return;
-      const url = 'wss://' + process.env.SERVER_URL + `/websocket/${uuid}/${1}`;
+      const url = 'ws://' + process.env.SERVER_URL + `/websocket/${uuid}/${1}`;
       this.socket = new WebSocket(url);
       this.socket.onopen = () => {
         // 在这里可以执行连接成功后的操作

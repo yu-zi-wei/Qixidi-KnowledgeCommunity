@@ -592,7 +592,7 @@ export default {
   async asyncData({app, params, store}) {
     const id = Buffer.from(params.id, 'base64').toString('utf-8');
     let token = store.state.token;
-    const response = await fetch(`https://${process.env.SERVER_URL}/white/article/details/${id}`, {
+    const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/article/details/${id}`, {
       headers: {
         'Authorization': 'Bearer ' + token
       }
