@@ -363,7 +363,7 @@ export default {
   async asyncData({app, params, store}) {
     const id = -12;//友链页面
     let token = store.state.token;
-    const response = await fetch(`http://${process.env.SERVER_URL}/white/article/details/${id}`, {
+    const response = await fetch(`https://${process.env.SERVER_URL}/white/article/details/${id}`, {
       headers: {
         'Authorization': 'Bearer ' + token
       }

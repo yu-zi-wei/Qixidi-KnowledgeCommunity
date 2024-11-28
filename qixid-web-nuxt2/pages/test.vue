@@ -50,7 +50,7 @@ export default {
   },
   async asyncData({app, params}) {
     console.log("执行 asyncData。。。。。", process.env.SERVER_URL)
-    const response = await fetch(`http://${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`);
+    const response = await fetch(`https://${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`);
     const data = await response.json();
     return {
       toolList: data,
@@ -100,7 +100,7 @@ export default {
       this.socket.send("发送测试数据")
     },
     websocketMain(name) {
-      const url = 'ws://127.0.0.1:9001/websocket/' + name;
+      const url = 'wss://127.0.0.1:9001/websocket/' + name;
       this.socket = new WebSocket(url);
 
       this.socket.onopen = () => {
