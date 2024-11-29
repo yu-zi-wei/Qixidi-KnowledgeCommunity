@@ -51,7 +51,7 @@
                   </el-menu-item>
                 </el-submenu>
                 <el-menu-item :index="$route.path">
-                  <a href="http://love.qixidi.top/" target="_blank" style="color: var(--default-color);">
+                  <a href="https://love.qixidi.top/" target="_blank" style="color: var(--default-color);">
                     <svg t="1729751692083" class="icon svg-translateY-1-" viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="7008" width="20" height="20">
                       <path

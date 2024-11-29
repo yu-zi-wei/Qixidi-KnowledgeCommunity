@@ -13,7 +13,7 @@ const config = {
     // 代理的后端请求服务器地址
     // SERVER_URL: '127.0.0.1:9001',
     SERVER_URL: 'server.qixidi.top',
-    SERVICE_PROTOCOL: 'http://',
+    SERVICE_PROTOCOL: 'https://',
     THEME_COLOR: defaultConfig.THEME_COLOR,
   },
   //测试环境

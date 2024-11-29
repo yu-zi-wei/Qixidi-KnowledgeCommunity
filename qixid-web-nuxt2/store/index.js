@@ -10,7 +10,12 @@ export const state = {
 export const mutations = {
   setToken(state, token) {
     this.state.token = token;
-    this.$cookies.set(tokenName, token)
+    this.$cookies.set(tokenName, token, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      sameSite: 'none',
+      secure: true
+    });
   },
   getToken() {
     this.state.token = this.$cookies.get(tokenName)
@@ -18,6 +23,6 @@ export const mutations = {
   },
   removeToken() {
     this.state.token = '';
-    this.$cookies.remove(tokenName)
+    this.$cookies.remove(tokenName);
   },
 }
