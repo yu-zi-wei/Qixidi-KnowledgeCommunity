@@ -10,12 +10,7 @@ export const state = {
 export const mutations = {
   setToken(state, token) {
     this.state.token = token;
-    this.$cookies.set(tokenName, token, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      sameSite: 'none',
-      secure: true
-    });
+    this.$cookies.set(tokenName, token);
   },
   getToken() {
     this.state.token = this.$cookies.get(tokenName)
