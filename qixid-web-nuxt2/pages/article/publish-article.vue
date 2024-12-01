@@ -117,7 +117,7 @@
                           :minimalistMode="false"></ai-editor-module>
       </div>
       <div>
-        <div style="position: fixed;max-width: 340px;right: 200px;">
+        <div style="position: fixed;max-width: 340px;right: 5%;">
           <div class="auroora-card mb-10">
             <div class="ml-6 font-bold">目录</div>
             <hr class="hr-item mb-15 mt-15"/>
