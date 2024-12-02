@@ -100,7 +100,7 @@ export default {
       this.socket.send("发送测试数据")
     },
     websocketMain(name) {
-      const url = 'wss://127.0.0.1:9001/websocket/' + name;
+      const url = 'ws://127.0.0.1:9001/websocket/' + name;
       this.socket = new WebSocket(url);
 
       this.socket.onopen = () => {

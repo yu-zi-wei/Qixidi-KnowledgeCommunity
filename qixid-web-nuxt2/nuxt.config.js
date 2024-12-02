@@ -33,6 +33,8 @@ export default {
     THEME_COLOR: env[process.env.NODE_ENV].THEME_COLOR,
     //服务端协议
     SERVICE_PROTOCOL: env[process.env.NODE_ENV].SERVICE_PROTOCOL,
+    //webSocket 协议
+    WEBSOCKET_PROTOCOL: env[process.env.NODE_ENV].WEBSOCKET_PROTOCOL,
     //项目名称
     PROJECT_NAME: "栖息地",
     //登录中转地址
@@ -93,7 +95,7 @@ export default {
   proxy: { // axios 配置
     '/api': {
       changeOrigin: true, // 是否跨域
-      target:  env[process.env.NODE_ENV].SERVICE_PROTOCOL + env[process.env.NODE_ENV].SERVER_URL,
+      target: env[process.env.NODE_ENV].SERVICE_PROTOCOL + env[process.env.NODE_ENV].SERVER_URL,
       pathRewrite: {
         '^/api': '', //请求前缀规则匹配
       }

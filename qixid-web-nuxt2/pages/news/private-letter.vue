@@ -207,7 +207,7 @@ export default {
     },
     webSocketLink(uuid) {
       if (uuid == null) return;
-      const url = 'ws://' + process.env.SERVER_URL + `/websocket/${uuid}/${3}`;
+      const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/${uuid}/${3}`;
       this.socket = new WebSocket(url);
 
       this.socket.onopen = () => {
