@@ -515,7 +515,7 @@ export default {
   components: {AiEditorModule},
   head() {
     return {
-      title: `${this.articleInfo.articleTitle == undefined ? process.env.PROJECT_NAME : this.articleInfo.articleTitle + '-' + process.env.PROJECT_NAME}`,
+      title: `${this.articleInfo.articleTitle == undefined ? process.env.PROJECT_NAME : this.articleInfo.articleTitle + ' - ' + process.env.PROJECT_NAME}`,
       meta: [
         {
           hid: 'description',

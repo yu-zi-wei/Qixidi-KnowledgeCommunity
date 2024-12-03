@@ -56,7 +56,7 @@ import toolListAssembly from './tool-list'
 
 export default {
   head: {
-    title: `工具-${process.env.PROJECT_NAME}`,
+    title: `工具 - ${process.env.PROJECT_NAME}`,
   },
   components: {
     toolListAssembly

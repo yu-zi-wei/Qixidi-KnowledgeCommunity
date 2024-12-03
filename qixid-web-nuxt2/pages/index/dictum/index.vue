@@ -104,7 +104,7 @@
 export default {
   name: "index",
   head: {
-    title: `名言广场-${process.env.PROJECT_NAME}`,
+    title: `名言广场 - ${process.env.PROJECT_NAME}`,
   },
   data() {
     return {

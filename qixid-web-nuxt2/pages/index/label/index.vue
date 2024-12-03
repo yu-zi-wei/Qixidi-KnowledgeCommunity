@@ -42,7 +42,7 @@
 <script>
 export default {
   head: {
-    title: `标签-${process.env.PROJECT_NAME}`,
+    title: `标签 - ${process.env.PROJECT_NAME}`,
   },
   name: "labelIndex",
   data() {
