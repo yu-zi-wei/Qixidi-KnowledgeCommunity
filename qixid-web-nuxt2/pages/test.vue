@@ -31,6 +31,7 @@
 <script>
 import SubmissionChart from "../components/submission-chart";
 import AiEditorModule from "../components/AiEditor-module";
+import https from "https";
 
 // import WebSocket from 'websocket';
 export default {
@@ -49,8 +50,11 @@ export default {
     }
   },
   async asyncData({app, params}) {
-    console.log("执行 asyncData。。。。。", process.env.SERVER_URL)
-    const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`);
+    const https = require('https');
+    const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`, {
+      //不做https校验，如果你的https是被信任的建议注释该代码，因为http是不安全的
+      agent: new https.Agent({rejectUnauthorized: false})
+    });
     const data = await response.json();
     return {
       toolList: data,

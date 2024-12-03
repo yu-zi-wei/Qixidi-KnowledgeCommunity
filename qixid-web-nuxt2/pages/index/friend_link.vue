@@ -363,10 +363,13 @@ export default {
   async asyncData({app, params, store}) {
     const id = -12;//友链页面
     let token = store.state.token;
+    const https = require('https');
     const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/article/details/${id}`, {
       headers: {
         'Authorization': 'Bearer ' + token
-      }
+      },
+      //不做https校验，如果你的https是被信任的建议注释该代码，因为http是不安全的
+      agent: new https.Agent({rejectUnauthorized: false})
     });
     const data = await response.json();
     let articleInfo = data.data;

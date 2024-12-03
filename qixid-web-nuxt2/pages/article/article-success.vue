@@ -52,7 +52,8 @@ export default {
     },
     copyLink(id) {
       let ids = this.$base64.encode(id);
-      let url = process.env.ARTICLE_SHARE_URL + "?id=" + ids;
+      const domainName = window.location.hostname;
+      let url = domainName + "?id=" + ids;
       navigator.clipboard.writeText(url);
       this.$modal.notifySuccess("链接地址复制成功");
     },

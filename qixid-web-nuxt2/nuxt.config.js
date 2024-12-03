@@ -27,8 +27,6 @@ export default {
     NODE_ENV: env[process.env.NODE_ENV].NODE_ENV,
     // 请求服务器地址
     SERVER_URL: env[process.env.NODE_ENV].SERVER_URL,
-    //文章分享地址
-    ARTICLE_SHARE_URL: env[process.env.NODE_ENV].ARTICLE_SHARE_URL,
     //主题颜色
     THEME_COLOR: env[process.env.NODE_ENV].THEME_COLOR,
     //服务端协议
