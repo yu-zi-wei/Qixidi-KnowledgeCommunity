@@ -28,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/white/label")
 public class FdLabelInfoController {
+
     private final ILabelInfoService iLabelInfoService;
 
     private final ILabelGroupingInfoService iLabelGroupingInfoService;
