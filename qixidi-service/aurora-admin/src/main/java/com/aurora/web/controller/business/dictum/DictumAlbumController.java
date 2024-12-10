@@ -15,27 +15,21 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 名言专辑Controller
+ * 名言专辑管理
  *
  * @author aurora
  * @date 2023-04-24
  */
 @Validated
-@Api(value = "名言专辑控制器", tags = {"名言专辑管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/dictum/album")
@@ -46,7 +40,6 @@ public class DictumAlbumController extends BaseController {
     /**
      * 查询名言专辑列表
      */
-    @ApiOperation("查询名言专辑列表")
     @SaCheckPermission("business:dictum:album:list")
     @GetMapping("/list")
     public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) DictumAlbumBo bo, PageQuery pageQuery) {
@@ -56,7 +49,6 @@ public class DictumAlbumController extends BaseController {
     /**
      * 导出名言专辑列表
      */
-    @ApiOperation("导出名言专辑列表")
     @SaCheckPermission("business:dictum:album:export")
     @Log(title = "名言专辑", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,19 +60,15 @@ public class DictumAlbumController extends BaseController {
     /**
      * 获取名言专辑详细信息
      */
-    @ApiOperation("获取名言专辑详细信息")
     @SaCheckPermission("business:dictum:album:query")
     @GetMapping("/{id}")
-    public R<DictumAlbumVo> getInfo(@ApiParam("主键")
-                                    @NotNull(message = "主键不能为空")
-                                    @PathVariable("id") Long id) {
+    public R<DictumAlbumVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iDictumAlbumService.queryById(id));
     }
 
     /**
      * 新增名言专辑
      */
-    @ApiOperation("新增名言专辑")
     @SaCheckPermission("business:dictum:album:add")
     @Log(title = "名言专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +80,6 @@ public class DictumAlbumController extends BaseController {
     /**
      * 修改名言专辑
      */
-    @ApiOperation("修改名言专辑")
     @SaCheckPermission("business:dictum:album:edit")
     @Log(title = "名言专辑", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,13 +91,10 @@ public class DictumAlbumController extends BaseController {
     /**
      * 删除名言专辑
      */
-    @ApiOperation("删除名言专辑")
     @SaCheckPermission("business:dictum:album:remove")
     @Log(title = "名言专辑", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iDictumAlbumService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

@@ -31,7 +31,7 @@ import java.util.List;
 
 
 /**
- * 爱情轮播图
+ * 【爱情小站】爱情轮播图
  *
  * @author ziwei
  * @date 2022-11-29
@@ -57,7 +57,6 @@ public class LoverCarouselController extends BaseController {
      * 导出爱情轮播图列表
      */
     @SaCheckPermission("lover:carousel:export")
-//    @Log(title = "爱情轮播图", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(LoverCarouselBo bo, HttpServletResponse response) {
         List<LoverCarouselVo> list = iLoverCarouselService.queryList(bo);

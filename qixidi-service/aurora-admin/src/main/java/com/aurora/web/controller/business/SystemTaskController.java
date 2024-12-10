@@ -4,7 +4,6 @@ import com.aurora.business.domain.vo.SystemTaskConfigVo;
 import com.aurora.business.service.SystemTaskConfigService;
 import com.aurora.business.task.*;
 import com.aurora.common.core.domain.R;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
+ * 系统任务
+ *
  * @author zi-wei
  * @create 2024/11/17 13:45
  */
-@Api(value = "系统任务")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/task")

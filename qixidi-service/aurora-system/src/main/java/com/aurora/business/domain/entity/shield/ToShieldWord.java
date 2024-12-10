@@ -1,6 +1,9 @@
 package com.aurora.business.domain.entity.shield;
-import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModelProperty;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,9 +17,9 @@ import java.util.Date;
  */
 @Data
 @TableName("to_shield_word")
-public class ToShieldWord{
+public class ToShieldWord {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      *
@@ -43,7 +46,6 @@ public class ToShieldWord{
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 

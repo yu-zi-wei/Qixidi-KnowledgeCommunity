@@ -4,8 +4,6 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.aurora.common.annotation.ExcelDictFormat;
 import com.aurora.common.convert.ExcelDictConvert;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,7 +16,6 @@ import java.util.Date;
  * @date 2023-04-23
  */
 @Data
-@ApiModel("系统消息视图对象")
 @ExcelIgnoreUnannotated
 public class NewsSystemInfoVo {
 
@@ -28,14 +25,12 @@ public class NewsSystemInfoVo {
      * id
      */
     @ExcelProperty(value = "id")
-    @ApiModelProperty("id")
     private Long id;
 
     /**
      * 消息标题
      */
     @ExcelProperty(value = "消息标题")
-    @ApiModelProperty("消息标题")
     private String newsTitle;
     /**
      * 状态
@@ -53,7 +48,6 @@ public class NewsSystemInfoVo {
      * 消息内容
      */
     @ExcelProperty(value = "消息内容")
-    @ApiModelProperty("消息内容")
     private String newsContent;
 
     /**
@@ -61,7 +55,6 @@ public class NewsSystemInfoVo {
      */
     @ExcelProperty(value = "是否有详情", converter = ExcelDictConvert.class)
     @ExcelDictFormat(readConverterExp = "1=：无，2：有")
-    @ApiModelProperty("是否有详情（1：无，2：有）")
     private Long isDetails;
 
     /**
@@ -69,14 +62,12 @@ public class NewsSystemInfoVo {
      */
     @ExcelProperty(value = "消息类型", converter = ExcelDictConvert.class)
     @ExcelDictFormat(readConverterExp = "1=：系统，2：用户")
-    @ApiModelProperty("消息类型（1：系统，2：用户）")
     private Long type;
 
     /**
      * 失效时间
      */
     @ExcelProperty(value = "失效时间")
-    @ApiModelProperty("失效时间")
     private Date lapseTime;
 
 

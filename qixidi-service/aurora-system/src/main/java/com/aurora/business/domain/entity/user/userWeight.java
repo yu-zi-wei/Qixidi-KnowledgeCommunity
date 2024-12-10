@@ -3,17 +3,18 @@ package com.aurora.business.domain.entity.user;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
+/**
+ * 前台权重对象
+ */
 @Data
 @NoArgsConstructor
 @TableName("user_weight")
-@ApiModel("前台权重对象")
 @Accessors(chain = true)
 public class userWeight {
 

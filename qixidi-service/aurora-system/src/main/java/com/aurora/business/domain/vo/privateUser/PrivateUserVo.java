@@ -3,7 +3,6 @@ package com.aurora.business.domain.vo.privateUser;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,21 +25,18 @@ public class PrivateUserVo {
      * id
      */
     @ExcelProperty(value = "id")
-    @ApiModelProperty("id")
     private Long id;
 
     /**
      * 用户id
      */
     @ExcelProperty(value = "用户id")
-    @ApiModelProperty("用户id")
     private String uid;
 
     /**
      * 目标用户id
      */
     @ExcelProperty(value = "目标用户id")
-    @ApiModelProperty("目标用户id")
     private String targetUid;
 
     /**

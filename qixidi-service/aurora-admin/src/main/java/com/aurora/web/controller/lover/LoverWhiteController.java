@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 前台接口
+ * 【爱情小站-白名单】前台接口
  */
 @Validated
 @RequiredArgsConstructor

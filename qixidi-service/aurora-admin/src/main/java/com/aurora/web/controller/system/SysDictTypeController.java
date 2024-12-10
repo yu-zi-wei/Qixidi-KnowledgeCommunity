@@ -4,15 +4,13 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aurora.common.annotation.Log;
 import com.aurora.common.constant.UserConstants;
 import com.aurora.common.core.controller.BaseController;
-import com.aurora.common.core.domain.R;
 import com.aurora.common.core.domain.PageQuery;
+import com.aurora.common.core.domain.R;
 import com.aurora.common.core.domain.entity.SysDictType;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
 import com.aurora.system.service.ISysDictTypeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -22,12 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * 数据字典信息
+ * 数据字典信息管理
  *
  * @author Lion Li
  */
 @Validated
-@Api(value = "数据字典信息控制器", tags = {"数据字典信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dict/type")
@@ -35,14 +32,23 @@ public class SysDictTypeController extends BaseController {
 
     private final ISysDictTypeService dictTypeService;
 
-    @ApiOperation("查询字典类型列表")
+    /**
+     * 查询字典类型列表
+     * @param dictType
+     * @param pageQuery
+     * @return
+     */
     @SaCheckPermission("system:dict:list")
     @GetMapping("/list")
     public TableDataInfo<SysDictType> list(SysDictType dictType, PageQuery pageQuery) {
         return dictTypeService.selectPageDictTypeList(dictType, pageQuery);
     }
 
-    @ApiOperation("导出字典类型列表")
+    /**
+     * 导出字典类型列表
+     * @param dictType
+     * @param response
+     */
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
     @PostMapping("/export")
@@ -54,7 +60,6 @@ public class SysDictTypeController extends BaseController {
     /**
      * 查询字典类型详细
      */
-    @ApiOperation("查询字典类型详细")
     @SaCheckPermission("system:dict:query")
     @GetMapping(value = "/{dictId}")
     public R<SysDictType> getInfo(@ApiParam("字典ID") @PathVariable Long dictId) {
@@ -64,7 +69,6 @@ public class SysDictTypeController extends BaseController {
     /**
      * 新增字典类型
      */
-    @ApiOperation("新增字典类型")
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping
@@ -78,7 +82,6 @@ public class SysDictTypeController extends BaseController {
     /**
      * 修改字典类型
      */
-    @ApiOperation("修改字典类型")
     @SaCheckPermission("system:dict:edit")
     @Log(title = "字典类型", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -92,7 +95,6 @@ public class SysDictTypeController extends BaseController {
     /**
      * 删除字典类型
      */
-    @ApiOperation("删除字典类型")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")
@@ -104,7 +106,6 @@ public class SysDictTypeController extends BaseController {
     /**
      * 刷新字典缓存
      */
-    @ApiOperation("刷新字典缓存")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
@@ -116,7 +117,6 @@ public class SysDictTypeController extends BaseController {
     /**
      * 获取字典选择框列表
      */
-    @ApiOperation("获取字典选择框列表")
     @GetMapping("/optionselect")
     public R<List<SysDictType>> optionselect() {
         List<SysDictType> dictTypes = dictTypeService.selectDictTypeAll();

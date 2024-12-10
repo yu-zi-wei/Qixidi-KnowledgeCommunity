@@ -10,8 +10,6 @@ import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.helper.LoginHelper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -19,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 【前台】用户订单管理
+ */
 @Validated
-@Api(value = "用户订单控制器", tags = {"用户订单管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/order")
@@ -31,7 +31,6 @@ public class FdUserOrderController extends BaseController {
     /**
      * 查询用户订单列表
      */
-    @ApiOperation("查询用户订单列表")
     @GetMapping("/list")
     public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) UserOrderBo bo, PageQuery pageQuery) {
         bo.setUid(LoginHelper.getTripartiteUuid());
@@ -45,7 +44,6 @@ public class FdUserOrderController extends BaseController {
      * @param id
      * @return
      */
-    @ApiOperation("获取用户订单详细信息")
     @GetMapping("/info/{id}")
     public R<UserOrderVo> getInfo(@ApiParam("主键")
                                   @NotNull(message = "主键不能为空")
@@ -56,7 +54,6 @@ public class FdUserOrderController extends BaseController {
     /**
      * 删除用户订单
      */
-    @ApiOperation("删除用户订单")
     @DeleteMapping("/delete/{id}")
     public R<Void> deleteOrder(@ApiParam("主键")
                                @NotNull(message = "主键不能为空")

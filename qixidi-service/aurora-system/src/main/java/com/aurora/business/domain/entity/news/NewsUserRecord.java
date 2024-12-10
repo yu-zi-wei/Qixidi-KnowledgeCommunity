@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
+ * 用户消息
  * @author ziwei
  * @date 2024年02月26日
  */

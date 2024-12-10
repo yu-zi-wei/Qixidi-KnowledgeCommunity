@@ -11,19 +11,16 @@ import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
+/**
+ * 【前台】名言分组管理
+ */
 @Validated
-@Api(value = "名言分组控制器", tags = {"名言分组管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/group")
@@ -34,18 +31,14 @@ public class FdDictumGroupController extends BaseController {
     /**
      * 获取名言分组详细信息
      */
-    @ApiOperation("获取名言分组详细信息")
     @GetMapping("/{id}")
-    public R<DictumGroupVo> getInfo(@ApiParam("主键")
-                                    @NotNull(message = "主键不能为空")
-                                    @PathVariable("id") Long id) {
+    public R<DictumGroupVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iDictumGroupService.queryById(id));
     }
 
     /**
      * 新增名言分组
      */
-    @ApiOperation("新增名言分组")
     @Log(title = "名言分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -56,7 +49,6 @@ public class FdDictumGroupController extends BaseController {
     /**
      * 修改名言分组
      */
-    @ApiOperation("修改名言分组")
     @Log(title = "名言分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -67,12 +59,9 @@ public class FdDictumGroupController extends BaseController {
     /**
      * 删除名言分组
      */
-    @ApiOperation("删除名言分组")
     @Log(title = "名言分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

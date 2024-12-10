@@ -3,8 +3,6 @@ package com.aurora.business.domain.bo;
 import com.aurora.common.core.domain.BaseEntity;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,31 +18,26 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("用户反馈业务对象")
 public class FeedbackBo extends BaseEntity {
 
     /**
      *
      */
-    @ApiModelProperty(value = "id", required = true)
     private Long id;
 
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "用户id", required = true)
     private String uid;
 
     /**
      * 用户名称
      */
-    @ApiModelProperty(value = "用户名称", required = true)
     private String nickname;
 
     /**
      * 反馈内容
      */
-    @ApiModelProperty(value = "反馈内容", required = true)
     private String FeedbackContent;
 
     /**

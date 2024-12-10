@@ -3,7 +3,6 @@ package com.aurora.business.domain.entity.user;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -13,7 +12,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("b_user_information")
-@ApiModel("前台用户基本")
 @Accessors(chain = true)
 public class UserInformation {
 

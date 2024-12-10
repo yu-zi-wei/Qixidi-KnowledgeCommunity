@@ -10,8 +10,6 @@ import com.aurora.common.core.domain.entity.SysMenu;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.StringUtils;
 import com.aurora.system.service.ISysMenuService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -22,12 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 菜单信息
+ * 菜单信息管理
  *
  * @author Lion Li
  */
 @Validated
-@Api(value = "菜单信息控制器", tags = {"菜单信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/menu")
@@ -38,7 +35,6 @@ public class SysMenuController extends BaseController {
     /**
      * 获取菜单列表
      */
-    @ApiOperation("获取菜单列表")
     @SaCheckPermission("system:menu:list")
     @GetMapping("/list")
     public R<List<SysMenu>> list(SysMenu menu) {
@@ -49,7 +45,6 @@ public class SysMenuController extends BaseController {
     /**
      * 根据菜单编号获取详细信息
      */
-    @ApiOperation("根据菜单编号获取详细信息")
     @SaCheckPermission("system:menu:query")
     @GetMapping(value = "/{menuId}")
     public R<SysMenu> getInfo(@ApiParam("菜单ID") @PathVariable Long menuId) {
@@ -59,7 +54,6 @@ public class SysMenuController extends BaseController {
     /**
      * 获取菜单下拉树列表
      */
-    @ApiOperation("获取菜单下拉树列表")
     @GetMapping("/treeselect")
     public R<List<Tree<Long>>> treeselect(SysMenu menu) {
         List<SysMenu> menus = menuService.selectMenuList(menu, getUserId());
@@ -69,7 +63,6 @@ public class SysMenuController extends BaseController {
     /**
      * 加载对应角色菜单列表树
      */
-    @ApiOperation("加载对应角色菜单列表树")
     @GetMapping(value = "/roleMenuTreeselect/{roleId}")
     public R<Map<String, Object>> roleMenuTreeselect(@ApiParam("角色ID") @PathVariable("roleId") Long roleId) {
         List<SysMenu> menus = menuService.selectMenuList(getUserId());
@@ -82,7 +75,6 @@ public class SysMenuController extends BaseController {
     /**
      * 新增菜单
      */
-    @ApiOperation("新增菜单")
     @SaCheckPermission("system:menu:add")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -98,7 +90,6 @@ public class SysMenuController extends BaseController {
     /**
      * 修改菜单
      */
-    @ApiOperation("修改菜单")
     @SaCheckPermission("system:menu:edit")
     @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -116,7 +107,6 @@ public class SysMenuController extends BaseController {
     /**
      * 删除菜单
      */
-    @ApiOperation("删除菜单")
     @SaCheckPermission("system:menu:remove")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")

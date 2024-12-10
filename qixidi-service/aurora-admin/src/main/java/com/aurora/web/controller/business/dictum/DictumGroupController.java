@@ -15,27 +15,21 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 名言分组Controller
+ * 名言分组管理
  *
  * @author aurora
  * @date 2023-04-24
  */
 @Validated
-@Api(value = "名言分组控制器", tags = {"名言分组管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/dictum/group")
@@ -46,7 +40,6 @@ public class DictumGroupController extends BaseController {
     /**
      * 查询名言分组列表
      */
-    @ApiOperation("查询名言分组列表")
     @SaCheckPermission("business:dictum:group:list")
     @GetMapping("/list")
     public TableDataInfo<DictumGroupVo> list(@Validated(QueryGroup.class) DictumGroupBo bo, PageQuery pageQuery) {
@@ -56,7 +49,6 @@ public class DictumGroupController extends BaseController {
     /**
      * 导出名言分组列表
      */
-    @ApiOperation("导出名言分组列表")
     @SaCheckPermission("business:dictum:group:export")
     @Log(title = "名言分组", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,19 +60,15 @@ public class DictumGroupController extends BaseController {
     /**
      * 获取名言分组详细信息
      */
-    @ApiOperation("获取名言分组详细信息")
     @SaCheckPermission("business:dictum:group:query")
     @GetMapping("/{id}")
-    public R<DictumGroupVo> getInfo(@ApiParam("主键")
-                                    @NotNull(message = "主键不能为空")
-                                    @PathVariable("id") Long id) {
+    public R<DictumGroupVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iDictumGroupService.queryById(id));
     }
 
     /**
      * 新增名言分组
      */
-    @ApiOperation("新增名言分组")
     @SaCheckPermission("business:dictum:group:add")
     @Log(title = "名言分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +80,6 @@ public class DictumGroupController extends BaseController {
     /**
      * 修改名言分组
      */
-    @ApiOperation("修改名言分组")
     @SaCheckPermission("business:dictum:group:edit")
     @Log(title = "名言分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,13 +91,10 @@ public class DictumGroupController extends BaseController {
     /**
      * 删除名言分组
      */
-    @ApiOperation("删除名言分组")
     @SaCheckPermission("business:dictum:group:remove")
     @Log(title = "名言分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

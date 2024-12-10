@@ -15,24 +15,19 @@ import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 
 /**
- * 用户反馈Controller
+ * 【前台】用户反馈管理
  *
  * @author aurora
  * @date 2023-04-17
  */
 @Validated
-@Api(value = "用户反馈控制器", tags = {"用户反馈管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
@@ -40,25 +35,27 @@ public class FdFeedbackController extends BaseController {
 
     private final IFeedbackService IFeedbackService;
 
-    @ApiOperation("查询用户状态总和")
+    /**
+     * 查询反馈状态总和-白名单
+     *
+     * @return
+     */
     @GetMapping("/white/feedback/status/sum")
     public R<FeedbackStatusSumVo> statusSum() {
         return R.ok(IFeedbackService.statusSum());
     }
 
     /**
-     * 查询用户反馈列表
+     * 查询用户反馈列表-白名单
      */
-    @ApiOperation("查询用户反馈列表")
     @GetMapping("/white/feedback/list")
     public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) FeedbackBo bo, PageQuery pageQuery) {
         return IFeedbackService.queryPageList(bo, pageQuery);
     }
 
     /**
-     * 获取反馈详情
+     * 获取反馈详情-白名单
      */
-    @ApiOperation("获取反馈详情")
     @GetMapping("/white/feedback/byId/{id}")
     public R<FeedbackVo> queryById(@PathVariable("id") Long id) {
         return R.ok(IFeedbackService.queryById(id));
@@ -67,7 +64,6 @@ public class FdFeedbackController extends BaseController {
     /**
      * 新增用户反馈
      */
-    @ApiOperation("新增用户反馈")
     @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/add")
@@ -78,7 +74,6 @@ public class FdFeedbackController extends BaseController {
     /**
      * 更新用户反馈
      */
-    @ApiOperation("更新用户反馈")
     @Log(title = "更新用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/update")
@@ -89,7 +84,6 @@ public class FdFeedbackController extends BaseController {
     /**
      * 修改用户反馈状态
      */
-    @ApiOperation("更新用户反馈状态")
     @RepeatSubmit()
     @GetMapping("/frontDesk/feedback/update/status/{id}/{status}")
     public R<Void> updateStatus(@PathVariable Long id, @PathVariable Integer status) {
@@ -99,12 +93,9 @@ public class FdFeedbackController extends BaseController {
     /**
      * 删除用户反馈
      */
-    @ApiOperation("删除用户反馈")
     @RepeatSubmit()
     @DeleteMapping("/frontDesk/feedback/delete/{ids}")
-    public R<Void> delete(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> delete(@PathVariable Long[] ids) {
         return toAjax(IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

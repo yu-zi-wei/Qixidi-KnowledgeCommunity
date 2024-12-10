@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 
+/**
+ * 【前台】用户消息管理
+ */
 @Validated
-@Api(value = "前台用户消息控制器", tags = {"用户消息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/news")
@@ -32,13 +34,11 @@ public class FdNewsController extends BaseController {
     /**
      * 查询用户消息汇总
      */
-    @ApiOperation("查询用户消息汇总")
     @GetMapping("/list/sum")
     public R listSum() {
         return R.ok(iNewsUserInfoService.listSum());
     }
 
-    @ApiOperation("查询用户消息汇总")
     @GetMapping("/list/info")
     public R listInfo() {
         return R.ok(iNewsUserInfoService.listInfo());
@@ -47,7 +47,6 @@ public class FdNewsController extends BaseController {
     /**
      * 查询用户消息列表
      */
-    @ApiOperation("查询用户消息列表")
     @GetMapping("/list")
     public R userList(NewsUserInfoBo bo, PageQuery pageQuery) {
         return R.ok(iNewsUserInfoService.userList(bo, pageQuery));
@@ -56,7 +55,6 @@ public class FdNewsController extends BaseController {
     /**
      * 新增消息
      */
-    @ApiOperation("新增消息")
     @Log(title = "用户消息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -67,7 +65,6 @@ public class FdNewsController extends BaseController {
     /**
      * 消息已读
      */
-    @ApiOperation("消息已读")
     @Log(title = "用户消息", businessType = BusinessType.UPDATE)
     @GetMapping("/news-read")
     public R<Void> newsRead(NewsUserRecord bo) {
@@ -77,7 +74,6 @@ public class FdNewsController extends BaseController {
     /**
      * 删除消息
      */
-    @ApiOperation("删除消息")
     @Log(title = "用户消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public R<Void> remove(@ApiParam("主键串")

@@ -1,7 +1,6 @@
 package com.aurora.business.domain.entity.collection;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -51,7 +50,6 @@ public class CollectionRecord {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 

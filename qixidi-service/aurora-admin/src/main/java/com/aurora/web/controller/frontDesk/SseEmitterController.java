@@ -2,11 +2,10 @@ package com.aurora.web.controller.frontDesk;
 
 import com.aurora.business.domain.vo.news.NewsUserSumVo;
 import com.aurora.business.domain.vo.user.UserSimpleInfoVo;
+import com.aurora.business.service.ITripartiteUserService;
 import com.aurora.business.service.news.INewsUserInfoService;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.utils.SseEmitterUtil;
-import com.aurora.business.service.ITripartiteUserService;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
+/**
+ * 【前台】SSE消息推送
+ */
 @Validated
-@Api(value = "SSE消息推送控制层", tags = {"SSE消息推送"})
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin
@@ -38,7 +39,8 @@ public class SseEmitterController {
 
     /**
      * 推送给所有人
-     *s
+     * s
+     *
      * @param message
      * @return
      */

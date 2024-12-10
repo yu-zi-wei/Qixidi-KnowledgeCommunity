@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 白名单测试
+ *
  * @author zi-wei
  * @create 2024/11/17 21:06
  */

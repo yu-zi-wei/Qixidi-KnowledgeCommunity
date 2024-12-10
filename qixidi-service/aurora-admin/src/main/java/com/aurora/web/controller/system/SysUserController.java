@@ -25,7 +25,7 @@ import com.aurora.system.listener.SysUserImportListener;
 import com.aurora.system.service.ISysPostService;
 import com.aurora.system.service.ISysRoleService;
 import com.aurora.system.service.ISysUserService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +39,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 用户信息
+ * 用户信息管理
  *
  * @author Lion Li
  */
 @Validated
-@Api(value = "用户信息控制器", tags = {"用户信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/user")
@@ -57,14 +56,18 @@ public class SysUserController extends BaseController {
     /**
      * 获取用户列表
      */
-    @ApiOperation("获取用户列表")
     @SaCheckPermission("system:user:list")
     @GetMapping("/list")
     public TableDataInfo<SysUser> list(SysUser user, PageQuery pageQuery) {
         return userService.selectPageUserList(user, pageQuery);
     }
 
-    @ApiOperation("导出用户列表")
+    /**
+     * 导出用户列表
+     *
+     * @param user
+     * @param response
+     */
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:user:export")
     @PostMapping("/export")
@@ -82,10 +85,14 @@ public class SysUserController extends BaseController {
         ExcelUtil.exportExcel(listVo, "用户数据", SysUserExportVo.class, response);
     }
 
-    @ApiOperation("导入用户列表")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "file", value = "导入文件", dataType = "java.io.File", required = true),
-    })
+    /**
+     * 导入用户列表
+     *
+     * @param file
+     * @param updateSupport
+     * @return
+     * @throws Exception
+     */
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
     @SaCheckPermission("system:user:import")
     @PostMapping("/importData")
@@ -94,7 +101,11 @@ public class SysUserController extends BaseController {
         return R.ok(result.getAnalysis());
     }
 
-    @ApiOperation("下载导入模板")
+    /**
+     * 下载导入模板
+     *
+     * @param response
+     */
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil.exportExcel(new ArrayList<>(), "用户数据", SysUserImportVo.class, response);
@@ -103,7 +114,6 @@ public class SysUserController extends BaseController {
     /**
      * 根据用户编号获取详细信息
      */
-    @ApiOperation("根据用户编号获取详细信息")
     @SaCheckPermission("system:user:query")
     @GetMapping(value = {"/", "/{userId}"})
     public R<Map<String, Object>> getInfo(@ApiParam("用户ID") @PathVariable(value = "userId", required = false) Long userId) {
@@ -124,7 +134,6 @@ public class SysUserController extends BaseController {
     /**
      * 新增用户
      */
-    @ApiOperation("新增用户")
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -145,7 +154,6 @@ public class SysUserController extends BaseController {
     /**
      * 修改用户
      */
-    @ApiOperation("修改用户")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -165,7 +173,6 @@ public class SysUserController extends BaseController {
     /**
      * 删除用户
      */
-    @ApiOperation("删除用户")
     @SaCheckPermission("system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
@@ -179,7 +186,6 @@ public class SysUserController extends BaseController {
     /**
      * 重置密码
      */
-    @ApiOperation("重置密码")
     @SaCheckPermission("system:user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
@@ -193,7 +199,6 @@ public class SysUserController extends BaseController {
     /**
      * 状态修改
      */
-    @ApiOperation("状态修改")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
@@ -206,7 +211,6 @@ public class SysUserController extends BaseController {
     /**
      * 根据用户编号获取授权角色
      */
-    @ApiOperation("根据用户编号获取授权角色")
     @SaCheckPermission("system:user:query")
     @GetMapping("/authRole/{userId}")
     public R<Map<String, Object>> authRole(@ApiParam("用户ID") @PathVariable("userId") Long userId) {
@@ -221,11 +225,6 @@ public class SysUserController extends BaseController {
     /**
      * 用户授权角色
      */
-    @ApiOperation("用户授权角色")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "userId", value = "用户Id", paramType = "query", dataTypeClass = String.class),
-        @ApiImplicitParam(name = "roleIds", value = "角色ID串", paramType = "query", dataTypeClass = String.class)
-    })
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")

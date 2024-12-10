@@ -11,16 +11,16 @@ import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 【前台】文章评论管理
+ */
 @Validated
-@Api(value = "文章评论控制器", tags = {"文章评论管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping()
@@ -31,7 +31,6 @@ public class FdArticleCommentController extends BaseController {
     /**
      * 查询文章评论列表
      */
-    @ApiOperation("查询文章评论列表")
     @GetMapping("/white/article/comment/list")
     public R list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
         return R.ok(iArticleCommentService.ArticleList(bo, pageQuery));
@@ -40,7 +39,6 @@ public class FdArticleCommentController extends BaseController {
     /**
      * 新增文章评论
      */
-    @ApiOperation("新增文章评论")
     @Log(title = "文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/article/comment/insert")
@@ -51,7 +49,6 @@ public class FdArticleCommentController extends BaseController {
     /**
      * 删除文章评论
      */
-    @ApiOperation("删除文章评论")
     @Log(title = "文章评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/article/comment")
     public R<Void> remove(ArticleCommentBo bo) {
@@ -61,7 +58,6 @@ public class FdArticleCommentController extends BaseController {
     /**
      * 查看文章评论
      */
-    @ApiOperation("查看文章评论")
     @GetMapping("/get/comment/{id}")
     public R<Void> getComment(@NotNull(message = "id不能为空") @PathVariable Long id) {
         return iArticleCommentService.getComment(id);

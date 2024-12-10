@@ -19,7 +19,7 @@ import com.aurora.system.domain.SysOss;
 import com.aurora.system.domain.bo.SysOssBo;
 import com.aurora.system.domain.vo.SysOssVo;
 import com.aurora.system.service.ISysOssService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -27,20 +27,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 文件上传 控制层
+ * 文件上传管理
  *
  * @author Lion Li
  */
 @Validated
-@Api(value = "对象存储控制器", tags = {"对象存储管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/oss")
@@ -51,7 +48,6 @@ public class SysOssController extends BaseController {
     /**
      * 查询OSS对象存储列表
      */
-    @ApiOperation("查询OSS对象存储列表")
     @SaCheckPermission("system:oss:list")
     @GetMapping("/list")
     public TableDataInfo<SysOssVo> list(@Validated(QueryGroup.class) SysOssBo bo, PageQuery pageQuery) {
@@ -61,10 +57,6 @@ public class SysOssController extends BaseController {
     /**
      * 上传OSS对象存储
      */
-    @ApiOperation("上传OSS对象存储（图片）")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "file", value = "文件", paramType = "query", dataTypeClass = File.class, required = true)
-    })
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping("/upload")
     public Map<String, Object> upload(@RequestPart("file") MultipartFile file) {
@@ -86,8 +78,13 @@ public class SysOssController extends BaseController {
         return mapObj;
     }
 
-
-    @ApiOperation("下载OSS对象存储")
+    /**
+     * 下载OSS对象存储
+     *
+     * @param ossId
+     * @param response
+     * @throws IOException
+     */
     @SaCheckPermission("system:oss:download")
     @GetMapping("/download/{ossId}")
     public void download(@ApiParam("OSS对象ID") @PathVariable Long ossId, HttpServletResponse response) throws IOException {
@@ -114,13 +111,10 @@ public class SysOssController extends BaseController {
     /**
      * 删除OSS对象存储
      */
-    @ApiOperation("删除OSS对象存储")
     @SaCheckPermission("system:oss:remove")
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")
-    public R<Void> remove(@ApiParam("OSS对象ID串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ossIds) {
+    public R<Void> remove(@PathVariable Long[] ossIds) {
         return toAjax(iSysOssService.deleteWithValidByIds(Arrays.asList(ossIds), true) ? 1 : 0);
     }
 

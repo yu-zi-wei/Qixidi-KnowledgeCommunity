@@ -15,8 +15,6 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,13 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 用户浏览历史Controller
+ * 用户浏览历史管理
  *
  * @author aurora
  * @date 2023-04-24
  */
 @Validated
-@Api(value = "用户浏览历史控制器", tags = {"用户浏览历史管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/browsing/history")
@@ -46,7 +43,6 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 查询用户浏览历史列表
      */
-    @ApiOperation("查询用户浏览历史列表")
     @SaCheckPermission("browsing:history:list")
     @GetMapping("/list")
     public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) BrowsingHistoryBo bo, PageQuery pageQuery) {
@@ -56,7 +52,6 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 导出用户浏览历史列表
      */
-    @ApiOperation("导出用户浏览历史列表")
     @SaCheckPermission("browsing:history:export")
     @Log(title = "用户浏览历史", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,7 +63,6 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 获取用户浏览历史详细信息
      */
-    @ApiOperation("获取用户浏览历史详细信息")
     @SaCheckPermission("browsing:history:query")
     @GetMapping("/{id}")
     public R<BrowsingHistoryVo> getInfo(@ApiParam("主键")
@@ -80,7 +74,6 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 新增用户浏览历史
      */
-    @ApiOperation("新增用户浏览历史")
     @SaCheckPermission("browsing:history:add")
     @Log(title = "用户浏览历史", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +85,6 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 修改用户浏览历史
      */
-    @ApiOperation("修改用户浏览历史")
     @SaCheckPermission("browsing:history:edit")
     @Log(title = "用户浏览历史", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,7 +96,6 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 删除用户浏览历史
      */
-    @ApiOperation("删除用户浏览历史")
     @SaCheckPermission("browsing:history:remove")
     @Log(title = "用户浏览历史", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

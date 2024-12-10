@@ -29,13 +29,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 标签分组信息Controller
+ * 标签分组信息管理
  *
  * @author aurora
  * @date 2022-08-16
  */
 @Validated
-@Api(value = "标签分组信息控制器", tags = {"标签分组信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/groupingInfo")
@@ -46,7 +45,6 @@ public class LabelGroupingInfoController extends BaseController {
     /**
      * 查询标签分组信息列表
      */
-    @ApiOperation("查询标签分组信息列表")
     @GetMapping("/list")
     public TableDataInfo<LabelGroupingInfoVo> list(@Validated(QueryGroup.class) LabelGroupingInfoBo bo, PageQuery pageQuery) {
         return iLabelGroupingInfoService.queryPageList(bo, pageQuery);
@@ -55,7 +53,6 @@ public class LabelGroupingInfoController extends BaseController {
     /**
      * 导出标签分组信息列表
      */
-    @ApiOperation("导出标签分组信息列表")
     @SaCheckPermission("system:groupingInfo:export")
     @Log(title = "标签分组信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -67,19 +64,15 @@ public class LabelGroupingInfoController extends BaseController {
     /**
      * 获取标签分组信息详细信息
      */
-    @ApiOperation("获取标签分组信息详细信息")
     @SaCheckPermission("system:groupingInfo:query")
     @GetMapping("/{id}")
-    public R<LabelGroupingInfoVo> getInfo(@ApiParam("主键")
-                                          @NotNull(message = "主键不能为空")
-                                          @PathVariable("id") Long id) {
+    public R<LabelGroupingInfoVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iLabelGroupingInfoService.queryById(id));
     }
 
     /**
      * 新增标签分组信息
      */
-    @ApiOperation("新增标签分组信息")
     @SaCheckPermission("system:groupingInfo:add")
     @Log(title = "标签分组信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -91,7 +84,6 @@ public class LabelGroupingInfoController extends BaseController {
     /**
      * 修改标签分组信息
      */
-    @ApiOperation("修改标签分组信息")
     @SaCheckPermission("system:groupingInfo:edit")
     @Log(title = "标签分组信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -103,13 +95,10 @@ public class LabelGroupingInfoController extends BaseController {
     /**
      * 删除标签分组信息
      */
-    @ApiOperation("删除标签分组信息")
     @SaCheckPermission("system:groupingInfo:remove")
     @Log(title = "标签分组信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iLabelGroupingInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

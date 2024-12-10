@@ -1,6 +1,5 @@
 package com.aurora.business.domain.vo.news;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -64,8 +63,9 @@ public class ArticleCommentNewsVo {
      * 评论人名称
      */
     private String commentName;
-
-    @ApiModelProperty("发送者头像")
+    /**
+     * 发送者头像
+     */
     private String commentAvatar;
 
     /**

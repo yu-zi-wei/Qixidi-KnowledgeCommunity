@@ -15,8 +15,6 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,13 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 搜索记录Controller
+ * 搜索记录管理
  *
  * @author aurora
  * @date 2023-04-18
  */
 @Validated
-@Api(value = "搜索记录控制器", tags = {"搜索记录管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/search/records")
@@ -46,7 +43,6 @@ public class SearchRecordsController extends BaseController {
     /**
      * 查询搜索记录列表
      */
-    @ApiOperation("查询搜索记录列表")
     @SaCheckPermission("business:search:records:list")
     @GetMapping("/list")
     public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) SearchRecordsBo bo, PageQuery pageQuery) {
@@ -56,7 +52,6 @@ public class SearchRecordsController extends BaseController {
     /**
      * 导出搜索记录列表
      */
-    @ApiOperation("导出搜索记录列表")
     @SaCheckPermission("business:search:records:export")
     @Log(title = "搜索记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,7 +63,6 @@ public class SearchRecordsController extends BaseController {
     /**
      * 获取搜索记录详细信息
      */
-    @ApiOperation("获取搜索记录详细信息")
     @SaCheckPermission("business:search:records:query")
     @GetMapping("/{id}")
     public R<SearchRecordsVo> getInfo(@ApiParam("主键")
@@ -80,7 +74,6 @@ public class SearchRecordsController extends BaseController {
     /**
      * 新增搜索记录
      */
-    @ApiOperation("新增搜索记录")
     @SaCheckPermission("business:search:records:add")
     @Log(title = "搜索记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +85,6 @@ public class SearchRecordsController extends BaseController {
     /**
      * 修改搜索记录
      */
-    @ApiOperation("修改搜索记录")
     @SaCheckPermission("business:search:records:edit")
     @Log(title = "搜索记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,7 +96,6 @@ public class SearchRecordsController extends BaseController {
     /**
      * 删除搜索记录
      */
-    @ApiOperation("删除搜索记录")
     @SaCheckPermission("business:search:records:remove")
     @Log(title = "搜索记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

@@ -16,27 +16,21 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 收藏夹信息Controller
+ * 收藏夹信息管理
  *
  * @author aurora
  * @date 2022-09-29
  */
 @Validated
-@Api(value = "收藏夹信息控制器", tags = {"收藏夹信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/collection/information")
@@ -47,7 +41,6 @@ public class CollectionInformationController extends BaseController {
     /**
      * 查询收藏夹信息列表
      */
-    @ApiOperation("查询收藏夹信息列表")
     @SaCheckPermission("collection:information:list")
     @GetMapping("/list")
     public TableDataInfo<CollectionInformationVo> list(@Validated(QueryGroup.class) CollectionInformationBo bo, PageQuery pageQuery) {
@@ -57,7 +50,6 @@ public class CollectionInformationController extends BaseController {
     /**
      * 导出收藏夹信息列表
      */
-    @ApiOperation("导出收藏夹信息列表")
     @SaCheckPermission("collection:information:export")
     @Log(title = "收藏夹信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -69,19 +61,15 @@ public class CollectionInformationController extends BaseController {
     /**
      * 获取收藏夹信息详细信息
      */
-    @ApiOperation("获取收藏夹信息详细信息")
     @SaCheckPermission("collection:information:query")
     @GetMapping("/{id}")
-    public R<CollectionInformationVo> getInfo(@ApiParam("主键")
-                                              @NotNull(message = "主键不能为空")
-                                              @PathVariable("id") Long id) {
+    public R<CollectionInformationVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iCollectionInformationService.queryById(id));
     }
 
     /**
      * 新增收藏夹信息
      */
-    @ApiOperation("新增收藏夹信息")
     @Log(title = "收藏夹信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -90,9 +78,11 @@ public class CollectionInformationController extends BaseController {
     }
 
     /**
-     * 修改收藏夹信息
+     * 更新收藏夹信息
+     *
+     * @param bo
+     * @return
      */
-    @ApiOperation("修改收藏夹信息")
     @Log(title = "收藏夹信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -102,13 +92,13 @@ public class CollectionInformationController extends BaseController {
 
     /**
      * 删除收藏夹信息
+     *
+     * @param ids
+     * @return
      */
-    @ApiOperation("删除收藏夹信息")
     @Log(title = "收藏夹信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iCollectionInformationService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

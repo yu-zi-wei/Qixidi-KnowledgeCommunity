@@ -15,8 +15,6 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.helper.LoginHelper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -24,8 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 【前台】名言信息管理
+ */
 @Validated
-@Api(value = "名言信息控制器", tags = {"名言信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/info")
@@ -36,8 +36,6 @@ public class FdDictumInfoController extends BaseController {
     /**
      * 查询名言信息列表(后台)
      */
-
-    @ApiOperation("查询名言信息列表")
     @GetMapping("/role/list")
     public TableDataInfo<DictumInfoVo> roleList(@Validated(QueryGroup.class) DictumInfoBo bo, PageQuery pageQuery) {
         bo.setUid(LoginHelper.getTripartiteUuid());
@@ -47,7 +45,6 @@ public class FdDictumInfoController extends BaseController {
     /**
      * 获取名言信息详细信息
      */
-    @ApiOperation("获取名言信息详细信息")
     @GetMapping("/{id}")
     public R<DictumInfoVo> getInfo(@ApiParam("主键")
                                    @NotNull(message = "主键不能为空")
@@ -58,8 +55,7 @@ public class FdDictumInfoController extends BaseController {
     /**
      * 新增名言信息
      */
-    @ApiOperation("新增名言信息")
-    @Log(title = "名言信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
@@ -73,8 +69,7 @@ public class FdDictumInfoController extends BaseController {
     /**
      * 修改名言信息
      */
-    @ApiOperation("修改名言信息")
-    @Log(title = "名言信息", businessType = BusinessType.UPDATE)
+    @Log(title = "更新名言信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
@@ -84,8 +79,7 @@ public class FdDictumInfoController extends BaseController {
     /**
      * 删除名言信息
      */
-    @ApiOperation("删除名言信息")
-    @Log(title = "名言信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}/{groupId}")
     public R<Void> remove(@ApiParam("主键串")
                           @NotNull(message = "id不能为空") @PathVariable Long id,

@@ -16,8 +16,6 @@ import com.aurora.system.service.ISysMenuService;
 import com.aurora.system.service.ISysUserService;
 import com.aurora.system.service.SysLoginService;
 import com.aurora.system.service.SysPermissionService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +31,11 @@ import java.util.Set;
 
 
 /**
- * 登录验证
+ * 登录验证管理
  *
  * @author Lion Li
  */
 @Validated
-@Api(value = "登录验证控制器", tags = {"登录验证管理"})
 @RequiredArgsConstructor
 @RestController
 public class SysLoginController extends BaseController {
@@ -53,7 +50,6 @@ public class SysLoginController extends BaseController {
      * @param loginBody 登录信息
      * @return 结果
      */
-    @ApiOperation("登录方法")
     @PostMapping("/login")
     public R<Map<String, Object>> login(@Validated @RequestBody LoginBody loginBody) {
         Map<String, Object> ajax = new HashMap<>();
@@ -70,7 +66,6 @@ public class SysLoginController extends BaseController {
      * @param smsLoginBody 登录信息
      * @return 结果
      */
-    @ApiOperation("短信登录(示例)")
     @PostMapping("/smsLogin")
     public R<Map<String, Object>> smsLogin(@Validated @RequestBody SmsLoginBody smsLoginBody) {
         Map<String, Object> ajax = new HashMap<>();
@@ -85,7 +80,6 @@ public class SysLoginController extends BaseController {
      *
      * @return 用户信息
      */
-    @ApiOperation("获取用户信息")
     @GetMapping("getInfo")
     public R<Map<String, Object>> getInfo() {
         if (!StpUtil.isLogin()) return null;
@@ -109,7 +103,6 @@ public class SysLoginController extends BaseController {
      * @param xcxCode 小程序code
      * @return 结果
      */
-    @ApiOperation("小程序登录(示例)")
     @PostMapping("/xcxLogin")
     public R<Map<String, Object>> xcxLogin(@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
         Map<String, Object> ajax = new HashMap<>();
@@ -119,7 +112,11 @@ public class SysLoginController extends BaseController {
         return R.ok(ajax);
     }
 
-    @ApiOperation("后台登出方法")
+    /**
+     * 登出
+     *
+     * @return
+     */
     @RepeatSubmit()
     @PostMapping("/logout")
     public R<Void> logout() {
@@ -136,7 +133,6 @@ public class SysLoginController extends BaseController {
      *
      * @return 路由信息
      */
-    @ApiOperation("获取路由信息")
     @GetMapping("getRouters")
     public R<List<RouterVo>> getRouters() {
         Long userId = LoginHelper.getUserId();

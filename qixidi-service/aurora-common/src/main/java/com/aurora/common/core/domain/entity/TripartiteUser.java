@@ -4,7 +4,6 @@ package com.aurora.common.core.domain.entity;
 import com.aurora.common.helper.LoginHelper;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -14,7 +13,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("b_user_main")
-@ApiModel("第三方登录用户")
 @Accessors(chain = true)
 public class TripartiteUser {
     /**

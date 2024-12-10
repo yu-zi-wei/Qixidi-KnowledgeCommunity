@@ -3,7 +3,6 @@ package com.aurora.business.domain.entity.dictum;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -70,14 +69,13 @@ public class DictumAlbum {
      */
     private Integer state;
 
-
     /**
      * 更新时间
      */
-    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
-
-    @ApiModelProperty(value = "更新时间")
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
 }

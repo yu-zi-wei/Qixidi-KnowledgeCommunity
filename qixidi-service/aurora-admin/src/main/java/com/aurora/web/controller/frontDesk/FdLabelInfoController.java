@@ -10,8 +10,6 @@ import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.QueryGroup;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * 【前台-白名单】标签信息管理
+ */
 @Validated
-@Api(value = "标签信息控制器", tags = {"标签信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/white/label")
@@ -35,7 +35,6 @@ public class FdLabelInfoController {
     /**
      * 查询标签信息列表
      */
-    @ApiOperation("查询标签信息列表")
     @GetMapping("/list")
     public List<LabelInfoVo> fdLabelList(LabelInfoBo bo) {
         return iLabelInfoService.fdLabelList(bo);
@@ -45,17 +44,14 @@ public class FdLabelInfoController {
     /**
      * 查询标签详情
      */
-    @ApiOperation("查询标签详情")
     @GetMapping("/info/{id}/{type}")
-    public LabelInfoVo fdLabelInfo(@NotNull(message = "id不能为空") @PathVariable("id") Long id,
-                                   @NotNull(message = "类型不能为空") @PathVariable("type") Long type) {
+    public LabelInfoVo fdLabelInfo(@PathVariable("id") Long id, @PathVariable("type") Long type) {
         return iLabelInfoService.fdLabelInfo(id, type);
     }
 
     /**
      * 查询标签分组详情
      */
-    @ApiOperation("查询标签详情")
     @GetMapping("/grouping/info/{id}")
     public R LabelGroupingInfo(@NotNull(message = "id不能为空") @PathVariable("id") Long id) {
         return R.ok(iLabelInfoService.LabelGroupingInfo(id));
@@ -65,7 +61,6 @@ public class FdLabelInfoController {
     /**
      * 查询标签分组信息列表
      */
-    @ApiOperation("查询标签分组信息列表")
     @GetMapping("/grouping/list")
     public TableDataInfo<LabelGroupingInfoVo> fdkGroupingList(@Validated(QueryGroup.class) LabelGroupingInfoBo bo, PageQuery pageQuery) {
         return iLabelGroupingInfoService.fdkGroupingList(bo, pageQuery);

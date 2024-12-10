@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 【前台-白名单】网站信息管理
  * @author ziwei
  * @date 2024年09月16日
  */
-@Api(value = "网站信息管理")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/white/site")
@@ -26,13 +26,19 @@ public class SiteInfoController {
     @Autowired
     private SiteInfoService siteInfoService;
 
-    @ApiOperation("网站信息")
+    /**
+     * 网站信息
+     * @return
+     */
     @GetMapping("/info")
     public R<ToSiteInfo> info() {
         return R.ok(siteInfoService.info());
     }
 
-    @ApiOperation("友链列表")
+    /**
+     * 友链列表
+     * @return
+     */
     @GetMapping("/friend-link")
     public TableDataInfo<FriendLinkVo> friendLink() {
         return TableDataInfo.build(siteInfoService.friendLink());

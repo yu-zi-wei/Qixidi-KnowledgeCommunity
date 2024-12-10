@@ -8,8 +8,6 @@ import com.aurora.common.core.controller.BaseController;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 
 /**
- * 用户关注Controller
+ * 【前台】用户关注管理
  *
  * @author aurora
  * @date 2023-02-13
  */
 @Validated
-@Api(value = "用户关注控制器", tags = {"用户关注管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user/follow")
@@ -34,7 +31,6 @@ public class UserFollowController extends BaseController {
     /**
      * 新增关注
      */
-    @ApiOperation("新增关注")
     @Log(title = "新增关注", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/add")
@@ -42,7 +38,12 @@ public class UserFollowController extends BaseController {
         return toAjax(iUserFollowService.insertByBo(bo) ? 1 : 0);
     }
 
-    @ApiOperation("取消关注")
+    /**
+     * 取消关注
+     *
+     * @param bo
+     * @return
+     */
     @Log(title = "取消关注", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/cancel")
@@ -50,7 +51,12 @@ public class UserFollowController extends BaseController {
         return toAjax(iUserFollowService.cancelFollow(bo) ? 1 : 0);
     }
 
-    @ApiOperation("用户关注列表")
+    /**
+     * 用户关注列表
+     *
+     * @param type
+     * @return
+     */
     @GetMapping("/list/{type}")
     public R followRoleList(@NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
         return R.ok(iUserFollowService.followRoleList(type));

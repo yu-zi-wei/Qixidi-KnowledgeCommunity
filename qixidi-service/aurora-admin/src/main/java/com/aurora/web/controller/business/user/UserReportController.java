@@ -15,8 +15,6 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,13 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 用户签到Controller
+ * 用户签到管理
  *
  * @author aurora
  * @date 2023-04-10
  */
 @Validated
-@Api(value = "用户签到控制器", tags = {"用户签到管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/user/report")
@@ -46,7 +43,6 @@ public class UserReportController extends BaseController {
     /**
      * 查询用户签到列表
      */
-    @ApiOperation("查询用户签到列表")
     @SaCheckPermission("business:user:report:list")
     @GetMapping("/list")
     public TableDataInfo<UserReportVo> list(@Validated(QueryGroup.class) UserReportBo bo, PageQuery pageQuery) {
@@ -56,7 +52,6 @@ public class UserReportController extends BaseController {
     /**
      * 导出用户签到列表
      */
-    @ApiOperation("导出用户签到列表")
     @SaCheckPermission("business:user:report:export")
     @Log(title = "用户签到", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,7 +63,6 @@ public class UserReportController extends BaseController {
     /**
      * 获取用户签到详细信息
      */
-    @ApiOperation("获取用户签到详细信息")
     @SaCheckPermission("business:user:report:query")
     @GetMapping("/{id}")
     public R<UserReportVo> getInfo(@ApiParam("主键")
@@ -80,7 +74,6 @@ public class UserReportController extends BaseController {
     /**
      * 新增用户签到
      */
-    @ApiOperation("新增用户签到")
     @SaCheckPermission("business:user:report:add")
     @Log(title = "用户签到", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +85,6 @@ public class UserReportController extends BaseController {
     /**
      * 修改用户签到
      */
-    @ApiOperation("修改用户签到")
     @SaCheckPermission("business:user:report:edit")
     @Log(title = "用户签到", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,7 +96,6 @@ public class UserReportController extends BaseController {
     /**
      * 删除用户签到
      */
-    @ApiOperation("删除用户签到")
     @SaCheckPermission("business:user:report:remove")
     @Log(title = "用户签到", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

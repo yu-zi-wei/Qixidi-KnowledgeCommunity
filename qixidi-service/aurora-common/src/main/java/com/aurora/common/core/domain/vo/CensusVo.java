@@ -1,6 +1,5 @@
 package com.aurora.common.core.domain.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,16 +17,21 @@ import java.util.Date;
 public class CensusVo {
 
     private Long id;
-    @ApiModelProperty(value = "标题", required = true)
+    /**
+     * "标题"
+     */
     private String title;
-
-    @ApiModelProperty(value = "时间", required = true)
+    /**
+     * 时间
+     */
     private Date dateTime;
-
-    @ApiModelProperty(value = "时间", required = true)
+    /**
+     * 时间
+     */
     private String dateTimes;
-
-    @ApiModelProperty(value = "总数", required = true)
+    /**
+     * 总数
+     */
     private Long censusSum = 0L;
 
 }

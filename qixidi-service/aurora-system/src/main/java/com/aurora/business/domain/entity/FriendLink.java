@@ -16,6 +16,7 @@ import java.util.Date;
 @Data
 @TableName("b_friend_link")
 public class FriendLink {
+
     @TableId(type = IdType.AUTO)
     private Long id;
     /**

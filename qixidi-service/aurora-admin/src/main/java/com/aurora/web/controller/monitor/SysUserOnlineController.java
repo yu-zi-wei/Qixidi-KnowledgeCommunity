@@ -14,7 +14,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.StringUtils;
 import com.aurora.common.utils.redis.RedisUtils;
 import com.aurora.system.domain.SysUserOnline;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +24,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 在线用户监控
+ * 在线用户监控管理
  *
  * @author Lion Li
  */
-@Api(value = "在线用户监控", tags = {"在线用户监控管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/online")
 public class SysUserOnlineController extends BaseController {
 
-    @ApiOperation("在线用户列表")
+    /**
+     * 在线用户列表
+     *
+     * @param ipaddr
+     * @param userName
+     * @return
+     */
     @SaCheckPermission("monitor:online:list")
     @GetMapping("/list")
     public TableDataInfo<SysUserOnline> list(String ipaddr, String userName) {
@@ -73,7 +77,6 @@ public class SysUserOnlineController extends BaseController {
     /**
      * 强退用户
      */
-    @ApiOperation("强退用户")
     @SaCheckPermission("monitor:online:forceLogout")
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")

@@ -10,8 +10,6 @@ import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.QueryGroup;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +19,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
-@Api(value = "用户浏览历史控制器", tags = {"用户浏览历史管理"})
+/**
+ * 【前台】用户浏览历史管理
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/browsing/history")
@@ -32,7 +32,6 @@ public class FdBrowsingHistoryController extends BaseController {
     /**
      * 查询用户浏览历史列表
      */
-    @ApiOperation("查询用户浏览历史列表")
     @GetMapping("/list")
     public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) BrowsingHistoryBo bo, PageQuery pageQuery) {
         return iBrowsingHistoryService.queryPageUidList(bo, pageQuery);
@@ -41,7 +40,6 @@ public class FdBrowsingHistoryController extends BaseController {
     /**
      * 获取用户浏览历史详细信息
      */
-    @ApiOperation("获取用户浏览历史详细信息")
     @GetMapping("/{id}")
     public R<BrowsingHistoryVo> getInfo(@ApiParam("主键")
                                         @NotNull(message = "主键不能为空")
@@ -52,7 +50,6 @@ public class FdBrowsingHistoryController extends BaseController {
     /**
      * 新增用户浏览历史
      */
-    @ApiOperation("新增用户浏览历史")
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody BrowsingHistoryBo bo) {
         return toAjax(iBrowsingHistoryService.insertByBo(bo) ? 1 : 0);
@@ -61,7 +58,6 @@ public class FdBrowsingHistoryController extends BaseController {
     /**
      * 删除用户浏览历史
      */
-    @ApiOperation("删除用户浏览历史")
     @SaCheckPermission("browsing:history:remove")
     @DeleteMapping("/{ids}")
     public R<Void> remove(@ApiParam("主键串")

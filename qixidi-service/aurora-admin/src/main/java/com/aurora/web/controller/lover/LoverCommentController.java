@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 爱情祝福语
+ * 【爱情小站】爱情祝福语
  *
  * @author ziwei
  * @date 2022-11-30

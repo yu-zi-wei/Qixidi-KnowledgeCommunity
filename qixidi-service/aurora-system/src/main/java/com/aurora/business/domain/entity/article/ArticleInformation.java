@@ -3,7 +3,6 @@ package com.aurora.business.domain.entity.article;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -92,11 +91,13 @@ public class ArticleInformation {
      * 点赞次数
      */
     private Long likeTimes;
-
-    @ApiModelProperty("评论次数")
+    /**
+     * 评论次数
+     */
     private Long commentTimes;
-
-    @ApiModelProperty("收藏次数")
+    /**
+     * 收藏次数
+     */
     private Long collectionTimes;
 
     /**

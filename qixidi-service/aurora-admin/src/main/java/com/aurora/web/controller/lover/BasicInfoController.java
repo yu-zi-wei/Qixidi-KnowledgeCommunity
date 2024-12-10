@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 网站基本信息
+ * 【爱情小站】网站基本信息
  *
  * @author ziwei
  * @date 2022-11-21
@@ -73,8 +73,7 @@ public class BasicInfoController extends BaseController {
      */
     @SaCheckPermission("basic:info:query")
     @GetMapping("/{id}")
-    public R<BasicInfoVo> getInfo(@NotNull(message = "主键不能为空")
-                                  @PathVariable Long id) {
+    public R<BasicInfoVo> getInfo(@PathVariable Long id) {
         return R.ok(iBasicInfoService.queryById(id));
     }
 
@@ -105,8 +104,7 @@ public class BasicInfoController extends BaseController {
      */
     @SaCheckPermission("basic:info:remove")
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iBasicInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

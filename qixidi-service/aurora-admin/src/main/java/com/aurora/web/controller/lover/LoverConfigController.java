@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 基本配置
+ * 【爱情小站】基本配置
  *
  * @author ziwei
  * @date 2022-12-02

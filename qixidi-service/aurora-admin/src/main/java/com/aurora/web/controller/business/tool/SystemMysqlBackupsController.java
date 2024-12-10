@@ -22,14 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Software：IntelliJ IDEA 2021.2 x64
- * Author: https://www.mobaijun.com
- * Date: 2021/9/16 14:45
- * ClassName:SystemMysqlBackupsController
- * 类描述： MySQL数据备份接口
+ * mySQL数据备份
  */
-@RestController
-@Api("MySQL数据备份")
 @RequestMapping(value = "/api/system/baskups")
 public class SystemMysqlBackupsController {
 
@@ -66,14 +60,22 @@ public class SystemMysqlBackupsController {
     @Autowired
     private SystemMysqlBackupsService systemMysqlBackupsService;
 
-    @ApiOperation(value = "获取所有备份数据列表")
+    /**
+     * 获取所有备份数据列表
+     *
+     * @return
+     */
     @GetMapping("/backupsList")
     public R backupsList() {
         List<SystemMysqlBackups> systemMysqlBackups = systemMysqlBackupsService.selectBackupsList();
         return R.ok(systemMysqlBackups);
     }
 
-    @ApiOperation(value = "MySQL备份")
+    /**
+     * MySQL备份
+     *
+     * @return
+     */
     @PostMapping("/mysql_Backups")
     public R mysqlBackupsTwo() {
         String url = "jdbc:mysql://localhost:3306/aurora_admin";
@@ -101,7 +103,11 @@ public class SystemMysqlBackupsController {
         return R.ok();
     }
 
-    @ApiOperation(value = "MySQL备份")
+    /**
+     * MySQL备份
+     *
+     * @return
+     */
     @PostMapping("/mysqlBackups")
     public R mysqlBackups() {
         String path = null;
@@ -125,7 +131,11 @@ public class SystemMysqlBackupsController {
         return R.ok(systemMysqlBackups);
     }
 
-    @ApiOperation(value = "恢复数据库")
+    /**
+     * 恢复数据库
+     * @param map
+     * @return
+     */
     @PutMapping("/rollback")
     public R rollback(@ApiParam(value = "恢复数据库") @RequestBody Map<String, Object> map) {
         Long id = Long.valueOf(map.get("id").toString());

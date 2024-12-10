@@ -15,8 +15,6 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,13 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 用户订单Controller
+ * 用户订单管理
  *
  * @author aurora
  * @date 2023-04-04
  */
 @Validated
-@Api(value = "用户订单控制器", tags = {"用户订单管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/order")
@@ -46,7 +43,6 @@ public class UserOrderController extends BaseController {
     /**
      * 查询用户订单列表
      */
-    @ApiOperation("查询用户订单列表")
     @SaCheckPermission("business:order:list")
     @GetMapping("/list")
     public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) UserOrderBo bo, PageQuery pageQuery) {
@@ -56,7 +52,6 @@ public class UserOrderController extends BaseController {
     /**
      * 导出用户订单列表
      */
-    @ApiOperation("导出用户订单列表")
     @SaCheckPermission("business:order:export")
     @Log(title = "用户订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,7 +63,6 @@ public class UserOrderController extends BaseController {
     /**
      * 获取用户订单详细信息
      */
-    @ApiOperation("获取用户订单详细信息")
     @SaCheckPermission("business:order:query")
     @GetMapping("/{id}")
     public R<UserOrderVo> getInfo(@ApiParam("主键")
@@ -80,7 +74,6 @@ public class UserOrderController extends BaseController {
     /**
      * 新增用户订单
      */
-    @ApiOperation("新增用户订单")
     @SaCheckPermission("business:order:add")
     @Log(title = "用户订单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +85,6 @@ public class UserOrderController extends BaseController {
     /**
      * 修改用户订单
      */
-    @ApiOperation("修改用户订单")
     @SaCheckPermission("system:order:edit")
     @Log(title = "用户订单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,7 +96,6 @@ public class UserOrderController extends BaseController {
     /**
      * 删除用户订单
      */
-    @ApiOperation("删除用户订单")
     @SaCheckPermission("business:order:remove")
     @Log(title = "用户订单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

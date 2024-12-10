@@ -9,14 +9,14 @@ import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 【前台】点赞管理
+ */
 @Validated
-@Api(value = "前台点赞控制器", tags = {"点赞管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/fabulous")
@@ -27,7 +27,6 @@ public class FdFabulousRecordController extends BaseController {
     /**
      * 点赞
      */
-    @ApiOperation("点赞")
     @Log(title = "点赞", businessType = BusinessType.INSERT)
     @PostMapping("/spot")
     public R spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
@@ -37,7 +36,6 @@ public class FdFabulousRecordController extends BaseController {
     /**
      * 取消点赞
      */
-    @ApiOperation("取消点赞")
     @Log(title = "取消点赞", businessType = BusinessType.INSERT)
     @PostMapping("/cancel")
     public R<Void> cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
@@ -47,7 +45,6 @@ public class FdFabulousRecordController extends BaseController {
     /**
      * 用户点赞列表
      */
-    @ApiOperation("用户点赞列表")
     @GetMapping("/fabulous/list")
     public R fabulousList(@Validated(AddGroup.class) UserHomeBo bo, PageQuery pageQuery) {
         return R.ok(iFabulousRecordService.fabulousList(bo, pageQuery));

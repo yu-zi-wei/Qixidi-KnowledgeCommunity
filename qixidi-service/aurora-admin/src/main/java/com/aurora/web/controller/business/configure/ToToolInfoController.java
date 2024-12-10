@@ -9,13 +9,11 @@ import com.aurora.common.annotation.RepeatSubmit;
 import com.aurora.common.core.controller.BaseController;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
-import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +21,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 工具信息Controller
+ * 工具信息管理
  *
  * @author aurora
  * @date 2022-10-21
  */
 @Validated
-@Api(value = "工具信息控制器", tags = {"工具信息管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/toolInfo")
@@ -46,7 +42,6 @@ public class ToToolInfoController extends BaseController {
     /**
      * 查询工具信息列表
      */
-    @ApiOperation("查询工具信息列表")
     @SaCheckPermission("business:toolInfo:list")
     @GetMapping("/list")
     public R list(@Validated(QueryGroup.class) ToToolInfoBo bo, PageQuery pageQuery) {
@@ -56,7 +51,7 @@ public class ToToolInfoController extends BaseController {
     /**
      * 导出工具信息列表
      */
-    @ApiOperation("导出工具信息列表")
+    @ApiOperation("导出具信息列表")
     @SaCheckPermission("business:toolInfo:export")
     @Log(title = "工具信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,7 +63,6 @@ public class ToToolInfoController extends BaseController {
     /**
      * 获取工具信息详细信息
      */
-    @ApiOperation("获取工具信息详细信息")
     @SaCheckPermission("business:toolInfo:query")
     @GetMapping("/{id}")
     public R<ToToolInfoVo> getInfo(@ApiParam("主键")
@@ -80,7 +74,6 @@ public class ToToolInfoController extends BaseController {
     /**
      * 新增工具信息
      */
-    @ApiOperation("新增工具信息")
     @SaCheckPermission("business:toolInfo:add")
     @Log(title = "工具信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +85,6 @@ public class ToToolInfoController extends BaseController {
     /**
      * 修改工具信息
      */
-    @ApiOperation("修改工具信息")
     @SaCheckPermission("business:toolInfo:edit")
     @Log(title = "工具信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,13 +96,10 @@ public class ToToolInfoController extends BaseController {
     /**
      * 删除工具信息
      */
-    @ApiOperation("删除工具信息")
     @SaCheckPermission("business:toolInfo:remove")
     @Log(title = "工具信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iToToolInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

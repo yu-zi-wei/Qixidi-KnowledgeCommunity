@@ -169,7 +169,6 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserType.FANS_COMMENT_COUNT.getCode());
         //修改文章评论数
         articleInformationMapper.updateAdd(bo.getArticleId(), ArticleUpdateType.COMMENT_COUNT.getCode());
-        //        sse推送消息
         //WebSocket推送消息
         WebSocketSelector.execute(bo.getTargetUid(), WebSocketEnum.INSIDE_NOTICE);
     }

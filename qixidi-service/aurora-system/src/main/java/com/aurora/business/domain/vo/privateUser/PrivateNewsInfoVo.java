@@ -3,8 +3,6 @@ package com.aurora.business.domain.vo.privateUser;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.aurora.common.core.domain.BaseEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 
@@ -15,7 +13,6 @@ import lombok.Data;
  * @date 2023-03-23
  */
 @Data
-@ApiModel("私信记录视图对象")
 @ExcelIgnoreUnannotated
 public class PrivateNewsInfoVo extends BaseEntity {
 
@@ -25,14 +22,12 @@ public class PrivateNewsInfoVo extends BaseEntity {
      * id
      */
     @ExcelProperty(value = "id")
-    @ApiModelProperty("id")
     private Long id;
 
     /**
      * 用户id
      */
     @ExcelProperty(value = "用户id")
-    @ApiModelProperty("用户id")
     private String uid;
 
     /**
@@ -48,14 +43,12 @@ public class PrivateNewsInfoVo extends BaseEntity {
      * 消息内容
      */
     @ExcelProperty(value = "消息内容")
-    @ApiModelProperty("消息内容")
     private String newsComment;
 
     /**
      * 目标uid
      */
     @ExcelProperty(value = "目标uid")
-    @ApiModelProperty("目标uid")
     private String replyTargetUid;
 
     /**

@@ -1,7 +1,6 @@
 package com.aurora.business.domain.entity.comment;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -70,15 +69,12 @@ public class ArticleComment {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
 
     /**
      * 更新时间
      */
-    @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 

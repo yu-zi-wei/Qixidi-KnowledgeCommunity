@@ -17,32 +17,29 @@ import com.aurora.common.core.domain.model.PhoneBinding;
 import com.aurora.common.core.domain.model.RegisterUserMain;
 import com.aurora.common.enums.UserStatus;
 import com.aurora.common.helper.LoginHelper;
-import com.aurora.system.service.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.aurora.system.service.SysLoginService;
 import lombok.RequiredArgsConstructor;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
-import me.zhyd.oauth.request.*;
+import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.*;
 
 /**
+ * 【前台】登录验证管理
+ *
  * @author ziwei
  * @date 2023年10月15日
  */
 @Validated
-@Api(value = "前台登录验证控制器", tags = {"前台登录验证管理"})
 @RequiredArgsConstructor
 @RestController
 public class LoginController extends BaseController {
@@ -52,7 +49,12 @@ public class LoginController extends BaseController {
     private final ITripartiteUserService iTripartiteUserService;
 
 
-    @ApiOperation("前台密码登录")
+    /**
+     * 密码登录
+     *
+     * @param loginUserMain
+     * @return
+     */
     @RepeatSubmit()
     @PostMapping("/oauth/front-desk/login")
     public R<Map<String, Object>> frontDeskLogin(@Validated @RequestBody LoginUserMain loginUserMain) {
@@ -70,7 +72,12 @@ public class LoginController extends BaseController {
         return R.ok(ajax);
     }
 
-    @ApiOperation("前台注册")
+    /**
+     * 注册
+     *
+     * @param registerUserMain
+     * @return
+     */
     @RepeatSubmit()
     @PostMapping("/oauth/front-desk/register")
     public R register(@Validated @RequestBody RegisterUserMain registerUserMain) {
@@ -78,7 +85,11 @@ public class LoginController extends BaseController {
         return iTripartiteUserService.register(registerUserMain);
     }
 
-    @ApiOperation("前台注销账号")
+    /**
+     * 注销账号
+     *
+     * @return
+     */
     @RepeatSubmit()
     @GetMapping("/oauth/account/cancellation")
     public R accountCancellation() {
@@ -89,24 +100,39 @@ public class LoginController extends BaseController {
         return toAjax(iTripartiteUserService.accountCancellation(uuid) ? 1 : 0);
     }
 
-
-    @ApiOperation("发送邮箱验证码")
+    /**
+     * 发送邮箱验证码
+     *
+     * @param email
+     * @param mag
+     * @return
+     */
     @RepeatSubmit()
     @GetMapping("/oauth/front-desk/code/{email}/{mag}")
-    public R sendOutCode(@NotNull(message = "邮箱不能为空") @PathVariable("email") String email,
-                         @NotNull(message = "当前操作异常") @PathVariable("mag") String mag) {
+    public R sendOutCode(@PathVariable("email") String email, @PathVariable("mag") String mag) {
         return iTripartiteUserService.sendOutCode(email, mag);
     }
 
-    @ApiOperation("发送手机号验证码")
+    /**
+     * 发送手机号验证码
+     *
+     * @param phone
+     * @param mag
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RepeatSubmit()
     @GetMapping("/oauth/phone/code/{phone}/{mag}")
-    public R sendPhoneCode(@NotNull(message = "手机号不能为空") @PathVariable("phone") String phone,
-                           @NotNull(message = "当前操作异常") @PathVariable("mag") String mag, HttpServletRequest request) throws Exception {
-        return iTripartiteUserService.sendPhoneCode(phone, mag,request);
+    public R sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("mag") String mag, HttpServletRequest request) throws Exception {
+        return iTripartiteUserService.sendPhoneCode(phone, mag, request);
     }
 
-    @ApiOperation("前台登出方法")
+    /**
+     * 登出
+     *
+     * @return
+     */
     @RepeatSubmit()
     @PostMapping("/oauth/logout")
     public R<Void> oauthLogout() {
@@ -124,7 +150,6 @@ public class LoginController extends BaseController {
      * @param response
      * @throws IOException
      */
-    @ApiOperation("第三方登录")
     @RequestMapping("/oauth/render/{source}")
     public R renderAuth(@PathVariable("source") String source, HttpServletResponse response) throws IOException {
         boolean login = StpUtil.isLogin();
@@ -142,7 +167,7 @@ public class LoginController extends BaseController {
 
 
     /**
-     * 取消回调
+     * 登录回调取消
      *
      * @param response
      * @param source
@@ -155,6 +180,8 @@ public class LoginController extends BaseController {
     }
 
     /**
+     * 第三方登录回调
+     *
      * @param source   登陆类型回调地址
      * @param callback
      * @param response
@@ -196,7 +223,6 @@ public class LoginController extends BaseController {
      *
      * @return 用户信息
      */
-    @ApiOperation("获取用户信息")
     @GetMapping("/oauth/getInfo")
     public R<Map<String, Object>> getInfo() {
         Map<String, Object> ajax = new HashMap<>();
@@ -227,7 +253,6 @@ public class LoginController extends BaseController {
      *
      * @throws IOException
      */
-    @ApiOperation("前台重置密码")
     @RepeatSubmit()
     @PostMapping("/oauth/reset/password")
     public R resetPassword(@Validated @RequestBody RegisterUserMain registerUserMain) {
@@ -235,11 +260,10 @@ public class LoginController extends BaseController {
     }
 
     /**
-     * 前台手机号绑定
+     * 手机号绑定
      *
      * @throws IOException
      */
-    @ApiOperation("前台手机号绑定")
     @RepeatSubmit()
     @PostMapping("/oauth/phone/binding")
     public R phoneNumberBinding(@Validated @RequestBody PhoneBinding phoneBinding) {

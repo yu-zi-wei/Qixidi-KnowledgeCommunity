@@ -15,8 +15,6 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,13 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 用户反馈Controller
+ * 用户反馈管理
  *
  * @author aurora
  * @date 2023-04-17
  */
 @Validated
-@Api(value = "用户反馈控制器", tags = {"用户反馈管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/Feedback")
@@ -46,7 +43,6 @@ public class FeedbackController extends BaseController {
     /**
      * 查询用户反馈列表
      */
-    @ApiOperation("查询用户反馈列表")
     @SaCheckPermission("business:Feedback:list")
     @GetMapping("/list")
     public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) FeedbackBo bo, PageQuery pageQuery) {
@@ -56,7 +52,6 @@ public class FeedbackController extends BaseController {
     /**
      * 导出用户反馈列表
      */
-    @ApiOperation("导出用户反馈列表")
     @SaCheckPermission("business:Feedback:export")
     @Log(title = "用户反馈", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -68,7 +63,6 @@ public class FeedbackController extends BaseController {
     /**
      * 获取用户反馈详细信息
      */
-    @ApiOperation("获取用户反馈详细信息")
     @SaCheckPermission("business:Feedback:query")
     @GetMapping("/{id}")
     public R<FeedbackVo> getInfo(@ApiParam("主键")
@@ -80,7 +74,6 @@ public class FeedbackController extends BaseController {
     /**
      * 新增用户反馈
      */
-    @ApiOperation("新增用户反馈")
     @SaCheckPermission("business:Feedback:add")
     @Log(title = "用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -92,7 +85,6 @@ public class FeedbackController extends BaseController {
     /**
      * 修改用户反馈
      */
-    @ApiOperation("修改用户反馈")
     @SaCheckPermission("system:Feedback:edit")
     @Log(title = "用户反馈", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -104,7 +96,6 @@ public class FeedbackController extends BaseController {
     /**
      * 删除用户反馈
      */
-    @ApiOperation("删除用户反馈")
     @SaCheckPermission("business:Feedback:remove")
     @Log(title = "用户反馈", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

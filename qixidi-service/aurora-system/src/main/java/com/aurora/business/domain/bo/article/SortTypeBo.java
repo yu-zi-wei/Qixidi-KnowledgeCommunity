@@ -1,27 +1,34 @@
 package com.aurora.business.domain.bo.article;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * 文章排序类型Bo
+ */
 @Data
-@ApiModel("文章排序类型Bo")
 public class SortTypeBo {
-    @ApiModelProperty(value = "浏览次数", required = true)
+    /**
+     * 用户id
+     */
     String uid;
-
-    @ApiModelProperty(value = "浏览次数", required = true)
+    /**
+     * 浏览次数
+     */
     Long numberTimes;
-
-    @ApiModelProperty(value = "点赞次数", required = true)
+    /**
+     * 点赞次数
+     */
     Long likeTimes;
-
-    @ApiModelProperty(value = "创建时间", required = true)
+    /**
+     * 创建时间
+     */
     Long createTime;
-
-    @ApiModelProperty(value = "排序规则（1：权重，2：时间）", required = true)
+    /**
+     * 排序规则（1：权重，2：时间）
+     */
     Integer sortType = 1;
-
-    @ApiModelProperty(value = "标签分组id", required = true)
+    /**
+     * 标签分组id
+     */
     Long groupingId;
 }

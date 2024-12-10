@@ -3,6 +3,8 @@ package com.aurora.business.domain.vo;
 import lombok.Data;
 
 /**
+ * 反馈vo
+ *
  * @author zi-wei
  * @create 2024/11/17 17:38
  */

@@ -14,6 +14,7 @@ import java.util.Date;
  */
 @Data
 public class FriendLinkVo {
+
     @TableId(type = IdType.AUTO)
     private Long id;
     /**

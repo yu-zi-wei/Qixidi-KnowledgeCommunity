@@ -6,8 +6,6 @@ import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.aurora.business.service.AliAayService;
 import com.aurora.common.config.AlipayConfig;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
-@Api(value = "充值接口控制器", tags = {"充值接口控制器"})
+/**
+ * 【前台】充值接口控制器
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/white/payment")
@@ -42,7 +42,6 @@ public class AliAayController {
     /**
      * 订单支付
      */
-    @ApiOperation("订单支付")
     @GetMapping("/order/pay/{id}")
     public void payOrder(HttpServletResponse response,
                          @ApiParam("主键")

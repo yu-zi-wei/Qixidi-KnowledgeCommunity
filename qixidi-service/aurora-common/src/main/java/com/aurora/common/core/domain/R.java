@@ -1,7 +1,5 @@
 package com.aurora.common.core.domain;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +12,6 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@ApiModel("请求响应对象")
 public class R<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -27,14 +24,17 @@ public class R<T> implements Serializable {
      * 失败
      */
     public static final int FAIL = 500;
-
-    @ApiModelProperty("消息状态码")
+    /**
+     * 消息状态码
+     */
     private int code;
-
-    @ApiModelProperty("消息内容")
+    /**
+     * 消息内容
+     */
     private String msg;
-
-    @ApiModelProperty("数据对象")
+    /**
+     * 数据对象
+     */
     private T data;
 
     public static <T> R<T> ok() {
@@ -48,6 +48,7 @@ public class R<T> implements Serializable {
     public static <T> R<T> ok(String msg) {
         return restResult(null, SUCCESS, msg);
     }
+
     public static <T> R<T> ok(String msg, T data) {
         return restResult(data, SUCCESS, msg);
     }

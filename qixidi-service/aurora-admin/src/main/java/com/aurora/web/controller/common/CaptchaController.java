@@ -13,8 +13,6 @@ import com.aurora.common.utils.reflect.ReflectUtils;
 import com.aurora.common.utils.spring.SpringUtils;
 import com.aurora.framework.config.properties.CaptchaProperties;
 import com.aurora.system.service.ISysConfigService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +22,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 验证码操作处理
+ * 验证码管理
  *
  * @author Lion Li
  */
-@Api(value = "验证码操作处理", tags = {"验证码管理"})
 @RequiredArgsConstructor
 @RestController
 public class CaptchaController {
@@ -39,7 +36,6 @@ public class CaptchaController {
     /**
      * 生成验证码
      */
-    @ApiOperation("生成验证码")
     @GetMapping("/captchaImage")
     public R<Map<String, Object>> getCode() {
         Map<String, Object> ajax = new HashMap<>();

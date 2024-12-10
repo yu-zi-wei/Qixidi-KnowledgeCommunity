@@ -3,8 +3,6 @@ package com.aurora.web.controller.monitor;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.utils.StringUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.RedisServerCommands;
 import org.springframework.data.redis.core.RedisCallback;
@@ -16,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 /**
- * 缓存监控
+ * 缓存监控管理
  *
  * @author Lion Li
  */
-@Api(value = "缓存监控", tags = {"缓存监控管理"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/cache")
@@ -28,7 +25,12 @@ public class CacheController {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    @ApiOperation("获取缓存监控详细信息")
+    /**
+     * 获取缓存监控详细信息
+     *
+     * @return
+     * @throws Exception
+     */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping()
     public R<Map<String, Object>> getInfo() throws Exception {

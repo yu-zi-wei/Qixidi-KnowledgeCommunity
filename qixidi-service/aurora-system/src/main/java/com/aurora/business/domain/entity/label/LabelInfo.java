@@ -3,7 +3,6 @@ package com.aurora.business.domain.entity.label;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -42,11 +41,13 @@ public class LabelInfo {
      * 封面
      */
     private String labelCover;
-
-    @ApiModelProperty("关注数")
+    /**
+     * 关注数
+     */
     private Integer followNumber;
-
-    @ApiModelProperty("文章数")
+    /**
+     * 文章数
+     */
     private Integer articleNumber;
 
     /**
