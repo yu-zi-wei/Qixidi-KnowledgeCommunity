@@ -16,7 +16,7 @@
                 <span class="color-grey" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                                         {{ $utils.reckonTime(item.createTime) }}</span>
               </div>
-              <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
+              <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener">
                   <h4 class="mb-10 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h4>
               </nuxt-link>
               <p class="color-grey overflow-nowrap-1 font-s-13">{{ item.articleAbstract }}</p>
@@ -94,7 +94,7 @@
                 <span :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                                         {{ $utils.reckonTime(item.createTime) }}</span>
               </div>
-              <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
+              <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener">
                 <h4 class="mb-8 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h4>
               </nuxt-link>
               <p class="color-grey overflow-nowrap-2 font-s-13" v-text="item.articleAbstract"></p>

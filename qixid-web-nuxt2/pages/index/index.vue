@@ -24,9 +24,9 @@
         <div class="auroora-card">
           <div class="font-bold font-s-14">热门分类</div>
           <hr class="hr-item mb-10 mt-10"/>
-          <el-skeleton class="mt-10" :rows="8" animated v-show="sidebarDialog"/>
+          <el-skeleton class="mt-10" :rows="8" animated v-show="labelGroupingDialog"/>
           <el-menu
-            v-if="!sidebarDialog"
+            v-if="!labelGroupingDialog"
             :default-active="$route.path"
             :router="true"
             class="el-menu-vertical-demo">
@@ -247,6 +247,7 @@ export default {
     return {
       websiteName: process.env.PROJECT_NAME,
       sidebarDialog: true,
+      labelGroupingDialog: true,
       sidebarList: [],
       labelGroupingList: [],
       userInfo: {},
@@ -323,6 +324,16 @@ export default {
     },
 
     listSidebar() {
+      let sidebarList = localStorage.getItem('sidebarList');
+      if (sidebarList != null) {
+        this.sidebarList = JSON.parse(sidebarList);
+        this.sidebarDialog = false
+      }
+      let labelGroupingList = localStorage.getItem('labelGroupingList');
+      if (sidebarList != null) {
+        this.labelGroupingList = JSON.parse(labelGroupingList);
+        this.labelGroupingDialog = false
+      }
       this.$API("/frontDesk/user/report/list", this.$get()).then(res => {
         if (res.data != null) {
           this.ctnFatalism = res.data.ctnFatalism;
@@ -335,10 +346,13 @@ export default {
       this.getSiteInfo();
       this.$API("/white/label//grouping/list", this.$get(), {pageNum: 0, pageSize: 8,}).then(res => {
         this.labelGroupingList = res.rows;
-        this.$API("/white/configure/sidebar/list", this.$get(), {type: 1, status: 0}).then(res => {
-          this.sidebarList = res.data;
-        }).finally(() => this.sidebarDialog = false);
-      })
+        localStorage.setItem("labelGroupingList", JSON.stringify(this.labelGroupingList));
+      }).finally(() => this.labelGroupingDialog = false);
+
+      this.$API("/white/configure/sidebar/list", this.$get(), {type: 1, status: 0}).then(res => {
+        this.sidebarList = res.data;
+        localStorage.setItem("sidebarList", JSON.stringify(this.sidebarList));
+      }).finally(() => this.sidebarDialog = false);
     },
     handleScroll() {
       let scrollTop = document.documentElement.scrollTop
