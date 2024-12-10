@@ -11,7 +11,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
 import com.aurora.system.domain.SysPost;
 import com.aurora.system.service.ISysPostService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +59,7 @@ public class SysPostController extends BaseController {
      */
     @SaCheckPermission("system:post:query")
     @GetMapping(value = "/{postId}")
-    public R<SysPost> getInfo(@ApiParam("岗位ID") @PathVariable Long postId) {
+    public R<SysPost> getInfo(@PathVariable Long postId) {
         return R.ok(postService.selectPostById(postId));
     }
 
@@ -100,7 +99,7 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:remove")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{postIds}")
-    public R<Void> remove(@ApiParam("岗位ID串") @PathVariable Long[] postIds) {
+    public R<Void> remove(@PathVariable Long[] postIds) {
         return toAjax(postService.deletePostByIds(postIds));
     }
 

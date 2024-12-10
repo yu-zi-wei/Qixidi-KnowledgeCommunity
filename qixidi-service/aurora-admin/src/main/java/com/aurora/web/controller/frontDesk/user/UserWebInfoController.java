@@ -15,7 +15,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.system.domain.SysOss;
 import com.aurora.system.service.ISysOssService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -104,9 +103,7 @@ public class UserWebInfoController extends BaseController {
      * @return
      */
     @GetMapping("/white/user/info/{uuid}")
-    public R<TripartiteUserVo> getWebsiteInfo(@ApiParam("主键")
-                                              @NotNull(message = "主键不能为空")
-                                              @PathVariable("uuid") String uuid) {
+    public R<TripartiteUserVo> getWebsiteInfo(@PathVariable("uuid") String uuid) {
         return R.ok(iTripartiteUserService.getWebsiteInfo(uuid));
     }
 

@@ -11,7 +11,6 @@ import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +42,7 @@ public class CollectionFdkController extends BaseController {
      */
     @Log(title = "收藏夹信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/delete/collection/{id}")
-    public R<Void> removeCollection(@ApiParam("主键串")
-                                    @NotNull(message = "主键不能为空") @PathVariable Long id) {
+    public R<Void> removeCollection(@PathVariable Long id) {
         return toAjax(iCollectionInformationService.removeCollection(id));
     }
 
@@ -85,9 +83,7 @@ public class CollectionFdkController extends BaseController {
      * @return
      */
     @GetMapping("/collection/{id}")
-    public R<CollectionInformationVo> getInfo(@ApiParam("主键")
-                                              @NotNull(message = "id不能为空")
-                                              @PathVariable("id") Long id) {
+    public R<CollectionInformationVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iCollectionInformationService.queryById(id));
     }
 
@@ -126,8 +122,7 @@ public class CollectionFdkController extends BaseController {
      */
     @Log(title = "删除收藏夹文章", businessType = BusinessType.INSERT)
     @GetMapping("/delete/collection/data/{id}/{labelId}")
-    public R<Void> deleteCollectionArticle(@ApiParam("主键") @NotNull(message = "id不能为空")
-                                           @PathVariable("id") Long id, @PathVariable("labelId") String labelId) {
+    public R<Void> deleteCollectionArticle(@PathVariable("id") Long id, @PathVariable("labelId") String labelId) {
         return toAjax(iCollectionInformationService.deleteCollectionArticle(id, labelId) ? 1 : 0);
     }
 

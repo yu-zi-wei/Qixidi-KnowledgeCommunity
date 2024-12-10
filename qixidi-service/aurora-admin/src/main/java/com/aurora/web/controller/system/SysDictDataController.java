@@ -12,7 +12,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
 import com.aurora.system.service.ISysDictDataService;
 import com.aurora.system.service.ISysDictTypeService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +66,7 @@ public class SysDictDataController extends BaseController {
      */
     @SaCheckPermission("system:dict:query")
     @GetMapping(value = "/{dictCode}")
-    public R<SysDictData> getInfo(@ApiParam("字典code") @PathVariable Long dictCode) {
+    public R<SysDictData> getInfo(@PathVariable Long dictCode) {
         return R.ok(dictDataService.selectDictDataById(dictCode));
     }
 
@@ -75,7 +74,7 @@ public class SysDictDataController extends BaseController {
      * 根据字典类型查询字典数据信息
      */
     @GetMapping(value = "/type/{dictType}")
-    public R<List<SysDictData>> dictType(@ApiParam("字典类型") @PathVariable String dictType) {
+    public R<List<SysDictData>> dictType(@PathVariable String dictType) {
         List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
         if (ObjectUtil.isNull(data)) {
             data = new ArrayList<>();
@@ -109,7 +108,7 @@ public class SysDictDataController extends BaseController {
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
-    public R<Void> remove(@ApiParam("字典code串") @PathVariable Long[] dictCodes) {
+    public R<Void> remove(@PathVariable Long[] dictCodes) {
         dictDataService.deleteDictDataByIds(dictCodes);
         return R.ok();
     }

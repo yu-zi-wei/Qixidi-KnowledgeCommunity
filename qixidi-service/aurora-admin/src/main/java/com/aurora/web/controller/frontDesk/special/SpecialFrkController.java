@@ -3,12 +3,9 @@ package com.aurora.web.controller.frontDesk.special;
 import com.aurora.business.domain.bo.special.SpecialInformationBo;
 import com.aurora.business.domain.vo.special.SpecialInformationVo;
 import com.aurora.business.service.special.ISpecialInformationService;
-import com.aurora.common.annotation.Log;
 import com.aurora.common.core.controller.BaseController;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
-import com.aurora.common.enums.BusinessType;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -76,9 +73,7 @@ public class SpecialFrkController extends BaseController {
      * 获取专栏信息详细信息
      */
     @GetMapping("/special/{id}")
-    public R<SpecialInformationVo> getInfo(@ApiParam("主键")
-                                           @NotNull(message = "专栏id不能为空")
-                                           @PathVariable("id") Long id) {
+    public R<SpecialInformationVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iSpecialInformationService.queryById(id));
     }
 
@@ -86,8 +81,7 @@ public class SpecialFrkController extends BaseController {
      * 删除专栏信息
      */
     @DeleteMapping("/delete/special/{id}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotNull(message = "主键不能为空") @PathVariable Long id) throws Exception {
+    public R<Void> remove( @PathVariable Long id) throws Exception {
         return iSpecialInformationService.remove(id, true);
     }
 }

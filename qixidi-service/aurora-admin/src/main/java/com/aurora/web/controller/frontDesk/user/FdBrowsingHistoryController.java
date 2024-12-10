@@ -10,13 +10,10 @@ import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.QueryGroup;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -41,9 +38,7 @@ public class FdBrowsingHistoryController extends BaseController {
      * 获取用户浏览历史详细信息
      */
     @GetMapping("/{id}")
-    public R<BrowsingHistoryVo> getInfo(@ApiParam("主键")
-                                        @NotNull(message = "主键不能为空")
-                                        @PathVariable("id") Long id) {
+    public R<BrowsingHistoryVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iBrowsingHistoryService.queryById(id));
     }
 
@@ -60,9 +55,7 @@ public class FdBrowsingHistoryController extends BaseController {
      */
     @SaCheckPermission("browsing:history:remove")
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iBrowsingHistoryService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 

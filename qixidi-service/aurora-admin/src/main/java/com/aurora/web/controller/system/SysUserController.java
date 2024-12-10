@@ -25,7 +25,6 @@ import com.aurora.system.listener.SysUserImportListener;
 import com.aurora.system.service.ISysPostService;
 import com.aurora.system.service.ISysRoleService;
 import com.aurora.system.service.ISysUserService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -116,7 +115,7 @@ public class SysUserController extends BaseController {
      */
     @SaCheckPermission("system:user:query")
     @GetMapping(value = {"/", "/{userId}"})
-    public R<Map<String, Object>> getInfo(@ApiParam("用户ID") @PathVariable(value = "userId", required = false) Long userId) {
+    public R<Map<String, Object>> getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         userService.checkUserDataScope(userId);
         Map<String, Object> ajax = new HashMap<>();
         List<SysRole> roles = roleService.selectRoleAll();
@@ -176,7 +175,7 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
-    public R<Void> remove(@ApiParam("角色ID串") @PathVariable Long[] userIds) {
+    public R<Void> remove(@PathVariable Long[] userIds) {
         if (ArrayUtil.contains(userIds, getUserId())) {
             return R.fail("当前用户不能删除");
         }
@@ -213,7 +212,7 @@ public class SysUserController extends BaseController {
      */
     @SaCheckPermission("system:user:query")
     @GetMapping("/authRole/{userId}")
-    public R<Map<String, Object>> authRole(@ApiParam("用户ID") @PathVariable("userId") Long userId) {
+    public R<Map<String, Object>> authRole(@PathVariable("userId") Long userId) {
         SysUser user = userService.selectUserById(userId);
         List<SysRole> roles = roleService.selectRolesByUserId(userId);
         Map<String, Object> ajax = new HashMap<>();

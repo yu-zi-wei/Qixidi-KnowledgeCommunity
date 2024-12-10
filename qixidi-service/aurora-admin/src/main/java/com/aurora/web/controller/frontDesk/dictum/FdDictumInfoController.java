@@ -15,12 +15,9 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.helper.LoginHelper;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 【前台】名言信息管理
@@ -46,9 +43,7 @@ public class FdDictumInfoController extends BaseController {
      * 获取名言信息详细信息
      */
     @GetMapping("/{id}")
-    public R<DictumInfoVo> getInfo(@ApiParam("主键")
-                                   @NotNull(message = "主键不能为空")
-                                   @PathVariable("id") Long id) {
+    public R<DictumInfoVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iDictumInfoService.queryById(id));
     }
 
@@ -81,9 +76,7 @@ public class FdDictumInfoController extends BaseController {
      */
     @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}/{groupId}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotNull(message = "id不能为空") @PathVariable Long id,
-                          @NotNull(message = "分类id不能为空") @PathVariable Long groupId) {
+    public R<Void> remove(@PathVariable Long id, @PathVariable Long groupId) {
         return toAjax(iDictumInfoService.deleteWithValidById(id, groupId) ? 1 : 0);
     }
 }

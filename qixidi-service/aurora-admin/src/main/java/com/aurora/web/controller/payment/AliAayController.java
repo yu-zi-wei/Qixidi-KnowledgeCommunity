@@ -6,7 +6,6 @@ import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.aurora.business.service.AliAayService;
 import com.aurora.common.config.AlipayConfig;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +43,6 @@ public class AliAayController {
      */
     @GetMapping("/order/pay/{id}")
     public void payOrder(HttpServletResponse response,
-                         @ApiParam("主键")
                          @NotNull(message = "主键不能为空")
                          @PathVariable("id") Long id) throws Exception {
         aliAayService.payOrder(response, id);

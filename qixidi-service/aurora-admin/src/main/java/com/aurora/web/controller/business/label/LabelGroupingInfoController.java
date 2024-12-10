@@ -15,16 +15,11 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 

@@ -15,14 +15,11 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,9 +62,7 @@ public class UserReportController extends BaseController {
      */
     @SaCheckPermission("business:user:report:query")
     @GetMapping("/{id}")
-    public R<UserReportVo> getInfo(@ApiParam("主键")
-                                   @NotNull(message = "主键不能为空")
-                                   @PathVariable("id") Long id) {
+    public R<UserReportVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iUserReportService.queryById(id));
     }
 
@@ -99,9 +94,7 @@ public class UserReportController extends BaseController {
     @SaCheckPermission("business:user:report:remove")
     @Log(title = "用户签到", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iUserReportService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

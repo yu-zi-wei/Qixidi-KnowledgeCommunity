@@ -3,7 +3,6 @@ package com.aurora.system.domain.bo;
 import com.aurora.common.core.domain.BaseEntity;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.core.validate.EditGroup;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,7 +24,6 @@ public class SysOssConfigBo extends BaseEntity {
     /**
      * 主建
      */
-    @ApiModelProperty(value = "主建", required = true)
     private Long ossConfigId;
 
     /**

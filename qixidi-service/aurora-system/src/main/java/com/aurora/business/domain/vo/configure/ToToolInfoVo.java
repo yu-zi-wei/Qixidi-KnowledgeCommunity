@@ -4,7 +4,6 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.aurora.common.annotation.ExcelDictFormat;
 import com.aurora.common.convert.ExcelDictConvert;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Date;
@@ -17,7 +16,6 @@ import java.util.Date;
  * @date 2022-10-21
  */
 @Data
-@ApiModel("工具信息视图对象")
 @ExcelIgnoreUnannotated
 public class ToToolInfoVo {
 

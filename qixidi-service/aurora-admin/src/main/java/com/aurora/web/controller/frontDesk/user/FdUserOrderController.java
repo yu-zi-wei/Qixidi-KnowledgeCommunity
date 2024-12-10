@@ -10,12 +10,9 @@ import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.helper.LoginHelper;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 【前台】用户订单管理
@@ -45,9 +42,7 @@ public class FdUserOrderController extends BaseController {
      * @return
      */
     @GetMapping("/info/{id}")
-    public R<UserOrderVo> getInfo(@ApiParam("主键")
-                                  @NotNull(message = "主键不能为空")
-                                  @PathVariable("id") Long id) {
+    public R<UserOrderVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iUserOrderService.queryById(id));
     }
 
@@ -55,9 +50,7 @@ public class FdUserOrderController extends BaseController {
      * 删除用户订单
      */
     @DeleteMapping("/delete/{id}")
-    public R<Void> deleteOrder(@ApiParam("主键")
-                               @NotNull(message = "主键不能为空")
-                               @PathVariable("id") Long id) {
+    public R<Void> deleteOrder(@PathVariable("id") Long id) {
         return toAjax(iUserOrderService.deleteOrder(id) ? 1 : 0);
     }
 

@@ -15,13 +15,11 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.List;
 
@@ -108,9 +106,7 @@ public class ArticleCommentController extends BaseController {
      */
     @Log(title = "文章评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] ids) {
+    public R<Void> remove(@PathVariable Long[] ids) {
         return toAjax(iArticleCommentService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
     }
 }

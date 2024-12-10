@@ -14,7 +14,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.StringUtils;
 import com.aurora.common.utils.redis.RedisUtils;
 import com.aurora.system.domain.SysUserOnline;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -19,7 +19,6 @@ import com.aurora.system.domain.SysOss;
 import com.aurora.system.domain.bo.SysOssBo;
 import com.aurora.system.domain.vo.SysOssVo;
 import com.aurora.system.service.ISysOssService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -87,7 +86,7 @@ public class SysOssController extends BaseController {
      */
     @SaCheckPermission("system:oss:download")
     @GetMapping("/download/{ossId}")
-    public void download(@ApiParam("OSS对象ID") @PathVariable Long ossId, HttpServletResponse response) throws IOException {
+    public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
         SysOss sysOss = iSysOssService.getById(ossId);
         if (ObjectUtil.isNull(sysOss)) {
             throw new ServiceException("文件数据不存在!");

@@ -5,7 +5,6 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.aurora.business.domain.entity.count.CountUserWebsiteEntity;
 import com.aurora.common.annotation.ExcelDictFormat;
 import com.aurora.common.convert.ExcelDictConvert;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -160,8 +159,7 @@ public class TripartiteUserVo extends CountUserWebsiteEntity {
     /**
      * 用户等级
      */
-    @ApiModelProperty("用户等级")
-    private String grade;
+        private String grade;
 
     /**
      * 用户状态（0：正常，1：已删除，2：冻结）

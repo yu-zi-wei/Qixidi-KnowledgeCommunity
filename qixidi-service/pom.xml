@@ -21,8 +21,6 @@
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
         <spring-boot.mybatis>2.2.0</spring-boot.mybatis>
         <druid.version>1.2.8</druid.version>
-        <knife4j.version>3.0.3</knife4j.version>
-        <swagger-annotations.version>1.5.22</swagger-annotations.version>
         <poi.version>4.1.2</poi.version>
         <commons-compress.version>1.21</commons-compress.version>
         <easyexcel.version>3.0.5</easyexcel.version>
@@ -105,24 +103,6 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-
-<!--            <dependency>-->
-<!--                <groupId>com.github.xiaoymin</groupId>-->
-<!--                <artifactId>knife4j-spring-boot-starter</artifactId>-->
-<!--                <version>${knife4j.version}</version>-->
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <artifactId>swagger-annotations</artifactId>-->
-<!--                        <groupId>io.swagger</groupId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
-<!--            </dependency>-->
-
-<!--            <dependency>-->
-<!--                <groupId>io.swagger</groupId>-->
-<!--                <artifactId>swagger-annotations</artifactId>-->
-<!--                <version>${swagger-annotations.version}</version>-->
-<!--            </dependency>-->
 
             <!-- excel工具 -->
             <dependency>
@@ -336,7 +316,6 @@
                 <!-- 环境标识，需要与配置文件的名称相对应 -->
                 <profiles.active>dev</profiles.active>
                 <logging.level>debug</logging.level>
-                <knife4j.production>false</knife4j.production>
                 <endpoints.include>'*'</endpoints.include>
             </properties>
             <activation>
@@ -349,7 +328,6 @@
             <properties>
                 <profiles.active>prod</profiles.active>
                 <logging.level>warn</logging.level>
-                <knife4j.production>true</knife4j.production>
                 <endpoints.include>health, info, logfile</endpoints.include>
             </properties>
         </profile>

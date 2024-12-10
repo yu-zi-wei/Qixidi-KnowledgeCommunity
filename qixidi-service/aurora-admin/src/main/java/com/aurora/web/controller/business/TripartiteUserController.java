@@ -15,13 +15,11 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -63,9 +61,7 @@ public class TripartiteUserController extends BaseController {
      */
     @SaCheckPermission("system:main:query")
     @GetMapping("/{uuid}")
-    public R<TripartiteUserVo> getInfo(@ApiParam("主键")
-                                       @NotNull(message = "主键不能为空")
-                                       @PathVariable("uuid") String uuid) {
+    public R<TripartiteUserVo> getInfo(@PathVariable("uuid") String uuid) {
         return R.ok(iTripartiteUserService.queryById(uuid));
     }
 

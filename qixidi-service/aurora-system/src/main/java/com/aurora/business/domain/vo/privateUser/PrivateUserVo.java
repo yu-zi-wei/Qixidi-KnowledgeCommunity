@@ -2,7 +2,6 @@ package com.aurora.business.domain.vo.privateUser;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,7 +14,6 @@ import java.util.Date;
  * @date 2023-03-23
  */
 @Data
-@ApiModel("私信记录视图对象")
 @ExcelIgnoreUnannotated
 public class PrivateUserVo {
 

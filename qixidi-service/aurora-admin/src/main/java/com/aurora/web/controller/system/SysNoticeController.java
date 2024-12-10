@@ -9,7 +9,6 @@ import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.system.domain.SysNotice;
 import com.aurora.system.service.ISysNoticeService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +40,7 @@ public class SysNoticeController extends BaseController {
      */
     @SaCheckPermission("system:notice:query")
     @GetMapping(value = "/{noticeId}")
-    public R<SysNotice> getInfo(@ApiParam("公告ID") @PathVariable Long noticeId) {
+    public R<SysNotice> getInfo(@PathVariable Long noticeId) {
         return R.ok(noticeService.selectNoticeById(noticeId));
     }
 
@@ -71,7 +70,7 @@ public class SysNoticeController extends BaseController {
     @SaCheckPermission("system:notice:remove")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
-    public R<Void> remove(@ApiParam("公告ID串") @PathVariable Long[] noticeIds) {
+    public R<Void> remove(@PathVariable Long[] noticeIds) {
         return toAjax(noticeService.deleteNoticeByIds(noticeIds));
     }
 }

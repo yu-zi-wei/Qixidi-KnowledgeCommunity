@@ -14,14 +14,11 @@ import com.aurora.common.core.validate.EditGroup;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +48,6 @@ public class ToToolInfoController extends BaseController {
     /**
      * 导出工具信息列表
      */
-    @ApiOperation("导出具信息列表")
     @SaCheckPermission("business:toolInfo:export")
     @Log(title = "工具信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -65,9 +61,7 @@ public class ToToolInfoController extends BaseController {
      */
     @SaCheckPermission("business:toolInfo:query")
     @GetMapping("/{id}")
-    public R<ToToolInfoVo> getInfo(@ApiParam("主键")
-                                   @NotNull(message = "主键不能为空")
-                                   @PathVariable("id") Long id) {
+    public R<ToToolInfoVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iToToolInfoService.queryById(id));
     }
 

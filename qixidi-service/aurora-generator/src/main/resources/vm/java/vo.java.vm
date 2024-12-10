@@ -19,7 +19,6 @@ import lombok.Data;
  * @date ${datetime}
  */
 @Data
-@ApiModel("${functionName}视图对象")
 @ExcelIgnoreUnannotated
 public class ${ClassName}Vo {
 
@@ -45,7 +44,6 @@ public class ${ClassName}Vo {
 #else
     @ExcelProperty(value = "${comment}")
 #end
-    @ApiModelProperty("$column.columnComment")
     private $column.javaType $column.javaField;
 
 #end

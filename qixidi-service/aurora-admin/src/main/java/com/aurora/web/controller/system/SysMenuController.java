@@ -10,7 +10,6 @@ import com.aurora.common.core.domain.entity.SysMenu;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.StringUtils;
 import com.aurora.system.service.ISysMenuService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +46,7 @@ public class SysMenuController extends BaseController {
      */
     @SaCheckPermission("system:menu:query")
     @GetMapping(value = "/{menuId}")
-    public R<SysMenu> getInfo(@ApiParam("菜单ID") @PathVariable Long menuId) {
+    public R<SysMenu> getInfo(@PathVariable Long menuId) {
         return R.ok(menuService.selectMenuById(menuId));
     }
 
@@ -64,7 +63,7 @@ public class SysMenuController extends BaseController {
      * 加载对应角色菜单列表树
      */
     @GetMapping(value = "/roleMenuTreeselect/{roleId}")
-    public R<Map<String, Object>> roleMenuTreeselect(@ApiParam("角色ID") @PathVariable("roleId") Long roleId) {
+    public R<Map<String, Object>> roleMenuTreeselect(@PathVariable("roleId") Long roleId) {
         List<SysMenu> menus = menuService.selectMenuList(getUserId());
         Map<String, Object> ajax = new HashMap<>();
         ajax.put("checkedKeys", menuService.selectMenuListByRoleId(roleId));
@@ -110,7 +109,7 @@ public class SysMenuController extends BaseController {
     @SaCheckPermission("system:menu:remove")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")
-    public R<Void> remove(@ApiParam("菜单ID") @PathVariable("menuId") Long menuId) {
+    public R<Void> remove(@PathVariable("menuId") Long menuId) {
         if (menuService.hasChildByMenuId(menuId)) {
             return R.fail("存在子菜单,不允许删除");
         }

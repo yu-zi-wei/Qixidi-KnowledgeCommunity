@@ -9,7 +9,6 @@ import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.QueryGroup;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,9 +47,7 @@ public class FdPrivateUserController extends BaseController {
      * 删除私信用户
      */
     @DeleteMapping("/{id}")
-    public R<Void> remove(@ApiParam("主键串")
-                          @NotEmpty(message = "主键不能为空")
-                          @PathVariable String id) {
+    public R<Void> remove(@PathVariable String id) {
         return toAjax(iPrivateUserService.deleteById(id) ? 1 : 0);
     }
 

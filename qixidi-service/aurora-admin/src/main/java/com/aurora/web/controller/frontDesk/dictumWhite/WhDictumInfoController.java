@@ -17,7 +17,6 @@ import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.RedisKeyEnums;
 import com.aurora.common.utils.redis.RedisUtils;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -70,9 +68,7 @@ public class WhDictumInfoController {
      * 获取名言专辑详细信息
      */
     @GetMapping("/album/{id}")
-    public R<DictumAlbumVo> getAlbumInfo(@ApiParam("主键")
-                                         @NotNull(message = "主键不能为空")
-                                         @PathVariable("id") Long id) {
+    public R<DictumAlbumVo> getAlbumInfo(@PathVariable("id") Long id) {
         return R.ok(iDictumAlbumService.queryById(id));
     }
 

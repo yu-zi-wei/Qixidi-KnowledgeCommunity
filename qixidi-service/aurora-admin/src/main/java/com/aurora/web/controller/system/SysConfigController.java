@@ -11,7 +11,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
 import com.aurora.system.domain.SysConfig;
 import com.aurora.system.service.ISysConfigService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +59,7 @@ public class SysConfigController extends BaseController {
      */
     @SaCheckPermission("system:config:query")
     @GetMapping(value = "/{configId}")
-    public R<SysConfig> getInfo(@ApiParam("参数ID") @PathVariable Long configId) {
+    public R<SysConfig> getInfo(@PathVariable Long configId) {
         return R.ok(configService.selectConfigById(configId));
     }
 
@@ -68,7 +67,7 @@ public class SysConfigController extends BaseController {
      * 根据参数键名查询参数值
      */
     @GetMapping(value = "/configKey/{configKey}")
-    public R<Void> getConfigKey(@ApiParam("参数Key") @PathVariable String configKey) {
+    public R<Void> getConfigKey(@PathVariable String configKey) {
         return R.ok(configService.selectConfigByKey(configKey));
     }
 
@@ -114,7 +113,7 @@ public class SysConfigController extends BaseController {
     @SaCheckPermission("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
-    public R<Void> remove(@ApiParam("参数ID串") @PathVariable Long[] configIds) {
+    public R<Void> remove(@PathVariable Long[] configIds) {
         configService.deleteConfigByIds(configIds);
         return R.ok();
     }

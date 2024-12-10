@@ -18,7 +18,6 @@ import com.aurora.system.domain.SysUserRole;
 import com.aurora.system.service.ISysRoleService;
 import com.aurora.system.service.ISysUserService;
 import com.aurora.system.service.SysPermissionService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +72,7 @@ public class SysRoleController extends BaseController {
      */
     @SaCheckPermission("system:role:query")
     @GetMapping(value = "/{roleId}")
-    public R<SysRole> getInfo(@ApiParam("角色ID") @PathVariable Long roleId) {
+    public R<SysRole> getInfo(@PathVariable Long roleId) {
         roleService.checkRoleDataScope(roleId);
         return R.ok(roleService.selectRoleById(roleId));
     }
@@ -152,7 +151,7 @@ public class SysRoleController extends BaseController {
     @SaCheckPermission("system:role:remove")
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleIds}")
-    public R<Void> remove(@ApiParam("岗位ID串") @PathVariable Long[] roleIds) {
+    public R<Void> remove(@PathVariable Long[] roleIds) {
         return toAjax(roleService.deleteRoleByIds(roleIds));
     }
 

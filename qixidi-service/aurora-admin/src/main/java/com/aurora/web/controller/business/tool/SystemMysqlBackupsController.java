@@ -5,9 +5,6 @@ import com.aurora.business.service.tool.SystemMysqlBackupsService;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.exception.ServiceException;
 import com.aurora.common.utils.Constants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -137,7 +134,7 @@ public class SystemMysqlBackupsController {
      * @return
      */
     @PutMapping("/rollback")
-    public R rollback(@ApiParam(value = "恢复数据库") @RequestBody Map<String, Object> map) {
+    public R rollback(@RequestBody Map<String, Object> map) {
         Long id = Long.valueOf(map.get("id").toString());
         if (id == null) {
             throw new ServiceException("id不能为null，请重新尝试！");

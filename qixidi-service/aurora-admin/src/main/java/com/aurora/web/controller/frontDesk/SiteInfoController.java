@@ -5,8 +5,6 @@ import com.aurora.business.domain.vo.FriendLinkVo;
 import com.aurora.business.service.SiteInfoService;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.page.TableDataInfo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

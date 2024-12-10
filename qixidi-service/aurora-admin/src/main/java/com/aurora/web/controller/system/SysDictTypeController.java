@@ -11,7 +11,6 @@ import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
 import com.aurora.system.service.ISysDictTypeService;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +33,7 @@ public class SysDictTypeController extends BaseController {
 
     /**
      * 查询字典类型列表
+     *
      * @param dictType
      * @param pageQuery
      * @return
@@ -46,6 +46,7 @@ public class SysDictTypeController extends BaseController {
 
     /**
      * 导出字典类型列表
+     *
      * @param dictType
      * @param response
      */
@@ -62,7 +63,7 @@ public class SysDictTypeController extends BaseController {
      */
     @SaCheckPermission("system:dict:query")
     @GetMapping(value = "/{dictId}")
-    public R<SysDictType> getInfo(@ApiParam("字典ID") @PathVariable Long dictId) {
+    public R<SysDictType> getInfo(@PathVariable Long dictId) {
         return R.ok(dictTypeService.selectDictTypeById(dictId));
     }
 
@@ -98,7 +99,7 @@ public class SysDictTypeController extends BaseController {
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")
-    public R<Void> remove(@ApiParam("字典ID串") @PathVariable Long[] dictIds) {
+    public R<Void> remove(@PathVariable Long[] dictIds) {
         dictTypeService.deleteDictTypeByIds(dictIds);
         return R.ok();
     }

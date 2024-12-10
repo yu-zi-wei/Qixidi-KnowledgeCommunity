@@ -10,7 +10,6 @@ import com.aurora.common.enums.BusinessType;
 import com.aurora.common.utils.poi.ExcelUtil;
 import com.aurora.system.domain.SysLogininfor;
 import com.aurora.system.service.ISysLogininforService;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +74,6 @@ public class SysLogininforController extends BaseController {
      * 清空系统访问记录
      * @return
      */
-    @ApiOperation("清空系统访问记录")
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
