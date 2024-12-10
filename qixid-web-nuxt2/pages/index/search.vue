@@ -1,10 +1,10 @@
 <template>
-  <div style="width: 1000px;margin: auto">
-    <el-menu :default-active="$route.path"
-             class="el-menu-demo" mode="horizontal"
+  <div style="width: 1000px;margin: auto;">
+    <el-menu class="el-menu-demo background-color-fefefe dds" mode="horizontal"
              @select="handleSelect"
-             text-color="#2f3542"
-             active-text-color="#8854d0">
+             :router="true"
+             text-color="#0a3d62"
+             :active-text-color="themeColor">
       <el-menu-item index="/search/data">综合</el-menu-item>
       <el-menu-item index="/search/article">文章</el-menu-item>
       <el-menu-item index="/search/label">标签</el-menu-item>
@@ -21,6 +21,7 @@ export default {
   name: "index",
   data() {
     return {
+      themeColor: process.env.THEME_COLOR,
       query: {
         data: this.$route.query.data,
       }
@@ -49,5 +50,9 @@ export default {
   background-color: #fefefe;
   border-radius: 4px;
   padding-bottom: 20px;
+}
+
+.dds {
+  background-color: #FEFEFE;
 }
 </style>

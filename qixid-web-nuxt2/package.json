@@ -13,7 +13,7 @@
     "@antv/g2plot": "^2.4.31",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/proxy": "^2.1.0",
-    "aieditor": "^1.2.2",
+    "aieditor": "^1.2.8",
     "base-64": "^1.0.0",
     "cookie-universal-nuxt": "^2.2.2",
     "core-js": "^3.25.3",

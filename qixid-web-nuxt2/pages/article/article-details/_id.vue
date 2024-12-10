@@ -93,7 +93,7 @@
             <div class="mb-10">
               <h2 class="article-title">{{ articleInfo.articleTitle }}</h2>
               <div class="article-user-info-two">
-                <div class="mt-4 ml-8">
+                <div class="mt-4 ml-8 flex-space-between align-items-center">
                   <div>
                     <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)" target="_blank">
                       <span class="cursor-pointer mr-10 hover-cl" v-text="articleInfo.nickname"></span>
@@ -108,7 +108,8 @@
                         fill="" p-id="4313"></path></svg>
                       {{ articleInfo.numberTimes }}</span>
                   </div>
-
+                  <div v-if="isOwn" @click="articleEdit(articleInfo.id)"
+                        class="font-s-13 cursor-pointer ml-10 color-theme">编辑</div>
                 </div>
               </div>
             </div>
@@ -126,11 +127,9 @@
                     :title="labelName.labelName">
                     <nuxt-link target="_blank"
                                :to="'/external_info/label-info?data='+labelName.id+'&type='+2">
-                      {{ labelName.labelName }}
+                     #{{ labelName.labelName }}
                     </nuxt-link>
                   </span>
-              <span v-if="isOwn" @click="articleEdit(articleInfo.id)"
-                    class="font-s-13 cursor-pointer ml-10 color-theme">编辑</span>
             </div>
             <hr class="hr-item mb-30 mt-20 mr-20"/>
             <!--            评论-->
