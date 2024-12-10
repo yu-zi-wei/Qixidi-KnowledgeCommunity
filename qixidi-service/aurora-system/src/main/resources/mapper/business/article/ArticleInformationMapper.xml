@@ -81,7 +81,7 @@
                 or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%'))
             </if>
             <if test="bo.labelId!=null and bo.labelId!=''">
-                and ai.label_id like concat('%' ,#{bo.labelId},'%')
+                and FIND_IN_SET(#{bo.labelId}, ai.label_id)
             </if>
             <if test="bo.specialId!=null and bo.specialId!=''">
                 and ai.special_id = #{bo.specialId}

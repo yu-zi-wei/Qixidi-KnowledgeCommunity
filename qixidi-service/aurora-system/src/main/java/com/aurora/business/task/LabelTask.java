@@ -55,7 +55,7 @@ public class LabelTask {
                 .map(e -> {
                     Map<String, String> map = new HashMap<>();
                     map.put("label", String.valueOf(e.getKey()));
-                    map.put("count", String.valueOf(e.getValue()));
+                    map.put("count", String.valueOf(e.getValue() + 1));
                     return map;
                 }).collect(Collectors.toList());
 

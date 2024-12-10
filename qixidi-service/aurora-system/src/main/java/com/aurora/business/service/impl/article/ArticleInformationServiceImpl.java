@@ -353,7 +353,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 searchRecordsMapper.insert(searchRecords);
             });
         }
-
         return baseMapper.articleList(bo, pageQuery.build());
     }
 
