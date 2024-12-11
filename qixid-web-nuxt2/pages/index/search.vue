@@ -1,8 +1,8 @@
 <template>
   <div style="width: 1000px;margin: auto;">
     <el-menu class="el-menu-demo background-color-fefefe dds" mode="horizontal"
+             :default-active="$route.path"
              @select="handleSelect"
-             :router="true"
              text-color="#0a3d62"
              :active-text-color="themeColor">
       <el-menu-item index="/search/data">综合</el-menu-item>

@@ -71,7 +71,9 @@ export default {
       query: {
         toolName: null,
         id: null,
-      }
+      },
+      debounceTimer: null,//防抖
+      debounceTime: 400,//防抖时间
     }
   },
   watch: {
@@ -91,15 +93,18 @@ export default {
   },
   methods: {
     toolSearch() {
+      clearTimeout(this.debounceTimer);
       this.loading = true;
-      this.$API("/white/configure/tool/child/list", "get", {toolName: this.toolName}).then(res => {
-        this.toolArray = res;
-        this.loading = false;
-      })
+      this.debounceTimer = setTimeout(() => {
+        this.$API("/white/configure/tool/child/list", "get", {toolName: this.toolName, isParent: 2}).then(res => {
+          this.toolArray = res;
+          this.loading = false;
+        })
+      }, this.debounceTime);
     },
     toolChildLists() {
       this.loading = true;
-      this.$API("/white/configure/tool/child/list", "get", {id: this.id}).then(res => {
+      this.$API("/white/configure/tool/child/list", "get", {id: this.id, isParent: 2}).then(res => {
         this.toolArray = res;
         this.loading = false;
       })

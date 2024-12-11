@@ -136,6 +136,7 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
     public List<ToToolInfoVo> childList(ToToolInfoBo bo) {
         LambdaQueryWrapper<ToToolInfo> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getId() != null, ToToolInfo::getParentId, bo.getId());
+        lqw.eq(bo.getIsParent() != null, ToToolInfo::getIsParent, bo.getIsParent());
         lqw.like(StringUtils.isNotBlank(bo.getToolName()), ToToolInfo::getToolName, bo.getToolName());
         lqw.or().like(StringUtils.isNotBlank(bo.getToolName()), ToToolInfo::getDescribe, bo.getToolName());
         lqw.orderByDesc(ToToolInfo::getCreateTime);
