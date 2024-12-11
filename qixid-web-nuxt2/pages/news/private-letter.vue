@@ -4,7 +4,7 @@
     <div v-show="!userLoading" style="height: 80%">
       <!--          头部-->
       <div class="user-top-div flex-center">
-        <div v-if="positionUserInfo.avatar">
+        <div>
           <el-avatar :size="35" v-if="positionUserInfo.avatar" :src="positionUserInfo.avatar"></el-avatar>
           <el-avatar :size="35" v-else src="/img/tx.jpg"></el-avatar>
         </div>
@@ -77,14 +77,16 @@
                           <span class="color-grey-2 font-s-12">{{ $utils.reckonTime(item.createTime) }}</span>
                           <span>{{ item.nickname }}</span>
                         </div>
-                        <el-avatar :src="item.userAvatar"></el-avatar>
+                        <el-avatar v-if="item.userAvatar" :src="item.userAvatar"></el-avatar>
+                        <el-avatar v-else src="/img/tx.jpg"></el-avatar>
                       </div>
                       <div class="tooltip-right"> {{ item.newsComment }}</div>
                     </div>
                   </div>
                   <div v-else>
                     <div class="flex-left align-items-center">
-                      <el-avatar :src="item.userAvatar"></el-avatar>
+                      <el-avatar v-if="item.userAvatar" :src="item.userAvatar"></el-avatar>
+                      <el-avatar v-else src="/img/tx.jpg"></el-avatar>
                       <div class="ml-4">
                         <span>{{ item.nickname }}</span>
                         <span class="color-grey-2 font-s-12">{{ $utils.reckonTime(item.createTime) }}</span>
@@ -150,6 +152,9 @@ export default {
         replyTargetUid: null,
       },
       privateUserList: [],
+      userSocket: null,
+      //私信链接
+      socket: null,
     }
   },
   watch: {
@@ -207,14 +212,33 @@ export default {
     },
     webSocketLink(uuid) {
       if (uuid == null) return;
-      const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/${uuid}/${3}`;
+      const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/${uuid}/${4}`;
       this.socket = new WebSocket(url);
-
       this.socket.onopen = () => {
-        // 在这里可以执行连接成功后的操作
       };
 
       this.socket.onmessage = (event) => {
+        let res = JSON.parse(event.data);
+        this.privateUserList = res.rows;
+      };
+      this.socket.onclose = (event) => {
+      };
+    },
+    webSocketUserLink(uuid) {
+      if (uuid == null) return;
+      //获取用户列表
+      const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/${uuid}/${3}`;
+      this.userSocket = new WebSocket(url);
+
+      this.userSocket.onopen = () => {
+        //滚动条在底部
+        this.$nextTick(() => {
+          let scrollEl = this.$refs.mianscroll;
+          scrollEl.scrollTo({top: scrollEl.scrollHeight, behavior: 'smooth'});
+        });
+      };
+
+      this.userSocket.onmessage = (event) => {
         let res = JSON.parse(event.data)
         this.newsList = res.newsList;
         this.privateUserList = res.userList;
@@ -224,7 +248,7 @@ export default {
           scrollEl.scrollTo({top: scrollEl.scrollHeight, behavior: 'smooth'});
         });
       };
-      this.socket.onclose = (event) => {
+      this.userSocket.onclose = (event) => {
       };
     },
 
@@ -235,18 +259,21 @@ export default {
       this.newsLoading = true;
       if (this.$route.query.code == null) {
         this.newsLoading = false;
-        // console.log("失败")
         return;
       }
+      //删除原链接
+      if (this.userSocket != null) {
+        this.userSocket.close();
+      }
       this.replyNews.replyTargetUid = this.$base64.decode(this.$route.query.code);
-      //建立链接
-      this.webSocketLink(this.userInfo.uuid + ":sx");
+      //建立用户链接
+      this.webSocketUserLink(this.userInfo.uuid + ":" + this.replyNews.replyTargetUid);
       //消息已读
       this.$API("/frontDesk/private/newsInfo/been/read/" + this.replyNews.replyTargetUid, "get").finally(() => {
         //  刷新用户列表
-        this.$API("/frontDesk/private/user/list", "get", {uid: this.userInfo.uuid}).then(res => {
-          this.privateUserList = res.rows;
-        })
+        // this.$API("/frontDesk/private/user/list", "get", {uid: this.userInfo.uuid}).then(res => {
+        //   this.privateUserList = res.rows;
+        // })
       });
       //获取聊天数据
       this.$API("/frontDesk/private/newsInfo/list", "get", this.replyNews).then(res => {
@@ -261,7 +288,7 @@ export default {
         this.newsLoading = false
       });
       //是否在线
-      this.$API("/frontDesk/sse/is/online/" + this.replyNews.replyTargetUid + ':sx', "get").then(res => {
+      this.$API("/websocket/is-online/" + this.replyNews.replyTargetUid, "get").then(res => {
         this.positionUserInfo = res.data;
       })
     },
@@ -306,19 +333,23 @@ export default {
             })
             //获取私信信息
             this.messageList();
+            //建立私信页面红点链接
+            this.webSocketLink(this.userInfo.uuid + ":sx");
             return;
           }
         }
       }).finally(() => this.userLoading = false)
     },
   },
-  beforeDestroy() {
-    // 组件销毁时记得关链接释放资源
-    if (this.userInfo == null || this.userInfo.userType != 'tripartite_user') {
-      return;
+  //离开页面关闭链接
+  destroyed() {
+    if (this.userSocket != null) {
+      this.userSocket.close();
+    }
+    if (this.socket != null) {
+      this.socket.close();
     }
   },
-
   mounted() {
     this.getBasicsUsers();
   }

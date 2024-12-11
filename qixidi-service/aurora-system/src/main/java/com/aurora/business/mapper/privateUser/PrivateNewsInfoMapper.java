@@ -1,7 +1,7 @@
 package com.aurora.business.mapper.privateUser;
 
 import com.aurora.business.domain.bo.privateUser.PrivateNewsInfoBo;
-import com.aurora.business.domain.entity.news.NewsUserInfo;
+import com.aurora.business.domain.entity.news.NewsUserRecord;
 import com.aurora.business.domain.entity.privateUser.PrivateNewsInfo;
 import com.aurora.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.aurora.business.domain.vo.privateUser.PrivateUserVo;
@@ -21,7 +21,7 @@ public interface PrivateNewsInfoMapper extends BaseMapperPlus<PrivateNewsInfoMap
 
     Page<PrivateNewsInfoVo> selectListXml(@Param("bo") PrivateNewsInfoBo bo, Page<Object> build);
 
-    List<NewsUserInfo> selectRead(@Param("uid") String uid);
+    List<NewsUserRecord> selectRead(@Param("uid") String uid);
 
     PrivateNewsInfoVo selectLast(@Param("uuid") String uuid, @Param("replyTargetUid") String replyTargetUid);
 

@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class NewsUserSumVo implements Serializable {
     /**
-     * 消息类型（1：点赞消息，2：评论消息，3：关注消息）
+     * 消息类型（1：点赞消息，2：评论消息，3：关注消息,4:私信消息）
      */
     private Integer type;
     /**

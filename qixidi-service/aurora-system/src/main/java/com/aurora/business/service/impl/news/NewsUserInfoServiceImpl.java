@@ -11,6 +11,7 @@ import com.aurora.business.domain.vo.news.NewsUserSumVo;
 import com.aurora.business.mapper.comment.NewsUserRecordMapper;
 import com.aurora.business.mapper.news.NewsSystemInfoMapper;
 import com.aurora.business.mapper.news.NewsUserInfoMapper;
+import com.aurora.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.aurora.business.selector.webSocket.WebSocketSelector;
 import com.aurora.business.service.news.INewsUserInfoService;
 import com.aurora.common.core.domain.PageQuery;
@@ -47,6 +48,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     private final NewsUserInfoMapper baseMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
+    private final PrivateNewsInfoMapper privateNewsInfoMapper;
 
     /**
      * 查询用户消息
@@ -156,10 +158,10 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
             collect = newsUserRecords.stream().collect(Collectors.groupingBy(NewsUserRecord::getType));
         }
         //查询用户未读私信列表
-//        List<NewsUserInfo> newsUserInfos = privateNewsInfoMapper.selectRead(uid);
-//        if (CollectionUtils.isNotEmpty(newsUserInfos)) {
-//            collect.put(NewsType.PRIVATE_LETTER.getCode(), newsUserInfos);
-//        }
+        List<NewsUserRecord> newsUserInfos = privateNewsInfoMapper.selectRead(uid);
+        if (CollectionUtils.isNotEmpty(newsUserInfos)) {
+            collect.put(NewsType.PRIVATE_LETTER.getCode(), newsUserInfos);
+        }
 
 //        查询系统消息
 //        Set<String> cacheSet = RedisUtils.getCacheSet(RedisKeyEnums.SYSTEM_MESSAGES_READ_LIST.getKey());

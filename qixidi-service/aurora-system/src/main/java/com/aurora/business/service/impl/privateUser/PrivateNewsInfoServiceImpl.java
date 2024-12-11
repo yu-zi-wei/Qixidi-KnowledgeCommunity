@@ -3,6 +3,7 @@ package com.aurora.business.service.impl.privateUser;
 import cn.hutool.core.bean.BeanUtil;
 import com.aurora.business.domain.bo.privateUser.PrivateNewsInfoBo;
 import com.aurora.business.domain.bo.privateUser.PrivateUserBo;
+import com.aurora.business.domain.constant.WebSocketConstant;
 import com.aurora.business.domain.entity.privateUser.PrivateNewsInfo;
 import com.aurora.business.domain.entity.privateUser.PrivateUser;
 import com.aurora.business.domain.vo.privateUser.PrivateNewsInfoVo;
@@ -19,7 +20,6 @@ import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.enums.WebSocketEnum;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.common.utils.DateUtils;
-import com.aurora.common.utils.SseEmitterUtil;
 import com.aurora.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -116,7 +116,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         add.setUid(uuid);
         add.setCreateTime(new Date());
         String replyTargetUid = bo.getReplyTargetUid();
-        String webSocketUuid = replyTargetUid + ":sx";
+        String webSocketUuid = replyTargetUid + ":" + uuid;
         Boolean online = webSocketServer.isOnline(webSocketUuid);
         if (online) {
             add.setBeenRead(2);// 当前私信在线(默认已读)
@@ -155,8 +155,10 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
             log.info("webSocket私信推送:{}", add.getReplyTargetUid());
             return flag;
         }
-//        webSocket消息推送
+        //        webSocket推送系统消息
         WebSocketSelector.execute(replyTargetUid, WebSocketEnum.INSIDE_NOTICE);
+        //        webSocket推送私信红点
+        WebSocketSelector.execute(replyTargetUid + WebSocketConstant.PERSONAL_RED_DOT, WebSocketEnum.PERSONAL_RED_DOT);
         log.info("webSocket消息推送:{}", replyTargetUid);
         return flag;
     }
@@ -207,8 +209,11 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         String uuid = LoginHelper.getTripartiteUuid();
         baseMapper.update(null, new UpdateWrapper<PrivateNewsInfo>().set("been_read", 2)
             .eq("reply_target_uid", uuid).eq("uid", targetUid));
-//        推送sse消息
-        SseEmitterUtil.sendJsonMessage(uuid, iNewsUserInfoService.listSums(uuid));
+        //        webSocket站内消息推送
+        WebSocketSelector.execute(uuid, WebSocketEnum.INSIDE_NOTICE);
+        //        webSocket站内私信红点消息推送
+        WebSocketSelector.execute(uuid + WebSocketConstant.PERSONAL_RED_DOT, WebSocketEnum.PERSONAL_RED_DOT);
+
     }
 }
 

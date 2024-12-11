@@ -5,7 +5,9 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.aurora.business.domain.vo.user.TripartiteUserVo;
+import com.aurora.business.domain.vo.user.UserSimpleInfoVo;
 import com.aurora.business.service.ITripartiteUserService;
+import com.aurora.business.webSocket.WebSocketServer;
 import com.aurora.common.annotation.RepeatSubmit;
 import com.aurora.common.config.justAuth.JustAuthConfig;
 import com.aurora.common.constant.Constants;
@@ -47,7 +49,7 @@ public class LoginController extends BaseController {
     private JustAuthConfig justAuthConfig;
     private final SysLoginService loginService;
     private final ITripartiteUserService iTripartiteUserService;
-
+    private final WebSocketServer webSocketServer;
 
     /**
      * 密码登录
@@ -137,6 +139,7 @@ public class LoginController extends BaseController {
     @PostMapping("/oauth/logout")
     public R<Void> oauthLogout() {
         try {
+            webSocketServer.userLogout(LoginHelper.getTripartiteUuid());
             StpUtil.logout();
             loginService.logout(LoginHelper.getTripartiteUsername());
         } catch (NotLoginException e) {
@@ -279,4 +282,12 @@ public class LoginController extends BaseController {
     public SaResult isLogin() {
         return SaResult.ok().setData(iTripartiteUserService.isLogin());
     }
+
+
+    @GetMapping("/websocket/is-online/{userid}")
+    public R<UserSimpleInfoVo> isOnline(@PathVariable(name = "userid") String userid) {
+        UserSimpleInfoVo userInformation = iTripartiteUserService.isOnline(userid);
+        return R.ok(userInformation);
+    }
+
 }

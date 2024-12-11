@@ -1,28 +1,28 @@
 <template>
   <div>测试页面
     <div>
-      <button @click="steToken">设置token</button>
-      <button @click="requestJuejing">请求</button>
-      <button @click="dynamicRouting">动态路由</button>
-      <button @click="getSessionStorage">getSessionStorage</button>
-      <button @click="$router.push('/dictum');"> this.$router.push('/dictum');</button>
-      <button @click="$router.push('/xxx');"> this.$router.push('/xxx');</button>
-      <nuxt-link to="/">主页</nuxt-link>
-      <button @click="websocketMain('1625400372048826368')"> 测试websocket客户端1</button>
-      <button @click="websocketMain('ziwei12')"> 测试websocket客户端2</button>
-      <button @click="websocketSend"> 发送消息</button>
-      <button @click="websocketClose('ziwei1')"> 关闭链接ziwei1</button>
+      <el-button @click="steToken">设置token</el-button>
+      <el-button @click="requestJuejing">请求</el-button>
+      <el-button @click="dynamicRouting">动态路由</el-button>
+      <el-button @click="getSessionStorage">getSessionStorage</el-button>
+      <el-button @click="$router.push('/dictum');"> this.$router.push('/dictum');</el-button>
+      <el-button @click="$router.push('/xxx');"> this.$router.push('/xxx');</el-button>
+      <el-nuxt-link to="/">主页</el-nuxt-link>
+      <el-button @click="websocketMain('1625400372048826368')"> 测试websocket客户端1</el-button>
+      <el-button @click="websocketMain('ziwei12')"> 测试websocket客户端2</el-button>
+      <el-button @click="websocketSend"> 发送消息</el-button>
+      <el-button @click="websocketClose('ziwei1')"> 关闭链接ziwei1</el-button>
 
 
     </div>
 
     <div v-if="submissionLoading">
-      <submission-chart :profile="submissionObj"></submission-chart>
+      <!--      <submission-chart :profile="submissionObj"></submission-chart>-->
     </div>
     <div>
-      <div v-for="(item,index) in toolList" :key="index">
-        <p>{{ item.toolName }}</p>
-      </div>
+      <!--      <div v-for="(item,index) in toolList" :key="index">-->
+      <!--        <p>{{ item.toolName }}</p>-->
+      <!--      </div>-->
     </div>
     <ai-editor-module></ai-editor-module>
   </div>
@@ -104,11 +104,12 @@ export default {
       this.socket.send("发送测试数据")
     },
     websocketMain(name) {
-      const url = 'ws://127.0.0.1:9001/websocket/' + name;
+      const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/${name}/-1`;
+      // const url = 'ws://127.0.0.1:9001/websocket/' + name;
       this.socket = new WebSocket(url);
 
       this.socket.onopen = () => {
-        console.log('WebSocket connected');
+        console.log('链接成功');
         // 在这里可以执行连接成功后的操作
       };
 

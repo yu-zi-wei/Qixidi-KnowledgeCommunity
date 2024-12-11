@@ -27,35 +27,61 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketServer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
-    //在线客户端数量
-    private static int onlineCount = 0;
     //Map用来存储已连接的客户端信息
     private static ConcurrentHashMap<String, SocketDomain> websocketMap = new ConcurrentHashMap<>();
     //当前客户端名称
     private String userId = "";
 
+    /**
+     * 用户是否在线
+     *
+     * @param userId
+     * @return
+     */
     public Boolean isOnline(String userId) {
-        if (websocketMap.containsKey(userId)) {
-            return true;
-        }
-        return false;
+        return websocketMap.containsKey(userId);
     }
 
+    /**
+     * 用户下线
+     *
+     * @param userId
+     */
+    public void userLogout(String userId) {
+        //用户链接
+        if (websocketMap.containsKey(userId)) {
+            websocketMap.remove(userId);
+            logger.info("用户下线：{}，人数:{}", userId, websocketMap.size());
+        }
+        //优化私信链接
+        String uid1 = userId + ":sx";
+        if (websocketMap.containsKey(uid1)) {
+            websocketMap.remove(uid1);
+            logger.info("用户下线：{}，人数:{}", uid1, websocketMap.size());
+        }
+    }
+
+    /**
+     * 建立链接
+     *
+     * @param session
+     * @param userId
+     * @param type
+     */
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId, @PathParam("type") Integer type) {
-        if (!websocketMap.containsKey(userId)) {
-            WebSocketServer.onlineCount++;
-        }
         this.userId = userId;
         SocketDomain socketDomain = new SocketDomain();
         socketDomain.setSession(session);
         socketDomain.setUri(session.getRequestURI().toString());
         websocketMap.put(userId, socketDomain);
-        logger.info("用户连接：" + userId + "，人数:" + onlineCount);
+        logger.info("用户连接：{}，人数:{}", userId, websocketMap.size());
         logger.info("type:", type);
         try {
             if (type == 1) {
                 WebSocketSelector.execute(userId, WebSocketEnum.INSIDE_NOTICE);
+            } else if (type == 4) {
+                WebSocketSelector.execute(userId, WebSocketEnum.PERSONAL_RED_DOT);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,15 +92,14 @@ public class WebSocketServer {
     public void onClose() {
         if (websocketMap.containsKey(userId)) {
             websocketMap.remove(userId);
-            onlineCount--;
-            logger.info("用户关闭：" + userId + "，人数:" + onlineCount);
+            logger.info("用户关闭：{}，人数:{}", userId, websocketMap.size());
         }
     }
 
     @OnMessage
     public void onMessage(String message, Session session) {
         if (StringUtil.isNotEmpty(message)) {
-            logger.info("收到用户消息:" + userId + ",报文:" + message);
+            logger.info("收到用户消息:{},报文:{}", userId, message);
         }
     }
 
@@ -91,8 +116,6 @@ public class WebSocketServer {
             if (socketDomain != null) {
                 // 向客户端发送消息
                 socketDomain.getSession().getAsyncRemote().sendObject(JsonUtils.toJsonString(message));
-            } else {
-                logger.warn("用户不存在：" + userId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,8 +130,6 @@ public class WebSocketServer {
             if (socketDomain != null) {
                 // 向客户端发送消息
                 socketDomain.getSession().getAsyncRemote().sendObject(message);
-            } else {
-                logger.warn("用户不存在：" + userId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +144,7 @@ public class WebSocketServer {
             Session toSeesion = client.getValue().getSession();
             if (!toSeesion.getId().equals(fromSession.getId()) && toSeesion.isOpen()) {
                 toSeesion.getAsyncRemote().sendText(message);
-                logger.info("服务端发送消息给" + client.getKey() + ":" + message);
+                logger.info("服务端发送消息给{}:{}", client.getKey(), message);
             }
         }
     }
@@ -134,7 +155,7 @@ public class WebSocketServer {
             Session toSeesion = client.getValue().getSession();
             if (toSeesion.isOpen()) {
                 toSeesion.getAsyncRemote().sendText(message);
-                logger.info("服务端发送消息给" + client.getKey() + ":" + message);
+                logger.info("服务端发送消息给{}:{}", client.getKey(), message);
             }
         }
     }

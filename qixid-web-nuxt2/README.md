@@ -58,3 +58,11 @@ pm2 startup #产生 init 脚本，保持进程活着；
 #杀进程
 pm2 kill #杀死pm2进程
 ```
+
+# nginx 相关
+```shell
+#检查配置
+/data/app/nginx/sbin/nginx -t
+# 重启nginx
+/data/app/nginx/sbin/nginx -s reload
+```

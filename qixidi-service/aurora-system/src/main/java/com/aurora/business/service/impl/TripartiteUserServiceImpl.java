@@ -20,6 +20,7 @@ import com.aurora.business.mapper.count.CountUserWebsiteMapper;
 import com.aurora.business.mapper.user.UserFollowMapper;
 import com.aurora.business.mapper.user.UserInformationMapper;
 import com.aurora.business.service.ITripartiteUserService;
+import com.aurora.business.webSocket.WebSocketServer;
 import com.aurora.common.config.SmsSendingConfig;
 import com.aurora.common.config.justAuth.BaiDuPlatformConfig;
 import com.aurora.common.config.justAuth.GiteePlatformConfig;
@@ -97,6 +98,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     private WeiBoPlatformConfig weiBoPlatformConfig;
     @Autowired
     private ZhiFuBaoPlatformConfig zhiFuBaoPlatformConfig;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 查询平台用户
@@ -473,6 +476,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         if (ObjectUtils.isNotEmpty(tripartiteUser)) {
             BeanUtils.copyProperties(tripartiteUser, userSimpleInfoVo);
         }
+        userSimpleInfoVo.setIsOnline(webSocketServer.isOnline(userid));
         return userSimpleInfoVo;
     }
 

@@ -77,9 +77,7 @@ public class SseEmitterController {
     @GetMapping("/is/online/{userid}")
     public R<UserSimpleInfoVo> isOnline(@PathVariable(name = "userid") String userid) {
 //        获取真正的uid
-        String uid = userid.substring(0, userid.lastIndexOf(":sx"));
-        UserSimpleInfoVo userInformation = iTripartiteUserService.isOnline(uid);
-        userInformation.setIsOnline(SseEmitterUtil.IsOnLine(userid));
+        UserSimpleInfoVo userInformation = iTripartiteUserService.isOnline(userid);
         return R.ok(userInformation);
     }
 

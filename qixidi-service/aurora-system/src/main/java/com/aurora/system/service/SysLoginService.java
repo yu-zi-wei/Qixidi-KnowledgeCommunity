@@ -43,7 +43,6 @@ public class SysLoginService {
     private final ISysUserService userService;
     private final LogininforService asyncService;
     private final SysPermissionService permissionService;
-
     /**
      * 登录验证
      *

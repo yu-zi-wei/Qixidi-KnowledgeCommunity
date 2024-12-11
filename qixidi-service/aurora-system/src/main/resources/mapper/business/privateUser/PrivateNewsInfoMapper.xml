@@ -21,7 +21,7 @@
         ORDER BY pni.create_time
     </select>
 
-    <select id="selectRead" resultType="com.aurora.business.domain.entity.news.NewsUserInfo">
+    <select id="selectRead" resultType="com.aurora.business.domain.entity.news.NewsUserRecord">
         select id, been_read
         from b_private_news_info
         where reply_target_uid = #{uid}

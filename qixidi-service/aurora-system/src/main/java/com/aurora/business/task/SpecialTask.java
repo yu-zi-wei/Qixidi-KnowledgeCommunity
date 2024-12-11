@@ -37,9 +37,9 @@ public class SpecialTask {
 
     /**
      * 同步专栏文章数
-     * 每天0点执行
+     * 每10分钟执行一次
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 */10 * * * *")
     public void recalculationColumn() {
         log.error("同步专栏文章数开始：{}", DateUtil.date());
         try {

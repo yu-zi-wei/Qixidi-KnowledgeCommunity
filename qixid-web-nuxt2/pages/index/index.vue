@@ -389,7 +389,7 @@ export default {
   height: 42px;
   line-height: 42px;
   width: 100%;
-  border-radius: 2px;
+  border-radius: 0px;
 }
 
 </style>
