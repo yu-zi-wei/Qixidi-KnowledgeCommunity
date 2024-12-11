@@ -1,6 +1,6 @@
 <template>
   <div style="width: 1000px;margin: auto;">
-    <el-menu class="el-menu-demo background-color-fefefe dds" mode="horizontal"
+    <el-menu class="el-menu-demo search-background" mode="horizontal"
              :default-active="$route.path"
              @select="handleSelect"
              text-color="#0a3d62"
@@ -52,7 +52,7 @@ export default {
   padding-bottom: 20px;
 }
 
-.dds {
+.search-background {
   background-color: #FEFEFE;
 }
 </style>
