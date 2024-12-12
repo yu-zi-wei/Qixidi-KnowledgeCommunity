@@ -135,8 +135,30 @@ public class DictumInfoVo {
      * 名言总数
      */
     private Long sum;
+
     /**
-     * 用户信息
+     * 用户名称
+     */
+    private String nickname;
+    /**
+     * 头像
+     */
+    private String avatar;
+    /**
+     * 职业
+     */
+    private String occupation;
+    /**
+     * 角色（1，普通用户，2，vip用户）
+     */
+    private String roleId;
+    /**
+     * 位置
+     */
+    private String location;
+
+    /**
+     * 用户详情信息
      */
     private TripartiteUserVo tripartiteUser;
 }
