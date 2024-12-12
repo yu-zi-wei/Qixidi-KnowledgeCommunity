@@ -49,6 +49,17 @@ public class WhDictumInfoController {
     }
 
     /**
+     * 获取名言详情(公开)
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/info/{id}")
+    public R<DictumInfoVo> getInfo(@PathVariable("id") Long id) {
+        return R.ok(iDictumInfoService.queryById(id));
+    }
+
+    /**
      * 查询名言专辑列表(公开)
      */
     @GetMapping("/album/list")

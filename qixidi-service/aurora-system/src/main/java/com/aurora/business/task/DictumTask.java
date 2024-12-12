@@ -60,10 +60,10 @@ public class DictumTask {
     }
 
     /**
-     * 计算热门数据（作者、标签）
-     * 每40分钟一次
+     * 计算名言广场热门数据（作者、标签）
+     * 每10分钟一次
      */
-    @Scheduled(cron = "0 */40 * * * *")
+    @Scheduled(cron = "0 */10 * * * *")
     public void countPopularAuthors() {
         try {
             List<DictumInfoVo> listAuthors = dictumInfoMapper.selectAuthorAuthors();
@@ -81,8 +81,9 @@ public class DictumTask {
                     }).collect(Collectors.toList());
 //        默认存前20个
                 Set<Map<String, String>> set = collect.stream().limit(20).collect(Collectors.toSet());
+                RedisUtils.deleteObject(RedisKeyEnums.POPULAR_AUTHORS.getKey());
                 RedisUtils.setCacheSet(RedisKeyEnums.POPULAR_AUTHORS.getKey(), set);
-                log.error("热门作者数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), set);
+                log.info("热门作者数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), set);
             }
             List<DictumInfoVo> listLabel = dictumInfoMapper.selectAuthorLabel();
             if (CollectionUtils.isNotEmpty(listLabel)) {
@@ -106,8 +107,9 @@ public class DictumTask {
 
                 //        默认存前20个
                 Set<Map<String, String>> setLabel = collectLabel.stream().limit(20).collect(Collectors.toSet());
+                RedisUtils.deleteObject(RedisKeyEnums.POPULAR_LABEL.getKey());
                 RedisUtils.setCacheSet(RedisKeyEnums.POPULAR_LABEL.getKey(), setLabel);
-                log.error("热门标签数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), setLabel);
+                log.info("热门标签数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), setLabel);
             }
         } catch (Exception e) {
             e.printStackTrace();

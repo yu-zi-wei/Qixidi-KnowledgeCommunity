@@ -35,9 +35,9 @@ public class LabelTask {
 
     /**
      * 同步标签信息数据
-     * 每天0点执行
+     * 每20分钟一次
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 */20 * * * *")
     public void syncLabel() {
         try {
             List<UserFollowVo> userFollowVos = userFollowMapper.selectVoLabelGroup();
@@ -71,7 +71,7 @@ public class LabelTask {
                 list1.add(infoVo);
             });
             labelInfoMapper.updateTaskList(list1);
-            log.info("同步标签信息数据王朝：时间：{}", DateUtils.getTime());
+            log.info("同步标签信息数据成功：时间：{}", DateUtils.getTime());
         } catch (Exception e) {
             MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步标签信息数据（syncLabel）任务异常", e.getMessage());
             log.error("同步标签信息数据异常：时间：{}", DateUtils.getTime());

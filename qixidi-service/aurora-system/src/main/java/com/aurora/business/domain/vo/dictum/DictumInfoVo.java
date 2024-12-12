@@ -2,6 +2,7 @@ package com.aurora.business.domain.vo.dictum;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.common.annotation.ExcelDictFormat;
 import com.aurora.common.convert.ExcelDictConvert;
 import lombok.Data;
@@ -130,28 +131,13 @@ public class DictumInfoVo {
     private Date createTime;
 
     private Date updateTime;
-
     /**
-     * 用户名称
+     * 名言总数
      */
-    private String nickname;
-    /**
-     * 头像
-     */
-    private String avatar;
-    /**
-     * 职业
-     */
-    private String occupation;
-    /**
-     * 角色（1，普通用户，2，vip用户）
-     */
-    private String roleId;
-    /**
-     * 位置
-     */
-    private String location;
-
     private Long sum;
+    /**
+     * 用户信息
+     */
+    private TripartiteUserVo tripartiteUser;
 }
 

@@ -4,6 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import com.aurora.business.domain.bo.dictum.DictumInfoBo;
 import com.aurora.business.domain.entity.dictum.DictumInfo;
 import com.aurora.business.domain.vo.dictum.DictumInfoVo;
+import com.aurora.business.domain.vo.user.TripartiteUserVo;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.aurora.business.mapper.dictum.DictumGroupMapper;
 import com.aurora.business.mapper.dictum.DictumInfoMapper;
 import com.aurora.business.service.dictum.IDictumInfoService;
@@ -34,6 +36,7 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
 
     private final DictumInfoMapper baseMapper;
     private final DictumGroupMapper dictumGroupMapper;
+    private final TripartiteUserMapper tripartiteUserMapper;
 
     /**
      * 查询名言信息
@@ -43,7 +46,10 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
      */
     @Override
     public DictumInfoVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
+        DictumInfoVo dictumInfoVo = baseMapper.selectVoById(id);
+        TripartiteUserVo tripartiteUserVo = tripartiteUserMapper.selectWebInfo(dictumInfoVo.getUid());
+        dictumInfoVo.setTripartiteUser(tripartiteUserVo);
+        return dictumInfoVo;
     }
 
     /**
