@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!loading && newsList.length==0" style="text-align: center;margin-top: 10px;margin: auto">
+    <div v-if="!loading && newsList.length==0" style="text-align: center;margin-top: 10px">
       <svg t="1666708559980" class="icon-theme" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
            p-id="2698" width="40" height="40">
         <path
@@ -38,7 +38,7 @@
     </div>
     <div v-show="newsList.length>20" class="pb-10 text-center font-s-14 color-grey-2">
       <div class="border-ts-class" v-if="moreLoading">加载中<i style="font-size: 13px"
-                                                            class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+                                                               class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
       <div class="border-ts-class" v-if="!moreLoading">没有更多了...</div>
     </div>
   </div>

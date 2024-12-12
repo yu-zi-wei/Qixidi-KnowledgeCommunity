@@ -247,10 +247,22 @@ mark {
 
 /*标注*/
 .aie-content blockquote {
-  border-left: 0.2rem solid var(--theme-color) !important;
+  border-left: 0.2rem solid #22a6b3 !important;
   background-color: #eef7fa !important;
   padding: 4px 6px !important;
 }
 
+/*
+高亮块
+ */
+.aie-content div.warning {
+  background: rgba(105, 209, 189, 0.2);
+  border-radius: 4px;
+}
 
+.aiEditor-class li {
+  list-style-type: disc !important;
+  color: var(--theme-color);
+
+}
 </style>
