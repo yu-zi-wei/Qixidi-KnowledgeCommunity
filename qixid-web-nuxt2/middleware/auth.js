@@ -20,6 +20,7 @@ const whiteList = [
   '/popular-group/**',
   '/article/article-details/**',
   '/external_info/**',
+  '/dictum/dictum-details/**',
 
 ];
 

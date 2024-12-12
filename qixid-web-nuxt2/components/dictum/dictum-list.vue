@@ -99,6 +99,11 @@
               </svg>
               收藏
             </div>
+            <div class="svg-translateY-2">
+              <nuxt-link class="text-underline-hover" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
+              详情
+              </nuxt-link>
+            </div>
           </div>
           <div>
           </div>

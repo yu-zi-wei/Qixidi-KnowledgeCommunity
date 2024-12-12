@@ -101,4 +101,8 @@ body {
 
 .border-left-3-solid {
   border-left: 3px solid var(--theme-color);
+
+}
+.border-left-2-solid {
+  border-left: 2px solid var(--theme-color);
 }
