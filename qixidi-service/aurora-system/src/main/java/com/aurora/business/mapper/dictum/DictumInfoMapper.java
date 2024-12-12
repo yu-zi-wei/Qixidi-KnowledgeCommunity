@@ -35,12 +35,12 @@ public interface DictumInfoMapper extends BaseMapperPlus<DictumInfoMapper, Dictu
 
     List<DictumInfoVo> selectAlbumId();
 
-    @Select("select label from b_dictum_info where label is not null and label!=''")
+    @Select("select label from b_dictum_info where label is not null and label!='' and `state`=0")
     List<DictumInfoVo> selectAuthorLabel();
 
     List<CountUserWebsiteVo> selectDictumInfo();
 
-    @Select("select author from b_dictum_info where author is not null and author!=''")
+    @Select("select author from b_dictum_info where author is not null and author!='' and `state`=0")
     List<DictumInfoVo> selectAuthorAuthors();
 
 }
