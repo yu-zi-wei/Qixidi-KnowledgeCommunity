@@ -167,7 +167,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             cacheMpa.put(bo.getUid(), userFuSet);
             RedisUtils.setCacheMap(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
 
-            //文章点赞数加一
+            //文章点赞用户列表加1
             Map<String, Set<String>> articleMap = new HashMap();
             if (RedisUtils.hasKey(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey())) {
                 articleMap = RedisUtils.getCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
@@ -180,7 +180,6 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             //记录文章亲密度
             articleInformationService.recordArticleIntimacy(bo.getUid(),bo.getLabelId(),2D);
         }
-        log.info("点赞结束");
         if (bo.getUid().equals(bo.getTargetUid())) return R.ok();
 //        发送消息
         executorService.execute(new Runnable() {

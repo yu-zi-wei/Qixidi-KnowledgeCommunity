@@ -188,6 +188,7 @@ public class ArticleTask {
     private void syncArticleFl(Map<String, Set<String>> articleMap, Map<String, Object> cacheMap) {
         executorService.execute(() -> {
             try {
+                //同步点赞记录
                 articleMap.forEach((k, v) -> {
                     List<FabulousRecord> list = new ArrayList<>();
                     for (String uid : v) {
