@@ -104,32 +104,32 @@
               </div>
               <hr class="hr-item mt-20 mb-20"/>
               <div class="flex-space-between align-items-center">
-                <div class="cursor-pointer">
+                <div class="cursor-pointer hover-cl">
                   <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                              rel="noopener">
-                    <p class="flex-center mb-6 color-stand-out">{{ userInfo.followCount }}</p>
-                    <p class="hover-cl">关注</p>
+                    <p class="flex-center mb-6 ">{{ userInfo.followCount }}</p>
+                    <p>关注</p>
                   </nuxt-link>
                 </div>
-                <div class="cursor-pointer">
+                <div class="cursor-pointer hover-cl">
                   <nuxt-link :to="`/user_home/collection?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                              rel="noopener">
-                    <p class="flex-center mb-6 color-stand-out">{{ userInfo.collectionCount }}</p>
-                    <p class="hover-cl">收藏</p>
+                    <p class="flex-center mb-6 ">{{ userInfo.collectionCount }}</p>
+                    <p>收藏</p>
                   </nuxt-link>
                 </div>
-                <div class="cursor-pointer">
+                <div class="cursor-pointer hover-cl">
                   <nuxt-link :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                              rel="noopener">
-                    <p class="flex-center mb-6 color-stand-out">{{ userInfo.articleCount }}</p>
-                    <p class="hover-cl">文章</p>
+                    <p class="flex-center mb-6 ">{{ userInfo.articleCount }}</p>
+                    <p>文章</p>
                   </nuxt-link>
                 </div>
-                <div class="cursor-pointer">
+                <div class="cursor-pointer hover-cl">
                   <nuxt-link :to="`/dictum/space/content-list?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                              rel="noopener">
-                    <p class="flex-center mb-6 color-stand-out">{{ userInfo.dictumCount }}</p>
-                    <p class="hover-cl">名言</p>
+                    <p class="flex-center mb-6">{{ userInfo.dictumCount }}</p>
+                    <p>名言</p>
                   </nuxt-link>
                 </div>
               </div>
