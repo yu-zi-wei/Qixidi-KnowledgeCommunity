@@ -139,9 +139,12 @@ public class LoginController extends BaseController {
     @PostMapping("/oauth/logout")
     public R<Void> oauthLogout() {
         try {
-            webSocketServer.userLogout(LoginHelper.getTripartiteUuid());
-            StpUtil.logout();
-            loginService.logout(LoginHelper.getTripartiteUsername());
+            String tripartiteUuid = LoginHelper.getTripartiteUuid();
+            if (tripartiteUuid != null) {
+                webSocketServer.userLogout(tripartiteUuid);
+                StpUtil.logout();
+                loginService.logout(LoginHelper.getTripartiteUsername());
+            }
         } catch (NotLoginException e) {
         }
         return R.ok("退出成功");
