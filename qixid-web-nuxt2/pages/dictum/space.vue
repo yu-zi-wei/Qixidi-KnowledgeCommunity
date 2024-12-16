@@ -59,10 +59,13 @@
                   <el-image class="img-cover" v-else src="/img/shu.jpg" fit="cover"></el-image>
                 </div>
                 <div class="mb-10">
-                  <p class="font-bold font-s-14 text-underline-hover">
+                  <p class="font-bold font-s-16 text-underline-hover">
                     {{ item.name }}
                   </p>
-                  <div class="font-s-12 overflow-nowrap-2 color-grey-2 mt-4">{{ item.briefIntroduction }}</div>
+                  <div class="font-s-13 line-height-16 overflow-nowrap-2 color-grey-2 mt-4">{{
+                      item.briefIntroduction
+                    }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,9 +299,13 @@ export default {
   transform: scale(1.2);
 }
 
+.dictum-list-cl:hover {
+  border: 1px solid #bdc3c7;
+}
+
 .dictum-list-cl {
   float: left;
-  width: 42%;
+  width: 41%;
   margin: 0 4% 24px 4%;
   height: 170px;
   display: flex;
@@ -306,10 +313,11 @@ export default {
   flex-direction: column;
   text-align: center;
   align-items: center;
-  box-shadow: 0 6px 6px 0 #b2bec3;
+  box-shadow: 0 6px 6px 0 #f1f2f6;
   border-radius: 2px;
   overflow: hidden;
   transition: .2s;
+  border: 1px solid #fefefe;
 }
 
 .dictum-background-color-acti {
@@ -318,12 +326,12 @@ export default {
 
 .albumList-box {
   background-color: #ffffff;
-  border: 4px solid #f1f2f6;
-  padding: 10px 15px;
-  width: 340px;
+  border: 2px solid #f1f2f6;
+  padding: 10px 5px;
+  width: 350px;
   top: 100px;
   position: fixed;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 
