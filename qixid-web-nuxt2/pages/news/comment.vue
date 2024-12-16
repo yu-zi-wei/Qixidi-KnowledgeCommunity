@@ -1,6 +1,6 @@
 <template>
   <div style="min-height: 200px">
-    <el-skeleton class="mt-10" :rows="4" animated v-if="loading"/>
+    <el-skeleton class="mt-10 ml-10" :rows="4" animated v-if="loading"/>
     <div class="ml-10">
       <div v-if="newsList.length>0" v-for="(item,index) in newsList" class="mb-20 for-div">
         <div class="flex-left align-items-center">

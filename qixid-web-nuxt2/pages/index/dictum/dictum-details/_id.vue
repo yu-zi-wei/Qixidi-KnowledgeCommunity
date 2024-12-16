@@ -2,7 +2,7 @@
   <div style="width: 1000px;margin: auto;">
     <div class="flex-left">
       <div class="flex-9 background-color-fefefe">
-        <div style="padding: 60px 60px 100px 60px">
+        <div style="padding: 60px 60px 100px 60px;box-shadow: 0 4px 8px 0 #dfe4ea;border-radius: 10px">
           <ai-editor-module :ai-editor-id="'aiEditor-dictum'" :content="dictumInfo.content"
                             :editable="false"></ai-editor-module>
           <div class="flex-right mt-20">

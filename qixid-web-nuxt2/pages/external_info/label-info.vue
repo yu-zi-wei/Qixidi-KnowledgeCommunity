@@ -38,8 +38,8 @@
               <el-row :gutter="20" class="mb-15">
                 <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
                   <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer" title="查看文章">
-                    <p class="font-bold font-s-16 mb-10 hover-cl text-underline-hover">{{ item.articleTitle }}</p>
-                    <p class="font-s-13 color-grey abstract-cl-2 text-indent-13">{{ item.articleAbstract }}</p>
+                    <p class="font-bold font-s-16 line-height-24 mb-10 hover-cl text-underline-hover">{{ item.articleTitle }}</p>
+                    <p class="font-s-13 line-height-24 color-grey abstract-cl-2 text-indent-13">{{ item.articleAbstract }}</p>
                   </el-col>
                   <el-col :span="3" v-if="item.articleCover">
                     <el-image :src="item.articleCover" fit="cover" style="width: 100px;height: 60px"></el-image>

@@ -27,11 +27,11 @@
                     <nuxt-link :to="`/details/album-info?data=`+item.id" target="_blank" rel="noopener">
                       <div class="font-bold font-s-6 color-grey5 cursor-pointer overflow-nowrap-1">
                         <span class="text-underline-hover">{{ item.name }}</span>
-                        <span class="font-s-13 color-grey">
+                        <span class="font-s-13 line-height-16 color-grey">
                         创建时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}') }}
                         </span>
                       </div>
-                      <p class="font-s-13 color-grey mt-10 overflow-nowrap-2">{{ item.briefIntroduction }}</p>
+                      <p class="font-s-13 line-height-24 color-grey mt-10 overflow-nowrap-2">{{ item.briefIntroduction }}</p>
                     </nuxt-link>
                   </div>
                 </div>

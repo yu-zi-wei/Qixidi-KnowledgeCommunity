@@ -112,10 +112,10 @@ export default {
   width: 200px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid #fefefe;
+  border: 1px solid #e2e2e5;
 }
 
 .label-item:hover {
-  border: 1px solid #a4b0be;
+  border: 1px solid #95a5a6;
 }
 </style>

@@ -205,6 +205,7 @@ export default {
   overflow: hidden;
   color: #5a5e66;
   font-size: 14px;
+  line-height: 24px;
   text-overflow: ellipsis;
   padding: 6px 20px 6px 0;
 }

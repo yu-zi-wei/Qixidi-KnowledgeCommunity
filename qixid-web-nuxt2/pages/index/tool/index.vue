@@ -99,8 +99,7 @@ export default {
 .tool-left-cl {
   background-color: #fefefe;
   border-radius: 4px;
-  border: 1px solid #dfe4ea;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 6px 0 #dfe6e9;
 }
 
 .el-card.is-always-shadow {

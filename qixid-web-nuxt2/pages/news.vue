@@ -14,7 +14,7 @@
           </el-menu>
         </div>
       </div>
-      <div class="flex-9">
+      <div class="flex-9 news-child-content">
         <nuxt-child/>
       </div>
     </div>
@@ -52,10 +52,17 @@ export default {
 }
 
 .left-list-menu {
-  padding: 4px 6px;
+  padding: 0px 10px;
   background: #fefefe;
   border-radius: 4px;
-  height: 60ch;
+  height: 80ch;
   position: fixed;
+}
+
+.news-child-content {
+  box-shadow: 0 6px 10px 0 #ecf0f1;
+  //border: 1px solid #e2e2e5;
+  margin-left: 20px;
+  border-radius: 4px;
 }
 </style>

@@ -430,56 +430,79 @@ mr-auto {
 
 .font-s-8 {
   font-size: 8px;
+}
+
+.line-height-12 {
   line-height: 12px;
 }
 
 .font-s-10 {
   font-size: 10px;
+}
+
+.line-height-14 {
   line-height: 14px;
 }
 
 .font-s-12 {
   font-size: 12px;
+}
+
+.line-height-16 {
   line-height: 16px;
 }
 
 .font-s-13 {
   font-size: 13px;
+}
+
+.line-height-18 {
   line-height: 18px;
 }
 
 .font-s-14 {
   font-size: 14px;
-  line-height: 18px;
+}
+
+.line-height-24 {
+  line-height: 24px;
 }
 
 .font-s-15 {
   font-size: 15px;
-  line-height: 22px;
 }
 
 .font-s-16 {
   font-size: 16px;
-  line-height: 20px;
+  line-height: 28px;
+}
+
+.line-height-28 {
+  line-height: 28px;
 }
 
 .font-s-18 {
   font-size: 18px;
-  line-height: 22px;
 }
 
 .font-s-20 {
   font-size: 20px;
-  line-height: 24px;
 }
 
 .font-s-24 {
   font-size: 24px;
+}
+
+.line-height-26 {
   line-height: 26px;
 }
 
 .font-s-32 {
   font-size: 32px;
+  line-height: 34px;
+}
+
+.line-height-34 {
   line-height: 34px;
 }
 
@@ -535,6 +558,16 @@ mr-auto {
   /*  溢出用省略号显示*/
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.overflow-nowrap-3 {
+  /*超出的文本隐藏*/
+  overflow: hidden;
+  /*  溢出用省略号显示*/
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
@@ -610,4 +643,12 @@ mr-auto {
 /*首行缩进*/
 .text-indent-13 {
   text-indent: 26px;
+}
+
+.border-radius-10 {
+  border-radius: 10px
+}
+
+.border-radius-4 {
+  border-radius: 4px
 }

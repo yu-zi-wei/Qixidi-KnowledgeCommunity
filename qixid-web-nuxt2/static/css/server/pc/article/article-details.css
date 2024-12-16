@@ -2,7 +2,7 @@
   background-color: #fefefe;
   padding: 40px 0 40px 20px;
   z-index: 10;
-  width: 920px;
+  width: 960px;
 }
 
 /*关于作者*/
@@ -46,7 +46,8 @@
 
 .left-content-ul {
   position: fixed;
-  margin-top: 100px;
+  margin-top: 200px;
+  margin-left: 20px;
 }
 
 .left-content-width {
@@ -63,9 +64,7 @@
   margin-right: 10px;
   border-radius: 4px;
   background-color: #f6f7f7;
-  padding: 10px 10px 10px 10px;
-  display: flex;
-  flex-direction: row;
+  padding: 10px;
 }
 
 .label-top-cl {

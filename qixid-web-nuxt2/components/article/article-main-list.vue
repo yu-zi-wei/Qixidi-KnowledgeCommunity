@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1">
     <div class="flex-grow-1">
-      <el-carousel height="100px" class="mb-15" style="border-radius: 2px">
+      <el-carousel height="100px" class="mb-15" style="border-radius: 2px" v-if="false">
         <el-carousel-item v-for="(item,index) in 4" :key="index">
           <nuxt-link v-if="item==1" :to="`/sign_in/daily`">
             <div class="lbt-cl daily-check-in">
@@ -70,14 +70,14 @@
       <div v-for="item of listInformationList" :key="item.id"
            class="article-item flex-space-between align-items-center">
         <div class="flex-8" style="padding: 0 15px">
-          <div class="font-s-13 mr-10">
-            <h4 class="mb-15 font-bold">
-              <nuxt-link class="text-underline-hover" :to="`/article/article-details/`+$base64.encode(item.id)"
+          <div class="mr-10">
+            <h4 class="mb-15 font-bold-s">
+              <nuxt-link class="text-underline-hover font-s-16" :to="`/article/article-details/`+$base64.encode(item.id)"
                          rel="noopener">
                 {{ item.articleTitle }}
               </nuxt-link>
             </h4>
-            <p class="font-s-13 color-grey text-indent-13 overflow-nowrap-2">{{ item.articleAbstract }}</p>
+            <p class="font-s-14 line-height-24 text-indent-13 overflow-nowrap-3">{{ item.articleAbstract }}</p>
           </div>
           <div class="flex-space-between mt-20">
             <div class="article-top font-s-13">
@@ -234,9 +234,9 @@ export default {
 }
 
 .article-release {
-  background: #3494e6; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173)); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #3494e6;
+  background: -webkit-linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173));
+  background: linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173));
 }
 
 .famous-words-square {
@@ -247,10 +247,9 @@ export default {
 }
 
 .common-tool {
-  background: #ffd89b; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123)); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background: #ffd89b;
+  background: -webkit-linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123));
+  background: linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123));
 }
 
 .el-carousel__item h3 {

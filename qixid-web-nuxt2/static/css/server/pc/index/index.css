@@ -17,13 +17,13 @@
 
 .index-right {
   border-radius: 0.25rem;
-  margin-left: 1.25rem;
+  margin-left: 25px;
   width: 16.25rem;
 }
 
 .index-left-width {
-  margin-right: 1.25rem;
-  width: 10rem;
+  margin-top: 60px;
+  width: 160px;
 }
 
 .index-left-cl {
@@ -83,6 +83,6 @@
 }
 
 .selected-articles-info {
-  padding: 0.375rem 1rem;
+  padding: 10px 6px;
 }
 

@@ -1,19 +1,19 @@
 /*主题颜色配置*/
 :root {
   /*主题颜色*/
-  --theme-color: #5C56E3;
+  --theme-color: #1fab89;
   /*  hover-color*/
-  --hover-color: #706be8;
+  --hover-color: #22ba95;
   /*  active-color*/
-  --active-color: #4f49e3;
+  --active-color: #1c9c7d;
   /*forbidden-color*/
   --theme-background_color: #fefefe;
   /*禁用按钮底色*/
-  --forbidden-color: #7b75ff;
+  --forbidden-color: #9df3c4;
   /*默认颜色*/
   --default-color: #2c3e50;
   /*背景颜色*/
-  --backdrop-color: #F2F3F5;
+  --backdrop-color: #fefefe;
 
   /*-----------------------------特殊处理---------------------------------*/
   /*导航栏 hover背景颜色*/
@@ -100,9 +100,17 @@ body {
 }
 
 .border-left-3-solid {
+  padding-bottom: 2px;
+  padding-top: 2px;
+  padding-left: 6px;
+  align-items: center;
   border-left: 3px solid var(--theme-color);
 
 }
 .border-left-2-solid {
+  padding-bottom: 2px;
+  padding-top: 2px;
+  padding-left: 6px;
+  align-items: center;
   border-left: 2px solid var(--theme-color);
 }

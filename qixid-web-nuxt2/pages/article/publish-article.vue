@@ -26,7 +26,6 @@
             </el-button>
             <el-dropdown trigger="click">
               <div class="el-dropdown-link" title="最近文章">
-
                 <svg t="1729826374304" class="icon icon-theme icon-hover-theme-stand-out ml-5 mr-12 cursor-pointer"
                      viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                      p-id="13656" width="32" height="32">
@@ -107,7 +106,7 @@
     </div>
     <div class="flex-left">
       <div style="width: 300px;height: 1px"></div>
-      <div style="width: 920px;border: 1px solid #F2F3F5;">
+      <div style="width: 960px;border: 1px solid #F2F3F5;">
         <ai-editor-module v-if="isClient"
                           :htmlContent.sync="article.articleContent"
                           :mdContent.sync="article.articleContentMd"
@@ -117,21 +116,24 @@
                           :minimalistMode="false"></ai-editor-module>
       </div>
       <div>
-        <div style="position: fixed;max-width: 340px;right: 5%;">
-          <div class="auroora-card mb-10">
-            <div class="ml-6 font-bold">目录</div>
+        <div style="position: fixed;max-width: 340px;right: 5%;background-color: #F2F3F5;border-radius: 4px">
+          <div class="padding-10 mb-10">
+            <div class="ml-6 font-bold">目 录</div>
             <hr class="hr-item mb-15 mt-15"/>
             <!-- 遍历目录 -->
             <ul class="publish-article-catalogue">
-              <el-timeline>
+              <el-timeline v-if="tocArray.length!=0">
                 <el-timeline-item v-for="(item, index) in tocArray" :key="index"
-                                  :size="item.level<=2?'large':'normal'"
+                                  size="normal"
                                   :type="highlightType()==index?'primary':''">
                     <span @click="gotoAnchor(item.pos)" class="font-s-14">
                     {{ item.text }}
                     </span>
                 </el-timeline-item>
               </el-timeline>
+              <div v-else>
+                --
+              </div>
             </ul>
           </div>
         </div>
@@ -499,7 +501,7 @@ export default {
 }
 
 .lately-article-item :hover {
-  font-weight: bold;
+  color: #ff7f50;
 }
 
 .publish-article-catalogue {
@@ -512,16 +514,14 @@ export default {
 .publish-article-catalogue::-webkit-scrollbar {
   width: 4px;
   height: 4px;
-  background-color: #ced6e0;
+  background-color: #fefefe;
 }
 
 .publish-article-catalogue::-webkit-scrollbar-track {
-  background: #fefefe;
   border-radius: 2px;
 }
 
 .publish-article-catalogue::-webkit-scrollbar-thumb {
-  background: #ced6e0;
   border-radius: 2px;
 }
 

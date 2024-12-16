@@ -1,6 +1,6 @@
 <template>
   <div style="min-height: 200px">
-    <el-skeleton class="mt-10" :rows="4" animated v-if="loading"/>
+    <el-skeleton class="mt-10 ml-10" :rows="4" animated v-if="loading"/>
     <div v-for="item of newsList" class="follow-news-cl mb-20">
       <div class="flex-left">
         <div class="mr-15">

@@ -3,16 +3,16 @@
     <navigation-bar-module></navigation-bar-module>
     <div class="module-main">
       <el-skeleton v-if="skeletonLoading" :rows="10" class="mt-10" animated/>
-      <el-row v-show="!skeletonLoading" :gutter="20" class="mt-10">
-        <el-col :span="5" style="background-color: #fefefe;border-radius: 4px;padding: 20px 0">
+      <div v-show="!skeletonLoading" :gutter="20" class="mt-10 flex-left">
+        <div class="sign-left-list">
           <div class="text-center mt-10 mb-20">
             <el-avatar v-if="userInfo.avatar" :size="100" :src="userInfo.avatar"></el-avatar>
             <el-avatar :size="100" v-else src="/img/tx.jpg"></el-avatar>
             <nuxt-link class="" :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)"
                        target="_blank" rel="noopener">
-              <p class="font-bold font-s-20 mt-4 overflow-nowrap-1">{{ userInfo.nickname }}</p>
+              <p class="font-bold font-s-20 line-height-24 mt-4 overflow-nowrap-1">{{ userInfo.nickname }}</p>
             </nuxt-link>
-            <span class="font-s-13 color-grey">{{ userInfo.occupation }}</span>
+            <span class="font-s-13 line-height-24 color-grey">{{ userInfo.occupation }}</span>
           </div>
           <el-menu
             :default-active="$route.path"
@@ -28,12 +28,11 @@
               <span slot="title">兑换中心</span>
             </el-menu-item>
           </el-menu>
-        </el-col>
-        <el-col :span="1" style="height: 1px"/>
-        <el-col :span="18" style="background: #fefefe;padding: 0 20px">
+        </div>
+        <div style="background: #fefefe;padding: 0 20px;" class="flex-1">
           <nuxt-child/>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +70,14 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.sign-left-list {
+  background-color: #fefefe;
+  border-radius: 4px;
+  padding: 20px 10px;
+  box-shadow: 0 4px 8px 0 #ecf0f1;
+  min-height: 90vh;
+  width: 200px;
+  margin-right: 20px;
+}
 </style>

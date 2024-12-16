@@ -9,6 +9,9 @@
           :router="true"
           mode="horizontal"
           text-color="#2c3e50"
+          style="padding: 6px;border-radius: 10px;
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,0.4) 0%, rgba(148,187,233,0.4) 100%);"
           :active-text-color="themeColor"
           class="el-menu-demo">
           <el-menu-item index="/dictum" title="推荐" class="dictum-special-cl">

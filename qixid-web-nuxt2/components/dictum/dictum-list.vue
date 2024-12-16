@@ -99,9 +99,9 @@
               </svg>
               收藏
             </div>
-            <div class="svg-translateY-2">
-              <nuxt-link class="text-underline-hover" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
-              详情
+            <div class="svg-translateY-4">
+              <nuxt-link class="text-underline hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
+                详情
               </nuxt-link>
             </div>
           </div>
@@ -314,12 +314,12 @@ export default {
   padding: 15px 20px;
   margin: 0 0 30px 0;
   border-radius: 15px;
-  border: 1px solid #dfe4ea;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  border: 1px solid #fefefe;
+  box-shadow: 0 4px 8px 0 #ecf0f1;
 }
 
 .dictum-info-cl:hover {
-  border: 1px solid #fefefe;
+  border: 1px solid #e2e2e5;
 }
 
 .user-info {

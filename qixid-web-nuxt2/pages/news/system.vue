@@ -1,6 +1,6 @@
 <template>
   <div style="min-height: 200px">
-    <el-skeleton :rows="4" animated v-if="loading"/>
+    <el-skeleton class="mt-10 ml-10" :rows="4" animated v-if="loading"/>
     <ul class="background-color-fefefe padding-10" v-if="newsList.length!=0">
       <li v-for="item of newsList" class="news-system-cl">
         <div title="系统消息" class="text-left">

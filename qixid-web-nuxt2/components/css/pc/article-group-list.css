@@ -4,7 +4,14 @@
 }
 
 .article-list-li {
-  margin-bottom: 10px;
-  border-radius: 2px;
-  padding: 6px;
+  margin: 4px 4px 20px 4px;
+  border-radius: 10px;
+  padding: 16px;
+  /*box-shadow: 0 2px 6px 0 #dfe6e9;*/
+  border: 1px solid #e2e2e5;
+  transition: .2s;
+}
+.article-list-li :hover{
+  /*border: 1px solid #95a5a6;*/
+  /*background: #E9EBEC;*/
 }

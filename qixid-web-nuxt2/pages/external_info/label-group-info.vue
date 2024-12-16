@@ -1,10 +1,10 @@
 <template>
   <div class="module-main-2">
-    <div class="label-info-cl background-color-theme">
+    <div class="label-group-info-title">
       <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
       <div v-show="!initialLoading" class="margin-auto">
         <p class="font-s-32 font-bold text-center">{{ labelGroupInfo.groupingName }}</p>
-        <div class="font-s-13 color-fefefe text-center mt-6">
+        <div class="font-s-13 line-height-24 color-fefefe text-center mt-6">
           <span>文章数：{{ labelGroupInfo.articleNumber }}</span>
         </div>
       </div>
@@ -30,8 +30,10 @@
               <el-row :gutter="20" class="mb-10">
                 <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
                   <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer" title="查看文章">
-                    <p class="font-bold font-s-16 mb-10 hover-cl">{{ item.articleTitle }}</p>
-                    <p class="font-s-13 color-grey abstract-cl-2 text-indent-13">{{ item.articleAbstract }}</p>
+                    <p class="font-bold line-height-24 font-s-16 mb-10 hover-cl">{{ item.articleTitle }}</p>
+                    <p class="font-s-13 line-height-24 color-grey abstract-cl-2 text-indent-13">{{
+                        item.articleAbstract
+                      }}</p>
                   </el-col>
                   <el-col :span="3" v-if="item.articleCover">
                     <el-image :src="item.articleCover" fit="cover" style="width: 100px;height: 60px"></el-image>
@@ -209,13 +211,12 @@ export default {
   color: #8a919f;
 }
 
-.label-info-cl {
-  height: 160px;
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
+.label-group-info-title {
+  background: rgb(141, 46, 205, 0.5);
+  background: linear-gradient(90deg, rgba(141, 46, 205, 0.5) 0%, rgba(29, 227, 253, 0.5) 50%, rgba(252, 69, 249, 0.5) 100%);
+  padding: 40px 0;
   margin-bottom: 20px;
+  margin-top: 20px;
   border-radius: 4px;
-  color: #fefefe;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-skeleton class="ml-6 mr-6" :rows="6" animated v-if="userLoading"/>
+    <el-skeleton class="mt-10 ml-10 mr-10" :rows="6" animated v-if="userLoading"/>
     <div v-show="!userLoading" style="height: 80%">
       <!--          头部-->
       <div class="user-top-div flex-center">
