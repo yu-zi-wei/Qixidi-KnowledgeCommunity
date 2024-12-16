@@ -36,7 +36,7 @@
             </div>
             <hr class="hr-item mt-4 mb-8"/>
           </a>
-          <div class="tool-describe color-grey font-s-14 line-height-18">
+          <div class="tool-describe color-grey font-s-14 line-height-20">
             {{ item.describe }}
           </div>
         </div>
