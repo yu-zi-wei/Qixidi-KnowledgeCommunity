@@ -26,12 +26,13 @@ import java.util.stream.Collectors;
 /**
  * 全局异常处理器
  *
- * @author Lion Li
+ * @author ziwei
  */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final static String DEFAULT_ERROR = "服务器异常";
     /**
      * 权限码异常
      */
@@ -115,7 +116,7 @@ public class GlobalExceptionHandler {
     public R<Void> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生未知异常.", requestURI, e);
-        return R.fail(e.getMessage());
+        return R.fail(DEFAULT_ERROR);
     }
 
     /**
@@ -125,7 +126,7 @@ public class GlobalExceptionHandler {
     public R<Void> handleException(Exception e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生系统异常.", requestURI, e);
-        return R.fail(e.getMessage());
+        return R.fail(DEFAULT_ERROR);
     }
 
     /**

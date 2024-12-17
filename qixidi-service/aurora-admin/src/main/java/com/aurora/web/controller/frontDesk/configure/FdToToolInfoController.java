@@ -29,6 +29,7 @@ public class FdToToolInfoController {
      */
     @GetMapping("/list")
     public List<ToToolInfoVo> fdList() {
+        System.out.printf("dd"+2/0);
         return iToToolInfoService.fdList();
     }
 
