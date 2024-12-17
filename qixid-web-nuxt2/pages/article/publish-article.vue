@@ -113,6 +113,7 @@
                           :content="article.articleContent"
                           :editor-height="'100%'"
                           :outline.sync="tocArray"
+                          :toolbar-size="'medium'"
                           :minimalistMode="false"></ai-editor-module>
       </div>
       <div>

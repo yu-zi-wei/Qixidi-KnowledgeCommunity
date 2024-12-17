@@ -109,6 +109,7 @@
                   :mdContent.sync="dictumInfo.contentMd"
                   :content="dictumInfo.content"
                   :minimalistMode="false"
+                  :toolbar-size="'medium'"
                   :editor-height="'300px'"></ai-editor-module>
               </div>
             </el-form-item>

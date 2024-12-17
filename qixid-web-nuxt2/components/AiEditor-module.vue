@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-editor">
     <div :id="aiEditorId" class="aiEditor-class" :style="{'height':editorHeight==''?'':editorHeight}">
       <div :class="{'aie-container':true, 'aie-container-default-height':editorHeight=='100%'}"
            style="overflow: hidden">
@@ -44,6 +44,10 @@ export default {
       type: String,
       default: "aiEditor",
     },
+    toolbarSize: {
+      type: String,
+      default: "small",
+    },
   },
   data() {
     return {
@@ -63,6 +67,7 @@ export default {
       const {AiEditor} = require('aieditor'); // 动态加载模块
       this.AiEditorEvn = new AiEditor({
         element: "#" + this.aiEditorId,//挂载
+        toolbarSize: this.toolbarSize,// 工具栏大小 默认 small，可选 'small' | 'medium' | 'large'
         content: this.content,//内容
         draggable: false,//是否可拖拽
         textCounter: false,//是否显示字数
@@ -179,6 +184,13 @@ aie-footer {
 }
 
 /**
+自定义主题颜色
+ */
+.my-editor .aie-theme-light {
+
+}
+
+/**
  当editorHeight=100%时， 编辑器默认高度
  */
 .aie-container-default-height {
@@ -204,8 +216,8 @@ aie-footer {
 }
 
 .aie-content p {
-  color: #353b48;
   margin: 2px 0;
+  line-height: 30px;
 }
 
 .aie-content h1 {
