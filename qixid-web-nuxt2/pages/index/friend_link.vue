@@ -111,7 +111,7 @@
                       <el-avatar size="medium" v-else src="/img/tx.jpg"></el-avatar>
                     </div>
                     <div class="flex-8">
-                      <div class="flex-left mt-6 align-items-center">
+                      <div class="flex-left align-items-center">
                         <nuxt-link class="ml-6 cursor-pointer hover-cl"
                                    :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)"
                                    target="_blank">
@@ -188,7 +188,7 @@
                           <el-avatar size="medium" v-else src="/img/tx.jpg"></el-avatar>
                         </div>
                         <div class="flex-8">
-                          <div class="flex-left align-items-center mt-6">
+                          <div class="flex-left align-items-center">
                             <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
                                        target="_blank">
                               <div class="ml-6 cursor-pointer hover-cl" v-text="items.commentName">

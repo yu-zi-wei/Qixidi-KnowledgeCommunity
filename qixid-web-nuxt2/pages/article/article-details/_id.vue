@@ -93,13 +93,13 @@
             <div class="mb-10">
               <h2 class="article-title">{{ articleInfo.articleTitle }}</h2>
               <div class="article-user-info-two">
-                <div class="mt-4 ml-8 flex-space-between align-items-center">
+                <div class="ml-8 flex-space-between align-items-center">
                   <div>
                     <span class="font-s-14 mr-10">
                       {{ $utils.parseTime(articleInfo.createTime, '{y}年{m}月{d}日 {h}:{s}') }}
                     </span>
                     <span class="font-s-14">
-                      <svg t="1734081054660" class="icon svg-translateY-5 icon-size-20" viewBox="0 0 1024 1024"
+                      <svg t="1734081054660" class="icon svg-translateY-2 icon-size-16" viewBox="0 0 1024 1024"
                            version="1.1"
                            xmlns="http://www.w3.org/2000/svg" p-id="4316"><path
                         d="M204 411.3c3-3.6 9.5-10.3 19.3-19.2 16.7-15.2 36.5-30.4 59.4-44.6 65.4-40.7 141.7-65 228.4-65 86.7 0 163.1 24.4 228.5 65 22.9 14.2 42.7 29.4 59.4 44.6 9.8 9 16.3 15.7 19.3 19.2 8.2 9.7 22.8 11 32.7 2.9 9.8-8.1 11.2-22.5 3-32.2-4.2-5-12.1-13.3-23.5-23.6-18.7-17-40.7-33.9-66.1-49.7-72.4-45-157.2-72.1-253.2-72.1-96.1 0-180.8 27.1-253.2 72.1-25.4 15.8-47.5 32.7-66.1 49.7-11.4 10.3-19.3 18.6-23.5 23.6-8.2 9.7-6.9 24.1 3 32.2 9.8 8.2 24.4 6.8 32.6-2.9z m0 0"
@@ -174,7 +174,7 @@
                         <el-avatar :size="35" size="medium" v-else src="/img/tx.jpg"></el-avatar>
                       </div>
                       <div class="flex-8">
-                        <div class="flex-left mt-6 align-items-center">
+                        <div class="flex-left align-items-center">
                           <nuxt-link class="ml-6 cursor-pointer hover-cl"
                                      :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)"
                                      target="_blank">
@@ -251,7 +251,7 @@
                             <el-avatar :size="30" v-else src="/img/tx.jpg"></el-avatar>
                           </div>
                           <div class="flex-8">
-                            <div class="flex-left align-items-center mt-6">
+                            <div class="flex-left align-items-center">
                               <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
                                          target="_blank">
                                 <div class="ml-6 cursor-pointer hover-cl" v-text="items.commentName">
