@@ -274,7 +274,7 @@ mark {
 
 .aiEditor-class li {
   list-style-type: disc !important;
-  color: var(--theme-color);
+  //color: var(--theme-color);
 
 }
 </style>

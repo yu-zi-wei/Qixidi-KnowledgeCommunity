@@ -10,17 +10,7 @@ body {
   overflow: scroll;
   height: 100%;
   width: 100%;
-
   background: var(--backdrop-color);
-
-  /*background: linear-gradient(135deg, #F2F3F5 50%, #8173e7 50.5%, #8173e7 calc(50.5% + 50px), transparent calc(50.5% + 50px));*/
-  /*background-size: cover; !* 或者使用 background-size: 100% 100%; *!*/
-  /*background-repeat: no-repeat;*/
-  /*background-attachment: fixed; !* 固定背景，不随滚动条滚动 *!*/
-  /*margin: 0;*/
-  /*padding: 0;*/
-  /*height: 100%; !* 确保body占据整个视口高度 *!*/
-
   overflow-x: hidden;
   letter-spacing: 0.4px;
 }
@@ -28,11 +18,11 @@ body {
 body::-webkit-scrollbar {
   width: 4px;
   height: 4px;
-  background-color: var(--theme-color);
+  background-color: var(--default-color);
 }
 
 body::-webkit-scrollbar-thumb {
-  background: var(--theme-color);
+  background: var(--default-color);
   border-radius: 2px;
 }
 

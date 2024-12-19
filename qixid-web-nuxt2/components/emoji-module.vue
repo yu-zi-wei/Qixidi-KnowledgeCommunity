@@ -47,7 +47,6 @@ export default {
       const response = require('static/json/emoji.json');
       this.emojiData = response.data;
       this.loading = true;
-      console.log("placementData:",this.placementData)
     },
     selectEmoji(emoji) {
       let input = document.getElementById(this.id)

@@ -76,25 +76,25 @@
           <div class="" id="comment">
             <div class="font-s-18 font-bold mb-20">
               评论<span class="ml-6" v-text="commentTotal"></span>
-              <div class="flex-left">
-                <div style="width: 40px">
-                  <el-avatar v-if="userInfo && userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-                  <el-avatar v-else src="/img/tx.jpg"></el-avatar>
-                </div>
-                <div class="flex-12">
-                  <div class="comment-import">
-                    <ai-editor-module v-if="commentTextLoading" :ai-editor-id="'aiEditor-introduce1'"
-                                      :htmlContent.sync="comment.content"
-                                      :content="comment.content" :editor-height="'200px'">
-                    </ai-editor-module>
-                    <div class="overflow-hidden mb-6">
-                      <el-button plain type="primary" class="fl-right" size="small"
-                                 :disabled="comment.content==null ||comment.content==''"
-                                 :loading="buttonLoading"
-                                 @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
-                        评 论
-                      </el-button>
-                    </div>
+            </div>
+            <div class="flex-left">
+              <div style="width: 40px">
+                <el-avatar v-if="userInfo && userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                <el-avatar v-else src="/img/tx.jpg"></el-avatar>
+              </div>
+              <div class="flex-12">
+                <div class="comment-import">
+                  <ai-editor-module v-if="commentTextLoading" :ai-editor-id="'aiEditor-introduce1'"
+                                    :htmlContent.sync="comment.content"
+                                    :content="comment.content" :editor-height="'200px'">
+                  </ai-editor-module>
+                  <div class="overflow-hidden mb-6">
+                    <el-button plain type="primary" class="fl-right" size="small"
+                               :disabled="comment.content==null ||comment.content==''"
+                               :loading="buttonLoading"
+                               @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
+                      评 论
+                    </el-button>
                   </div>
                 </div>
               </div>
@@ -180,7 +180,7 @@
                     </div>
                   </div>
                   <!--二级评论-->
-                  <div v-if="item.mountComment.length!=0" class="comment-li">
+                  <div v-if="item.mountComment!=null && item.mountComment.length!=0" class="comment-li">
                     <div v-for="(items,index2) in item.mountComment" class="mb-18" :key="index2">
                       <div class="flex-left">
                         <div class="mr-2">
@@ -278,8 +278,8 @@
                 </div>
               </div>
             </div>
-            <div v-if="articleComment.length==0 && !skeletonLoading"
-                 style="text-align: center;margin-top: 20px;font-size: 14px;color: #747d8c">快来抢占沙发~
+            <div v-if="articleComment.length==0 && !skeletonLoading" class="text-center mt-20 font-s-14 color-grey-3">
+              快来抢占沙发~
             </div>
           </div>
         </div>

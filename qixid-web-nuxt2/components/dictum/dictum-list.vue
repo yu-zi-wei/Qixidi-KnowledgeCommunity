@@ -77,7 +77,7 @@
               </svg>
               点赞
             </div>
-            <div title="评论" class="cursor-pointer mr-20" @click="$modal.notify('功能待开发！')">
+            <div title="评论" class="cursor-pointer mr-20">
               <svg t="1685704893908" class="icon icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                    version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="3482">
@@ -89,7 +89,7 @@
                   d="M512.01 959.33c-70.48 0-140.41-16.79-202.89-48.62H93.23V669.25c-18.96-50.4-28.56-103.26-28.56-157.26 0-246.66 200.68-447.32 447.34-447.32s447.32 200.66 447.32 447.32-200.66 447.34-447.32 447.34zM166.85 837.09h160.56l8.16 4.39c53.89 28.94 114.89 44.23 176.43 44.23 206.06 0 373.7-167.65 373.7-373.72 0-206.06-167.65-373.7-373.7-373.7-206.07 0-373.72 167.65-373.72 373.7 0 47.09 8.75 93.16 25.99 136.91l2.57 6.51v181.68z"
                   p-id="3485"></path>
               </svg>
-              评论
+              {{ item.commentSum == null ? '评论' : item.commentSum}}
             </div>
             <div title="收藏" class="cursor-pointer icon-theme-1 mr-20" @click="$modal.notify('功能待开发！')">
               <svg t="1685705013960" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024" version="1.1"

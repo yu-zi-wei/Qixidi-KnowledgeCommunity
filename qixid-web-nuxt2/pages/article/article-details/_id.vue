@@ -243,7 +243,7 @@
                       </div>
                     </div>
                     <!--二级评论-->
-                    <div v-if="item.mountComment.length!=0" class="comment-li">
+                    <div v-if="item.mountComment!=null && item.mountComment.length!=0" class="comment-li">
                       <div v-for="(items,index2) in item.mountComment" class="mb-18" :key="index2">
                         <div class="flex-left">
                           <div class="mr-2">
@@ -345,8 +345,8 @@
                   </div>
                 </div>
               </div>
-              <div v-if="articleComment.length==0 && !skeletonLoading"
-                   style="text-align: center;margin-top: 20px;font-size: 14px;color: #747d8c">快来抢占沙发~
+              <div v-if="articleComment.length==0 && !skeletonLoading" class="text-center mt-20 font-s-14 color-grey-3">
+                快来抢占沙发~
               </div>
             </div>
           </div>
