@@ -15,7 +15,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <div class="text-left">
+          <div class="text-left" style="border-bottom: 1px solid #dfe4ea;padding-bottom: 10px;margin-bottom: 10px">
             <el-tag class="mr-10 cursor-pointer" type="warning" size="small" title="分类" v-if="item.groupName!=null">
               {{ item.groupName }}
             </el-tag>
@@ -24,12 +24,11 @@
                 {{ item.albumName }}
               </nuxt-link>
             </el-tag>
-            <el-tag class="ml-10 cursor-pointer" size="small" v-if="item.labelList!=null"
+            <el-tag class="ml-10 cursor-pointer" size="small" type="info" effect="plain" v-if="item.labelList!=null"
                     v-for="(items,indexs) in item.labelList" title="标签" :key="indexs">
-              {{ items }}
+              #{{ items }}
             </el-tag>
           </div>
-          <hr class="hr-item mt-8 mb-10"/>
           <div>
             <ai-editor-module :ai-editor-id="'dictum-manage-content'+index" :content="item.content"
                               :editable="false"></ai-editor-module>
@@ -52,10 +51,10 @@
                     :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
                   </span>
             </div>
-            <div v-if="item.author!=null ||item.worksName!=null" class="font-s-14">—— {{ item.author }}
+            <div v-if="item.author!=null ||item.worksName!=null" class="font-s-14 color-grey-2">—— {{ item.author }}
               <span v-if="item.worksName!=null">
                 《
-              <span class="color-ffc312">{{ item.worksName }}</span>
+              <span>{{ item.worksName }}</span>
                 》
               </span>
             </div>
@@ -232,11 +231,10 @@ export default {
 
 <style scoped>
 .info-li-cl {
-  background-color: #f5f6fa;
   padding: 15px;
-  border-radius: 4px;
+  border-radius: 10px;
   margin-bottom: 20px;
   transition: .2s;
-  border: 2px solid #ecf0f1;
+  border: 1px solid #ced6e0;
 }
 </style>

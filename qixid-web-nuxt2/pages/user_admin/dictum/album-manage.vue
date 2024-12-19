@@ -31,7 +31,9 @@
                         创建时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}') }}
                         </span>
                       </div>
-                      <p class="font-s-13 line-height-24 color-grey mt-10 overflow-nowrap-2">{{ item.briefIntroduction }}</p>
+                      <p class="font-s-13 line-height-24 color-grey mt-10 overflow-nowrap-2">{{
+                          item.briefIntroduction
+                        }}</p>
                     </nuxt-link>
                   </div>
                 </div>
@@ -223,12 +225,11 @@ export default {
 
 <style scoped>
 .album-info-cl {
-  padding: 10px;
-  background-color: #f5f6fa;
-  margin-bottom: 15px;
+  padding: 12px;
+  margin-bottom: 20px;
   transition: .2s;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 #ecf0f1;
   border: 1px solid #fef0f0;
 }
 
