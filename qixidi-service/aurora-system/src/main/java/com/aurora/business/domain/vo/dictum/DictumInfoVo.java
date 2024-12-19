@@ -91,18 +91,6 @@ public class DictumInfoVo {
     private List<String> labelList;
 
     /**
-     * 点赞总数
-     */
-    @ExcelProperty(value = "点赞总数")
-    private Long helpSum;
-
-    /**
-     * 评论总数
-     */
-    @ExcelProperty(value = "评论总数")
-    private Long commentSum;
-
-    /**
      * 图片（多个以逗号隔开）
      */
     @ExcelProperty(value = "图片", converter = ExcelDictConvert.class)
@@ -151,11 +139,24 @@ public class DictumInfoVo {
     /**
      * 角色（1，普通用户，2，vip用户）
      */
-    private String roleId;
+    private Long roleId;
     /**
      * 位置
      */
     private String location;
+
+    /**
+     * 点赞总数
+     */
+    @ExcelProperty(value = "点赞总数")
+    private Long helpSum;
+
+    /**
+     * 评论总数
+     */
+    @ExcelProperty(value = "评论总数")
+    private Long commentSum;
+
 
     /**
      * 用户详情信息

@@ -1,10 +1,12 @@
 package com.aurora.business.service.impl.comment;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.aurora.business.domain.bo.comment.ArticleCommentBo;
 import com.aurora.business.domain.entity.comment.ArticleComment;
 import com.aurora.business.domain.entity.news.NewsUserRecord;
 import com.aurora.business.domain.vo.comment.ArticleCommentVo;
+import com.aurora.business.mapper.TripartiteUserMapper;
 import com.aurora.business.mapper.article.ArticleInformationMapper;
 import com.aurora.business.mapper.comment.ArticleCommentMapper;
 import com.aurora.business.mapper.comment.NewsUserRecordMapper;
@@ -14,6 +16,7 @@ import com.aurora.business.selector.webSocket.WebSocketSelector;
 import com.aurora.business.service.comment.IArticleCommentService;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
+import com.aurora.common.core.domain.entity.TripartiteUser;
 import com.aurora.common.core.page.TableDataInfo;
 import com.aurora.common.enums.*;
 import com.aurora.common.enums.article.ArticleUpdateType;
@@ -29,6 +32,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +59,8 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     private ExecutorService executorService;
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
+    @Autowired
+    private TripartiteUserMapper tripartiteUserMapper;
 
     /**
      * 查询文章评论
@@ -199,29 +205,65 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
 
     @Override
     public List<ArticleCommentVo> ArticleList(ArticleCommentBo bo, PageQuery pageQuery) {
-        Page<ArticleCommentVo> articleCommentVoTableDataInfo = baseMapper.ArticleList(bo.getArticleId(), pageQuery.build());
-        List<ArticleCommentVo> rows = articleCommentVoTableDataInfo.getRecords();
-        if (CollectionUtils.isEmpty(rows)) return rows;
-        //获取顶级评论
-        List<ArticleCommentVo> collect = rows.stream().filter(item -> item.getCommentGrade() == 1
-            && item.getType() == CommentType.ARTICLE_TYPE.getCode()).collect(Collectors.toList());
-        //获取挂载评论(降序)
-        List<ArticleCommentVo> collect2 = rows.stream().filter(item -> item.getCommentGrade() != 1
-            && item.getType() == CommentType.COMMENT_TYPE.getCode())
-            .sorted(Comparator.comparing(ArticleCommentVo::getCreateTime))
-            .collect(Collectors.toList());
-        collect.forEach(item -> {
-            //满足条件的挂载评论
-            List<ArticleCommentVo> list = new ArrayList();
-            collect2.forEach(items -> {
-                if (item.getId().equals(items.getParentId())) {
-                    list.add(items);
-                }
-            });
-            item.setMountComment(list);
-        });
-        collect.get(0).setCommentTotal(rows.size());
-        return collect;
+        //一级评论
+        List<ArticleCommentVo> list = baseMapper.selectVoList(new LambdaQueryWrapper<ArticleComment>()
+            .eq(ArticleComment::getArticleId, bo.getArticleId())
+            .eq(ArticleComment::getType, 1)
+            .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode())
+            .orderByDesc(ArticleComment::getCreateTime));
+        if (CollectionUtil.isEmpty(list)) return new ArrayList<>();
+        List<Long> ids = list.stream().map(ArticleCommentVo::getId).collect(Collectors.toList());
+        //二级评论
+        List<ArticleCommentVo> levelList = baseMapper.selectVoList(new LambdaQueryWrapper<ArticleComment>()
+            .eq(ArticleComment::getArticleId, bo.getArticleId())
+            .eq(ArticleComment::getType, 2)
+            .in(ArticleComment::getParentId, ids)
+            .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode())
+            .orderByAsc(ArticleComment::getCreateTime));
+
+        Set<String> uids = new HashSet<>();
+        list.forEach(item -> uids.add(item.getCommentUid()));
+        if (CollectionUtil.isNotEmpty(levelList)) {
+            levelList.forEach(item -> uids.add(item.getTargetUid()));
+        }
+
+        List<TripartiteUser> tripartiteUserVos = tripartiteUserMapper.selectList(new LambdaQueryWrapper<TripartiteUser>()
+            .in(TripartiteUser::getUuid, uids));
+        Map<String, TripartiteUser> userMpa = tripartiteUserVos.stream().collect(Collectors.toMap(TripartiteUser::getUuid, item -> item));
+        Map<Long, List<ArticleCommentVo>> levelmap = new HashMap<>();
+
+        for (ArticleCommentVo item : levelList) {
+            List<ArticleCommentVo> articleCommentVos = levelmap.get(item.getParentId());
+            if (articleCommentVos == null) articleCommentVos = new ArrayList<>();
+            //填充用户信息
+            TripartiteUser user = userMpa.get(item.getCommentUid());
+            if (user != null) {
+                item.setCommentName(user.getNickname());
+                item.setCommentAvatar(user.getAvatar());
+            }
+            TripartiteUser targetUser = userMpa.get(item.getTargetUid());
+            if (targetUser != null) {
+                item.setTargetName(targetUser.getNickname());
+                item.setTargetAvatar(targetUser.getAvatar());
+            }
+            articleCommentVos.add(item);
+            levelmap.put(item.getParentId(), articleCommentVos);
+        }
+
+        //组装数据
+        for (ArticleCommentVo record : list) {
+            TripartiteUser user = userMpa.get(record.getCommentUid());
+            if (user != null) {
+                record.setCommentName(user.getNickname());
+                record.setCommentAvatar(user.getAvatar());
+            }
+            List<ArticleCommentVo> dictumCommentVos = levelmap.get(record.getId());
+            if (dictumCommentVos != null) {
+                record.setMountComment(dictumCommentVos);
+            }
+        }
+        list.get(0).setCommentTotal(levelList.size() + list.size());
+        return list;
     }
 
 

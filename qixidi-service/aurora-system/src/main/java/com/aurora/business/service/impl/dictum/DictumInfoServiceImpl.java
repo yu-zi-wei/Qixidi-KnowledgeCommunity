@@ -2,15 +2,18 @@ package com.aurora.business.service.impl.dictum;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.aurora.business.domain.bo.dictum.DictumInfoBo;
+import com.aurora.business.domain.entity.dictum.DictumComment;
 import com.aurora.business.domain.entity.dictum.DictumInfo;
 import com.aurora.business.domain.vo.dictum.DictumInfoVo;
 import com.aurora.business.domain.vo.user.TripartiteUserVo;
 import com.aurora.business.mapper.TripartiteUserMapper;
+import com.aurora.business.mapper.dictum.DictumCommentMapper;
 import com.aurora.business.mapper.dictum.DictumGroupMapper;
 import com.aurora.business.mapper.dictum.DictumInfoMapper;
 import com.aurora.business.service.dictum.IDictumInfoService;
 import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.page.TableDataInfo;
+import com.aurora.common.enums.StatusEnums;
 import com.aurora.common.helper.LoginHelper;
 import com.aurora.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,10 +22,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 名言信息Service业务层处理
@@ -37,6 +42,8 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     private final DictumInfoMapper baseMapper;
     private final DictumGroupMapper dictumGroupMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
+    @Autowired
+    private DictumCommentMapper dictumCommentMapper;
 
     /**
      * 查询名言信息
@@ -60,9 +67,23 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
      */
     @Override
     public TableDataInfo<DictumInfoVo> queryPageList(DictumInfoBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<DictumInfo> lqw = buildQueryWrapper(bo);
         IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
-        result.getRecords().forEach(item -> {
+        List<DictumInfoVo> records = result.getRecords();
+        if (ObjectUtils.isEmpty(records)) return TableDataInfo.build();
+        List<Long> ids = new ArrayList<>();
+        Set<String> uids = new HashSet<>();
+        records.forEach(item -> {
+            ids.add(item.getId());
+            uids.add(item.getUid());
+        });
+        List<DictumComment> dictumComments = dictumCommentMapper.selectList(new LambdaQueryWrapper<DictumComment>()
+            .select(DictumComment::getId, DictumComment::getDictumId)
+            .in(DictumComment::getDictumId, ids)
+            .eq(DictumComment::getStatus, StatusEnums.NORMAL.getCode())
+        );
+        Map<Long, Long> sumMap = dictumComments.stream().collect(Collectors.groupingBy(DictumComment::getDictumId, Collectors.counting()));
+
+        records.forEach(item -> {
             if (StringUtils.isNotEmpty(item.getLabel())) {
                 List<String> labelList = Arrays.asList(item.getLabel().split(","));
                 item.setLabelList(labelList);
@@ -70,6 +91,10 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
             if (StringUtils.isNotEmpty(item.getPicture())) {
                 List<String> pictureList = Arrays.asList(item.getPicture().split(","));
                 item.setPictureList(pictureList);
+            }
+            Long sum = sumMap.get(item.getId());
+            if (sum != null) {
+                item.setCommentSum(sum);
             }
         });
         return TableDataInfo.build(result);
@@ -94,8 +119,6 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         lqw.eq(StringUtils.isNotBlank(bo.getContent()), DictumInfo::getContent, bo.getContent());
         lqw.eq(bo.getGroupId() != null, DictumInfo::getGroupId, bo.getGroupId());
         lqw.eq(StringUtils.isNotBlank(bo.getLabel()), DictumInfo::getLabel, bo.getLabel());
-        lqw.eq(bo.getHelpSum() != null, DictumInfo::getHelpSum, bo.getHelpSum());
-        lqw.eq(bo.getCommentSum() != null, DictumInfo::getCommentSum, bo.getCommentSum());
         lqw.eq(StringUtils.isNotBlank(bo.getPicture()), DictumInfo::getPicture, bo.getPicture());
         lqw.eq(bo.getDictumState() != null, DictumInfo::getDictumState, bo.getDictumState());
         lqw.eq(bo.getState() != null, DictumInfo::getState, bo.getState());

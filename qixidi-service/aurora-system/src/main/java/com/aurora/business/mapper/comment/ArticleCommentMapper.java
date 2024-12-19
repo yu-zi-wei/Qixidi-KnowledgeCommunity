@@ -3,7 +3,6 @@ package com.aurora.business.mapper.comment;
 import com.aurora.business.domain.entity.comment.ArticleComment;
 import com.aurora.business.domain.vo.comment.ArticleCommentVo;
 import com.aurora.common.core.mapper.BaseMapperPlus;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,8 +17,6 @@ import java.util.List;
  */
 @Mapper
 public interface ArticleCommentMapper extends BaseMapperPlus<ArticleCommentMapper, ArticleComment, ArticleCommentVo> {
-
-    Page<ArticleCommentVo> ArticleList(@Param("articleId") Long articleId, Page<ArticleComment> build);
 
     List<ArticleCommentVo> selectBasicsLis(@Param("ids") Collection<Long> ids);
 }

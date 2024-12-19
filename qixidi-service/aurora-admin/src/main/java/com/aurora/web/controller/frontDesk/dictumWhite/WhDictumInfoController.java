@@ -4,9 +4,11 @@ import com.aurora.business.domain.bo.dictum.DictumAlbumBo;
 import com.aurora.business.domain.bo.dictum.DictumGroupBo;
 import com.aurora.business.domain.bo.dictum.DictumInfoBo;
 import com.aurora.business.domain.vo.dictum.DictumAlbumVo;
+import com.aurora.business.domain.vo.dictum.DictumCommentVo;
 import com.aurora.business.domain.vo.dictum.DictumGroupVo;
 import com.aurora.business.domain.vo.dictum.DictumInfoVo;
 import com.aurora.business.domain.vo.label.LabelInfoVo;
+import com.aurora.business.service.dictum.DictumCommentService;
 import com.aurora.business.service.dictum.IDictumAlbumService;
 import com.aurora.business.service.dictum.IDictumGroupService;
 import com.aurora.business.service.dictum.IDictumInfoService;
@@ -18,6 +20,7 @@ import com.aurora.common.core.validate.QueryGroup;
 import com.aurora.common.enums.RedisKeyEnums;
 import com.aurora.common.utils.redis.RedisUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +42,8 @@ public class WhDictumInfoController {
     private final IDictumGroupService iDictumGroupService;
     private final IDictumAlbumService iDictumAlbumService;
     private final ILabelInfoService iLabelInfoService;
+    @Autowired
+    private DictumCommentService dictumCommentService;
 
     /**
      * 查询名言信息列表（公开）
@@ -120,6 +125,18 @@ public class WhDictumInfoController {
     public R systemLabel(String label) {
         List<LabelInfoVo> list = iLabelInfoService.systemLabel(label);
         return R.ok(list);
+    }
+
+    /**
+     * 获取名言评论
+     *
+     * @param id
+     * @param pageQuery
+     * @return
+     */
+    @GetMapping("comment/list/{id}")
+    public TableDataInfo<DictumCommentVo> commentList(@PathVariable("id") Long id, PageQuery pageQuery) {
+        return dictumCommentService.commentList(id, pageQuery);
     }
 
 }

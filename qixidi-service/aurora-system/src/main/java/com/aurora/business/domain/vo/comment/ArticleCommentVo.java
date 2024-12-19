@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,6 +101,8 @@ public class ArticleCommentVo {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+
+
     /**
      * 目标用户头像
      */
@@ -108,6 +111,7 @@ public class ArticleCommentVo {
      * 目标用户名称
      */
     private String targetName;
+
     /**
      * 评论人用户名称
      */
@@ -119,7 +123,7 @@ public class ArticleCommentVo {
     /**
      * 评论挂载
      */
-    private List mountComment;
+    private List<ArticleCommentVo> mountComment = new ArrayList<>();
     /**
      * 评论总数
      */

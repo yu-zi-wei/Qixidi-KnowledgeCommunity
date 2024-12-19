@@ -9,8 +9,6 @@
         <result property="content" column="content"/>
         <result property="albumId" column="album_id"/>
         <result property="label" column="label"/>
-        <result property="helpSum" column="help_sum"/>
-        <result property="commentSum" column="comment_sum"/>
         <result property="picture" column="picture"/>
         <result property="dictumState" column="dictum_state"/>
         <result property="state" column="state"/>
@@ -26,8 +24,6 @@
         di.group_id,
         di.label,
         di.label,
-        di.help_sum,
-        di.comment_sum,
         di.picture,
         di.author,
         di.works_name,

@@ -50,19 +50,11 @@ public class DictumInfo {
      * 标签（多个以逗号隔开）
      */
     private String label;
-    /**
-     * 点赞总数
-     */
-    private Long helpSum;
 
     private String author;
 
     private String worksName;
 
-    /**
-     * 评论总数
-     */
-    private Long commentSum;
     /**
      * 图片（多个以逗号隔开）
      */
