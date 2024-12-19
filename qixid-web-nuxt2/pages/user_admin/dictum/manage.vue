@@ -16,8 +16,6 @@
           <el-menu-item index="all">全部</el-menu-item>
           <el-menu-item label="已发布" index="open">公开</el-menu-item>
           <el-menu-item label="审核中" index="private">私有</el-menu-item>
-          <!--                              <el-menu-item label="未通过" index="failed">未通过</el-menu-item>-->
-          <!--          <el-menu-item label="草稿箱" index="drafts">草稿箱</el-menu-item>-->
         </el-menu>
 
         <div>

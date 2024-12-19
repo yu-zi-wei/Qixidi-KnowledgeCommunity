@@ -2,7 +2,7 @@
   <div>
     <el-skeleton class="mt-10" :rows="6" animated v-if="loading"/>
     <div v-if="!loading">
-      <ul v-if="dictumList.length>0">
+      <ul v-if="dictumList!=null && dictumList.length!=0">
         <li v-for="(item,index) in dictumList" class="info-li-cl" :key="index">
           <div class="fl-right cursor-pointer" title="更多操作">
             <el-dropdown size="medium" trigger="click">
@@ -61,7 +61,7 @@
           </div>
         </li>
       </ul>
-      <div v-if="dictumList.length==0" class="text-center mt-10">
+      <div v-else class="text-center mt-10">
         <svg t="1682476949715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
              p-id="1648" width="50" height="50">
           <path
