@@ -343,4 +343,8 @@ export default {
   border-radius: 0px;
 }
 
+.el-button--medium{
+  padding: 10px 20px;
+}
+
 </style>

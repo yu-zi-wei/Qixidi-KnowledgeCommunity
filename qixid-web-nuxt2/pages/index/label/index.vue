@@ -118,4 +118,8 @@ export default {
 .label-item:hover {
   border: 1px solid #95a5a6;
 }
+.el-button--mini{
+  padding: 7px 15px;
+}
+
 </style>

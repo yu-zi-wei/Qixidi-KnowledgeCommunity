@@ -225,7 +225,6 @@ export default {
 }
 
 .contentItem:hover {
-  transform: translateY(-4px);
   background-color: #f4f5f5;
 }
 
