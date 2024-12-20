@@ -284,7 +284,9 @@
                 </div>
                 <div v-else>
                   <div @click="loginWindow" class="cursor-pointer">
-                    <el-avatar>登录</el-avatar>
+                    <el-avatar>
+                      <span class="font-bold">登录</span>
+                    </el-avatar>
                   </div>
                 </div>
               </li>
@@ -556,4 +558,7 @@ export default {
   padding: 0px;
 }
 
+.el-button {
+  padding: 12px 14px;
+}
 </style>

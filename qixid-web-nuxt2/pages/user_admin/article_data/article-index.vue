@@ -3,7 +3,7 @@
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <ul v-if="!loading">
       <li v-if="articleList.length>0" v-for="item of articleList" class="article-cli">
-        <nuxt-link class="font-s-16 text-underline-hover hover-cl"
+        <nuxt-link class="font-s-16 text-underline-hover"
                    :to="`/article/article-details/`+$base64.encode(item.id)"
                    target="_blank">
           {{ item.articleTitle }}
@@ -244,10 +244,6 @@ export default {
   cursor: pointer;
 }
 
-.bo-info-cl span:hover {
-  color: var(--theme-color);
-}
-
 .article-cli {
   border-radius: 2px;
   padding: 10px;
@@ -256,7 +252,7 @@ export default {
 }
 
 .article-cli:hover {
-  background-color: #f1f2f6;
+  background-color: #f5f6fa;
 }
 
 </style>

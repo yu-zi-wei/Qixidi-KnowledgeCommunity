@@ -5,7 +5,7 @@
       <div style="width: 360px">
         <!--        侧边栏-->
         <div style="position: fixed">
-          <el-card style="width: 260px">
+          <div class="user-admin-left-div">
             <div class="mt-20 flex-left">
               <div>
                 <el-avatar class="cursor-pointer" :size="50" v-if="userInfo.avatar"
@@ -13,10 +13,10 @@
                 <el-avatar v-else src="/img/tx.jpg"></el-avatar>
               </div>
               <div class="ml-10">
-                <p class="cursor-pointer font-bold font-s-16 mb-6 overflow-nowrap overflow-nowrap-1"
+                <p class="cursor-pointer font-bold font-s-16 overflow-nowrap overflow-nowrap-1"
                    v-text="userInfo.nickname"
                    :title="userInfo.nickname"></p>
-                <p class="color-grey font-s-14" v-text="userInfo.occupation==null?'职业-~-':userInfo.occupation"></p>
+                <p class="color-grey font-s-14 line-height-18" v-text="userInfo.occupation==null?'职业-~-':userInfo.occupation"></p>
               </div>
             </div>
             <div :gutter="20" class="mt-15">
@@ -58,7 +58,7 @@
                 </el-menu>
               </div>
             </div>
-          </el-card>
+          </div>
         </div>
       </div>
       <div class="" style="width: 100%">
@@ -135,6 +135,12 @@ export default {
 .left-list::-webkit-scrollbar-thumb {
   background: #ced6e0;
   border-radius: 2px;
+}
+.user-admin-left-div{
+  width: 260px;
+  //border: 1px solid #4e5969;
+  box-shadow: 0 6px 8px 0 #ecf0f1;
+  padding: 0px 10px;
 }
 
 </style>
