@@ -323,7 +323,6 @@ export default {
               this.urlSplicing();
               this.$router.push(process.env.LOGIN_TRANSFER + "?key=" + res.data.uuid + "&token=" + res.data.token);
               this.handleClose();
-              this.$modal.notifySuccess("欢迎回来");
             }
           }).finally(() => this.buttonLoading = false)
         }

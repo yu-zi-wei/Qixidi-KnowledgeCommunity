@@ -323,7 +323,6 @@ export default {
         this.$API(`/frontDesk/dictum/comment/delete/${id}`, "delete").then(res => {
           if (res.code == 200) {
             this.$modal.msgSuccess("删除成功");
-            this.commentListLoading = false;
             this.getCommentList();
           }
         })

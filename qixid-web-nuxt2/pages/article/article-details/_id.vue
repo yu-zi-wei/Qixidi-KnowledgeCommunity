@@ -951,4 +951,8 @@ li {
   color: var(--theme-color);
   cursor: pointer;
 }
+
+.el-button--small {
+  padding: 9px 15px !important;
+}
 </style>
