@@ -62,6 +62,10 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
     @ExcelProperty(value = "文章内容")
     private String articleContent;
     /**
+     * 文章内容
+     */
+    private String articleContentMd;
+    /**
      * 主题
      */
     @ExcelProperty(value = "主题")
