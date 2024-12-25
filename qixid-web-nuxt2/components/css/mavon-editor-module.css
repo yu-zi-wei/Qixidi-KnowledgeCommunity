@@ -1,5 +1,9 @@
 .v-note-show li {
-  list-style-type: disc !important;
+  list-style-type: disc;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
 }
 
 sup {
@@ -11,8 +15,8 @@ sub {
 }
 
 .markdown-body blockquote {
-  border-left: .25em solid var(--theme-color) !important;
-  background-color: #EEF7FA !important;
+  border-left: 0.2rem solid #22a6b3 !important;
+  background-color: #eef7fa !important;
   padding: 6px !important;
 }
 
@@ -28,4 +32,13 @@ sub {
 
 .button-item {
   cursor: pointer;
+}
+
+.markdown-body p {
+  line-height: 26px;
+}
+
+.v-note-wrapper .v-note-op {
+  border-top: 1px solid #e1e4e8;
+  border-bottom: 1px solid #e1e4e8 !important;
 }

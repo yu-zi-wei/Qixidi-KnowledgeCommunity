@@ -66,24 +66,6 @@
 
                 </div>
               </li>
-              <!--              <li class="fa-li-class" title="举报">-->
-              <!--                <div class="fa-li-div">-->
-              <!--                  <svg t="1700407568823" class="icon icon-size-24 mt-10 svg-d63031 icon-hover" viewBox="0 0 1024 1024"-->
-              <!--                       version="1.1"-->
-              <!--                       xmlns="http://www.w3.org/2000/svg" p-id="13346">-->
-              <!--                    <path-->
-              <!--                      d="M924.8 908H284v-32h640.8c8 0 15.2-4 20-11.2 4-7.2 4-15.2 0-22.4L532 128c-4-7.2-11.2-11.2-20-11.2-8 0-15.2 4-20 11.2l-320 555.2-28-16L464.8 112c9.6-16.8 27.2-27.2 47.2-27.2 20 0 37.6 10.4 47.2 27.2l412.8 714.4c9.6 16.8 9.6 37.6 0 54.4-9.6 17.6-27.2 27.2-47.2 27.2z"-->
-              <!--                      p-id="13347"></path>-->
-              <!--                    <path d="M517.6 737.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" p-id="13348"></path>-->
-              <!--                    <path-->
-              <!--                      d="M517.6 672c-17.6 0-32-14.4-32-32V416c0-17.6 14.4-32 32-32s32 14.4 32 32v224c0 17.6-14.4 32-32 32z"-->
-              <!--                      p-id="13349"></path>-->
-              <!--                    <path d="M158.4 675.2m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13350"></path>-->
-              <!--                    <path d="M284 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13351"></path>-->
-              <!--                    <path d="M208 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" p-id="13352"></path>-->
-              <!--                  </svg>-->
-              <!--                </div>-->
-              <!--              </li>-->
             </ul>
           </div>
         </div>
@@ -116,8 +98,22 @@
                 </div>
               </div>
             </div>
-            <ai-editor-module :ai-editor-id="'aiEditor-article'" :content="articleInfo.articleContent"
-                              :editable="false" :outline.sync="tocArray"></ai-editor-module>
+            <mavon-editor class="markdown"
+                          id="detailDirectory"
+                          style="padding-left: 10px"
+                          :value="articleInfo.articleContentMd"
+                          :subfield="false"
+                          :defaultOpen="prop.defaultOpen"
+                          :boxShadow="prop.boxShadow"
+                          :toolbarsFlag="prop.toolbarsFlag"
+                          :editable="prop.editable"
+                          :codeStyle="articleInfo.theme"
+                          fontSize="18px"
+                          previewBackground="#fefefe"
+                          :scrollStyle="prop.scrollStyle"
+                          :navigation="false"
+                          ref="markdown"
+            />
             <!--            文章标签-->
             <div class="mt-8">
               <span class="label-top-cl"> 分类:</span>
@@ -135,23 +131,34 @@
                   </span>
             </div>
             <hr class="hr-item mb-30 mt-20 mr-20"/>
-            <!--            评论-->
-            <div class="mt-20" id="comment">
-              <div class="font-s-18 font-bold mb-10">
+            <!--   ============================= 评论开始  =============================   -->
+            <div class="" id="comment">
+              <p class="font-s-18 font-bold mb-20">
                 评论<span class="ml-6" v-text="commentTotal"></span>
-              </div>
+              </p>
               <div class="flex-left">
                 <div style="width: 40px">
-                  <el-avatar :size="40" v-if="userInfo && userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-                  <el-avatar :size="40" v-else src="/img/tx.jpg"></el-avatar>
+                  <el-avatar v-if="userInfo && userInfo.avatar" :size="35" :src="userInfo.avatar"></el-avatar>
+                  <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
                 </div>
-                <div class="flex-12">
-                  <div class="comment-import">
-                    <ai-editor-module v-if="commentTextLoading" :ai-editor-id="'aiEditorComment1'"
-                                      :htmlContent.sync="comment.content"
-                                      :content="comment.content" :editor-height="'200px'">
-                    </ai-editor-module>
-                    <div class="overflow-hidden mb-6 mt-6">
+                <div class="comment-input-div overflow-hidden flex-1" v-if="radio=='2'">
+                  <mavon-editor-module v-if="commentTextLoading" :mdContent.sync="comment.content"
+                                       :mavonHeight="300">
+                  </mavon-editor-module>
+                  <el-button size="small" plain type="primary" class="mt-6 fl-right mr-6" :loading="buttonLoading"
+                             :disabled="comment.content==null || comment.content==''"
+                             @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
+                    评 论
+                  </el-button>
+                </div>
+                <div v-else class="flex-12">
+                  <div class="comment-import" v-if="commentTextLoading">
+                  <textarea style="white-space:pre-line" id="articleComment" v-model="comment.content"
+                            placeholder="请输入内容..."
+                            rows="3" class="news-comment-cl"/>
+                    <div class="overflow-hidden">
+                      <emoji-module :content.sync="comment.content" :id="'articleComment'" :placement="'bottom-start'"
+                                    class="fl-left"></emoji-module>
                       <el-button plain type="primary" class="fl-right" size="small"
                                  :disabled="comment.content==null ||comment.content==''"
                                  :loading="buttonLoading"
@@ -162,16 +169,22 @@
                   </div>
                 </div>
               </div>
-              <el-skeleton class="mt-10 mr-6" v-if="skeletonLoading" :rows="4" animated/>
-              <div v-if="articleComment.length!=0 && !skeletonLoading">
+              <div style="margin-left: 50px">
+                <el-radio-group v-model="radio" size="mini">
+                  <el-radio-button label="1">文本编辑器</el-radio-button>
+                  <el-radio-button label="2">Markdown</el-radio-button>
+                </el-radio-group>
+              </div>
+
+              <div v-if="articleComment.length!=0">
                 <div class="mt-20 font-bold">热门评论</div>
                 <!--                      一级评论-->
                 <div style="margin-top: 10px;padding: 10px">
-                  <div v-for="(item,index) in articleComment.slice(0,commentShow)" class="mb-20" :key="index">
+                  <div v-for="(item,ineex) in articleComment" class="mb-20" :key="ineex">
                     <div class="font-s-16 flex-left">
                       <div class="mr-2">
-                        <el-avatar :size="35" v-if="item.commentAvatar" :src="item.commentAvatar"></el-avatar>
-                        <el-avatar :size="35" size="medium" v-else src="/img/tx.jpg"></el-avatar>
+                        <el-avatar v-if="item.commentAvatar" :size="35" :src="item.commentAvatar"></el-avatar>
+                        <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
                       </div>
                       <div class="flex-8">
                         <div class="flex-left align-items-center">
@@ -180,21 +193,32 @@
                                      target="_blank">
                             {{ item.commentName }}
                           </nuxt-link>
-                          <el-tag v-if="item.commentUid==articleInfo.userId" size="mini" class="ml-4">作者</el-tag>
-                          <span class="color-grey ml-10 mr-8 font-s-14">|</span>
-                          <span class="color-grey font-s-14"
+                          <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
+                                  class="ml-6 mr-10">作者
+                          </el-tag>
+                          <span class="color-grey-2 font-s-12"
                                 v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                         </div>
-                        <div class="content-div">
-                          <ai-editor-module v-if="commentTextLoading" :ai-editor-id="'aiEditor-content1-'+index"
-                                            :content="item.content"
-                                            :editable="false"></ai-editor-module>
+                        <div class="content-div mt-10">
+                          <mavon-editor class="markdown"
+                                        previewBackground="#fefefe"
+                                        :value="item.content"
+                                        :subfield="false"
+                                        :defaultOpen="prop.defaultOpen"
+                                        :boxShadow="prop.boxShadow"
+                                        :toolbarsFlag="prop.toolbarsFlag"
+                                        :editable="prop.editable"
+                                        :codeStyle="articleInfo.theme"
+                                        :scrollStyle="prop.scrollStyle"
+                                        :navigation="false"
+                                        ref="markdown"
+                          />
                         </div>
-                        <div class="flex-left">
+                        <div class="flex-left ml-10">
                           <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
-                               class="font-s-13 color-grey-2 cursor-pointer hover-cl icon-hover"
-                               @click="deleteComment(item)" style="width: 60px">
-                            <svg t="1701957752378" class="icon icon-size-16 icon-theme-1 svg-translateY-3 icon-hover"
+                               class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover"
+                               @click="deleteComment(item)">
+                            <svg t="1701957752378" class="icon icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
                                  viewBox="0 0 1024 1024" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg" p-id="3681">
                               <path
@@ -206,13 +230,13 @@
                             </svg>
                             删除
                           </div>
-                          <div class="flex-12 flex-left">
+                          <div class="flex-left flex-12 ml-10">
                             <el-collapse accordion style="width: 100%;">
-                              <el-collapse-item v-if="commentTextLoading">
+                              <el-collapse-item>
                                 <template slot="title">
-                                  <div class="hover-cl icon-hover font-s-13 color-grey-2">
+                                  <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-5">
                                     <svg t="1701957280525"
-                                         class="icon icon-size-16 icon-theme-1 svg-translateY-3 icon-hover"
+                                         class="icon icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
                                          viewBox="0 0 1024 1024" version="1.1"
                                          xmlns="http://www.w3.org/2000/svg" p-id="2658">
                                       <path
@@ -222,20 +246,37 @@
                                     回复
                                   </div>
                                 </template>
-                                <div class="comment-import">
-                                  <ai-editor-module :ai-editor-id="'aiEditorComment2-'+index"
-                                                    :htmlContent.sync="item.recoverContent"
-                                                    :content="item.recoverContent" :editor-height="'160px'">
-                                  </ai-editor-module>
-                                  <div class="overflow-hidden mb-6 mt-6">
+                                <div class="comment-input-div overflow-hidden" v-if="radio2=='2'">
+                                  <mavon-editor-module v-if="commentTextLoading" :mdContent.sync="item.recoverContent"
+                                                       :mavonHeight="300">
+                                  </mavon-editor-module>
+                                  <el-button size="small" plain type="primary" class="mt-10 fl-right mr-6"
+                                             :loading="buttonLoading"
+                                             :disabled="item.recoverContent==null || item.recoverContent==''"
+                                             @click="sendComment(item.id,item.content,item.recoverContent,2,item.id,item.commentUid,2)">
+                                    回 复
+                                  </el-button>
+                                </div>
+                                <div class="comment-import" v-if="commentTextLoading && radio2=='1'">
+                                <textarea style="white-space:pre-line" :id="'articleComment2'+ineex"
+                                          v-model="item.recoverContent"
+                                          placeholder="请输入内容..." rows="3" class="news-comment-cl"/>
+                                  <div class="overflow-hidden">
+                                    <emoji-module :content.sync="item.recoverContent" :id="'articleComment2'+ineex"
+                                                  :placement="'bottom-start'" class="fl-left"></emoji-module>
                                     <el-button plain type="primary" class="fl-right" size="small"
                                                :disabled="item.recoverContent==null || item.recoverContent==''"
                                                :loading="buttonLoading"
                                                @click="sendComment(item.id,item.content,item.recoverContent,2,item.id,item.commentUid,2)">
-                                      评 论
+                                      回 复
                                     </el-button>
                                   </div>
                                 </div>
+                                <el-radio-group v-model="radio2" size="mini" class="ml-10">
+                                  <el-radio-button label="1">文本编辑器</el-radio-button>
+                                  <el-radio-button label="2">Markdown</el-radio-button>
+                                </el-radio-group>
+
                               </el-collapse-item>
                             </el-collapse>
                           </div>
@@ -243,48 +284,61 @@
                       </div>
                     </div>
                     <!--二级评论-->
-                    <div v-if="item.mountComment!=null && item.mountComment.length!=0" class="comment-li">
-                      <div v-for="(items,index2) in item.mountComment" class="mb-18" :key="index2">
+                    <div v-if="item.mountComment.length!=0" class="comment-li">
+                      <div v-for="(items,index2) in item.mountComment" class="mb-20" :key="index2">
                         <div class="flex-left">
                           <div class="mr-2">
-                            <el-avatar :size="30" v-if="items.commentAvatar" :src="items.commentAvatar"></el-avatar>
-                            <el-avatar :size="30" v-else src="/img/tx.jpg"></el-avatar>
+                            <el-avatar v-if="items.commentAvatar" :size="30" :src="items.commentAvatar"></el-avatar>
+                            <el-avatar v-else :size="30" src="/img/tx.jpg"></el-avatar>
                           </div>
                           <div class="flex-8">
                             <div class="flex-left align-items-center">
-                              <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
-                                         target="_blank">
-                                <div class="ml-6 cursor-pointer hover-cl" v-text="items.commentName">
-                                </div>
-                              </nuxt-link>
-                              <el-tag v-if="items.commentUid==articleInfo.userId" size="mini" class="ml-4">作者</el-tag>
-                              <div v-if="items.commentGrade==3">
-                                <span class="ml-10 color-grey font-s-13">回复</span>
+                              <div class="ml-6 mr-10">
+                                <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
+                                           target="_blank" class="cursor-pointer hover-cl">
+                                  {{ items.commentName }}
+                                </nuxt-link>
+                                <el-tag v-if="items.commentUid==articleInfo.userId" type="info" effect="plain"
+                                        size="mini" class="ml-2">作者
+                                </el-tag>
+                              </div>
+                              <div v-if="items.commentGrade==3" class="mr-10">
+                                <span class="color-grey-3 font-s-12 mr-4">回复</span>
                                 <nuxt-link class="cursor-pointer hover-cl"
                                            :to="'/user_home/article?uuid='+$base64.encode(items.targetUid)"
                                            target="_blank">
                                   {{ items.targetName }}
                                 </nuxt-link>
-                                <el-tag v-if="items.targetUid==articleInfo.userId" size="mini" class="ml-4">作者
+                                <el-tag v-if="items.targetUid==articleInfo.userId" type="info" effect="plain"
+                                        size="mini"
+                                        class="ml-2">作者
                                 </el-tag>
                               </div>
-                              <!--                              <span class="color-grey ml-10 mr-8 font-s-13">|</span>-->
-                              <span class="color-grey-2 font-s-13 ml-6"
+                              <span class="color-grey-2 font-s-12"
                                     v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                             </div>
                             <!--                          内容-->
-                            <div class=" content-div mt-6">
-                              <ai-editor-module v-if="commentTextLoading"
-                                                :ai-editor-id="'aiEditor-content2-'+index+'-'+index2"
-                                                :content="items.content"
-                                                :editable="false"></ai-editor-module>
+                            <div class="content-div mt-6">
+                              <mavon-editor class="markdown"
+                                            previewBackground="#fefefe"
+                                            :value="items.content"
+                                            :subfield="false"
+                                            :defaultOpen="prop.defaultOpen"
+                                            :boxShadow="prop.boxShadow"
+                                            :toolbarsFlag="prop.toolbarsFlag"
+                                            :editable="prop.editable"
+                                            :codeStyle="articleInfo.theme"
+                                            :scrollStyle="prop.scrollStyle"
+                                            :navigation="false"
+                                            ref="markdown"
+                              />
                             </div>
-                            <div class="flex-left">
-                              <div class="font-s-13 hover-cl cursor-pointer color-grey-2"
+                            <div class="flex-left ml-10">
+                              <div class="font-s-12 hover-cl cursor-pointer color-grey-2"
                                    v-if="userInfo!=null && userInfo.uuid==items.commentUid"
-                                   @click="deleteComment(items)" style="width: 60px">
+                                   @click="deleteComment(items)">
                                 <svg t="1701957752378"
-                                     class="icon icon-size-16 icon-theme-1 svg-translateY-3 icon-hover"
+                                     class="icon icon-size-14 icon-theme-1 svg-translateY-3 icon-hover"
                                      viewBox="0 0 1024 1024" version="1.1"
                                      xmlns="http://www.w3.org/2000/svg" p-id="3681">
                                   <path
@@ -296,13 +350,13 @@
                                 </svg>
                                 删除
                               </div>
-                              <div class="flex-12 flex-left">
+                              <div class="flex-12 flex-left ml-10">
                                 <el-collapse accordion style="width: 100%;">
-                                  <el-collapse-item v-if="commentTextLoading">
+                                  <el-collapse-item>
                                     <template slot="title">
-                                      <div class="hover-cl font-s-13 color-grey-2">
+                                      <div class="hover-cl font-s-12 color-grey-2">
                                         <svg t="1701957280525"
-                                             class="icon icon-size-16 icon-theme-1 svg-translateY-3 icon-hover"
+                                             class="icon icon-size-14 icon-theme-1 svg-translateY-3 icon-hover"
                                              viewBox="0 0 1024 1024" version="1.1"
                                              xmlns="http://www.w3.org/2000/svg" p-id="2658">
                                           <path
@@ -313,22 +367,39 @@
                                       </div>
                                     </template>
                                     <div>
-                                      <div class="comment-import">
+                                      <div class="comment-input-div overflow-hidden" v-if="radio3=='2'">
+                                        <mavon-editor-module v-if="commentTextLoading"
+                                                             :mdContent.sync="items.recoverContent"
+                                                             :mavonHeight="300">
+                                        </mavon-editor-module>
+                                        <el-button size="small" type="primary" plain class="mt-10 fl-right mr-6"
+                                                   :loading="buttonLoading"
+                                                   :disabled="items.recoverContent==null || items.recoverContent==''"
+                                                   @click="sendComment(item.id,item.content,items.recoverContent,3,items.id,items.commentUid,2)">
+                                          回 复
+                                        </el-button>
+                                      </div>
+
+                                      <div class="comment-import" v-if="commentTextLoading && radio3=='1'">
+                                      <textarea style="white-space:pre-line" :id="'articleComment3'+index2"
+                                                v-model="items.recoverContent"
+                                                placeholder="请输入内容..." rows="3" class="news-comment-cl"/>
                                         <div class="overflow-hidden">
-                                          <ai-editor-module :ai-editor-id="'aiEditorComment3-'+index+'-'+index2"
-                                                            :htmlContent.sync="items.recoverContent"
-                                                            :content="items.recoverContent" :editor-height="'160px'">
-                                          </ai-editor-module>
-                                          <div class="overflow-hidden mb-6">
-                                            <el-button plain type="primary" class="fl-right" size="small"
-                                                       :disabled="items.recoverContent==null || items.recoverContent==''"
-                                                       :loading="buttonLoading"
-                                                       @click="sendComment(item.id,item.content,items.recoverContent,3,items.id,items.commentUid,2)">
-                                              回 复
-                                            </el-button>
-                                          </div>
+                                          <emoji-module :content.sync="items.recoverContent"
+                                                        :id="'articleComment3'+index2"
+                                                        :placement="'bottom-start'" class="fl-left"></emoji-module>
+                                          <el-button plain type="primary" class="fl-right" size="small"
+                                                     :disabled="items.recoverContent==null || items.recoverContent==''"
+                                                     :loading="buttonLoading"
+                                                     @click="sendComment(item.id,item.content,items.recoverContent,3,items.id,items.commentUid,2)">
+                                            回 复
+                                          </el-button>
                                         </div>
                                       </div>
+                                      <el-radio-group v-model="radio3" size="mini" class="ml-10">
+                                        <el-radio-button label="1">文本编辑器</el-radio-button>
+                                        <el-radio-button label="2">Markdown</el-radio-button>
+                                      </el-radio-group>
                                     </div>
                                   </el-collapse-item>
                                 </el-collapse>
@@ -339,16 +410,17 @@
                       </div>
                     </div>
                   </div>
-                  <div v-if="articleComment.length>commentShow" class="text-center font-s-14 color-grey hover-cl">
+                  <div v-if="articleComment.length>commentTotal" class="text-center font-s-14 color-grey hover-cl">
                       <span class="cursor-pointer"> 查看更多
                       <i class="fa fa-angle-double-down" aria-hidden="true"></i></span>
                   </div>
                 </div>
               </div>
-              <div v-if="articleComment.length==0 && !skeletonLoading" class="text-center mt-20 font-s-14 color-grey-3">
+              <div v-else class="text-center mt-20 font-s-14 color-grey-3">
                 快来抢占沙发~
               </div>
             </div>
+            <!--   ============================= 评论结束  =============================   -->
           </div>
         </div>
         <!--        右侧边栏-->
@@ -436,8 +508,7 @@
               <!-- 遍历目录 -->
               <ul class="article-catalogue">
                 <el-timeline>
-                  <el-timeline-item v-for="(item, index) in tocArray" :key="index"
-                                    size="normal"
+                  <el-timeline-item v-for="(item, index) in tocArray" :key="index" size="normal"
                                     :type="highlightType()==index?'primary':''">
                     <span @click="gotoAnchor(item.pos)" class="font-s-14 line-height-18">
                     {{ item.text }}
@@ -528,13 +599,24 @@ export default {
       ]
     }
   },
+  computed: {
+    prop() {
+      let data = {
+        subfield: false,// 单双栏模式
+        defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        editable: false,
+        toolbarsFlag: false,
+        scrollStyle: true,
+        boxShadow: false,  //边框阴影
+      }
+      return data
+    },
+  },
   data() {
     return {
       articleInfo: {},
       //文章目录
       tocArray: [],
-      //默认头像
-      profile: '',
       id: null,
       queryParams: {
         pageNum: 0,
@@ -571,10 +653,8 @@ export default {
         targetId: null,
         type: null,
       },
+      //评论相关
       buttonCoLoading: false,
-      commentTotal: 0,
-      commentShow: 10,
-      skeletonLoading: true,
       articleComment: [],
       comment: {
         articleId: null,
@@ -589,6 +669,11 @@ export default {
         worksContent: '',
       },
       commentTextLoading: true,
+      commentTotal: 0,
+      //评论编辑器切换
+      radio: '1',
+      radio2: '1',
+      radio3: '1',
     }
   },
   async asyncData({app, params, store}) {
@@ -619,6 +704,32 @@ export default {
     }
   },
   methods: {
+    //目录生成
+    generateDirectory() {
+      //客户端执行
+      this.$nextTick(() => {
+        let tocTags = ["H1", "H2", "H3", "H4"];//筛选目录
+        let tocArray = [];
+        let element = document.querySelector("#detailDirectory");
+        let childNodes = element.childNodes[2].childNodes[2].childNodes[0].childNodes;
+        childNodes.forEach(item => {
+          let tagName = item.tagName;
+          //是否包含 tocTags存在的标签
+          if (tagName == undefined || !tocTags.includes(tagName.toUpperCase())) {
+            return true;
+          }
+          let elementsByTagName = item.getElementsByTagName("a");
+          let id = elementsByTagName[0].getAttribute("id");
+          tocArray.push({
+            id: id,
+            text: item.innerText,
+            level: Number.parseInt(tagName.substring(1)),
+            pos: item.offsetTop,
+          })
+        });
+        this.tocArray = tocArray;
+      });
+    },
     highlightType() {
       let scrollTops = this.scrollTops + 1;
       if (scrollTops <= this.tocArray[0].pos) {
@@ -693,7 +804,8 @@ export default {
         }
       }).finally(() => {
         this.comment.content = null;
-        this.buttonLoading = false
+        this.buttonLoading = false;
+        this.commentTextLoading = true;
       })
     },
     goComment() {
@@ -830,13 +942,6 @@ export default {
         top: pos,
         behavior: "smooth"  // 平滑滚动
       });
-
-      // let dom = document.querySelector("#" + id);
-      // dom.scrollIntoView({
-      //   /*平滑滚动*/
-      //   behavior: "smooth",
-      //   // block: "start",
-      // })
     },
     handleScroll() {
       let scrollTop = document.documentElement.scrollTop
@@ -860,21 +965,14 @@ export default {
       });
     },
     articleDetailsInfo() {
-      // this.id = this.$base64.decode(this.$route.params.id);
-      // this.$API('/white/article/details/' + this.id, this.$get()).then(res => {
-      //   this.articleInfo = res.data;
-      //   this.queryParams.articleTitle = this.articleInfo.articleTitle;
-      //   this.queryParams.id = this.articleInfo.id;
-      //--------------------------------
       //获取用户基本信息
       this.getBasicsUsers();
+      this.generateDirectory();
       this.loading = false;
       this.$API(`/white/article/add/browse-count/${this.articleInfo.id}/${this.articleInfo.labelId}`);
-      // }).finally(() => {
       //获取相关文章
       this.$API('/white/article/related/list', this.$get(), this.queryParams).then(res => {
         this.listInformationList = res;
-        // });
         //  记录用户浏览历史
         this.$API('/frontDesk/browsing/history', this.$post(), null, {
           targetId: this.articleInfo.id,
@@ -886,7 +984,6 @@ export default {
       });
     },
     articleCommentLists() {
-      // this.skeletonLoading = true;
       let query = {
         articleId: this.articleInfo.id
       }
@@ -895,8 +992,6 @@ export default {
         if (this.articleComment.length > 0) {
           this.commentTotal = this.articleComment[0].commentTotal;
         }
-        this.skeletonLoading = false;
-        this.commentTextLoading = true;
       })
     },
     getBasicsUsers() {
@@ -950,9 +1045,5 @@ li {
 .el-timeline-item__wrapper :hover {
   color: var(--theme-color);
   cursor: pointer;
-}
-
-.el-button--small {
-  padding: 9px 15px !important;
 }
 </style>

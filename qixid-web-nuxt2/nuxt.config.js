@@ -57,6 +57,7 @@ export default {
     '~/static/css/common/element.css',
     '~/static/css/common/module.css',// 通用组件 css
     '~/static/css/common/theme.css',//主题配置
+    // '~/static/vditor/dist/index.css',
   ],
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -65,8 +66,8 @@ export default {
     '~/plugins/modal.js',  //提示
     '~/plugins/base64.js',  //base64加解密
     '~/plugins/utils.js',
-    '~/plugins/globalConfig.js',//全局配置
     '~/plugins/init.js',//全局配置
+    '~/plugins/mavon-editor.js',//富文本编辑器
     //=================api==================
     '~/api/API.js', // axios 请求封装
     '~/api/requestType.js', // axios 请求类型封装
@@ -118,7 +119,10 @@ export default {
     extractCSS: {allChunks: true},// 将内嵌的样式提取到外部，解决查看网页源代码是出现css问题
     extend(config, {isDev, isClient}) {
       config.module.rules.push({
-        test: /\.js$/,
+        // test: /\.js$/,
+        test: /\.(js|mjs)$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
         use: {
           loader: 'babel-loader',
           options: {

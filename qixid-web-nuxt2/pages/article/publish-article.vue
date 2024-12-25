@@ -1,6 +1,6 @@
 <template>
   <div class="padding-10" style="height: 100%;">
-    <div style="height: 70px;">
+    <div style="height: 60px;">
       <div class="title-input-class">
         <div class="mb-10 flex-space-between flex-wrap-wrap padding-10">
           <div class="flex-6 mr-6">
@@ -104,41 +104,12 @@
         </div>
       </div>
     </div>
-    <div class="flex-left">
-      <div style="width: 300px;height: 1px"></div>
-      <div style="width: 960px;border: 1px solid #F2F3F5;">
-        <ai-editor-module v-if="isClient"
-                          :htmlContent.sync="article.articleContent"
-                          :mdContent.sync="article.articleContentMd"
-                          :content="article.articleContent"
-                          :editor-height="'100%'"
-                          :outline.sync="tocArray"
-                          :toolbar-size="'medium'"
-                          :minimalistMode="false"></ai-editor-module>
-      </div>
-      <div>
-        <div style="position: fixed;max-width: 340px;right: 5%;background-color: #F2F3F5;border-radius: 4px">
-          <div class="padding-10 mb-10">
-            <div class="ml-6 font-bold">目 录</div>
-            <hr class="hr-item mb-15 mt-15"/>
-            <!-- 遍历目录 -->
-            <ul class="publish-article-catalogue">
-              <el-timeline v-if="tocArray.length!=0">
-                <el-timeline-item v-for="(item, index) in tocArray" :key="index"
-                                  size="normal"
-                                  :type="highlightType()==index?'primary':''">
-                    <span @click="gotoAnchor(item.pos)" class="font-s-14 line-height-18">
-                    {{ item.text }}
-                    </span>
-                </el-timeline-item>
-              </el-timeline>
-              <div v-else>
-                --
-              </div>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <div>
+      <mavon-editor-module :mdContent.sync="article.articleContentMd"
+                           :htmlContent.sync="article.articleContent"
+                           :theme.sync="article.theme"
+                           :content="article.articleContentMd"
+                           v-if="isClient"></mavon-editor-module>
     </div>
     <el-dialog title="文章发布" :visible.sync="articlePopupDialog" width="800px">
       <el-form :model="article" :rules="rules" ref="article" label-width="100px" class="demo-ruleForm">
@@ -232,14 +203,14 @@
 
 <script>
 import AiEditorModule from "../../components/AiEditor-module";
+import MavonEditorModule from "../../components/mavon-editor-module.vue";
 
 export default {
   name: "publishArticle",
-  components: {AiEditorModule},
+  components: {MavonEditorModule, AiEditorModule},
   data() {
     return {
       //文章目录
-      tocArray: [],
       isClient: false,
       rules: {
         specialId: [
@@ -295,29 +266,6 @@ export default {
     }
   },
   methods: {
-    gotoAnchor(pos) {
-      window.scrollTo({
-        top: pos,
-        behavior: "smooth"  // 平滑滚动
-      });
-    },
-    highlightType() {
-      let scrollTop = document.documentElement.scrollTop
-      this.scrollTops = scrollTop;
-      let scrollTops = this.scrollTops + 1;
-      if (scrollTops <= this.tocArray[0].pos) {
-        return 0;
-      }
-      if (this.tocArray[this.tocArray.length - 1].pos <= scrollTops) {
-        return this.tocArray.length - 1;
-      }
-      for (let i = 0; i < this.tocArray.length; i++) {
-        if (this.tocArray[i].pos <= scrollTops
-          && this.tocArray[i + 1] != null && scrollTops < this.tocArray[i + 1].pos) {
-          return i;
-        }
-      }
-    },
     handleTabsClick(tab, event) {
       this.latelyArticleQueryParams.auditState = parseInt(tab.name)
       this.getLatelyArticleList()

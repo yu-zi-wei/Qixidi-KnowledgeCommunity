@@ -181,10 +181,10 @@
 }
 
 .comment-input-div {
-  background-color: #F2F3F5;
   margin: 10px;
-  padding: 8px;
+  padding-bottom: 8px;
   border-radius: 4px;
+  box-shadow: 0 2px 6px 0 #ecf0f1;
 }
 
 .comment-li {
@@ -259,4 +259,8 @@
 /*隐藏折叠面板 尖括号图标*/
 .el-collapse-item__arrow {
   display: none;
+}
+
+.el-button--small {
+  padding: 9px 15px !important;
 }

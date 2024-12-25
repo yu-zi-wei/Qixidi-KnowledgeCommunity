@@ -488,11 +488,11 @@ textarea:focus {
 }
 
 .content-div {
-  height: 100%;
-  background-color: #fefefe;
-  border-radius: 4px;
-  border-bottom: 1px solid #F0F2F5;
-  border-left: 1px solid #F0F2F5;
+  //height: 100%;
+  //background-color: #fefefe;
+  //border-radius: 4px;
+  //border-bottom: 1px solid #F0F2F5;
+  //border-left: 1px solid #F0F2F5;
 }
 
 .news-content {
