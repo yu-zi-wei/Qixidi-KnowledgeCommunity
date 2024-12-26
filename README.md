@@ -92,19 +92,6 @@ qixidi/
 ### 前台功能点
 ![前台功能.png](img%2F%E5%89%8D%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
 
-### 前台页面截图
-![登录页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%99%BB%E5%BD%95%E9%A1%B5.png)
-![首页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%A6%96%E9%A1%B5.png)
-![名言广场.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA.png)
-![工具.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%B7%A5%E5%85%B7.png)
-![创作者中心.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%88%9B%E4%BD%9C%E8%80%85%E4%B8%AD%E5%BF%83.png)
-![个人主页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5.png)
-![名言空间.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E7%A9%BA%E9%97%B4.png)
-![文章详情页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85%E9%A1%B5.png)
-![文章发布.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E5%8F%91%E5%B8%83.png)
-![私信.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%A7%81%E4%BF%A1.png)
-![签到.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%AD%BE%E5%88%B0.png)
-
 ### 后台功能点
 ![后台功能.png](img%2F%E5%90%8E%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
 
