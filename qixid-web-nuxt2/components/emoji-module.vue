@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="emoji-module">
     <el-popover
       v-show="loading"
       :placement="placementData"
@@ -86,7 +86,12 @@ export default {
   cursor: pointer;
   transition: .3s;
 }
-.emoji-item:active{
+
+.emoji-item:active {
   font-size: 22px;
+}
+
+.emoji-module .el-button--mini {
+  padding: 7px 4px;
 }
 </style>

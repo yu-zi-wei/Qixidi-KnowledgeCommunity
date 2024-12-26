@@ -20,14 +20,13 @@
             </div>
           </div>
         </div>
-        <!--        <hr class="hr-item"/>-->
         <!--        评论-->
         <div style="margin-top: 60px">
           <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;">
             <emoji-module :content.sync="dictumComment.content" :id="'dictum-comment'"></emoji-module>
             <textarea style="white-space:pre-line" id="dictum-comment" v-model="dictumComment.content"
                       placeholder="输入评论..."
-                      rows="2" class="dictum-comment-cl">
+                      rows="3" class="dictum-comment-cl">
             </textarea>
             <div class="overflow-hidden">
               <el-button plain class="fl-right" title="评论" size="small"
@@ -69,7 +68,7 @@
                               <textarea style="white-space:pre-line" :id="'dictum-comment-'+item.id"
                                         v-model="dictumComment2.content"
                                         placeholder="输入评论..."
-                                        rows="2" class="dictum-comment-cl"></textarea>
+                                        rows="3" class="dictum-comment-cl"></textarea>
                               <div class="overflow-hidden">
                                 <el-button plain class="fl-right" title="评论" size="small"
                                            :disabled="dictumComment2.content==null ||dictumComment2.content==''"
@@ -106,7 +105,7 @@
                 <!--                二级评论列表-->
                 <div v-if="item.dictumCommentVoList!=null && item.dictumCommentVoList.length!=0"
                      class="level-comment">
-                  <div v-for="(item2,index2) in commentListPage[index]" :key="index2" class="mb-15">
+                  <div v-for="(item2,index2) in item.dictumCommentVoList" :key="index2" class="mb-15">
                     <div class="align-items-center">
                       <div v-if="item2.commentGrade!=3">
                         <nuxt-link class="font-s-13 font-bold-s mr-10 hover-cl"
@@ -144,7 +143,7 @@
                                 <textarea style="white-space:pre-line" :id="'dictum-comment-'+item2.id"
                                           v-model="dictumComment3.content"
                                           placeholder="输入评论..."
-                                          rows="2" class="dictum-comment-cl"></textarea>
+                                          rows="3" class="dictum-comment-cl"></textarea>
                                 <div class="overflow-hidden">
                                   <el-button plain class="fl-right" title="评论" size="small"
                                              :disabled="dictumComment3.content==null ||dictumComment3.content==''"
@@ -177,10 +176,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div @click="loadMore(index)" v-if="commentListPage[index]!=null &&
-                  commentListPage[index].length<item.dictumCommentVoList.length" class="load-more-class">
-                    查看更多...
                   </div>
                 </div>
               </div>
@@ -261,6 +256,7 @@ export default {
       },
       loginDialog: false,
       id: null,
+      //评论相关
       dictumComment: {
         dictumId: null,
         uid: null,
@@ -281,11 +277,8 @@ export default {
       buttonLoading2: false,
       buttonLoading3: false,
       commentList: [],
-      commentListPage: [],
       commentListLoading: false,
       userInfo: {},
-      isOwn: false,
-      pageSize: 5,
     }
   },
   async asyncData({app, params, store}) {
@@ -306,10 +299,6 @@ export default {
     }
   },
   methods: {
-    loadMore(index) {
-      let list = this.commentListPage[index];
-      this.commentListPage[index].push(...this.commentList[index].dictumCommentVoList.slice(list.length, this.pageSize + list.length));
-    },
     deleteComment(id) {
       if (this.userInfo == null) {
         this.loginDialog = true;
@@ -333,16 +322,9 @@ export default {
     },
     getCommentList() {
       this.$API(`/white/dictum/comment/list/${this.dictumInfo.id}`, "get").then(res => {
+        this.commentList = [];
         if (res.code == 200) {
           this.commentList = res.rows;
-          this.commentListPage = [];
-          this.commentList.forEach(item => {
-            if (item.dictumCommentVoList != null) {
-              this.commentListPage.push(item.dictumCommentVoList.slice(0, this.pageSize));
-            } else {
-              this.commentListPage.push(item.dictumCommentVoList);
-            }
-          })
         }
         this.commentListLoading = true;
       })
@@ -395,11 +377,6 @@ export default {
       this.$API('/front-desk/user/basics', this.$get()).then(res => {
         if (res != null) {
           this.userInfo = res.data;
-          if (res.data != null && res.data.uuid === this.dictumComment.uid) {
-            this.isOwn = true;
-          } else {
-            this.isOwn = false;
-          }
         }
         this.getCommentList();
       });
@@ -411,6 +388,8 @@ export default {
 }
 </script>
 <style>
+@import url("components/css/pc/dictum-comment.css");
+
 .dictum-re-name-cl {
   padding-left: 6px;
   font-size: 16px;
@@ -424,62 +403,8 @@ export default {
   margin-left: 20px;
 }
 
-.dictum-comment-cl {
-  width: 100%;
-  white-space: pre-wrap;
-  font-size: 16px;
-  border: unset;
-  padding: unset;
-  margin: unset;
-  resize: none;
+.el-button--small {
+  padding: 9px 15px;
 }
 
-textarea:focus {
-  outline: none;
-}
-
-.dictum-comment-cl::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  background-color: #ced6e0;
-  border-radius: 4px;
-}
-
-.dictum-comment-cl::-webkit-scrollbar-track {
-  background: #fefefe;
-  border-radius: 4px;
-}
-
-.dictum-comment-cl::-webkit-scrollbar-thumb {
-  background: #ced6e0;
-  border-radius: 4px;
-}
-
-.dictum-comment-item {
-  font-size: 14px;
-  line-height: 20px;
-  border-bottom: 1px solid #E6E6E6;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-.dictum-comment-item :hover {
-  background-color: #f9fafc;
-}
-
-.level-comment {
-  margin-top: 15px;
-  margin-bottom: 10px;
-  margin-left: 50px;
-}
-
-.load-more-class {
-  font-size: 12px;
-  color: #57606f;
-  cursor: pointer;
-}
-
-.load-more-class:hover {
-  color: var(--default-color);
-}
 </style>

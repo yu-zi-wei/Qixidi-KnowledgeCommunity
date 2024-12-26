@@ -1,0 +1,59 @@
+
+.dictum-comment-cl {
+  width: 100%;
+  white-space: pre-wrap;
+  font-size: 16px;
+  border: unset;
+  padding: unset;
+  margin: unset;
+  resize: none;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+.dictum-comment-cl::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #ced6e0;
+  border-radius: 4px;
+}
+
+.dictum-comment-cl::-webkit-scrollbar-track {
+  background: #fefefe;
+  border-radius: 4px;
+}
+
+.dictum-comment-cl::-webkit-scrollbar-thumb {
+  background: #ced6e0;
+  border-radius: 4px;
+}
+
+.dictum-comment-item {
+  font-size: 14px;
+  line-height: 20px;
+  border-bottom: 1px solid #E6E6E6;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.dictum-comment-item :hover {
+  background-color: #f9fafc;
+}
+
+.level-comment {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+}
+
+.load-more-class {
+  font-size: 12px;
+  color: #57606f;
+  cursor: pointer;
+}
+
+.load-more-class:hover {
+  color: var(--default-color);
+}
