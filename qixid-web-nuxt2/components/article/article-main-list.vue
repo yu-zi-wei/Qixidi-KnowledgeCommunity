@@ -170,7 +170,7 @@ export default {
       listInformationList: [],
       queryParams: {
         pageNum: 1,
-        pageSize: 20,
+        pageSize: 10,
         articleTitle: null,
       },
       total: 0,

@@ -180,7 +180,6 @@
       :destroy-on-close="true"
       :size="560"
       direction="rtl"
-      :modal="false"
       :with-header="false"
       :visible.sync="commentViewLoading">
       <div style="padding: 0px 20px 20px 20px">

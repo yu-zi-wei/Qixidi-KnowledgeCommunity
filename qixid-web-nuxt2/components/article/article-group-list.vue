@@ -112,7 +112,7 @@ export default {
       activeName: '推荐',
       queryParams: {
         pageNum: 1,
-        pageSize: 20,
+        pageSize: 10,
         createTime: null,
         sortType: 1,
         groupingId: null,
