@@ -185,7 +185,6 @@ export default {
     },
     load() {
       if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
-        this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.$API("/white/article/recommend/list", this.$get(), this.queryParams).then(res => {
           res.rows.forEach(item => {

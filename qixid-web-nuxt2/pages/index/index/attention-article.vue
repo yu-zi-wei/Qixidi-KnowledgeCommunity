@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="follow-list-admin">
-      <el-skeleton :rows="4" animated v-if="loading"/>
+      <el-skeleton class="mt-6 ml-6" :rows="4" animated v-if="loading"/>
       <div v-show="!loading">
         <p class="font-s-16 font-bold-s mb-10" style="color: #8c7ae6">
           <svg t="1734170207789" class="icon svg-translateY-6" viewBox="0 0 1024 1024" version="1.1"
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div>
-      <el-skeleton :rows="4" animated v-if="loading"/>
+      <el-skeleton class="mt-10 ml-6" :rows="4" animated v-if="loading"/>
       <article-group-list :last="true" :type="1" v-show="!loading"></article-group-list>
     </div>
   </div>
