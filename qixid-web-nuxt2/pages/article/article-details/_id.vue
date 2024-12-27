@@ -710,7 +710,7 @@ export default {
       this.$nextTick(() => {
         let tocTags = ["H1", "H2", "H3", "H4"];//筛选目录
         let tocArray = [];
-        let element = document.querySelector("#detailDirectory");
+        let element = document.getElementById("detailDirectory");
         let childNodes = element.childNodes[2].childNodes[2].childNodes[0].childNodes;
         childNodes.forEach(item => {
           let tagName = item.tagName;
@@ -720,11 +720,12 @@ export default {
           }
           let elementsByTagName = item.getElementsByTagName("a");
           let id = elementsByTagName[0].getAttribute("id");
+          let offsetTop = document.getElementById(id).offsetTop;
           tocArray.push({
             id: id,
             text: item.innerText,
             level: Number.parseInt(tagName.substring(1)),
-            pos: item.offsetTop,
+            pos: offsetTop,
           })
         });
         this.tocArray = tocArray;
