@@ -438,7 +438,6 @@ export default {
 .button-new-tag {
   margin-left: 10px;
   height: 32px;
-  line-height: 30px;
   padding-top: 0;
   padding-bottom: 0;
 }
