@@ -156,9 +156,10 @@
   flex-grow: 1;
   cursor: pointer;
   border-radius: 4px;
+  transition: all 0.1s linear 0s;
 }
 
 .publish-list-item:hover {
-  background: #ecf0f1;
+  background: #f4f5f5;
 }
 
