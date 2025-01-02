@@ -1,7 +1,6 @@
 <template>
   <div class="index-main">
     <!--    左侧-->
-    <!--    <div style="width: 80px"></div>-->
     <div class="index-left-width">
       <div :class="{'index-left-cl':true, 'index-left-cl-true':goTopLoading,'index-left-cl-false':!goTopLoading}">
         <div class="auroora-card mb-15">
@@ -10,6 +9,7 @@
             v-show="!sidebarDialog"
             :router="true"
             :default-active="$route.path"
+            style="width:100px"
             class="el-menu-vertical-demo tool-list-left">
             <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
                           :key="index">
@@ -93,12 +93,12 @@
                   <el-avatar :size="50" v-if="userInfo.avatar" :src="userInfo.avatar"/>
                   <el-avatar :size="50" v-else src="/img/tx.jpg"></el-avatar>
                 </div>
-                <div class="ml-8 mt-4">
+                <div class="ml-8 mt-2">
                   <nuxt-link class="" :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)"
                              target="_blank" rel="noopener">
                     <p class="font-s-18 overflow-nowrap-1">{{ userInfo.nickname }}</p>
                   </nuxt-link>
-                  <p class="font-s-13 line-height-24 overflow-nowrap-1 color-grey-2">
+                  <p class="font-s-13 line-height-24 overflow-nowrap-1 color-grey-2 mt-4">
                     {{ userInfo.occupation == null ? '职业-~-' : userInfo.occupation }}</p>
                 </div>
               </div>

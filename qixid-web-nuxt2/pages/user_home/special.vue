@@ -232,7 +232,7 @@ export default {
 }
 
 .content {
-  height: calc(100vh - 400px);
+  height: calc(100vh - 300px);
   background-color: #fefefe;
   overflow: scroll;
   overflow-x: hidden;

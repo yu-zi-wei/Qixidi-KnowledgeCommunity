@@ -41,7 +41,6 @@
       <!--    内容-->
       <div class="flex-left">
         <div class="flex-4">
-          <el-skeleton class="mt-10" :rows="10" animated v-if="loading"/>
           <div class="albumList-box" v-if="!loading">
             <div class="flex-space-between">
               <div class="mt-8 font-bold color-grey4">专辑列表</div>

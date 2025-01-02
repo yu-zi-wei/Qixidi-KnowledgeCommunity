@@ -34,7 +34,7 @@
                               :editable="false"></ai-editor-module>
           </div>
           <div class="flex-space-between mt-15">
-            <div class="color-grey font-s-12" title="记录时间">
+            <div class="color-grey-2 font-s-12" title="记录时间">
               <svg t="1720679689510" class="icon svg-translateY-4 icon-size-16" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="38189">
                 <path
@@ -51,7 +51,7 @@
                     :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
                   </span>
             </div>
-            <div v-if="item.author!=null ||item.worksName!=null" class="font-s-14 color-grey-2">—— {{ item.author }}
+            <div v-if="item.author!=null ||item.worksName!=null" class="font-s-13 color-grey-2">—— {{ item.author }}
               <span v-if="item.worksName!=null">
                 《
               <span>{{ item.worksName }}</span>

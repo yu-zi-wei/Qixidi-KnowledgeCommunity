@@ -37,61 +37,20 @@
               <el-dropdown-menu slot="dropdown">
                 <div class="lately-article-cl">
                   <el-tabs v-model="activeName" @tab-click="handleTabsClick">
-                    <el-tab-pane label="全部" name="-1">
-                      <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
-                           class="lately-article-item font-s-14 flex-left align-items-center" :key="index"
-                           title="点击文章快速编辑">
-                        <div style="width: 15px">
-                          <div :style="'background-color:'+auditStateDotColor(item.auditState)"
-                               class="aurora-dot mr-6"></div>
-                        </div>
-                        <div>{{ item.articleTitle }}</div>
+                    <el-tab-pane label="全部" name="-1"></el-tab-pane>
+                    <el-tab-pane label="草稿" name="4"></el-tab-pane>
+                    <el-tab-pane label="审核通过" name="2"></el-tab-pane>
+                    <el-tab-pane label="审核中" name="1"></el-tab-pane>
+                    <el-tab-pane label="审核未通过" name="3"></el-tab-pane>
+                    <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
+                         class="lately-article-item font-s-14 line-height-24 flex-left align-items-center" :key="index"
+                         title="点击文章快速编辑">
+                      <div style="width: 15px">
+                        <div :style="'background-color:'+auditStateDotColor(item.auditState)"
+                             class="aurora-dot mr-6"></div>
                       </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="草稿" name="4">
-                      <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
-                           class="lately-article-item font-s-14 flex-left align-items-center" :key="index"
-                           title="点击文章快速编辑">
-                        <div style="width: 15px">
-                          <div :style="'background-color:'+auditStateDotColor(item.auditState)"
-                               class="aurora-dot mr-6"></div>
-                        </div>
-                        <div>{{ item.articleTitle }}</div>
-                      </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="审核通过" name="2">
-                      <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
-                           class="lately-article-item font-s-14 flex-left align-items-center" :key="index"
-                           title="点击文章快速编辑">
-                        <div style="width: 15px">
-                          <div :style="'background-color:'+auditStateDotColor(item.auditState)"
-                               class="aurora-dot mr-6"></div>
-                        </div>
-                        <div>{{ item.articleTitle }}</div>
-                      </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="审核中" name="1">
-                      <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
-                           class="lately-article-item font-s-14 flex-left align-items-center" :key="index"
-                           title="点击文章快速编辑">
-                        <div style="width: 15px">
-                          <div :style="'background-color:'+auditStateDotColor(item.auditState)"
-                               class="aurora-dot mr-6"></div>
-                        </div>
-                        <div>{{ item.articleTitle }}</div>
-                      </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="审核未通过" name="3">
-                      <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
-                           class="lately-article-item font-s-14 flex-left align-items-center" :key="index"
-                           title="点击文章快速编辑">
-                        <div style="width: 15px">
-                          <div :style="'background-color:'+auditStateDotColor(item.auditState)"
-                               class="aurora-dot mr-6"></div>
-                        </div>
-                        <div>{{ item.articleTitle }}</div>
-                      </div>
-                    </el-tab-pane>
+                      <div>{{ item.articleTitle }}</div>
+                    </div>
                   </el-tabs>
                 </div>
               </el-dropdown-menu>

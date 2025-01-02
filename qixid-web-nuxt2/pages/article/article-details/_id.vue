@@ -432,19 +432,19 @@
               <div class="flex-left">
                 <div>
                   <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)" target="_blank">
-                    <el-avatar v-if="articleInfo.avatar" :src="articleInfo.avatar"/>
-                    <el-avatar v-else src="/img/tx.jpg"></el-avatar>
+                    <el-avatar :size="40" v-if="articleInfo.avatar" :src="articleInfo.avatar"/>
+                    <el-avatar :size="40" v-else src="/img/tx.jpg"></el-avatar>
                   </nuxt-link>
                 </div>
-                <div class="ml-8 mt-2">
+                <div class="ml-8">
                   <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)" target="_blank">
                     <div class="cursor-pointer font-bold mb-4 overflow-nowrap-1" style="width: 100%;"
                          :title="articleInfo.nickname">
                       {{ articleInfo.nickname }}
                     </div>
                   </nuxt-link>
-                  <p class="color-grey-2 font-s-13"
-                     v-text="articleInfo.occupation==null?'职业-~-':articleInfo.occupation"></p>
+                  <div class="color-grey-2 font-s-13 mt-6"
+                     v-text="articleInfo.occupation==null?'职业-~-':articleInfo.occupation"></div>
                 </div>
               </div>
               <div class="mt-8">
@@ -534,7 +534,7 @@
                   </nuxt-link>
                 </div>
                 <div v-if="listInformationList.length==0"
-                     style="color: #5a5e66;font-size: 13px;text-align: center">暂无数据
+                     style="color: #5a5e66;font-size: 13px;text-align: center">暂无文章
                 </div>
               </div>
             </div>

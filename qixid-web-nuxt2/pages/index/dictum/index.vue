@@ -44,7 +44,6 @@
                       :author="author"></dictumList>
         </div>
       </div>
-      <!--      <div class="flex-1" style="min-height: 1px;"/>-->
       <!--      右边-->
       <div class="flex-4" style="min-height: 1px;">
         <div style="margin-left: 40px">
@@ -57,9 +56,9 @@
                 suffix-icon="el-icon-search">
               </el-input>
             </div>
-            <hr class="hr-item mb-10 mt-10"/>
+            <hr class="hr-item mb-20 mt-10"/>
             <div class="re-name-cl border-left-3-solid">推荐专辑</div>
-            <el-skeleton class="mt-10" :rows="6" animated v-if="albumLoading"/>
+            <el-skeleton class="mt-10" :rows="4" animated v-if="albumLoading"/>
             <div class="overflow-hidden" v-if="!albumLoading">
               <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
                 <nuxt-link :to="`/details/album-info?data=`+item.id" target="_blank" rel="noopener">
@@ -75,9 +74,8 @@
               </div>
             </div>
           </div>
-
           <div class="re-name-cl mt-20 border-left-3-solid">热门作者</div>
-          <el-skeleton class="mt-10" :rows="6" animated v-if="authorLoading"/>
+          <el-skeleton class="mt-10" :rows="4" animated v-if="authorLoading"/>
           <div class="overflow-hidden" v-if="!authorLoading">
             <div v-for="item of popularAuthorsArr" class="mr-10 mb-10 fl-left">
               <el-button plain size="medium" @click="selectDictum('authors',item.author)">
@@ -87,11 +85,11 @@
           </div>
 
           <div class="re-name-cl mt-20 border-left-3-solid">热门标签</div>
-          <el-skeleton class="mt-10" :rows="6" animated v-if="authorLoading"/>
+          <el-skeleton class="mt-10" :rows="4" animated v-if="authorLoading"/>
           <div class="overflow-hidden" v-if="!authorLoading">
             <div v-for="item of popularLabelArr"
                  class="mr-10 mb-10 cursor-pointer fl-left hover-fw-bold">
-              <el-tag effect="dark" :type="randomType()" @click="selectDictum('label',item.label)">
+              <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
                 #{{ item.label }}+{{ item.count }}
               </el-tag>
             </div>

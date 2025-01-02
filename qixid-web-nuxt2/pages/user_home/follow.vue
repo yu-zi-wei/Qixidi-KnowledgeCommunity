@@ -200,7 +200,7 @@ export default {
 
 <style scoped>
 .follow-cl-ul {
-  max-height: 400px;
+  max-height: 50vh;
   overflow: scroll;
   overflow-x: hidden;
 }

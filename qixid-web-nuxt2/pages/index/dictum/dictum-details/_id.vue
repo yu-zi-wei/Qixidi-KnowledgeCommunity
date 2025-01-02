@@ -8,7 +8,7 @@
           <div class="flex-right mt-20">
             <div
               v-if="(dictumInfo.worksName!=null && dictumInfo.worksName!='')||(dictumInfo.author!=null && dictumInfo.author!='')"
-              class="font-s-14" style="color: #FB7299">——
+              class="font-s-14 color-fb7299">——
               <span v-if="dictumInfo.author!=null" class="cursor-pointer text-underline-hover" title="作者"
                     @click="jumpUrlBaidu('www.baidu.com',dictumInfo.author)">
                 {{ dictumInfo.author }}

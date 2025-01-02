@@ -18,15 +18,15 @@ npm run build
 # 2、将 .nuxt、package.json、nuxt.config.js、static文件拷贝到nux2-deployment
 # 3、将nux2-deployment上传到服务器
 # 4、解压nux2-deployment.zip文件，unzip -u nux2-deployment.zip
-# 5、安装依赖(后续更新，如果package.json没有发生变化，无需执行这一步)，在项目文件跟目录执行
+# 5、安装依赖，在项目文件跟目录执行(后续更新，如果 package.json 没有发生变化，无需执行这一步)
 # npm install --registry=http://registry.npmmirror.com
-# 6、安装pm2：执行 npm i pm2 -g
-# 7、提供pm2来启动项目，管理项目:执行 pm2 start npm --name "qixidi" -- run start
-# 5、提供nginx代理端口即可
+# 6、安装pm2，执行：npm i pm2 -g
+# 7、使用pm2来启动项目，执行：pm2 start npm --name "qixidi" -- run start
+# 8、提供nginx代理端口即可
 
 ## 项目更新
 # 如果没有添加新的配置，只需要上传.nuxt文件和其他修改过的文件即可
-# 如果有添加新的配置，需要上传所有文件，并执行npm install拉取配置
+# 如果有添加新的配置，需要上传 package.json文件，并执行npm install拉取配置
 # 执行pm2 reload qixidi命令，重新加载文件
 pm2 reload qixidi
 # 启动
@@ -63,6 +63,7 @@ pm2 kill #杀死pm2进程
 ```shell
 #检查配置
 /data/app/nginx/sbin/nginx -t
+
 # 重启nginx
 /data/app/nginx/sbin/nginx -s reload
 ```

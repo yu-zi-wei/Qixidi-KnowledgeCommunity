@@ -57,6 +57,14 @@ body {
   color: var(--theme-color);
 }
 
+.icon-theme-2 {
+  fill: #636e72;
+}
+
+.icon-theme-66441d {
+  fill: #66441D;
+}
+
 .icon-theme-1 {
   fill: #818e8f;
 }
@@ -107,6 +115,7 @@ body {
   border-left: 3px solid var(--theme-color);
 
 }
+
 .border-left-2-solid {
   padding-bottom: 2px;
   padding-top: 2px;

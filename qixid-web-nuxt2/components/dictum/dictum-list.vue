@@ -11,7 +11,7 @@
                   <p class="font-s-14 cursor-pointer text-underline-hover hover-cl">{{ item.nickname }}</p>
                 </nuxt-link>
               </div>
-              <div class="color-grey-2 font-s-14" title="记录时间">
+              <div class="color-grey-2 font-s-13" title="记录时间">
                 <span class="ml-4">|</span>
                 <span class="" v-text="$utils.reckonTime(item.updateTime)"
                       :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')"></span>
@@ -20,7 +20,9 @@
             <div class="ml-8">
               <el-tag class="cursor-pointer mr-10" size="small" type="info" effect="plain" title="收录专辑"
                       v-if="item.albumName!=null">
-                {{ item.albumName }}
+                <nuxt-link :to="`/details/album-info?data=`+item.albumId" target="_blank" rel="noopener">
+                  {{ item.albumName }}
+                </nuxt-link>
               </el-tag>
               <span v-if="item.labelList!=null"
                     v-for="(items,indexs) in item.labelList" title="标签" :key="indexs" class="font-s-13 color-grey">
@@ -31,7 +33,7 @@
             <div class="cursor-pointer ml-10" title="更多操作" v-if="isSelf">
               <el-dropdown size="medium" trigger="click">
                 <div class="el-dropdown-link">
-                  <svg t="1729494770005" class="icon icon-theme" viewBox="0 0 1024 1024" version="1.1"
+                  <svg t="1729494770005" class="icon icon-theme-1" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="7153" width="20" height="20">
                     <path
                       d="M805.236364 488.727273h-141.963637a127.767273 127.767273 0 0 1-128-126.836364V221.090909A127.767273 127.767273 0 0 1 663.272727 93.090909h141.963637a128 128 0 0 1 127.767272 128v140.8A128 128 0 0 1 805.236364 488.727273zM663.272727 162.909091A57.949091 57.949091 0 0 0 605.090909 221.090909v140.8A58.181818 58.181818 0 0 0 663.272727 418.909091h141.963637a58.181818 58.181818 0 0 0 57.949091-57.949091V221.090909A57.949091 57.949091 0 0 0 805.236364 162.909091zM805.236364 930.909091h-141.963637a127.767273 127.767273 0 0 1-128-127.069091v-140.8A127.767273 127.767273 0 0 1 663.272727 535.272727h141.963637a128 128 0 0 1 127.767272 127.767273v140.8A128 128 0 0 1 805.236364 930.909091z m-141.963637-325.818182a58.181818 58.181818 0 0 0-58.181818 57.949091v140.8A57.949091 57.949091 0 0 0 663.272727 861.090909h141.963637a57.949091 57.949091 0 0 0 57.949091-57.716364v-140.334545A58.181818 58.181818 0 0 0 805.236364 605.090909zM364.683636 488.727273h-141.963636a127.767273 127.767273 0 0 1-127.534545-127.767273V221.090909A127.767273 127.767273 0 0 1 222.72 93.090909h141.963636a127.767273 127.767273 0 0 1 127.767273 128v140.8A127.767273 127.767273 0 0 1 364.683636 488.727273zM222.72 162.909091a57.716364 57.716364 0 0 0-57.716364 58.181818v140.8A57.949091 57.949091 0 0 0 222.72 418.909091h141.963636a58.181818 58.181818 0 0 0 57.949091-57.949091V221.090909A57.949091 57.949091 0 0 0 364.683636 162.909091zM364.683636 930.909091h-141.963636a127.767273 127.767273 0 0 1-127.534545-127.534546v-140.334545A127.767273 127.767273 0 0 1 222.72 535.272727h141.963636a127.767273 127.767273 0 0 1 127.767273 127.767273v140.8A127.767273 127.767273 0 0 1 364.683636 930.909091z m-141.963636-325.818182a57.949091 57.949091 0 0 0-57.716364 57.949091v140.8A57.716364 57.716364 0 0 0 222.72 861.090909h141.963636a57.949091 57.949091 0 0 0 57.949091-57.716364v-140.334545A58.181818 58.181818 0 0 0 364.683636 605.090909z"
@@ -52,13 +54,13 @@
           </div>
           <div class="flex-right mt-10">
             <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
-                 class="color-grey-2 font-s-14">——
-              <span v-if="item.author!=null" class="cursor-pointer text-underline-hover" title="作者"
+                 class="color-grey-2 font-s-13">——
+              <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
                     @click="jumpUrlBaidu('www.baidu.com',item.author)">
                 {{ item.author }}
                 </span>
-              <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处">
-                《<span class="color-ffc312 cursor-pointer text-underline-hover"
+              <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
+                《<span class="cursor-pointer text-underline-hover"
                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                 </span>
             </div>
@@ -93,7 +95,7 @@
               {{ item.commentSum == null ? '评论' : item.commentSum }}
             </div>
             <div title="收藏" class="cursor-pointer icon-theme-1 mr-20" @click="$modal.notify('功能待开发！')">
-              <svg t="1685705013960" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1685705013960" class="icon icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="4508">
                 <path
                   d="M949.888 457.258667c26.069333-29.824 13.866667-67.52-24.789333-76.309334L681.728 325.546667l-127.786667-214.677334c-20.266667-34.069333-59.925333-34.090667-80.213333 0l-127.786667 214.677334-243.370666 55.381333c-38.442667 8.746667-50.858667 46.506667-24.789334 76.309333l164.394667 188.053334-22.613333 248.917333c-3.584 39.466667 28.458667 62.805333 64.896 47.146667l237.781333-102.037334a21.333333 21.333333 0 0 0-16.810667-39.210666L267.626667 902.186667c-6.698667 2.88-6.229333 3.221333-5.568-4.096l24.277333-267.093334-176.426667-201.813333c-4.757333-5.461333-4.906667-5.034667 2.133334-6.634667l261.205333-59.434666 137.152-230.4c3.733333-6.293333 3.136-6.293333 6.869333 0l137.173334 230.4 261.205333 59.434666c7.125333 1.621333 6.954667 1.088 2.133333 6.613334l-176.426666 201.813333 24.256 267.093333a21.333333 21.333333 0 1 0 42.496-3.84l-22.613334-248.917333 164.394667-188.053333z"
@@ -180,6 +182,7 @@
       :destroy-on-close="true"
       :size="560"
       direction="rtl"
+      :modal="true"
       :with-header="false"
       :visible.sync="commentViewLoading">
       <div style="padding: 0px 20px 20px 20px">

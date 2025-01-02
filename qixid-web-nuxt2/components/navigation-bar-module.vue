@@ -80,10 +80,19 @@
                 <i class="el-icon-search el-input__icon" slot="suffix"></i>
               </el-autocomplete>
 
-              <!--        创作者中心-->
+              <!--        创作中心-->
               <li>
-                <el-dropdown split-button type="primary" @click="routeJumpUrl('/user_admin/data-index')">
-                  创造者中心
+                <el-dropdown class="el-dropdown-link ml-20" title="创作中心">
+                  <div class="mt-4">
+                    <svg t="1735791417843" class="icon icon-theme cursor-pointer icon-hover"
+                         viewBox="0 0 1024 1024"
+                         version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="6761" width="30" height="30">
+                      <path
+                        d="M509.866667 384c25.6-36.266667 179.2-32 183.466666-34.133333 25.6-21.333333 49.066667-42.666667 74.666667-68.266667 4.266667-4.266667-157.866667 19.2-132.266667-14.933333 25.6-34.133333 194.133333-55.466667 198.4-59.733334 21.333333-25.6 40.533333-51.2 59.733334-78.933333-93.866667 0-187.733333-6.4-334.933334 36.266667-34.133333 10.666667-76.8 36.266667-106.666666 70.4C320 384 202.666667 586.666667 130.133333 842.666667c-4.266667 12.8-4.266667 42.666667 21.333334 51.2 25.6 10.666667 38.4-17.066667 40.533333-25.6 8.533333-27.733333 12.8-57.6 40.533333-115.2 25.6-57.6 93.866667-200.533333 155.733334-224 91.733333-36.266667 153.6-70.4 224-117.333334 6.4-6.4-128 6.4-102.4-27.733333zM853.333333 682.666667h-85.333333v-85.333334c0-23.466667-19.2-42.666667-42.666667-42.666666s-42.666667 19.2-42.666666 42.666666v85.333334h-85.333334c-23.466667 0-42.666667 19.2-42.666666 42.666666s19.2 42.666667 42.666666 42.666667h85.333334v85.333333c0 23.466667 19.2 42.666667 42.666666 42.666667s42.666667-19.2 42.666667-42.666667v-85.333333h85.333333c23.466667 0 42.666667-19.2 42.666667-42.666667s-19.2-42.666667-42.666667-42.666666z"
+                        p-id="6762"></path>
+                    </svg>
+                  </div>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item class="text-center mb-6" @click.native="publishData('/article/publish-article')">
                       <div>
@@ -102,6 +111,26 @@
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
+                <!--                <el-dropdown split-button type="primary" @click="routeJumpUrl('/user_admin/data-index')">-->
+                <!--                  创造者中心-->
+                <!--                  <el-dropdown-menu slot="dropdown">-->
+                <!--                    <el-dropdown-item class="text-center mb-6" @click.native="publishData('/article/publish-article')">-->
+                <!--                      <div>-->
+                <!--                        写文章-->
+                <!--                        <svg t="1719580641624" class="icon icon-theme svg-translateY-2" viewBox="0 0 1024 1024"-->
+                <!--                             version="1.1"-->
+                <!--                             xmlns="http://www.w3.org/2000/svg" p-id="4652" width="18" height="18">-->
+                <!--                          <path-->
+                <!--                            d="M972.146238 0.005962h-3.629346c-15.683959 0.907336-246.277047 15.683959-374.341111 93.714898-27.479334 16.850535-36.16384 49.12579-41.867098 104.602935a94.362995 94.362995 0 0 0-67.920617-31.627158 85.16001 85.16001 0 0 0-52.625517 18.924447c-47.051878 37.330416-207.391197 171.356977-277.256107 332.862872C68.698334 717.320267 82.826859 863.66068 83.474957 869.752797c0 1.555434 0.907336 2.981248 1.166575 4.536682-47.959214 61.439642-77.123602 104.732555-80.364089 109.398857a25.9239 25.9239 0 0 0 7.129073 35.515743A25.9239 25.9239 0 0 0 25.9239 1024a25.9239 25.9239 0 0 0 21.387217-11.406516c0-1.036956 27.479334-40.830142 72.716539-98.899677h1.685053A250.295251 250.295251 0 0 0 181.467298 920.304401c99.547775 0 305.902016-38.88585 570.325793-296.958271C987.570958 393.012282 1019.716594 99.294498 1023.086701 58.723595A47.829595 47.829595 0 0 0 1023.994038 51.853762a51.070082 51.070082 0 0 0-51.8478-51.8478zM716.406968 586.404573C461.575034 835.533249 267.405025 868.456602 181.467298 868.456602c-10.499179 0-18.794827 0-25.9239-1.166576 87.363542-107.195325 220.353147-251.202588 368.378615-349.972645a25.9239 25.9239 0 0 0-28.51629-42.644815c-145.173838 97.214624-272.200947 232.148522-361.89764 338.825369a795.215623 795.215623 0 0 1 67.531759-274.274859c64.809749-151.136335 221.001245-280.626214 262.220245-312.901469a33.182592 33.182592 0 0 1 20.998359-8.166029c45.237205 0 81.401045 108.750759 100.195872 108.75076h1.944293c16.202437-7.517931 9.591843-173.560508 34.349167-188.72599C741.034672 64.815712 972.146238 51.853762 972.146238 51.853762s-19.054066 303.180007-255.73927 534.550811z"-->
+                <!--                            p-id="4653"></path>-->
+                <!--                        </svg>-->
+                <!--                      </div>-->
+                <!--                    </el-dropdown-item>-->
+                <!--                    <el-dropdown-item class="text-center" @click.native="routeJumpUrl('/dictum/release-dictum')">-->
+                <!--                      记录名言-->
+                <!--                    </el-dropdown-item>-->
+                <!--                  </el-dropdown-menu>-->
+                <!--                </el-dropdown>-->
               </li>
               <!--        消息-->
               <li style="margin-top: 4px">
@@ -143,47 +172,57 @@
                             <el-avatar v-else src="/img/tx.jpg"></el-avatar>
                           </div>
                           <div>
-                            <p class="mb-4 font-bold overflow-nowrap-1">{{ userInfo.nickname }}</p>
+                            <p class="mb-6 font-bold overflow-nowrap-1">{{ userInfo.nickname }}</p>
                             <p class="font-s-14 color-grey">
                               {{ userInfo.occupation == null ? '职业-~-' : userInfo.occupation }}</p>
                           </div>
                         </div>
                         <hr class="hr-item mt-10 mb-15"/>
                         <div class="flex-space-between padding-le-ri-10 mb-20">
-                          <div class="cursor-pointer">
+                          <div class="cursor-pointer hover-cl">
                             <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                        rel="noopener">
-                              <p class="hover-cl">关注</p>
-                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.fansFollowCount }}</p>
+                              <p>关注</p>
+                              <p class="flex-center mt-6">{{ userInfo.fansFollowCount }}</p>
                             </nuxt-link>
                           </div>
-                          <div class="cursor-pointer">
+                          <div class="cursor-pointer hover-cl">
                             <nuxt-link :to="`/user_home/collection?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                        rel="noopener">
                               <p class="hover-cl">收藏</p>
-                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.collectionCount }}</p>
+                              <p class="flex-center mt-6">{{ userInfo.collectionCount }}</p>
                             </nuxt-link>
                           </div>
-                          <div class="cursor-pointer">
+                          <div class="cursor-pointer hover-cl">
                             <nuxt-link :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                        rel="noopener">
                               <p class="hover-cl">文章</p>
-                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.articleCount }}</p>
+                              <p class="flex-center mt-6">{{ userInfo.articleCount }}</p>
                             </nuxt-link>
                           </div>
-                          <div class="cursor-pointer">
+                          <div class="cursor-pointer hover-cl">
                             <nuxt-link :to="`/dictum/space/content-list?uuid=`+$base64.encode(userInfo.uuid)"
                                        target="_blank"
                                        rel="noopener">
                               <p class="hover-cl">名言</p>
-                              <p class="flex-center mt-6 color-grey-2">{{ userInfo.dictumCount }}</p>
+                              <p class="flex-center mt-6">{{ userInfo.dictumCount }}</p>
                             </nuxt-link>
                           </div>
                         </div>
                         <div class="mt-26">
                           <ul class="flex-space-between flex-wrap-wrap">
+                            <li class="function-li-dev" @click="routeJumpUrl('/user_admin/data-index')">
+                              <svg t="1735798042107" class="icon icon-size-24 mr-6"
+                                   viewBox="0 0 1024 1024" version="1.1"
+                                   xmlns="http://www.w3.org/2000/svg" p-id="33544">
+                                <path
+                                  d="M568.832 37.888l358.4 238.8992A102.4 102.4 0 0 1 972.8 361.984v300.032a102.4 102.4 0 0 1-45.568 85.1968l-358.4 238.8992a102.4 102.4 0 0 1-113.664 0l-358.4-238.8992A102.4 102.4 0 0 1 51.2 662.016V361.984a102.4 102.4 0 0 1 45.568-85.1968l358.4-238.8992a102.4 102.4 0 0 1 113.664 0z m143.36 330.9056a27.392 27.392 0 0 0-37.9904-7.6288l-133.7856 89.2416a51.2 51.2 0 0 1-56.832 0L349.7984 361.216A27.392 27.392 0 0 0 307.2 384v23.808a51.2 51.2 0 0 0 22.784 42.5984l108.032 71.9872a51.2 51.2 0 0 1 22.784 42.5984v109.1584a51.2 51.2 0 0 0 102.4 0v-109.2096a51.2 51.2 0 0 1 22.784-42.5984l108.032-71.9872A51.2 51.2 0 0 0 716.8 407.7568v-23.808a27.392 27.392 0 0 0-4.608-15.1552z"
+                                  fill="#4285F4" p-id="33545"></path>
+                              </svg>
+                              创作中心
+                            </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/article',userInfo.uuid)">
-                              <svg t="1720603953455" class="icon-theme icon-size-24 svg-translateY-1- mr-4"
+                              <svg t="1720603953455" class="icon-theme icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="14832" id="mx_n_1720603953456">
                                 <path
@@ -197,7 +236,8 @@
                             </li>
                             <li class="function-li-dev"
                                 @click="routeJumpUuid('/dictum/space/content-list',userInfo.uuid)">
-                              <svg t="1720603401642" class="icon-theme icon-size-24 mr-4" viewBox="0 0 1024 1024"
+                              <svg t="1720603401642" class="icon-theme icon-size-24 svg-translateY-1- mr-6"
+                                   viewBox="0 0 1024 1024"
                                    version="1.1" xmlns="http://www.w3.org/2000/svg"
                                    p-id="8008">
                                 <path
@@ -207,7 +247,7 @@
                               名言空间
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/follow',userInfo.uuid)">
-                              <svg t="1704636202856" class="icon-theme-stand-out icon-size-24 svg-translateY-2- mr-4"
+                              <svg t="1704636202856" class="icon-theme-stand-out icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="5600">
                                 <path
@@ -217,7 +257,7 @@
                               我的关注
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/special',userInfo.uuid)">
-                              <svg t="1704636239327" class="icon icon-size-24 svg-translateY-1- mr-4 icon-theme"
+                              <svg t="1704636239327" class="icon icon-size-24 svg-translateY-1 mr-6 icon-theme"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="6694">
                                 <path
@@ -227,7 +267,7 @@
                               我的专栏
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/fabulous',userInfo.uuid)">
-                              <svg t="1704636283898" class="icon icon-size-24 svg-translateY-2- icon-theme mr-4"
+                              <svg t="1704636283898" class="icon icon-size-24 icon-theme mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="7693">
                                 <path
@@ -243,7 +283,7 @@
                               我的点赞
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/lately',userInfo.uuid)">
-                              <svg t="1704636371057" class="icon icon-size-24 svg-translateY-2- mr-4"
+                              <svg t="1704636371057" class="icon icon-size-24 mr-6 icon-theme-1"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="9933">
                                 <path

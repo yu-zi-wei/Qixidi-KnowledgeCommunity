@@ -2,8 +2,8 @@
   <div>
     <div @click="toggleShow" class="cursor-pointer" title="点击上传">
       <el-avatar :size="100" :src="avatarUrl"></el-avatar>
-      <p class="mb-2 mt-4 font-s-14">我的头像</p>
-      <div style="width: 200px;margin: auto" class="font-s-12 color-grey">支持jpg、png、jpeg 格式大小 5M 以内的图片</div>
+      <p class="mb-2 mt-4 font-s-14 line-height-24">我的头像</p>
+      <div style="width: 200px;margin: auto" class="font-s-12 color-grey line-height-18">支持jpg、png、jpeg 格式大小 5M 以内的图片</div>
     </div>
     <client-only>
       <avatar-upload field="img"

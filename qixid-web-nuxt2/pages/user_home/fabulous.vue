@@ -207,7 +207,7 @@ export default {
 }
 
 .fabulousArr-ul {
-  max-height: 400px;
+  max-height: 50vh;
   background-color: #fefefe;
   overflow: scroll;
   overflow-x: hidden;

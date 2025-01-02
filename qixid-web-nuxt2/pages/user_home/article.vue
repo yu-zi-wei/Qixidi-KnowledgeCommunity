@@ -4,7 +4,7 @@
     <div v-if="loading" style="width: 100%;"></div>
     <ul class="content" v-if="collectionUserLoading" ref="dialogContent" @scroll="divScroll($event)">
       <li v-for="item of articleList" class="contentItem">
-        <div class="font-s-13 color-grey mb-8">
+        <div class="font-s-13 color-grey mb-15">
           <span v-text="item.nickname"></span>
           <span>|</span>
           <span v-text="$utils.reckonTime(item.createTime)"
@@ -14,7 +14,7 @@
                    target="_blank" rel="noopener">
           {{ item.articleTitle }}
         </nuxt-link>
-        <div class="abstract-class mt-10 color-grey-2" v-text="item.articleAbstract"></div>
+        <div class="abstract-class mt-6 color-grey-2" v-text="item.articleAbstract"></div>
         <div class="font-s-13 color-grey bo-list-loc flex-left">
           <div class="mr-4">
             <svg t="1710640089142" class="icon icon-size-14 svg-translateY-2" viewBox="0 0 1036 1024" version="1.1"
