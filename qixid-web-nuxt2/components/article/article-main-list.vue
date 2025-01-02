@@ -81,7 +81,7 @@
           </div>
           <div class="flex-space-between mt-20">
             <div class="article-top font-s-13">
-              <div>
+              <div class="svg-translateY-2">
                 <nuxt-link class="hover-cl"
                            :to="`/user_home/article?uuid=`+$base64.encode(item.userId)"
                            target="_blank">
@@ -135,7 +135,7 @@
               转载</span>
               </div>
             </div>
-            <div>
+            <div class="svg-translateY-3">
               <el-tag :type="randomType()" size="small" effect="plain" class="cursor-pointer" title="分类">
                 <nuxt-link :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
                   {{ item.groupingName }}
