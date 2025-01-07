@@ -58,10 +58,10 @@
                   <el-image class="img-cover" v-else src="/img/shu.jpg" fit="cover"></el-image>
                 </div>
                 <div class="mb-10">
-                  <p class="font-bold font-s-16 text-underline-hover">
+                  <p class="font-bold font-s-16 text-underline-hover" :title="item.name">
                     {{ item.name }}
                   </p>
-                  <div class="font-s-13 line-height-16 overflow-nowrap-2 color-grey-2 mt-4">{{
+                  <div class="font-s-13 line-height-16 overflow-nowrap-2 color-grey-2 mt-4" :title="item.briefIntroduction">{{
                       item.briefIntroduction
                     }}
                   </div>
@@ -320,7 +320,7 @@ export default {
 }
 
 .dictum-background-color-acti {
-  box-shadow: 0 6px 6px 0 var(--theme-color);
+  box-shadow: 0 6px 6px 0 var(--forbidden-color);
 }
 
 .albumList-box {

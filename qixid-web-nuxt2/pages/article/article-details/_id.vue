@@ -114,6 +114,16 @@
                           :navigation="false"
                           ref="markdown"
             />
+            <div v-if="articleInfo.type==2" class="mb-20 mt-10">
+              转载地址：
+              <a :href="articleInfo.reprintUrl" target="_blank"
+                 class="color-blue text-underline-hover">{{ articleInfo.reprintUrl }}</a>
+            </div>
+            <div v-if="articleInfo.type==3" class="mb-20 mt-10">
+              翻译地址：
+              <a :href="articleInfo.reprintUrl" target="_blank"
+                 class="color-blue text-underline-hover">{{ articleInfo.reprintUrl }}</a>
+            </div>
             <!--            文章标签-->
             <div class="mt-8">
               <span class="label-top-cl"> 分类:</span>
@@ -444,7 +454,7 @@
                     </div>
                   </nuxt-link>
                   <div class="color-grey-2 font-s-13 mt-6"
-                     v-text="articleInfo.occupation==null?'职业-~-':articleInfo.occupation"></div>
+                       v-text="articleInfo.occupation==null?'职业-~-':articleInfo.occupation"></div>
                 </div>
               </div>
               <div class="mt-8">

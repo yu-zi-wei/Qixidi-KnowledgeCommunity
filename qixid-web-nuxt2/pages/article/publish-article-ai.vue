@@ -187,7 +187,7 @@
 <!--          <el-input type="textarea"-->
 <!--                    :rows="6"-->
 <!--                    placeholder="文章摘要 ..."-->
-<!--                    maxlength="150"-->
+<!--                    maxlength="400"-->
 <!--                    show-word-limit-->
 <!--                    v-model="article.articleAbstract">-->
 <!--          </el-input>-->
@@ -203,7 +203,7 @@
 <!--        <el-form-item label="转载地址：" v-if="article.type==2" class="demo-input-suffix">-->
 <!--          <el-input style="width: 75%"-->
 <!--                    v-model="article.reprintUrl"-->
-<!--                    maxlength="40"-->
+<!--                    maxlength="200"-->
 <!--                    show-word-limit-->
 <!--                    :clearable="true"-->
 <!--                    placeholder="转载地址">-->

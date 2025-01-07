@@ -32,9 +32,9 @@
                     </svg>
                     +{{ addAcurrency }}
                   </p>
-                  <p v-if="isReport(data.day)==-1" class="font-s-13 color-grey mt-2">待补签</p>
-                  <p v-if="isReport(data.day)==-2" class="font-s-13 color-grey mt-2">
-                    <svg t="1680423108793" class="icon icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
+                  <p v-if="isReport(data.day)==-1" class="font-s-13 color-grey mt-2 line-height-18">待补签</p>
+                  <p v-if="isReport(data.day)==-2" class="font-s-13 color-grey mt-2 line-height-18">
+                    <svg t="1680423108793" class="icon icon-size-16 svg-translateY-4" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="7773">
                       <path
@@ -208,6 +208,7 @@ export default {
 
 .data-re-br p {
   font-size: 13px;
+  line-height: 20px;
   color: #86909c;
 }
 
