@@ -113,6 +113,7 @@
                ai.article_content_md,
                ai.theme,
                ai.`type`,
+               ai.reprint_url,
                ai.`state`,
                ai.create_time,
                ai.special_id,
