@@ -347,14 +347,6 @@
 </template>
 
 <script>
-var _hmt = _hmt || [];
-(function () {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?c58934a7bcf2e29f8f3eb821b7a8293e";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-})();
-
 export default {
   name: "navigationBarModule",
   props: {

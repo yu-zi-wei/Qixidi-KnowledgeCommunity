@@ -16,11 +16,14 @@ export default {
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
       {hid: 'description', name: 'description', content: '栖息地知识社区，栖息地社区，知识社区，论坛，心灵栖息地'},
       {name: 'format-detection', content: 'telephone=no'},
-      {hid: 'keywords', name: 'keywords', content: "栖息地知识社区，极光社区，知识社区，论坛，心灵栖息地"}
-
+      {hid: 'keywords', name: 'keywords', content: "栖息地知识社区，极光社区，知识社区，论坛，心灵栖息地"},
+      {name: "baidu-site-verification", content: "codeva-vo8bZBYJNH"}
     ],
     link: [
       {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}//ico配置
+    ],
+    script: [
+      {src: 'https://hm.baidu.com/hm.js?c58934a7bcf2e29f8f3eb821b7a8293e'}
     ]
   },
   env: {
@@ -71,6 +74,7 @@ export default {
     //=================api==================
     '~/api/API.js', // axios 请求封装
     '~/api/requestType.js', // axios 请求类型封装
+    '~/plugins/baiduGa.js',//百度统计
     {src: '~/plugins/cropper.js', mode: 'client'},//只在客户端渲染
   ],
   // mixins: [
