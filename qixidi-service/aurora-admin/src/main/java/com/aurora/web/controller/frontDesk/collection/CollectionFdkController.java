@@ -11,6 +11,7 @@ import com.aurora.common.core.domain.PageQuery;
 import com.aurora.common.core.domain.R;
 import com.aurora.common.core.validate.AddGroup;
 import com.aurora.common.enums.BusinessType;
+import com.aurora.common.helper.LoginHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,35 +24,26 @@ import javax.validation.constraints.NotNull;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/white")
 public class CollectionFdkController extends BaseController {
     private final ICollectionInformationService iCollectionInformationService;
 
-    /**
-     * 新增收藏夹信息
-     */
-    @Log(title = "收藏夹信息", businessType = BusinessType.INSERT)
-    @RepeatSubmit()
-    @PostMapping("/add/collection")
-    public R<Void> addCollection(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
-        return toAjax(iCollectionInformationService.addCollection(bo) ? 1 : 0);
-    }
 
     /**
-     * 删除收藏夹信息
+     * 查询收藏夹信息列表
      */
-    @Log(title = "收藏夹信息", businessType = BusinessType.DELETE)
-    @DeleteMapping("/delete/collection/{id}")
-    public R<Void> removeCollection(@PathVariable Long id) {
-        return toAjax(iCollectionInformationService.removeCollection(id));
+    @GetMapping("/white/collection/list/{uuid}")
+    public R listUid(@NotNull(message = "用户id不能为空") @PathVariable("uuid") String uuid) {
+        return R.ok(iCollectionInformationService.listUid(uuid));
     }
 
     /**
      * 查询收藏夹信息列表
      */
-    @GetMapping("/collection/list/{uuid}")
-    public R listUid(@NotNull(message = "用户id不能为空") @PathVariable("uuid") String uuid) {
-        return R.ok(iCollectionInformationService.listUid(uuid));
+    @GetMapping("/frontDesk/collection/list")
+    public R frontDeskListUid() {
+        String tripartiteUuid = LoginHelper.getTripartiteUuid();
+        if (tripartiteUuid == null) throw new RuntimeException("用户未登录");
+        return R.ok(iCollectionInformationService.listUid(tripartiteUuid));
     }
 
     /**
@@ -59,7 +51,7 @@ public class CollectionFdkController extends BaseController {
      *
      * @return
      */
-    @GetMapping("/aut/collection/list")
+    @GetMapping("/white/aut/collection/list")
     public R list() {
         return R.ok(iCollectionInformationService.list());
     }
@@ -71,7 +63,7 @@ public class CollectionFdkController extends BaseController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/collection/article/list")
+    @GetMapping("/white/collection/article/list")
     public R articleList(CollectionRecordBo bo, PageQuery pageQuery) {
         return R.ok(iCollectionInformationService.articleList(bo, pageQuery));
     }
@@ -82,9 +74,28 @@ public class CollectionFdkController extends BaseController {
      * @param id
      * @return
      */
-    @GetMapping("/collection/{id}")
+    @GetMapping("/white/collection/{id}")
     public R<CollectionInformationVo> getInfo(@PathVariable("id") Long id) {
         return R.ok(iCollectionInformationService.queryById(id));
+    }
+
+    /**
+     * 新增收藏夹信息
+     */
+    @Log(title = "收藏夹信息", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/frontDesk/add/collection")
+    public R<Void> addCollection(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
+        return toAjax(iCollectionInformationService.addCollection(bo) ? 1 : 0);
+    }
+
+    /**
+     * 删除收藏夹信息
+     */
+    @Log(title = "收藏夹信息", businessType = BusinessType.DELETE)
+    @DeleteMapping("/frontDesk/delete/collection/{id}")
+    public R<Void> removeCollection(@PathVariable Long id) {
+        return toAjax(iCollectionInformationService.removeCollection(id));
     }
 
     /**
@@ -95,7 +106,7 @@ public class CollectionFdkController extends BaseController {
      */
     @Log(title = "添加收藏夹文章", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PostMapping("/add/collection/data")
+    @PostMapping("/frontDesk/add/collection/data")
     public R<Void> collectionArticle(@Validated(AddGroup.class) @RequestBody CollectionRecordBo bo) {
         return toAjax(iCollectionInformationService.collectionArticle(bo) ? 1 : 0);
     }
@@ -108,7 +119,7 @@ public class CollectionFdkController extends BaseController {
      */
     @Log(title = "转移收藏夹文章", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PutMapping("/update/collection/data")
+    @PutMapping("/frontDesk/update/collection/data")
     public R<Void> collectionUpdate(@RequestBody CollectionRecordBo bo) {
         return toAjax(iCollectionInformationService.collectionUpdate(bo) ? 1 : 0);
     }
@@ -121,7 +132,7 @@ public class CollectionFdkController extends BaseController {
      * @return
      */
     @Log(title = "删除收藏夹文章", businessType = BusinessType.INSERT)
-    @GetMapping("/delete/collection/data/{id}/{labelId}")
+    @GetMapping("/frontDesk/delete/collection/data/{id}/{labelId}")
     public R<Void> deleteCollectionArticle(@PathVariable("id") Long id, @PathVariable("labelId") String labelId) {
         return toAjax(iCollectionInformationService.deleteCollectionArticle(id, labelId) ? 1 : 0);
     }

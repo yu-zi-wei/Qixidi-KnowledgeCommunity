@@ -28,8 +28,13 @@ public class LabelGroupingInfoBo extends BaseEntity {
     /**
      * 分组名称
      */
-    @NotBlank(message = "分组名称不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "分组名称不能为空", groups = {AddGroup.class, EditGroup.class})
     private String groupingName;
+
+    /**
+     * 图标
+     */
+    private String icon;
 
     /**
      * 状态（0：正常，1：已删除）
@@ -39,7 +44,7 @@ public class LabelGroupingInfoBo extends BaseEntity {
     /**
      * 描述
      */
-    @NotBlank(message = "描述不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "描述不能为空", groups = {AddGroup.class, EditGroup.class})
     private String groupingDescribe;
 
 

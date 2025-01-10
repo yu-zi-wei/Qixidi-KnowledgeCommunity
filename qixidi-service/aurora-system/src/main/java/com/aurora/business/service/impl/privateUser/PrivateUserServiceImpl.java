@@ -60,7 +60,6 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
      */
     @Override
     public TableDataInfo<PrivateUserVo> queryPageList(PrivateUserBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<PrivateUser> lqw = buildQueryWrapper(bo);
         Page<PrivateUserVo> result = baseMapper.selectListXml(bo, pageQuery.build());
         if (CollectionUtils.isEmpty(result.getRecords())) return TableDataInfo.build(result);
         // 获取未读数据 条数
