@@ -172,11 +172,11 @@ export default {
       }
     },
     handleClick(tab) {
-      if (tab.label == '推荐') {
+      if (tab.label == '推荐') {//推荐
         this.queryParams.sortType = 1;
         this.queryParams.pageNum = 1;
         this.queryParams.pageSize = 20;
-      } else if (tab.label == '最新') {
+      } else if (tab.label == '最新') {//最新
         this.queryParams.sortType = 2;
         this.queryParams.pageNum = 1;
         this.queryParams.pageSize = 20;
