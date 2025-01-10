@@ -1,15 +1,17 @@
 <template>
   <div style="width: 1000px;margin: auto;">
-    <el-menu class="el-menu-demo search-background" mode="horizontal"
-             :default-active="$route.path"
-             @select="handleSelect"
-             text-color="#0a3d62"
-             :active-text-color="themeColor">
-      <el-menu-item index="/search/data">综合</el-menu-item>
-      <el-menu-item index="/search/article">文章</el-menu-item>
-      <el-menu-item index="/search/label">标签</el-menu-item>
-      <el-menu-item index="/search/user">用户</el-menu-item>
-    </el-menu>
+    <div style="border-bottom: 1px solid #e6e6e6;" class="mb-10">
+      <el-menu class="el-menu-demo search-background" mode="horizontal"
+               :default-active="$route.path"
+               @select="handleSelect"
+               text-color="#0a3d62"
+               :active-text-color="themeColor">
+        <el-menu-item index="/search/data">综合</el-menu-item>
+        <el-menu-item index="/search/article">文章</el-menu-item>
+        <el-menu-item index="/search/label">标签</el-menu-item>
+        <el-menu-item index="/search/user">用户</el-menu-item>
+      </el-menu>
+    </div>
     <div class="data-page">
       <nuxt-child/>
     </div>

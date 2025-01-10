@@ -169,7 +169,6 @@ export default {
   components: {MavonEditorModule, AiEditorModule},
   data() {
     return {
-      //文章目录
       isClient: false,
       rules: {
         specialId: [

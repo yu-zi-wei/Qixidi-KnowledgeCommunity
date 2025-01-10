@@ -24,14 +24,15 @@
       <!--        <p>{{ item.toolName }}</p>-->
       <!--      </div>-->
     </div>
-    <ai-editor-module></ai-editor-module>
+    <!--    <ai-editor-module></ai-editor-module>-->
+    <div style="width: 600px;height: 600px">
+    </div>
   </div>
 </template>
 
 <script>
 import SubmissionChart from "../components/submission-chart";
 import AiEditorModule from "../components/AiEditor-module";
-import https from "https";
 
 // import WebSocket from 'websocket';
 export default {
@@ -47,6 +48,7 @@ export default {
       socket: null,
       submissionObj: {},
       submissionLoading: false,
+      loading: false,
     }
   },
   async asyncData({app, params}) {

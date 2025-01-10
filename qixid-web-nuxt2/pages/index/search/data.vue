@@ -8,24 +8,25 @@
             <!--          用户信息-->
             <el-row :gutter="20" class="mb-10">
               <el-col :span="20" class="font-s-12 color-grey">
-                <nuxt-link class="hover-cl" :to="`/user_home/article?uuid=`+$base64.encode(item.userId)"
+                <nuxt-link class="hover-cl mr-4" :to="`/user_home/article?uuid=`+$base64.encode(item.userId)"
                            target="_blank">
                   <span class="font-bold cursor-pointer">{{ item.nickname }}</span>
                 </nuxt-link>
                 |
-                <span class="ml-8">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
+                <span class="ml-4">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20" class="mb-10">
-              <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
-                <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer">
-                  <p class="font-bold font-s-18 mb-8 hover-cl">{{ item.articleTitle }}</p>
-                  <p class="font-s-13 color-grey abstract-cl-2">{{ item.articleAbstract }}</p>
-                </el-col>
-                <el-col :span="3" v-if="item.articleCover">
-                  <el-image :src="item.articleCover" fit="cover" style="width: 100px;height: 60px"></el-image>
-                </el-col>
-              </nuxt-link>
+              <el-col :span=" item.articleCover==null?24:20">
+                <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
+                  <p class="font-bold font-s-18 mb-8 text-underline-hover line-height-24 cursor-pointer">
+                    {{ item.articleTitle }}</p>
+                </nuxt-link>
+                <p class="font-s-13 abstract-cl-2 line-height-18 color-grey">{{ item.articleAbstract }}</p>
+              </el-col>
+              <el-col :span="3" v-if="item.articleCover">
+                <el-image :src="item.articleCover" fit="cover" style="width: 100px;height: 60px"></el-image>
+              </el-col>
             </el-row>
             <div class="overflow-hidden mt-15 font-s-14" title="浏览">
               <div class="fl-left mr-20">
@@ -103,7 +104,7 @@
       </div>
       <div v-show="listInformationList.length>total" class="pb-10">
         <div class="border-ts-class" v-if="loading">加载中<i style="font-size: 13px"
-                                                          class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+                                                             class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
         <div class="border-ts-class" v-if="!loading">没有更多了...</div>
       </div>
     </div>
