@@ -5,10 +5,19 @@
       <el-button type="text" class="fl-right mr-4" icon="el-icon-plus" @click="add">新建收藏夹</el-button>
     </div>
     <div v-if="collectionUserLoading">
-      <ul clacc="content" v-show="!loading">
+      <ul v-show="!loading">
         <li v-for="item of collectionUserList" class="contentItem">
           <div class="flex-space-between">
             <div class="details-1 text-underline-hover cursor-pointer" @click="specialIndex(item)">
+              <svg t="1736501888880" class="icon svg-translateY-6 mr-10" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg" p-id="6429" width="26" height="26">
+                <path
+                  d="M856.8 82.8H386.1c-40.4-43.2-135.5-67-188.9-67-94.9 0-175.8 70.5-188.9 164.4-5.6 16-8.3 31.3-8.3 46.7v603.7c0 98.7 80.3 179.2 179.2 179.2h695.7c82 0 148.8-66.7 148.8-148.8V249.8c0-92.2-74.8-167-166.9-167z m0 30.4c60 0 110.5 39.2 128.7 93.2H627.2l-183.5-93.2h413.1z m136.6 747.7c0 65.3-53.1 118.4-118.4 118.4H179.3c-82 0.1-148.9-66.7-148.9-148.8V226.8c0-12.3 2.3-24.7 7-38l0.8-3.2c10.5-79.4 78.7-139.5 159.1-139.5 56.2 0 142.9 26.7 170.1 61.2l4.6 5.8h2.6l242.3 120.3h374.9c0.6 5.3 1.6 10.6 1.6 16.1v611.4z m0 0"
+                  fill="#6c5ce7" p-id="6430"></path>
+                <path
+                  d="M201.3 842.6h791v27.8h-791v-27.8z m-92.9 0h30.3v30.3h-30.3v-30.3z m258-260L346.1 693.8c-1.9 10.7 2.3 21.3 11 27.8 8.8 6.5 20.1 7.4 29.8 2.5l98.7-51.6 99.5 53.6c4.3 2.3 8.9 3.4 13.5 3.4 5.7 0 11.5-1.8 16.4-5.3 8.8-6.3 13.3-16.8 11.6-27.6L608.1 586.8l81.8-78c7.8-7.5 10.7-18.6 7.5-29-3.3-10.4-12-17.8-22.7-19.5L564.5 444l-49-101.9c-4.7-9.8-14.4-15.9-25.2-16.1-9.7-0.5-20.7 5.8-25.6 15.5L415.1 441.1l-112 15.1c-10.7 1.5-19.6 8.8-23.1 19.1s-0.8 21.4 6.9 29.1l79.5 78.2z m52.8-111.3c9.2-1.2 17.2-6.9 21.5-15.3l49.2-97.2 47.2 98.3c4.1 8.4 12 14.3 21.2 15.7L666.1 489.6l-78.8 75.2c-6.7 6.4-9.9 15.7-8.4 25l18.5 108.3-97.3-52.3c-4.2-2.3-8.8-3.4-13.4-3.4-4.4 0-8.9 1-13 3.1l-97 49.7 19.6-107.3c1.7-9.2-1.3-18.6-7.9-25.1l-77.3-77 108.1-14.5z m0 0"
+                  fill="#6c5ce7" p-id="6431"></path>
+              </svg>
               {{ item.collectionName }}
             </div>
             <div v-if="currentUser">
@@ -21,7 +30,7 @@
               </el-dropdown>
             </div>
           </div>
-          <div class="details-3 color-grey-2 mt-10">
+          <div class="details-3 color-grey-2 mt-15">
             <svg t="1710640454068" class="icon icon-size-14 svg-translateY-2" viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg" p-id="3373">
               <path
@@ -74,7 +83,6 @@ export default {
   name: "userCollection",
   data() {
     return {
-      cover: "",
       loading: true,
       dialogVisible: false,
       collectionUserLoading: true,
@@ -127,7 +135,7 @@ export default {
         if (valid) {
           this.buttonLoading = true
           if (this.tips.isAdd) {
-            this.$API("/white/add/collection", "post", null, this.form).then(response => {
+            this.$API("/frontDesk/add/collection", "post", null, this.form).then(response => {
               this.$modal.msg("添加成功");
               this.collectionListUids();
             }).finally(() => {
@@ -136,7 +144,7 @@ export default {
               this.collectionUserLoading = true;
             });
           } else {
-            this.$API("/business/collection/information", "post", null, this.form).then(response => {
+            this.$API("/business/collection/information", "put", null, this.form).then(response => {
               this.$modal.msg("更新成功");
               this.collectionListUids();
             }).finally(() => {
@@ -151,7 +159,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.collectionName + '》收藏夹吗？').then(() => {
         this.loading = true;
-        return this.$API("/white/delete/collection/" + item.id, "delete");
+        return this.$API("/frontDesk/delete/collection/" + item.id, "delete");
       }).then(() => {
         this.collectionListUids();
         this.$modal.msgSuccess("删除成功");

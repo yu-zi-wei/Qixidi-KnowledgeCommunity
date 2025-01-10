@@ -3,7 +3,6 @@
     <div class="home-index">
       <div class="collect-list-admin">
         <p class="font-s-24 font-bold text-center" v-text="collectionInfo.collectionName"></p>
-<!--        <p class="mt-10 font-s-14 text-center color-grey" v-text="collectionInfo.collectionIntroduce"></p>-->
         <el-row>
           <el-col :span="19" class="ml-4 color-grey4">
             <div class="font-s-14 flex-left align-items-center">
@@ -190,7 +189,7 @@ export default {
     transferCollection() {
       this.buttonCoLoading = true;
       this.collectionParams.type = 1;
-      this.$API("/white/update/collection/data", "put", null, this.collectionParams).then(res => {
+      this.$API("/frontDesk/update/collection/data", "put", null, this.collectionParams).then(res => {
         if (res.code == 200) {
           this.$modal.notifySuccess("转移成功！");
         } else {
@@ -205,19 +204,11 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要把《' + item.articleTitle + '》移除收藏夹吗？').then(() => {
         this.loading = true;
-        return this.$API("/white/delete/collection/data/" + item.collectionRecordId, "get");
+        return this.$API("/frontDesk/delete/collection/data/" + item.collectionRecordId, "get");
       }).then(() => {
         this.colArticleLists();
         this.$modal.msgSuccess("删除成功");
       }).finally(() => this.loading = false)
-    },
-    articleDetails(id) {
-      let routeInfo = this.$router.resolve({
-        path: "/article-details",
-        name: "文章详情页",
-        query: {id: this.$base64.encode(id)},
-      });
-      window.open(routeInfo.href, '_blank');
     },
     getInfos() {
       let id = this.$base64.decode(this.$route.query.id)
@@ -227,7 +218,6 @@ export default {
     },
     getWebsiteInfos() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      console.log("uuid:", this.$base64.decode(this.$route.query.uuid))
       this.$API("/white/user/info/" + uuid, "get").then(res => {
         this.userinfo = res.data;
         this.isCurrentUser();
@@ -239,12 +229,10 @@ export default {
       this.$API("/front-desk/user/basics", "get").then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
-          return;
-        }
-        if (res.data != null && res.data.uuid == uuid) {
+        } else if (res.data.uuid == uuid) {
           this.currentUser = true;
+          this.uuid = res.data.uuid;
         }
-        this.uuid = res.data.uuid;
         this.queryParams.collectionId = collectionId;
         this.colArticleLists();
       });

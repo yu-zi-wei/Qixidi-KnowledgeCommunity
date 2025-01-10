@@ -8,7 +8,7 @@
                       suffix-icon="el-icon-el-input__icon el-icon-search"></el-input>
           </el-col>
           <el-col :span="3" class="fl-right">
-            <el-button type="primary" size="medium" plain @click="add">创建专栏
+            <el-button type="primary" size="small" plain @click="add">创建专栏
               <i class="el-icon-plus el-icon--right"></i></el-button>
           </el-col>
         </el-row>

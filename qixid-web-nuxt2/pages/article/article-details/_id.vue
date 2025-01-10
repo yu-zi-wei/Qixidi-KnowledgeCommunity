@@ -848,7 +848,7 @@ export default {
       this.collectionParams.targetId = this.articleInfo.id;
       this.collectionParams.type = 1;
       this.collectionParams.labelId = this.articleInfo.labelId;
-      this.$API('/white/add/collection/data', this.$post(), null, this.collectionParams).then(res => {
+      this.$API('/frontDesk/add/collection/data', this.$post(), null, this.collectionParams).then(res => {
         if (res.code == 200) {
           this.$modal.notifySuccess("收藏成功！");
           this.articleInfo.isCollection = true;
@@ -865,7 +865,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          this.$API('/white/add/collection', this.$post(), null, this.form).then(() => {
+          this.$API('/frontDesk/add/collection', this.$post(), null, this.form).then(() => {
             this.$modal.msgSuccess("创建成功");
             this.$API(`/white/collection/list/${this.userInfo.uuid}`, this.$get()).then(res => {
               this.collectionList = res.data;
@@ -883,7 +883,7 @@ export default {
         return;
       }
       if (this.articleInfo.isCollection) {
-        this.$API(`/white/delete/collection/data/${this.articleInfo.collectionRId}/${this.articleInfo.labelId}`, this.$get()).then(res => {
+        this.$API(`/frontDesk/delete/collection/data/${this.articleInfo.collectionRId}/${this.articleInfo.labelId}`, this.$get()).then(res => {
           if (res.code == 200) {
             this.articleInfo.isCollection = false;
             this.$modal.notifySuccess("已取消收藏！");
