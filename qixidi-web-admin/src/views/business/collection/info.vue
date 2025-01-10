@@ -77,10 +77,8 @@
 
     <el-table v-loading="loading" :data="informationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-<!--      <el-table-column label="收藏夹id" align="center" prop="id" v-if="true"/>-->
       <el-table-column label="收藏夹名称" align="center" prop="collectionName"/>
       <el-table-column label="收藏夹简介" align="center" prop="collectionIntroduce"/>
-      <el-table-column label="收藏夹封面" align="center" prop="collectionCover"/>
       <el-table-column label="收藏夹状态" align="center" prop="state">
         <template v-slot="scope">
           <dict-tag :options="dict.type.state_type" :value="scope.row.state"/>

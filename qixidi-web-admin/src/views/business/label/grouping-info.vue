@@ -115,7 +115,7 @@
           <el-input v-model="form.groupingName" placeholder="请输入分组名称"/>
         </el-form-item>
         <el-form-item label="图标" prop="icon">
-          <el-input type="textarea" :rows="4" v-model="form.icon" placeholder="请输入分组图标"/>
+          <el-input type="textarea" :rows="6" v-model="form.icon" placeholder="请输入分组图标"/>
         </el-form-item>
         <el-form-item label="图标展示" prop="navigationIcon">
           <span v-html="form.icon"></span>

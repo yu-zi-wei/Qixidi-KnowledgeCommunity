@@ -137,8 +137,11 @@
         <el-form-item label="描述" prop="labelDescribe">
           <el-input v-model="form.labelDescribe" placeholder="请输入描述"/>
         </el-form-item>
-        <el-form-item label="封面" prop="labelCover">
-          <el-input v-model="form.labelCover" placeholder="请输入封面"/>
+        <el-form-item label="图标" prop="labelCover">
+          <el-input type="textarea" :rows="6" v-model="form.labelCover" placeholder="请输入图标"/>
+        </el-form-item>
+        <el-form-item label="图标展示" prop="navigationIcon">
+          <span v-html="form.labelCover"></span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
