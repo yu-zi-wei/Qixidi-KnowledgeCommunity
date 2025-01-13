@@ -27,6 +27,7 @@ npm run build:stage
 npm run build:prod
 
 ## 上传dist.zip并解压
+cd /data/aurora/web/aurora-ht/
 unzip -u dist.zip
 
 # 重启nginx
