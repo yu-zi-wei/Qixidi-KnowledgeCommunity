@@ -249,6 +249,22 @@ export default {
 <style>
 @import url("components/css/mavon-editor-module.css");
 
+/*
+代码块
+ */
+.markdown-body .highlight pre, .markdown-body pre {
+  padding: 6px !important;
+  font-size: 100% !important;
+}
+
+/**
+图片
+ */
+.markdown-body img {
+  border: 1px solid #bdc3c7 !important;
+  border-radius: 2px !important;
+}
+
 /*富文本*/
 .markdown-body {
   z-index: 10 !important;
