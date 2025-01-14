@@ -69,17 +69,25 @@
         </div>
       </div>
       <!--        波浪-->
-      <!--        <div class="sbw-cl"></div>-->
-      <div class="wave-cl">
-        <img src="./img/wave-1.svg"/>
-        <img src="./img/wave-2.svg"/>
-        <img src="./img/wave-3.svg"/>
-        <img src="./img/wave-4.svg"/>
-        <!--        <img src="./img/wave-5.svg" id="shape"/>-->
-        <img src="./img/wave-5.svg"/>
+      <div class="wave-header">
+        <div>
+          <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+               viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+              <path id="gentle-wave"
+                    d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
+            </defs>
+            <g class="parallax">
+              <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)"/>
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)"/>
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)"/>
+              <use xlink:href="#gentle-wave" x="48" y="7" fill="rgba(255,255,255,0.9)"/>
+            </g>
+          </svg>
+        </div>
       </div>
     </div>
-    <div>
+    <div class="grid-view-class">
       <router-view></router-view>
     </div>
     <div class="go-top-cl" @click="goTop" title="回到顶部" v-show="!topScrollBar.isTop">
@@ -143,7 +151,7 @@
 import './css/index.css'
 import './css/index-media.css'
 import './css/wave.css'
-import {listInfo, configInfo} from "@/api/lover";
+import {configInfo, listInfo} from "@/api/lover";
 
 export default {
   name: "index",
@@ -210,6 +218,20 @@ export default {
 }
 </script>
 <style>
+.grid-view-class {
+  background-size: 46px 46px;
+  background-position: center center;
+  background-image: linear-gradient(to right, #cbd5e1 1px, transparent 1px),
+  linear-gradient(to bottom, #cbd5e1 1px, transparent 1px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #fff 50px calc(100% - 50px), transparent),
+  linear-gradient(to right, transparent, #fff 50px calc(100% - 50px), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #fff 50px calc(100% - 50px), transparent),
+  linear-gradient(to right, transparent, #fff 50px calc(100% - 50px), transparent);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in, xor;
+  padding-bottom: 60px;
+}
+
 .sbw-cl {
   margin-top: 40px;
   height: 100px;

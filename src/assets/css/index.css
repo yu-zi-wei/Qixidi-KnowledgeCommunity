@@ -2,7 +2,7 @@
 
 /* 将具有默认margin和padding的标记置零，所有标记的margin、padding都在使用时具体定义 */
 :root{
-    --color-thme: #9b59b6;
+    --color-thme: #6E5DF0;
 }
 * {
     margin: 0;
@@ -13,7 +13,6 @@
     url("//at.alicdn.com/wf/webfont/1lgaVhkC8jhy/Yrfrt4uDahwx.woff") format("woff");
     font-display: swap;
 }
-
 
 input {
     outline: none;
@@ -26,7 +25,6 @@ body {
     width: 100%;
     overflow-x: hidden;
     letter-spacing: 1.6px;
-    background-image: url(../img/wangge.jpg);
 }
 
 /*首页二级页面*/

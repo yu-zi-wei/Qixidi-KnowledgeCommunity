@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-spin :loading="loading" tip="加速获取祝福中..." style="width: 100%" :size="28">
-      <div class="ml-15">
+      <div class="ml-15 mt-20">
         <a-space size="large" title="切换样式">
           <a-switch checked-color="#9b59b6" unchecked-color="#00cec9" v-model="isList"/>
         </a-space>

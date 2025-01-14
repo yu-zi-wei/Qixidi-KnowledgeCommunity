@@ -1,7 +1,6 @@
 const {defineConfig} = require('@vue/cli-service')
 const path = require('path');
-const webpack = require('webpack')
-let timeStamp = new Date().getTime();
+// const webpack = require('webpack')
 
 function resolve(dir) {
     return path.join(__dirname, './', dir)
@@ -33,16 +32,6 @@ module.exports = {
                 }
             },
         },
-        output: { // 输出重构 打包编译后的js文件名称,添加时间戳.
-            filename: `js/js[name].${timeStamp}.js`,
-            chunkFilename: `js/chunk.[id].${timeStamp}.js`,
-        },
-    },
-    css: {
-        extract: { // 打包后css文件名称添加时间戳
-            filename: `css/[name].${timeStamp}.css`,
-            chunkFilename: `css/chunk.[id].${timeStamp}.css`,
-        }
     },
     pwa: {
         iconPaths: {
