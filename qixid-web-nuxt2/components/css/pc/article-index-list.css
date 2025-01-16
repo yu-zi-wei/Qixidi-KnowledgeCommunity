@@ -7,7 +7,7 @@
   background: #fefefe;
   /*border-bottom: 1px solid #bdc3c7;*/
   /*height: 160px;*/
-  transition: .2s;
+  transition: .3s;
   padding: 20px 0px;
   border: 1px solid #e2e2e5;
   border-radius: 10px;
@@ -15,7 +15,7 @@
 }
 
 .article-item:hover {
-  background: #E9EBEC;
+  background: #edeff0;
 }
 
 .article-item:hover .article-cover-img {

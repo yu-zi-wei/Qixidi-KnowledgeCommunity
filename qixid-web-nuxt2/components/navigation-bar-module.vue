@@ -577,17 +577,16 @@ export default {
   border-radius: 20px;
 }
 
-.qixidi-name {
-  width: 60px;
-  margin-left: 6px;
-  font-size: 16px;
-}
-
 .el-menu--popup {
   padding: 0px;
 }
 
 .el-button {
   padding: 12px 14px;
+}
+
+.el-menu--horizontal > .el-menu-item {
+  height: 58px;
+  line-height: 58px;
 }
 </style>
