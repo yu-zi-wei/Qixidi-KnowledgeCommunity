@@ -29,7 +29,7 @@ Nuxt.js 对前台进行了重构，并赋予它新的名字——**栖息地**�
 
 ```text
 qixidi/
-└── qixidi-service  # 项目后端（SpringBoot）
+└── qixidi-service  # 项目后端（基于SpringBoot-v2实现）
     │
     ├── aurora-admin # 后台启动模块
     │
@@ -41,8 +41,10 @@ qixidi/
     │
     ├── aurora-system # 项目业务模块
     │
-    ├── sql  # sql文件（暂不提供，需要可加微信：zsh2978824265）
+    ├── sql  # sql文件（暂不提供，需要可加微信（有偿）：zsh2978824265）
     │
+├── qixidi-service-plus  # 项目后端plus版本（基于SpringBoot-v3实现）
+│
 ├── qixid-web-nuxt2  # 项目前台（Nuxt）
 │
 └── qixidi-web-admin  # 项目后台（Vue）
