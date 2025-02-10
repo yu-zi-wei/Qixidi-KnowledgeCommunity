@@ -20,6 +20,7 @@
         <java.version>1.8</java.version>
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
         <spring-boot.mybatis>2.2.0</spring-boot.mybatis>
+        <spring-boot.mybatis>2.2.0</spring-boot.mybatis>
         <druid.version>1.2.8</druid.version>
         <poi.version>4.1.2</poi.version>
         <commons-compress.version>1.21</commons-compress.version>
@@ -46,8 +47,8 @@
         <!-- OSS 配置 -->
         <qiniu.version>7.9.5</qiniu.version>
         <aliyun.oss.version>3.14.0</aliyun.oss.version>
-        <qcloud.cos.version>5.6.72</qcloud.cos.version>
         <minio.version>8.3.8</minio.version>
+        <qcloud.cos.version>5.6.72</qcloud.cos.version>
 
     </properties>
 

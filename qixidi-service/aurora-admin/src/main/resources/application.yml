@@ -157,7 +157,7 @@ security:
 mybatis-plus:
   # 不支持多包, 如有需要可在注解配置 或 提升扫包等级
   # 例如 com.**.**.mapper
-  mapperPackage: com.aurora.**.mapper
+  mapperPackage: com.**.**.mapper
   # 对应的 XML 文件位置
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
