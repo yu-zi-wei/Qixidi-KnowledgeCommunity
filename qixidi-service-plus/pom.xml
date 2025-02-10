@@ -1,0 +1,307 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.2</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.light</groupId>
+    <artifactId>qixidi-service-plus</artifactId>
+    <packaging>pom</packaging>
+    <version>${revision}</version>
+
+    <properties>
+        <revision>1.0.1-SNAPSHOT</revision>
+        <java.version>17</java.version>
+        <java.source.version>${java.version}</java.source.version>
+        <java.target.version>${java.version}</java.target.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!--        springBoot -->
+        <spring-boot.version>3.3.2</spring-boot.version>
+        <aspectjweaver.version>1.9.7</aspectjweaver.version>
+
+        <!--        通用工具包 -->
+        <lombok.version>1.18.32</lombok.version>
+        <hutool.version>5.8.27</hutool.version>
+        <guava.version>30.0-jre</guava.version>
+
+        <easyexcel.version>3.3.4</easyexcel.version>
+
+        <!--敏感词相关-->
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <assertj-core.version>3.25.3</assertj-core.version>
+
+        <JustAuth.version>1.16.5</JustAuth.version>
+
+        <aliyun.dysmsapi20170525.version>3.1.1</aliyun.dysmsapi20170525.version>
+
+        <!-- DB & MyBatis libs -->
+        <jsqlparser.version>5.0</jsqlparser.version>
+        <p6spy.version>3.9.1</p6spy.version>
+        <mybatis-plus-spring-boot3-starter.version>3.5.7</mybatis-plus-spring-boot3-starter.version>
+        <druid-spring-boot-3-starter.version>1.2.18</druid-spring-boot-3-starter.version>
+        <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
+        <redisson.version>3.31.0</redisson.version>
+
+        <!-- OSS 配置 -->
+        <aliyun.oss.version>3.14.0</aliyun.oss.version>
+        <minio.version>8.3.8</minio.version>
+        <alipay-sdk-java.version>4.15.6.ALL</alipay-sdk-java.version>
+
+        <!-- Sa-Token libs -->
+        <sa-token-spring-boot3-starter.version>1.37.0</sa-token-spring-boot3-starter.version>
+        <sa-token-redis-jackson.version>1.37.0</sa-token-redis-jackson.version>
+    </properties>
+
+    <modules>
+        <module>qixidi-startup</module>
+        <module>framework</module>
+        <module>qixidi-system</module>
+        <module>qixidi-auth</module>
+        <module>qixidi-business</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-system</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-startup</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-auth</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>framework</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-mybatis-plus</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-exception</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-excel</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-redission</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-oss</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-business</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- ========================================== 其他依赖=================================-->
+
+            <!-- alipay 支付宝支付-->
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>${alipay-sdk-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${sa-token-spring-boot3-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-redis-jackson</artifactId>
+                <version>${sa-token-redis-jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun.oss.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi-ooxml-schemas</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- 阿里数据库连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
+                <version>${druid-spring-boot-3-starter.version}</version>
+            </dependency>
+
+            <!-- dynamic-datasource 多数据源-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+                <version>${dynamic-datasource-spring-boot3-starter.version}</version>
+            </dependency>
+
+
+            <!-- 统一 guava 版本 解决隐式漏洞问题 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!--敏感词相关-->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+
+            <!--redisson-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
+            <!--        JustAuth第三方登录开放平台-->
+            <dependency>
+                <groupId>me.zhyd.oauth</groupId>
+                <artifactId>JustAuth</artifactId>
+                <version>${JustAuth.version}</version>
+            </dependency>
+
+            <!--            阿里短信发送-->
+            <!-- https://mvnrepository.com/artifact/com.aliyun/dysmsapi20170525 -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dysmsapi20170525</artifactId>
+                <version>${aliyun.dysmsapi20170525.version}</version>
+            </dependency>
+
+            <!-- hutool 的依赖配置-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-bom</artifactId>
+                <version>${hutool.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <scope>test</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectjweaver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>${mybatis-plus-spring-boot3-starter.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>${p6spy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.31</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

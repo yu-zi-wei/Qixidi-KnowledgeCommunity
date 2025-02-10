@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.business.mapper.dictum.DictumGroupMapper">
+    <resultMap type="com.qixidi.business.domain.entity.dictum.DictumGroup" id="DictumGroupResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cover" column="cover"/>
+        <result property="briefIntroduction" column="brief_introduction"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectVoPageXml" resultType="com.qixidi.business.domain.vo.dictum.DictumGroupVo">
+        select dg.id,
+               dg.name,
+               dg.cover,
+               dg.brief_introduction,
+               dg.employ_sum,
+               dg.create_time,
+               dg.update_time
+        from b_dictum_group as dg
+        where dg.state = 0
+        order by dg.update_time desc
+    </select>
+
+    <update id="updateList">
+        <foreach collection="list" item="item" separator=";">
+            update b_dictum_group
+            set`employ_sum` = #{item.sum}
+            where `id` = #{item.groupId}
+        </foreach>
+    </update>
+</mapper>

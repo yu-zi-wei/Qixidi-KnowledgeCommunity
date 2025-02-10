@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.light</groupId>
+        <artifactId>qixidi-service-plus</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>qixidi-startup</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-mybatis-plus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-system</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-auth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-exception</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-excel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-redission</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-oss</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-business</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <!-- 环境标识，需要与配置文件的名称相对应 -->
+                <profiles.active>dev</profiles.active>
+                <logging.level>debug</logging.level>
+                <endpoints.include>'*'</endpoints.include>
+            </properties>
+            <activation>
+                <!-- 默认环境 -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+                <logging.level>warn</logging.level>
+                <endpoints.include>health, info, logfile</endpoints.include>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.qixidi.startup.QixidiStartupApplication</mainClass>
+                    <!--                    继承父 pom.xml的环境配置-->
+                    <systemPropertyVariables>
+                        <profiles.active>${profiles.active}</profiles.active>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <!--不开启过滤，即无需进行参数替换的文件-->
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <!--开启过滤，用指定的参数替换directory下的文件中的参数，如application.yml中的@active@-->
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.yml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>

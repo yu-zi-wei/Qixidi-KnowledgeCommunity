@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.business.mapper.configure.ToToolInfoMapper">
+    <select id="selectListSlq" resultType="com.qixidi.business.domain.vo.configure.ToToolInfoVo">
+        SELECT id,
+               parent_id,
+               tool_name,
+               icon,
+               `order`,
+               is_parent,
+               tool_url,
+               `type`
+        FROM to_tool_info
+        WHERE `state` = 0
+          AND is_parent = 1
+        ORDER BY `order` DESC, create_time DESC
+    </select>
+</mapper>
