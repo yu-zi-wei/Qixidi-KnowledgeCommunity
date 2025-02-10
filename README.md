@@ -43,7 +43,7 @@ qixidi/
     │
     ├── sql  # sql文件（暂不提供，需要可加微信（有偿）：zsh2978824265）
     │
-├── qixidi-service-plus  # 项目后端plus版本（基于SpringBoot-v3实现）
+├── qixidi-service-plus  # 项目后端plus版本[待完善]（基于SpringBoot-v3实现）
 │
 ├── qixid-web-nuxt2  # 项目前台（Nuxt）
 │
