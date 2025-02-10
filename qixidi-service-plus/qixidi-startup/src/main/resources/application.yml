@@ -59,8 +59,6 @@ spring:
       # 允许对象忽略json中不存在的属性
       fail_on_unknown_properties: false
 
-#debug: true
-
 mybatis-plus:
   # 多包名使用
   basePackages: com.**.**.mapper
