@@ -2,7 +2,9 @@ package com.qixidi.business.selector.webSocket;
 
 
 import com.qixidi.business.domain.enums.WebSocketEnum;
-import com.light.core.utils.context.SpringContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -11,8 +13,14 @@ import java.util.Map;
  * @date 2024年01月07日
  * WebSocket消息发送中转站
  */
+@Component
 public class WebSocketSelector {
-    private static Map<String, WebSocketInterface> taskClearHandlers = SpringContext.inst().getInterfaceBeans(WebSocketInterface.class);
+    private static Map<String, WebSocketInterface> taskClearHandlers;
+
+    @Autowired
+    private WebSocketSelector(ApplicationContext applicationContext) {
+        this.taskClearHandlers = applicationContext.getBeansOfType(WebSocketInterface.class);
+    }
 
     private WebSocketSelector() {
     }

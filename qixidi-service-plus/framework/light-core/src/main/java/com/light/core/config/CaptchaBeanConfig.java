@@ -6,6 +6,8 @@ import cn.hutool.captcha.ShearCaptcha;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.awt.*;
+
 /**
  * 验证码初始化
  *
@@ -15,20 +17,31 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CaptchaBeanConfig {
     private final int codeWidth = 160;
-    private final int codeHeight = 60;
+    private final int codeHeight = 40;
+    private static final Color BACKGROUND = Color.PINK;
+    private static final Font FONT = new Font("Arial", Font.BOLD, 48);
 
     @Bean
     public LineCaptcha lineCaptcha() {
-        return new LineCaptcha(codeWidth, codeHeight);
+        LineCaptcha lineCaptcha = new LineCaptcha(codeWidth, codeHeight);
+        lineCaptcha.setBackground(BACKGROUND);
+        lineCaptcha.setFont(FONT);
+        return lineCaptcha;
     }
 
     @Bean
     public CircleCaptcha circleCaptcha() {
-        return new CircleCaptcha(codeWidth, codeHeight);
+        CircleCaptcha circleCaptcha = new CircleCaptcha(codeWidth, codeHeight);
+        circleCaptcha.setBackground(BACKGROUND);
+        circleCaptcha.setFont(FONT);
+        return circleCaptcha;
     }
 
     @Bean
     public ShearCaptcha shearCaptcha() {
-        return new ShearCaptcha(codeWidth, codeHeight);
+        ShearCaptcha shearCaptcha = new ShearCaptcha(codeWidth, codeHeight);
+        shearCaptcha.setBackground(BACKGROUND);
+        shearCaptcha.setFont(FONT);
+        return shearCaptcha;
     }
 }

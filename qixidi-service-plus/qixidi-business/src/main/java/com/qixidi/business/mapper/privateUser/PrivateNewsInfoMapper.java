@@ -7,6 +7,7 @@ import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author aurora
  * @date 2023-03-23
  */
+@Mapper
 public interface PrivateNewsInfoMapper extends BaseMapperPlus<PrivateNewsInfoMapper, PrivateNewsInfo, PrivateNewsInfoVo> {
 
     Page<PrivateNewsInfoVo> selectListXml(@Param("bo") PrivateNewsInfoBo bo, Page<Object> build);

@@ -67,16 +67,22 @@ public class LoginHelper {
      * 获取后台用户(多级缓存)
      */
     public static LoginUser getLoginUser() {
-        return (LoginUser) StpUtil.getTokenSession().get(StpUtil.getLoginIdAsString());
+        String loginIdAsString = StpUtil.getLoginIdAsString();
+        String type = loginIdAsString.split(JOIN_CODE)[0];
+        if (type.equals(UserType.TRIPARTITE_USER.getUserType())) return null;
+        return (LoginUser) StpUtil.getTokenSession().get(loginIdAsString);
     }
 
     /**
      * 获取前台用户(多级缓存)TripartiteUser
      */
     public static TripartiteUser getTripartiteUser() {
-        Object loginIdAsString = StpUtil.getLoginIdDefaultNull();//获取当前会话账号id, 如果未登录，则返回 null
-        if (loginIdAsString == null) return null;
-        return (TripartiteUser) StpUtil.getTokenSession().get(String.valueOf(loginIdAsString));
+        Object loginIdAsObj = StpUtil.getLoginIdDefaultNull();//获取当前会话账号id, 如果未登录，则返回 null
+        if (loginIdAsObj == null) return null;
+        String loginIdAsString = String.valueOf(loginIdAsObj);
+        String type = loginIdAsString.split(JOIN_CODE)[0];
+        if (type.equals(UserType.SYS_USER.getUserType())) return null;
+        return (TripartiteUser) StpUtil.getTokenSession().get(loginIdAsString);
     }
 
     /**

@@ -47,9 +47,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Bean
     public RedissonClient redisson() {
         String prefix = REDIS_PROTOCOL_PREFIX;
-//        if (redisProperties.isSsl()) {
-//            prefix = REDISS_PROTOCOL_PREFIX;
-//        }
         Config config = new Config();
         config.setThreads(redissonProperties.getThreads())
                 .setNettyThreads(redissonProperties.getNettyThreads())

@@ -2,6 +2,7 @@ package com.qixidi.startup;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
@@ -9,7 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 public class QixidiStartupApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(QixidiStartupApplication.class, args);
+        ConfigurableApplicationContext run = SpringApplication.run(QixidiStartupApplication.class, args);
+        System.out.println("==================> (♥◠‿◠)ﾉﾞ  qi-xi-di Startup success   ლ(´ڡ`ლ)ﾞ  <==================");
     }
 
 }

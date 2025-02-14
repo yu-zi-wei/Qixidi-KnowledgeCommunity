@@ -55,7 +55,7 @@ import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
 import com.qixidi.business.service.ITripartiteUserService;
-import com.qixidi.business.webSocket.WebSocketServer;
+import com.qixidi.business.service.webSocket.WebSocketServer;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

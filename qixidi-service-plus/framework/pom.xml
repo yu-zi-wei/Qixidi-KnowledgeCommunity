@@ -17,6 +17,7 @@
         <module>light-excel</module>
         <module>light-redission</module>
         <module>light-oss</module>
+        <module>light-web</module>
     </modules>
 
 </project>
