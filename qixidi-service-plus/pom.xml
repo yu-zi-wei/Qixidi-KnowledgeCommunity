@@ -64,6 +64,7 @@
         <module>qixidi-auth</module>
         <module>qixidi-business</module>
         <module>qixidi-love</module>
+        <module>framework/light-web</module>
     </modules>
 
     <dependencyManagement>
@@ -123,6 +124,11 @@
             <dependency>
                 <groupId>com.light</groupId>
                 <artifactId>light-oss</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-web</artifactId>
                 <version>${revision}</version>
             </dependency>
 

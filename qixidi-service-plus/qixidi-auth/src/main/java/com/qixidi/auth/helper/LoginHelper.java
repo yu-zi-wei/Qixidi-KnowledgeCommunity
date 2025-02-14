@@ -74,7 +74,9 @@ public class LoginHelper {
      * 获取前台用户(多级缓存)TripartiteUser
      */
     public static TripartiteUser getTripartiteUser() {
-        return (TripartiteUser) StpUtil.getTokenSession().get(StpUtil.getLoginIdAsString());
+        Object loginIdAsString = StpUtil.getLoginIdDefaultNull();//获取当前会话账号id, 如果未登录，则返回 null
+        if (loginIdAsString == null) return null;
+        return (TripartiteUser) StpUtil.getTokenSession().get(String.valueOf(loginIdAsString));
     }
 
     /**

@@ -31,7 +31,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 .addExclude(securityProperties.getExcludes())
                 // 认证函数: 每次请求执行
                 .setAuth(obj -> {
-                    StpUtil.checkLogin();//判断是否登录
+//                    StpUtil.checkLogin();//判断是否登录
                 });
 
     }
