@@ -4,9 +4,9 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.light.core.constant.SystemConstant;
-import com.light.core.enums.CommentType;
-import com.light.core.enums.RedisKeyEnums;
-import com.light.core.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.CommentType;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
@@ -165,17 +165,17 @@ public class ArticleTask {
     public void syncFabulous() {
         log.info("文章点赞开始同步");
 //         用户点赞的文章列表
-        Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
+        Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
 //         文章点赞人列表
-        Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+        Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
 //      文章点赞总数
-        Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
+        Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
         if (CollectionUtils.isNotEmpty(cacheMpa)) {
 //            文章点赞记录落盘
             syncArticleFl(articleMap, cacheMap);
-            RedisUtils.deleteObject(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
-            RedisUtils.deleteObject(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-            RedisUtils.deleteObject(RedisKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
+            RedisUtils.deleteObject(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
+            RedisUtils.deleteObject(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+            RedisUtils.deleteObject(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
         }
         log.info("文章点赞同步结束");
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_ARTICLE_CLICK_LIKE.getCode());

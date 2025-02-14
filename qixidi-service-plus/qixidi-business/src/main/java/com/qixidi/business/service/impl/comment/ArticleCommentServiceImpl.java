@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.enums.*;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
@@ -19,8 +20,8 @@ import com.light.core.core.domain.R;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.*;
-import com.light.core.enums.article.ArticleUpdateType;
-import com.light.core.enums.news.NewsType;
+import com.qixidi.business.domain.enums.article.ArticleUpdateType;
+import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
@@ -125,11 +126,11 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         ArticleComment add = BeanUtil.toBean(bo, ArticleComment.class);
         add.setCreateTime(new Date()).setUpdateTime(new Date());
         //评论审核
-        List<String> cacheList = RedisUtils.getCacheList(RedisKeyEnums.BLOCKING_WORDS.getKey());
+        List<String> cacheList = RedisUtils.getCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey());
         if (CollectionUtils.isEmpty(cacheList)) {
             //        存入缓存
             List<String> stringList = toShieldWordMapper.selectKeyword();
-            RedisUtils.setCacheList(RedisKeyEnums.BLOCKING_WORDS.getKey(), stringList);
+            RedisUtils.setCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey(), stringList);
             cacheList = stringList;
         }
         WordFilter wordFilter = new WordFilter(cacheList);

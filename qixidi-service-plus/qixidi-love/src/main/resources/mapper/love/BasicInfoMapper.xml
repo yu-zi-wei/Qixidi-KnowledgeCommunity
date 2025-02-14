@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.love.mapper.BasicInfoMapper">
+    <select id="selectApi" resultType="com.qixidi.love.domain.vo.BasicInfoVo">
+        SELECT title,
+               introduce,
+               left_img,
+               left_name,
+               right_img,
+               right_name,
+               lover_prefix,
+               `type`,
+               lover_time
+        FROM basic_info
+        WHERE state = 0
+        ORDER BY type LIMIT 1;
+    </select>
+</mapper>

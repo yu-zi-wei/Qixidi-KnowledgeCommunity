@@ -8,7 +8,7 @@ import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.service.shield.IToShieldWordService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.RedisKeyEnums;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
@@ -129,12 +129,12 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
     public void ShieldWordRefresh() {
         List<String> list = baseMapper.selectKeyword();
 //        存入缓存
-        RedisUtils.setCacheList(RedisKeyEnums.BLOCKING_WORDS.getKey(), list);
+        RedisUtils.setCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey(), list);
     }
 
     @Override
     public Map<String, Object> detection(String text) {
-        List<String> list = RedisUtils.getCacheList(RedisKeyEnums.BLOCKING_WORDS.getKey());
+        List<String> list = RedisUtils.getCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey());
         if (CollectionUtils.isEmpty(list)) {
             ShieldWordRefresh();
             return null;

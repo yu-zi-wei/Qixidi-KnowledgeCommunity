@@ -17,7 +17,7 @@ import com.qixidi.business.service.privateUser.IPrivateUserService;
 import com.qixidi.business.webSocket.WebSocketServer;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.WebSocketEnum;
+import com.qixidi.business.domain.enums.WebSocketEnum;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.StringUtils;

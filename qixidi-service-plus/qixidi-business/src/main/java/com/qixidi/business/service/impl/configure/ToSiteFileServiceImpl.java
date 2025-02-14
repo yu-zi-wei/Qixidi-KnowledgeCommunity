@@ -9,7 +9,7 @@ import com.qixidi.business.mapper.configure.ToSiteFileMapper;
 import com.qixidi.business.service.configure.IToSiteFileService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.ToSiteFileType;
+import com.qixidi.business.domain.enums.ToSiteFileType;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

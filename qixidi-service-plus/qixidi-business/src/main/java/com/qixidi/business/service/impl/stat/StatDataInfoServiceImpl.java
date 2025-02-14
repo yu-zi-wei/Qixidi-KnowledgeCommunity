@@ -12,7 +12,7 @@ import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.stat.StatDataInfoMapper;
 import com.qixidi.business.mapper.stat.StatTheDataMapper;
 import com.qixidi.business.service.stat.IStatDataInfoService;
-import com.light.core.enums.StatDataEnums;
+import com.qixidi.business.domain.enums.StatDataEnums;
 import com.light.core.utils.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qixidi.business.utils.ClassUtils;

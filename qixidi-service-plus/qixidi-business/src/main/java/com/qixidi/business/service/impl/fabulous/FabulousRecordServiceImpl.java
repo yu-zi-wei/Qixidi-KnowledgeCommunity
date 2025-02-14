@@ -15,10 +15,10 @@ import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.CommentType;
-import com.light.core.enums.RedisKeyEnums;
-import com.light.core.enums.WebSocketEnum;
-import com.light.core.enums.news.NewsType;
+import com.qixidi.business.domain.enums.CommentType;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.WebSocketEnum;
+import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.redission.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -155,28 +155,28 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             //            文章点赞总数加一
             Map<String, Object> sumMap = new HashMap();
             sumMap.put(bo.getTypeId().toString(), bo.getFabulousSum() + 1);
-            RedisUtils.setCacheMapValue(RedisKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey(), bo.getTypeId().toString(), bo.getFabulousSum() + 1);
+            RedisUtils.setCacheMapValue(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey(), bo.getTypeId().toString(), bo.getFabulousSum() + 1);
             //            我的点赞文章加一
             Map<String, Set<String>> cacheMpa = new HashMap();
-            if (RedisUtils.hasKey(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey())) {
-                cacheMpa = RedisUtils.getCacheMap(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
+            if (RedisUtils.hasKey(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey())) {
+                cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
             }
             Set<String> userFuSet = CollectionUtils.isEmpty(cacheMpa.get(bo.getUid())) ? new HashSet()
                 : cacheMpa.get(bo.getUid());
             userFuSet.add(bo.getTypeId().toString());
             cacheMpa.put(bo.getUid(), userFuSet);
-            RedisUtils.setCacheMap(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
+            RedisUtils.setCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
 
             //文章点赞用户列表加1
             Map<String, Set<String>> articleMap = new HashMap();
-            if (RedisUtils.hasKey(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey())) {
-                articleMap = RedisUtils.getCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+            if (RedisUtils.hasKey(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey())) {
+                articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
             }
             Set<String> articleSet = CollectionUtils.isEmpty(articleMap.get(bo.getTypeId().toString())) ? new HashSet()
                 : articleMap.get(bo.getTypeId().toString());
             articleSet.add(bo.getUid());
             articleMap.put(bo.getTypeId().toString(), articleSet);
-            RedisUtils.setCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
+            RedisUtils.setCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
             //记录文章亲密度
             articleInformationService.recordArticleIntimacy(bo.getUid(),bo.getLabelId(),2D);
         }
@@ -208,20 +208,20 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             //            文章点赞总数减一
             Map<String, Object> mapCount = new HashMap();
             mapCount.put(bo.getTypeId().toString(), bo.getFabulousSum() - 1);
-            RedisUtils.setCacheMap(RedisKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey(), mapCount);
+            RedisUtils.setCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey(), mapCount);
             //            用户点赞的文章减一
-            Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
+            Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
             Set<String> userFuSet = cacheMpa.get(bo.getUid());
             userFuSet.remove(bo.getTypeId().toString());
             cacheMpa.put(bo.getUid(), userFuSet);
-            RedisUtils.setCacheMap(RedisKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
+            RedisUtils.setCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
 
             //文章点赞人加一
-            Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+            Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
             Set<String> articleSet = articleMap.get(bo.getTypeId().toString());
             articleSet.remove(bo.getUid());
             articleMap.put(bo.getTypeId().toString(), articleSet);
-            RedisUtils.setCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
+            RedisUtils.setCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
             //记录亲密度
             articleInformationService.recordArticleIntimacy(bo.getUid(),bo.getLabelId(),-2D);
             //发送消息

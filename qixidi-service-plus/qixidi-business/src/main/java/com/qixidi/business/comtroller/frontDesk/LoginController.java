@@ -7,7 +7,7 @@ import cn.dev33.satoken.util.SaResult;
 import com.light.core.config.justAuth.JustAuthConfig;
 import com.light.core.constant.Constants;
 import com.light.core.core.domain.R;
-import com.light.core.enums.UserStatus;
+import com.qixidi.auth.domain.enums.UserStatus;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.controller.BaseController;
 import com.qixidi.auth.domain.entity.TripartiteUser;
@@ -67,7 +67,7 @@ public class LoginController extends BaseController {
         Map<String, Object> ajax = new HashMap<>();
         // 登录
         iTripartiteUserService.frontDeskLogin(loginUserMain);
-        String uuid = LoginHelper.getUserMapId().get("uuId");
+        String uuid = LoginHelper.getTripartiteUuid();
         //返回token
         ajax.put(Constants.TOKEN, StpUtil.getTokenValue());
         ajax.put("uuid", uuid);
@@ -196,31 +196,20 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/oauth/callback/{source}")
     public Object login(@PathVariable("source") String source, AuthCallback callback, HttpServletResponse response) throws
-        IOException {
+            IOException {
         AuthRequest authRequest = iTripartiteUserService.getAuthRequest(source);
         AuthResponse<AuthUser> authResponse = authRequest.login(callback);
         if (authResponse == null) {
             return R.fail(500, "授权失败");
         }
-        TripartiteUser tripartiteUser;
-        tripartiteUser = new TripartiteUser().setUuid(authResponse.getData().getUuid())
-            .setUsername(authResponse.getData().getUsername())
-            .setNickname(authResponse.getData().getNickname())
-            .setAvatar(authResponse.getData().getAvatar())
-            .setBlog(authResponse.getData().getBlog())
-            .setCompany(authResponse.getData().getCompany())
-            .setLocation(authResponse.getData().getLocation())
-            .setEmail(authResponse.getData().getEmail())
-            .setGender(authResponse.getData().getGender().getCode())
-            .setRemark(authResponse.getData().getRemark())
-            .setSource(authResponse.getData().getSource())
-            .setUpdateTime(new Date())
-            .setRoleId(UserStatus.GENERAL_USER.getLogCode())
-            .setUserType(justAuthConfig.getTripartiteUserType());
+        TripartiteUser tripartiteUser = new TripartiteUser(authResponse);
+        tripartiteUser.setUpdateTime(new Date())
+                .setRoleId(UserStatus.GENERAL_USER.getLogCode())
+                .setUserType(justAuthConfig.getTripartiteUserType());
         iTripartiteUserService.oauthLogin(tripartiteUser);
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
         response.sendRedirect(justAuthConfig.getTransferUrl() + "?key=" + authResponse.getData().getUuid()
-            + "&token=" + saTokenInfo.getTokenValue());
+                + "&token=" + saTokenInfo.getTokenValue());
         return authResponse;
     }
 
@@ -236,14 +225,11 @@ public class LoginController extends BaseController {
             ajax.put("isLogin", false);
             return R.ok(ajax);
         }
-        String uuidString = StpUtil.getLoginIdAsString();
-        if (uuidString == null) {
+        String uuid = LoginHelper.getTripartiteUuid();
+        if (uuid == null) {
             ajax.put("isLogin", false);
             return R.ok(ajax);
         }
-        int index = uuidString.indexOf(":");
-        String uuid = uuidString.substring(index + 1);
-        String type = uuidString.substring(0, index);
         TripartiteUserVo tripartiteUser = iTripartiteUserService.queryById(uuid);
         tripartiteUser.setUuid(uuid);
         ajax.put("user", tripartiteUser);
@@ -287,6 +273,12 @@ public class LoginController extends BaseController {
     }
 
 
+    /**
+     * websocket 是否链接
+     *
+     * @param userid
+     * @return
+     */
     @GetMapping("/websocket/is-online/{userid}")
     public R<UserSimpleInfoVo> isOnline(@PathVariable(name = "userid") String userid) {
         UserSimpleInfoVo userInformation = iTripartiteUserService.isOnline(userid);

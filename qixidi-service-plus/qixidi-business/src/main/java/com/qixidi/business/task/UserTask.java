@@ -2,8 +2,8 @@ package com.qixidi.business.task;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.light.core.constant.SystemConstant;
-import com.light.core.enums.CountUserType;
-import com.light.core.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.CountUserType;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.light.core.utils.email.MailUtils;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;

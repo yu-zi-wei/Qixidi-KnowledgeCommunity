@@ -17,7 +17,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.CountUserType;
+import com.qixidi.business.domain.enums.CountUserType;
 import com.light.core.enums.MsgEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

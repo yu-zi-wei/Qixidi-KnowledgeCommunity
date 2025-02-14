@@ -11,7 +11,7 @@ import com.qixidi.business.service.dictum.DictumCommentService;
 import com.light.core.core.domain.PageQuery;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.StatusEnums;
+import com.qixidi.business.domain.enums.StatusEnums;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

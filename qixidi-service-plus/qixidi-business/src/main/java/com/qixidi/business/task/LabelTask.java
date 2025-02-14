@@ -8,7 +8,7 @@ import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.light.core.constant.SystemConstant;
-import com.light.core.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -33,6 +33,7 @@ import com.light.core.utils.ip.AddressUtils;
 import com.light.exception.ServiceException;
 import com.light.redission.utils.RedisUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.domain.enums.UserStatus;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
@@ -43,6 +44,8 @@ import com.qixidi.business.domain.bo.user.UserInfoBo;
 import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.entity.user.UserInformation;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.UserFollowType;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.domain.vo.user.UserFollowVo;
@@ -324,7 +327,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
 //校验手机号
         phoneMatches(registerUserMain.getPhone(), 1);
 //        验证码校验
-        String redisKey = String.format(RedisKeyEnums.PHONE_CAPTCHA.getKey(), registerUserMain.getPhone());
+        String redisKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), registerUserMain.getPhone());
         codeVerification(redisKey, registerUserMain.getCode());
 //        手机号校验
         Long phone = baseMapper.selectCount(new QueryWrapper<TripartiteUser>()
@@ -390,7 +393,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     @Override
     public R sendOutCode(String email, String mag) {
         phoneMatches(email, 2);
-        String mailCaptchaKey = String.format(RedisKeyEnums.MAIL_CAPTCHA.getKey(), email);
+        String mailCaptchaKey = String.format(RedisBusinessKeyEnums.MAIL_CAPTCHA.getKey(), email);
         if (RedisUtils.hasKey(mailCaptchaKey)) throw new ServiceException(MsgEnums.CAPTCHA_ALREADY_EXISTS.getValue());
         String code = RandomUtil.randomNumbers(5);
         StringBuffer mags = new StringBuffer();
@@ -490,9 +493,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
 
     @Override
     public R sendPhoneCode(String phone, String mag, HttpServletRequest request) throws Exception {
-        String CAPTCHA_DAILY_LIMIT_PHONE = String.format(RedisKeyEnums.CAPTCHA_DAILY_LIMIT_PHONE.getKey(), phone);
+        String CAPTCHA_DAILY_LIMIT_PHONE = String.format(RedisBusinessKeyEnums.CAPTCHA_DAILY_LIMIT_PHONE.getKey(), phone);
         String ip = AddressUtils.gainIp(request);
-        String CAPTCHA_DAILY_LIMIT_IP = String.format(RedisKeyEnums.CAPTCHA_DAILY_LIMIT_IP.getKey(), ip);
+        String CAPTCHA_DAILY_LIMIT_IP = String.format(RedisBusinessKeyEnums.CAPTCHA_DAILY_LIMIT_IP.getKey(), ip);
         Long phoneLimit = RedisUtils.getCacheObject(CAPTCHA_DAILY_LIMIT_PHONE);
         Long ipLimit = RedisUtils.getCacheObject(CAPTCHA_DAILY_LIMIT_IP);
         if (phoneLimit == null) phoneLimit = 0L;
@@ -500,7 +503,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         if (phoneLimit >= 10 || ipLimit >= 10) {
             throw new ServiceException(MsgEnums.VERIFICATION_CODE_UNDERCOUNT.getValue());
         }
-        String mailCaptchaKey = String.format(RedisKeyEnums.PHONE_CAPTCHA.getKey(), phone);
+        String mailCaptchaKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), phone);
         if (RedisUtils.hasKey(mailCaptchaKey)) throw new ServiceException(MsgEnums.CAPTCHA_ALREADY_EXISTS.getValue());
         String code = RandomUtil.randomNumbers(5);
         Boolean aBoolean = smsSendingConfig.SendSmsCode(phone, code);
@@ -545,7 +548,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
 //        手机号校验
         phoneMatches(phoneBinding.getPhone(), 1);
 //        验证码校验
-        String redisKey = String.format(RedisKeyEnums.PHONE_CAPTCHA.getKey(), phoneBinding.getPhone());
+        String redisKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), phoneBinding.getPhone());
         codeVerification(redisKey, phoneBinding.getCode());
         //清除redis验证码
         RedisUtils.deleteObject(redisKey);
@@ -567,9 +570,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             if (collect.get(bo.getEmail()) != null && !collect.get(bo.getEmail()).equals(bo.getUuid()))
                 throw new ServiceException("该邮箱已被使用");
 //            验证码校验
-            String redisKey = String.format(RedisKeyEnums.MAIL_CAPTCHA.getKey(), bo.getEmail());
+            String redisKey = String.format(RedisBusinessKeyEnums.MAIL_CAPTCHA.getKey(), bo.getEmail());
             if (bo.getType().equals(2)) {//换绑
-                redisKey = String.format(RedisKeyEnums.MAIL_CAPTCHA.getKey(), bo.getOriginalData());
+                redisKey = String.format(RedisBusinessKeyEnums.MAIL_CAPTCHA.getKey(), bo.getOriginalData());
             }
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
@@ -583,7 +586,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             if (collect.get(bo.getPhone()) != null && !collect.get(bo.getPhone()).equals(bo.getUuid()))
                 throw new ServiceException("手机号已被使用");
 
-            String redisKey = String.format(RedisKeyEnums.PHONE_CAPTCHA.getKey(), bo.getOriginalData());
+            String redisKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), bo.getOriginalData());
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
             int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()

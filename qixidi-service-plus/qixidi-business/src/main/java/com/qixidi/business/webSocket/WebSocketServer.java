@@ -1,6 +1,6 @@
 package com.qixidi.business.webSocket;
 
-import com.light.core.enums.WebSocketEnum;
+import com.qixidi.business.domain.enums.WebSocketEnum;
 import com.light.core.utils.JsonUtils;
 import com.qixidi.business.domain.SocketDomain;
 import com.qixidi.business.selector.webSocket.WebSocketSelector;

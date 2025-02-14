@@ -4,7 +4,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
-import com.light.core.enums.RedisKeyEnums;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.light.redission.utils.RedisUtils;
 import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
 import com.qixidi.business.domain.bo.dictum.DictumGroupBo;
@@ -101,9 +101,9 @@ public class WhDictumInfoController {
      */
     @GetMapping("/popular/authors")
     public R<Set> popularAuthors() {
-        Boolean aBoolean = RedisUtils.hasKey(RedisKeyEnums.POPULAR_AUTHORS.getKey());
+        Boolean aBoolean = RedisUtils.hasKey(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
         if (!aBoolean) R.ok(null);
-        Set<Object> cacheSet = RedisUtils.getCacheSet(RedisKeyEnums.POPULAR_AUTHORS.getKey());
+        Set<Object> cacheSet = RedisUtils.getCacheSet(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
         return R.ok(cacheSet);
     }
 
@@ -112,9 +112,9 @@ public class WhDictumInfoController {
      */
     @GetMapping("/popular/label")
     public R<Set> popularLabel() {
-        Boolean aBoolean = RedisUtils.hasKey(RedisKeyEnums.POPULAR_LABEL.getKey());
+        Boolean aBoolean = RedisUtils.hasKey(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
         if (!aBoolean) R.ok(null);
-        Set<String> cacheSet = RedisUtils.getCacheSet(RedisKeyEnums.POPULAR_LABEL.getKey());
+        Set<String> cacheSet = RedisUtils.getCacheSet(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
         return R.ok(cacheSet);
     }
 

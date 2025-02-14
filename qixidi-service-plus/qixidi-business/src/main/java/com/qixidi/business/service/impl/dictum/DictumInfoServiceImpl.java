@@ -13,7 +13,7 @@ import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.qixidi.business.service.dictum.IDictumInfoService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.StatusEnums;
+import com.qixidi.business.domain.enums.StatusEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

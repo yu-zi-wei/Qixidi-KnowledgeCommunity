@@ -20,12 +20,12 @@ spring:
           username: ${datasource.datasource.master.username}
           password: ${datasource.datasource.master.password}
         # 从库数据源
-      #        slave_lover:
-      #          lazy: true
-      #          driverClassName: com.mysql.cj.jdbc.Driver
-      #          url: ${datasource.datasource.slave_lover.url}/lover_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&rewriteBatchedStatements=true&allowMultiQueries=true
-      #          username: ${datasource.datasource.slave_lover.username}
-      #          password: ${datasource.datasource.slave_lover.password}
+        slave_lover:
+          lazy: true
+          driverClassName: com.mysql.cj.jdbc.Driver
+          url: ${datasource.datasource.slave_lover.url}/lover_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&rewriteBatchedStatements=true&allowMultiQueries=true
+          username: ${datasource.datasource.slave_lover.username}
+          password: ${datasource.datasource.slave_lover.password}
       druid:
         # 初始连接数
         initialSize: 5

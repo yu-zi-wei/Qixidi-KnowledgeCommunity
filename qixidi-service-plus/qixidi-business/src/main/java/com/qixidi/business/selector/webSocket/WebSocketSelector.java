@@ -1,7 +1,7 @@
 package com.qixidi.business.selector.webSocket;
 
 
-import com.light.core.enums.WebSocketEnum;
+import com.qixidi.business.domain.enums.WebSocketEnum;
 import com.light.core.utils.context.SpringContext;
 
 import java.util.Map;

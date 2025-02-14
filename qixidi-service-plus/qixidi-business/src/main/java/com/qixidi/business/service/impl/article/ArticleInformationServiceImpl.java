@@ -13,6 +13,7 @@ import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.entity.user.UserFollow;
+import com.qixidi.business.domain.enums.*;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionRecordVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
@@ -32,9 +33,8 @@ import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.*;
-import com.light.core.enums.article.ArticleAuditStateType;
-import com.light.core.enums.article.ArticleUpdateType;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
+import com.qixidi.business.domain.enums.article.ArticleUpdateType;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
@@ -189,11 +189,11 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public void articleReview(String Title, String Content, String Abstract, Long id, String uuid) {
         if (id == null) return;
         //文章审核
-        List<String> cacheList = RedisUtils.getCacheList(RedisKeyEnums.BLOCKING_WORDS.getKey());
+        List<String> cacheList = RedisUtils.getCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey());
         if (CollectionUtils.isEmpty(cacheList)) {
             //        存入缓存
             List<String> stringList = toShieldWordMapper.selectKeyword();
-            RedisUtils.setCacheList(RedisKeyEnums.BLOCKING_WORDS.getKey(), stringList);
+            RedisUtils.setCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey(), stringList);
             cacheList = stringList;
         }
         WordFilter wordFilter = new WordFilter(cacheList);
@@ -368,7 +368,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 searchRecordsMapper.insert(searchRecords);
             });
         }
-        Set<Object> labelSet = RedisUtils.getZset(String.format(RedisKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), 0, 10);
+        Set<Object> labelSet = RedisUtils.getZset(String.format(RedisBusinessKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), 0, 10);
         String result = StringUtils.join(labelSet, ", ");
         return baseMapper.articleRecommendList(bo, result, pageQuery.build());
     }
@@ -411,12 +411,12 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return details;
 //        获取点赞数据
-        Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
+        Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
         if (CollectionUtils.isNotEmpty(cacheMap)) {
             details.setLikeTimes(cacheMap.get(details.getId().toString()) == null
                 ? details.getLikeTimes() : Long.valueOf(cacheMap.get(details.getId().toString()).toString()));
         }
-        Map<String, Set<String>> FaMap = RedisUtils.getCacheMap(RedisKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+        Map<String, Set<String>> FaMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
         if (CollectionUtils.isNotEmpty(FaMap)) {
             details.setFabulousUserSet(FaMap.get(details.getId().toString()));
         }
@@ -526,7 +526,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String[] split = labelId.split(",");
         for (String label : split) {
             if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotEmpty(label)) {
-                RedisUtils.zAddScore(String.format(RedisKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), label, score);
+                RedisUtils.zAddScore(String.format(RedisBusinessKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), label, score);
             }
         }
     }
@@ -535,7 +535,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public Boolean addArticleBrowse(Long id, String label, HttpServletRequest request) {
         String ip = AddressUtils.gainIp(request);
         if (ip == null) return true;
-        String key = String.format(RedisKeyEnums.ARTICLE_GLANCE_OVER.getKey(), id, ip);
+        String key = String.format(RedisBusinessKeyEnums.ARTICLE_GLANCE_OVER.getKey(), id, ip);
         if (RedisUtils.hasKey(key)) return true;
         RedisUtils.setCacheObject(key, key, 30, TimeUnit.MINUTES);
         String uuid = LoginHelper.getTripartiteUuid();

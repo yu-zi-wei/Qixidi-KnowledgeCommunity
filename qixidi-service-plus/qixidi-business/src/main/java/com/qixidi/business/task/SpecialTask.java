@@ -8,7 +8,7 @@ import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.light.core.constant.SystemConstant;
-import com.light.core.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.light.core.utils.email.MailUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;

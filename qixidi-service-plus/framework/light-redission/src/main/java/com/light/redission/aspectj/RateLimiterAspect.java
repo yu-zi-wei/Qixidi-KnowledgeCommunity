@@ -1,6 +1,6 @@
 package com.light.redission.aspectj;
 
-import com.light.core.enums.LimitType;
+import com.light.redission.domain.enums.LimitType;
 import com.light.core.utils.ServletUtils;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RateLimiter;

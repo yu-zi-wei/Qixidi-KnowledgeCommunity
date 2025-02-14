@@ -8,8 +8,8 @@ import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.light.core.constant.SystemConstant;
-import com.light.core.enums.RedisKeyEnums;
-import com.light.core.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -81,8 +81,8 @@ public class DictumTask {
                     }).collect(Collectors.toList());
 //        默认存前20个
                 Set<Map<String, String>> set = collect.stream().limit(20).collect(Collectors.toSet());
-                RedisUtils.deleteObject(RedisKeyEnums.POPULAR_AUTHORS.getKey());
-                RedisUtils.setCacheSet(RedisKeyEnums.POPULAR_AUTHORS.getKey(), set);
+                RedisUtils.deleteObject(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
+                RedisUtils.setCacheSet(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey(), set);
                 log.info("热门作者数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), set);
             }
             List<DictumInfoVo> listLabel = dictumInfoMapper.selectAuthorLabel();
@@ -107,8 +107,8 @@ public class DictumTask {
 
                 //        默认存前20个
                 Set<Map<String, String>> setLabel = collectLabel.stream().limit(20).collect(Collectors.toSet());
-                RedisUtils.deleteObject(RedisKeyEnums.POPULAR_LABEL.getKey());
-                RedisUtils.setCacheSet(RedisKeyEnums.POPULAR_LABEL.getKey(), setLabel);
+                RedisUtils.deleteObject(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
+                RedisUtils.setCacheSet(RedisBusinessKeyEnums.POPULAR_LABEL.getKey(), setLabel);
                 log.info("热门标签数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), setLabel);
             }
         } catch (Exception e) {

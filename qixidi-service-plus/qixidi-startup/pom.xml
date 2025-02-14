@@ -66,6 +66,11 @@
             <groupId>com.light</groupId>
             <artifactId>qixidi-business</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-love</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>

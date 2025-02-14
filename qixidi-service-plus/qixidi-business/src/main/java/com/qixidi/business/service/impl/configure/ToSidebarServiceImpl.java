@@ -9,7 +9,7 @@ import com.qixidi.business.mapper.configure.ToSidebarMapper;
 import com.qixidi.business.service.configure.IToSidebarService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.RedisKeyEnums;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.light.core.utils.JsonUtils;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
@@ -127,7 +127,7 @@ public class ToSidebarServiceImpl implements IToSidebarService {
 
     @Override
     public List<ToSidebarVo> sidebarList(ToNavigationBo bo) {
-        Object cacheObject = RedisUtils.getCacheObject(RedisKeyEnums.SIDEBAR_CONFIGURATION.getKey());
+        Object cacheObject = RedisUtils.getCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey());
         if (ObjectUtils.isNotEmpty(cacheObject)) {
             List<ToSidebarVo> toSidebarVos = JsonUtils.castList(cacheObject, ToSidebarVo.class);
             List<ToSidebarVo> collect = toSidebarVos.stream().filter(item -> item.getType().equals(bo.getType())).collect(Collectors.toList());
@@ -142,7 +142,7 @@ public class ToSidebarServiceImpl implements IToSidebarService {
     @Override
     public void sidebarList() {
         List<ToSidebarVo> toSidebarVos = sidebarList(new QueryWrapper<ToSidebar>().orderByAsc("`order`"));
-        RedisUtils.setCacheObject(RedisKeyEnums.SIDEBAR_CONFIGURATION.getKey(), toSidebarVos);
+        RedisUtils.setCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey(), toSidebarVos);
     }
 
     public List<ToSidebarVo> sidebarList(QueryWrapper<ToSidebar> lqw) {

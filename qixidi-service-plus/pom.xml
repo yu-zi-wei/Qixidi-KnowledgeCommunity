@@ -63,6 +63,7 @@
         <module>qixidi-system</module>
         <module>qixidi-auth</module>
         <module>qixidi-business</module>
+        <module>qixidi-love</module>
     </modules>
 
     <dependencyManagement>
@@ -130,6 +131,13 @@
                 <artifactId>qixidi-business</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-love</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- ========================================== 其他依赖=================================-->
 
             <!-- alipay 支付宝支付-->

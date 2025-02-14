@@ -4,14 +4,18 @@ package com.qixidi.auth.domain.entity;
 import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import me.zhyd.oauth.model.AuthResponse;
+import me.zhyd.oauth.model.AuthUser;
 
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @TableName("b_user_main")
 @Accessors(chain = true)
 public class TripartiteUser {
@@ -115,4 +119,17 @@ public class TripartiteUser {
         return userType + LoginHelper.JOIN_CODE + uuid;
     }
 
+    public TripartiteUser(AuthResponse<AuthUser> authResponse) {
+        this.uuid = authResponse.getData().getUuid();
+        this.username = authResponse.getData().getUsername();
+        this.nickname = authResponse.getData().getNickname();
+        this.avatar = authResponse.getData().getAvatar();
+        this.blog = authResponse.getData().getBlog();
+        this.company = authResponse.getData().getCompany();
+        this.location = authResponse.getData().getLocation();
+        this.email = authResponse.getData().getEmail();
+        this.gender = authResponse.getData().getGender().getCode();
+        this.remark = authResponse.getData().getRemark();
+        this.source = authResponse.getData().getSource();
+    }
 }

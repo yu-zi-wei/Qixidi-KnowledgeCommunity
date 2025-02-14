@@ -2,7 +2,7 @@ package com.light.redission.annotation;
 
 
 import com.light.core.constant.Constants;
-import com.light.core.enums.LimitType;
+import com.light.redission.domain.enums.LimitType;
 
 import java.lang.annotation.*;
 

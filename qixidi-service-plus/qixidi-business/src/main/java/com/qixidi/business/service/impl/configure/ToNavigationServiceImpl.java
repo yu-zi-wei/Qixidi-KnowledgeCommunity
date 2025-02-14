@@ -10,7 +10,7 @@ import com.qixidi.business.mapper.configure.ToNavigationMapper;
 import com.qixidi.business.service.configure.IToNavigationService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.RedisKeyEnums;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -64,7 +64,7 @@ public class ToNavigationServiceImpl implements IToNavigationService {
         LambdaQueryWrapper<ToNavigation> lqw = Wrappers.lambdaQuery();
         lqw.orderByAsc(ToNavigation::getOrder);
         TableDataInfo<ToNavigationVo> toNavigationVoTableDataInfo = queryPageList(lqw);
-        RedisUtils.setCacheObject(RedisKeyEnums.NAVIGATION_BAR_CONFIGURATION.getKey(), toNavigationVoTableDataInfo.getRows());
+        RedisUtils.setCacheObject(RedisBusinessKeyEnums.NAVIGATION_BAR_CONFIGURATION.getKey(), toNavigationVoTableDataInfo.getRows());
     }
 
     public TableDataInfo<ToNavigationVo> queryPageList(LambdaQueryWrapper<ToNavigation> lqw) {

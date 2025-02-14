@@ -16,9 +16,9 @@ import com.qixidi.business.selector.webSocket.WebSocketSelector;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.RedisKeyEnums;
-import com.light.core.enums.WebSocketEnum;
-import com.light.core.enums.news.NewsType;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.WebSocketEnum;
+import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
@@ -166,7 +166,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
 //        查询系统消息
 //        Set<String> cacheSet = RedisUtils.getCacheSet(RedisKeyEnums.SYSTEM_MESSAGES_READ_LIST.getKey());
         List<NewsSystemInfoVo> newsSystemList = newsSystemInfoMapper.selectBaseUid(uid);
-        String key = String.format(RedisKeyEnums.USER_SYSTEM_MESSAGES.getKey(), uid);
+        String key = String.format(RedisBusinessKeyEnums.USER_SYSTEM_MESSAGES.getKey(), uid);
         Set<Long> cacheSet = RedisUtils.getCacheSet(key);
 
         List<NewsUserRecord> systemNewsList = new ArrayList<>();
@@ -227,7 +227,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         String uuid = LoginHelper.getTripartiteUuid();
         if (bo.getType() == NewsType.SYSTEM_NEWS.getCode()) {
             List<NewsSystemInfoVo> newsSystemList = newsSystemInfoMapper.selectBase();
-            String key = String.format(RedisKeyEnums.USER_SYSTEM_MESSAGES.getKey(), uuid);
+            String key = String.format(RedisBusinessKeyEnums.USER_SYSTEM_MESSAGES.getKey(), uuid);
             Set<Long> cacheSet = RedisUtils.getCacheSet(key);
             if (CollectionUtils.isNotEmpty(newsSystemList)) {
                 newsSystemList.forEach(item -> {
