@@ -1,7 +1,6 @@
 package com.qixidi.business.service.webSocket;
 
 import com.light.core.utils.JsonUtils;
-import com.qixidi.business.domain.SocketDomain;
 import com.qixidi.business.domain.enums.WebSocketEnum;
 import com.qixidi.business.selector.webSocket.WebSocketSelector;
 import jakarta.websocket.OnClose;
@@ -28,7 +27,7 @@ public class WebSocketServer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
     //Map用来存储已连接的客户端信息
-    private static ConcurrentHashMap<String, SocketDomain> websocketMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Session> websocketMap = new ConcurrentHashMap<>();
     //当前客户端名称
     private String userId = "";
 
@@ -71,12 +70,8 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId, @PathParam("type") Integer type) {
         this.userId = userId;
-        SocketDomain socketDomain = new SocketDomain();
-        socketDomain.setSession(session);
-        socketDomain.setUri(session.getRequestURI().toString());
-        websocketMap.put(userId, socketDomain);
-        logger.info("用户连接：{}，人数:{}", userId, websocketMap.size());
-        logger.info("type:", type);
+        websocketMap.put(userId, session);
+        logger.info("用户创建连接：{}，type：{}，当前在线链接数:{}", userId, type, websocketMap.size());
         try {
             if (type == 1) {
                 WebSocketSelector.execute(userId, WebSocketEnum.INSIDE_NOTICE);
@@ -88,6 +83,9 @@ public class WebSocketServer {
         }
     }
 
+    /**
+     * 关闭链接
+     */
     @OnClose
     public void onClose() {
         if (websocketMap.containsKey(userId)) {
@@ -96,6 +94,12 @@ public class WebSocketServer {
         }
     }
 
+    /**
+     * 服务端接收到消息
+     *
+     * @param message
+     * @param session
+     */
     @OnMessage
     public void onMessage(String message, Session session) {
         if (StringUtil.isNotEmpty(message)) {
@@ -104,18 +108,19 @@ public class WebSocketServer {
     }
 
     /**
-     * 指定用户发送消息
+     * 向指定客户端发送消息
      *
      * @param userId
-     * @param message
+     * @param message Object
      */
     public void sendMessageToUser(String userId, Object message) {
         // 获取该 userId 对应的 SocketDomain 对象
-        SocketDomain socketDomain = websocketMap.get(userId);
+        Session session = websocketMap.get(userId);
         try {
-            if (socketDomain != null) {
+            if (session != null) {
                 // 向客户端发送消息
-                socketDomain.getSession().getAsyncRemote().sendObject(JsonUtils.toJsonString(message));
+                session.getAsyncRemote().sendText(JsonUtils.toJsonString(message));
+//                session.getAsyncRemote().sendObject(message);// TODO:客户端接收失败，待查
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,13 +128,19 @@ public class WebSocketServer {
         }
     }
 
+    /**
+     * 向指定客户端发送消息
+     *
+     * @param userId
+     * @param message String
+     */
     public void sendMessageToUser(String userId, String message) {
         // 获取该 userId 对应的 SocketDomain 对象
-        SocketDomain socketDomain = websocketMap.get(userId);
+        Session session = websocketMap.get(userId);
         try {
-            if (socketDomain != null) {
+            if (session != null) {
                 // 向客户端发送消息
-                socketDomain.getSession().getAsyncRemote().sendObject(message);
+                session.getAsyncRemote().sendText(message);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,10 +149,15 @@ public class WebSocketServer {
     }
 
 
-    //给除了当前客户端的其他客户端发消息
+    /**
+     * 给除了当前客户端的其他客户端发消息
+     *
+     * @param message
+     * @param fromSession
+     */
     private void sendMessageToAllExpectSelf(String message, Session fromSession) {
-        for (Map.Entry<String, SocketDomain> client : websocketMap.entrySet()) {
-            Session toSeesion = client.getValue().getSession();
+        for (Map.Entry<String, Session> client : websocketMap.entrySet()) {
+            Session toSeesion = client.getValue();
             if (!toSeesion.getId().equals(fromSession.getId()) && toSeesion.isOpen()) {
                 toSeesion.getAsyncRemote().sendText(message);
                 logger.info("服务端发送消息给{}:{}", client.getKey(), message);
@@ -149,10 +165,14 @@ public class WebSocketServer {
         }
     }
 
-    //给包括当前客户端的全部客户端发送消息
+    /**
+     * 给包括当前客户端的全部客户端发送消息
+     *
+     * @param message
+     */
     private void sendMessageToAll(String message) {
-        for (Map.Entry<String, SocketDomain> client : websocketMap.entrySet()) {
-            Session toSeesion = client.getValue().getSession();
+        for (Map.Entry<String, Session> client : websocketMap.entrySet()) {
+            Session toSeesion = client.getValue();
             if (toSeesion.isOpen()) {
                 toSeesion.getAsyncRemote().sendText(message);
                 logger.info("服务端发送消息给{}:{}", client.getKey(), message);
@@ -160,7 +180,11 @@ public class WebSocketServer {
         }
     }
 
-    //给外部调用的方法接口
+    /**
+     * 给外部调用的方法接口（群发消息）
+     *
+     * @param Message
+     */
     public void sendAll(String Message) {
         sendMessageToAll(Message);
     }
