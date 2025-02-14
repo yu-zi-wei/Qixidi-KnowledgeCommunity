@@ -508,11 +508,13 @@ export default {
       if (uuid == null) return;
       const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/${uuid}/${1}`;
       this.socket = new WebSocket(url);
-      this.socket.onopen = () => {
+      this.socket.onopen = (event) => {
         // 在这里可以执行连接成功后的操作
+        console.log("链接成功"+JSON.stringify(event))
       };
 
       this.socket.onmessage = (event) => {
+        console.log("event.data===>"+event)
         let parse = JSON.parse(event.data);
         this.userNewsList = parse;
         let newsSums = 0;

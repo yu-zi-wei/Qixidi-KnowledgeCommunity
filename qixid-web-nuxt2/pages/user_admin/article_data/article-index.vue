@@ -212,7 +212,7 @@ export default {
       this.queryParams.pageNum = 1;
       this.queryParams.auditState = this.state;
       this.queryParams.articleTitle = this.keyword;
-      this.$API("/user/article/list/", this.$get(), this.queryParams).then(res => {
+      this.$API("/user/article/list", this.$get(), this.queryParams).then(res => {
         this.articleList = res.data.records;
         this.total = res.data.total;
         this.loading = false;

@@ -1,6 +1,6 @@
 const defaultConfig = {
   //默认主题颜色
-  THEME_COLOR: '#5C56E3',
+  THEME_COLOR: '#1fab89',
 }
 
 const config = {
