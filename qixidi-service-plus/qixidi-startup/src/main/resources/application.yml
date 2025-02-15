@@ -37,7 +37,7 @@ spring:
     active: @profiles.active@
   config:
     # 读取 config.properties 配置文件用于填充 application-xx.yml
-    import: "classpath:config/${spring.profiles.active}/config.properties"
+    import: "classpath:applicationConfig/${spring.profiles.active}/config.properties"
   # 文件上传
   servlet:
     multipart:
