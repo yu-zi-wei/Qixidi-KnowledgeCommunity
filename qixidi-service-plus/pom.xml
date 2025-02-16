@@ -29,13 +29,17 @@
         <hutool.version>5.8.27</hutool.version>
         <guava.version>30.0-jre</guava.version>
 
+        <!--       easyexcel工具 -->
         <easyexcel.version>3.3.4</easyexcel.version>
 
         <!--敏感词相关-->
         <commons-collections4.version>4.4</commons-collections4.version>
         <assertj-core.version>3.25.3</assertj-core.version>
 
+        <!--        第三方登录-->
         <JustAuth.version>1.16.5</JustAuth.version>
+
+        <!--    websocket    -->
         <spring-boot-starter-websocket.version>3.4.2</spring-boot-starter-websocket.version>
 
         <aliyun.dysmsapi20170525.version>3.1.1</aliyun.dysmsapi20170525.version>
@@ -47,15 +51,19 @@
         <druid-spring-boot-3-starter.version>1.2.18</druid-spring-boot-3-starter.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
         <redisson.version>3.31.0</redisson.version>
+        <mysql-connector-java.version>8.0.31</mysql-connector-java.version>
 
         <!-- OSS 配置 -->
         <aliyun.oss.version>3.14.0</aliyun.oss.version>
-        <minio.version>8.3.8</minio.version>
         <alipay-sdk-java.version>4.15.6.ALL</alipay-sdk-java.version>
+
+        <!-- minio 配置 -->
+        <minio.version>8.3.8</minio.version>
 
         <!-- Sa-Token libs -->
         <sa-token-spring-boot3-starter.version>1.37.0</sa-token-spring-boot3-starter.version>
         <sa-token-redis-jackson.version>1.37.0</sa-token-redis-jackson.version>
+
     </properties>
 
     <modules>
@@ -320,7 +328,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.31</version>
+                <version>${mysql-connector-java.version}</version>
             </dependency>
 
             <dependency>
