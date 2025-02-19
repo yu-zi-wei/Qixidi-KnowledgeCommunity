@@ -77,19 +77,18 @@ spring.datasource.druid:
 
 --- # redis 单机配置(单机与集群只能开启一个另一个需要注释掉)
 spring:
-  redis:
-    # 地址
-    host: ${config.redis.host}
-    # 端口，默认为6379
-    port: ${config.redis.port}
-    # 数据库索引
-    database: ${config.redis.database}
-    # 密码
-    password: ${config.redis.password}
-    # 连接超时时间
-    timeout: 10s
-    # 是否开启ssl
-    ssl: false
+  data:
+    redis:
+      # 地址
+      host: ${config.redis.host}
+      # 端口，默认为6379
+      port: ${config.redis.port}
+      # 数据库索引
+      database: ${config.redis.database}
+      # 密码
+      password: ${config.redis.password}
+      # 连接超时时间
+      timeout: 10s
 
 redisson:
   # 线程池数量
@@ -157,7 +156,7 @@ JustAuth:
     gitee:
       clientId: ${config.JustAuth.platform.gitee.clientId}
       clientSecret: ${config.JustAuth.platform.gitee.clientSecret}
-#      登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
+      #      登录回调地址 callBackBaseUrl/{平台} 与平台回调地址保持一致
       redirectUrl: ${config.JustAuth.platform.gitee.redirectUrl}
     baidu:
       clientId: ${config.JustAuth.platform.baidu.clientId}

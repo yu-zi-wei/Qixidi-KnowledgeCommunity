@@ -28,7 +28,6 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +44,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @RestController
 public class LoginController extends BaseController {
-    @Autowired
-    private JustAuthConfig justAuthConfig;
+    private final JustAuthConfig justAuthConfig;
     private final SysLoginService loginService;
     private final ITripartiteUserService iTripartiteUserService;
     private final WebSocketServer webSocketServer;
@@ -197,6 +195,7 @@ public class LoginController extends BaseController {
     @RequestMapping("/oauth/callback/{source}")
     public Object login(@PathVariable("source") String source, AuthCallback callback, HttpServletResponse response) throws
             IOException {
+        if (source == null) return null;
         AuthRequest authRequest = iTripartiteUserService.getAuthRequest(source);
         AuthResponse<AuthUser> authResponse = authRequest.login(callback);
         if (authResponse == null) {
@@ -208,6 +207,7 @@ public class LoginController extends BaseController {
                 .setUserType(justAuthConfig.getTripartiteUserType());
         iTripartiteUserService.oauthLogin(tripartiteUser);
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
+        //跳转到前端登录中转页，并提供token
         response.sendRedirect(justAuthConfig.getTransferUrl() + "?key=" + authResponse.getData().getUuid()
                 + "&token=" + saTokenInfo.getTokenValue());
         return authResponse;

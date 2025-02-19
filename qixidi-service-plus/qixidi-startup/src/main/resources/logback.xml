@@ -5,7 +5,8 @@
 
     <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
     <property name="console.log.pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss} %boldMagenta([%thread]) %highlight(%-5level) %green(%logger{36}%n) - %msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss} %boldMagenta([%thread]) %highlight(%-5level) %blue(%logger{36}%n) - %msg%n"/>
+
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <!-- 控制台输出 -->

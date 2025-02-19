@@ -144,8 +144,8 @@ sms:
 --- # JustAuth 第三方登录配置
 justauth:
   # 前端中转地址 与前端默认地址保持一致
-  # 本项目为：http://localhost:3000/transfer/login
-  url: ${config.JustAuth.url}
+  # 本项目为：http://127.0.0.1:9006/transfer/login
+  transferUrl: ${config.JustAuth.url}
   # 第三方登录类型 用于获取用户信息方式判断
   tripartiteUserType: tripartite_user
   #  平台APPID信息

@@ -146,6 +146,7 @@ security:
     - /**.html
     - /**.css
     - /**.js
+    - /**.ico
     # druid 监控配置
     - /druid/**
     # actuator 监控配置
