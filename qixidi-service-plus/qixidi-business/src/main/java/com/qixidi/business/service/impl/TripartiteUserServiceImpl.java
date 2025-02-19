@@ -23,7 +23,8 @@ import com.light.core.constant.SystemConstant;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.*;
+import com.light.core.enums.DeviceType;
+import com.light.core.enums.MsgEnums;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.RandomNumberUtils;
 import com.light.core.utils.SecureUtils;
@@ -31,9 +32,12 @@ import com.light.core.utils.StringUtils;
 import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.ip.AddressUtils;
 import com.light.exception.ServiceException;
+import com.light.mybatisPlus.domain.dto.UserInfoIdNameDto;
+import com.light.mybatisPlus.interfaces.UserInfoInterface;
 import com.light.redission.utils.RedisUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserStatus;
+import com.qixidi.auth.domain.model.LoginUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
@@ -83,7 +87,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class TripartiteUserServiceImpl implements ITripartiteUserService {
+public class TripartiteUserServiceImpl implements ITripartiteUserService, UserInfoInterface {
 
     private final TripartiteUserMapper baseMapper;
     private final CountUserWebsiteMapper countUserWebsiteMapper;
@@ -222,27 +226,27 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             countUserWebsiteEntity.setUuid(tripartiteUser.getUuid());
             countUserWebsiteMapper.insert(countUserWebsiteEntity);
             UserInformation userInformation = new UserInformation()
-                .setUuid(tripartiteUser.getUuid())
-                .setNickname(tripartiteUser.getUsername())
-                .setCreateTime(new Date())
-                .setUpdateId(tripartiteUser.getUuid());
+                    .setUuid(tripartiteUser.getUuid())
+                    .setNickname(tripartiteUser.getUsername())
+                    .setCreateTime(new Date())
+                    .setUpdateId(tripartiteUser.getUuid());
             int insert = userInformationMapper.insert(userInformation);
             if (insert > 0) {
                 //            发送邮件
                 executorService.execute(() -> {
                     StringBuffer mags = new StringBuffer();
                     mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，手机号：%s，密码：%s",
-                        tripartiteUser.getSource(),
-                        tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
+                            tripartiteUser.getSource(),
+                            tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
                     MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
                 });
             }
         }
 //        更新用户数据
         baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-            .set("username", tripartiteUser.getUsername())
-            .set("avatar", tripartiteUser.getAvatar())
-            .eq("uuid", tripartiteUser.getUuid()));
+                .set("username", tripartiteUser.getUsername())
+                .set("avatar", tripartiteUser.getAvatar())
+                .eq("uuid", tripartiteUser.getUuid()));
         //记录用户信息，登录
         LoginHelper.tripartiteLoginByDevice(tripartiteUser, DeviceType.PC);
     }
@@ -269,8 +273,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         BeanUtils.copyProperties(loginUserMain, tripartiteUser);
 
         TripartiteUser tripartiteUsers = baseMapper.selectOne(new QueryWrapper<TripartiteUser>()
-            .eq("email", tripartiteUser.getUsername()).or()
-            .eq("phone", tripartiteUser.getUsername()));
+                .eq("email", tripartiteUser.getUsername()).or()
+                .eq("phone", tripartiteUser.getUsername()));
         if (ObjectUtils.isEmpty(tripartiteUsers)) throw new ServiceException("账号不存在！");
         if (tripartiteUsers.getState().equals(2)) throw new ServiceException("账号已注销！");
         if (tripartiteUsers.getState().equals(1)) throw new ServiceException("账号已冻结！");
@@ -286,37 +290,37 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     @Transactional(rollbackFor = Exception.class)
     public R register(RegisterUserMain registerUserMain) {
         registerUserMain.setPassword(Base64.decodeStr(registerUserMain.getPassword()))
-            .setPhone(Base64.decodeStr(registerUserMain.getPhone()))
-            .setCode(Base64.decodeStr(registerUserMain.getCode()));
+                .setPhone(Base64.decodeStr(registerUserMain.getPhone()))
+                .setCode(Base64.decodeStr(registerUserMain.getCode()));
 //        数据校验
         registerDataCheck(registerUserMain);
         TripartiteUser tripartiteUser = new TripartiteUser();
         BeanUtils.copyProperties(registerUserMain, tripartiteUser);
         Long uuid = RandomNumberUtils.Snowflakes();
         tripartiteUser.setUuid(uuid.toString())
-            .setUsername("用户" + uuid)
-            .setNickname("用户" + uuid)
-            .setCreateTime(new Date())
-            .setPassword(SecureUtils.digesters(tripartiteUser.getPassword()))
-            .setState(UserStatus.OK.getIntegerCode())
-            .setRoleId(UserStatus.GENERAL_USER.getLogCode())
-            .setSource("平台注册");
+                .setUsername("用户" + uuid)
+                .setNickname("用户" + uuid)
+                .setCreateTime(new Date())
+                .setPassword(SecureUtils.digesters(tripartiteUser.getPassword()))
+                .setState(UserStatus.OK.getIntegerCode())
+                .setRoleId(UserStatus.GENERAL_USER.getLogCode())
+                .setSource("平台注册");
         int insert = baseMapper.insert(tripartiteUser);
         CountUserWebsiteEntity countUserWebsiteEntity = new CountUserWebsiteEntity()
-            .setUuid(tripartiteUser.getUuid());
+                .setUuid(tripartiteUser.getUuid());
         countUserWebsiteMapper.insert(countUserWebsiteEntity);
         UserInformation userInformation = new UserInformation()
-            .setUuid(tripartiteUser.getUuid())
-            .setNickname(tripartiteUser.getNickname())
-            .setCreateTime(new Date())
-            .setUpdateId(tripartiteUser.getUuid());
+                .setUuid(tripartiteUser.getUuid())
+                .setNickname(tripartiteUser.getNickname())
+                .setCreateTime(new Date())
+                .setUpdateId(tripartiteUser.getUuid());
         userInformationMapper.insert(userInformation);
         if (insert > 0) {
 //            发送邮件
             executorService.execute(() -> {
                 StringBuffer mags = new StringBuffer();
                 mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，手机号：%s，密码：%s",
-                    "平台注册", tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
+                        "平台注册", tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
                 MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
             });
         }
@@ -331,7 +335,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         codeVerification(redisKey, registerUserMain.getCode());
 //        手机号校验
         Long phone = baseMapper.selectCount(new QueryWrapper<TripartiteUser>()
-            .eq("phone", registerUserMain.getPhone()).eq("state", 0));
+                .eq("phone", registerUserMain.getPhone()).eq("state", 0));
         if (registerUserMain.getRegisterType().equals(1) && phone > 0)
             throw new ServiceException("该手机号已被使用！");
         if (registerUserMain.getRegisterType().equals(2) && phone < 0)
@@ -353,9 +357,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         TripartiteUserVo tripartiteUserVo = baseMapper.selectWebInfo(uuid);
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new QueryWrapper<UserFollow>()
-            .eq("target_id", uuid)
-            .eq("type", UserFollowType.b_user_follow.getCode())
-            .eq("uid", uuid1));
+                .eq("target_id", uuid)
+                .eq("type", UserFollowType.b_user_follow.getCode())
+                .eq("uid", uuid1));
         if (ObjectUtils.isNotEmpty(userFollow) && userFollow.getTargetId().equals(uuid)) {
             tripartiteUserVo.setIsFollow(true);
         }
@@ -365,9 +369,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     @Override
     public boolean updateUserAvatar(String uuid, String avatar) {
         return baseMapper.update(null,
-            new LambdaUpdateWrapper<TripartiteUser>()
-                .set(TripartiteUser::getAvatar, avatar)
-                .eq(TripartiteUser::getUuid, uuid)) > 0;
+                new LambdaUpdateWrapper<TripartiteUser>()
+                        .set(TripartiteUser::getAvatar, avatar)
+                        .eq(TripartiteUser::getUuid, uuid)) > 0;
     }
 
     @Override
@@ -423,7 +427,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         if (ObjectUtils.isEmpty(bo.getUuid()) || CollectionUtils.isEmpty(list)) return list;
 
         List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>()
-            .eq("uid", bo.getUuid()).eq("type", bo.getType()));
+                .eq("uid", bo.getUuid()).eq("type", bo.getType()));
 
         if (CollectionUtils.isEmpty(userFollowVos)) return list;
 
@@ -439,19 +443,19 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     @Override
     public CountUserWebsiteEntity fdUserData(String uuid) {
         CountUserWebsiteEntity countUserWebsiteEntity = countUserWebsiteMapper.selectOne(
-            new QueryWrapper<CountUserWebsiteEntity>().eq("uuid", uuid));
+                new QueryWrapper<CountUserWebsiteEntity>().eq("uuid", uuid));
         return countUserWebsiteEntity;
     }
 
     @Override
     public R resetPassword(RegisterUserMain registerUserMain) {
         registerUserMain.setPassword(Base64.decodeStr(registerUserMain.getPassword()))
-            .setPhone(Base64.decodeStr(registerUserMain.getPhone()))
-            .setCode(Base64.decodeStr(registerUserMain.getCode()));
+                .setPhone(Base64.decodeStr(registerUserMain.getPhone()))
+                .setCode(Base64.decodeStr(registerUserMain.getCode()));
         registerDataCheck(registerUserMain);
         int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-            .set("password", SecureUtils.digesters(registerUserMain.getPassword()))
-            .eq("phone", registerUserMain.getPhone()));
+                .set("password", SecureUtils.digesters(registerUserMain.getPassword()))
+                .eq("phone", registerUserMain.getPhone()));
         if (update > 0) {
             TripartiteUser tripartiteUser = baseMapper.selectPhone(registerUserMain.getPhone());
             executorService.execute(() -> {
@@ -486,9 +490,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
     @Override
     public boolean accountCancellation(String uuid) {
         return baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-            .set("state", 2)
-            .set("update_time", new Date())
-            .eq("uuid", uuid)) > 0;
+                .set("state", 2)
+                .set("update_time", new Date())
+                .eq("uuid", uuid)) > 0;
     }
 
     @Override
@@ -554,9 +558,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         RedisUtils.deleteObject(redisKey);
         String uuid = LoginHelper.getTripartiteUuid();
         int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-            .set("phone", phoneBinding.getPhone())
-            .set("update_time", new Date())
-            .eq("uuid", uuid)
+                .set("phone", phoneBinding.getPhone())
+                .set("update_time", new Date())
+                .eq("uuid", uuid)
         );
         return update > 0;
     }
@@ -577,7 +581,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
             int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("email", bo.getEmail()).eq("uuid", bo.getUuid()));
+                    .set("email", bo.getEmail()).eq("uuid", bo.getUuid()));
             return update > 0;
         }
         if (bo.getType().equals(3)) {// 手机号换绑
@@ -590,7 +594,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
             int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
+                    .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
             return update > 0;
         }
         if (bo.getType().equals(4)) {// 手机号绑定
@@ -599,7 +603,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             if (collect.get(bo.getPhone()) != null && !collect.get(bo.getPhone()).equals(bo.getUuid()))
                 throw new ServiceException("手机号已被使用");
             int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
+                    .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
             return update > 0;
         }
         return false;
@@ -611,39 +615,39 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
         switch (source) {
             case "gitee":
                 authRequest = new AuthGiteeRequest(AuthConfig.builder()
-                    .clientId(giteePlatformConfig.getClientId())
-                    .clientSecret(giteePlatformConfig.getClientSecret())
-                    .redirectUri(giteePlatformConfig.getRedirectUrl())
-                    .build());
+                        .clientId(giteePlatformConfig.getClientId())
+                        .clientSecret(giteePlatformConfig.getClientSecret())
+                        .redirectUri(giteePlatformConfig.getRedirectUrl())
+                        .build());
                 break;
             case "qq":
                 authRequest = new AuthQqRequest(AuthConfig.builder()
-                    .clientId("")
-                    .clientSecret("")
-                    .redirectUri("")
-                    .build());
+                        .clientId("")
+                        .clientSecret("")
+                        .redirectUri("")
+                        .build());
                 break;
             case "baidu":
                 authRequest = new AuthBaiduRequest(AuthConfig.builder()
-                    .clientId(baiDuPlatformConfig.getClientId())
-                    .clientSecret(baiDuPlatformConfig.getClientSecret())
-                    .redirectUri(baiDuPlatformConfig.getRedirectUrl())
-                    .build());
+                        .clientId(baiDuPlatformConfig.getClientId())
+                        .clientSecret(baiDuPlatformConfig.getClientSecret())
+                        .redirectUri(baiDuPlatformConfig.getRedirectUrl())
+                        .build());
                 break;
             case "weibo":
                 authRequest = new AuthWeiboRequest(AuthConfig.builder()
-                    .clientId(weiBoPlatformConfig.getClientId())
-                    .clientSecret(weiBoPlatformConfig.getClientSecret())
-                    .redirectUri(weiBoPlatformConfig.getRedirectUrl())
-                    .build());
+                        .clientId(weiBoPlatformConfig.getClientId())
+                        .clientSecret(weiBoPlatformConfig.getClientSecret())
+                        .redirectUri(weiBoPlatformConfig.getRedirectUrl())
+                        .build());
                 break;
             case "zhifubao":
                 authRequest = new AuthAlipayRequest(AuthConfig.builder()
-                    .clientId(zhiFuBaoPlatformConfig.getClientId())
-                    .clientSecret(zhiFuBaoPlatformConfig.getClientSecret())
-                    .alipayPublicKey(zhiFuBaoPlatformConfig.getAlipayPublicKey())
-                    .redirectUri(zhiFuBaoPlatformConfig.getRedirectUrl())
-                    .build());
+                        .clientId(zhiFuBaoPlatformConfig.getClientId())
+                        .clientSecret(zhiFuBaoPlatformConfig.getClientSecret())
+                        .alipayPublicKey(zhiFuBaoPlatformConfig.getAlipayPublicKey())
+                        .redirectUri(zhiFuBaoPlatformConfig.getRedirectUrl())
+                        .build());
                 break;
 
             default:
@@ -653,5 +657,19 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService {
             throw new AuthException("未获取到有效的Auth配置");
         }
         return authRequest;
+    }
+
+    @Override
+    public UserInfoIdNameDto getLoginUser() {
+        LoginUser loginUser = LoginHelper.getLoginUser();
+        if (loginUser == null) return null;
+        return new UserInfoIdNameDto(loginUser.getUserId().toString(), loginUser.getUsername());
+    }
+
+    @Override
+    public UserInfoIdNameDto getTripartiteUser() {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (tripartiteUser == null) return null;
+        return new UserInfoIdNameDto(tripartiteUser.getUuid(), tripartiteUser.getUsername());
     }
 }

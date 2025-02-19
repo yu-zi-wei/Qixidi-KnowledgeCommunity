@@ -4,8 +4,10 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.light.core.core.domain.BaseEntity;
-import com.light.core.utils.StringUtils;
+import com.light.core.utils.spring.SpringUtils;
 import com.light.exception.ServiceException;
+import com.light.mybatisPlus.domain.dto.UserInfoIdNameDto;
+import com.light.mybatisPlus.interfaces.UserInfoInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -20,6 +22,12 @@ import java.util.Date;
 @Slf4j
 public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
 
+
+    private UserInfoInterface userInfoInterface;
+
+    public CreateAndUpdateMetaObjectHandler() {
+    }
+
     @Override
     public void insertFill(MetaObject metaObject) {
         try {
@@ -29,12 +37,13 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                         ? baseEntity.getCreateTime() : new Date();
                 baseEntity.setCreateTime(current);
                 baseEntity.setUpdateTime(current);
-//                String username = StringUtils.isNotBlank(baseEntity.getCreateBy())
-//                        ? baseEntity.getCreateBy() : getLoginUsername() == null ? getTripartiteUserName() : getLoginUsername();
+                String loginUsername = getLoginUsername();
+                if (loginUsername != null) {
 //                // 当前已登录 且 创建人为空 则填充
-//                baseEntity.setCreateBy(username);
+                    baseEntity.setCreateBy(loginUsername);
 //                // 当前已登录 且 更新人为空 则填充
-//                baseEntity.setUpdateBy(username);
+                    baseEntity.setUpdateBy(loginUsername);
+                }
             }
         } catch (Exception e) {
             throw new ServiceException("自动注入异常 => " + e.getMessage(), HttpStatus.HTTP_UNAUTHORIZED);
@@ -49,43 +58,50 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 Date current = new Date();
                 // 更新时间填充(不管为不为空)
                 baseEntity.setUpdateTime(current);
-//                String username = getLoginUsername();
-//                // 当前已登录 更新人填充(不管为不为空)
-//                if (StringUtils.isNotBlank(username)) {
-//                    baseEntity.setUpdateBy(username);
-//                }
+                String loginUsername = getLoginUsername();
+                if (loginUsername != null) {
+//                // 当前已登录 且 更新人为空 则填充
+                    baseEntity.setUpdateBy(loginUsername);
+                }
             }
         } catch (Exception e) {
             throw new ServiceException("自动注入异常 => " + e.getMessage(), HttpStatus.HTTP_UNAUTHORIZED);
         }
     }
 
+    public UserInfoInterface injectionUserInfoInterface() {
+        if (userInfoInterface == null) {
+            synchronized (this.getClass()) {
+                if (userInfoInterface == null) {
+                    userInfoInterface = SpringUtils.getBean(UserInfoInterface.class);
+                }
+            }
+        }
+        return userInfoInterface;
+    }
+
     /**
      * 获取登录用户名
      */
-//    private String getLoginUsername() {
-//        LoginUser loginUser;
-//        try {
-//            loginUser = LoginHelper.getLoginUser();
-//        } catch (Exception e) {
-//            log.warn("自动注入警告 => 用户未登录");
-//            return null;
-//        }
-//        return loginUser == null ? null : loginUser.getUsername();
-//    }
-//
-//    /**
-//     * 获取前台登录用户名
-//     */
-//    private String getTripartiteUserName() {
-//        TripartiteUser tripartiteUser;
-//        try {
-//            tripartiteUser = LoginHelper.getTripartiteUser();
-//        } catch (Exception e) {
-//            log.warn("自动注入警告 => 用户未登录");
-//            return null;
-//        }
-//        return tripartiteUser == null ? null : tripartiteUser.getUsername();
-//    }
+    private String getLoginUsername() {
+        UserInfoIdNameDto loginUser = injectionUserInfoInterface().getLoginUser();
+        if (loginUser != null) {
+            return loginUser.getUsername();
+        }
+        UserInfoIdNameDto tripartiteUser = userInfoInterface.getTripartiteUser();
+        return tripartiteUser == null ? null : tripartiteUser.getUsername();
+    }
+
+    /**
+     * 获取登录用户id
+     */
+    private String getLoginUserId() {
+        UserInfoIdNameDto loginUser = injectionUserInfoInterface().getLoginUser();
+        if (loginUser != null) {
+            return loginUser.getUid();
+        }
+        UserInfoIdNameDto tripartiteUser = userInfoInterface.getTripartiteUser();
+        return tripartiteUser == null ? null : tripartiteUser.getUid();
+    }
 
 }

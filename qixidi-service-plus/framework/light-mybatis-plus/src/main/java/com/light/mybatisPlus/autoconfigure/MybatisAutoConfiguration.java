@@ -32,6 +32,7 @@ public class MybatisAutoConfiguration {
         return interceptor;
     }
 
+
     /**
      * 元对象字段填充控制器
      */
