@@ -29,7 +29,7 @@ Nuxt.js 对前台进行了重构，并赋予它新的名字——**栖息地**�
 
 ```text
 qixidi/
-└── qixidi-service  # 项目后端（基于SpringBoot-v2实现）
+└── qixidi-service  # 项目后端（基于SpringBoot-v2实现；jdk8【该模块不再维护，请使用qixidi-service-plus做为服务端】）
     │
     ├── aurora-admin # 后台启动模块
     │
@@ -43,7 +43,7 @@ qixidi/
     │
     ├── sql  # sql文件（暂不提供，需要可加微信（有偿）：zsh2978824265）
     │
-├── qixidi-service-plus  # 项目后端plus版本[待完善]（基于SpringBoot-v3实现）
+├── qixidi-service-plus  # 项目后端plus版本【持续更新中...】（基于SpringBoot-v3实现；jdk17）
 │
 ├── qixid-web-nuxt2  # 项目前台（Nuxt）
 │
@@ -71,16 +71,17 @@ qixidi/
 
 ### 后端
 
-| 名称           | 版本   | 说明      |
-|--------------|------|---------|
-| SpringBoot   | 2.6  | 基础框架    |
-| Sa-Token     | 1.29 | 认证框架    |
-| Mybatis-Plus | 3.5  | 数据库框架   |
-| Justauth     | 1.16 | 第三方登录框架 |
-| websocket    | 3.1  | 长连接框架   |
-| OSS          | 3.14 | 云存储     |
-| MySQL        | 8.0  | 数据库     |
-| Redis        | 6.0  | 缓存      |
+| 名称           | 版本    | 说明      |
+|--------------|-------|---------|
+| SpringBoot   | 2.6   | 基础框架    |
+| Sa-Token     | 1.29  | 认证框架    |
+| Mybatis-Plus | 3.5   | 数据库框架   |
+| Justauth     | 1.16  | 第三方登录框架 |
+| websocket    | 3.1   | 长连接框架   |
+| OSS          | 3.14  | 云存储     |
+| Minio        | 8.3.8 | 云存储     |
+| MySQL        | 8.0   | 数据库     |
+| Redis        | 6.0   | 缓存      |
 
 ### 前端
 
