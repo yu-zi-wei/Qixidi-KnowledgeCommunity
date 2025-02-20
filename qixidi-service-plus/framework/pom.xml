@@ -18,6 +18,7 @@
         <module>light-redission</module>
         <module>light-oss</module>
         <module>light-web</module>
+        <module>light-minio</module>
     </modules>
 
 </project>

@@ -1,25 +1,16 @@
-package com.qixidi.system.domain.entity;
+package com.light.oss.domain.dto;
 
-import com.light.core.core.domain.BaseEntity;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * OSS对象存储对象
- *
- * @author Lion Li
+ * @author zi-wei
+ * @create 2025/2/20 14:47
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@TableName("sys_oss")
-public class SysOss extends BaseEntity {
-
+public class OssDto {
     /**
      * 对象存储主键
      */
-    @TableId(value = "oss_id")
     private String ossId;
 
     /**
@@ -46,5 +37,4 @@ public class SysOss extends BaseEntity {
      * 服务商
      */
     private String service;
-
 }

@@ -1,28 +1,26 @@
 package com.qixidi.system.service.impl;
 
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.light.exception.ServiceException;
-import com.light.core.utils.StringUtils;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.light.oss.entity.UploadResult;
-import com.light.oss.factory.OssFactory;
-import com.light.oss.service.IOssStrategy;
-import com.qixidi.system.domain.entity.SysOss;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.light.minio.domain.dto.MinioDto;
+import com.light.minio.service.MinioService;
+import com.light.oss.service.OssService;
 import com.qixidi.system.domain.bo.SysOssBo;
+import com.qixidi.system.domain.entity.SysOss;
 import com.qixidi.system.domain.vo.SysOssVo;
 import com.qixidi.system.mapper.SysOssMapper;
 import com.qixidi.system.service.ISysOssService;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,10 +30,12 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class SysOssServiceImpl implements ISysOssService {
 
-    @Mapper
     private final SysOssMapper baseMapper;
+    private final OssService ossService;
+    private final MinioService minioService;
 
     @Override
     public TableDataInfo<SysOssVo> queryPageList(SysOssBo bo, PageQuery pageQuery) {
@@ -53,7 +53,7 @@ public class SysOssServiceImpl implements ISysOssService {
         lqw.eq(StringUtils.isNotBlank(bo.getUrl()), SysOss::getUrl, bo.getUrl());
         lqw.like(StringUtils.isNotBlank(bo.getFileName()), SysOss::getFileName, bo.getFileName());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            SysOss::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
+                SysOss::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         lqw.eq(StringUtils.isNotBlank(bo.getCreateBy()), SysOss::getCreateBy, bo.getCreateBy());
         lqw.eq(StringUtils.isNotBlank(bo.getService()), SysOss::getService, bo.getService());
         return lqw;
@@ -66,37 +66,22 @@ public class SysOssServiceImpl implements ISysOssService {
 
     @Override
     public SysOss upload(MultipartFile file) {
-        String originalfileName = file.getOriginalFilename();
-        String suffix = StringUtils.substring(originalfileName, originalfileName.lastIndexOf("."),
-            originalfileName.length());
-        IOssStrategy storage = OssFactory.instance();
-        UploadResult uploadResult;
-        try {
-            uploadResult = storage.uploadSuffix(file.getBytes(), suffix, file.getContentType());
-        } catch (IOException e) {
-            throw new ServiceException(e.getMessage());
-        }
+        //Minio 上传
+        MinioDto upload = minioService.upload(file);
+        log.info("Minio_url:" + upload.getUrl());
+        SysOss sysOss = BeanUtil.copyProperties(upload, SysOss.class);
+
+        //oss上传（不使用）
+//        OssDto ossDto = ossService.upload(file);
+//        log.info("ossDto_url:" + ossDto.getUrl());
+//        SysOss sysOss = BeanUtil.copyProperties(ossDto, SysOss.class);
         // 保存文件信息
-        SysOss oss = new SysOss();
-        oss.setUrl(uploadResult.getUrl());
-        oss.setFileSuffix(suffix);
-        oss.setFileName(uploadResult.getFilename());
-        oss.setOriginalName(originalfileName);
-        oss.setService(storage.getServiceType().getValue());
-        baseMapper.insert(oss);
-        return oss;
+        baseMapper.insert(sysOss);
+        return sysOss;
     }
 
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if (isValid) {
-            // 做一些业务上的校验,判断是否需要校验
-        }
-        List<SysOss> list = baseMapper.selectBatchIds(ids);
-        for (SysOss sysOss : list) {
-            IOssStrategy storage = OssFactory.instance(sysOss.getService());
-            storage.delete(sysOss.getUrl());
-        }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 

@@ -42,9 +42,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size: 10MB
+      max-file-size: 36MB
       # 设置总上传的文件大小
-      max-request-size: 20MB
+      max-request-size: 60MB
       # 临时存储地址
       location: /lightFile/service/temp
   jackson:
@@ -193,4 +193,3 @@ lock4j:
   acquire-timeout: 3000
   # 分布式锁的超时时间，默认为 30 毫秒
   expire: 30000
-

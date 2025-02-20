@@ -2,8 +2,8 @@ package com.qixidi.system.service;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.system.domain.entity.SysOss;
 import com.qixidi.system.domain.bo.SysOssBo;
+import com.qixidi.system.domain.entity.SysOss;
 import com.qixidi.system.domain.vo.SysOssVo;
 import org.springframework.web.multipart.MultipartFile;
 

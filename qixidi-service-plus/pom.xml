@@ -152,6 +152,12 @@
                 <version>${revision}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>light-minio</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- ========================================== 其他依赖=================================-->
 
             <!-- WebSocket -->

@@ -40,6 +40,10 @@
             <groupId>com.light</groupId>
             <artifactId>light-oss</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-minio</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.light</groupId>

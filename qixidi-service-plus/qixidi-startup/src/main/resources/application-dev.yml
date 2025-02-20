@@ -189,3 +189,21 @@ lipay:
   charset: UTF-8
   #签名方式,签名算法，推荐：RSA2
   signType: RSA2
+
+# 阿里云OSS配置
+aliyun:
+  oss:
+    end-point: ${config.aliyun.oss.end_point}
+    access-key-id: ${config.aliyun.oss.access_key_id}
+    access-key-secret: ${config.aliyun.oss.access_key_secret}
+    bucket-name: ${config.aliyun.oss.bucket_name}
+    http-protocol: ${config.aliyun.oss.http_protocol}
+
+# minio配置
+minio:
+  storage:
+    bucket-name: ${config.minio.storage.bucket_name}
+    endpoint: ${config.minio.storage.endpoint}
+    access-port: ${config.minio.storage.access_port}
+    access-key: ${config.minio.storage.access_key}
+    secret-key: ${config.minio.storage.secret_key}
