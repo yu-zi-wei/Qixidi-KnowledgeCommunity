@@ -18,7 +18,7 @@
             <span class="color-grey" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                                         {{ $utils.reckonTime(item.createTime) }}</span>
           </div>
-          <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener">
+          <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
             <h1 class="font-s-16 mb-10 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h1>
           </nuxt-link>
           <p class="color-grey text-indent-13 overflow-nowrap-2 font-s-13 line-height-24">{{ item.articleAbstract }}</p>

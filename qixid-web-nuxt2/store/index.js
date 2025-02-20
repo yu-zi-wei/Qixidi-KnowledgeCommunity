@@ -5,6 +5,7 @@ export const actions = {
   }
 };
 let tokenName = "aurora-token"
+
 export const state = {
   token: '',
 };

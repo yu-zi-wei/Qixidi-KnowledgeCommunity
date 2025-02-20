@@ -45,8 +45,8 @@
                   </p>
                 </div>
                 <div v-if="isReport(data.day)==-3" @click="addReports(data.day)">
-                  <span class="the-same-day background-color-theme font-s-13">{{ data.day.slice(8) }}</span>
-                  <p class="font-s-12 color-theme mt-6">点击签到</p>
+                  <span class="the-same-day background-color-theme font-s-14">{{ data.day.slice(8) }}</span>
+                  <p class="font-s-12 color-theme mt-8">点击签到</p>
                 </div>
               </div>
             </template>
@@ -241,7 +241,7 @@ export default {
 
 .the-same-day {
   color: #fefefe;
-  padding: 6px;
+  padding: 4px;
   border-radius: 50%;
 }
 

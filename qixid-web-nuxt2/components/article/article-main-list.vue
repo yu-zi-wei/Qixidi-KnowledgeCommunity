@@ -73,7 +73,7 @@
           <div class="mr-10">
             <h4 class="mb-15 font-bold-s">
               <nuxt-link class="text-underline-hover font-s-16" :to="`/article/article-details/`+$base64.encode(item.id)"
-                         rel="noopener">
+                         rel="noopener" target="_blank">
                 {{ item.articleTitle }}
               </nuxt-link>
             </h4>

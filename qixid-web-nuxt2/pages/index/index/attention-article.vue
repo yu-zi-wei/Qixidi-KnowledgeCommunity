@@ -14,6 +14,9 @@
           关注列表
         </p>
         <div class="flex-left">
+          <div v-if="followRoleArr.length==0" class="color-grey font-s-13 mt-4">
+            暂无关注......
+          </div>
           <div class="mr-15 cursor-pointer color-grey hover-cl" style="max-width: 60px"
                v-for="(item,index) in followRoleArr.slice(0,10)"
                :key="index"
