@@ -268,7 +268,6 @@ mark {
 高亮块
  */
 .aie-content div.warning {
-  background: rgba(105, 209, 189, 0.2);
   border-radius: 4px;
 }
 
