@@ -14,7 +14,7 @@
         </div>
       </div>
       <!--        默认展示-->
-      <div>
+      <div v-if="1==2">
         <div class="middle-info">
           <div>
             <div class="avatar-img">
@@ -230,6 +230,7 @@ export default {
   mask-composite: intersect;
   -webkit-mask-composite: source-in, xor;
   padding-bottom: 60px;
+  padding-top: 40px;
 }
 
 .sbw-cl {

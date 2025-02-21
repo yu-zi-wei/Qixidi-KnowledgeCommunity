@@ -4,7 +4,7 @@
       <optical-axis :data="recordList" :number="4"></optical-axis>
     </div>
     <div class="disappear-789-an record-main">
-      <optical-axis :data="timeAxis" :number="2"></optical-axis>
+      <optical-axis :data="recordList" :number="2"></optical-axis>
     </div>
     <!--    搜索-->
     <!--    <div class="text-center">-->
@@ -57,35 +57,6 @@ export default {
   components: {OpticalAxis},
   data() {
     return {
-      timeAxis: [{title: '吉照亮1', createTime: '2024-07-12 :23:12:00'}, {
-        title: '吉照亮2',
-        createTime: '2024-07-12 :23:12:00'
-      },
-        {title: '吉照亮3', createTime: '2024-07-12 :23:12:00'},
-        {title: '吉照亮4', createTime: '2024-07-12 :23:12:00'},
-        {title: '吉照亮5', createTime: '2024-07-12 :23:12:00'}
-        , {title: '吉照亮6', createTime: '2024-07-12 :23:12:00'}, {
-          title: '吉照亮7',
-          createTime: '2024-07-12 :23:12:00'
-        }, {title: '吉照亮8', createTime: '2024-07-12 :23:12:00'},
-        {title: '吉照亮9', createTime: '2024-07-12 :23:12:00'}, {title: '吉照亮10', createTime: '2024-07-12 :23:12:00'}
-        , {title: '吉照亮11', createTime: '2024-07-12 :23:12:00'}, {
-          title: '吉照亮12',
-          createTime: '2024-07-12 :23:12:00'
-        }, {title: '吉照亮13', createTime: '2024-07-12 :23:12:00'},
-        {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}, {
-          title: '吉照亮14',
-          createTime: '2024-07-12 :23:12:00'
-        }, {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}
-        , {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}, {
-          title: '吉照亮14',
-          createTime: '2024-07-12 :23:12:00'
-        }, {title: '吉照亮14', createTime: '2024-07-12 :23:12:00'}
-
-        , {title: '吉照亮11', createTime: '2024-07-12 :23:12:00'}, {
-          title: '吉照亮12',
-          createTime: '2024-07-12 :23:12:00'
-        }, {title: '吉照亮13', createTime: '2024-07-12 :23:12:00'},],
       recordList: [],
       queryParams: {
         pageNum: 1,
