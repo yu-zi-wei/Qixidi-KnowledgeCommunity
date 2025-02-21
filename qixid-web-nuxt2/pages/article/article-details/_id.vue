@@ -98,30 +98,27 @@
                 </div>
               </div>
             </div>
-<!--            <mavon-editor class="markdown"-->
-<!--                          id="detailDirectory"-->
-<!--                          style="padding-left: 10px"-->
-<!--                          :value="articleInfo.articleContentMd"-->
-<!--                          :subfield="false"-->
-<!--                          :defaultOpen="prop.defaultOpen"-->
-<!--                          :boxShadow="prop.boxShadow"-->
-<!--                          :toolbarsFlag="prop.toolbarsFlag"-->
-<!--                          :editable="prop.editable"-->
-<!--                          :codeStyle="articleInfo.theme"-->
-<!--                          fontSize="18px"-->
-<!--                          previewBackground="#fefefe"-->
-<!--                          :scrollStyle="prop.scrollStyle"-->
-<!--                          :navigation="false"-->
-<!--                          ref="markdown"-->
-<!--            />-->
+            <mavon-editor class="markdown"
+                          id="detailDirectory"
+                          style="padding-left: 10px"
+                          :value="articleInfo.articleContentMd"
+                          :subfield="false"
+                          :defaultOpen="prop.defaultOpen"
+                          :boxShadow="prop.boxShadow"
+                          :toolbarsFlag="prop.toolbarsFlag"
+                          :editable="prop.editable"
+                          :codeStyle="articleInfo.theme"
+                          fontSize="18px"
+                          previewBackground="#fefefe"
+                          :scrollStyle="prop.scrollStyle"
+                          :navigation="false"
+                          ref="markdown"
+            />
 
-            <ai-editor-module
-                              :htmlContent.sync="articleInfo.articleContent"
-                              :mdContent.sync="articleInfo.articleContentMd"
-                              :content="articleInfo.articleContent"
-                              :editor-height="'100%'"
-                              :outline.sync="tocArray"
-                              :editable="false"></ai-editor-module>
+<!--            <ai-editor-module :content="articleInfo.articleContent"-->
+<!--                              :editor-height="'100%'"-->
+<!--                              :outline.sync="tocArray"-->
+<!--                              :editable="false"></ai-editor-module>-->
 
             <div v-if="articleInfo.type==2" class="mb-20 mt-10">
               转载地址：
@@ -724,29 +721,29 @@ export default {
     //目录生成
     generateDirectory() {
       //客户端执行
-      // this.$nextTick(() => {
-      //   let tocTags = ["H1", "H2", "H3", "H4"];//筛选目录
-      //   let tocArray = [];
-      //   let element = document.getElementById("detailDirectory");
-      //   let childNodes = element.childNodes[2].childNodes[2].childNodes[0].childNodes;
-      //   childNodes.forEach(item => {
-      //     let tagName = item.tagName;
-      //     //是否包含 tocTags存在的标签
-      //     if (tagName == undefined || !tocTags.includes(tagName.toUpperCase())) {
-      //       return true;
-      //     }
-      //     let elementsByTagName = item.getElementsByTagName("a");
-      //     let id = elementsByTagName[0].getAttribute("id");
-      //     let offsetTop = document.getElementById(id).offsetTop;
-      //     tocArray.push({
-      //       id: id,
-      //       text: item.innerText,
-      //       level: Number.parseInt(tagName.substring(1)),
-      //       pos: offsetTop,
-      //     })
-      //   });
-      //   this.tocArray = tocArray;
-      // });
+      this.$nextTick(() => {
+        let tocTags = ["H1", "H2", "H3", "H4"];//筛选目录
+        let tocArray = [];
+        let element = document.getElementById("detailDirectory");
+        let childNodes = element.childNodes[2].childNodes[2].childNodes[0].childNodes;
+        childNodes.forEach(item => {
+          let tagName = item.tagName;
+          //是否包含 tocTags存在的标签
+          if (tagName == undefined || !tocTags.includes(tagName.toUpperCase())) {
+            return true;
+          }
+          let elementsByTagName = item.getElementsByTagName("a");
+          let id = elementsByTagName[0].getAttribute("id");
+          let offsetTop = document.getElementById(id).offsetTop;
+          tocArray.push({
+            id: id,
+            text: item.innerText,
+            level: Number.parseInt(tagName.substring(1)),
+            pos: offsetTop,
+          })
+        });
+        this.tocArray = tocArray;
+      });
     },
     highlightType() {
       let scrollTops = this.scrollTops + 1;

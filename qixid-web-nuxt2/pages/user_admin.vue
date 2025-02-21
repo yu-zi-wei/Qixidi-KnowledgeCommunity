@@ -21,7 +21,7 @@
             </div>
             <div :gutter="20" class="mt-15">
               <div style="text-align: center;padding: 0 6px">
-                <nuxt-link to="/article/publish-article-ai" target="_blank">
+                <nuxt-link to="/article/publish-article" target="_blank">
                   <el-button style="width: 100%;" type="primary">发布文章</el-button>
                 </nuxt-link>
               </div>

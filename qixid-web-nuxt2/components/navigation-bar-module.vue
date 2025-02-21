@@ -93,7 +93,7 @@
                   </div>
                   <el-dropdown-menu slot="dropdown">
                     <div class="flex-left" style="margin: 2px 15px">
-                      <div class="publish-list-item text-center" @click="publishData('/article/publish-article-ai')">
+                      <div class="publish-list-item text-center" @click="publishData('/article/publish-article')">
                         <svg t="1735805120625" class="icon" viewBox="0 0 1024 1024" version="1.1"
                              xmlns="http://www.w3.org/2000/svg" p-id="26867" width="30" height="30">
                           <path
