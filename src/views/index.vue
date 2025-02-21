@@ -14,7 +14,7 @@
         </div>
       </div>
       <!--        默认展示-->
-      <div v-if="1==2">
+      <div>
         <div class="middle-info">
           <div>
             <div class="avatar-img">
