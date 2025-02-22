@@ -57,7 +57,11 @@ public class Repertoire extends BaseEntity {
     @TableField("`order`")
     private Long order;
 
+    /**
+     * 是否完成
+     */
     private Integer isComplete;
+
     /**
      * 地址
      */

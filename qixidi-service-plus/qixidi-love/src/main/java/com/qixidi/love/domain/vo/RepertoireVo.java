@@ -63,6 +63,9 @@ public class RepertoireVo extends BaseEntity {
      */
     @ExcelProperty(value = "排序")
     private Long order;
+    /**
+     * 是否完成
+     */
     private Integer isComplete;
 
 

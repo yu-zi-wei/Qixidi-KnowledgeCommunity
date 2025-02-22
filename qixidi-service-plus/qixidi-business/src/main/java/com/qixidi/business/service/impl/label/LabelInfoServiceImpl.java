@@ -2,6 +2,16 @@ package com.qixidi.business.service.impl.label;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.label.LabelInfoBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.label.LabelInfo;
@@ -14,16 +24,6 @@ import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.label.ILabelInfoService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.auth.helper.LoginHelper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -149,11 +149,11 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         if (ObjectUtils.isEmpty(bo.getLabelName())) return list;
 
         list = baseMapper.selectVoList(new QueryWrapper<LabelInfo>()
-            .like("label_name", bo.getLabelName()));
+                .like("label_name", bo.getLabelName()));
         if (ObjectUtils.isEmpty(bo.getUid()) || CollectionUtils.isEmpty(list)) return list;
 
         List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>()
-            .eq("uid", bo.getUid()).eq("type", bo.getType()));
+                .eq("uid", bo.getUid()).eq("type", bo.getType()));
         if (CollectionUtils.isEmpty(userFollowVos)) return list;
 
         Map<String, String> collect = userFollowVos.stream().collect(Collectors.toMap(UserFollowVo::getTargetId, UserFollowVo::getUid));
@@ -172,7 +172,7 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         if (ObjectUtils.isEmpty(uuid)) return infoVo;
 
         List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>()
-            .eq("uid", uuid).eq("type", type));
+                .eq("uid", uuid).eq("type", type));
         if (CollectionUtils.isEmpty(userFollowVos)) return infoVo;
 
         userFollowVos.forEach(item -> {
@@ -188,7 +188,7 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         LabelGroupingInfoVo labelGroupingInfoVo = labelGroupingInfoMapper.selectVoById(id);
         if (ObjectUtils.isEmpty(labelGroupingInfoVo)) return labelGroupingInfoVo;
         Long articleNumber = articleInformationMapper.selectCount(new QueryWrapper<ArticleInformation>()
-            .eq("grouping_id", id));
+                .eq("grouping_id", id));
         labelGroupingInfoVo.setArticleNumber(articleNumber);
         return labelGroupingInfoVo;
     }
@@ -206,10 +206,14 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>().eq("type", 2));
         if (CollectionUtils.isEmpty(userFollowVos)) return list;
 
-        Map<String, String> collect = userFollowVos.stream().filter(item -> item.getUid().equals(uuid))
-            .collect(Collectors.toMap(UserFollowVo::getTargetId, UserFollowVo::getUid));
+        Map<String, String> collect = new HashMap<>();
+        userFollowVos.forEach(item -> {
+            if (item.getUid().equals(uuid)) {
+                collect.put(item.getTargetId(), item.getUid());
+            }
+        });
         Map<String, Long> groupCounts = userFollowVos.stream()
-            .collect(Collectors.groupingBy(UserFollowVo::getTargetId, Collectors.counting()));
+                .collect(Collectors.groupingBy(UserFollowVo::getTargetId, Collectors.counting()));
         list.forEach(item -> {
             Long sum = groupCounts.get(item.getId().toString());
             if (sum != null) {
