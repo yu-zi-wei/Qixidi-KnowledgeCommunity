@@ -182,8 +182,20 @@
           .
           <a href="https://gitee.com/yu-zi-wei/qixidi" target="_blank"
              class="text-underline-hover">开源地址：<span style="color: #ee5a24">gitee.com</span></a>
-          .
-          <span>小站已经运行了：<span>{{ siteOperationTime }}</span></span>
+          <div>小站已经运行了：{{ siteOperationTime }}</div>
+          <div>
+            <svg t="1740204474294" class="icon-theme-1 icon-size-18 svg-translateY-4" viewBox="0 0 1024 1024"
+                 version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2805">
+              <path
+                d="M512 106.666667a405.333333 405.333333 0 1 0 405.333333 405.333333A405.333333 405.333333 0 0 0 512 106.666667z m0 768a362.666667 362.666667 0 1 1 362.666667-362.666667 362.666667 362.666667 0 0 1-362.666667 362.666667z"
+                fill="#333333" p-id="2806"></path>
+              <path
+                d="M624.853333 399.146667a21.333333 21.333333 0 0 0 30.293334-30.293334 202.24 202.24 0 1 0 0 286.293334 21.333333 21.333333 0 0 0-30.293334-30.293334 159.573333 159.573333 0 1 1 0-225.706666z"
+                fill="#333333" p-id="2807"></path>
+            </svg>
+            {{ $utils.parseTime(new Date(), '{y}') }} 栖息地
+          </div>
         </div>
       </div>
     </div>
@@ -343,7 +355,7 @@ export default {
   border-radius: 0px;
 }
 
-.el-button--medium{
+.el-button--medium {
   padding: 10px 20px;
 }
 
