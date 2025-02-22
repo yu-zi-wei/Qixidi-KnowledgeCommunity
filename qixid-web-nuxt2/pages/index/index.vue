@@ -184,7 +184,7 @@
              class="text-underline-hover">开源地址：<span style="color: #ee5a24">gitee.com</span></a>
           <div>小站已经运行了：{{ siteOperationTime }}</div>
           <div>
-            <svg t="1740204474294" class="icon-theme-1 icon-size-18 svg-translateY-4" viewBox="0 0 1024 1024"
+            <svg t="1740204474294" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="2805">
               <path
