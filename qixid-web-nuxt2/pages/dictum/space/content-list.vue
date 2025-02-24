@@ -1,6 +1,10 @@
 <template>
   <div>
-    <dictumList :album-id="albumId==null?null:parseInt(albumId)" :isSelf="true" :uid="uuid"></dictumList>
+    <dictumList
+      :album-id="albumId==null?null :parseInt(albumId)"
+      :isSelf="true"
+      :typography="2"
+      :uid="uuid"></dictumList>
   </div>
 </template>
 

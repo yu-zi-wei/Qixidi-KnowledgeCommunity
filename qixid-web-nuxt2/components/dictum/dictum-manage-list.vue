@@ -230,11 +230,12 @@ export default {
 </script>
 
 <style scoped>
-.info-li-cl {
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  transition: .2s;
-  border: 1px solid #ced6e0;
+
+/* 瀑布流中的每个元素 */
+.waterfall-item {
+  margin-bottom: 10px;
+  background-color: #f4f4f4;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 </style>

@@ -69,6 +69,10 @@ body {
   fill: #818e8f;
 }
 
+.icon-theme-2 {
+  fill: #c2c2c2;
+}
+
 .icon-hover-theme-stand-out {
   transition: .2s;
 }

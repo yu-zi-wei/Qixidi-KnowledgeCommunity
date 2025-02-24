@@ -57,3 +57,28 @@ textarea:focus {
 .load-more-class:hover {
   color: var(--default-color);
 }
+
+.info-li-cl {
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: .2s;
+  border: 1px solid #ced6e0;
+}
+
+
+.column-box {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.box-item {
+  margin: 30px 12px;
+  width: 400px;
+}
+
+.box-item-div {
+  box-shadow: 0 4px 8px 0 #dee2e3;
+  padding: 20px 10px;
+  border-radius: 10px
+}
