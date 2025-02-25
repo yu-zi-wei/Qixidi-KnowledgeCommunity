@@ -188,7 +188,8 @@
             <div class="flex-space-between user-info align-items-center mb-15">
               <div class="flex-left align-items-center">
                 <div class="ml-6">
-                  <nuxt-link class="color-grey-2" :to="`/user_home/article?uuid=`+$base64.encode(item.uid)" target="_blank">
+                  <nuxt-link class="color-grey-2" :to="`/user_home/article?uuid=`+$base64.encode(item.uid)"
+                             target="_blank">
                     <p class="font-s-14 cursor-pointer text-underline-hover hover-cl">{{ item.nickname }}</p>
                   </nuxt-link>
                 </div>
@@ -201,7 +202,8 @@
                   </nuxt-link>
                 </el-tag>
                 <span v-if="item.labelList!=null"
-                      v-for="(items,indexs) in item.labelList" title="标签" :key="indexs" class="font-s-13 color-grey-2">
+                      v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
+                      class="font-s-13 color-grey-2">
                               #{{ items }}
                                 <span v-if="indexs+1!=item.labelList.length">|</span>
                               </span>
@@ -866,4 +868,5 @@ export default {
 .el-button--small {
   padding: 9px 15px;
 }
+
 </style>
