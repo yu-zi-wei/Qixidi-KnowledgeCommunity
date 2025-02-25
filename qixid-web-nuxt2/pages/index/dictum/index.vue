@@ -381,8 +381,8 @@ export default {
   text-align: center;
   background-color: #fefefe;
   margin: 6px 15px !important;
-  height: 50px;
-  line-height: 50px;
+  height: 50px !important;
+  line-height: 50px !important;
   border-radius: 4px;
 }
 
