@@ -4,7 +4,7 @@
     <div v-if="!loading" class="flex-space-between">
       <!--      类容-->
       <div class="flex-8">
-        <div class="mb-20" style="width: 600px">
+        <div class="mb-20" style="width: 400px">
           <el-input
             placeholder="名言关键字"
             v-model="content"
@@ -45,7 +45,7 @@
             <span>{{ item.name }}</span>
           </el-menu-item>
         </el-menu>
-        <div class="mt-10" style="box-shadow: 0 4px 8px 0 #dee2e3;padding: 15px 15px;border-radius: 10px">
+        <div class="mt-10" style="box-shadow: 0 2px 4px 0 #f1f2f6;padding: 15px 15px;border-radius: 10px">
           <el-collapse accordion v-model="activeName1">
             <el-collapse-item name="1">
               <template slot="title">

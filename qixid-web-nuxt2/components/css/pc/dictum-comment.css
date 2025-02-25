@@ -66,19 +66,14 @@ textarea:focus {
   border: 1px solid #ced6e0;
 }
 
-
-.column-box {
-  display: inline-block;
-  vertical-align: top;
-}
-
 .box-item {
-  margin: 30px 12px;
   width: 400px;
+  margin-bottom: 35px;
 }
 
 .box-item-div {
-  box-shadow: 0 4px 8px 0 #dee2e3;
+  /*box-shadow: 0 4px 6px 0 #dee2e3;*/
+  border: 1px solid #dfe4ea;
   padding: 20px 10px;
-  border-radius: 10px
+  border-radius: 10px;
 }
