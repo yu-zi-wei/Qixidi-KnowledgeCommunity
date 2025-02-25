@@ -69,17 +69,19 @@
                   推荐专辑
                 </div>
               </template>
-              <div v-for="item of recommendedAlbumArr" class="album-tj-cl mt-15">
-                <nuxt-link :to="`/details/album-info?data=`+item.id" target="_blank" rel="noopener">
-                  <div class="dictum-cover-div">
-                    <el-image class="dictum-cover-img" v-if="item.cover"
-                              :src="item.cover" fit="cover"></el-image>
-                    <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
-                  </div>
-                  <div class="mt-10 text-underline hover-cl" style="width: 90px" :title="item.name">
-                    {{ item.name }}
-                  </div>
-                </nuxt-link>
+              <div class="mt-15 mb-10">
+                <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
+                  <nuxt-link :to="`/details/album-info?data=`+item.id" target="_blank" rel="noopener">
+                    <div class="dictum-cover-div">
+                      <el-image class="dictum-cover-img" v-if="item.cover"
+                                :src="item.cover" fit="cover"></el-image>
+                      <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
+                    </div>
+                    <div class="mt-10 text-underline hover-cl" style="width: 90px" :title="item.name">
+                      {{ item.name }}
+                    </div>
+                  </nuxt-link>
+                </div>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -97,8 +99,8 @@
                   热门作者
                 </div>
               </template>
-              <div class="overflow-hidden mt-15">
-                <div v-for="item of popularAuthorsArr" class="mr-10 mb-10 fl-left">
+              <div class="mt-15 mb-10 flex-left flex-wrap-wrap">
+                <div v-for="item of popularAuthorsArr" class="mr-10 mb-10">
                   <el-button plain size="medium" @click="selectDictum('authors',item.author)">
                     {{ item.author }}&ensp;+{{ item.count }}
                   </el-button>
@@ -123,9 +125,9 @@
                   热门标签#
                 </div>
               </template>
-              <div class="overflow-hidden mt-15">
+              <div class="mt-15 flex-left flex-wrap-wrap mb-10">
                 <div v-for="item of popularLabelArr"
-                     class="mr-10 mb-10 cursor-pointer fl-left hover-fw-bold">
+                     class="mr-10 mb-10 cursor-pointer hover-fw-bold">
                   <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
                     #{{ item.label }}+{{ item.count }}
                   </el-tag>
@@ -315,7 +317,7 @@ export default {
 <style>
 .collapse-title {
   font-size: 16px;
-  padding-bottom: 15px;
+  padding-bottom: 12px;
   margin-bottom: 5px;
   font-weight: 500;
   width: 100%;
@@ -365,7 +367,7 @@ export default {
   cursor: pointer;
   text-align: center;
   border-radius: 4px;
-  height: 120px;
+  height: 125px;
   border: 1px solid #fefefe;
 }
 
@@ -405,7 +407,8 @@ export default {
 .el-collapse-item__wrap {
   border: none !important;
 }
-.el-collapse-item__content{
+
+.el-collapse-item__content {
   padding-bottom: 0px;
 }
 </style>
