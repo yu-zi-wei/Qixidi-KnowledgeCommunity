@@ -316,7 +316,7 @@ export default {
 .collapse-title {
   font-size: 16px;
   padding-bottom: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-weight: 500;
   width: 100%;
   border-bottom: 1px solid #ced6e0;
@@ -380,7 +380,7 @@ export default {
   width: 10%;
   text-align: center;
   background-color: #fefefe;
-  margin: 6px 15px;
+  margin: 6px 15px !important;
   height: 50px;
   line-height: 50px;
   border-radius: 4px;
@@ -393,8 +393,8 @@ export default {
 
 .el-collapse-item__header {
   border: none !important;
-  height: initial;
-  line-height: initial;
+  height: initial !important;
+  line-height: initial !important;
   background-color: initial !important;
 }
 
@@ -404,5 +404,8 @@ export default {
 
 .el-collapse-item__wrap {
   border: none !important;
+}
+.el-collapse-item__content{
+  padding-bottom: 0px;
 }
 </style>
