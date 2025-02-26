@@ -71,7 +71,8 @@
         </div>
         <el-skeleton class="mt-10" :rows="8" animated v-if="loading"/>
         <div>
-          <div class="article-content" v-if="!loading">
+          <!--          <div class="article-content" v-if="!loading">-->
+          <div class="article-content">
             <div class="mb-10">
               <h2 class="article-title">{{ articleInfo.articleTitle }}</h2>
               <div class="article-user-info-two">
@@ -98,40 +99,44 @@
                 </div>
               </div>
             </div>
-            <mavon-editor class="markdown"
-                          id="detailDirectory"
-                          style="padding-left: 10px"
-                          :value="articleInfo.articleContentMd"
-                          :subfield="false"
-                          :defaultOpen="prop.defaultOpen"
-                          :boxShadow="prop.boxShadow"
-                          :toolbarsFlag="prop.toolbarsFlag"
-                          :editable="prop.editable"
-                          :codeStyle="articleInfo.theme"
-                          fontSize="18px"
-                          previewBackground="#fefefe"
-                          :scrollStyle="prop.scrollStyle"
-                          :navigation="false"
-                          ref="markdown"
-            />
+            <!--            <mavon-editor class="markdown"-->
+            <!--                          id="detailDirectory"-->
+            <!--                          style="padding-left: 10px"-->
+            <!--                          :value="articleInfo.articleContentMd"-->
+            <!--                          :subfield="false"-->
+            <!--                          :defaultOpen="prop.defaultOpen"-->
+            <!--                          :boxShadow="prop.boxShadow"-->
+            <!--                          :toolbarsFlag="prop.toolbarsFlag"-->
+            <!--                          :editable="prop.editable"-->
+            <!--                          :codeStyle="articleInfo.theme"-->
+            <!--                          fontSize="18px"-->
+            <!--                          previewBackground="#fefefe"-->
+            <!--                          :scrollStyle="prop.scrollStyle"-->
+            <!--                          :navigation="false"-->
+            <!--                          ref="markdown"-->
+            <!--            />-->
+            <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContentMd"
+                            :outline.sync="tocArray"></vditor-preview>
 
-<!--            <ai-editor-module :content="articleInfo.articleContent"-->
-<!--                              :editor-height="'100%'"-->
-<!--                              :outline.sync="tocArray"-->
-<!--                              :editable="false"></ai-editor-module>-->
+            <!--            <ai-editor-module :content="articleInfo.articleContent"-->
+            <!--                              :editor-height="'100%'"-->
+            <!--                              :outline.sync="tocArray"-->
+            <!--                              :editable="false"></ai-editor-module>-->
 
-            <div v-if="articleInfo.type==2" class="mb-20 mt-10">
-              转载地址：
-              <a :href="articleInfo.reprintUrl" target="_blank"
-                 class="color-blue text-underline-hover">{{ articleInfo.reprintUrl }}</a>
-            </div>
-            <div v-if="articleInfo.type==3" class="mb-20 mt-10">
-              翻译地址：
-              <a :href="articleInfo.reprintUrl" target="_blank"
-                 class="color-blue text-underline-hover">{{ articleInfo.reprintUrl }}</a>
+            <div class="mb-20 mt-40">
+              <div v-if="articleInfo.type==2">
+                转载地址：
+                <a :href="articleInfo.reprintUrl" target="_blank"
+                   class="color-blue text-underline-hover">{{ articleInfo.reprintUrl }}</a>
+              </div>
+              <div v-if="articleInfo.type==3">
+                翻译地址：
+                <a :href="articleInfo.reprintUrl" target="_blank"
+                   class="color-blue text-underline-hover">{{ articleInfo.reprintUrl }}</a>
+              </div>
             </div>
             <!--            文章标签-->
-            <div class="mt-8">
+            <div class="mt-20">
               <span class="label-top-cl"> 分类:</span>
               <span class="label-top-cl-list">
                     <nuxt-link target="_blank" :to="'/external_info/label-group-info?data='+articleInfo.groupingId">
@@ -595,11 +600,11 @@
 </template>
 
 <script>
-import AiEditorModule from "../../../components/AiEditor-module";
+import VditorPreview from "../../../components/Vditor-preview.vue";
 
 export default {
   name: "articleId",
-  components: {AiEditorModule},
+  components: {VditorPreview},
   head() {
     return {
       title: `${this.articleInfo.articleTitle == undefined ? process.env.PROJECT_NAME : this.articleInfo.articleTitle + ' - ' + process.env.PROJECT_NAME}`,
@@ -718,7 +723,7 @@ export default {
     }
   },
   methods: {
-    //目录生成
+    //mavon-editor 编辑器 目录生成
     generateDirectory() {
       //客户端执行
       this.$nextTick(() => {
@@ -742,7 +747,7 @@ export default {
             pos: offsetTop,
           })
         });
-        this.tocArray = tocArray;
+        // this.tocArray = tocArray;
       });
     },
     highlightType() {
@@ -982,7 +987,6 @@ export default {
     articleDetailsInfo() {
       //获取用户基本信息
       this.getBasicsUsers();
-      this.generateDirectory();
       this.loading = false;
       this.$API(`/white/article/add/browse-count/${this.articleInfo.id}/${this.articleInfo.labelId}`);
       //获取相关文章
@@ -1044,10 +1048,6 @@ export default {
 
 <style>
 @import url("static/css/server/pc/article/article-details.css");
-
-li {
-  /*list-style-type: disc;*/
-}
 
 .el-timeline-item {
   padding-bottom: 14px;

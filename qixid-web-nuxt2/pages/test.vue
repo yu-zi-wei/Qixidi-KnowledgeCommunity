@@ -7,7 +7,7 @@
       <el-button @click="getSessionStorage">getSessionStorage</el-button>
       <el-button @click="$router.push('/dictum');"> this.$router.push('/dictum');</el-button>
       <el-button @click="$router.push('/xxx');"> this.$router.push('/xxx');</el-button>
-      <el-nuxt-link to="/">主页</el-nuxt-link>
+<!--      <el-nuxt-link to="/">主页</el-nuxt-link>-->
       <el-button @click="websocketMain('1625400372048826368')"> 测试websocket客户端1</el-button>
       <el-button @click="websocketMain('ziwei12')"> 测试websocket客户端2</el-button>
       <el-button @click="websocketSend"> 发送消息</el-button>
@@ -25,19 +25,19 @@
       <!--      </div>-->
     </div>
     <!--    <ai-editor-module></ai-editor-module>-->
-    <div style="width: 600px;height: 600px">
-    </div>
+    <VditorMd :height="500"></VditorMd>
   </div>
 </template>
 
 <script>
 import SubmissionChart from "../components/submission-chart";
 import AiEditorModule from "../components/AiEditor-module";
+import VditorMd from "../components/Vditor-md.vue";
 
 // import WebSocket from 'websocket';
 export default {
   name: "test",
-  components: {AiEditorModule, SubmissionChart},
+  components: {VditorMd, AiEditorModule, SubmissionChart},
   data() {
     return {
       title: "测试",

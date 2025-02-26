@@ -60,7 +60,7 @@ export default {
     '~/static/css/common/element.css',
     '~/static/css/common/module.css',// 通用组件 css
     '~/static/css/common/theme.css',//主题配置
-    // '~/static/vditor/dist/index.css',
+    '~/static/vditor/dist/index.css'//vditor
   ],
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [

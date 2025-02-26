@@ -207,14 +207,6 @@ aie-footer {
   display: none;
 }
 
-.aiEditor-class ol, ul {
-  list-style: disc !important;
-}
-
-.aiEditor-class li {
-  list-style-type: disc !important;
-}
-
 .aie-content p {
   margin: 2px 0;
   line-height: 30px;

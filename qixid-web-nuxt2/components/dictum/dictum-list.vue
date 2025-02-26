@@ -2,7 +2,7 @@
   <div>
     <el-skeleton class="mt-10" :rows="10" animated v-if="loading"/>
     <div v-if="!loading && typography==2">
-      <ul v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0">
+      <ul v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="dictum-info-ul">
         <li v-for="(item,index) in dictumInfoListArr" class="dictum-info-cl" :key="index">
           <div class="flex-space-between user-info align-items-center">
             <div class="flex-left align-items-center">
@@ -49,8 +49,9 @@
           </div>
 
           <div class="dictum-content">
-            <ai-editor-module :ai-editor-id="'dictum-content'+index" :content="item.content"
-                              :editable="false"></ai-editor-module>
+                        <ai-editor-module :ai-editor-id="'dictum-content'+index" :content="item.content"
+                                          :editable="false"></ai-editor-module>
+<!--            <vditor-preview :id="'dictum-content'" :content="item.content"></vditor-preview>-->
           </div>
           <div class="flex-right mt-10">
             <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
@@ -545,10 +546,12 @@
 
 
 import EmojiModule from "../emoji-module.vue";
+import Vditor from 'static/vditor/dist/index.min.js'
+import VditorPreview from "../Vditor-preview.vue";
 
 export default {
   name: "dictumList",
-  components: {EmojiModule},
+  components: {VditorPreview, EmojiModule},
   props: {
     // 内容
     content: String,
@@ -869,4 +872,7 @@ export default {
   padding: 9px 15px;
 }
 
+.dictum-info-ul li {
+  list-style: none;
+}
 </style>

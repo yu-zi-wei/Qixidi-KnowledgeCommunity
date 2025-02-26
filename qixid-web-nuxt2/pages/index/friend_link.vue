@@ -32,7 +32,7 @@
           </div>
         </div>
         <el-skeleton class="mt-10" :rows="8" animated v-if="loading"/>
-        <div class="article-content-introduce" v-if="!loading">
+        <div class="article-content-introduce">
           <div class="mb-20 flex-space-between">
             <div>
               <h3 class="article-title color-theme">
@@ -71,10 +71,9 @@
               </a>
             </div>
           </div>
-          <ai-editor-module :ai-editor-id="'aiEditor-introduce'" v-if="!loading" :content="articleInfo.articleContent"
-                            :editable="false"></ai-editor-module>
+          <VditorPreview :id="'friendLinkVditor'" :content="articleInfo.articleContent"></VditorPreview>
           <!--   ============================= 评论开始  =============================   -->
-          <div class="" id="comment">
+          <div class="mt-40" id="comment">
             <p class="font-s-18 font-bold mb-20">
               评论<span class="ml-6" v-text="commentTotal"></span>
             </p>
@@ -372,8 +371,11 @@
 
 <script>
 
+import VditorPreview from "../../components/Vditor-preview.vue";
+
 export default {
   name: "friendLink",
+  components: {VditorPreview},
   head() {
     return {
       title: `${this.articleInfo.articleTitle == undefined ? process.env.PROJECT_NAME : this.articleInfo.articleTitle + ' - ' + process.env.PROJECT_NAME}`,

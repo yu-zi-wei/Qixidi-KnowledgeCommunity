@@ -103,4 +103,8 @@ export default {
 .browsing-list:hover {
   border: 1px solid #95a5a6;
 }
+
+.dialogContent li {
+  list-style: none;
+}
 </style>

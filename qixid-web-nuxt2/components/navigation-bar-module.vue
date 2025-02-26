@@ -510,11 +510,11 @@ export default {
       this.socket = new WebSocket(url);
       this.socket.onopen = (event) => {
         // 在这里可以执行连接成功后的操作
-        console.log("链接成功"+JSON.stringify(event))
+        console.log("链接成功" + JSON.stringify(event))
       };
 
       this.socket.onmessage = (event) => {
-        console.log("event.data===>"+event)
+        console.log("event.data===>" + event)
         let parse = JSON.parse(event.data);
         this.userNewsList = parse;
         let newsSums = 0;
@@ -577,6 +577,7 @@ export default {
   border: 1px solid #dfe4ea;
   margin: 4px;
   border-radius: 20px;
+  list-style-type: none;
 }
 
 .el-menu--popup {
@@ -590,5 +591,9 @@ export default {
 .el-menu--horizontal > .el-menu-item {
   height: 58px;
   line-height: 58px;
+}
+
+.nav-right-ul li {
+  list-style-type: none;
 }
 </style>

@@ -1,74 +1,73 @@
 <template>
   <div class="padding-10" style="height: 100%;">
-    <div style="height: 60px;">
-      <div class="title-input-class">
-        <div class="mb-10 flex-space-between flex-wrap-wrap padding-10">
-          <div class="flex-6 mr-6">
-            <el-input
-              class="articleTitleInput"
-              style="float: left;width: 100%;font-size: 16px;"
-              maxlength="120"
-              prefix-icon="el-icon-edit el-input__icon"
-              show-word-limit
-              placeholder="文章标题"
-              v-model="article.articleTitle"
-              clearable>
-            </el-input>
-          </div>
-          <div class="flex-right align-items-center">
-            <el-button class="mr-6" plain size="medium" :loading="buttonDraft" @click="saveDraft">草稿箱
-            </el-button>
-            <el-button v-if="isUpdate" class="mr-8" type="primary" size="medium" @click="articlePopup">
-              更 新<i class="el-icon-refresh ml-4"></i>
-            </el-button>
-            <el-button v-else class="mr-8" type="primary" size="medium" @click="articlePopup">
-              发 布<i class="el-icon-position ml-4"></i>
-            </el-button>
-            <el-dropdown trigger="click">
-              <div class="el-dropdown-link" title="最近文章">
-                <svg t="1729826374304" class="icon icon-theme icon-hover-theme-stand-out ml-5 mr-12 cursor-pointer"
-                     viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                     p-id="13656" width="32" height="32">
-                  <path
-                    d="M172.032 704.512c-40.96 0-73.728 32.768-73.728 73.728s32.768 73.728 73.728 73.728S249.856 819.2 249.856 778.24 212.992 704.512 172.032 704.512zM172.032 815.104c-20.48 0-36.864-16.384-36.864-36.864s16.384-36.864 36.864-36.864 36.864 16.384 36.864 36.864S192.512 815.104 172.032 815.104zM172.032 176.128c-40.96 0-73.728 32.768-73.728 73.728S131.072 327.68 172.032 327.68s73.728-32.768 73.728-73.728S212.992 176.128 172.032 176.128zM172.032 286.72C151.552 286.72 135.168 270.336 135.168 249.856c0-20.48 16.384-36.864 36.864-36.864s36.864 16.384 36.864 36.864C208.896 270.336 192.512 286.72 172.032 286.72zM851.968 438.272l-450.56 0c-40.96 0-73.728 32.768-73.728 73.728 0 40.96 32.768 73.728 73.728 73.728l450.56 0c40.96 0 73.728-32.768 73.728-73.728C925.696 471.04 892.928 438.272 851.968 438.272zM851.968 552.96l-450.56 0c-20.48 0-36.864-16.384-36.864-36.864 0-20.48 16.384-36.864 36.864-36.864l450.56 0c20.48 0 36.864 16.384 36.864 36.864C888.832 536.576 872.448 552.96 851.968 552.96zM851.968 704.512l-450.56 0c-40.96 0-73.728 32.768-73.728 73.728s32.768 73.728 73.728 73.728l450.56 0c40.96 0 73.728-32.768 73.728-73.728S892.928 704.512 851.968 704.512zM851.968 815.104l-450.56 0c-20.48 0-36.864-16.384-36.864-36.864 0-20.48 16.384-36.864 36.864-36.864l450.56 0c20.48 0 36.864 16.384 36.864 36.864C888.832 798.72 872.448 815.104 851.968 815.104zM397.312 327.68l450.56 0c40.96 0 73.728-32.768 73.728-73.728s-32.768-73.728-73.728-73.728l-450.56 0c-40.96 0-73.728 32.768-73.728 73.728S356.352 327.68 397.312 327.68zM397.312 212.992l450.56 0c20.48 0 36.864 16.384 36.864 36.864 0 20.48-16.384 36.864-36.864 36.864l-450.56 0C376.832 286.72 360.448 270.336 360.448 249.856 360.448 229.376 376.832 212.992 397.312 212.992zM172.032 438.272c-40.96 0-73.728 32.768-73.728 73.728s32.768 73.728 73.728 73.728 73.728-32.768 73.728-73.728S212.992 438.272 172.032 438.272zM172.032 552.96c-20.48 0-36.864-16.384-36.864-36.864 0-20.48 16.384-36.864 36.864-36.864s36.864 16.384 36.864 36.864C208.896 536.576 192.512 552.96 172.032 552.96z"
-                    p-id="13657"></path>
-                </svg>
-              </div>
-              <el-dropdown-menu slot="dropdown">
-                <div class="lately-article-cl">
-                  <el-tabs v-model="activeName" @tab-click="handleTabsClick">
-                    <el-tab-pane label="全部" name="-1"></el-tab-pane>
-                    <el-tab-pane label="草稿" name="4"></el-tab-pane>
-                    <el-tab-pane label="审核通过" name="2"></el-tab-pane>
-                    <el-tab-pane label="审核中" name="1"></el-tab-pane>
-                    <el-tab-pane label="审核未通过" name="3"></el-tab-pane>
-                    <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
-                         class="lately-article-item font-s-14 line-height-24 flex-left align-items-center" :key="index"
-                         title="点击文章快速编辑">
-                      <div style="width: 15px">
-                        <div :style="'background-color:'+auditStateDotColor(item.auditState)"
-                             class="aurora-dot mr-6"></div>
-                      </div>
-                      <div>{{ item.articleTitle }}</div>
-                    </div>
-                  </el-tabs>
-                </div>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <div v-if="userInfo!=null">
-              <el-avatar v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-              <el-avatar v-else src="/img/tx.jpg"></el-avatar>
+    <div class="title-input-class">
+      <div class="mb-10 flex-space-between flex-wrap-wrap">
+        <div class="flex-6 mr-6">
+          <el-input
+            class="articleTitleInput"
+            style="float: left;width: 100%;font-size: 16px;"
+            maxlength="120"
+            prefix-icon="el-icon-edit el-input__icon"
+            show-word-limit
+            placeholder="文章标题"
+            v-model="article.articleTitle"
+            clearable>
+          </el-input>
+        </div>
+        <div class="flex-right align-items-center">
+          <el-button class="mr-6" plain size="medium" :loading="buttonDraft" @click="saveDraft">草稿箱
+          </el-button>
+          <el-button v-if="isUpdate" class="mr-8" type="primary" size="medium" @click="articlePopup">
+            更 新<i class="el-icon-refresh ml-4"></i>
+          </el-button>
+          <el-button v-else class="mr-8" type="primary" size="medium" @click="articlePopup">
+            发 布<i class="el-icon-position ml-4"></i>
+          </el-button>
+          <el-dropdown trigger="click">
+            <div class="el-dropdown-link" title="最近文章">
+              <svg t="1729826374304" class="icon icon-theme icon-hover-theme-stand-out ml-5 mr-12 cursor-pointer"
+                   viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                   p-id="13656" width="32" height="32">
+                <path
+                  d="M172.032 704.512c-40.96 0-73.728 32.768-73.728 73.728s32.768 73.728 73.728 73.728S249.856 819.2 249.856 778.24 212.992 704.512 172.032 704.512zM172.032 815.104c-20.48 0-36.864-16.384-36.864-36.864s16.384-36.864 36.864-36.864 36.864 16.384 36.864 36.864S192.512 815.104 172.032 815.104zM172.032 176.128c-40.96 0-73.728 32.768-73.728 73.728S131.072 327.68 172.032 327.68s73.728-32.768 73.728-73.728S212.992 176.128 172.032 176.128zM172.032 286.72C151.552 286.72 135.168 270.336 135.168 249.856c0-20.48 16.384-36.864 36.864-36.864s36.864 16.384 36.864 36.864C208.896 270.336 192.512 286.72 172.032 286.72zM851.968 438.272l-450.56 0c-40.96 0-73.728 32.768-73.728 73.728 0 40.96 32.768 73.728 73.728 73.728l450.56 0c40.96 0 73.728-32.768 73.728-73.728C925.696 471.04 892.928 438.272 851.968 438.272zM851.968 552.96l-450.56 0c-20.48 0-36.864-16.384-36.864-36.864 0-20.48 16.384-36.864 36.864-36.864l450.56 0c20.48 0 36.864 16.384 36.864 36.864C888.832 536.576 872.448 552.96 851.968 552.96zM851.968 704.512l-450.56 0c-40.96 0-73.728 32.768-73.728 73.728s32.768 73.728 73.728 73.728l450.56 0c40.96 0 73.728-32.768 73.728-73.728S892.928 704.512 851.968 704.512zM851.968 815.104l-450.56 0c-20.48 0-36.864-16.384-36.864-36.864 0-20.48 16.384-36.864 36.864-36.864l450.56 0c20.48 0 36.864 16.384 36.864 36.864C888.832 798.72 872.448 815.104 851.968 815.104zM397.312 327.68l450.56 0c40.96 0 73.728-32.768 73.728-73.728s-32.768-73.728-73.728-73.728l-450.56 0c-40.96 0-73.728 32.768-73.728 73.728S356.352 327.68 397.312 327.68zM397.312 212.992l450.56 0c20.48 0 36.864 16.384 36.864 36.864 0 20.48-16.384 36.864-36.864 36.864l-450.56 0C376.832 286.72 360.448 270.336 360.448 249.856 360.448 229.376 376.832 212.992 397.312 212.992zM172.032 438.272c-40.96 0-73.728 32.768-73.728 73.728s32.768 73.728 73.728 73.728 73.728-32.768 73.728-73.728S212.992 438.272 172.032 438.272zM172.032 552.96c-20.48 0-36.864-16.384-36.864-36.864 0-20.48 16.384-36.864 36.864-36.864s36.864 16.384 36.864 36.864C208.896 536.576 192.512 552.96 172.032 552.96z"
+                  p-id="13657"></path>
+              </svg>
             </div>
+            <el-dropdown-menu slot="dropdown">
+              <div class="lately-article-cl">
+                <el-tabs v-model="activeName" @tab-click="handleTabsClick">
+                  <el-tab-pane label="全部" name="-1"></el-tab-pane>
+                  <el-tab-pane label="草稿" name="4"></el-tab-pane>
+                  <el-tab-pane label="审核通过" name="2"></el-tab-pane>
+                  <el-tab-pane label="审核中" name="1"></el-tab-pane>
+                  <el-tab-pane label="审核未通过" name="3"></el-tab-pane>
+                  <div v-for="(item,index) in latelyArticleList" @click="handleCommand(item.id)"
+                       class="lately-article-item font-s-14 line-height-24 flex-left align-items-center" :key="index"
+                       title="点击文章快速编辑">
+                    <div style="width: 15px">
+                      <div :style="'background-color:'+auditStateDotColor(item.auditState)"
+                           class="aurora-dot mr-6"></div>
+                    </div>
+                    <div>{{ item.articleTitle }}</div>
+                  </div>
+                </el-tabs>
+              </div>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <div v-if="userInfo!=null">
+            <el-avatar v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+            <el-avatar v-else src="/img/tx.jpg"></el-avatar>
           </div>
         </div>
       </div>
     </div>
     <div>
-      <mavon-editor-module :mdContent.sync="article.articleContentMd"
-                           :htmlContent.sync="article.articleContent"
-                           :theme.sync="article.theme"
-                           :content="article.articleContentMd"
-                           v-if="isClient"></mavon-editor-module>
+
+      <VditorMd :height="'90vh'"
+                :vditorId="'articlePublish'"
+                :mdContent.sync="article.articleContentMd"
+                :htmlContent.sync="article.articleContent"
+                :content="article.articleContentMd" v-if="isClient"></VditorMd>
     </div>
     <el-dialog title="文章发布" :visible.sync="articlePopupDialog" width="800px">
       <el-form :model="article" :rules="rules" ref="article" label-width="100px" class="demo-ruleForm">
@@ -163,10 +162,11 @@
 <script>
 import AiEditorModule from "../../components/AiEditor-module";
 import MavonEditorModule from "../../components/mavon-editor-module.vue";
+import VditorMd from "../../components/Vditor-md.vue";
 
 export default {
   name: "publishArticle",
-  components: {MavonEditorModule, AiEditorModule},
+  components: {VditorMd, MavonEditorModule, AiEditorModule},
   data() {
     return {
       isClient: false,
@@ -301,11 +301,11 @@ export default {
     },
 
     articlePopup() {
-      if (this.article.articleTitle === null || this.article.articleTitle === '') {
+      if (this.article.articleTitle === null || this.article.articleTitle.trim().length === 0) {
         this.$modal.msg("请填写标题！");
         return;
       }
-      if (this.article.articleContent === null || this.article.articleContent === '') {
+      if (this.article.articleContent === null || this.article.articleContent.trim().length === 0) {
         this.$modal.msg("请填写内容！");
         return;
       }
@@ -433,13 +433,8 @@ export default {
 }
 
 .title-input-class {
-  position: fixed;
   width: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
   background-color: #fefefe;
-  height: 65px;
   z-index: 99;
 }
 
@@ -450,5 +445,13 @@ export default {
 .el-timeline-item__wrapper :hover {
   color: var(--theme-color);
   cursor: pointer;
+}
+
+.el-button--medium {
+  padding: 10px 20px;
+}
+
+.el-button {
+  padding: 12px 20px;
 }
 </style>
