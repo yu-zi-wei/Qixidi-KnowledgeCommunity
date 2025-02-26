@@ -89,11 +89,11 @@ mybatis-plus:
       # AUTO 自增 NONE 空 INPUT 用户输入 ASSIGN_ID 雪花 ASSIGN_UUID 唯一 UUID
       id-type: AUTO
       # 全局逻辑删除的实体字段名
-      logic-delete-field: status
+#      logic-delete-field: status
       # 逻辑已删除值
-      logic-delete-value: 1
+#      logic-delete-value: 1
       # 逻辑未删除值
-      logic-not-delete-value: 0
+#      logic-not-delete-value: 0
       # 字段验证策略之 insert,在 insert 的时候的字段验证策略
       # IGNORED 忽略 NOT_NULL 非NULL NOT_EMPTY 非空 DEFAULT 默认 NEVER 不加入 SQL
       insertStrategy: NOT_NULL

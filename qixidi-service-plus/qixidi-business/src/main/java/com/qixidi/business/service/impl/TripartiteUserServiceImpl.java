@@ -390,7 +390,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     @Override
     public TripartiteUserVo BasicsUser() {
         String uuid = LoginHelper.getTripartiteUuid();
-        if (uuid == null) return new TripartiteUserVo();
+        if (uuid == null) return null;
         return baseMapper.getBasicsUser(uuid);
     }
 
