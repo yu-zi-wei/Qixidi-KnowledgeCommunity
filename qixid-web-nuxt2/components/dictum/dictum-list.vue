@@ -49,9 +49,7 @@
           </div>
 
           <div class="dictum-content">
-                        <ai-editor-module :ai-editor-id="'dictum-content'+index" :content="item.content"
-                                          :editable="false"></ai-editor-module>
-<!--            <vditor-preview :id="'dictum-content'" :content="item.content"></vditor-preview>-->
+            <vditor-preview :id="'dictum-content-'+index" :content="item.content"></vditor-preview>
           </div>
           <div class="flex-right mt-10">
             <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
@@ -227,8 +225,7 @@
               </div>
             </div>
             <div class="dictum-content">
-              <ai-editor-module :ai-editor-id="'dictum-content'+index+'-'+itemIndex" :content="item.content"
-                                :editable="false"></ai-editor-module>
+              <vditor-preview :id="'dictum-content-list-'+index+'-'+itemIndex" :content="item.content"></vditor-preview>
             </div>
             <div class="flex-right mt-30">
               <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
@@ -546,7 +543,6 @@
 
 
 import EmojiModule from "../emoji-module.vue";
-import Vditor from 'static/vditor/dist/index.min.js'
 import VditorPreview from "../Vditor-preview.vue";
 
 export default {
@@ -838,23 +834,6 @@ export default {
 .dictum-content {
   display: flex;
   max-height: 300px;
-  overflow-y: auto
-}
-
-.dictum-content::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-  background-color: #ced6e0;
-}
-
-.dictum-content::-webkit-scrollbar-track {
-  background: #fefefe;
-  border-radius: 2px;
-}
-
-.dictum-content::-webkit-scrollbar-thumb {
-  background: #ced6e0;
-  border-radius: 2px;
 }
 
 .dictum-content-two {

@@ -160,13 +160,12 @@
 </template>
 
 <script>
-import AiEditorModule from "../../components/AiEditor-module";
 import MavonEditorModule from "../../components/mavon-editor-module.vue";
 import VditorMd from "../../components/Vditor-md.vue";
 
 export default {
   name: "publishArticle",
-  components: {VditorMd, MavonEditorModule, AiEditorModule},
+  components: {VditorMd, MavonEditorModule},
   data() {
     return {
       isClient: false,

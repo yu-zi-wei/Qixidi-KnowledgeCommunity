@@ -113,10 +113,7 @@
         width="50%">
         <div class="font-bold-s mb-10 font-s-18 color-black">{{ feedbackInfo.feedbackTitle }}</div>
         <hr class="hr-item mb-10"/>
-        <ai-editor-module :ai-editor-id="'issues-info'+feedbackInfo.id"
-                          :editorHeight="'400px'"
-                          :content="feedbackInfo.feedbackContent"
-                          :editable="false"></ai-editor-module>
+        <vditor-preview :id="'issues-info'+feedbackInfo.id" :content="feedbackInfo.feedbackContent"></vditor-preview>
         <div class="flex-direction-row mt-20">
           <div>
             <div class="font-s-13">
@@ -169,12 +166,11 @@
                   clearable>
         </el-input>
         <div class="mt-10">
-          <ai-editor-module :ai-editor-id="'issues-editing'+feedbackInfo.id" :content="feedbackInfo.feedbackContent"
-                            :htmlContent.sync="feedbackInfo.feedbackContent"
-                            :editorHeight="'400px'"
-                            :editable="true"></ai-editor-module>
+          <vditor-md :vditor-id="'issues-editing'"
+                     :outline="false"
+                     :content="addFeedbackInfo.feedbackContent"
+                     :htmlContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
         </div>
-        <hr class="hr-item mt-5"/>
         <div slot="footer">
           <el-button size="medium" type="primary" @click="updateFeedbackInfo()">更 新</el-button>
         </div>
@@ -190,12 +186,12 @@
                   clearable>
         </el-input>
         <div class="mt-10">
-          <ai-editor-module :ai-editor-id="'issues-add'" :content="addFeedbackInfo.feedbackContent"
-                            :htmlContent.sync="addFeedbackInfo.feedbackContent"
-                            :editorHeight="'400px'"
-                            :editable="true"></ai-editor-module>
+          <vditor-md
+            :vditor-id="'issues-add'"
+            :outline="false"
+            :content="addFeedbackInfo.feedbackContent"
+            :htmlContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
         </div>
-        <hr class="hr-item mt-5"/>
         <div slot="footer">
           <el-button size="medium" type="primary" @click="addFeedback">新 建</el-button>
         </div>
@@ -206,10 +202,11 @@
 </template>
 
 <script>
-import AiEditorModule from "../../components/AiEditor-module.vue";
+import VditorMd from "../../components/Vditor-md.vue";
+import VditorPreview from "../../components/Vditor-preview.vue";
 
 export default {
-  components: {AiEditorModule},
+  components: {VditorPreview, VditorMd},
   data() {
     return {
       statusOptions: [
@@ -281,6 +278,7 @@ export default {
       })
     },
     addFeedbackWindow() {
+      console.log("this.userInfo" + this.userInfo)
       if (this.userInfo == null) {
         this.loginDialog = true;
       } else {

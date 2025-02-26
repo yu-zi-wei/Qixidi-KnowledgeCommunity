@@ -117,12 +117,6 @@
             <!--            />-->
             <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContentMd"
                             :outline.sync="tocArray"></vditor-preview>
-
-            <!--            <ai-editor-module :content="articleInfo.articleContent"-->
-            <!--                              :editor-height="'100%'"-->
-            <!--                              :outline.sync="tocArray"-->
-            <!--                              :editable="false"></ai-editor-module>-->
-
             <div class="mb-20 mt-40">
               <div v-if="articleInfo.type==2">
                 转载地址：
@@ -153,7 +147,7 @@
             </div>
             <hr class="hr-item mb-30 mt-20 mr-20"/>
             <!--   ============================= 评论开始  =============================   -->
-            <div class="" id="comment">
+            <div class="mt-20" id="comment">
               <p class="font-s-18 font-bold mb-20">
                 评论<span class="ml-6" v-text="commentTotal"></span>
               </p>

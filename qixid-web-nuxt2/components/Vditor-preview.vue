@@ -28,6 +28,10 @@ export default {
           speech: {
             enable: false,
           },
+          cache: {
+            enable: false
+          },
+          width: '100%',
           hljs: {
             style: 'monokai',
             lineNumber: true,// 显示行号
@@ -65,5 +69,23 @@ export default {
 </script>
 
 <style>
+.vditor-reset {
+  width: 100%;
+}
 
+.vditor-reset::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background-color: #ced6e0;
+}
+
+.vditor-reset::-webkit-scrollbar-track {
+  background: #fefefe;
+  border-radius: 2px;
+}
+
+.vditor-reset::-webkit-scrollbar-thumb {
+  background: #ced6e0;
+  border-radius: 2px;
+}
 </style>

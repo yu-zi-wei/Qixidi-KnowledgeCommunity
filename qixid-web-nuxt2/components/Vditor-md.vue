@@ -29,7 +29,7 @@ export default {
       type: String,
       default: '400px'
     },
-    outline:{
+    outline: {
       type: Boolean,
       default: true
     }
@@ -55,6 +55,7 @@ export default {
     initVditor() {
       this.vditor = new Vditor(this.vditorId, {
         height: this.height,
+        width: '100%',
         mode: this.mode,//wysiwyg-所见即所得、sv-分屏预览、ir-即时渲染、preview-预览模式
         value: this.content, // 设置要预览的 Markdown 内容
         placeholder: '编写内容......',
@@ -133,6 +134,7 @@ export default {
         },
         after: {},
         input: (value) => {
+          console.log("value:"+value)
           this.$emit('update:mdContent', value);
           this.$emit('update:htmlContent', value);
           //更新主题
@@ -228,4 +230,7 @@ export default {
 </script>
 
 <style>
+.vditor-reset {
+  width: 100%;
+}
 </style>

@@ -3,8 +3,7 @@
     <div class="flex-left">
       <div class="flex-9 background-color-fefefe">
         <div style="padding: 60px 60px 100px 60px;border-radius: 10px;border: 1px solid #e2e2e5">
-          <ai-editor-module :ai-editor-id="'aiEditor-dictum'" :content="dictumInfo.content"
-                            :editable="false"></ai-editor-module>
+          <vditor-preview :id="'aiEditor-dictum'" :content="dictumInfo.content"></vditor-preview>
           <div class="flex-right mt-20">
             <div
               v-if="(dictumInfo.worksName!=null && dictumInfo.worksName!='')||(dictumInfo.author!=null && dictumInfo.author!='')"
@@ -230,12 +229,12 @@
 </template>
 
 <script>
-import AiEditorModule from "../../../../components/AiEditor-module.vue";
 import EmojiModule from "../../../../components/emoji-module.vue";
+import VditorPreview from "../../../../components/Vditor-preview.vue";
 
 export default {
   name: "dictumDetails",
-  components: {EmojiModule, AiEditorModule},
+  components: {VditorPreview, EmojiModule},
   head() {
     return {
       title: "名言详情" + ' - ' + process.env.PROJECT_NAME,

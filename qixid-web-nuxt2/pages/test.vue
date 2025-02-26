@@ -31,13 +31,12 @@
 
 <script>
 import SubmissionChart from "../components/submission-chart";
-import AiEditorModule from "../components/AiEditor-module";
 import VditorMd from "../components/Vditor-md.vue";
 
 // import WebSocket from 'websocket';
 export default {
   name: "test",
-  components: {VditorMd, AiEditorModule, SubmissionChart},
+  components: {VditorMd, SubmissionChart},
   data() {
     return {
       title: "测试",
