@@ -72,8 +72,8 @@ export default {
           actions: [],//预览页面 复制到其他地方
           delay: 0,
           hljs: {
-            style: 'monokai',
-            lineNumber: true,// 显示行号
+            style: 'atom-one-dark',
+            lineNumber: false,// 显示行号
             enable: true,// 启用代码高亮
           }
         },

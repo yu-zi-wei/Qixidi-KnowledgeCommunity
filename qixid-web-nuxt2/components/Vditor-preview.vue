@@ -33,8 +33,8 @@ export default {
           },
           width: '100%',
           hljs: {
-            style: 'monokai',
-            lineNumber: true,// 显示行号
+            style: 'atom-one-dark',//主题：androidstudio,atom-one-dark
+            lineNumber: false,// 显示行号
             enable: true,// 启用代码高亮
           },
           anchor: 1,
