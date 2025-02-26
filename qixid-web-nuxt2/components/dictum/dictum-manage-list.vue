@@ -30,8 +30,7 @@
             </el-tag>
           </div>
           <div>
-            <ai-editor-module :ai-editor-id="'dictum-manage-content'+index" :content="item.content"
-                              :editable="false"></ai-editor-module>
+            <vditor-preview :id="'dictum-manage-content'+index" :content="item.content"></vditor-preview>
           </div>
           <div class="flex-space-between mt-15">
             <div class="color-grey-2 font-s-12" title="记录时间">
@@ -131,8 +130,11 @@
 
 <script>
 
+import VditorPreview from "../Vditor-preview.vue";
+
 export default {
   name: "dictumManage",
+  components: {VditorPreview},
   props: {
     state: Number,
     keyword: String

@@ -833,7 +833,7 @@ export default {
 
 .dictum-content {
   display: flex;
-  max-height: 300px;
+  max-height: 260px;
 }
 
 .dictum-content-two {
