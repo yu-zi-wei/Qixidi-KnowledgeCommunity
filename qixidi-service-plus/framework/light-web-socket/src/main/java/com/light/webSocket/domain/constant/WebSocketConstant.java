@@ -1,4 +1,4 @@
-package com.qixidi.business.domain.constant;
+package com.light.webSocket.domain.constant;
 
 /**
  * WebSocket 常量

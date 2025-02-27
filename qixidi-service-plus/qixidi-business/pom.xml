@@ -28,6 +28,16 @@
 
         <dependency>
             <groupId>com.light</groupId>
+            <artifactId>light-ai</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-web-socket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
             <artifactId>light-excel</artifactId>
         </dependency>
 
@@ -55,6 +65,7 @@
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

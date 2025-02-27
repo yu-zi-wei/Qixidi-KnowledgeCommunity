@@ -19,6 +19,8 @@
         <module>light-oss</module>
         <module>light-web</module>
         <module>light-minio</module>
+        <module>light-ai</module>
+        <module>light-web-socket</module>
     </modules>
 
 </project>

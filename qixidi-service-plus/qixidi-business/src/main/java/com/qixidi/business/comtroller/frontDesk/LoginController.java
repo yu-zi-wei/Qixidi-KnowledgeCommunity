@@ -8,6 +8,7 @@ import com.light.core.config.justAuth.JustAuthConfig;
 import com.light.core.constant.Constants;
 import com.light.core.core.domain.R;
 import com.light.redission.annotation.RepeatSubmit;
+import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.controller.BaseController;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserStatus;
@@ -18,7 +19,6 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import com.qixidi.business.service.ITripartiteUserService;
-import com.qixidi.business.service.webSocket.WebSocketServer;
 import com.qixidi.system.service.SysLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,7 +47,6 @@ public class LoginController extends BaseController {
     private final JustAuthConfig justAuthConfig;
     private final SysLoginService loginService;
     private final ITripartiteUserService iTripartiteUserService;
-    private final WebSocketServer webSocketServer;
 
     /**
      * 密码登录
@@ -139,7 +138,10 @@ public class LoginController extends BaseController {
         try {
             String tripartiteUuid = LoginHelper.getTripartiteUuid();
             if (tripartiteUuid != null) {
-                webSocketServer.userLogout(tripartiteUuid);
+                //用户链接
+                WebSocketUtils.removeLinks(tripartiteUuid);
+                //用户私信链接
+                WebSocketUtils.removeLinks(tripartiteUuid + ":sx");
                 StpUtil.logout();
                 loginService.logout(LoginHelper.getTripartiteUsername());
             }

@@ -1,7 +1,7 @@
-package com.qixidi.business.selector.webSocket;
+package com.light.webSocket.selector;
 
 
-import com.qixidi.business.domain.enums.WebSocketEnum;
+import com.light.webSocket.domain.enums.WebSocketEnum;
 
 /**
  * @author ziwei

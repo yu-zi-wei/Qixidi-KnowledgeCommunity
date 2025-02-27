@@ -2,6 +2,7 @@ package com.qixidi.business.service.impl.comment;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
@@ -13,7 +14,7 @@ import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
-import com.qixidi.business.selector.webSocket.WebSocketSelector;
+import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.business.service.comment.IArticleCommentService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;

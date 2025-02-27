@@ -83,6 +83,16 @@
         </dependency>
 
         <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-ai</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>light-web-socket</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>

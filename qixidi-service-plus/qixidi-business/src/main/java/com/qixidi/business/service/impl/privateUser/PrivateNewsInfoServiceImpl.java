@@ -1,39 +1,39 @@
 package com.qixidi.business.service.impl.privateUser;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
-import com.qixidi.business.domain.bo.privateUser.PrivateUserBo;
-import com.qixidi.business.domain.constant.WebSocketConstant;
-import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
-import com.qixidi.business.domain.entity.privateUser.PrivateUser;
-import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
-import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
-import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
-import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
-import com.qixidi.business.selector.webSocket.WebSocketSelector;
-import com.qixidi.business.service.news.INewsUserInfoService;
-import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
-import com.qixidi.business.service.privateUser.IPrivateUserService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.WebSocketEnum;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.DateUtils;
-import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qixidi.business.service.webSocket.WebSocketServer;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.DateUtils;
+import com.light.core.utils.StringUtils;
+import com.light.webSocket.domain.constant.WebSocketConstant;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
+import com.light.webSocket.utils.WebSocketUtils;
+import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
+import com.qixidi.business.domain.bo.privateUser.PrivateUserBo;
+import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
+import com.qixidi.business.domain.entity.privateUser.PrivateUser;
+import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
+import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
+import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
+import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
+import com.qixidi.business.service.news.INewsUserInfoService;
+import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
+import com.qixidi.business.service.privateUser.IPrivateUserService;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 
@@ -55,7 +55,6 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     private final INewsUserInfoService iNewsUserInfoService;
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
-    private final WebSocketServer webSocketServer;
 
     /**
      * 查询私信记录
@@ -117,7 +116,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         add.setCreateTime(new Date());
         String replyTargetUid = bo.getReplyTargetUid();
         String webSocketUuid = replyTargetUid + ":" + uuid;
-        Boolean online = webSocketServer.isOnline(webSocketUuid);
+        Boolean online = WebSocketUtils.containsKey(webSocketUuid);
         if (online) {
             add.setBeenRead(2);// 当前私信在线(默认已读)
         }
@@ -127,7 +126,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
             Map<String, Integer> datePoor = DateUtils.getDatePoor(privateNewsInfoVo.getCreateTime(), new Date());
             if (datePoor.get("min") > 20) {
                 baseMapper.update(null, new UpdateWrapper<PrivateNewsInfo>()
-                    .set("time_mark", 1).eq("id", privateNewsInfoVo.getId()));
+                        .set("time_mark", 1).eq("id", privateNewsInfoVo.getId()));
             }
         }
 //        添加消息
@@ -151,8 +150,8 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
             map.put("newsList", result.getRecords());
             map.put("userList", privateUserVoTableDataInfo.getRows());
 
-            webSocketServer.sendMessageToUser(webSocketUuid, map);
-            log.info("webSocket私信推送:{}", add.getReplyTargetUid());
+            //webSocket私信推送
+            WebSocketUtils.sendMessage(webSocketUuid, map);
             return flag;
         }
         //        webSocket推送系统消息
@@ -166,19 +165,19 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     public void updatePrivateNews(String uid, String replyTargetUid, String newsComment) {
 
         PrivateUserVo privateUserVo = privateUserMapper.selectVoOne(new QueryWrapper<PrivateUser>()
-            .eq("target_uid", uid).eq("uid", replyTargetUid));
+                .eq("target_uid", uid).eq("uid", replyTargetUid));
         if (ObjectUtils.isEmpty(privateUserVo)) {
             PrivateUser privateUser = new PrivateUser().setUid(replyTargetUid)
-                .setTargetUid(uid)
-                .setCreateTime(new Date())
-                .setUpdateTime(new Date());
+                    .setTargetUid(uid)
+                    .setCreateTime(new Date())
+                    .setUpdateTime(new Date());
             privateUserMapper.insert(privateUser);
         }
         // 更新用户私信表
         privateUserMapper.update(null, new UpdateWrapper<PrivateUser>()
-            .set("last_news", newsComment).set("update_time", new Date())
-            .eq("uid", uid).eq("target_uid", replyTargetUid)
-            .or().eq("target_uid", uid).eq("uid", replyTargetUid));
+                .set("last_news", newsComment).set("update_time", new Date())
+                .eq("uid", uid).eq("target_uid", replyTargetUid)
+                .or().eq("target_uid", uid).eq("uid", replyTargetUid));
     }
 
     /**
@@ -208,7 +207,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     public void beenRead(String targetUid) {
         String uuid = LoginHelper.getTripartiteUuid();
         baseMapper.update(null, new UpdateWrapper<PrivateNewsInfo>().set("been_read", 2)
-            .eq("reply_target_uid", uuid).eq("uid", targetUid));
+                .eq("reply_target_uid", uuid).eq("uid", targetUid));
         //        webSocket站内消息推送
         WebSocketSelector.execute(uuid, WebSocketEnum.INSIDE_NOTICE);
         //        webSocket站内私信红点消息推送

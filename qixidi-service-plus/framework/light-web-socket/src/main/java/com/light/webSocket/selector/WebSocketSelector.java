@@ -1,7 +1,7 @@
-package com.qixidi.business.selector.webSocket;
+package com.light.webSocket.selector;
 
 
-import com.qixidi.business.domain.enums.WebSocketEnum;
+import com.light.webSocket.domain.enums.WebSocketEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

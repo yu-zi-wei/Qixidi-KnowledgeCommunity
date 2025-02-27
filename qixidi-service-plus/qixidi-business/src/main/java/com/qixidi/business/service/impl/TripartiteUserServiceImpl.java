@@ -35,6 +35,7 @@ import com.light.exception.ServiceException;
 import com.light.mybatisPlus.domain.dto.UserInfoIdNameDto;
 import com.light.mybatisPlus.interfaces.UserInfoInterface;
 import com.light.redission.utils.RedisUtils;
+import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserStatus;
 import com.qixidi.auth.domain.model.LoginUser;
@@ -59,7 +60,6 @@ import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
 import com.qixidi.business.service.ITripartiteUserService;
-import com.qixidi.business.service.webSocket.WebSocketServer;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -105,8 +105,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     private WeiBoPlatformConfig weiBoPlatformConfig;
     @Autowired
     private ZhiFuBaoPlatformConfig zhiFuBaoPlatformConfig;
-    @Autowired
-    private WebSocketServer webSocketServer;
 
     /**
      * 查询平台用户
@@ -483,7 +481,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         if (ObjectUtils.isNotEmpty(tripartiteUser)) {
             BeanUtils.copyProperties(tripartiteUser, userSimpleInfoVo);
         }
-        userSimpleInfoVo.setIsOnline(webSocketServer.isOnline(userid));
+        userSimpleInfoVo.setIsOnline(WebSocketUtils.containsKey(userid));
         return userSimpleInfoVo;
     }
 

@@ -1,9 +1,8 @@
 package com.qixidi.business.execute;
 
-import com.qixidi.business.domain.enums.WebSocketEnum;
-import com.qixidi.business.selector.webSocket.WebSocketInterface;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketInterface;
 import com.qixidi.business.service.impl.news.NewsUserInfoServiceImpl;
-import com.qixidi.business.service.webSocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WebSocketInsideChatExecute implements WebSocketInterface {
-    @Autowired
-    private WebSocketServer webSocketServer;
     @Autowired
     private NewsUserInfoServiceImpl newsUserInfoService;
 

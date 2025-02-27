@@ -112,6 +112,7 @@ public class SysLoginService {
 
     public void logout(String loginName) {
         asyncService.recordLogininfor(loginName, Constants.LOGOUT, "退出成功", ServletUtils.getRequest());
+
     }
 
     /**
