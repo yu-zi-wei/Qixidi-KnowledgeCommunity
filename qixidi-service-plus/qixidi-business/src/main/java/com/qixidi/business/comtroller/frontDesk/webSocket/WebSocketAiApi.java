@@ -1,6 +1,7 @@
 package com.qixidi.business.comtroller.frontDesk.webSocket;
 
-import com.light.ai.service.DeepSeekService;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
 import com.light.webSocket.utils.WebSocketUtils;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -11,9 +12,6 @@ import jakarta.websocket.server.ServerEndpoint;
 import jodd.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,14 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ServerEndpoint(value = "/websocket/ai/{userId}")
-public class WebSocketAiApi implements ApplicationContextAware {
-    private static ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        WebSocketAiApi.applicationContext = applicationContext;
-    }
-
+public class WebSocketAiApi {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketAiApi.class);
     //当前客户端名称
     private String key = "";
@@ -70,9 +61,7 @@ public class WebSocketAiApi implements ApplicationContextAware {
     public void onMessage(String message, Session session) {
         if (StringUtil.isNotEmpty(message)) {
             logger.info("收到用户消息:{},报文:{}", key, message);
-            DeepSeekService deepSeekService = applicationContext.getBean(DeepSeekService.class);
-            deepSeekService.generationContent(message, session);
+            WebSocketSelector.execute(WebSocketEnum.AI).aiExecute(message, session);
         }
     }
-
 }

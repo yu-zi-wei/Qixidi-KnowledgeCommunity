@@ -2,11 +2,32 @@ package com.qixidi.business.service.impl.comment;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.R;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.enums.MsgEnums;
+import com.light.core.utils.StringUtils;
+import com.light.core.utils.word.WordFilter;
+import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
+import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
-import com.qixidi.business.domain.enums.*;
+import com.qixidi.business.domain.enums.CommentType;
+import com.qixidi.business.domain.enums.CountUserType;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.StatusEnums;
+import com.qixidi.business.domain.enums.article.ArticleUpdateType;
+import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
@@ -14,32 +35,14 @@ import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
-import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.business.service.comment.IArticleCommentService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
-import com.qixidi.auth.domain.entity.TripartiteUser;
-import com.light.core.core.page.TableDataInfo;
-import com.light.core.enums.*;
-import com.qixidi.business.domain.enums.article.ArticleUpdateType;
-import com.qixidi.business.domain.enums.news.NewsType;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.light.redission.utils.RedisUtils;
-import com.light.core.utils.word.WordFilter;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
@@ -159,7 +162,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
                     newsUserRecord.setCreateTime(new Date());
                     newsUserRecordMapper.insert(newsUserRecord);
                     //WebSocket推送消息
-                    WebSocketSelector.execute(bo.getTargetUid(), WebSocketEnum.INSIDE_NOTICE);
+                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
                 }
             });
         }
@@ -178,7 +181,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         //修改文章评论数
         articleInformationMapper.updateAdd(bo.getArticleId(), ArticleUpdateType.COMMENT_COUNT.getCode());
         //WebSocket推送消息
-        WebSocketSelector.execute(bo.getTargetUid(), WebSocketEnum.INSIDE_NOTICE);
+        WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
     }
 
 
@@ -209,19 +212,19 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     public List<ArticleCommentVo> ArticleList(ArticleCommentBo bo, PageQuery pageQuery) {
         //一级评论
         List<ArticleCommentVo> list = baseMapper.selectVoList(new LambdaQueryWrapper<ArticleComment>()
-            .eq(ArticleComment::getArticleId, bo.getArticleId())
-            .eq(ArticleComment::getType, 1)
-            .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode())
-            .orderByDesc(ArticleComment::getCreateTime));
+                .eq(ArticleComment::getArticleId, bo.getArticleId())
+                .eq(ArticleComment::getType, 1)
+                .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode())
+                .orderByDesc(ArticleComment::getCreateTime));
         if (CollectionUtil.isEmpty(list)) return new ArrayList<>();
         List<Long> ids = list.stream().map(ArticleCommentVo::getId).collect(Collectors.toList());
         //二级评论
         List<ArticleCommentVo> levelList = baseMapper.selectVoList(new LambdaQueryWrapper<ArticleComment>()
-            .eq(ArticleComment::getArticleId, bo.getArticleId())
-            .eq(ArticleComment::getType, 2)
-            .in(ArticleComment::getParentId, ids)
-            .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode())
-            .orderByAsc(ArticleComment::getCreateTime));
+                .eq(ArticleComment::getArticleId, bo.getArticleId())
+                .eq(ArticleComment::getType, 2)
+                .in(ArticleComment::getParentId, ids)
+                .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode())
+                .orderByAsc(ArticleComment::getCreateTime));
 
         Set<String> uids = new HashSet<>();
         list.forEach(item -> uids.add(item.getCommentUid()));
@@ -230,7 +233,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         }
 
         List<TripartiteUser> tripartiteUserVos = tripartiteUserMapper.selectList(new LambdaQueryWrapper<TripartiteUser>()
-            .in(TripartiteUser::getUuid, uids));
+                .in(TripartiteUser::getUuid, uids));
         Map<String, TripartiteUser> userMpa = tripartiteUserVos.stream().collect(Collectors.toMap(TripartiteUser::getUuid, item -> item));
         Map<Long, List<ArticleCommentVo>> levelmap = new HashMap<>();
 
@@ -274,7 +277,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     public boolean deleteWithValidById(ArticleCommentBo bo) {
         //        获取该评论的所以子集评论
         List<ArticleComment> articleComments = baseMapper.selectList(new QueryWrapper<ArticleComment>()
-            .eq("parent_id", bo.getId()).or().eq("target_id", bo.getId()));
+                .eq("parent_id", bo.getId()).or().eq("target_id", bo.getId()));
         List<Long> collect = articleComments.stream().map(item -> item.getId()).collect(Collectors.toList());
         collect.add(bo.getId());
         executorService.execute(new Runnable() {
@@ -295,7 +298,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserType.FANS_COMMENT_COUNT.getCode());
         //修改文章评论数
         articleInformationMapper.updateDeleteNumber(bo.getArticleId(),
-            ArticleUpdateType.COMMENT_COUNT.getCode(), size);
+                ArticleUpdateType.COMMENT_COUNT.getCode(), size);
     }
 
     @Override

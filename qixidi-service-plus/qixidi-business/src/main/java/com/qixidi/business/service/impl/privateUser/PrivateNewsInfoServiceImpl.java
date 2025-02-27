@@ -155,9 +155,9 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
             return flag;
         }
         //        webSocket推送系统消息
-        WebSocketSelector.execute(replyTargetUid, WebSocketEnum.INSIDE_NOTICE);
+        WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(replyTargetUid);
         //        webSocket推送私信红点
-        WebSocketSelector.execute(replyTargetUid + WebSocketConstant.PERSONAL_RED_DOT, WebSocketEnum.PERSONAL_RED_DOT);
+        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(replyTargetUid + WebSocketConstant.PERSONAL_RED_DOT);
         log.info("webSocket消息推送:{}", replyTargetUid);
         return flag;
     }
@@ -209,9 +209,9 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         baseMapper.update(null, new UpdateWrapper<PrivateNewsInfo>().set("been_read", 2)
                 .eq("reply_target_uid", uuid).eq("uid", targetUid));
         //        webSocket站内消息推送
-        WebSocketSelector.execute(uuid, WebSocketEnum.INSIDE_NOTICE);
+        WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
         //        webSocket站内私信红点消息推送
-        WebSocketSelector.execute(uuid + WebSocketConstant.PERSONAL_RED_DOT, WebSocketEnum.PERSONAL_RED_DOT);
+        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(uuid + WebSocketConstant.PERSONAL_RED_DOT);
 
     }
 }

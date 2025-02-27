@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
+
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 
@@ -100,7 +101,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
         lqw.eq(bo.getType() != null, FabulousRecord::getType, bo.getType());
         lqw.eq(bo.getState() != null, FabulousRecord::getState, bo.getState());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            FabulousRecord::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
+                FabulousRecord::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
@@ -146,7 +147,6 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
     }
 
 
-
     @Override
     public R spotFabulous(FabulousRecordBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
@@ -162,7 +162,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
                 cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
             }
             Set<String> userFuSet = CollectionUtils.isEmpty(cacheMpa.get(bo.getUid())) ? new HashSet()
-                : cacheMpa.get(bo.getUid());
+                    : cacheMpa.get(bo.getUid());
             userFuSet.add(bo.getTypeId().toString());
             cacheMpa.put(bo.getUid(), userFuSet);
             RedisUtils.setCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
@@ -173,12 +173,12 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
                 articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
             }
             Set<String> articleSet = CollectionUtils.isEmpty(articleMap.get(bo.getTypeId().toString())) ? new HashSet()
-                : articleMap.get(bo.getTypeId().toString());
+                    : articleMap.get(bo.getTypeId().toString());
             articleSet.add(bo.getUid());
             articleMap.put(bo.getTypeId().toString(), articleSet);
             RedisUtils.setCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
             //记录文章亲密度
-            articleInformationService.recordArticleIntimacy(bo.getUid(),bo.getLabelId(),2D);
+            articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), 2D);
         }
         if (bo.getUid().equals(bo.getTargetUid())) return R.ok();
 //        发送消息
@@ -194,7 +194,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
                 newsUserRecord.setCreateTime(new Date());
                 newsUserRecordMapper.insert(newsUserRecord);
                 //WebSocket推送消息
-                WebSocketSelector.execute(bo.getTargetUid(), WebSocketEnum.INSIDE_NOTICE);
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
             }
         });
         return R.ok();
@@ -223,17 +223,17 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             articleMap.put(bo.getTypeId().toString(), articleSet);
             RedisUtils.setCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
             //记录亲密度
-            articleInformationService.recordArticleIntimacy(bo.getUid(),bo.getLabelId(),-2D);
+            articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), -2D);
             //发送消息
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
                     newsUserRecordMapper.delete(new QueryWrapper<NewsUserRecord>()
-                        .eq("target_uid", bo.getUid())
-                        .eq("uid", bo.getTargetUid())
-                        .eq("type", NewsType.FABULOUS_NEWS.getCode()));
+                            .eq("target_uid", bo.getUid())
+                            .eq("uid", bo.getTargetUid())
+                            .eq("type", NewsType.FABULOUS_NEWS.getCode()));
                     //WebSocket推送消息
-                    WebSocketSelector.execute(bo.getTargetUid(), WebSocketEnum.INSIDE_NOTICE);
+                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
                 }
             });
         }

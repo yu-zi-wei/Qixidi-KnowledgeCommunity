@@ -27,7 +27,7 @@ public class WebsocketPersonalRedDotExecute implements WebSocketInterface {
     }
 
     @Override
-    public void execute(String uuid, WebSocketEnum anEnum) {
+    public void execute(String uuid) {
         PrivateUserBo bo = new PrivateUserBo();
         bo.setUid(uuid.replace(WebSocketConstant.PERSONAL_RED_DOT, ""));
         TableDataInfo<PrivateUserVo> list = iPrivateUserService.queryPageList(bo, new PageQuery());

@@ -69,7 +69,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
                     newsUserRecord.setCreateTime(new Date());
                     newsUserRecordMapper.insert(newsUserRecord);
                     //WebSocket推送消息
-                    WebSocketSelector.execute(bo.getTargetId(), WebSocketEnum.INSIDE_NOTICE);
+                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
                 }
             });
         } else if (bo.getType().equals(UserFollowType.LABEL_FOLLOW.getCode())) { //标签关注
@@ -98,7 +98,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
                             .eq("uid", bo.getTargetId())
                             .eq("type", NewsType.FOLLOW_NEWS.getCode()));
                     //WebSocket推送消息
-                    WebSocketSelector.execute(bo.getTargetId(), WebSocketEnum.INSIDE_NOTICE);
+                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
                 }
             });
         } else if (bo.getType().equals(UserFollowType.LABEL_FOLLOW.getCode())) { //标签关注取消

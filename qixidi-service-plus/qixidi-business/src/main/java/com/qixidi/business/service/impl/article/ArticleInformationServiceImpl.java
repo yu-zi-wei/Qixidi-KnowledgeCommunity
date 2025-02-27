@@ -22,6 +22,7 @@ import com.light.core.utils.ip.AddressUtils;
 import com.light.core.utils.word.WordFilter;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
@@ -33,7 +34,10 @@ import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.entity.user.UserFollow;
-import com.qixidi.business.domain.enums.*;
+import com.qixidi.business.domain.enums.CollectionType;
+import com.qixidi.business.domain.enums.CountUserType;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.UserFollowType;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
 import com.qixidi.business.domain.enums.article.ArticleUpdateType;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
@@ -49,7 +53,6 @@ import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
-import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.business.service.article.IArticleInformationService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -222,7 +225,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 .setCreateTime(new Date());
         newsSystemInfoMapper.insert(newsSystemInfo);
         //WebSocket推送消息
-        WebSocketSelector.execute(uuid, WebSocketEnum.INSIDE_NOTICE);
+        WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
     }
 
     public void articleWeightAlgorithms(List<ArticleInformationVo> list) {

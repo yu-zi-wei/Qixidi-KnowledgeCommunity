@@ -25,10 +25,13 @@ public class WebSocketSelector {
     private WebSocketSelector() {
     }
 
-    public static void execute(String roleid, WebSocketEnum anEnum) {
+    public static WebSocketInterface execute(WebSocketEnum anEnum) {
         for (Map.Entry<String, WebSocketInterface> entry : taskClearHandlers.entrySet()) {
             WebSocketInterface handler = entry.getValue();
-            if (handler.support(anEnum)) handler.execute(roleid, anEnum);
+            if (handler.support(anEnum)) {
+                return handler;
+            }
         }
+        throw new RuntimeException("没有找到对应的处理器");
     }
 }

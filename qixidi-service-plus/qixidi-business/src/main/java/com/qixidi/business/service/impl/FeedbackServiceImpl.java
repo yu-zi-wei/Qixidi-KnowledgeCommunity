@@ -57,7 +57,7 @@ public class FeedbackServiceImpl implements IFeedbackService {
     public FeedbackVo queryById(Long id) {
         FeedbackVo FeedbackVo = baseMapper.selectVoById(id);
         TripartiteUser tripartiteUser = tripartiteUserMapper.selectOne(new LambdaQueryWrapper<TripartiteUser>()
-            .eq(TripartiteUser::getUuid, FeedbackVo.getUpdateBy()));
+                .eq(TripartiteUser::getUuid, FeedbackVo.getUpdateBy()));
         FeedbackVo.setUpdateName(tripartiteUser.getNickname());
         return FeedbackVo;
     }
@@ -154,16 +154,16 @@ public class FeedbackServiceImpl implements IFeedbackService {
             //发送系统消息
             String content = String.format("%s 修改了任务：#%s 状态为-[%s]", tripartiteUser.getNickname(), FeedbackVo.getFeedbackTitle(), FeedbackStatus.acquireStatusMessage(status));
             NewsSystemInfo newsSystemInfo = new NewsSystemInfo()
-                .setNewsTitle(content)
-                .setNewsContent(content)
-                .setIsDetails(1L)
-                .setType(2L)
-                .setIsMassAir(2L)
-                .setUid(FeedbackVo.getUid())
-                .setCreateTime(new Date());
+                    .setNewsTitle(content)
+                    .setNewsContent(content)
+                    .setIsDetails(1L)
+                    .setType(2L)
+                    .setIsMassAir(2L)
+                    .setUid(FeedbackVo.getUid())
+                    .setCreateTime(new Date());
             newsSystemInfoMapper.insert(newsSystemInfo);
             //WebSocket推送消息
-            WebSocketSelector.execute(FeedbackVo.getUid(), WebSocketEnum.INSIDE_NOTICE);
+            WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(FeedbackVo.getUid());
         }
         return isSucceed;
     }

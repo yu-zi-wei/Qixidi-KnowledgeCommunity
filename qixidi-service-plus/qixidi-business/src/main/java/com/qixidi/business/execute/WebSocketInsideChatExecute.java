@@ -23,7 +23,7 @@ public class WebSocketInsideChatExecute implements WebSocketInterface {
     }
 
     @Override
-    public void execute(String uuid, WebSocketEnum anEnum) {
+    public void execute(String uuid) {
 
     }
 

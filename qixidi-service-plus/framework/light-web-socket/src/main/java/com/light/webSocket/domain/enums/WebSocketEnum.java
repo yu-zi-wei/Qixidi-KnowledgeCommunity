@@ -12,6 +12,7 @@ public enum WebSocketEnum {
     SYSTEM_TASKS(2, "系统任务"),
     INSIDE_CHAT(3, "站内聊天"),
     PERSONAL_RED_DOT(4, "私信红点"),
+    AI(5, "AI对话"),
     ;
     private int code;
     private String msg;

@@ -39,9 +39,9 @@ public class WebSocketUserApi {
         WebSocketUtils.addLinks(userId, session);
         try {
             if (type == 1) {
-                WebSocketSelector.execute(userId, WebSocketEnum.INSIDE_NOTICE);
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(userId);
             } else if (type == 4) {
-                WebSocketSelector.execute(userId, WebSocketEnum.PERSONAL_RED_DOT);
+                WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(userId);
             }
         } catch (Exception e) {
             e.printStackTrace();

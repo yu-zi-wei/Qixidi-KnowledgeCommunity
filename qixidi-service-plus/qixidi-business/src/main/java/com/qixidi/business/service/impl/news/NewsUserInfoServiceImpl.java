@@ -148,7 +148,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         List<NewsUserSumVo> list = new ArrayList<>();
         for (NewsType value : NewsType.values()) {
             NewsUserSumVo newsUserSumVo = new NewsUserSumVo().setType(value.getCode()).setTypeInfo(value.getValue())
-                .setNewsSum(0).setRoute(value.getRoute());
+                    .setNewsSum(0).setRoute(value.getRoute());
             list.add(newsUserSumVo);
         }
         List<NewsUserRecord> newsUserRecords = newsUserRecordMapper.selectLists(uid);
@@ -239,12 +239,12 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
             RedisUtils.setCacheSet(key, cacheSet);
         }
         newsUserRecordMapper.update(null, new UpdateWrapper<NewsUserRecord>()
-            .set("been_read", bo.getBeenRead())
-            .eq("type", bo.getType())
-            .eq("uid", uuid)
+                .set("been_read", bo.getBeenRead())
+                .eq("type", bo.getType())
+                .eq("uid", uuid)
         );
         //WebSocket推送消息
-        WebSocketSelector.execute(uuid, WebSocketEnum.INSIDE_NOTICE);
+        WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
         return true;
     }
 
@@ -253,7 +253,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         List<NewsUserSumVo> list = new ArrayList<>();
         for (NewsType value : NewsType.values()) {
             NewsUserSumVo newsUserSumVo = new NewsUserSumVo().setType(value.getCode()).setTypeInfo(value.getValue())
-                .setNewsSum(0).setRoute(value.getRoute());
+                    .setNewsSum(0).setRoute(value.getRoute());
             list.add(newsUserSumVo);
         }
         return list;
