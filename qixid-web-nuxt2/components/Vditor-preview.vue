@@ -34,7 +34,7 @@ export default {
           width: '100%',
           hljs: {
             style: 'atom-one-dark',//主题：androidstudio,atom-one-dark
-            lineNumber: false,// 显示行号
+            lineNumber: true,// 显示行号
             enable: true,// 启用代码高亮
           },
           anchor: 1,
@@ -69,23 +69,5 @@ export default {
 </script>
 
 <style>
-.vditor-reset {
-  width: 100%;
-}
-
-.vditor-reset::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-  background-color: #ced6e0;
-}
-
-.vditor-reset::-webkit-scrollbar-track {
-  background: #fefefe;
-  border-radius: 2px;
-}
-
-.vditor-reset::-webkit-scrollbar-thumb {
-  background: #ced6e0;
-  border-radius: 2px;
-}
+@import url("components/css/vditor-components.css");
 </style>

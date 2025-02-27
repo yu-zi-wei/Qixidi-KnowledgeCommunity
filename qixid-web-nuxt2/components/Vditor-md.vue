@@ -9,7 +9,6 @@
 
 // 从本地静态文件引入 Vditor
 import Vditor from 'static/vditor/dist/index.min.js'
-
 export default {
   props: {
     // 接收父组件传递的 Markdown 内容
@@ -73,7 +72,7 @@ export default {
           delay: 0,
           hljs: {
             style: 'atom-one-dark',
-            lineNumber: false,// 显示行号
+            lineNumber: true,// 显示行号
             enable: true,// 启用代码高亮
           }
         },
@@ -134,7 +133,6 @@ export default {
         },
         after: {},
         input: (value) => {
-          console.log("value:"+value)
           this.$emit('update:mdContent', value);
           this.$emit('update:htmlContent', value);
           //更新主题
@@ -230,7 +228,5 @@ export default {
 </script>
 
 <style>
-.vditor-reset {
-  width: 100%;
-}
+@import url("components/css/vditor-components.css");
 </style>

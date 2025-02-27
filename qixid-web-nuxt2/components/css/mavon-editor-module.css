@@ -10,7 +10,7 @@ sup {
   color: #e67e22 !important;
 }
 
-sub {
+.markdown-body.sub {
   color: #05c46b !important;
 }
 
@@ -20,7 +20,7 @@ sub {
   padding: 6px !important;
 }
 
-.hljs {
+.markdown-body .hljs {
   border-radius: 4px !important;
   padding: 12px !important;
 }

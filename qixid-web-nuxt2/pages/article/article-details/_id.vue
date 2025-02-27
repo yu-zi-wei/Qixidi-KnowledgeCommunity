@@ -115,8 +115,10 @@
             <!--                          :navigation="false"-->
             <!--                          ref="markdown"-->
             <!--            />-->
-            <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContentMd"
-                            :outline.sync="tocArray"></vditor-preview>
+            <div class="mt-20">
+              <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContentMd"
+                              :outline.sync="tocArray"></vditor-preview>
+            </div>
             <div class="mb-20 mt-40">
               <div v-if="articleInfo.type==2">
                 转载地址：
