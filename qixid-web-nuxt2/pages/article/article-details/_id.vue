@@ -99,22 +99,22 @@
                 </div>
               </div>
             </div>
-            <!--            <mavon-editor class="markdown"-->
-            <!--                          id="detailDirectory"-->
-            <!--                          style="padding-left: 10px"-->
-            <!--                          :value="articleInfo.articleContentMd"-->
-            <!--                          :subfield="false"-->
-            <!--                          :defaultOpen="prop.defaultOpen"-->
-            <!--                          :boxShadow="prop.boxShadow"-->
-            <!--                          :toolbarsFlag="prop.toolbarsFlag"-->
-            <!--                          :editable="prop.editable"-->
-            <!--                          :codeStyle="articleInfo.theme"-->
-            <!--                          fontSize="18px"-->
-            <!--                          previewBackground="#fefefe"-->
-            <!--                          :scrollStyle="prop.scrollStyle"-->
-            <!--                          :navigation="false"-->
-            <!--                          ref="markdown"-->
-            <!--            />-->
+<!--                        <mavon-editor class="markdown"-->
+<!--                                      id="detailDirectory"-->
+<!--                                      style="padding-left: 10px"-->
+<!--                                      :value="articleInfo.articleContentMd"-->
+<!--                                      :subfield="false"-->
+<!--                                      :defaultOpen="prop.defaultOpen"-->
+<!--                                      :boxShadow="prop.boxShadow"-->
+<!--                                      :toolbarsFlag="prop.toolbarsFlag"-->
+<!--                                      :editable="prop.editable"-->
+<!--                                      :codeStyle="articleInfo.theme"-->
+<!--                                      fontSize="18px"-->
+<!--                                      previewBackground="#fefefe"-->
+<!--                                      :scrollStyle="prop.scrollStyle"-->
+<!--                                      :navigation="false"-->
+<!--                                      ref="markdown"-->
+<!--                        />-->
             <div class="mt-20">
               <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContentMd"
                               :outline.sync="tocArray"></vditor-preview>

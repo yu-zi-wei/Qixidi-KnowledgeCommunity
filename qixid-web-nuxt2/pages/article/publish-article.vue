@@ -62,7 +62,6 @@
       </div>
     </div>
     <div>
-
       <VditorMd :height="'90vh'"
                 :vditorId="'articlePublish'"
                 :mdContent.sync="article.articleContentMd"

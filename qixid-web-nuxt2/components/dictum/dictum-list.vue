@@ -183,7 +183,7 @@
            v-for="(column, index) in dictumInfoListArr" :key="index">
         <!-- 动态渲染每个列中的元素 -->
         <div v-for="(item, itemIndex) in column.items" :key="itemIndex" class="box-item">
-          <div class="box-item-div">
+<!--          <div>-->
             <div class="flex-space-between user-info align-items-center mb-15">
               <div class="flex-left align-items-center">
                 <div class="ml-6">
@@ -290,7 +290,7 @@
               </div>
             </div>
             <div>
-            </div>
+<!--            </div>-->
           </div>
         </div>
       </div>
