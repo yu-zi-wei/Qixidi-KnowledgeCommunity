@@ -25,15 +25,15 @@ public class AlgorithmUtils {
     }
 
     public static void main(String[] args) {
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i < 365; i++) {
             Integer SUN = directionExport(scopes, i);
             System.out.printf("SUN: " + SUN + "==>" + i + "\n");
-            System.out.printf("SUN/scopes: " + SUN * 0.01 + "\n");
+            System.out.printf("SUN/scopes: " + SUN * 0.1 + "\n");
         }
     }
 
     public static Double directionExport(Integer code) {
-        return directionExport(scopes, code) * 0.01;
+        return directionExport(scopes, code) * 0.1;
     }
 
 }
