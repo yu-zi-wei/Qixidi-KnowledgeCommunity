@@ -3,6 +3,25 @@ package com.qixidi.business.service.impl.article;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.vo.CensusVo;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.AlgorithmUtils;
+import com.light.core.utils.DateUtils;
+import com.light.core.utils.StringUtils;
+import com.light.core.utils.ip.AddressUtils;
+import com.light.core.utils.word.WordFilter;
+import com.light.redission.utils.RedisUtils;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
@@ -14,6 +33,8 @@ import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.enums.*;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
+import com.qixidi.business.domain.enums.article.ArticleUpdateType;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionRecordVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
@@ -29,34 +50,13 @@ import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.selector.webSocket.WebSocketSelector;
 import com.qixidi.business.service.article.IArticleInformationService;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.vo.CensusVo;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
-import com.qixidi.business.domain.enums.article.ArticleUpdateType;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.AlgorithmUtils;
-import com.light.core.utils.DateUtils;
-import com.light.core.utils.StringUtils;
-import com.light.core.utils.ip.AddressUtils;
-import com.light.redission.utils.RedisUtils;
-import com.light.core.utils.word.WordFilter;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -120,7 +120,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         lqw.eq(bo.getType() != null, "ai.type", bo.getType());
         lqw.eq(bo.getAuditState() != null, "ai.audit_state", bo.getAuditState());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            "ai.create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
+                "ai.create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
         lqw.orderByDesc("ai.create_time");
         return lqw;
     }
@@ -161,16 +161,16 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     public void recalculationColumn(String uuid) {
         List<SpecialInformation> specialInformations = specialInformationMapper.selectList(
-            new LambdaQueryWrapper<SpecialInformation>().select(SpecialInformation::getId).eq(SpecialInformation::getUid, uuid));
+                new LambdaQueryWrapper<SpecialInformation>().select(SpecialInformation::getId).eq(SpecialInformation::getUid, uuid));
 
         if (CollectionUtil.isEmpty(specialInformations)) return;
         List<Long> specialIds = specialInformations.stream().map(SpecialInformation::getId).collect(Collectors.toList());
         List<ArticleInformation> articleInformations = baseMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
-            .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
-            .in(ArticleInformation::getSpecialId, specialIds)
-            .eq(ArticleInformation::getState, 0)
-            .eq(ArticleInformation::getAuditState, 2)
-            .isNotNull(ArticleInformation::getSpecialId));
+                .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
+                .in(ArticleInformation::getSpecialId, specialIds)
+                .eq(ArticleInformation::getState, 0)
+                .eq(ArticleInformation::getAuditState, 2)
+                .isNotNull(ArticleInformation::getSpecialId));
         if (CollectionUtil.isEmpty(articleInformations)) return;
         Map<Long, Long> collectMap = articleInformations.stream().collect(Collectors.groupingBy(ArticleInformation::getSpecialId, Collectors.counting()));
         List<SpecialInformation> updateSpecialInformations = new ArrayList<>();
@@ -206,19 +206,19 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
 //                修改文章状态
         baseMapper.update(null, new UpdateWrapper<ArticleInformation>()
-            .set("audit_state", 2).set("audit_time", new Date())
-            .eq("id", id));
+                .set("audit_state", 2).set("audit_time", new Date())
+                .eq("id", id));
         //文章数量加一
         countUserWebsiteMapper.updateAdd(uuid, CountUserType.ARTICLE_COUNT.getCode());
 //        发送消息
         NewsSystemInfo newsSystemInfo = new NewsSystemInfo()
-            .setNewsTitle("你的文章《" + Title + "》已审核通过！")
-            .setNewsContent("你的文章《" + Title + "》已审核通过！")
-            .setIsDetails(1L)
-            .setType(2L)
-            .setIsMassAir(2L)
-            .setUid(uuid)
-            .setCreateTime(new Date());
+                .setNewsTitle("你的文章《" + Title + "》已审核通过！")
+                .setNewsContent("你的文章《" + Title + "》已审核通过！")
+                .setIsDetails(1L)
+                .setType(2L)
+                .setIsMassAir(2L)
+                .setUid(uuid)
+                .setCreateTime(new Date());
         newsSystemInfoMapper.insert(newsSystemInfo);
         //WebSocket推送消息
         WebSocketSelector.execute(uuid, WebSocketEnum.INSIDE_NOTICE);
@@ -230,11 +230,11 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             BeanUtils.copyProperties(item, articleInformation);
             Map<String, Integer> datePoor = DateUtils.getDatePoor(item.getCreateTime(), new Date());
             Integer day = datePoor.get("day");
-            double heatWeight = (0 * 2)
-                + (0 * 3)
-                + (0 * 3)
-                + (0 * 1)
-                + (AlgorithmUtils.directionExport(day));
+            double heatWeight = (articleInformation.getLikeTimes() == null ? 0 : articleInformation.getLikeTimes())
+                    + (articleInformation.getCommentTimes() == null ? 0 : articleInformation.getCommentTimes() * 2)
+                    + (articleInformation.getCollectionTimes() == null ? 0 : articleInformation.getCollectionTimes() * 2)
+                    + (articleInformation.getNumberTimes() == null ? 0 : articleInformation.getNumberTimes())
+                    + (AlgorithmUtils.directionExport(day));
             articleInformation.setHeatWeight(heatWeight);
             return articleInformation;
         }).collect(Collectors.toList());
@@ -288,19 +288,19 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         ArticleInformationVo articleVo = baseMapper.selectAuditStatus(bo.getId());
 //        添加文章
         if (ObjectUtils.isEmpty(articleVo)
-            && bo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())) return 1;
+                && bo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())) return 1;
 //        保存草稿
         if (ObjectUtils.isEmpty(articleVo)
-            && bo.getAuditState().equals(ArticleAuditStateType.DRAFT.getCode())) return 0;
+                && bo.getAuditState().equals(ArticleAuditStateType.DRAFT.getCode())) return 0;
 //        正常更新
         if (articleVo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())
-            && bo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())) return 0;
+                && bo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())) return 0;
 //        文章变为草稿
         if (articleVo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())
-            && bo.getAuditState().equals(ArticleAuditStateType.DRAFT.getCode())) return -1;
+                && bo.getAuditState().equals(ArticleAuditStateType.DRAFT.getCode())) return -1;
 //        草稿变为文章
         if (articleVo.getAuditState().equals(ArticleAuditStateType.DRAFT.getCode())
-            && bo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())) return 1;
+                && bo.getAuditState().equals(ArticleAuditStateType.APPROV.getCode())) return 1;
         return 0;
     }
 
@@ -383,9 +383,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         ArticleInformationVo details = baseMapper.details(id);
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new QueryWrapper<UserFollow>()
-            .eq("target_id", details.getUserId())
-            .eq("type", UserFollowType.b_user_follow.getCode())
-            .eq("uid", uuid1));
+                .eq("target_id", details.getUserId())
+                .eq("type", UserFollowType.b_user_follow.getCode())
+                .eq("uid", uuid1));
         if (ObjectUtils.isNotEmpty(userFollow) && userFollow.getTargetId().equals(details.getUserId())) {
             details.setIsFollow(true);
         }
@@ -414,7 +414,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
         if (CollectionUtils.isNotEmpty(cacheMap)) {
             details.setLikeTimes(cacheMap.get(details.getId().toString()) == null
-                ? details.getLikeTimes() : Long.valueOf(cacheMap.get(details.getId().toString()).toString()));
+                    ? details.getLikeTimes() : Long.valueOf(cacheMap.get(details.getId().toString()).toString()));
         }
         Map<String, Set<String>> FaMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
         if (CollectionUtils.isNotEmpty(FaMap)) {
@@ -422,9 +422,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
 //        获取收藏数据
         CollectionRecordVo collectionRecordVo = collectionRecordMapper.selectVoOne(new QueryWrapper<CollectionRecord>()
-            .eq("uid", uuid)
-            .eq("type", CollectionType.ARTICLE_TYPE.getCode())
-            .eq("target_id", details.getId()));
+                .eq("uid", uuid)
+                .eq("type", CollectionType.ARTICLE_TYPE.getCode())
+                .eq("target_id", details.getId()));
         if (ObjectUtils.isEmpty(collectionRecordVo)) {
             details.setIsCollection(false);
         } else {
@@ -556,7 +556,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             list = baseMapper.selectCensusYear(bo);
         }
         Map<Date, Long> collect = list.stream()
-            .collect(Collectors.groupingBy(e -> DateUtils.parseDate(e.getDateTimes()), Collectors.counting()));
+                .collect(Collectors.groupingBy(e -> DateUtils.parseDate(e.getDateTimes()), Collectors.counting()));
         List<CensusVo> list1 = new ArrayList<>();
         collect.forEach((k, v) -> {
             CensusVo censusVo = new CensusVo().setDateTimes(DateUtil.format(k, "yyyy-MM")).setCensusSum(v);

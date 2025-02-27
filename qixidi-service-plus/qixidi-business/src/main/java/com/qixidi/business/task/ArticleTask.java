@@ -4,15 +4,15 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.light.core.constant.SystemConstant;
-import com.qixidi.business.domain.enums.CommentType;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
 import com.light.redission.utils.RedisUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
+import com.qixidi.business.domain.enums.CommentType;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
@@ -96,10 +96,10 @@ public class ArticleTask {
             BeanUtils.copyProperties(item, articleInformation);
             Map<String, Integer> datePoor = DateUtils.getDatePoor(item.getCreateTime(), new Date());
             Integer day = datePoor.get("day");
-            double heatWeight = (articleInformation.getLikeTimes() * 2)
-                    + (articleInformation.getCommentTimes() * 3)
-                    + (articleInformation.getCollectionTimes() * 3)
-                    + (articleInformation.getNumberTimes() * 1)
+            double heatWeight = (articleInformation.getLikeTimes())
+                    + (articleInformation.getCommentTimes() * 2)
+                    + (articleInformation.getCollectionTimes() * 2)
+                    + (articleInformation.getNumberTimes())
                     + (AlgorithmUtils.directionExport(day));
             log.info("点赞次数：{}，评论次数：{}，收藏次数：{}，浏览：{}，时间蹉：{}", articleInformation.getLikeTimes()
                     , articleInformation.getCommentTimes(), articleInformation.getCollectionTimes(), articleInformation.getNumberTimes()
@@ -120,6 +120,7 @@ public class ArticleTask {
      * 4、
      */
     @Scheduled(cron = "0 0 * * * ?")
+//    @Scheduled(cron = "0 */2 * * * ?")
     public void ArticleCalculateWeight() {
         Long aLong = articleInformationMapper.selectCount(new QueryWrapper<ArticleInformation>()
                 .eq("state", 0).eq("audit_state", 2));
