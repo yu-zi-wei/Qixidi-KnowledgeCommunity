@@ -29,22 +29,24 @@ Nuxt.js 对前台进行了重构，并赋予它新的名字——**栖息地**�
 
 ```text
 qixidi/
-└── qixidi-service  # 项目后端（基于SpringBoot-v2实现；jdk8【该模块不再维护，请使用qixidi-service-plus做为服务端】）
+└── qixidi-service  # 项目后端（基于SpringBoot-v2实现【已废弃】）
+│
+└──  qixidi-service-plus  # 项目后端plus版本【持续更新中...】（基于SpringBoot-v3 + jdk17 完成）
     │
-    ├── aurora-admin # 后台启动模块
+    ├── qixidi-startup # 后台启动模块
     │
-    ├── aurora-common # 公共模块
+    ├── framework # 核心框架
     │
-    ├── aurora-framework # 框架核心
+    ├── qixidi-auth # 认证模块
     │
-    ├── aurora-oss # 云存储模块
+    ├── qixidi-business # 核心业务
     │
-    ├── aurora-system # 项目业务模块
+    ├── qixidi-love # 爱情小站业务
+    │
+    ├── qixidi-system # 基础业务（原ruoyi项目业务逻辑）
     │
     ├── sql  # sql文件（暂不提供，需要可加微信（有偿）：zsh2978824265）
     │
-├── qixidi-service-plus  # 项目后端plus版本【持续更新中...】（基于SpringBoot-v3实现；jdk17）
-│
 ├── qixid-web-nuxt2  # 项目前台（Nuxt）
 │
 └── qixidi-web-admin  # 项目后台（Vue）
