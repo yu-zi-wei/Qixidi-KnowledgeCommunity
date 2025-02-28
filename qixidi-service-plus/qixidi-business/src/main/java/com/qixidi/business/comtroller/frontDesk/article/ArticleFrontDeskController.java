@@ -1,15 +1,18 @@
 package com.qixidi.business.comtroller.frontDesk.article;
 
 
-import com.qixidi.business.domain.bo.article.ArticleInformationBo;
-import com.qixidi.business.domain.bo.article.SortTypeBo;
-import com.qixidi.business.domain.vo.article.ArticleInformationVo;
-import com.qixidi.business.service.article.IArticleInformationService;
-import com.qixidi.auth.controller.BaseController;
+import com.light.ai.service.DeepSeekService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
+import com.qixidi.auth.controller.BaseController;
+import com.qixidi.business.domain.bo.article.ArticleInformationBo;
+import com.qixidi.business.domain.bo.article.SortTypeBo;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.service.article.IArticleInformationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -31,7 +32,12 @@ import java.util.List;
 public class ArticleFrontDeskController extends BaseController {
 
     private final IArticleInformationService iArticleInformationService;
+    private final DeepSeekService deepSeekService;
 
+    @GetMapping("/ai")
+    public Object ai(String questions) {
+        return deepSeekService.generationContent(questions);
+    }
 
     /**
      * 查询文章推荐列表

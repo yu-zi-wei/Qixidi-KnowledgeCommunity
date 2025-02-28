@@ -23,7 +23,7 @@ public class WebSocketAiExecute implements WebSocketInterface {
 
     @Override
     public void aiExecute(String content, Session session) {
-        deepSeekService.generationContent(content, session);
+        deepSeekService.generationContentFlow(content, session);
     }
 
     @Override

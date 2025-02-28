@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,54 @@ public class DeepSeekService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final DeepSeekConfig deepSeekConfig;
 
-    public void generationContent(String questions, Session session) {
+    /**
+     * 一次性返回
+     *
+     * @param questions
+     */
+    public Object generationContent(String questions) {
+        Map<String, Object> requestBody = new HashMap<>();
+        Map<String, String> message = new HashMap<>();
+        Object reasoningContent = "";
+
+        String url = deepSeekConfig.getUrl();
+        requestBody.put("model", deepSeekConfig.getModel());
+        message.put("role", deepSeekConfig.getRole());
+        message.put("content", questions);
+        requestBody.put("messages", new Object[]{message});
+        requestBody.put("stream", false);//非流式返回
+        WebClient webClient = WebClient.create();
+        Mono<String> authorization = webClient.post()
+                .uri(url)
+                .header("Authorization", "Bearer " + deepSeekConfig.getAuthorizationKey())
+                .header("Content-Type", "application/json")
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(String.class);
+        String block = authorization.block();
+        try {
+            Map<String, Object> jsonObj = objectMapper.readValue(block, Map.class);
+            List<Object> choicesList = (List<Object>) jsonObj.get("choices");
+            Object choicesObj = choicesList.get(0);
+            JSONObject entries = JSONUtil.parseObj(choicesObj);
+            Object data = entries.get("message");
+            JSONObject dataJson = JSONUtil.parseObj(data);
+            reasoningContent = dataJson.get("reasoning_content");//获取推理内容
+            System.out.printf("相应内容：" + reasoningContent + "\n");
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return reasoningContent;
+    }
+
+    /**
+     * 流式返回
+     *
+     * @param questions
+     * @param session
+     */
+    public void generationContentFlow(String questions, Session session) {
         Map<String, Object> requestBody = new HashMap<>();
         Map<String, String> message = new HashMap<>();
 
@@ -59,9 +107,9 @@ public class DeepSeekService {
                             JSONObject entries = JSONUtil.parseObj(choicesObj);
                             Object data = entries.get("delta");
                             JSONObject dataJson = JSONUtil.parseObj(data);
-
+                            Object reasoningContent = dataJson.get("reasoning_content");//获取推理内容
                             //webSocket消息推送
-                            WebSocketUtils.sendMessage(session, dataJson.get("reasoning_content"));
+                            WebSocketUtils.sendMessage(session, reasoningContent);
                         }
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
