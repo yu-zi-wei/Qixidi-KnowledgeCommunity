@@ -70,4 +70,5 @@ export default {
 
 <style>
 @import url("components/css/vditor-components.css");
+@import url("components/css/vditor-hljs.css");
 </style>

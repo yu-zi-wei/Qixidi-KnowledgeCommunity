@@ -205,7 +205,7 @@ export default {
           'fullscreen',//全屏
           'preview',//预览
           'outline',//大纲
-          'code-theme',//代码主题
+          // 'code-theme',//代码主题
           // 'content-theme',//主题
           'export',//导出
           'help',//帮助
@@ -228,4 +228,5 @@ export default {
 
 <style>
 @import url("components/css/vditor-components.css");
+@import url("components/css/vditor-hljs.css");
 </style>
