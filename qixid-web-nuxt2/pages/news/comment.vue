@@ -19,11 +19,10 @@
             </nuxt-link>
           </div>
         </div>
-        <div class="comment-div" title="查看详情">
+        <div class="comment-div padding-10" title="查看详情">
           <nuxt-link :to="`/article/article-details/`+$base64.encode(item.articleId)" target="_blank">
-            <ai-editor-module :ai-editor-id="'aiEditor-news-introduce-'+index" v-if="!loading"
-                              :content="item.content"
-                              :editable="false"></ai-editor-module>
+            <vditor-preview :id="'aiEditor-news-introduce-'+index" :content="item.content"
+                            v-if="!loading"></vditor-preview>
           </nuxt-link>
         </div>
         <div class="flex-left color-grey-2" style="margin-left: 45px">
@@ -57,10 +56,12 @@
               width="800"
               trigger="click">
               <div>
-                <ai-editor-module v-if="commentState" :ai-editor-id="'aiEditor-news-introduce1-'+index"
-                                  :htmlContent.sync="comment.content"
-                                  :content="comment.content" :editor-height="'200px'">
-                </ai-editor-module>
+                <vditor-md v-if="commentState" :vditor-id="'aiEditor-news-introduce1-'+index"
+                           :mdContent.sync="comment.content"
+                           :content="comment.content"
+                           :outline="false"
+                           :height="'200px'"
+                ></vditor-md>
                 <el-button class="fl-right mt-10" type="primary" plain @click="sendComment(item)" size="medium">回复
                 </el-button>
               </div>
@@ -104,8 +105,12 @@
 
 <script>
 
+import VditorMd from "../../components/Vditor-md.vue";
+import VditorPreview from "../../components/Vditor-preview.vue";
+
 export default {
   name: "comment",
+  components: {VditorPreview, VditorMd},
   data() {
     return {
       newsList: [],

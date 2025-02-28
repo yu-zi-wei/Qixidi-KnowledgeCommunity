@@ -64,7 +64,7 @@
           </div>
           <hr class="hr-item mb-10 mt-10"/>
           <div class="mb-30">
-            <vditor-preview :id="'introduceVditor'" :content="articleInfo.articleContentMd"></vditor-preview>
+            <vditor-preview :id="'introduceVditor'" :content="articleInfo.articleContent"></vditor-preview>
           </div>
           <!--   ============================= 评论开始  =============================   -->
           <div class="mt-40" id="comment">

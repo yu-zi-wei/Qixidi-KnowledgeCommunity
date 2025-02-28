@@ -134,7 +134,6 @@ export default {
         after: {},
         input: (value) => {
           this.$emit('update:mdContent', value);
-          this.$emit('update:htmlContent', value);
           //更新主题
           // this.$emit('update:theme', this.codeStyle)
         },

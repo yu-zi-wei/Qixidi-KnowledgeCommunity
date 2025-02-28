@@ -64,9 +64,8 @@
     <div>
       <VditorMd :height="'90vh'"
                 :vditorId="'articlePublish'"
-                :mdContent.sync="article.articleContentMd"
-                :htmlContent.sync="article.articleContent"
-                :content="article.articleContentMd" v-if="isClient"></VditorMd>
+                :mdContent.sync="article.articleContent"
+                :content="article.articleContent" v-if="isClient"></VditorMd>
     </div>
     <el-dialog title="文章发布" :visible.sync="articlePopupDialog" width="800px">
       <el-form :model="article" :rules="rules" ref="article" label-width="100px" class="demo-ruleForm">
@@ -196,7 +195,6 @@ export default {
         articleCover: null,//封面
         articleAbstract: null,//摘要
         articleContent: '',//内容
-        articleContentMd: '',//内容
         theme: null,//主题
         type: 1,//文章类型（1：原创，2：转载，3：翻译）
         reprintUrl: null,//转载地址

@@ -235,7 +235,6 @@ export default {
       // console.log('html格式', this.$refs.md.d_render)
       // console.log('md格式', this.$refs.md.d_value)
       this.$emit('update:mdContent', this.$refs.md.d_value)
-      this.$emit('update:htmlContent', this.$refs.md.d_render)
       this.$emit('update:theme', this.codeStyle)
     },
     codeStyle() {

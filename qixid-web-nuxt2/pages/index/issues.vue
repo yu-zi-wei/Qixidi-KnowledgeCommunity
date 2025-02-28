@@ -169,7 +169,7 @@
           <vditor-md :vditor-id="'issues-editing'"
                      :outline="false"
                      :content="addFeedbackInfo.feedbackContent"
-                     :htmlContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
+                     :mdContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
         </div>
         <div slot="footer">
           <el-button size="medium" type="primary" @click="updateFeedbackInfo()">更 新</el-button>
@@ -190,7 +190,7 @@
             :vditor-id="'issues-add'"
             :outline="false"
             :content="addFeedbackInfo.feedbackContent"
-            :htmlContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
+            :mdContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
         </div>
         <div slot="footer">
           <el-button size="medium" type="primary" @click="addFeedback">新 建</el-button>

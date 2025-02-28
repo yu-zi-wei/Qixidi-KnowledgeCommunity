@@ -102,7 +102,7 @@
 <!--                        <mavon-editor class="markdown"-->
 <!--                                      id="detailDirectory"-->
 <!--                                      style="padding-left: 10px"-->
-<!--                                      :value="articleInfo.articleContentMd"-->
+<!--                                      :value="articleInfo.articleContent"-->
 <!--                                      :subfield="false"-->
 <!--                                      :defaultOpen="prop.defaultOpen"-->
 <!--                                      :boxShadow="prop.boxShadow"-->
@@ -116,7 +116,7 @@
 <!--                                      ref="markdown"-->
 <!--                        />-->
             <div class="mt-20">
-              <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContentMd"
+              <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContent"
                               :outline.sync="tocArray"></vditor-preview>
             </div>
             <div class="mb-20 mt-40">

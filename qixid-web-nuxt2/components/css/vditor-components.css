@@ -5,7 +5,7 @@
 .vditor-reset::-webkit-scrollbar {
   width: 4px;
   height: 4px;
-  background-color: #ced6e0;
+  background-color: #f1f2f6;
 }
 
 .vditor-reset::-webkit-scrollbar-track {
@@ -14,7 +14,7 @@
 }
 
 .vditor-reset::-webkit-scrollbar-thumb {
-  background: #ced6e0;
+  background: #f1f2f6;
   border-radius: 2px;
 }
 

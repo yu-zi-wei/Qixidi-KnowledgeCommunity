@@ -160,21 +160,10 @@
             </el-row>
             <el-form-item label="名言：" prop="content">
               <div style="border: 1px solid #DCDFE6;border-radius: 2px">
-                <!--                <ai-editor-module-->
-                <!--                  v-if="!loading"-->
-                <!--                  :id="'dictum-editor'"-->
-                <!--                  :htmlContent.sync="dictumInfo.content"-->
-                <!--                  :mdContent.sync="dictumInfo.contentMd"-->
-                <!--                  :content="dictumInfo.content"-->
-                <!--                  :minimalistMode="false"-->
-                <!--                  :toolbar-size="'medium'"-->
-                <!--                  :editor-height="'300px'"></ai-editor-module>-->
-
                 <VditorMd :height="'300px'"
                           :outline="false"
                           :vditorId="'releaseDictum'"
                           :mdContent.sync="dictumInfo.content"
-                          :htmlContent.sync="dictumInfo.content"
                           :content="dictumInfo.contentMd" v-if="!loading"></VditorMd>
               </div>
             </el-form-item>
