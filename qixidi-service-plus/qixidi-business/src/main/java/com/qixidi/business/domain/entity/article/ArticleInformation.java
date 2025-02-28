@@ -49,7 +49,7 @@ public class ArticleInformation {
     /**
      * 文章内容
      */
-    private String articleContentMd;
+    private String articleSummary;
     /**
      * 主题
      */

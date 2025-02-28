@@ -1,17 +1,17 @@
 package com.qixidi.business.service.article;
 
-import com.qixidi.business.domain.bo.article.ArticleInformationBo;
-import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
-import com.qixidi.business.domain.bo.article.SortTypeBo;
-import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
+import com.qixidi.business.domain.bo.article.ArticleInformationBo;
+import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
+import com.qixidi.business.domain.bo.article.SortTypeBo;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -71,7 +71,7 @@ public interface IArticleInformationService {
 
     TableDataInfo<ArticleInformationVo> index(ArticleInformationBo bo, PageQuery pageQuery);
 
-    IPage<ArticleInformationVo> sortIndex(SortTypeBo bo,PageQuery pageQuery);
+    IPage<ArticleInformationVo> sortIndex(SortTypeBo bo, PageQuery pageQuery);
 
     IPage<ArticleInformationVo> articleList(ArticleInformationBo bo, PageQuery pageQuery);
 
@@ -93,7 +93,7 @@ public interface IArticleInformationService {
 
     List<ArticleInformationVo> selected();
 
-    Boolean addArticleBrowse(Long id,String label, HttpServletRequest request);
+    Boolean addArticleBrowse(Long id, String label, HttpServletRequest request);
 
     List<CensusVo> timeArticleCensus(CensusEntity bo);
 

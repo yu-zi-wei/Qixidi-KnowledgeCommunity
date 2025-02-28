@@ -1,19 +1,19 @@
 package com.qixidi.business.mapper.article;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.vo.CensusVo;
+import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.article.ArticleCensusVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.vo.CensusVo;
-import com.light.mybatisPlus.mapper.BaseMapperPlus;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -67,7 +67,7 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     int updateSpecial(@Param("ids") List<String> ids, @Param("id") Long id);
 
     @Select("select id,user_id,article_title,update_time from b_article_information " +
-        "where user_id=#{uid} and special_id=#{id} and state=0")
+            "where user_id=#{uid} and special_id=#{id} and state=0")
     List<ArticleInformationVo> selectSpecial(@Param("id") Long id, @Param("uid") String uid);
 
     Integer updateDeleteNumber(@Param("articleId") Long articleId, @Param("code") Integer code, @Param("size") int size);
@@ -96,9 +96,9 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     @Select("select label_id from b_article_information where audit_state=2 and state=0 and label_id is not null and label_id!=''")
     List<String> selectLabel();
 
-    IPage<ArticleInformationVo> articleRecommendList(@Param("bo") ArticleInformationBo bo,@Param("labelResult") String labelResult, Page<Object> build);
+    IPage<ArticleInformationVo> articleRecommendList(@Param("bo") ArticleInformationBo bo, @Param("labelResult") String labelResult, Page<Object> build);
 
-    List<CensusVo> submissionCensus(@Param("uuid")String uuid, @Param("time")String time);
+    List<CensusVo> submissionCensus(@Param("uuid") String uuid, @Param("time") String time);
 
     List<ArticleInformationVo> latelyArticleList(@Param("bo") ArticleInformationBo bo, Page<ArticleInformation> build);
 }

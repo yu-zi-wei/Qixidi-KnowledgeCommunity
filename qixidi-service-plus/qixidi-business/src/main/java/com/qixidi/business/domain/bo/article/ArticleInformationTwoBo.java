@@ -58,7 +58,7 @@ public class ArticleInformationTwoBo extends BaseEntity {
     /**
      * 文章内容
      */
-    private String articleContentMd;
+    private String articleSummary;
 
     /**
      * 主题

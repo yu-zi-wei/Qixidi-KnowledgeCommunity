@@ -59,9 +59,9 @@ public class ArticleInformationBo extends BaseEntity {
     private String articleContent;
 
     /**
-     * 文章内容
+     * 文章总结
      */
-    private String articleContentMd;
+    private String articleSummary;
 
     /**
      * 主题

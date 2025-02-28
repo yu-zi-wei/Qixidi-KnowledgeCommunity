@@ -90,7 +90,7 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/details/{id}")
-    public R details(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
+    public R<ArticleInformationVo> details(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
         return R.ok(iArticleInformationService.details(Long.valueOf(id)));
     }
 
