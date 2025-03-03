@@ -195,6 +195,7 @@ export default {
         articleCover: null,//封面
         articleAbstract: null,//摘要
         articleContent: '',//内容
+        articleSummary: '',//总结
         theme: null,//主题
         type: 1,//文章类型（1：原创，2：转载，3：翻译）
         reprintUrl: null,//转载地址
