@@ -1,6 +1,6 @@
 <template>
   <div class="module-main">
-    <div style="width: 30%;margin-left: 26px">
+    <div style="width: 30%;margin-left: 26px" class="mt-30">
       <el-input placeholder="标签关键字" v-model="labelName" @keyup.enter.native="labelSearch">
         <el-button slot="append" icon="el-icon-search" @click="labelSearch"></el-button>
       </el-input>

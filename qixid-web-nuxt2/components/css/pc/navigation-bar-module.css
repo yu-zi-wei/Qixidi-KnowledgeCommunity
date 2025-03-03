@@ -1,5 +1,5 @@
 .main-div {
-  height: 90px;
+  height: 58px;
   margin: auto;
   z-index: 99;
 }
@@ -162,4 +162,3 @@
 .publish-list-item:hover {
   background: #f4f5f5;
 }
-

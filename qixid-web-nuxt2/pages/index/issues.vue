@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-30">
     <div class="background-color-fefefe" style="width: 100%;padding: 15px 20px">
       <div class="font-s-18 font-bold color-stand-out mb-10 flex-space-between">
         <div></div>

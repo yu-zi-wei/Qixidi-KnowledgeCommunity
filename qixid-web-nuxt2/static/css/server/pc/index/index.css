@@ -86,3 +86,9 @@
   padding: 10px 6px;
 }
 
+
+.label-grouping-div {
+  border: 1px solid #dfe4ea;
+  background: #fefefe;
+  border-radius: 4px;
+}

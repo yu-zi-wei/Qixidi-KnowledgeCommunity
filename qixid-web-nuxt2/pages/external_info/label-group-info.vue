@@ -1,7 +1,7 @@
 <template>
   <div class="module-main-2">
     <div class="label-group-info-title">
-      <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
+      <el-skeleton style="padding: 20px 10px" :rows="3" animated v-if="initialLoading"/>
       <div v-show="!initialLoading" class="margin-auto">
         <p class="font-s-32 font-bold text-center">{{ labelGroupInfo.groupingName }}</p>
         <div class="font-s-13 line-height-24 color-fefefe text-center mt-6">
@@ -212,8 +212,8 @@ export default {
 }
 
 .label-group-info-title {
-  background: rgb(141, 46, 205, 0.5);
-  background: linear-gradient(90deg, rgba(141, 46, 205, 0.5) 0%, rgba(29, 227, 253, 0.5) 50%, rgba(252, 69, 249, 0.5) 100%);
+  background: rgb(141, 46, 205, 0.3);
+  background: linear-gradient(90deg, rgba(141, 46, 205, 0.3) 0%, rgba(29, 227, 253, 0.3) 50%, rgba(252, 69, 249, 0.3) 100%);
   padding: 40px 0;
   margin-bottom: 20px;
   margin-top: 20px;

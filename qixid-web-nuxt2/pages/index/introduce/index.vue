@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="mt-15 page-content-width">
+  <div class="mt-30">
+    <div class="page-content-width">
       <div class="flex-space-between flex-wrap-wrap">
         <div class="left-content-width">
           <div class="left-content-ul left-content-width">

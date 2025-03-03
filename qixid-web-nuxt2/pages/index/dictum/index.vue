@@ -1,7 +1,7 @@
 <template>
   <div class="module-main">
-    <el-skeleton class="mt-20" :rows="16" animated v-if="loading"/>
-    <div v-if="!loading" class="flex-space-between">
+    <el-skeleton class="mt-30" :rows="16" animated v-if="loading"/>
+    <div v-if="!loading" class="flex-space-between mt-30">
       <!--      类容-->
       <div class="flex-8">
         <div class="mb-20" style="width: 400px">

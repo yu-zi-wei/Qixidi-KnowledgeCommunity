@@ -70,8 +70,6 @@
           </div>
         </div>
       </div>
-
-
       <div v-show="articleList.length==0" style="margin: auto;max-width: 200px">
         <div style="text-align: center;margin-top: 10px">
           <svg t="1666708559980" class="icon-theme" viewBox="0 0 1024 1024" version="1.1"

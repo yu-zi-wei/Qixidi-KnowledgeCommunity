@@ -7,7 +7,7 @@
       <el-button @click="getSessionStorage">getSessionStorage</el-button>
       <el-button @click="$router.push('/dictum');"> this.$router.push('/dictum');</el-button>
       <el-button @click="$router.push('/xxx');"> this.$router.push('/xxx');</el-button>
-<!--      <el-nuxt-link to="/">主页</el-nuxt-link>-->
+      <!--      <el-nuxt-link to="/">主页</el-nuxt-link>-->
       <el-button @click="websocketMain('1625400372048826368')"> 测试websocket客户端1</el-button>
       <el-button @click="websocketMain('ziwei12')"> 测试websocket客户端2</el-button>
       <el-button @click="websocketSend"> 发送消息</el-button>
@@ -25,20 +25,72 @@
       <!--      </div>-->
     </div>
     <!--    <ai-editor-module></ai-editor-module>-->
-    <VditorMd :height="500"></VditorMd>
+    <!--    <VditorMd :height="500"></VditorMd>-->
+    <div>
+      <!--      <div style="height: 400px;border: 1px solid #5C86FF;overflow: auto;margin-bottom: 20px">-->
+      <mavon-editor v-if="loading"
+                    class="markdown"
+                    id="detailDirectory"
+                    style="padding-left: 10px"
+                    :value="this.aiContent"
+                    :subfield="false"
+                    :defaultOpen="prop.defaultOpen"
+                    :boxShadow="prop.boxShadow"
+                    :toolbarsFlag="prop.toolbarsFlag"
+                    :editable="prop.editable"
+                    fontSize="18px"
+                    previewBackground="#fefefe"
+                    :scrollStyle="prop.scrollStyle"
+                    :navigation="false"
+                    ref="markdown"
+      />
+    </div>
+
+    <el-form ref="form" :model="form" label-width="80px">
+      <el-form-item label="内容">
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="请输入内容"
+          v-model="form.textarea">
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="sendContent" :disabled="form.textarea==null">发送</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
   </div>
 </template>
 
 <script>
 import SubmissionChart from "../components/submission-chart";
 import VditorMd from "../components/Vditor-md.vue";
+import VditorPreview from "../components/Vditor-preview.vue";
 
 // import WebSocket from 'websocket';
 export default {
   name: "test",
-  components: {VditorMd, SubmissionChart},
+  components: {VditorPreview, VditorMd, SubmissionChart},
+  computed: {
+    prop() {
+      let data = {
+        subfield: false,// 单双栏模式
+        defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        editable: false,
+        toolbarsFlag: false,
+        scrollStyle: true,
+        boxShadow: false,  //边框阴影
+      }
+      return data
+    },
+  },
   data() {
     return {
+      form: {
+        textarea: null,
+      },
+      aiContent: '',
       title: "测试",
       meta: [
         {hid: 'description', name: 'description', content: '描述'},
@@ -63,6 +115,36 @@ export default {
   },
 
   methods: {
+    sendContent() {
+      const url = process.env.WEBSOCKET_PROTOCOL + process.env.SERVER_URL + `/websocket/ai/1`;
+      this.socket = new WebSocket(url);
+
+      this.socket.onopen = () => {
+        console.log('链接成功');
+        this.socket.send(this.form.textarea);
+        // 在这里可以执行连接成功后的操作
+      };
+
+      this.socket.onmessage = (event) => {
+        console.log('Received message: ', event);
+        // 处理接收到的消息
+        console.log(" event.data:" + event.data)
+        let result = this.removeQuotes(event.data);
+        const results = result.replace(/\\n/g, ' ');
+        this.aiContent += results;
+      };
+      this.socket.onclose = (event) => {
+        console.log('链接关闭：', event);
+      };
+    },
+    removeQuotes(str) {
+      const firstQuoteIndex = str.indexOf('"');
+      const lastQuoteIndex = str.lastIndexOf('"');
+      if (firstQuoteIndex === 0 && lastQuoteIndex === str.length - 1) {
+        return str.slice(1, -1);
+      }
+      return str;
+    },
     tesTtoolList() {
       // console.log("this.toolList:", JSON.stringify(this.toolList))
       this.$API("/user/census/submission", "get").then(res => {
@@ -149,6 +231,7 @@ export default {
 
   },
   mounted() {
+    this.loading = true;
     this.tesTtoolList();
   }
 

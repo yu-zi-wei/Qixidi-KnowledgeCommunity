@@ -1,21 +1,24 @@
 <template>
   <div>
     <navigation-bar-module :isConceal="false"></navigation-bar-module>
-    <div class="module-main flex-left news-index">
-      <div class="flex-1">
-        <el-skeleton class="mt-10" :rows="4" animated v-if="loading"/>
-        <div class="left-list-menu" v-if="!loading">
-          <el-menu :default-active="$route.path"
-                   :router="true"
-                   class="el-menu-demo">
-            <el-menu-item v-for="(item,index) in userNewsList" :index="item.route" style="font-size: 16px" :key="index">
-              {{ item.typeInfo }}
-            </el-menu-item>
-          </el-menu>
+    <div class="mt-30">
+      <div class="module-main flex-left news-index">
+        <div class="flex-1">
+          <el-skeleton class="mt-10" :rows="4" animated v-if="loading"/>
+          <div class="left-list-menu" v-if="!loading">
+            <el-menu :default-active="$route.path"
+                     :router="true"
+                     class="el-menu-demo">
+              <el-menu-item v-for="(item,index) in userNewsList" :index="item.route" style="font-size: 16px"
+                            :key="index">
+                {{ item.typeInfo }}
+              </el-menu-item>
+            </el-menu>
+          </div>
         </div>
-      </div>
-      <div class="flex-9 news-child-content">
-        <nuxt-child/>
+        <div class="flex-9 news-child-content">
+          <nuxt-child/>
+        </div>
       </div>
     </div>
   </div>
