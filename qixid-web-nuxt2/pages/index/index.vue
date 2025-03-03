@@ -303,7 +303,7 @@ export default {
 
       this.selectedArticleListApi();
       this.getSiteInfo();
-      this.$API("/white/label//grouping/list", this.$get(), {pageNum: 0, pageSize: 8,}).then(res => {
+      this.$API("/white/label/grouping/list", this.$get(), {pageNum: 0, pageSize: 14,}).then(res => {
         this.labelGroupingList = res.rows;
         localStorage.setItem("labelGroupingList", JSON.stringify(this.labelGroupingList));
       }).finally(() => this.labelGroupingDialog = false);
