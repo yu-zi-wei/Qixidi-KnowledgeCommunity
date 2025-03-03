@@ -5,12 +5,14 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.ai.service.DeepSeekService;
 import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
@@ -88,6 +90,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
     private final SpecialInformationMapper specialInformationMapper;
+    private final DeepSeekService deepSeekService;
 
     /**
      * 查询文章信息
@@ -145,7 +148,8 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         add.setCreateTime(new Date());
         add.setUpdateTime(new Date());
         baseMapper.insert(add);
-        vo.setId(add.getId());
+        Long id = add.getId();
+        vo.setId(id);
         if (bo.getAuditState().equals(4)) return vo;
         ArticleInformationVo articleInformationVo = BeanUtil.toBean(add, ArticleInformationVo.class);
         List<ArticleInformationVo> list = new ArrayList();
@@ -155,12 +159,27 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             //计算文章推荐权证
             articleWeightAlgorithms(list);
             //文章自动审核，发送消息
-            articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), add.getId(), uuid);
+            articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), id, uuid);
             //  重算专栏数据
             recalculationColumn(uuid);
+            //生成 ai总结
+            aiSummary(id, add.getArticleTitle(), add.getArticleContent());
         });
 
         return vo;
+    }
+
+    private void aiSummary(Long id, String articleTitle, String articleContent) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("\n 文章标题：" + articleTitle);
+        stringBuffer.append("\n 文章内容：" + articleContent);
+        stringBuffer.append("\n 要求：对该文章内容生成简单的总结，只需要总结这篇文章的大概内容，不需要详细总结");
+        Object Summary = deepSeekService.generationContent(stringBuffer.toString());
+        if (Summary != null) {
+            baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
+                    .set(ArticleInformation::getArticleSummary, Summary.toString())
+                    .eq(ArticleInformation::getId, id));
+        }
     }
 
     public void recalculationColumn(String uuid) {
@@ -268,6 +287,8 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             executorService.execute(() -> {
                 articleWeightAlgorithms(list);
                 articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), update.getId(), uuid);
+                //生成 ai总结
+                aiSummary(update.getId(), update.getArticleTitle(), update.getArticleContent());
             });
         } else if (integer < 0) {
             countUserWebsiteMapper.updateDelete(uuid, CountUserType.ARTICLE_COUNT.getCode());
@@ -495,7 +516,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         info.setUpdateId(uuid);
         info.setUpdateTime(new Date());
-        info.setState(2);
         baseMapper.updateById(info);
         LoginHelper.getTripartiteUuid();
         if (integer > 0) {

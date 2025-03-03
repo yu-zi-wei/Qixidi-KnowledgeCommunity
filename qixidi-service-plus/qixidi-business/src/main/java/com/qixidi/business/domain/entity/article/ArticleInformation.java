@@ -67,7 +67,7 @@ public class ArticleInformation {
      */
     private String reprintUrl;
     /**
-     * 文章状态（0：正常，1：已删除，2:草稿）
+     *文章状态（0：正常，1：已删除）
      */
     private Integer state;
     /**

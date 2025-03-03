@@ -30,14 +30,15 @@ public class DeepSeekService {
     private final DeepSeekConfig deepSeekConfig;
 
     /**
-     * 一次性返回
+     * 一次性返回（content）不返回深度思考内容
      *
      * @param questions
      */
     public Object generationContent(String questions) {
         Map<String, Object> requestBody = new HashMap<>();
         Map<String, String> message = new HashMap<>();
-        Object reasoningContent = "";
+        Object reasoningContent = "";//深度思考
+        Object content = "";//最终内容
 
         String url = deepSeekConfig.getUrl();
         requestBody.put("model", deepSeekConfig.getModel());
@@ -62,12 +63,14 @@ public class DeepSeekService {
             Object data = entries.get("message");
             JSONObject dataJson = JSONUtil.parseObj(data);
             reasoningContent = dataJson.get("reasoning_content");//获取推理内容
-            System.out.printf("相应内容：" + reasoningContent + "\n");
+            content = dataJson.get("content");//获取推理内容
+            log.info("返回内容 reasoning_content：{}", reasoningContent);
+            log.info("返回内容 content：{}", content);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return reasoningContent;
+        return content;
     }
 
     /**
