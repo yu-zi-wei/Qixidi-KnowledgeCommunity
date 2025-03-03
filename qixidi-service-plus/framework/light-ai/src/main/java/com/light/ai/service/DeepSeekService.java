@@ -64,8 +64,6 @@ public class DeepSeekService {
             JSONObject dataJson = JSONUtil.parseObj(data);
             reasoningContent = dataJson.get("reasoning_content");//获取推理内容
             content = dataJson.get("content");//获取推理内容
-            log.info("返回内容 reasoning_content：{}", reasoningContent);
-            log.info("返回内容 content：{}", content);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -110,9 +108,13 @@ public class DeepSeekService {
                             JSONObject entries = JSONUtil.parseObj(choicesObj);
                             Object data = entries.get("delta");
                             JSONObject dataJson = JSONUtil.parseObj(data);
-                            Object reasoningContent = dataJson.get("reasoning_content");//获取推理内容
-                            //webSocket消息推送
-                            WebSocketUtils.sendMessage(session, reasoningContent);
+                            Object reasoningContent = dataJson.get("reasoning_content");//深度思考内容
+                            if (reasoningContent != null) {
+                                WebSocketUtils.sendMessage(session, reasoningContent);//webSocket消息推送
+                            } else {
+                                Object content = dataJson.get("content");//最终回答内容
+                                WebSocketUtils.sendMessage(session, content);//webSocket消息推送
+                            }
                         }
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);

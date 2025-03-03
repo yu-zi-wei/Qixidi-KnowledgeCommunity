@@ -1,7 +1,6 @@
 package com.qixidi.business.comtroller.frontDesk.article;
 
 
-import com.light.ai.service.DeepSeekService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
@@ -32,12 +31,6 @@ import java.util.List;
 public class ArticleFrontDeskController extends BaseController {
 
     private final IArticleInformationService iArticleInformationService;
-    private final DeepSeekService deepSeekService;
-
-    @GetMapping("/ai")
-    public Object ai(String questions) {
-        return deepSeekService.generationContent(questions);
-    }
 
     /**
      * 查询文章推荐列表

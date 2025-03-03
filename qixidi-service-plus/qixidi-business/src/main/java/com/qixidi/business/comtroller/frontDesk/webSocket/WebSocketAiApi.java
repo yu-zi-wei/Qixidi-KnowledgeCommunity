@@ -36,11 +36,6 @@ public class WebSocketAiApi {
         this.key = userId;
         //建立链接
         WebSocketUtils.addLinks(userId, session);
-        try {
-            WebSocketUtils.sendMessage(session, "你好！有什么可以帮到你的吗？");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
