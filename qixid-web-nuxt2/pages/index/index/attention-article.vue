@@ -23,7 +23,8 @@
                :title="item.nickname">
             <nuxt-link :to="`/user_home/article?uuid=`+$base64.encode(item.uuid)"
                        target="_blank">
-              <el-avatar size="medium" :src="item.avatar"></el-avatar>
+              <el-avatar :size="35" v-if="item.avatar" :src="item.avatar"></el-avatar>
+              <el-avatar :size="35" v-else src="/img/tx.jpg"></el-avatar>
               <p class="font-s-13 overflow-nowrap-1">{{ item.nickname }}</p>
             </nuxt-link>
           </div>

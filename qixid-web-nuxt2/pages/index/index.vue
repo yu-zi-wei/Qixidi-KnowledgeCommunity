@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex-space-between mb-30">
+    <div class="flex-space-between mb-40">
       <div style="min-height: 1px"></div>
       <div class="label-grouping-div">
         <el-menu
@@ -347,7 +347,7 @@ export default {
 .el-menu-item {
   height: 42px;
   line-height: 42px;
-  border-radius: 0px;
+  border-radius: 20px;
 }
 
 .el-button--medium {
