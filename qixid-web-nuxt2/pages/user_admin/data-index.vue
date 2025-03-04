@@ -117,8 +117,8 @@
             </div>
           </div>
           <el-divider></el-divider>
-<!--          提交记录图-->
-          <div v-if="submissionLoading" class="mb-20">
+          <!--          提交记录图-->
+          <div v-if="submissionLoading" class="mb-30">
             <submission-chart :profile="submissionObj"></submission-chart>
           </div>
           <div class="overflow-hidden">
@@ -127,13 +127,13 @@
             <div v-show="!statisticalChartLoading">
               <!--            收藏夹统计饼图-->
               <div style="float: left;width: 40%;">
-                <div class="align-center font-s-18 font-bold"> 收藏夹统计图</div>
-                <div id="timeCollectionCensus"></div>
+                <div class="font-s-18 font-bold ml-20 color-blue"> 收藏夹统计图</div>
+                <div id="timeCollectionCensus" style="height: 320px"></div>
               </div>
               <!--            专栏-->
               <div style="float: right;width: 40%;">
-                <div class="align-center font-s-18 font-bold"> 专栏统计图</div>
-                <div id="timeSpecialCensus"></div>
+                <div class="align-center font-s-18 font-bold ml-10 color-blue"> 专栏统计图</div>
+                <div id="timeSpecialCensus" style="height: 320px"></div>
               </div>
             </div>
           </div>

@@ -407,6 +407,7 @@ export default {
   background: #ced6e0;
   border-radius: 2px;
 }
+
 .el-button--medium{
   padding: 10px 20px;
 }
