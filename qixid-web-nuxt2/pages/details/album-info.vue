@@ -21,10 +21,9 @@
               <span class="ml-6 color-grey5">{{ info.name }}</span>
             </div>
             <div class="mt-15">
-              <el-tag class="mr-10" size="medium">搜录 12</el-tag>
-              <el-tag class="mr-10" type="warning" size="medium">关注 34</el-tag>
-              <el-tag class="mr-10" size="medium">点赞 34</el-tag>
-              <el-tag type="danger" size="medium">评论 234</el-tag>
+              <el-tag class="mr-10" size="medium">搜录 --</el-tag>
+              <el-tag class="mr-10" type="warning" size="medium">关注 --</el-tag>
+              <el-tag class="mr-10" size="medium" type="danger">点赞 --</el-tag>
             </div>
             <div class="mt-15">
               <div class="color-grey font-s-14">
@@ -40,10 +39,10 @@
       </div>
     </div>
     <div class="mt-20">
-      <dictumList v-if="!loading"
-                  :album-id="info.id"
-                  :typography="2"
-      ></dictumList>
+      <dictumList
+        v-if="!loading"
+        :album-id="info.id"
+        :typography="2"></dictumList>
     </div>
   </div>
 </template>

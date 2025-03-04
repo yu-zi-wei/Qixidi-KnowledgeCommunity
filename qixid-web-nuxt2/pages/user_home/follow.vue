@@ -20,7 +20,7 @@
                       v-text="item.nickname"></span>
                       <span class="ml-8 font-s-13 color-grey">{{ item.occupation }}</span>
                     </div>
-                    <div class="font-s-14 color-grey mt-10">
+                    <div class="font-s-14 color-grey mt-15">
                       <span class="mr-8">关注数：{{ item.fansFollowCount == 0 ? '--' : item.fansFollowCount }}</span>
                       <span>关注时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
                     </div>
@@ -56,7 +56,8 @@
               <div class="flex-left align-items-center" :gutter="20" style="padding: 10px 20px 0 20px">
                 <div v-html="item.labelCover" class="mr-10"></div>
                 <div class="flex-8">
-                  <p class="font-bold cursor-pointer mb-8 text-underline-hover" @click="jumpLabel(item)" v-text="item.labelName"></p>
+                  <p class="font-bold cursor-pointer mb-8 text-underline-hover" @click="jumpLabel(item)"
+                     v-text="item.labelName"></p>
                   <div class="font-s-14 color-grey">
                     <span class="mr-8">文章数：{{ item.articleNumber == 0 ? '--' : item.articleNumber }}</span>
                     <span>关注时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>

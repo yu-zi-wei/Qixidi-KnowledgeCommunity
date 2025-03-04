@@ -530,7 +530,6 @@
           <div v-else class="text-center mt-20 font-s-14 color-grey-3">
             快来抢占沙发~
           </div>
-
         </div>
       </div>
     </el-drawer>

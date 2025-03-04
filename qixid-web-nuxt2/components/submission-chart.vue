@@ -19,11 +19,11 @@
     </div>
     <div class="operation">
       <div class="slider">
-        <div class="slider-desc">0</div>
-        <div style="width:120px;">
-          <span class="color-theme ml-10">总贡献：{{ sumNumBer }}次</span>
+        <div style="width: 30px;margin-left: 10px">0</div>
+        <div style="width: 100px">
+          <span class="color-theme">总贡献：{{ sumNumBer }}+</span>
         </div>
-        <div class="slider-desc">12+</div>
+        <div class="">month：12</div>
       </div>
       <div class="legend">
         <div class="level-desc">少</div>
@@ -141,14 +141,14 @@ export default {
       return color
     },
     sliderFormat(val) {
-      return '贡献: ' + val
+      return ' +' + val
     },
   }
 }
 </script>
 <style scoped>
 .submission-chart {
-  width: 820px;
+  width: 915px;
   height: 180px;
   background-color: #fff;
   margin: auto;
@@ -176,7 +176,7 @@ export default {
 }
 
 .submission-chart .calendar .column {
-  width: 11px;
+  width: 13px;
   margin-right: 3px;
 }
 
@@ -190,16 +190,16 @@ export default {
 }
 
 .submission-chart .calendar .column .date-wrapper {
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
   background: #fefefe;
   border: 1px solid #fefefe;
   margin-bottom: 2px;
 }
 
 .submission-chart .calendar .column .date-wrapper .date {
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
 }
 
 .submission-chart .calendar .column .date-wrapper .date:hover {
@@ -220,15 +220,11 @@ export default {
 
 .submission-chart .operation .slider {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
-  width: 200px;
-}
-
-.submission-chart .operation .slider .slider-desc {
-  width: 11px;
   margin: 0 8px;
 }
+
 
 .submission-chart .operation .legend {
   display: flex;

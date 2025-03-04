@@ -133,7 +133,7 @@
 import VditorPreview from "../Vditor-preview.vue";
 
 export default {
-  name: "dictumManage",
+  name: "dictumManageList",
   components: {VditorPreview},
   props: {
     state: Number,
@@ -184,7 +184,7 @@ export default {
       this.debounceTimer = setTimeout(() => {
         this.queryParams.pageNum = 1;
         this.queryParams.dictumState = this.state;
-        this.queryParams.articleTitle = this.keyword;
+        this.queryParams.content = this.keyword;
         this.loading = true;
         this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
           this.dictumList = res.rows;
@@ -232,12 +232,5 @@ export default {
 </script>
 
 <style scoped>
-
-/* 瀑布流中的每个元素 */
-.waterfall-item {
-  margin-bottom: 10px;
-  background-color: #f4f4f4;
-  padding: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
+@import url("components/css/pc/dictum-comment.css");
 </style>

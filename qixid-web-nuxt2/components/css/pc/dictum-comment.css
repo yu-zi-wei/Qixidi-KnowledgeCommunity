@@ -67,12 +67,12 @@ textarea:focus {
 }
 
 .box-item {
-  width: 385px;
-  margin-bottom: 35px;
+  width: 380px;
+  margin-bottom: 40px;
   box-shadow: 0 4px 8px 0 #f1f2f6;
   padding: 20px 10px;
   border-radius: 10px;
-  border: 1px solid #fefefe;
+  border: 1px solid #ecf0f1;
 }
 
 .box-item:hover {

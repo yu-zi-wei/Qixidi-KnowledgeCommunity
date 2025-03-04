@@ -18,8 +18,8 @@
           <el-menu-item label="审核中" index="private">私有</el-menu-item>
         </el-menu>
 
-        <div>
-          <dictumManageList :state="state" :keyword="keyword"></dictumManageList>
+        <div class="mt-10">
+          <dictum-manage-list :state="state" :keyword="keyword"></dictum-manage-list>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -28,8 +28,11 @@
 
 <script>
 
+import DictumManageList from "../../../components/dictum/dictum-manage-list.vue";
+
 export default {
   name: "dictumManage",
+  components: {DictumManageList},
   data() {
     return {
       themeColor: process.env.THEME_COLOR,
