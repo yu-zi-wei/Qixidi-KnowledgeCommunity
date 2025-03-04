@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="module-main">
+  <div class="module-main">
+    <div class="mt-30">
       <el-skeleton class="mt-10" :rows="8" animated v-if="loading"/>
       <div v-show="!loading" class="flex-left">
         <div class="flex-2">
