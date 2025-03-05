@@ -3,6 +3,7 @@ package com.light.ai.config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@ConfigurationProperties(prefix = "deepSeek.config")
+@ConfigurationProperties(prefix = "deep-seek.config")
 @Configuration
 public class DeepSeekConfig {
     /**
@@ -22,21 +23,21 @@ public class DeepSeekConfig {
     /**
      * 密钥
      */
-    private String AuthorizationKey = "sk-qrkzlmqqarpykhoeqfwwoidxhvyhvxeekmwxsqttwcfusyps";
+    private String authorizationKey;
 
     /**
      * 地址
      */
-    private String url = "https://api.siliconflow.cn/v1/chat/completions";
+    private String url;
 
     /**
      * 模型
      */
-    private String model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B";
+    private String model;
 
     /**
      * 请求角色
      */
-    private String role = "user";
+    private String role;
 
 }

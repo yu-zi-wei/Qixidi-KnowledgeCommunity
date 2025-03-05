@@ -207,3 +207,11 @@ minio:
     access-port: ${config.minio.storage.access_port}
     access-key: ${config.minio.storage.access_key}
     secret-key: ${config.minio.storage.secret_key}
+
+# deepSeek配置
+deep-seek:
+  config:
+    authorization-key: ${config.deepSeek.authorizationKey}
+    url: ${config.deepSeek.url}
+    model: ${config.deepSeek.model}
+    role: ${config.deepSeek.role}
