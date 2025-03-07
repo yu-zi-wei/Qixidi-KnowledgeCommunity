@@ -106,6 +106,17 @@ qixidi/
 
 ![前台功能.png](img%2F%E5%89%8D%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
 
+### 后台页面截图
+![首页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%A6%96%E9%A1%B5.png)
+![名言广场.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA.png)
+![文章详情.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85.png)
+![文章编辑.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E7%BC%96%E8%BE%91.png)
+![用户后台.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E5%90%8E%E5%8F%B0.png)
+
+### 爱情小站页面截图
+![爱情小站.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%88%B1%E6%83%85%E5%B0%8F%E7%AB%99.png)
+![爱情小站1.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%88%B1%E6%83%85%E5%B0%8F%E7%AB%991.png)
+
 ### 后台功能点
 
 ![后台功能.png](img%2F%E5%90%8E%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
