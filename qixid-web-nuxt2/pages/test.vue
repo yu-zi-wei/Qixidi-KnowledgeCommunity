@@ -13,6 +13,15 @@
       <el-button @click="websocketSend"> 发送消息</el-button>
       <el-button @click="websocketClose('ziwei1')"> 关闭链接ziwei1</el-button>
 
+<!--      <NumberAnimation-->
+<!--        ref="number1"-->
+<!--        :from="100"-->
+<!--        :to="10000"-->
+<!--        :format="theFormat"-->
+<!--        :duration="5"-->
+<!--        autoplay-->
+<!--        easing="linear"-->
+<!--      />-->
 
     </div>
 
@@ -59,19 +68,21 @@
         <el-button type="primary" @click="sendContent" :disabled="form.textarea==null">发送</el-button>
       </el-form-item>
     </el-form>
+
+    <countTo :startVal='0' :endVal='30' :duration='3000'></countTo>
   </div>
-  </div>
+
 </template>
 
 <script>
 import SubmissionChart from "../components/submission-chart";
 import VditorMd from "../components/Vditor-md.vue";
 import VditorPreview from "../components/Vditor-preview.vue";
-
+import countTo from 'vue-count-to';
 // import WebSocket from 'websocket';
 export default {
   name: "test",
-  components: {VditorPreview, VditorMd, SubmissionChart},
+  components: {VditorPreview, VditorMd, SubmissionChart,countTo },
   computed: {
     prop() {
       let data = {
@@ -87,6 +98,8 @@ export default {
   },
   data() {
     return {
+      startVal: 0,
+      endVal: 2017,
       form: {
         textarea: null,
       },

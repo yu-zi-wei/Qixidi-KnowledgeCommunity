@@ -25,7 +25,9 @@
                         文章总数
                       </nuxt-link>
                     </div>
-                    <div class="sum-data-cl" v-text="countUseInfo.articleCount==0?'--':countUseInfo.articleCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.articleCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
                 <el-col :span="1" style="height: 1px">
@@ -38,8 +40,9 @@
                         专栏数
                       </nuxt-link>
                     </div>
-                    <div class="sum-data-cl"
-                         v-text="countUseInfo.specialColumnCount==0?'--':countUseInfo.specialColumnCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.specialColumnCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
                 <el-col :span="1" style="height: 1px">
@@ -52,8 +55,9 @@
                         收藏夹数
                       </nuxt-link>
                     </div>
-                    <div class="sum-data-cl"
-                         v-text="countUseInfo.collectionCount==0?'--':countUseInfo.collectionCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.collectionCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
                 <el-col :span="1" style="height: 1px">
@@ -66,8 +70,9 @@
                         关注数
                       </nuxt-link>
                     </div>
-                    <div class="sum-data-cl"
-                         v-text="countUseInfo.followCount==0?'--':countUseInfo.followCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.followCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
               </el-row>
@@ -84,8 +89,9 @@
                 <el-col :span="5">
                   <el-card shadow="hover" class="ba-color-grey-2 text-center" title="总获评论数">
                     <div class="cursor-pointer hover-cl font-s-4 mb-12">总获评论数</div>
-                    <div class="sum-data-cl"
-                         v-text="countUseInfo.fansCommentCount==0?'--':countUseInfo.fansCommentCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.fansCommentCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
                 <el-col :span="1" style="height: 1px"/>
@@ -96,8 +102,9 @@
                         专辑总数
                       </nuxt-link>
                     </div>
-                    <div class="sum-data-cl"
-                         v-text="countUseInfo.albumCount==0?'--':countUseInfo.albumCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.albumCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
                 <el-col :span="1" style="height: 1px"/>
@@ -109,8 +116,9 @@
                         名言总数
                       </nuxt-link>
                     </div>
-                    <div class="sum-data-cl"
-                         v-text="countUseInfo.dictumCount==0?'--':countUseInfo.dictumCount"></div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.dictumCount' :duration='2000'></countTo>
+                    </div>
                   </el-card>
                 </el-col>
               </el-row>
@@ -144,9 +152,11 @@
 </template>
 
 <script>
+import countTo from 'vue-count-to';
 
 export default {
   name: "dataIndex",
+  components: {countTo},
   data() {
     return {
       query: {

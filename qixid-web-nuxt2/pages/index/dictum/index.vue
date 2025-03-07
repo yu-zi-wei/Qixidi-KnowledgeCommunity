@@ -99,7 +99,7 @@
                 <div v-for="item of popularLabelArr"
                      class="mr-10 mb-10 cursor-pointer hover-fw-bold">
                   <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
-                    #{{ item.label }}+{{ item.count }}
+                    {{ item.label }}+{{ item.count }}
                   </el-tag>
                 </div>
               </div>

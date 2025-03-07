@@ -2,6 +2,7 @@
   <div>
     <div class="flex-space-between mb-40">
       <div style="min-height: 1px"></div>
+      <!--      热门分类-->
       <div class="label-grouping-div">
         <el-menu
           v-if="!labelGroupingDialog"
@@ -12,7 +13,7 @@
           :active-text-color="themeColor"
           class="el-menu-demo">
           <el-menu-item v-for="(item,index) in labelGroupingList" :index="'/popular-group/'+item.id"
-                        :title="item.groupingName" :key="index">
+                        :title="'热门分类：'+item.groupingName" :key="index">
             <nuxt-link :to="'/popular-group/'+item.id" class="font-s-14">
               <span>{{ item.groupingName }}</span>
             </nuxt-link>
@@ -110,29 +111,37 @@
                   <div class="cursor-pointer hover-cl">
                     <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                rel="noopener">
-                      <p class="flex-center mb-6 ">{{ userInfo.followCount }}</p>
-                      <p>关注</p>
+                      <p class="flex-center mb-6 ">
+                        <countTo :startVal='0' :endVal='userInfo.followCount' :duration='2000'></countTo>
+                      </p>
+                      <p class="color-grey-2 hover-cl">关注</p>
                     </nuxt-link>
                   </div>
                   <div class="cursor-pointer hover-cl">
                     <nuxt-link :to="`/user_home/collection?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                rel="noopener">
-                      <p class="flex-center mb-6 ">{{ userInfo.collectionCount }}</p>
-                      <p>收藏</p>
+                      <p class="flex-center mb-6 ">
+                        <countTo :startVal='0' :endVal='userInfo.collectionCount' :duration='2000'></countTo>
+                      </p>
+                      <p class="color-grey-2 hover-cl">收藏</p>
                     </nuxt-link>
                   </div>
                   <div class="cursor-pointer hover-cl">
                     <nuxt-link :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                rel="noopener">
-                      <p class="flex-center mb-6 ">{{ userInfo.articleCount }}</p>
-                      <p>文章</p>
+                      <p class="flex-center mb-6 ">
+                        <countTo :startVal='0' :endVal='userInfo.articleCount' :duration='2000'></countTo>
+                      </p>
+                      <p class="color-grey-2 hover-cl">文章</p>
                     </nuxt-link>
                   </div>
                   <div class="cursor-pointer hover-cl">
                     <nuxt-link :to="`/dictum/space/content-list?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                rel="noopener">
-                      <p class="flex-center mb-6">{{ userInfo.dictumCount }}</p>
-                      <p>名言</p>
+                      <p class="flex-center mb-6">
+                        <countTo :startVal='0' :endVal='userInfo.dictumCount' :duration='2000'></countTo>
+                      </p>
+                      <p class="color-grey-2 hover-cl">名言</p>
                     </nuxt-link>
                   </div>
                 </div>
@@ -199,8 +208,11 @@
 </template>
 
 <script>
+
+import countTo from 'vue-count-to';
 export default {
   name: "index",
+  components: {countTo},
   data() {
     return {
       websiteName: process.env.PROJECT_NAME,
