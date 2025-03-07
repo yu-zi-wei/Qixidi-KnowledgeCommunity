@@ -15,16 +15,18 @@
             </nuxt-link>
             |
             <span class="color-grey" v-if="item.occupation!=null">{{ item.occupation }} |</span>
-            <span class="color-grey" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
+            <span class="color-grey font-bold-300" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                                         {{ $utils.reckonTime(item.createTime) }}</span>
           </div>
           <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
-            <h1 class="font-s-16 mb-10 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h1>
+            <h1 class="font-s-16 mb-15 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h1>
           </nuxt-link>
-          <p class="color-grey text-indent-13 overflow-nowrap-2 font-s-13 line-height-24">{{ item.articleAbstract }}</p>
+          <p class="color-grey text-indent-13 overflow-nowrap-2 font-s-14 line-height-24 font-bold-300">
+            {{ item.articleAbstract }}
+          </p>
           <div class="mt-15 font-s-14 flex-left">
             <div class="mr-20" title="浏览">
-              <svg t="1735801351038" class="icon svg-translateY-3 icon-size-14" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1735801351038" class="icon-theme-1 svg-translateY-3 icon-size-14" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
                    p-id="53595">
                 <path
@@ -34,12 +36,12 @@
                   d="M512 345.6c-96 0-169.6 76.8-169.6 169.6 0 96 76.8 169.6 169.6 169.6 96 0 169.6-76.8 169.6-169.6C681.6 422.4 604.8 345.6 512 345.6zM512 640c-67.2 0-121.6-54.4-121.6-121.6 0-67.2 54.4-121.6 121.6-121.6 67.2 0 121.6 54.4 121.6 121.6C633.6 582.4 579.2 640 512 640z"
                   p-id="53597"></path>
               </svg>
-              <span class="font-s-13 color-grey-2"
-                    v-text="item.numberTimes>0?item.numberTimes:'浏览'"></span>
+              <span class="font-s-13 color-grey-2 font-bold-300"
+                    v-text="item.numberTimes>0?item.numberTimes:'--'"></span>
             </div>
             <div class="mr-20" title="点赞">
               <svg t="1700403032641"
-                   class="icon icon-size-14 svg-translateY-2"
+                   class="icon-theme-1 icon-size-14 svg-translateY-2"
                    viewBox="0 0 1024 1024"
                    version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="7591">
@@ -53,19 +55,19 @@
                   d="M264.827039 924.31872c0.319272 0.024559 0.441045 0.024559 0.295735-0.024559 0.243547-0.048095 0.367367-0.074701-0.295735-0.074701s-0.539282 0.026606-0.271176 0.074701C264.43409 924.343279 264.532327 924.343279 264.827039 924.31872z"
                   p-id="7594"></path>
               </svg>
-              <span class="font-s-13 color-grey-2"
-                    v-text="item.likeTimes>0?item.likeTimes:'暂无'"></span>
+              <span class="font-s-13 color-grey-2 font-bold-300"
+                    v-text="item.likeTimes>0?item.likeTimes:'--'"></span>
             </div>
             <div class="mr-20" title="评论">
-              <svg t="1719974110350" class="icon icon-size-14 svg-translateY-2" viewBox="0 0 1024 1024"
+              <svg t="1719974110350" class="icon-theme-1 icon-size-14 svg-translateY-2" viewBox="0 0 1024 1024"
                    version="1.1" xmlns="http://www.w3.org/2000/svg"
                    p-id="13918">
                 <path
                   d="M512.4 836.1c-28.5 0-56.4-2.4-83.5-6.7L233.2 944V753.2C131 684.1 65.6 578.1 65.6 459c0-208.2 200-377 446.8-377 246.9 0 446.9 168.8 446.9 377s-200 377.1-446.9 377.1z m0-700.3c-215.9 0-391 144.8-391 323.2 0 109.6 66.1 206.3 167 264.6l-1.8 125.1L418 772.5c30.3 6.2 61.8 9.8 94.3 9.8 216 0 391.1-144.6 391.1-323.2 0.1-178.5-175-323.3-391-323.3z m223.5 377c-30.9 0-55.9-24.1-55.9-53.8 0-29.8 25.1-53.8 55.9-53.8 30.9 0 55.8 24.1 55.8 53.8 0.1 29.8-24.9 53.8-55.8 53.8z m-223.5 0c-30.8 0-55.8-24.1-55.8-53.8 0-29.8 25.1-53.8 55.8-53.8 30.9 0 55.9 24.1 55.9 53.8 0 29.8-25 53.8-55.9 53.8z m-223.4 0c-30.9 0-55.8-24.1-55.8-53.8 0-29.8 24.9-53.8 55.8-53.8s55.9 24.1 55.9 53.8c0 29.8-25 53.8-55.9 53.8z m0 0"
                   p-id="13919"></path>
               </svg>
-              <span class="font-s-13 color-grey-2"
-                    v-text="item.commentTimes>0?item.commentTimes:'暂无'"></span>
+              <span class="font-s-13 color-grey-2 font-bold-300"
+                    v-text="item.commentTimes>0?item.commentTimes:'--'"></span>
             </div>
           </div>
         </div>

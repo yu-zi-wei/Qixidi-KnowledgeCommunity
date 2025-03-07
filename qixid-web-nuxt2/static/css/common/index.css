@@ -412,6 +412,10 @@ mr-auto {
   font-weight: bold;
 }
 
+.font-bold-300 {
+  font-weight: 300;
+}
+
 .font-s-8 {
   font-size: 8px;
 }

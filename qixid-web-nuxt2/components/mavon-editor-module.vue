@@ -300,6 +300,7 @@ export default {
 }
 
 .v-note-wrapper .v-note-panel .v-note-show .v-show-content, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
-  padding: 10px 10px 0 10px !important;
+  //padding: 10px 10px 0 10px !important;
+  padding: 0px !important;
 }
 </style>

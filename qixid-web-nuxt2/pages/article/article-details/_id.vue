@@ -100,29 +100,37 @@
                   </div>
                 </div>
               </div>
-              <!--                        <mavon-editor class="markdown"-->
-              <!--                                      id="detailDirectory"-->
-              <!--                                      style="padding-left: 10px"-->
-              <!--                                      :value="articleInfo.articleContent"-->
-              <!--                                      :subfield="false"-->
-              <!--                                      :defaultOpen="prop.defaultOpen"-->
-              <!--                                      :boxShadow="prop.boxShadow"-->
-              <!--                                      :toolbarsFlag="prop.toolbarsFlag"-->
-              <!--                                      :editable="prop.editable"-->
-              <!--                                      :codeStyle="articleInfo.theme"-->
-              <!--                                      fontSize="18px"-->
-              <!--                                      previewBackground="#fefefe"-->
-              <!--                                      :scrollStyle="prop.scrollStyle"-->
-              <!--                                      :navigation="false"-->
-              <!--                                      ref="markdown"-->
-              <!--                        />-->
               <div class="mt-20">
                 <!--          ai总结  -->
                 <div class="article-summary-dev" v-if="articleInfo.articleSummary!=null">
-                  <span class="color-stand-out font-bold">DeepSeek：</span>
-                  {{ articleInfo.articleSummary }}
+                  <div class="font-bold mb-6">
+                    <svg t="1741333845009" class="icon icon-size-16 svg-translateY-1" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="19948">
+                      <path
+                        d="M503.737 598.24C456.683 725.285 393.161 842.918 313.17 951.141c-47.054 56.465-89.401 75.286-127.044 56.465-28.232-18.822-23.527-61.17 14.116-127.045 37.643-70.581 131.749-169.392 282.321-296.437-197.626-14.116-338.785-47.053-423.481-98.812-47.054-32.938-65.875-65.875-56.464-98.812 14.116-37.643 49.406-51.759 105.87-42.348 84.697 28.232 216.445 103.517 395.249 225.857-37.643-141.161-56.464-272.91-56.464-395.249 0-103.518 21.174-159.982 63.522-169.393 42.348 9.411 63.522 65.874 63.522 169.393-4.705 117.634-23.527 249.383-56.464 395.249 174.099-108.224 301.142-176.45 381.133-204.683 61.17-18.822 101.165-11.764 119.986 21.174 14.116 37.643-7.057 75.285-63.522 112.928-70.581 42.348-190.566 70.58-359.959 84.696-32.938 4.705-56.464 7.058-70.58 7.058 127.045 84.697 232.914 185.861 317.611 303.495 28.233 61.17 23.527 101.165-14.116 119.987-32.938 14.116-75.285-9.411-127.044-70.581-65.876-84.697-129.397-199.977-190.567-345.843L503.737 598.24z"
+                        fill="#272636" p-id="19949"></path>
+                    </svg>
+                    AI总结：
+                  </div>
+                  <p class="font-bold-300 color-grey"> {{ articleInfo.articleSummary }}</p>
                 </div>
                 <!--            内容 -->
+                <!--                <mavon-editor class="markdown"-->
+                <!--                              id="detailDirectory"-->
+                <!--                              v-if="!loading"-->
+                <!--                              :value="articleInfo.articleContent"-->
+                <!--                              :subfield="false"-->
+                <!--                              :defaultOpen="prop.defaultOpen"-->
+                <!--                              :boxShadow="prop.boxShadow"-->
+                <!--                              :toolbarsFlag="prop.toolbarsFlag"-->
+                <!--                              :editable="prop.editable"-->
+                <!--                              :codeStyle="articleInfo.theme"-->
+                <!--                              fontSize="18px"-->
+                <!--                              previewBackground="#fefefe"-->
+                <!--                              :scrollStyle="prop.scrollStyle"-->
+                <!--                              :navigation="false"-->
+                <!--                              ref="markdown"-->
+                <!--                />-->
                 <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContent"
                                 :outline.sync="tocArray"></vditor-preview>
               </div>
@@ -751,7 +759,7 @@ export default {
             pos: offsetTop,
           })
         });
-        // this.tocArray = tocArray;
+        this.tocArray = tocArray;
       });
     },
     highlightType() {
@@ -992,6 +1000,7 @@ export default {
       //获取用户基本信息
       this.getBasicsUsers();
       this.loading = false;
+      // this.generateDirectory();
       this.$API(`/white/article/add/browse-count/${this.articleInfo.id}/${this.articleInfo.labelId}`);
       //获取相关文章
       this.$API('/white/article/related/list', this.$get(), this.queryParams).then(res => {
