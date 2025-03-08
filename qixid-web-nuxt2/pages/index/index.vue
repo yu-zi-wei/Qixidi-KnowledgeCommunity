@@ -358,7 +358,7 @@ export default {
 
 .el-menu-item {
   height: 42px;
-  line-height: 42px;
+  line-height: 38px;
   border-radius: 20px;
 }
 
