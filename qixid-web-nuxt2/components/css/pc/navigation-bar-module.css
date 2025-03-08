@@ -152,10 +152,10 @@
 }
 
 .publish-list-item {
-  padding: 5px 10px 10px 10px;
+  padding: 5px 8px 5px 8px;
   flex-grow: 1;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 2px;
   transition: all 0.1s linear 0s;
 }
 

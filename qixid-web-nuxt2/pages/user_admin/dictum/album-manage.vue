@@ -19,15 +19,18 @@
                   </el-dropdown>
                 </div>
                 <div class="flex-left">
-                  <el-image v-if="item.cover" style="height: 100px;width: 120px;border-radius: 4px" :src="item.cover"
-                            fit="cover"></el-image>
-                  <el-image style="height: 100px;width: 120px;border-radius: 4px"
-                            v-else src="/img/shu.jpg" fit="cover"></el-image>
+                  <div>
+                    <el-image v-if="item.cover" style="height: 100px;width: 120px;border-radius: 2px" :src="item.cover"
+                              fit="cover"></el-image>
+                    <el-image v-else style="height: 100px;width: 120px;border-radius: 2px"
+                              src="/img/shu.jpg" fit="cover"></el-image>
+                  </div>
+
                   <div class="mr-2 ml-10" style="height: 70px">
-                    <nuxt-link :to="`/details/album-info?data=`+item.id" target="_blank" rel="noopener">
-                      <div class="font-bold font-s-6 color-grey5 cursor-pointer overflow-nowrap-1">
-                        <span class="text-underline-hover">{{ item.name }}</span>
-                        <span class="font-s-13 line-height-16 color-grey">
+                    <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
+                      <div class="font-bold cursor-pointer overflow-nowrap-1">
+                        <span class="text-underline">{{ item.name }}</span>
+                        <span class="font-s-14 line-height-24 color-grey ml-6">
                         创建时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}') }}
                         </span>
                       </div>

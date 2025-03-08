@@ -20,7 +20,7 @@
             <div class="ml-8">
               <el-tag class="cursor-pointer mr-10" size="small" type="info" effect="plain" title="收录专辑"
                       v-if="item.albumName!=null">
-                <nuxt-link :to="`/details/album-info?data=`+item.albumId" target="_blank" rel="noopener">
+                <nuxt-link :to="`/external_info/album-info?data=`+item.albumId" target="_blank" rel="noopener">
                   {{ item.albumName }}
                 </nuxt-link>
               </el-tag>
@@ -195,7 +195,7 @@
             <div class="ml-8">
               <el-tag class="cursor-pointer mr-10" size="small" type="info" effect="plain" title="收录专辑"
                       v-if="item.albumName!=null">
-                <nuxt-link :to="`/details/album-info?data=`+item.albumId" target="_blank" rel="noopener">
+                <nuxt-link :to="`/external_info/album-info?data=`+item.albumId" target="_blank" rel="noopener">
                   {{ item.albumName }}
                 </nuxt-link>
               </el-tag>

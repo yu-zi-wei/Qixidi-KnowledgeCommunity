@@ -29,9 +29,8 @@
                   </div>
                   <div class="details-3 color-grey-2">
                     <span v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d}')"></span>
-                    <span>.</span>
-                    <span>文章数:</span>
-                    <span v-text="item.includedCount"></span>
+                    <span class="ml-4 mr-4">.</span>
+                    <span>{{ item.includedCount }} 篇文章</span>
                   </div>
                 </div>
               </div>
@@ -174,7 +173,7 @@ export default {
   methods: {
     specialIndex(item) {
       let routeInfo = this.$router.resolve({
-        path: "/details/special",
+        path: "/external_info/special",
         query: {id: this.$base64.encode(item.id), uuid: this.$base64.encode(item.uid)},
       });
       window.open(routeInfo.href, '_blank');

@@ -77,15 +77,6 @@
                 </el-col>
               </el-row>
               <el-row class="font-s-14 mt-20">
-                <!--                <el-col :span="5">-->
-                <!--                  <el-card shadow="hover" class="ba-color-grey-2 text-center" title="总获赞数">-->
-                <!--                    <div class="cursor-pointer hover-color">总获赞数</div>-->
-                <!--                    <div class="sum-data-cl"-->
-                <!--                         v-text="countUseInfo.fansFabulousCount==0?'&#45;&#45;':countUseInfo.fansFabulousCount"></div>-->
-                <!--                  </el-card>-->
-                <!--                </el-col>-->
-                <!--                <el-col :span="1" style="height: 1px">-->
-                <!--                </el-col>-->
                 <el-col :span="5">
                   <el-card shadow="hover" class="ba-color-grey-2 text-center" title="总获评论数">
                     <div class="cursor-pointer hover-cl font-s-4 mb-12">总获评论数</div>
