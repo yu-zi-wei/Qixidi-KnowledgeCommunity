@@ -112,7 +112,7 @@
         <el-form-item label="文章摘要：" prop="articleAbstract">
           <el-switch
             v-model="article.abstractSelect"
-            active-text="AI主动生成"
+            active-text="AI生成"
             inactive-text="手动填写">
           </el-switch>
           <div v-if="!article.abstractSelect">

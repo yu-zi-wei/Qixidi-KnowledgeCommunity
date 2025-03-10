@@ -6,6 +6,7 @@ const whiteList = [
   '/label',
   '/introduce',
   '/friend_link',
+  '/about_author',
   '/issues',
   '/content',
   '/error/**',
