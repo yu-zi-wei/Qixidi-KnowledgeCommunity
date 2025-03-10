@@ -73,6 +73,7 @@ textarea:focus {
   padding: 20px 10px;
   border-radius: 10px;
   border: 1px solid #ecf0f1;
+  background-color: #fefefe;
 }
 
 .box-item:hover {

@@ -30,7 +30,7 @@
                 d="M545.23858719 614.39524812c35.21850281 0 52.97774812 28.13880375 53.09774344 66.83715938 0 47.69797312-17.63925 66.77716219-52.91775094 66.77716219-35.21850281 0-52.79775656-19.07918906-52.79775563-66.77716219 0-38.21837531 26.21888531-66.83715937 52.61776313-66.83715938z m177.17247-410.50255312c52.85775375 47.69797312 325.96614656 400.90296187 88.01625937 658.77200156-255.46914281 229.07026406-502.0586625 104.9955375-598.95454406 0-52.79775656-76.43675156-70.49700375-152.75350781-52.79775656-248.26944844 17.57925281-105.11553281 96.89588156-200.51147812 105.65551031-315.10660781 26.51887313 57.29756531 35.27850094 104.9955375 35.2785 162.29310281C396.44491062 347.10660781 484.58116531 184.813505 467.0019125 32c0 0 167.33288813 57.29756531 237.76989469 343.72539188 44.03812875-38.09838094 35.27850094-114.5351325 17.63925-171.83269688z m-290.56765032 582.33525l8.819625-209.991075h-43.97813062v85.85635125H308.54864656V576.23687h-43.97813062v209.991075h43.97813062v-85.91634844H387.80527813v85.91634844h44.03812874z m114.47513438 0c61.61738156 0 96.83588438-38.09838094 96.83588437-104.9955375 0-66.83715937-35.21850281-104.9955375-96.83588437-104.9955375-61.61738156 0-96.89588156 38.15837812-96.89588156 104.9955375 0 66.77716219 35.27850094 104.9955375 96.89588156 104.9955375z m220.19064187-171.83269687h61.79737407v-38.15837813h-167.39288625v38.15837813h61.61738156v171.83269687h43.97813062V614.39524812z"
                 fill="#FF3B30" p-id="6750"></path>
             </svg>
-            <span>推荐</span>
+            <span>推 荐</span>
           </el-menu-item>
           <el-menu-item v-for="(item,index) in dictumSpecial"
                         :index="'/dictum?code='+$base64.encode(item.id)"
@@ -40,45 +40,6 @@
         </el-menu>
         <div class="mt-10" style="box-shadow: 0 2px 4px 0 #f1f2f6;padding: 15px 15px;border-radius: 10px">
           <el-collapse accordion v-model="activeName1">
-            <el-collapse-item name="1">
-              <template slot="title">
-                <div class="collapse-title">
-                  推荐专辑
-                </div>
-              </template>
-              <div class="mt-15 mb-10">
-                <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
-                  <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
-                    <div class="dictum-cover-div">
-                      <el-image class="dictum-cover-img" v-if="item.cover"
-                                :src="item.cover" fit="cover"></el-image>
-                      <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
-                    </div>
-                    <div class="mt-10 text-underline hover-cl" style="width: 90px" :title="item.name">
-                      {{ item.name }}
-                    </div>
-                  </nuxt-link>
-                </div>
-              </div>
-            </el-collapse-item>
-          </el-collapse>
-          <el-collapse accordion class="mt-20" v-model="activeName2">
-            <el-collapse-item name="1">
-              <template slot="title">
-                <div class="collapse-title">
-                  热门作者
-                </div>
-              </template>
-              <div class="mt-15 mb-10 flex-left flex-wrap-wrap">
-                <div v-for="item of popularAuthorsArr" class="mr-10 mb-10">
-                  <el-button plain size="medium" @click="selectDictum('authors',item.author)">
-                    {{ item.author }}&ensp;+{{ item.count }}
-                  </el-button>
-                </div>
-              </div>
-            </el-collapse-item>
-          </el-collapse>
-          <el-collapse accordion class="mt-20" v-model="activeName3">
             <el-collapse-item name="1">
               <template slot="title">
                 <div class="collapse-title">
@@ -92,21 +53,53 @@
                       d="M611.84 228.576L158.36 272.548c-17.088 1.7-29.54 18.432-27.976 37.204a2559.616 2559.616 0 0 1-19.396 592.124c-2.82 18.676 7.952 28.412 24.188 21.46a2912.66 2912.66 0 0 0 220.36-106.336c15.908-8.516 40.24-6.144 54.008 5.732a3017.228 3017.228 0 0 1 183.744 172.44c13 13.32 26.6 6.008 30.004-16.528a3077.752 3077.752 0 0 0 23.32-711.964c-1.88-22.668-17.692-39.804-34.776-38.104z"
                       fill="#fd79a8" p-id="11317"></path>
                   </svg>
-                  热门标签
+                  <span class="font-bold">
+                    推荐专辑
+                    <span class="color-fb7299">/</span>
+                    热门作者
+                  <span class="color-fb7299">/</span>
+                    热门标签
+                  </span>
                 </div>
               </template>
-              <div class="mt-15 flex-left flex-wrap-wrap mb-10">
-                <div v-for="item of popularLabelArr"
-                     class="mr-10 mb-10 cursor-pointer hover-fw-bold">
-                  <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
-                    {{ item.label }}+{{ item.count }}
-                  </el-tag>
+              <div class="mt-15 mb-10">
+                <div class="font-s-16 font-bold-s hot-title-solid">推荐专辑</div>
+                <div class="flex-left mb-10">
+                  <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
+                    <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
+                      <div class="dictum-cover-div">
+                        <el-image class="dictum-cover-img" v-if="item.cover"
+                                  :src="item.cover" fit="cover"></el-image>
+                        <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
+                      </div>
+                      <div class="mt-10 text-underline hover-cl" style="width: 90px" :title="item.name">
+                        {{ item.name }}
+                      </div>
+                    </nuxt-link>
+                  </div>
+                </div>
+                <div class="font-s-16 font-bold-s hot-title-solid">热门作者</div>
+                <div class="mt-15 mb-20 flex-left flex-wrap-wrap">
+                  <div v-for="item of popularAuthorsArr" class="mr-10 mb-10">
+                    <el-button plain size="medium" @click="selectDictum('authors',item.author)">
+                      {{ item.author }}&ensp;+{{ item.count }}
+                    </el-button>
+                  </div>
+                </div>
+                <div class="font-s-16 font-bold-s hot-title-solid">热门标签</div>
+                <div class="mt-15 flex-left flex-wrap-wrap mb-10">
+                  <div v-for="item of popularLabelArr"
+                       class="mr-10 mb-10 cursor-pointer hover-fw-bold">
+                    <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
+                      {{ item.label }}+{{ item.count }}
+                    </el-tag>
+                  </div>
                 </div>
               </div>
             </el-collapse-item>
           </el-collapse>
         </div>
-        <div class="">
+        <div class="mt-30">
           <dictumList :groupId="groupId==null?null:parseInt(groupId)"
                       :content="contents"
                       :label="label"
@@ -195,8 +188,6 @@ export default {
       positionCss: '',
       positionType: false,
       activeName1: '2',
-      activeName2: '2',
-      activeName3: '1',
     }
   },
   watch: {
@@ -285,11 +276,19 @@ export default {
 </script>
 
 <style>
+.hot-title-solid {
+  padding-bottom: 1px;
+  padding-top: 1px;
+  padding-left: 6px;
+  align-items: center;
+  border-left: 2px solid #fb7299;
+  //border-bottom: 1px solid #fb7299;
+}
+
 .collapse-title {
   font-size: 16px;
   padding-bottom: 12px;
   margin-bottom: 5px;
-  font-weight: 500;
   width: 100%;
   border-bottom: 1px solid #ced6e0;
 }
@@ -330,10 +329,8 @@ export default {
 
 .album-tj-cl {
   margin: 0 10px 5px 0;
-  float: left;
   background-color: #fefefe;
   padding: 10px;
-  font-size: 13px;
   cursor: pointer;
   text-align: center;
   border-radius: 4px;

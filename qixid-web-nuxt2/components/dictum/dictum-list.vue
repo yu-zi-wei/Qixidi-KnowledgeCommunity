@@ -177,7 +177,7 @@
       </div>
     </div>
 
-    <div v-if="!loading && typography==1" class="flex-space-between mt-30">
+    <div v-if="!loading && typography==1" class="flex-space-between">
       <!-- 这里是列容器 -->
       <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0"
            v-for="(column, index) in dictumInfoListArr" :key="index">
