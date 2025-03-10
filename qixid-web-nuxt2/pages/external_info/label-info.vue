@@ -1,8 +1,9 @@
 <template>
   <div class="module-main-2">
-    <div class="label-info-cl">
+    <div class="label-info-cl flex-space-between">
       <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
-      <div v-show="!initialLoading" class="margin-auto">
+      <div style="line-height: 1px"></div>
+      <div v-show="!initialLoading">
         <div class="flex-left">
           <div v-if="labelInfo.labelCover" v-html="labelInfo.labelCover" class="svg-translateY-5- mr-10"></div>
           <div class="font-s-32 font-bold text-center">{{ labelInfo.labelName }}</div>
@@ -12,7 +13,7 @@
           <span class="ml-6">{{ labelInfo.articleNumber }}文章</span>
         </div>
       </div>
-      <el-button size="small" class="fl-right mr-20" @click="followClick(labelInfo)" :loading="followLoading"
+      <el-button size="small" class="mr-20" @click="followClick(labelInfo)" :loading="followLoading"
                  :type="labelInfo.isFollow?'primary':''">
         {{ labelInfo.isFollow ? '已关注' : '关注' }}
       </el-button>
@@ -99,7 +100,6 @@ export default {
 
 <style scoped>
 .label-info-cl {
-  display: flex;
   align-items: center;
   height: 160px;
   margin-top: 20px;
@@ -108,5 +108,9 @@ export default {
   background: url(
   data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAa0lEQVQoU2NkgIKmQ37/6+w2MYK4xpnX/h9piWDgFL4E54MZhBSdna7FyEiMIpBhYBNxWQcyCWYjTjchKwK5nRGbw9EVga3+/lbvP7LvsCkCGYbiRlyKdtW2QDwD0oFPkbDUMogbCSkCGQYAka1/qtQO9d8AAAAASUVORK5CYII=
   ) repeat;
+}
+
+.el-button--small {
+  padding: 9px 15px;
 }
 </style>

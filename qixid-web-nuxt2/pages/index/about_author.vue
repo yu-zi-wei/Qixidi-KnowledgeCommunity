@@ -366,7 +366,7 @@
 <script>
 
 import 'static/vditor/dist/index.css'
-import VditorPreview from "../../../components/Vditor-preview.vue";
+import VditorPreview from "../../components/Vditor-preview.vue";
 
 export default {
   name: "introduce",
@@ -442,7 +442,7 @@ export default {
     }
   },
   async asyncData({app, params, store}) {
-    const id = -11;//关于栖息地
+    const id = -13;//关于作者
     let token = store.state.token;
     const https = require('https');
     const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/article/details/${id}`, {

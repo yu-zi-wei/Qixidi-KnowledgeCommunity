@@ -211,7 +211,7 @@
                               创作中心
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/article',userInfo.uuid)">
-                              <svg t="1720603953455" class="icon-theme icon-size-24 svg-translateY-1- mr-6"
+                              <svg t="1720603953455" class="icon-theme-blue icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="14832" id="mx_n_1720603953456">
                                 <path
@@ -225,7 +225,7 @@
                             </li>
                             <li class="function-li-dev"
                                 @click="routeJumpUuid('/dictum/space/content-list',userInfo.uuid)">
-                              <svg t="1720603401642" class="icon-theme icon-size-24 svg-translateY-1- mr-6"
+                              <svg t="1720603401642" class="icon-theme-stand-out icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024"
                                    version="1.1" xmlns="http://www.w3.org/2000/svg"
                                    p-id="8008">

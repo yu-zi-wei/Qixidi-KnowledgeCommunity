@@ -109,15 +109,21 @@
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-form-item label="文章摘要：" prop="articleAbstract">
-          <el-input type="textarea"
-                    :rows="6"
-                    placeholder="文章摘要 ..."
-                    maxlength="400"
-                    show-word-limit
-                    v-model="article.articleAbstract">
-          </el-input>
+          <el-switch
+            v-model="article.abstractSelect"
+            active-text="AI主动生成"
+            inactive-text="手动填写">
+          </el-switch>
+          <div v-if="!article.abstractSelect">
+            <el-input type="textarea"
+                      :rows="6"
+                      placeholder="文章摘要 ..."
+                      maxlength="400"
+                      show-word-limit
+                      v-model="article.articleAbstract">
+            </el-input>
+          </div>
         </el-form-item>
 
         <el-form-item label="文章类型：" prop="type">
@@ -168,17 +174,11 @@ export default {
     return {
       isClient: false,
       rules: {
-        specialId: [
-          {required: true, message: '文章专栏', trigger: 'change'}
-        ],
         labelLongList: [
-          {required: true, message: '请添加标签', trigger: 'change'}
+          {required: true, message: '请选择文章标签', trigger: 'change'}
         ],
         groupingId: [
-          {required: true, message: '请选择分类', trigger: 'change'}
-        ],
-        articleAbstract: [
-          {required: true, message: '请填写文章摘要', trigger: 'change'}
+          {required: true, message: '请选择文章类别', trigger: 'change'}
         ],
         type: [
           {required: true, message: '请选择文章类型', trigger: 'change'}
@@ -206,6 +206,7 @@ export default {
         classification: null,
         auditState: 4,//（1：审核中，2：审核通过，3：审核不通过,4:草稿）
         labelLongList: [],
+        abstractSelect: true,//ai生成摘要
       },
       buttonLoading: false,
       buttonDraft: false,
@@ -245,6 +246,11 @@ export default {
       this.loadArticleInfo(this.$base64.encode(id))
     },
     articlePopupConfirm() {
+      if (!this.article.abstractSelect && (this.article.articleAbstract === null || this.article.articleAbstract.trim().length === 0)) {
+        this.$modal.msg("请填写文章摘要！");
+        return;
+      }
+
       this.$refs["article"].validate(valid => {
         if (valid) {
           if (this.value.length > 0) {
@@ -276,11 +282,6 @@ export default {
         return;
       }
       this.buttonDraft = true;
-      //自动生成文章摘要
-      if (this.article.articleAbstract == null || this.article.articleAbstract == '') {
-        let articleContent = this.filtersHtmlText(this.article.articleContent);
-        this.article.articleAbstract = articleContent.replace(/\s*/g, "").substring(0, 120)
-      }
       this.article.auditState = 4;
       if (this.value.length > 0) {
         this.article.articleCover = this.value[0].url;
@@ -306,24 +307,7 @@ export default {
         this.$modal.msg("请填写内容！");
         return;
       }
-      if (this.article.articleAbstract == null || this.article.articleAbstract == '') {
-        let articleContent = this.filtersHtmlText(this.article.articleContent);
-        this.article.articleAbstract = articleContent.replace(/\s*/g, "").substring(0, 120)
-      }
       this.articlePopupDialog = true;
-    },
-    //html解析为纯文本
-    filtersHtmlText(html) {
-      return html.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, '').replace(/<[^>]+?>/g, '').replace(/\s+/g, ' ').replace(/ /g, ' ').replace(/>/g, ' ');
-    },
-    // md 解析为纯文本
-    filtersMdText(md) {
-      if (md != null && md != '') {
-        let reg = /[\u4e00-\u9fa5]|[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/g;
-        let names = md.match(reg);
-        md = names ? names.join('') : '';
-        return md;
-      } else return '';
     },
     getLatelyArticleList() {
       this.$API("/user/lately/article/list", this.$get(), this.latelyArticleQueryParams).then(response => {

@@ -276,4 +276,9 @@
   border-radius: 10px;
   border: 1px solid #ced6e0;
   margin-bottom: 15px;
+  transition: all 0.2s linear 0s;
+}
+
+.article-summary-dev:hover {
+  border: 1px solid var(--theme-color);
 }
