@@ -158,17 +158,28 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         executorService.execute(() -> {
             //计算文章推荐权证
             articleWeightAlgorithms(list);
-            //文章自动审核，发送消息
-            articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), id, uuid);
-            //  重算专栏数据
-            recalculationColumn(uuid);
             //生成 ai总结
             aiSummary(id, add.getArticleTitle(), add.getArticleContent());
+            //生成ai摘要
+            if (bo.getAbstractSelect()) {
+                aiAbstract(id, add.getArticleTitle(), add.getArticleContent());
+            }
+            //文章自动审核，发送消息
+            articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), id, uuid);
+            // 重算专栏数据
+            recalculationColumn(uuid);
         });
 
         return vo;
     }
 
+    /**
+     * AI 生成总结
+     *
+     * @param id
+     * @param articleTitle
+     * @param articleContent
+     */
     private void aiSummary(Long id, String articleTitle, String articleContent) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("\n 文章标题：" + articleTitle);
@@ -285,10 +296,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             list.add(articleInformationVo);
             //        计算文章权重，审核文章
             executorService.execute(() -> {
+                //计算文章权重
                 articleWeightAlgorithms(list);
+                //更新文章
                 articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), update.getId(), uuid);
-                //生成 ai总结
-                aiSummary(update.getId(), update.getArticleTitle(), update.getArticleContent());
             });
         } else if (integer < 0) {
             countUserWebsiteMapper.updateDelete(uuid, CountUserType.ARTICLE_COUNT.getCode());
@@ -296,11 +307,39 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (baseMapper.updateById(update) > 0) {
             ArticleInformationVo articleInformationVo = new ArticleInformationVo();
             articleInformationVo.setId(bo.getId());
+            executorService.execute(() -> {
+                //生成 ai总结
+                aiSummary(update.getId(), update.getArticleTitle(), update.getArticleContent());
+                if (bo.getAbstractSelect()) {
+                    //生成ai摘要
+                    aiAbstract(update.getId(), update.getArticleTitle(), update.getArticleContent());
+                }
+            });
             return articleInformationVo;
         }
         //  重算专栏数据
         recalculationColumn(uuid);
         return new ArticleInformationVo();
+    }
+
+    /**
+     * 生成ai摘要
+     *
+     * @param id
+     * @param articleTitle
+     * @param articleContent
+     */
+    private void aiAbstract(Long id, String articleTitle, String articleContent) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("\n 文章标题：" + articleTitle);
+        stringBuffer.append("\n 文章内容：" + articleContent);
+        stringBuffer.append("\n 要求：对该文章内容生成简单的文章摘要，不超过400个字符。");
+        Object Summary = deepSeekService.generationContent(stringBuffer.toString());
+        if (Summary != null) {
+            baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
+                    .set(ArticleInformation::getArticleAbstract, Summary.toString())
+                    .eq(ArticleInformation::getId, id));
+        }
     }
 
     /**

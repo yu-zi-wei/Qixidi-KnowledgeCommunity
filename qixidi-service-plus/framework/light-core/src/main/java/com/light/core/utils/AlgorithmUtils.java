@@ -33,7 +33,7 @@ public class AlgorithmUtils {
     }
 
     public static Double directionExport(Integer code) {
-        return directionExport(scopes, code) * 0.1;
+        return directionExport(scopes, code) * 1.0;
     }
 
 }

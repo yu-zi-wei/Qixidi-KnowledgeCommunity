@@ -1,24 +1,23 @@
 package com.qixidi.business.comtroller.frontDesk.article;
 
 
-import com.qixidi.business.domain.bo.article.ArticleInformationBo;
-import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
-import com.qixidi.business.domain.vo.article.ArticleInformationVo;
-import com.qixidi.business.service.article.IArticleInformationService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.controller.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.controller.BaseController;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.article.ArticleInformationBo;
+import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.service.article.IArticleInformationService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * 【前台】文章信息接口

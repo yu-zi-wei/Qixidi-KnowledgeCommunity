@@ -3,10 +3,10 @@ package com.qixidi.business.domain.bo.article;
 import com.light.core.core.domain.BaseEntity;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import jakarta.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -132,7 +132,5 @@ public class ArticleInformationTwoBo extends BaseEntity {
      * 审核时间
      */
     private Date auditTime;
-
-
 }
 

@@ -49,7 +49,6 @@ public class ArticleInformationBo extends BaseEntity {
     /**
      * 文章摘要
      */
-    @NotBlank(message = "请填写文章摘要", groups = {AddGroup.class, EditGroup.class})
     private String articleAbstract;
 
     /**
@@ -139,6 +138,10 @@ public class ArticleInformationBo extends BaseEntity {
      */
     private Date auditTime;
 
+    /**
+     * 是否选择ai生成摘要
+     */
+    private Boolean abstractSelect;
 
 }
 
