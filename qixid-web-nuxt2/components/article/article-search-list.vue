@@ -6,7 +6,7 @@
         <li v-for="item of listInformationList" :key="item.id" class="search-data-li">
           <!--          用户信息-->
           <el-row :gutter="20" class="mb-15">
-            <el-col :span="20" class="font-s-12 color-grey">
+            <el-col :span="20" class="font-s-12">
                 <span class="font-bold cursor-pointer hover-cl">
                   <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(item.userId)" target="_blank">
                     {{ item.nickname }}
@@ -19,8 +19,8 @@
           <el-row :gutter="20" class="mb-10">
             <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
               <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer" title="查看文章">
-                <p class="font-bold line-height-24 font-s-16 mb-10 text-underline-hover">{{ item.articleTitle }}</p>
-                <p class="font-s-14 line-height-24 color-grey abstract-cl-2 text-indent-13 font-bold-300">
+                <p class="font-bold-s line-height-24 font-s-16 mb-10 text-underline-hover">{{ item.articleTitle }}</p>
+                <p class="font-s-14 line-height-26 abstract-cl-2 text-indent-13 font-bold-300">
                   {{ item.articleAbstract }}</p>
               </el-col>
               <el-col :span="3" v-if="item.articleCover" class="mt-20">
