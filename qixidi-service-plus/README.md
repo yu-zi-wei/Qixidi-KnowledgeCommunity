@@ -9,3 +9,4 @@ mvn clean package -P prod
 b_article_information
 - id：（-11：关于作者）
 - id：（-12：友链）
+- id：（-13：作者）
