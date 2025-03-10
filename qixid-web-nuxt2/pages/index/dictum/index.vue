@@ -17,7 +17,7 @@
           :router="true"
           mode="horizontal"
           text-color="#2c3e50"
-          style="padding: 6px;border-radius: 10px;
+          style="padding: 6px;border-radius: 15px;
   background: rgb(238,174,202);
   background: radial-gradient(circle, rgba(238,174,202,0.4) 0%, rgba(148,187,233,0.4) 100%);"
           :active-text-color="themeColor"
@@ -63,7 +63,7 @@
                 </div>
               </template>
               <div class="mt-15 mb-10">
-                <div class="font-s-16 font-bold-s hot-title-solid">推荐专辑</div>
+                <div class="font-s-16 font-bold-s hot-title-solid mb-10">推荐专辑</div>
                 <div class="flex-left mb-10">
                   <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
                     <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
@@ -324,7 +324,7 @@ export default {
 }
 
 .album-tj-cl:hover {
-  border: 1px solid #dfe4ea;
+  border: 1px solid #fb7299;
 }
 
 .album-tj-cl {
@@ -335,7 +335,7 @@ export default {
   text-align: center;
   border-radius: 4px;
   height: 125px;
-  border: 1px solid #fefefe;
+  border: 1px solid #dfe4ea;
 }
 
 .re-name-cl {
@@ -346,13 +346,14 @@ export default {
 
 .dictum-special-cl {
   cursor: pointer;
-  width: 10%;
+  width: 120px;
   text-align: center;
   background-color: #fefefe;
   margin: 6px 15px !important;
-  height: 50px !important;
-  line-height: 50px !important;
-  border-radius: 4px;
+  height: 48px !important;
+  line-height: 46px !important;
+  border-radius: 25px;
+  transition: .2s;
 }
 
 /*隐藏折叠面板 尖括号图标*/
