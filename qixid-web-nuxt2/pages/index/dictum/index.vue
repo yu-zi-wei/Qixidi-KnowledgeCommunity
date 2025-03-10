@@ -64,7 +64,7 @@
               </template>
               <div class="mt-15 mb-10">
                 <div class="font-s-16 font-bold-s hot-title-solid mb-10">推荐专辑</div>
-                <div class="flex-left mb-10">
+                <div class="flex-left mb-20">
                   <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
                     <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
                       <div class="dictum-cover-div">
@@ -290,7 +290,7 @@ export default {
   padding-bottom: 12px;
   margin-bottom: 5px;
   width: 100%;
-  border-bottom: 1px solid #ced6e0;
+  border-bottom: 1px solid #c7ecee;
 }
 
 .positionCss {
