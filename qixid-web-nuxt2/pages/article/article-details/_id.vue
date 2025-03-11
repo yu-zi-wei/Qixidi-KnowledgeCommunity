@@ -554,10 +554,9 @@
                 </ul>
               </div>
               <!--                相关文章-->
-              <div class="auroora-card mt-10">
+              <div class="auroora-card mt-10" v-if="listInformationList.length!=0">
                 <span class="ml-6 font-bold border-left-2-solid">相关文章</span>
                 <el-divider></el-divider>
-                <el-skeleton class="mt-10" :rows="3" animated v-if="loading"/>
                 <div v-show="!loading">
                   <div v-for="item of listInformationList" :key="item.id"
                        class="ml-6 mr-6 cursor-pointer featured-articles">
@@ -567,9 +566,9 @@
                       </h4>
                     </nuxt-link>
                   </div>
-                  <div v-if="listInformationList.length==0" class="color-grey-2 font-s-13 text-center">
-                    暂无文章
-                  </div>
+                  <!--                  <div v-if="listInformationList.length==0" class="color-grey-2 font-s-13 text-center">-->
+                  <!--                    暂无文章-->
+                  <!--                  </div>-->
                 </div>
               </div>
             </div>

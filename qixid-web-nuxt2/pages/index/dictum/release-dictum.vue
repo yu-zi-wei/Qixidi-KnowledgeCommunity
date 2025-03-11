@@ -164,7 +164,7 @@
                           :outline="false"
                           :vditorId="'releaseDictum'"
                           :mdContent.sync="dictumInfo.content"
-                          :content="dictumInfo.contentMd" v-if="!loading"></VditorMd>
+                          :content="dictumInfo.content" v-if="!loading"></VditorMd>
               </div>
             </el-form-item>
             <el-row>

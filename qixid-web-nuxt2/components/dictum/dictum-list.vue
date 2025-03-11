@@ -826,6 +826,7 @@ export default {
 .user-info {
   padding-bottom: 10px;
   border-bottom: 1px solid #dfe4ea;
+  margin-bottom: 10px;
 }
 
 .dictum-content {
