@@ -173,25 +173,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         return vo;
     }
 
-    /**
-     * AI 生成总结
-     *
-     * @param id
-     * @param articleTitle
-     * @param articleContent
-     */
-    private void aiSummary(Long id, String articleTitle, String articleContent) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("\n 文章标题：" + articleTitle);
-        stringBuffer.append("\n 文章内容：" + articleContent);
-        stringBuffer.append("\n 要求：对该文章内容生成简单的总结，只需要总结这篇文章的大概内容，不需要详细总结。要求纯文字返回，不要返回markdown格式");
-        Object Summary = deepSeekService.generationContent(stringBuffer.toString());
-        if (Summary != null) {
-            baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
-                    .set(ArticleInformation::getArticleSummary, Summary.toString())
-                    .eq(ArticleInformation::getId, id));
-        }
-    }
 
     public void recalculationColumn(String uuid) {
         List<SpecialInformation> specialInformations = specialInformationMapper.selectList(
@@ -333,11 +314,31 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("\n 文章标题：" + articleTitle);
         stringBuffer.append("\n 文章内容：" + articleContent);
-        stringBuffer.append("\n 要求：对该文章内容生成简单的文章摘要，要求纯文字返回，不要返回markdown格式，切不超过400个字符。");
+        stringBuffer.append("\n 要求：对该文章内容生成简单的文章摘要，要求纯文字返回，不要返回markdown格式，且不超过400个字符。");
         Object Summary = deepSeekService.generationContent(stringBuffer.toString());
         if (Summary != null) {
             baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
                     .set(ArticleInformation::getArticleAbstract, Summary.toString())
+                    .eq(ArticleInformation::getId, id));
+        }
+    }
+
+    /**
+     * AI 生成总结
+     *
+     * @param id
+     * @param articleTitle
+     * @param articleContent
+     */
+    private void aiSummary(Long id, String articleTitle, String articleContent) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("\n 文章标题：" + articleTitle);
+        stringBuffer.append("\n 文章内容：" + articleContent);
+        stringBuffer.append("\n 要求：对该文章内容生成简单的总结，只需要总结这篇文章的大概内容，不需要详细总结。要求纯文字返回，不要返回markdown格式，且不超过400个字符。");
+        Object Summary = deepSeekService.generationContent(stringBuffer.toString());
+        if (Summary != null) {
+            baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
+                    .set(ArticleInformation::getArticleSummary, Summary.toString())
                     .eq(ArticleInformation::getId, id));
         }
     }
