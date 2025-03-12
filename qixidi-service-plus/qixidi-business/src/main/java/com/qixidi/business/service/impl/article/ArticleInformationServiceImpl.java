@@ -3,6 +3,7 @@ package com.qixidi.business.service.impl.article;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.ai.service.DeepSeekService;
+import com.light.core.constant.SystemConstant;
 import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
@@ -20,6 +22,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.StringUtils;
+import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.ip.AddressUtils;
 import com.light.core.utils.word.WordFilter;
 import com.light.redission.utils.RedisUtils;
@@ -161,7 +164,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             //生成 ai总结
             aiSummary(id, add.getArticleTitle(), add.getArticleContent());
             //生成ai摘要
-            if (bo.getAbstractSelect()) {
+            if (bo.getAbstractSelect() != null && bo.getAbstractSelect()) {
                 aiAbstract(id, add.getArticleTitle(), add.getArticleContent());
             }
             //文章自动审核，发送消息
@@ -214,9 +217,15 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         WordFilter wordFilter = new WordFilter(cacheList);
         int wordCount = wordFilter.wordCount(Title);
         int wordCount1 = wordFilter.wordCount(Content);
-        int wordCount2 = wordFilter.wordCount(Abstract);
+        int wordCount2 = 0;
+        if (StrUtil.isNotBlank(Abstract)) {
+            wordCount2 = wordFilter.wordCount(Abstract);
+        }
         if (wordCount > 10 || wordCount1 > 10 || wordCount2 > 10) {
             //            发送人工审核消息
+            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "文章自动审核失败",
+                    String.format("文章名称：%s，标题触发敏感词数：%s，内容触发敏感词数：%s，摘要触发敏感词数：%s",
+                            Title, wordCount, wordCount1, wordCount2));
             return;
         }
 //                修改文章状态
@@ -291,7 +300,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             executorService.execute(() -> {
                 //生成 ai总结
                 aiSummary(update.getId(), update.getArticleTitle(), update.getArticleContent());
-                if (bo.getAbstractSelect()) {
+                if (bo.getAbstractSelect() != null && bo.getAbstractSelect()) {
                     //生成ai摘要
                     aiAbstract(update.getId(), update.getArticleTitle(), update.getArticleContent());
                 }
