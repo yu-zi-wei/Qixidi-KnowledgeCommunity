@@ -8,10 +8,10 @@
   /*border-bottom: 1px solid #bdc3c7;*/
   /*height: 160px;*/
   transition: .3s;
-  padding: 20px 0px;
-  border: 1px solid #e2e2e5;
-  border-radius: 10px;
-  margin-bottom: 16px;
+  padding: 20px 4px;
+  border: 1px solid #ced6e0;
+  border-radius: 25px;
+  margin-bottom: 25px;
 }
 
 .article-item:hover {

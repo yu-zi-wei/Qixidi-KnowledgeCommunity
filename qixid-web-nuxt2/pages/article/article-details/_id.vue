@@ -116,7 +116,7 @@
                     </svg>
                     AI总结：
                   </div>
-                  <p class="font-bold-300 color-grey"> {{ articleInfo.articleSummary }}</p>
+                  <p class="font-bold-300"> {{ articleInfo.articleSummary }}</p>
                 </div>
                 <!--            内容 -->
                 <!--                <mavon-editor class="markdown"-->

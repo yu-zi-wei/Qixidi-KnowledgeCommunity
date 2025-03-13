@@ -7,7 +7,7 @@
     </el-tabs>
     <div v-if="!loading">
       <div v-for="(item,index) in articleList" :key="index" class="article-list-li flex-space-between">
-        <div style="padding: 16px">
+        <div>
           <div class="mb-15 font-s-13">
             <nuxt-link class="mr-4 hover-cl font-bold" :to="`/user_home/article?uuid=`+$base64.encode(item.userId)"
                        target="_blank" rel="noopener">
@@ -21,7 +21,7 @@
           <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
             <h1 class="font-s-16 mb-15 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h1>
           </nuxt-link>
-          <p class="text-indent-13 overflow-nowrap-2 font-s-14 line-height-26 font-bold-300">
+          <p class="text-indent-13 overflow-nowrap-2 font-s-14 line-height-26 color-grey">
             {{ item.articleAbstract }}
           </p>
           <div class="mt-15 font-s-14 flex-left">

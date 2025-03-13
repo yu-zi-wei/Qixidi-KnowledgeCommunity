@@ -9,7 +9,7 @@
           :default-active="$route.path"
           :router="true"
           mode="horizontal"
-          text-color="#7f8c8d"
+          text-color="#535c68"
           :active-text-color="themeColor"
           class="el-menu-demo">
           <el-menu-item v-for="(item,index) in labelGroupingList" :index="'/popular-group/'+item.id"

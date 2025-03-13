@@ -495,14 +495,12 @@ export default {
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
       this.$API("/front-desk/user/basics", "get").then(res => {
-        if (res == null) {
+        if (res == null || res.data == null) {
           this.currentUser = false;
           return;
         }
-        if (res.code == 200) {
-          this.userInfos = res.data;
-        }
-        if (res.data != null && res.data.uuid == uuid) {
+        this.userInfos = res.data;
+        if (res.data.uuid == uuid) {
           this.currentUser = true;
           return;
         }
@@ -511,15 +509,7 @@ export default {
     ,
     routeJump(url) {
       this.$router.push(url);
-    }
-    ,
-    routeJumpUuid(url, id) {
-      this.$router.push({
-        path: url,
-        query: {uuid: this.$base64.encode(id)}
-      })
-    }
-    ,
+    },
     getWebsiteInfos() {
       this.uuid = this.$base64.decode(this.$route.query.uuid)
       this.$API("/white/user/info/" + this.uuid, "get").then(res => {

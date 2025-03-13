@@ -320,10 +320,6 @@ export default {
   margin-bottom: 12px;
 }
 
-.el-divider--horizontal {
-  margin: 12px 0;
-}
-
 .details-3 {
   font-size: 14px;
 }

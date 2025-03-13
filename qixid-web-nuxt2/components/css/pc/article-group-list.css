@@ -5,8 +5,9 @@
 
 .article-list-li {
   margin: 4px 4px 20px 4px;
-  border-radius: 10px;
-  border: 1px solid #e2e2e5;
+  border-radius: 25px;
+  padding: 20px 15px;
+  border: 1px solid #ced6e0;
   transition: .3s;
 }
 
