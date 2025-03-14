@@ -72,7 +72,7 @@
                                   :src="item.cover" fit="cover"></el-image>
                         <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
                       </div>
-                      <div class="mt-10 text-underline hover-cl" style="width: 90px" :title="item.name">
+                      <div class="mt-10 hover-cl overflow-nowrap-1" style="width: 90px" :title="item.name">
                         {{ item.name }}
                       </div>
                     </nuxt-link>

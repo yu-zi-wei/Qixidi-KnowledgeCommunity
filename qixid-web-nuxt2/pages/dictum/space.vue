@@ -8,7 +8,7 @@
         </div>
         <div class="">
           <nuxt-link to="/" title="首页">
-            <svg t="1720603401642" class="icon-theme icon-size-36 svg-translateY-10" viewBox="0 0 1024 1024"
+            <svg t="1720603401642" class="icon-theme-stand-out icon-size-36 svg-translateY-10" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="8008">
               <path
@@ -61,7 +61,8 @@
                   <p class="font-bold font-s-16 text-underline-hover" :title="item.name">
                     {{ item.name }}
                   </p>
-                  <div class="font-s-13 line-height-16 overflow-nowrap-2 color-grey-2 mt-4" :title="item.briefIntroduction">{{
+                  <div class="font-s-14 line-height-16 overflow-nowrap-2 color-grey mt-4 padding-le-ri-5 font-bold-300"
+                       :title="item.briefIntroduction">{{
                       item.briefIntroduction
                     }}
                   </div>
@@ -275,7 +276,7 @@ export default {
 }
 
 .space-list::-webkit-scrollbar-thumb {
-  background: var(--theme-color);
+  background: #ced6e0;
   border-radius: 2px;
 }
 
@@ -346,9 +347,8 @@ export default {
   top: 0px;
   position: sticky;
   font-size: 20px;
-  color: var(--theme-color);
   box-shadow: 0 6px 12px 0 rgba(0, 0, 0, .1);
-  border-bottom: 2px solid var(--theme-color);
+  border-bottom: 1px solid var(--theme-color);
   text-align: center;
 }
 </style>

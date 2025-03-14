@@ -27,7 +27,7 @@
   background-color: #fefefe;
   cursor: pointer;
   transition: all 0.1s linear 0s;
-  padding: 10px 10px 20px 10px;
+  padding: 20px 20px 25px 20px;
   border-radius: 10px;
   margin: 0px 25px 25px 0px;
   border: 1px solid #dfe4ea;
@@ -43,7 +43,7 @@
   -webkit-line-clamp: 2;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  padding-top: 6px 4px 0 4px;
+  padding: 6px 4px 4px 4px;
 }
 
 .tool-toolName {

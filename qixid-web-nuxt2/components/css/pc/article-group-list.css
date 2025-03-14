@@ -4,7 +4,8 @@
 }
 
 .article-list-li {
-  margin: 4px 4px 20px 4px;
+  margin-bottom: 25px;
+  margin-top: 5px;
   border-radius: 25px;
   padding: 20px 15px;
   border: 1px solid #ced6e0;

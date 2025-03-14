@@ -165,7 +165,7 @@
                   class="recommend-article-item flex-left align-items-center"
                   :title="item.articleTitle">
                 <div class="flex-1 mr-6">
-                  <div v-if="index<=2" class="ranking-item-1-3"
+                  <div v-if="index<=2" class="ranking-item-3-"
                        :style="index==0?'background-color:#eb4d4b':index==1?'background-color:#f9ca24':'background-color:#4cd137'">
                     {{ index + 1 }}
                   </div>
@@ -174,7 +174,7 @@
                   </div>
                 </div>
                 <div class="cursor-pointer overflow-nowrap-1 flex-10">
-                  <nuxt-link class="hover-cl text-underline-hover"
+                  <nuxt-link class="text-underline-hover color-grey"
                              :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank"
                              rel="noopener">
                     {{ item.articleTitle }}
@@ -210,6 +210,7 @@
 <script>
 
 import countTo from 'vue-count-to';
+
 export default {
   name: "index",
   components: {countTo},

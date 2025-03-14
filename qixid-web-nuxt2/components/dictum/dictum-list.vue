@@ -50,18 +50,18 @@
 
           <div class="dictum-content">
             <vditor-preview :id="'dictum-content-'+index" :content="item.content"></vditor-preview>
-          </div>
-          <div class="flex-right mt-10">
-            <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
-                 class="color-grey-2 font-s-13">——
-              <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
-                    @click="jumpUrlBaidu('www.baidu.com',item.author)">
+            <div class="flex-right mt-20" style="width: 100%">
+              <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
+                   class="color-grey-2 font-s-13">——
+                <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
+                      @click="jumpUrlBaidu('www.baidu.com',item.author)">
                 {{ item.author }}
                 </span>
-              <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
+                <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
                 《<span class="cursor-pointer text-underline-hover"
                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                 </span>
+              </div>
             </div>
           </div>
           <div class="flex-left font-s-13 color-grey-2 mt-20">
@@ -206,37 +206,24 @@
                                 <span v-if="indexs+1!=item.labelList.length">|</span>
                               </span>
             </div>
-            <div class="cursor-pointer ml-10" title="更多操作" v-if="isSelf">
-              <el-dropdown size="medium" trigger="click">
-                <div class="el-dropdown-link">
-                  <svg t="1729494770005" class="icon icon-theme-1" viewBox="0 0 1024 1024" version="1.1"
-                       xmlns="http://www.w3.org/2000/svg" p-id="7153" width="20" height="20">
-                    <path
-                      d="M805.236364 488.727273h-141.963637a127.767273 127.767273 0 0 1-128-126.836364V221.090909A127.767273 127.767273 0 0 1 663.272727 93.090909h141.963637a128 128 0 0 1 127.767272 128v140.8A128 128 0 0 1 805.236364 488.727273zM663.272727 162.909091A57.949091 57.949091 0 0 0 605.090909 221.090909v140.8A58.181818 58.181818 0 0 0 663.272727 418.909091h141.963637a58.181818 58.181818 0 0 0 57.949091-57.949091V221.090909A57.949091 57.949091 0 0 0 805.236364 162.909091zM805.236364 930.909091h-141.963637a127.767273 127.767273 0 0 1-128-127.069091v-140.8A127.767273 127.767273 0 0 1 663.272727 535.272727h141.963637a128 128 0 0 1 127.767272 127.767273v140.8A128 128 0 0 1 805.236364 930.909091z m-141.963637-325.818182a58.181818 58.181818 0 0 0-58.181818 57.949091v140.8A57.949091 57.949091 0 0 0 663.272727 861.090909h141.963637a57.949091 57.949091 0 0 0 57.949091-57.716364v-140.334545A58.181818 58.181818 0 0 0 805.236364 605.090909zM364.683636 488.727273h-141.963636a127.767273 127.767273 0 0 1-127.534545-127.767273V221.090909A127.767273 127.767273 0 0 1 222.72 93.090909h141.963636a127.767273 127.767273 0 0 1 127.767273 128v140.8A127.767273 127.767273 0 0 1 364.683636 488.727273zM222.72 162.909091a57.716364 57.716364 0 0 0-57.716364 58.181818v140.8A57.949091 57.949091 0 0 0 222.72 418.909091h141.963636a58.181818 58.181818 0 0 0 57.949091-57.949091V221.090909A57.949091 57.949091 0 0 0 364.683636 162.909091zM364.683636 930.909091h-141.963636a127.767273 127.767273 0 0 1-127.534545-127.534546v-140.334545A127.767273 127.767273 0 0 1 222.72 535.272727h141.963636a127.767273 127.767273 0 0 1 127.767273 127.767273v140.8A127.767273 127.767273 0 0 1 364.683636 930.909091z m-141.963636-325.818182a57.949091 57.949091 0 0 0-57.716364 57.949091v140.8A57.716364 57.716364 0 0 0 222.72 861.090909h141.963636a57.949091 57.949091 0 0 0 57.949091-57.716364v-140.334545A58.181818 58.181818 0 0 0 364.683636 605.090909z"
-                      p-id="7154"></path>
-                  </svg>
+          </div>
+          <div style="display: flex;align-items: center; min-height: 220px;flex-wrap: wrap">
+            <div class="dictum-content">
+              <vditor-preview :id="'dictum-content-list-'+index+'-'+itemIndex"
+                              :content="item.content"></vditor-preview>
+              <div class="flex-right mt-30" style="width: 100%">
+                <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
+                     class="color-grey-2 font-s-13">——
+                  <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
+                        @click="jumpUrlBaidu('www.baidu.com',item.author)">
+                                {{ item.author }}
+                                </span>
+                  <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
+                                《<span class="cursor-pointer text-underline-hover"
+                                       @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
+                                </span>
                 </div>
-                <el-dropdown-menu>
-                  <el-dropdown-item @click.native="updateInfo(item)">编辑名言</el-dropdown-item>
-                  <el-dropdown-item @click.native="deleteInfo(item)">删除</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-          </div>
-          <div class="dictum-content">
-            <vditor-preview :id="'dictum-content-list-'+index+'-'+itemIndex" :content="item.content"></vditor-preview>
-          </div>
-          <div class="flex-right mt-30">
-            <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
-                 class="color-grey-2 font-s-13">——
-              <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
-                    @click="jumpUrlBaidu('www.baidu.com',item.author)">
-                {{ item.author }}
-                </span>
-              <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
-                《<span class="cursor-pointer text-underline-hover"
-                       @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
-                </span>
+              </div>
             </div>
           </div>
           <div class="flex-left font-s-13 color-grey-3 mt-20">
@@ -832,7 +819,15 @@ export default {
 .dictum-content {
   display: flex;
   padding: 0px 10px;
-  max-height: 240px;
+  max-height: 260px;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dictum-content::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
 .dictum-content-two {
