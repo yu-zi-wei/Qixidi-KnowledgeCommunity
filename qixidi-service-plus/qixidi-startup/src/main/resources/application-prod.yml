@@ -141,6 +141,7 @@ sms:
   accessKeyId: ${config.sms.accessKeyId}
   accessKeySecret: ${config.sms.accessKeySecret}
   signName: ${config.sms.signName}
+  templateCode: ${config.sms.templateCode}
   # 腾讯专用
   sdkAppId:
 
