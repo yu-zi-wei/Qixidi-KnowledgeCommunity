@@ -95,6 +95,7 @@ qixidi/
 | antv/g2plot  | 2.4.31      | 数据可视化框架     |
 | AiEditor     | 1.2.2       | Makdwon 编辑器 |
 | mavon-editor | 2.10.4      | Makdwon 编辑器 |
+| vditotr      | xxx         | Makdwon 编辑器 |
 
 ### 技术架构图🍂
 
