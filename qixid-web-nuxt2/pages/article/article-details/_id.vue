@@ -263,7 +263,7 @@
                             <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
                                  class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
                                  @click="deleteComment(item)">
-                              <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-3 icon-hover"
+                              <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="6428">
                                 <path
@@ -380,7 +380,7 @@
                                 <div class="font-s-12 hover-cl cursor-pointer color-grey-2 mr-10"
                                      v-if="userInfo!=null && userInfo.uuid==items.commentUid"
                                      @click="deleteComment(items)">
-                                  <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-3 icon-hover"
+                                  <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
                                        viewBox="0 0 1024 1024" version="1.1"
                                        xmlns="http://www.w3.org/2000/svg" p-id="6428">
                                     <path
