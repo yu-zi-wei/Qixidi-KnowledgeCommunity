@@ -206,7 +206,7 @@
               </div>
               <div style="display: flex;align-items: center;flex-wrap: wrap;min-height: 120px">
                 <div class="dictum-content">
-                  <vditor-preview :id="'dictum-content-list-'+index+'-'+itemIndex"
+                  <vditor-preview :id="'dictum-content-waterfall-list-'+index"
                                   :content="item.content"></vditor-preview>
                   <div class="flex-right mt-30" style="width: 100%">
                     <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
@@ -779,15 +779,7 @@ export default {
 .dictum-content {
   display: flex;
   padding: 0px 10px;
-  //max-height: 260px;
   flex-wrap: wrap;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.dictum-content::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
 }
 
 .el-button--small {
