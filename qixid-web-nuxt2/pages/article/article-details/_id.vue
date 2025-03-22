@@ -543,8 +543,6 @@
               </div>
               <!--               文章目录-->
               <div class="auroora-card" v-if="tocArray.length>0">
-                <!--                <div class="ml-6 font-bold border-left-2-solid">文章目录</div>-->
-                <!--                <hr class="hr-item mb-15 mt-15"/>-->
                 <!-- 遍历目录 -->
                 <ul class="article-catalogue">
                   <el-timeline>
