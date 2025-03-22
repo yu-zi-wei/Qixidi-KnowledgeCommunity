@@ -14,7 +14,7 @@
                     <span class="sum-span-div" v-text="articleInfo.likeTimes"></span>
                   </div>
                   <svg t="1700403032641"
-                       :class="{'icon':!isFabulous,'icon-size-24':true,'mt-10':true,'icon-theme':isFabulous}"
+                       :class="{'icon-theme-1':!isFabulous,'icon-size-20':true,'mt-10':true,'icon-theme':isFabulous}"
                        viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="7591">
@@ -32,7 +32,7 @@
               </li>
               <li class="fa-li-class" title="评论">
                 <div class="fa-li-div" @click="goComment">
-                  <svg t="1741407164890" class="icon icon-size-24 mt-10 icon-hover" viewBox="0 0 1024 1024"
+                  <svg t="1741407164890" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="27498">
                     <path
@@ -43,7 +43,7 @@
               </li>
               <li class="fa-li-class" title="分享">
                 <div class="fa-li-div" @click="copyLink">
-                  <svg t="1700407528486" class="icon icon-size-24 mt-10 icon-hover" viewBox="0 0 1024 1024"
+                  <svg t="1700407528486" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="12183">
                     <path

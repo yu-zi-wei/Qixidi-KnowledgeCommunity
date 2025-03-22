@@ -15,7 +15,6 @@
 
 .left-content-auto {
   width: 46px;
-  height: 46px;
   margin: auto;
 }
 
@@ -25,8 +24,8 @@
   -moz-box-shadow: 0px 1px 1px #d7d5f7;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   border-radius: 50%;
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   transition: all 0.1s linear 0s;
   color: #757e8d;
   cursor: pointer;
@@ -46,7 +45,7 @@
 
 .left-content-ul {
   position: fixed;
-  margin-top: 200px;
+  margin-top: 12%;
   margin-left: 20px;
 }
 
@@ -139,9 +138,11 @@
 }
 
 .article-catalogue {
-  overflow: auto;
-  max-height: 600px;
+  overflow-y: auto;
+  height: 500px;
   padding: 6px;
+  margin-top: 100px;
+  /*border: 1px solid #dfe4ea;*/
 }
 
 .article-catalogue::-webkit-scrollbar {
@@ -161,7 +162,8 @@
 }
 
 .sum-span-div {
-  line-height: 16px;
+  line-height: 12px;
+  font-size: 12px;
   letter-spacing: 0px;
   color: #fefefe;
 }
@@ -170,12 +172,9 @@
   position: fixed;
   border-radius: 50%;
   display: inline-block;
-  font-size: 12px;
-  height: 16px;
-  min-width: 16px;
+  height: 20px;
+  min-width: 20px;
   margin-left: 20px;
-  margin-top: 0px;
-  padding: 2px;
   text-align: center;
   justify-items: center;
 }

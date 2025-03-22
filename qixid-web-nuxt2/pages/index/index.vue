@@ -70,15 +70,15 @@
             </div>
           </div>
           <!--                用户信息-->
-          <div class="auroora-card mb-15 overflow-hidden border-1-e6e6e6 border-radius-10" v-show="positionCssRight">
+          <div class="auroora-card mb-15 overflow-hidden border-1-e6e6e6 border-radius-10" v-show="!positionCssRight && false">
             <div class="fl-right flex-left" v-if="userInfo!=null">
               <div style="background-color: #FC625D" class="aurora-dot mr-6"></div>
               <div style="background-color: #FDBC40" class="aurora-dot mr-6"></div>
               <div style="background-color: #35CD4B" class="aurora-dot"></div>
             </div>
             <el-skeleton :rows="4" animated v-if="userInfoLoading"/>
-            <div v-show="!userInfoLoading">
-              <div v-if="userInfo==null || userInfo=={}" class="flex-define justify-content-center cursor-pointer"
+            <div v-if="!userInfoLoading">
+              <div v-if="userInfo==null" class="flex-define justify-content-center cursor-pointer"
                    @click="isLoginBinlog=true"
                    title="点击登陆">
                 <div class="hover-cl">
@@ -150,23 +150,23 @@
           </div>
           <!--        精选文章-->
           <div class="selected-articles-info">
-            <div class="flex-space-between align-items-center">
-              <div class="font-bold border-left-2-solid">精选文章</div>
+            <div class="flex-space-between align-items-center mb-10">
+              <div class="font-bold  ml-10">精选文章</div>
               <div>
                 <el-button @click="selectedArticleListApi()"
                            type="text" :loading="selectedArticleLoading" icon="el-icon-refresh">
-                  刷新
+                  换一换
                 </el-button>
               </div>
             </div>
-            <el-skeleton class="mt-10" :rows="6" animated v-if="selectedArticleLoading"/>
+            <el-skeleton :rows="6" animated v-if="selectedArticleLoading"/>
             <ul v-show="!selectedArticleLoading">
               <li v-for="(item,index) in selectedArticleList" :key="index"
                   class="recommend-article-item flex-left align-items-center"
                   :title="item.articleTitle">
                 <div class="flex-1 mr-6">
                   <div v-if="index<=2" class="ranking-item-3-"
-                       :style="index==0?'background-color:#eb4d4b':index==1?'background-color:#f9ca24':'background-color:#4cd137'">
+                       :style="index==0?'color:#eb4d4b':index==1?'color:#f9ca24':'color:#4cd137'">
                     {{ index + 1 }}
                   </div>
                   <div v-else class="ranking-item-3-">
@@ -174,7 +174,7 @@
                   </div>
                 </div>
                 <div class="cursor-pointer overflow-nowrap-1 flex-10">
-                  <nuxt-link class="text-underline-hover color-grey"
+                  <nuxt-link class="text-underline-hover color-grey font-s-14"
                              :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank"
                              rel="noopener">
                     {{ item.articleTitle }}
@@ -182,11 +182,11 @@
                 </div>
               </li>
             </ul>
-            <hr class="hr-item mt-15 mb-10" style="margin: 0 20px"/>
           </div>
+          <hr class="hr-item" style="margin: 0px 20px 15px 20px"/>
           <!-- 备案-->
           <el-skeleton class="mt-10" :rows="3" animated v-if="siteInfoLoading"/>
-          <div class="mt-10 ml-10 color-grey-2 line-height-24 font-s-13" style="padding: 0 10px"
+          <div class="mt-10 ml-10 line-height-30 font-s-13" style="padding: 0 10px;color: #747d8c"
                v-if="!siteInfoLoading">
             <a href="https://beian.miit.gov.cn" class="hover-cl" target="_blank"
                rel="nofollow">{{ siteInfo.filings }}</a>
@@ -222,7 +222,7 @@ export default {
       labelGroupingDialog: true,
       sidebarList: [],
       labelGroupingList: [],
-      userInfo: {},
+      userInfo: null,
       goTopLoading: false,
 
       isReport: false,

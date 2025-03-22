@@ -96,7 +96,7 @@
                          target="_blank">
                 {{ item.nickname }}
               </nuxt-link>
-              <span class="color-grey-2 ml-8 font-bold-300"
+              <span class="color-grey ml-8 font-bold-300"
                     :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                       {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>
             </div>
@@ -127,7 +127,7 @@
             <!--              </div>-->
           </div>
           <div class="svg-translateY-3">
-            <el-tag :type="randomType()" size="small" effect="plain" class="cursor-pointer font-bold-300" title="分类">
+            <el-tag type="info" size="small" effect="plain" class="cursor-pointer font-bold-300" title="分类">
               <nuxt-link :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
                 {{ item.groupingName }}
               </nuxt-link>
@@ -164,11 +164,6 @@ export default {
     }
   },
   methods: {
-    randomType() {
-      let items = ["''", "success", "info", "warning", "danger"];
-      let item = items[Math.floor(Math.random() * items.length)];
-      return item;
-    },
     load() {
       if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;

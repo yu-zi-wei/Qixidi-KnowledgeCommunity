@@ -176,108 +176,85 @@
         <p class="color-grey font-s-14">暂无数据</p>
       </div>
     </div>
-
-    <div v-if="!loading && typography==1" class="flex-space-between">
-      <!-- 这里是列容器 -->
-      <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0"
-           v-for="(column, index) in dictumInfoListArr" :key="index">
-        <!-- 动态渲染每个列中的元素 -->
-        <div v-for="(item, itemIndex) in column.items" :key="itemIndex" class="box-item">
-          <div class="flex-space-between user-info align-items-center mb-15">
-            <div class="flex-left align-items-center">
-              <div class="ml-6">
-                <nuxt-link class="color-grey-2" :to="`/user_home/article?uuid=`+$base64.encode(item.uid)"
-                           target="_blank">
-                  <p class="font-s-14 cursor-pointer text-underline-hover hover-cl">{{ item.nickname }}</p>
-                </nuxt-link>
+    <div v-if="!loading && typography==1">
+      <!-- 瀑布流布局 -->
+      <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="ml-10">
+        <waterfall :col='3' :data="dictumInfoListArr">
+          <template>
+            <div v-for="(item, index) in dictumInfoListArr" :key="index" class="box-item">
+              <!-- 动态渲染每个列中的元素 -->
+              <div class="flex-space-between user-info align-items-center mb-15">
+                <div style="line-height: 1px"></div>
+                <div class="flex-right align-items-center">
+                  <!--                <nuxt-link class="color-grey" :to="`/user_home/article?uuid=`+$base64.encode(item.uid)"-->
+                  <!--                           target="_blank">-->
+                  <!--                  <p class="font-s-14 cursor-pointer text-underline-hover hover-cl">{{ item.nickname }}</p>-->
+                  <!--                </nuxt-link>-->
+                  <!--                <el-tag class="cursor-pointer mr-5" size="medium" type="info" effect="plain" title="收录专辑"-->
+                  <!--                        v-if="item.albumName!=null">-->
+                  <!--                  <nuxt-link :to="`/external_info/album-info?data=`+item.albumId" target="_blank" rel="noopener">-->
+                  <!--                    {{ item.albumName }}-->
+                  <!--                  </nuxt-link>-->
+                  <!--                </el-tag>-->
+                  <div v-if="item.labelList!=null"
+                       v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
+                       class="font-s-13 color-grey">
+                    #{{ items }}
+                    <span v-if="indexs+1!=item.labelList.length" class="ml-2 mr-2 color-grey-2">|</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="ml-8">
-              <el-tag class="cursor-pointer mr-10" size="small" type="info" effect="plain" title="收录专辑"
-                      v-if="item.albumName!=null">
-                <nuxt-link :to="`/external_info/album-info?data=`+item.albumId" target="_blank" rel="noopener">
-                  {{ item.albumName }}
-                </nuxt-link>
-              </el-tag>
-              <span v-if="item.labelList!=null"
-                    v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
-                    class="font-s-13 color-grey-2">
-                              #{{ items }}
-                                <span v-if="indexs+1!=item.labelList.length">|</span>
-                              </span>
-            </div>
-          </div>
-          <div style="display: flex;align-items: center; min-height: 220px;flex-wrap: wrap">
-            <div class="dictum-content">
-              <vditor-preview :id="'dictum-content-list-'+index+'-'+itemIndex"
-                              :content="item.content"></vditor-preview>
-              <div class="flex-right mt-30" style="width: 100%">
-                <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
-                     class="color-grey-2 font-s-13">——
-                  <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
-                        @click="jumpUrlBaidu('www.baidu.com',item.author)">
+              <div style="display: flex;align-items: center;flex-wrap: wrap;min-height: 120px">
+                <div class="dictum-content">
+                  <vditor-preview :id="'dictum-content-list-'+index+'-'+itemIndex"
+                                  :content="item.content"></vditor-preview>
+                  <div class="flex-right mt-30" style="width: 100%">
+                    <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
+                         class="color-grey-2 font-s-13">——
+                      <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299"
+                            title="作者"
+                            @click="jumpUrlBaidu('www.baidu.com',item.author)">
                                 {{ item.author }}
                                 </span>
-                  <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
+                      <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
                                 《<span class="cursor-pointer text-underline-hover"
                                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                                 </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="flex-left font-s-13 color-grey-3 mt-20">
-            <!--              <div title="点赞" class="cursor-pointer mr-15" @click="$modal.notify('功能待开发！')">-->
-            <!--                <svg t="1685704715311" class="icon icon-theme-2 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"-->
-            <!--                     version="1.1"-->
-            <!--                     xmlns="http://www.w3.org/2000/svg" p-id="2426">-->
-            <!--                  <path-->
-            <!--                    d="M194.792475 478.69343c16.167215 0 29.330002-13.163811 29.330002-29.346375 0-16.092513-13.015432-29.212322-29.801746-29.212322-0.086981 0-0.177032 0-0.264013 0l-60.606333 0.177032c-1.560542-0.206708-3.149736-0.325411-4.76963-0.325411-21.291932 0-38.636972 17.537422-38.636972 39.09439l-0.323365 423.853427c0 21.645996 16.9613 38.578644 38.636972 38.578644l1.677199 0.057305c0.707105 0.029676 1.385557 0.059352 2.032286 0.059352 0.823761 0 1.64957-0.029676 1.826602-0.11768l59.926858 0.086981c0.559748 0 1.001817-0.11768 1.089821-0.11768 0 0-0.029676 0-0.116657 0.057305l3.76986-0.147356 0-0.382717c13.517875-2.236947 23.64656-13.84124 23.64656-27.799136 0-13.987572-10.129708-25.589818-23.64656-27.828812l0-0.766456-49.827849 0 1.413186-385.92356L194.792475 478.69036z"-->
-            <!--                    p-id="2427"></path>-->
-            <!--                  <path-->
-            <!--                    d="M918.228001 436.301947c-18.199501-29.66974-45.204551-44.821835-82.22163-46.322002-1.883907-0.25071-3.799536-0.412392-5.77247-0.412392l-195.744149-0.648776c13.398148-40.359196 20.732184-83.750449 20.732184-122.740462 0-27.255761-3.00545-54.686507-8.894577-81.543178l-1.206478-3.196809-0.089028 0.01535c-12.161994-46.837748-53.477982-79.259158-101.626585-79.259158-55.393611 0-97.18032 46.248324-97.18032 107.576087l-0.059352 3.047406c-0.057305 2.222621-0.116657 4.40124 0.059352 6.16849-2.796696 101.715613-83.869153 187.397041-188.559517 199.324698l-3.358491 0.36839-0.76441 274.43128 0 228.491994 13.930267 0.005117 0.587378 0.11154 3.179412-0.027629 0.01535-0.081864 485.653959 0.198521 8.685823-0.236384c19.84907 0 31.038924-5.03569 48.621371-16.344247 16.22452-10.482749 29.359678-25.266453 37.751812-42.316781 2.562359-3.76986 4.418636-7.862062 5.565762-12.251022l75.30101-336.657506c1.089821-4.225231 1.472538-8.643867 1.149173-12.56006C935.660023 478.42737 930.212964 455.900308 918.228001 436.301947zM879.148961 488.807788l-0.912789 3.799536 0.295735 0.074701-80.129992 355.2387-0.148379 0.353041c-2.296299 5.536087-6.15314 10.160407-11.101849 13.340843-3.415796 2.209318-7.185656 3.622504-11.161201 4.239558-0.470721-0.057305-0.941442-0.057305-1.413186-0.057305l-3.03308 0.086981-462.84344-0.530073-0.177032-392.299781c79.540567-35.986609 148.155295-73.959455 183.080735-167.79868l0.295735 0.074701 1.119497-3.328815c3.709485-11.263531 6.596232-22.350031 8.598842-32.909527 5.447059-28.577872 5.212722-56.422034 5.183046-58.041928-1.766226-13.502525 1.206478-24.738427 8.80555-33.394574 8.598842-9.777691 21.673625-14.151301 30.744211-14.151301 22.586414 0.766456 45.526893 30.966269 45.61592 48.163953 0.029676 0.26606 5.38873 26.945699 5.418406 55.186903 0.057305 27.65178-2.651386 45.277206-3.858888 51.828412l-0.500397 0-0.589424 3.062755c-5.595438 29.522384-15.518438 57.794287-29.41903 84.003206l-0.972141 2.856048 0.118704 0.132006c-1.885953 4.696975-2.856048 9.643638-2.856048 14.709003 0 25.032116 27.121707 25.032116 41.697681 25.032116l233.381351 0.264013 7.15598 0.221034c1.266853 0.045025 2.503007 0.089028 3.592828 0.118704l0 0.425695 5.538133-0.248663c10.453073 0 19.937075 5.344728 25.412786 14.296611C880.709503 471.080032 881.829 480.283648 879.148961 488.807788z"-->
-            <!--                    p-id="2428"></path>-->
-            <!--                </svg>-->
-            <!--                赞-->
-            <!--              </div>-->
-            <div title="评论" class="cursor-pointer mr-15 hover-cl" @click="viewCommentList(item)">
-              <svg t="1685704893908" class="icon icon-theme-2 icon-size-16 svg-translateY-3 icon-hover"
-                   viewBox="0 0 1024 1024"
-                   version="1.1"
-                   xmlns="http://www.w3.org/2000/svg" p-id="3482">
-                <path d="M405.97 530.4m-40.81 0a40.81 40.81 0 1 0 81.62 0 40.81 40.81 0 1 0-81.62 0Z" p-id="3483"
-                ></path>
-                <path d="M618.04 530.4m-40.81 0a40.81 40.81 0 1 0 81.62 0 40.81 40.81 0 1 0-81.62 0Z" p-id="3484"
-                ></path>
-                <path
-                  d="M512.01 959.33c-70.48 0-140.41-16.79-202.89-48.62H93.23V669.25c-18.96-50.4-28.56-103.26-28.56-157.26 0-246.66 200.68-447.32 447.34-447.32s447.32 200.66 447.32 447.32-200.66 447.34-447.32 447.34zM166.85 837.09h160.56l8.16 4.39c53.89 28.94 114.89 44.23 176.43 44.23 206.06 0 373.7-167.65 373.7-373.72 0-206.06-167.65-373.7-373.7-373.7-206.07 0-373.72 167.65-373.72 373.7 0 47.09 8.75 93.16 25.99 136.91l2.57 6.51v181.68z"
-                  p-id="3485"></path>
-              </svg>
-              {{ item.commentSum == null ? '评论' : item.commentSum }}
-            </div>
-            <!--              <div title="收藏" class="cursor-pointer mr-15" @click="$modal.notify('功能待开发！')">-->
-            <!--                <svg t="1685705013960" class="icon icon-size-16 icon-theme-2 svg-translateY-3" viewBox="0 0 1024 1024"-->
-            <!--                     version="1.1"-->
-            <!--                     xmlns="http://www.w3.org/2000/svg" p-id="4508">-->
-            <!--                  <path-->
-            <!--                    d="M949.888 457.258667c26.069333-29.824 13.866667-67.52-24.789333-76.309334L681.728 325.546667l-127.786667-214.677334c-20.266667-34.069333-59.925333-34.090667-80.213333 0l-127.786667 214.677334-243.370666 55.381333c-38.442667 8.746667-50.858667 46.506667-24.789334 76.309333l164.394667 188.053334-22.613333 248.917333c-3.584 39.466667 28.458667 62.805333 64.896 47.146667l237.781333-102.037334a21.333333 21.333333 0 0 0-16.810667-39.210666L267.626667 902.186667c-6.698667 2.88-6.229333 3.221333-5.568-4.096l24.277333-267.093334-176.426667-201.813333c-4.757333-5.461333-4.906667-5.034667 2.133334-6.634667l261.205333-59.434666 137.152-230.4c3.733333-6.293333 3.136-6.293333 6.869333 0l137.173334 230.4 261.205333 59.434666c7.125333 1.621333 6.954667 1.088 2.133333 6.613334l-176.426666 201.813333 24.256 267.093333a21.333333 21.333333 0 1 0 42.496-3.84l-22.613334-248.917333 164.394667-188.053333z"-->
-            <!--                    p-id="4509"></path>-->
-            <!--                </svg>-->
-            <!--                收藏-->
-            <!--              </div>-->
-            <div class="svg-translateY-4 mr-15">
-              <nuxt-link class="text-underline hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
-                详情
-              </nuxt-link>
-            </div>
-            <div class="color-grey-3 font-s-13 mr-15 svg-translateY-4" title="记录时间">
+              <div class="flex-left font-s-13 color-grey-2 mt-20">
+                <div title="评论" class="cursor-pointer mr-15 hover-cl" @click="viewCommentList(item)">
+                  <svg t="1685704893908" class="icon icon-theme-1 icon-size-16 svg-translateY-3 icon-hover"
+                       viewBox="0 0 1024 1024"
+                       version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="3482">
+                    <path d="M405.97 530.4m-40.81 0a40.81 40.81 0 1 0 81.62 0 40.81 40.81 0 1 0-81.62 0Z" p-id="3483"
+                    ></path>
+                    <path d="M618.04 530.4m-40.81 0a40.81 40.81 0 1 0 81.62 0 40.81 40.81 0 1 0-81.62 0Z" p-id="3484"
+                    ></path>
+                    <path
+                      d="M512.01 959.33c-70.48 0-140.41-16.79-202.89-48.62H93.23V669.25c-18.96-50.4-28.56-103.26-28.56-157.26 0-246.66 200.68-447.32 447.34-447.32s447.32 200.66 447.32 447.32-200.66 447.34-447.32 447.34zM166.85 837.09h160.56l8.16 4.39c53.89 28.94 114.89 44.23 176.43 44.23 206.06 0 373.7-167.65 373.7-373.72 0-206.06-167.65-373.7-373.7-373.7-206.07 0-373.72 167.65-373.72 373.7 0 47.09 8.75 93.16 25.99 136.91l2.57 6.51v181.68z"
+                      p-id="3485"></path>
+                  </svg>
+                  {{ item.commentSum == null ? '评论' : item.commentSum }}
+                </div>
+                <div class="svg-translateY-4 mr-15">
+                  <nuxt-link class="text-underline hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
+                    详情
+                  </nuxt-link>
+                </div>
+                <div class="font-s-13 mr-15 svg-translateY-4" title="记录时间">
                 <span class="" v-text="$utils.reckonTime(item.updateTime)"
                       :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')"></span>
+                </div>
+              </div>
+              <div>
+              </div>
             </div>
-          </div>
-          <div>
-          </div>
-        </div>
+          </template>
+        </waterfall>
       </div>
       <div v-else class="text-center mt-20">
         <svg t="1682476949715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -520,6 +497,10 @@
         </div>
       </div>
     </el-drawer>
+    <div>
+
+    </div>
+
   </div>
 </template>
 
@@ -562,10 +543,9 @@ export default {
   },
   data() {
     return {
-
       queryParams: {
         pageNum: 1,
-        pageSize: 20,
+        pageSize: 18,
       },
       total: 0,
       loading: true,
@@ -720,23 +700,10 @@ export default {
       this.queryParams.label = this.label;
       this.queryParams.uid = this.uid;
       this.queryParams.type = this.type;
-      if (this.typography === 1) {
-        this.dictumInfoListArr = [
-          {items: []},
-          {items: []},
-          {items: []}];
-      } else {
-        this.dictumInfoListArr = [];
-      }
+      this.dictumInfoListArr = [];
       this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
-        if (this.typography === 1) {
-          for (let i = 0; i < res.rows.length; i++) {
-            let index = i % this.dictumInfoListArr.length;
-            this.dictumInfoListArr[index].items.push(res.rows[i])
-          }
-        } else {
-          this.dictumInfoListArr = res.rows;
-        }
+
+        this.dictumInfoListArr = res.rows;
         this.total = res.total;
       }).finally(() => {
         this.loading = false;
@@ -765,16 +732,9 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
         this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
-          if (this.typography === 1) {
-            for (let i = 0; i < res.rows.length; i++) {
-              let index = i % this.dictumInfoListArr.length;
-              this.dictumInfoListArr[index].items.push(res.rows[i])
-            }
-          } else {
-            res.rows.forEach(item => {
-              this.dictumInfoListArr.push(item)
-            })
-          }
+          res.rows.forEach(item => {
+            this.dictumInfoListArr.push(item)
+          })
           this.total = res.total;
         }).finally(() => this.scrollLoading = true)
       } else {
@@ -790,7 +750,7 @@ export default {
     //添加滚动监听事件
     window.addEventListener('scroll', this.getData, true);
     this.dictumInfoLists();
-  }
+  },
 }
 </script>
 
@@ -819,7 +779,7 @@ export default {
 .dictum-content {
   display: flex;
   padding: 0px 10px;
-  max-height: 260px;
+  //max-height: 260px;
   flex-wrap: wrap;
   overflow-y: auto;
   overflow-x: hidden;
@@ -828,17 +788,6 @@ export default {
 .dictum-content::-webkit-scrollbar {
   width: 4px;
   height: 4px;
-}
-
-.dictum-content-two {
-  margin: auto;
-  font-size: 16px;
-  line-height: 20px;
-}
-
-.dictum-list-div {
-  width: 800px;
-  margin: auto;
 }
 
 .el-button--small {

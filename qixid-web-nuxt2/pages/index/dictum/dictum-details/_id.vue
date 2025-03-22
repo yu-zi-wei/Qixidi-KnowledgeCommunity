@@ -189,7 +189,7 @@
         </div>
         <div class="flex-2">
           <div class="padding-10 dictum-details-right">
-            <div class="dictum-re-name-cl mt-20 mb-6">作者</div>
+            <div class="dictum-re-name-cl mt-20 mb-10">作 者</div>
             <div class="flex-left">
               <div>
                 <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(dictumInfo.tripartiteUser.uuid)"
@@ -203,11 +203,11 @@
                            target="_blank">
                   <p class="text-underline-hover">{{ dictumInfo.tripartiteUser.nickname }}</p>
                 </nuxt-link>
-                <p class="font-s-13 color-grey-2 mt-2 line-height-18">{{ dictumInfo.tripartiteUser.occupation }}</p>
+                <p class="font-s-13 color-grey-2 mt-4 line-height-18">{{ dictumInfo.tripartiteUser.occupation }}</p>
               </div>
             </div>
             <!--          作者数据-->
-            <div class="flex-space-between mt-10 font-s-14" style="padding: 0 30px">
+            <div class="flex-space-between mt-20 font-s-14 mb-20" style="padding: 0 30px">
               <div class="text-center">
                 <p class="color-grey">名言</p>
                 <p class="mt-6 font-bold-s">{{ dictumInfo.tripartiteUser.dictumCount }}</p>
@@ -221,7 +221,7 @@
                 <P class="mt-6 font-bold-s">{{ dictumInfo.tripartiteUser.fansFollowCount }}</P>
               </div>
             </div>
-            <div class="dictum-re-name-cl mt-40 mb-6">更多...</div>
+            <div class="dictum-re-name-cl mt-40 mb-6">更 多...</div>
           </div>
         </div>
       </div>

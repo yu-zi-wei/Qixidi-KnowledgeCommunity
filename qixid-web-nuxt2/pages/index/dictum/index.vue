@@ -4,26 +4,23 @@
     <div v-if="!loading" class="flex-space-between mt-30">
       <!--      类容-->
       <div class="flex-8">
-        <div class="mb-20" style="width: 600px">
-          <el-input
-            placeholder="名言关键字"
-            v-model="content"
-            @keyup.enter.native="searchDictum"
-            suffix-icon="el-icon-search">
-          </el-input>
-        </div>
+        <!--        <div class="mb-20" style="width: 600px">-->
+        <!--          <el-input-->
+        <!--            placeholder="名言关键字"-->
+        <!--            v-model="content"-->
+        <!--            @keyup.enter.native="searchDictum"-->
+        <!--            suffix-icon="el-icon-search">-->
+        <!--          </el-input>-->
+        <!--        </div>-->
         <el-menu
           :default-active="$route.path+($route.query.code==null?'':'?code='+$route.query.code)"
           :router="true"
           mode="horizontal"
           text-color="#2c3e50"
-          style="padding: 6px;border-radius: 15px;
-  background: rgb(238,174,202);
-  background: radial-gradient(circle, rgba(238,174,202,0.4) 0%, rgba(148,187,233,0.4) 100%);"
           :active-text-color="themeColor"
-          class="el-menu-demo">
+          class="el-menu-demo dictum-group-list">
           <el-menu-item index="/dictum" title="推荐" class="dictum-special-cl">
-            <svg t="1740386025248" class="icon mr-2 icon-size-24 svg-translateY-1-" viewBox="0 0 1024 1024"
+            <svg t="1740386025248" class="icon mr-2 icon-size-22 svg-translateY-1-" viewBox="0 0 1024 1024"
                  version="1.1"
                  xmlns="http://www.w3.org/2000/svg" p-id="6749">
               <path
@@ -38,32 +35,37 @@
             <span>{{ item.name }}</span>
           </el-menu-item>
         </el-menu>
-        <div class="mt-10" style="box-shadow: 0 2px 4px 0 #f1f2f6;padding: 15px 15px;border-radius: 10px">
+        <div class="mt-10" style="padding: 15px 15px;border-radius: 4px;">
           <el-collapse accordion v-model="activeName1">
             <el-collapse-item name="1">
               <template slot="title">
                 <div class="collapse-title">
-                  <svg t="1740386162845" class="icon svg-translateY-6 icon-size-24" viewBox="0 0 1024 1024"
+                  <svg t="1742608687334" class="icon-theme-1 svg-translateY-4 mr-10" viewBox="0 0 1024 1024"
                        version="1.1"
-                       xmlns="http://www.w3.org/2000/svg" p-id="11315">
+                       xmlns="http://www.w3.org/2000/svg" p-id="71871" width="22" height="22">
                     <path
-                      d="M298.548 91.94c-18.572 2.992-31.16 21.64-28.3 41.468 1.568 10.844 3.072 21.696 4.508 32.552 2.632 19.856 19.812 34.356 38.496 32.188l342.94-40.7c18.668-2.264 36.208 14.712 38.628 37.748a3132.124 3132.124 0 0 1 11.096 522.096c-1.396 23.024 9.104 53.3 23.564 67.576a3113.408 3113.408 0 0 1 67.128 68.028c14.132 14.848 27.816 7.6 30.168-16.4a3262.348 3262.348 0 0 0-18.46-780.908c-3.456-23.904-21.78-40.984-40.348-37.996-156.472 24.784-312.944 49.56-469.42 74.348z"
-                      fill="#ee6985" opacity=".4" p-id="11316"></path>
-                    <path
-                      d="M611.84 228.576L158.36 272.548c-17.088 1.7-29.54 18.432-27.976 37.204a2559.616 2559.616 0 0 1-19.396 592.124c-2.82 18.676 7.952 28.412 24.188 21.46a2912.66 2912.66 0 0 0 220.36-106.336c15.908-8.516 40.24-6.144 54.008 5.732a3017.228 3017.228 0 0 1 183.744 172.44c13 13.32 26.6 6.008 30.004-16.528a3077.752 3077.752 0 0 0 23.32-711.964c-1.88-22.668-17.692-39.804-34.776-38.104z"
-                      fill="#fd79a8" p-id="11317"></path>
+                      d="M945.11 945.25c-10.18 10.88-27.29 11.47-38.26 1.29L795.81 835.51c-10.58-10.98-10.48-28.38 0.3-39.26 10.78-10.78 28.28-10.97 39.15-0.29L946.3 906.99c10.28 10.98 9.69 27.99-1.19 38.26z m-455.6-36.18c-231.66 0-419.42-187.76-419.42-419.42 0-231.66 187.76-419.52 419.52-419.52 231.66 0 419.52 187.76 419.52 419.52 0 111.23-44.19 217.92-122.9 296.62-78.71 78.6-185.49 122.8-296.72 122.8z m0-782.97c-147.03 0-279.61 88.59-335.87 224.44-56.26 135.85-25.11 292.17 78.8 396.19 104.02 104.01 260.33 135.06 396.19 78.8 135.85-56.26 224.44-188.85 224.44-335.87-0.01-200.82-162.75-363.56-363.56-363.56z m0 0"
+                      p-id="71872"></path>
                   </svg>
                   <span class="font-bold">
                     推荐专辑
-                    <span class="color-fb7299">/</span>
+                    <span class="color-grey-2 ml-2 mr-2">/</span>
                     热门作者
-                  <span class="color-fb7299">/</span>
+                  <span class="color-grey-2 ml-2 mr-2">/</span>
                     热门标签
                   </span>
                 </div>
               </template>
               <div class="mt-15 mb-10">
-                <div class="font-s-16 font-bold-s hot-title-solid mb-10">推荐专辑</div>
+                <div class="mb-20" style="width: 600px">
+                  <el-input
+                    placeholder="名言关键字"
+                    v-model="content"
+                    @keyup.enter.native="searchDictum"
+                    suffix-icon="el-icon-search">
+                  </el-input>
+                </div>
+                <div class="font-s-16 font-bold hot-title-solid mb-10">推荐专辑</div>
                 <div class="flex-left mb-20">
                   <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
                     <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
@@ -78,7 +80,7 @@
                     </nuxt-link>
                   </div>
                 </div>
-                <div class="font-s-16 font-bold-s hot-title-solid">热门作者</div>
+                <div class="font-s-16 font-bold hot-title-solid">热门作者</div>
                 <div class="mt-15 mb-20 flex-left flex-wrap-wrap">
                   <div v-for="item of popularAuthorsArr" class="mr-10 mb-10">
                     <el-button plain size="medium" @click="selectDictum('authors',item.author)">
@@ -86,7 +88,7 @@
                     </el-button>
                   </div>
                 </div>
-                <div class="font-s-16 font-bold-s hot-title-solid">热门标签</div>
+                <div class="font-s-16 font-bold hot-title-solid">热门标签</div>
                 <div class="mt-15 flex-left flex-wrap-wrap mb-10">
                   <div v-for="item of popularLabelArr"
                        class="mr-10 mb-10 cursor-pointer hover-fw-bold">
@@ -99,64 +101,12 @@
             </el-collapse-item>
           </el-collapse>
         </div>
-        <div class="mt-30">
+        <div class="mt-20">
           <dictumList :groupId="groupId==null?null:parseInt(groupId)"
                       :content="contents"
                       :label="label"
                       :typography="1"
                       :author="author"></dictumList>
-        </div>
-      </div>
-      <!--      右边-->
-      <div class="flex-4" style="min-height: 1px;" v-if="1==2">
-        <div style="margin-left: 40px">
-          <div :class="positionCss" style="margin-top: 40px">
-            <div>
-              <el-input
-                placeholder="名言关键字"
-                v-model="content"
-                @keyup.enter.native="searchDictum"
-                suffix-icon="el-icon-search">
-              </el-input>
-            </div>
-            <hr class="hr-item mb-20 mt-10"/>
-            <div class="re-name-cl border-left-3-solid">推荐专辑</div>
-            <el-skeleton class="mt-10" :rows="4" animated v-if="albumLoading"/>
-            <div class="overflow-hidden" v-if="!albumLoading">
-              <div v-for="item of recommendedAlbumArr" class="album-tj-cl">
-                <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
-                  <div class="dictum-cover-div">
-                    <el-image class="dictum-cover-img" v-if="item.cover"
-                              :src="item.cover" fit="cover"></el-image>
-                    <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
-                  </div>
-                  <div class="mt-10 text-underline hover-cl" style="width: 90px" :title="item.name">
-                    {{ item.name }}
-                  </div>
-                </nuxt-link>
-              </div>
-            </div>
-          </div>
-          <div class="re-name-cl mt-20 border-left-3-solid">热门作者</div>
-          <el-skeleton class="mt-10" :rows="4" animated v-if="authorLoading"/>
-          <div class="overflow-hidden" v-if="!authorLoading">
-            <div v-for="item of popularAuthorsArr" class="mr-10 mb-10 fl-left">
-              <el-button plain size="medium" @click="selectDictum('authors',item.author)">
-                {{ item.author }}&ensp;+{{ item.count }}
-              </el-button>
-            </div>
-          </div>
-
-          <div class="re-name-cl mt-20 border-left-3-solid">热门标签</div>
-          <el-skeleton class="mt-10" :rows="4" animated v-if="authorLoading"/>
-          <div class="overflow-hidden" v-if="!authorLoading">
-            <div v-for="item of popularLabelArr"
-                 class="mr-10 mb-10 cursor-pointer fl-left hover-fw-bold">
-              <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
-                #{{ item.label }}+{{ item.count }}
-              </el-tag>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -276,12 +226,18 @@ export default {
 </script>
 
 <style>
+.dictum-group-list {
+  border-radius: 25px;
+  padding: 6px;
+  background-color: #ecf0f1;
+  //background: rgb(238, 174, 202);
+  //background: radial-gradient(circle, rgba(238, 174, 202, 0.4) 0%, rgba(148, 187, 233, 0.4) 100%);
+}
+
 .hot-title-solid {
-  padding-bottom: 1px;
-  padding-top: 1px;
   padding-left: 6px;
   align-items: center;
-  border-left: 2px solid #fb7299;
+  border-left: 2px solid #7f8c8d;
   //border-bottom: 1px solid #fb7299;
 }
 
@@ -290,20 +246,7 @@ export default {
   padding-bottom: 12px;
   margin-bottom: 5px;
   width: 100%;
-  border-bottom: 1px solid #c7ecee;
-}
-
-.positionCss {
-  width: 380px;
-  position: fixed;
-  margin-top: 10px !important;
-  transform: translateY(-80px);
-  transition: 0.4s;
-}
-
-.positionCssTop {
-  transform: translateY(-6px);
-  transition: 0.6s;
+  border-bottom: 1px solid #ced6e0;
 }
 
 .dictum-cover-div {
@@ -346,12 +289,13 @@ export default {
 
 .dictum-special-cl {
   cursor: pointer;
-  width: 120px;
+  width: 100px;
   text-align: center;
+  font-size: 14px !important;
   background-color: #fefefe;
-  margin: 6px 15px !important;
-  height: 48px !important;
-  line-height: 46px !important;
+  margin: 4px 15px !important;
+  height: 40px !important;
+  line-height: 36px !important;
   border-radius: 25px;
   transition: .2s;
 }

@@ -76,6 +76,7 @@ export default {
     '~/api/requestType.js', // axios 请求类型封装
     '~/plugins/baiduGa.js',//百度统计
     {src: '~/plugins/cropper.js', mode: 'client'},//只在客户端渲染
+    {src: '~/plugins/waterfall2.js', mode: 'client'},//只在客户端渲染
   ],
   // mixins: [
   //   '~/plugins/utils.js',

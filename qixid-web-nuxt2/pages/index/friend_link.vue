@@ -7,7 +7,7 @@
             <ul class="left-content-auto">
               <li class="fa-li-class" title="申请友链">
                 <div class="fa-li-div" @click="goComment">
-                  <svg t="1726563114935" class="icon icon-size-24 mt-10 icon-hover" viewBox="0 0 1024 1024"
+                  <svg t="1726563114935" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="11360">
                     <path
@@ -19,7 +19,7 @@
               </li>
               <li class="fa-li-class" title="分享">
                 <div class="fa-li-div" @click="copyLink">
-                  <svg t="1700407528486" class="icon icon-size-24 mt-10 icon-hover" viewBox="0 0 1024 1024"
+                  <svg t="1700407528486" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="12183">
                     <path

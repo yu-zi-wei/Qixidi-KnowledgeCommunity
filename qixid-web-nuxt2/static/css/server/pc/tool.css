@@ -22,14 +22,14 @@
 }
 
 .tool-list {
-  width: 280px;
+  width: 285px;
   height: 90px;
   background-color: #fefefe;
   cursor: pointer;
   transition: all 0.1s linear 0s;
   padding: 20px 20px 25px 20px;
   border-radius: 10px;
-  margin: 0px 25px 25px 0px;
+  margin: 0px 26px 26px 0px;
   border: 1px solid #dfe4ea;
 }
 

@@ -13,10 +13,10 @@
                     <div
                       :class="{'circular-div':true,'background-color-theme':isFabulous,'background-color-c2c8d1':!isFabulous}"
                       v-if="articleInfo.likeTimes!=0 && articleInfo.likeTimes!=null">
-                      <span class="sum-span-div" v-text="articleInfo.likeTimes"></span>
+                      <span class="sum-span-div">{{ articleInfo.likeTimes }}</span>
                     </div>
                     <svg t="1700403032641"
-                         :class="{'icon':!isFabulous,'icon-size-24':true,'mt-10':true,'icon-theme':isFabulous}"
+                         :class="{'icon-theme-1':!isFabulous,'icon-size-20':true,'mt-10':true,'icon-theme':isFabulous}"
                          viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="7591">
@@ -34,7 +34,7 @@
                 </li>
                 <li class="fa-li-class" title="评论">
                   <div class="fa-li-div" @click="goComment">
-                    <svg t="1741407164890" class="icon icon-size-24 mt-10 icon-hover" viewBox="0 0 1024 1024"
+                    <svg t="1741407164890" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="27498">
                       <path
@@ -47,7 +47,7 @@
                 <li class="fa-li-class" title="收藏">
                   <div class="fa-li-div" @click="collection">
                     <svg t="1700406279634"
-                         :class="{'icon':!articleInfo.isCollection,'icon-hover':true,'icon-size-24':true,'mt-10':true,'icon-theme':articleInfo.isCollection}"
+                         :class="{'icon-theme-1':!articleInfo.isCollection,'icon-hover':true,'icon-size-20':true,'mt-10':true,'icon-theme':articleInfo.isCollection}"
                          viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="9570">
                       <path
@@ -58,7 +58,7 @@
                 </li>
                 <li class="fa-li-class" title="分享">
                   <div class="fa-li-div" @click="copyLink">
-                    <svg t="1700407528486" class="icon icon-size-24 mt-10 icon-hover" viewBox="0 0 1024 1024"
+                    <svg t="1700407528486" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="12183">
                       <path
@@ -79,25 +79,34 @@
                 <h2 class="article-title">{{ articleInfo.articleTitle }}</h2>
                 <div class="article-user-info-two">
                   <div class="ml-8 flex-space-between align-items-center">
-                    <div>
-                    <span class="font-s-14 mr-10">
-                      {{ $utils.parseTime(articleInfo.createTime, '{y}年{m}月{d}日 {h}:{s}') }}
-                    </span>
-                      <svg t="1741407328107" class="icon svg-translateY-3 icon-size-16"
-                           viewBox="0 0 1024 1024"
-                           version="1.1"
-                           xmlns="http://www.w3.org/2000/svg" p-id="30371">
-                        <path
-                          d="M512 153.6c-123.477333 0-235.178667 51.9168-323.089067 137.557333C117.230933 360.96 68.266667 448.938667 68.266667 505.173333v13.6704c0 56.234667 48.981333 144.196267 120.644266 214.016C276.804267 818.466133 388.522667 870.4 512 870.4c123.613867 0 235.246933-51.234133 322.7648-135.970133 71.799467-69.5296 120.490667-157.320533 120.968533-215.296V505.173333c-0.477867-58.2656-49.169067-146.056533-120.968533-215.586133C747.246933 204.8512 635.5968 153.6 512 153.6z m0 68.266667c104.6528 0 199.799467 43.6736 275.268267 116.753066 59.886933 57.992533 99.8912 130.133333 100.1984 166.843734v13.380266c-0.3072 36.420267-40.311467 108.544-100.181334 166.536534C711.7824 758.459733 616.635733 802.133333 512 802.133333c-104.3456 0-199.560533-44.2368-275.456-118.186666C176.810667 625.7664 136.533333 553.4208 136.533333 518.843733V505.173333c0-34.577067 40.277333-106.922667 100.010667-165.12C312.439467 266.120533 407.6544 221.866667 512 221.866667z"
-                          p-id="30372"></path>
-                        <path
-                          d="M512 341.333333c-94.2592 0-170.666667 76.407467-170.666667 170.666667s76.407467 170.666667 170.666667 170.666667 170.666667-76.407467 170.666667-170.666667-76.407467-170.666667-170.666667-170.666667z m0 68.266667a102.4 102.4 0 1 1 0 204.8 102.4 102.4 0 0 1 0-204.8z"
-                          p-id="30373"></path>
-                      </svg>
-                      <span class="font-s-14"> {{ articleInfo.numberTimes }}</span>
+                    <div class="flex-left">
+                      <div class="cursor-pointer font-bold font-s-14 mr-10 svg-translateY-1"
+                           :title="'作者：'+articleInfo.nickname">
+                        <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)"
+                                   target="_blank">
+                          {{ articleInfo.nickname }}
+                        </nuxt-link>
+                      </div>
+                      <div class="font-s-14 mr-15 svg-translateY-1">
+                        {{ $utils.parseTime(articleInfo.createTime, '{y}年{m}月{d}日 {h}:{s}') }}
+                      </div>
+                      <div>
+                        <svg t="1741407328107" class="icon svg-translateY-1 icon-size-14"
+                             viewBox="0 0 1024 1024"
+                             version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" p-id="30371">
+                          <path
+                            d="M512 153.6c-123.477333 0-235.178667 51.9168-323.089067 137.557333C117.230933 360.96 68.266667 448.938667 68.266667 505.173333v13.6704c0 56.234667 48.981333 144.196267 120.644266 214.016C276.804267 818.466133 388.522667 870.4 512 870.4c123.613867 0 235.246933-51.234133 322.7648-135.970133 71.799467-69.5296 120.490667-157.320533 120.968533-215.296V505.173333c-0.477867-58.2656-49.169067-146.056533-120.968533-215.586133C747.246933 204.8512 635.5968 153.6 512 153.6z m0 68.266667c104.6528 0 199.799467 43.6736 275.268267 116.753066 59.886933 57.992533 99.8912 130.133333 100.1984 166.843734v13.380266c-0.3072 36.420267-40.311467 108.544-100.181334 166.536534C711.7824 758.459733 616.635733 802.133333 512 802.133333c-104.3456 0-199.560533-44.2368-275.456-118.186666C176.810667 625.7664 136.533333 553.4208 136.533333 518.843733V505.173333c0-34.577067 40.277333-106.922667 100.010667-165.12C312.439467 266.120533 407.6544 221.866667 512 221.866667z"
+                            p-id="30372"></path>
+                          <path
+                            d="M512 341.333333c-94.2592 0-170.666667 76.407467-170.666667 170.666667s76.407467 170.666667 170.666667 170.666667 170.666667-76.407467 170.666667-170.666667-76.407467-170.666667-170.666667-170.666667z m0 68.266667a102.4 102.4 0 1 1 0 204.8 102.4 102.4 0 0 1 0-204.8z"
+                            p-id="30373"></path>
+                        </svg>
+                        <span class="font-s-14"> {{ articleInfo.numberTimes }}</span>
+                      </div>
                     </div>
                     <div v-if="isOwn" @click="articleEdit(articleInfo.id)"
-                         class="font-s-13 cursor-pointer ml-10 color-theme">编辑
+                         class="font-s-13 cursor-pointer ml-10 color-grey-2">编辑
                     </div>
                   </div>
                 </div>
@@ -464,7 +473,7 @@
             <div :class="{'right-content-div':true,'right-content-width':true,
            'index-right-cl-true':goTopLoading,'index-right-cl-false':!goTopLoading}">
               <!--               作者简介-->
-              <div class="auroora-card mb-10" v-if="!goTopLoading" style="padding: 20px 20px 10px 20px">
+              <div class="auroora-card mb-10" v-if="!goTopLoading && false" style="padding: 20px 20px 10px 20px">
                 <div class="flex-left">
                   <div>
                     <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)" target="_blank">
@@ -539,38 +548,35 @@
               </div>
               <!--               文章目录-->
               <div class="auroora-card" v-if="tocArray.length>0">
-                <div class="ml-6 font-bold border-left-2-solid">文章目录</div>
-                <hr class="hr-item mb-15 mt-15"/>
+                <!--                <div class="ml-6 font-bold border-left-2-solid">文章目录</div>-->
+                <!--                <hr class="hr-item mb-15 mt-15"/>-->
                 <!-- 遍历目录 -->
                 <ul class="article-catalogue">
                   <el-timeline>
                     <el-timeline-item v-for="(item, index) in tocArray" :key="index" size="normal"
                                       :type="highlightType()==index?'primary':''">
-                    <span @click="gotoAnchor(item.pos)" class="font-s-14 line-height-18">
+                    <div @click="gotoAnchor(item.pos)" class="font-s-13 line-height-16 color-grey">
                     {{ item.text }}
-                    </span>
+                    </div>
                     </el-timeline-item>
                   </el-timeline>
                 </ul>
               </div>
               <!--                相关文章-->
-              <div class="auroora-card mt-10" v-if="listInformationList.length!=0">
-                <span class="ml-6 font-bold border-left-2-solid">相关文章</span>
-                <el-divider></el-divider>
-                <div v-show="!loading">
-                  <div v-for="item of listInformationList" :key="item.id"
-                       class="ml-6 mr-6 cursor-pointer featured-articles">
-                    <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
-                      <h4>
-                        {{ item.articleTitle }}
-                      </h4>
-                    </nuxt-link>
-                  </div>
-                  <!--                  <div v-if="listInformationList.length==0" class="color-grey-2 font-s-13 text-center">-->
-                  <!--                    暂无文章-->
-                  <!--                  </div>-->
-                </div>
-              </div>
+              <!--              <div class="auroora-card mt-10" v-if="listInformationList.length!=0">-->
+              <!--                <span class="ml-6 font-bold border-left-2-solid">相关文章</span>-->
+              <!--                <el-divider></el-divider>-->
+              <!--                <div v-show="!loading">-->
+              <!--                  <div v-for="item of listInformationList" :key="item.id"-->
+              <!--                       class="ml-6 mr-6 cursor-pointer featured-articles">-->
+              <!--                    <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">-->
+              <!--                      <h4>-->
+              <!--                        {{ item.articleTitle }}-->
+              <!--                      </h4>-->
+              <!--                    </nuxt-link>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
             </div>
           </div>
         </div>
@@ -1064,6 +1070,15 @@ export default {
 
 <style>
 @import url("static/css/server/pc/article/article-details.css");
+
+.el-timeline-item__node--normal {
+  //left: 0px;
+  //width: 10px;
+  //height: 10px;
+  left: 4px;
+  width: 2px;
+  height: 20px;
+}
 
 .el-timeline-item {
   padding-bottom: 14px;
