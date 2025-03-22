@@ -204,23 +204,21 @@
                   </div>
                 </div>
               </div>
-              <div style="display: flex;align-items: center;flex-wrap: wrap;min-height: 120px">
-                <div class="dictum-content">
-                  <vditor-preview :id="'dictum-content-waterfall-list-'+index"
-                                  :content="item.content"></vditor-preview>
-                  <div class="flex-right mt-30" style="width: 100%">
-                    <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
-                         class="color-grey-2 font-s-13">——
-                      <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299"
-                            title="作者"
-                            @click="jumpUrlBaidu('www.baidu.com',item.author)">
+              <div class="dictum-content">
+                <vditor-preview :id="'dictum-content-waterfall-list-'+index"
+                                :content="item.content"></vditor-preview>
+                <div class="flex-right mt-30" style="width: 100%">
+                  <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
+                       class="color-grey-2 font-s-13">——
+                    <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299"
+                          title="作者"
+                          @click="jumpUrlBaidu('www.baidu.com',item.author)">
                                 {{ item.author }}
                                 </span>
-                      <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
+                    <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
                                 《<span class="cursor-pointer text-underline-hover"
                                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                                 </span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -320,7 +318,6 @@
         <p class="color-grey font-s-14">暂无数据</p>
       </div>
     </div>
-
     <!--    评论列表-->
     <el-drawer
       :destroy-on-close="true"
@@ -329,9 +326,13 @@
       :modal="true"
       :with-header="false"
       :visible.sync="commentViewLoading">
+      <div style="background-color: #F8F8FA;margin: 10px;padding: 10px;border-radius: 4px">
+        <vditor-preview :id="'dictum-content-comment-list-'+dictumInfo.id"
+                        :content="dictumInfo.content"></vditor-preview>
+      </div>
       <div style="padding: 0px 20px 20px 20px">
         <!--        评论-->
-        <div style="margin-top: 60px">
+        <div style="margin-top: 40px">
           <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;">
             <emoji-module :content.sync="dictumComment.content" :id="'dictum-comment'"></emoji-module>
             <textarea style="white-space:pre-line" id="dictum-comment" v-model="dictumComment.content"
@@ -497,10 +498,6 @@
         </div>
       </div>
     </el-drawer>
-    <div>
-
-    </div>
-
   </div>
 </template>
 
@@ -772,13 +769,13 @@ export default {
 
 .user-info {
   padding-bottom: 10px;
-  border-bottom: 1px solid #dfe4ea;
+  border-bottom: 1px solid #ced6e0;
   margin-bottom: 10px;
 }
 
 .dictum-content {
   display: flex;
-  padding: 0px 10px;
+  padding: 20px 10px;
   flex-wrap: wrap;
 }
 

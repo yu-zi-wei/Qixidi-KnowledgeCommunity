@@ -8,7 +8,7 @@
     <div v-if="!loading">
       <div v-for="(item,index) in articleList" :key="index" class="article-list-li flex-space-between">
         <div>
-          <div class="mb-15 font-s-13">
+          <div class="mb-20 font-s-13">
             <nuxt-link class="mr-4 hover-cl font-bold" :to="`/user_home/article?uuid=`+$base64.encode(item.userId)"
                        target="_blank" rel="noopener">
               {{ item.nickname }}
@@ -19,9 +19,9 @@
                                         {{ $utils.reckonTime(item.createTime) }}</span>
           </div>
           <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
-            <h1 class="font-s-16 mb-15 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h1>
+            <h1 class="font-s-18 mb-15 cursor-pointer font-bold text-underline-hover" v-text="item.articleTitle"></h1>
           </nuxt-link>
-          <p class="text-indent-13 overflow-nowrap-2 font-s-14 line-height-26 color-grey">
+          <p class="overflow-nowrap-2 font-s-14 line-height-26 color-grey mb-10">
             {{ item.articleAbstract }}
           </p>
           <div class="mt-15 font-s-14 flex-left">

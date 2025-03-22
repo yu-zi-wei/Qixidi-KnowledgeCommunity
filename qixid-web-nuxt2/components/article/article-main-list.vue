@@ -78,7 +78,7 @@
                   {{ item.articleTitle }}
                 </nuxt-link>
               </h4>
-              <p class="font-s-14 line-height-26 text-indent-13 overflow-nowrap-3 color-grey">
+              <p class="font-s-14 line-height-26 overflow-nowrap-2 color-grey">
                 {{ item.articleAbstract }}
               </p>
             </div>
