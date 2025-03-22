@@ -11,9 +11,11 @@
                   <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(item.userId)" target="_blank">
                     {{ item.nickname }}
                   </nuxt-link>
-                  </span>&nbsp;|
-              <span class="ml-6">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>&nbsp;|
-              <span class="ml-6 font-bold-300">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
+                  </span>
+              <span class="color-grey-3 ml-2 mr-2">|</span>
+              <span class="">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
+              <span class="color-grey-3 ml-2 mr-2">|</span>
+              <span class="font-bold-300">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="mb-10">
@@ -29,7 +31,7 @@
               </el-col>
             </nuxt-link>
           </el-row>
-          <div class="mt-10 font-s-14 flex-left font-bold-300">
+          <div class="mt-15 font-s-14 flex-left font-bold-300">
             <div class="mr-20" title="浏览">
               <svg t="1741407328107" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                    version="1.1"

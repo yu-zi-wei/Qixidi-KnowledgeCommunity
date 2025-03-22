@@ -199,8 +199,8 @@
                   <div v-if="item.labelList!=null"
                        v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
                        class="font-s-13 color-grey">
-                    #{{ items }}
-                    <span v-if="indexs+1!=item.labelList.length" class="ml-2 mr-2 color-grey-2">|</span>
+                    <span>#{{ items }}</span>
+                    <span v-if="indexs+1!=item.labelList.length" class="ml-2 mr-2 color-grey-3">|</span>
                   </div>
                 </div>
               </div>
