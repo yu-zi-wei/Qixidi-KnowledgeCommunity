@@ -28,3 +28,7 @@ SET content = REPLACE ( content, 'https://zsh-aurora.oss-cn-beijing.aliyuncs.com
 -- 专栏表
 UPDATE b_special_information
 SET cover = REPLACE ( cover, 'https://zsh-aurora.oss-cn-beijing.aliyuncs.com', 'https://minio.qixidi.top/qixidi' );
+
+-- 反馈表
+UPDATE b_feedback
+SET feedback_content = REPLACE ( feedback_content, 'https://zsh-aurora.oss-cn-beijing.aliyuncs.com', 'https://minio.qixidi.top/qixidi' );
