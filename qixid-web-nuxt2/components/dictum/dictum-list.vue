@@ -11,8 +11,8 @@
                   <p class="font-s-14 cursor-pointer text-underline-hover hover-cl">{{ item.nickname }}</p>
                 </nuxt-link>
               </div>
+              <div class="ml-4 mr-4 color-grey-3 font-s-13">|</div>
               <div class="color-grey-2 font-s-13" title="记录时间">
-                <span class="ml-4">|</span>
                 <span class="" v-text="$utils.reckonTime(item.updateTime)"
                       :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')"></span>
               </div>
@@ -27,7 +27,7 @@
               <span v-if="item.labelList!=null"
                     v-for="(items,indexs) in item.labelList" title="标签" :key="indexs" class="font-s-13 color-grey">
               #{{ items }}
-                <span v-if="indexs+1!=item.labelList.length">|</span>
+                <span v-if="indexs+1!=item.labelList.length" class="color-grey-3 ml-2 mr-2">|</span>
               </span>
             </div>
             <div class="cursor-pointer ml-10" title="更多操作" v-if="isSelf">
@@ -47,18 +47,17 @@
               </el-dropdown>
             </div>
           </div>
-
           <div class="dictum-content">
             <vditor-preview :id="'dictum-content-'+index" :content="item.content"></vditor-preview>
             <div class="flex-right mt-20" style="width: 100%">
               <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                    class="color-grey-2 font-s-13">——
-                <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299" title="作者"
+                <span v-if="item.author!=null" class="cursor-pointer text-underline-hover" title="作者"
                       @click="jumpUrlBaidu('www.baidu.com',item.author)">
                 {{ item.author }}
                 </span>
-                <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
-                《<span class="cursor-pointer text-underline-hover"
+                <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处">
+                《<span class="cursor-pointer text-underline-hover color-fb7299"
                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                 </span>
               </div>
@@ -210,21 +209,21 @@
                 <div class="flex-right mt-30" style="width: 100%">
                   <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                        class="color-grey-2 font-s-13">——
-                    <span v-if="item.author!=null" class="cursor-pointer text-underline-hover color-fb7299"
+                    <span v-if="item.author!=null" class="cursor-pointer text-underline-hover"
                           title="作者"
                           @click="jumpUrlBaidu('www.baidu.com',item.author)">
                                 {{ item.author }}
                                 </span>
-                    <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处" class="color-fb7299">
-                                《<span class="cursor-pointer text-underline-hover"
+                    <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处">
+                                《<span class="cursor-pointer text-underline-hover color-fb7299"
                                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                                 </span>
                   </div>
                 </div>
               </div>
-              <div class="flex-left font-s-13 color-grey-2 mt-20">
+              <div class="flex-left font-s-13 color-grey-3 mt-20">
                 <div title="评论" class="cursor-pointer mr-15 hover-cl" @click="viewCommentList(item)">
-                  <svg t="1685704893908" class="icon icon-theme-1 icon-size-16 svg-translateY-3 icon-hover"
+                  <svg t="1685704893908" class="icon icon-theme-2 icon-size-16 svg-translateY-3 icon-hover"
                        viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="3482">
@@ -239,7 +238,7 @@
                   {{ item.commentSum == null ? '评论' : item.commentSum }}
                 </div>
                 <div class="svg-translateY-4 mr-15">
-                  <nuxt-link class="text-underline hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
+                  <nuxt-link class="text-underline-hover hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
                     详情
                   </nuxt-link>
                 </div>
@@ -769,7 +768,7 @@ export default {
 
 .user-info {
   padding-bottom: 10px;
-  border-bottom: 1px solid #ced6e0;
+  border-bottom: 1px dotted #ced6e0;
   margin-bottom: 10px;
 }
 

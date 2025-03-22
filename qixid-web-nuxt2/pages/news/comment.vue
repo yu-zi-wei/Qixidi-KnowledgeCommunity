@@ -43,7 +43,7 @@
               placement="bottom-start"
               width="800"
               trigger="click">
-              <div>
+              <div class="mt-20">
                 <vditor-md v-if="commentState" :vditor-id="'aiEditor-news-introduce1-'+index"
                            :mdContent.sync="comment.content"
                            :content="comment.content"

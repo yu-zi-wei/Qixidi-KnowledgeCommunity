@@ -72,12 +72,13 @@ textarea:focus {
   margin-right: 35px;
   /*box-shadow: 0 4px 8px 0 #f1f2f6;*/
   padding: 20px 10px;
-  border-radius: 4px;
-  border: 1px solid #dfe6e9;
-  background-color: #F8F8FA;
+  border-radius: 10px;
+  border: 1px solid #ced6e0;
+  background-color: #fefefe;
   transition: all 0.2s linear 0s;
 }
 
 .box-item:hover {
-  border: 1px solid #bdc3c7;
+  border: 1px solid #747d8c;
+  background-color: #F8F8FA;
 }

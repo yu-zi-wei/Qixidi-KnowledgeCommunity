@@ -1,14 +1,14 @@
 <template>
   <div>
-    <!--    <button @click="getMarkdownContent">获取 Markdown 内容</button>-->
     <div :id="vditorId"></div>
   </div>
 </template>
 
 <script>
-
+//官网：https://gitee.com/vanessali/vditor#-%E7%AE%80%E4%BB%8B
 // 从本地静态文件引入 Vditor
 import Vditor from 'static/vditor/dist/index.min.js'
+
 export default {
   props: {
     // 接收父组件传递的 Markdown 内容
@@ -106,20 +106,33 @@ export default {
             "kissing_heart": "😘",
             "kissing_smiling_eyes": "😙",
             "clown_face": "🤡",
+            "zipper_mouth_face": "🤐",
             "+1": "👍",
             "-1": "👎",
+            "muscle": "💪",
             "clap": "👏",
+            "wave": "👋",
+            "writing_hand": "✍️",
+            "fu": "🖕",
+            "handshake": "🤝",
             "fist_oncoming": "👊",
             "fist_raised": "✊",
+            "ok_hand": "👌",
+            "ok_man": "🙆‍♂",
+            "ok_woman": "🙆",
             "birthday": "🎂",
             "eyes": "👀️",
             "heart": "❤️",
             "broken_heart": "💔",
+            "heartpulse": "💗",
             "rocket": "🚀️",
             "beer": "🍺",
             "beers": "🍻",
+            "hourglass": "⌛️",
+            "hourglass_flowing_sand": "⏳",
             "cocktail": "🍸",
             "coffee": "☕️",
+            "zzz": "💤",
             "tada": "🎉️",
             "anger": "💢",
             "fire": "🔥",

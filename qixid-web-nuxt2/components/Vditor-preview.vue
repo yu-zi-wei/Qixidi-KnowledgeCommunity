@@ -3,6 +3,8 @@
 </template>
 
 <script>
+//官网：https://gitee.com/vanessali/vditor#-%E7%AE%80%E4%BB%8B
+
 import Vditor from 'static/vditor/dist/index.min.js'
 
 export default {

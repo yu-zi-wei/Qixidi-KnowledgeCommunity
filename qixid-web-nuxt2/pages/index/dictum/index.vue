@@ -323,4 +323,8 @@ export default {
 .el-collapse-item__content {
   padding-bottom: 0px;
 }
+
+.el-button--medium {
+  padding: 10px 20px;
+}
 </style>
