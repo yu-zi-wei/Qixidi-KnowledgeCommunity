@@ -7,13 +7,14 @@
   background: #fefefe;
   transition: .3s;
   padding: 25px 5px;
-  border: 1px solid #ced6e0;
+  border: 1px solid #bdc3c7;
   border-radius: 25px;
   margin-bottom: 25px;
 }
 
 .article-item:hover {
   background: #edeff0;
+  border: 1px solid #636e72;
 }
 
 .article-item:hover .article-cover-img {
