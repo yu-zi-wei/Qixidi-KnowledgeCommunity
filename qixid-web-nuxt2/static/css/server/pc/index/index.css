@@ -41,17 +41,6 @@
   line-height: 1.625rem;
 }
 
-.ranking-item-3- {
-  width: 18px;
-  /*height: 18px;*/
-  /*line-height: 18px;*/
-  font-size: 14px;
-  /*color: #fefefe;*/
-  border-radius: 50%;
-  text-align: center;
-  /*background-color: #95a5a6;*/
-}
-
 .recommend-article-div-true {
   transform: translateY(0rem);
   transition: 0.4s;

@@ -70,7 +70,8 @@
             </div>
           </div>
           <!--                用户信息-->
-          <div class="auroora-card mb-15 overflow-hidden border-1-e6e6e6 border-radius-10" v-show="!positionCssRight && false">
+          <div class="auroora-card mb-15 overflow-hidden border-1-e6e6e6 border-radius-10"
+               v-show="!positionCssRight && false">
             <div class="fl-right flex-left" v-if="userInfo!=null">
               <div style="background-color: #FC625D" class="aurora-dot mr-6"></div>
               <div style="background-color: #FDBC40" class="aurora-dot mr-6"></div>
@@ -162,19 +163,19 @@
             <el-skeleton :rows="6" animated v-if="selectedArticleLoading"/>
             <ul v-show="!selectedArticleLoading">
               <li v-for="(item,index) in selectedArticleList" :key="index"
-                  class="recommend-article-item flex-left align-items-center"
+                  class="recommend-article-item flex-left align-items-center font-s-15"
                   :title="item.articleTitle">
-                <div class="flex-1 mr-6">
-                  <div v-if="index<=2" class="ranking-item-3-"
+                <div class="flex-1 mr-6 text-center">
+                  <div v-if="index<=2"
                        :style="index==0?'color:#eb4d4b':index==1?'color:#f9ca24':'color:#4cd137'">
                     {{ index + 1 }}
                   </div>
-                  <div v-else class="ranking-item-3-">
+                  <div v-else>
                     {{ index + 1 }}
                   </div>
                 </div>
                 <div class="cursor-pointer overflow-nowrap-1 flex-10">
-                  <nuxt-link class="text-underline-hover color-grey font-s-14"
+                  <nuxt-link class="text-underline-hover color-grey"
                              :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank"
                              rel="noopener">
                     {{ item.articleTitle }}

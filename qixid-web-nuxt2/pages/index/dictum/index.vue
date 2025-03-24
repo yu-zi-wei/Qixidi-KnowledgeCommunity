@@ -27,12 +27,12 @@
                 d="M545.23858719 614.39524812c35.21850281 0 52.97774812 28.13880375 53.09774344 66.83715938 0 47.69797312-17.63925 66.77716219-52.91775094 66.77716219-35.21850281 0-52.79775656-19.07918906-52.79775563-66.77716219 0-38.21837531 26.21888531-66.83715937 52.61776313-66.83715938z m177.17247-410.50255312c52.85775375 47.69797312 325.96614656 400.90296187 88.01625937 658.77200156-255.46914281 229.07026406-502.0586625 104.9955375-598.95454406 0-52.79775656-76.43675156-70.49700375-152.75350781-52.79775656-248.26944844 17.57925281-105.11553281 96.89588156-200.51147812 105.65551031-315.10660781 26.51887313 57.29756531 35.27850094 104.9955375 35.2785 162.29310281C396.44491062 347.10660781 484.58116531 184.813505 467.0019125 32c0 0 167.33288813 57.29756531 237.76989469 343.72539188 44.03812875-38.09838094 35.27850094-114.5351325 17.63925-171.83269688z m-290.56765032 582.33525l8.819625-209.991075h-43.97813062v85.85635125H308.54864656V576.23687h-43.97813062v209.991075h43.97813062v-85.91634844H387.80527813v85.91634844h44.03812874z m114.47513438 0c61.61738156 0 96.83588438-38.09838094 96.83588437-104.9955375 0-66.83715937-35.21850281-104.9955375-96.83588437-104.9955375-61.61738156 0-96.89588156 38.15837812-96.89588156 104.9955375 0 66.77716219 35.27850094 104.9955375 96.89588156 104.9955375z m220.19064187-171.83269687h61.79737407v-38.15837813h-167.39288625v38.15837813h61.61738156v171.83269687h43.97813062V614.39524812z"
                 fill="#FF3B30" p-id="6750"></path>
             </svg>
-            <span>推 荐</span>
+            <span class="font-style-italic">推 荐</span>
           </el-menu-item>
           <el-menu-item v-for="(item,index) in dictumSpecial"
                         :index="'/dictum?code='+$base64.encode(item.id)"
                         :title="item.name" class="dictum-special-cl" :key="index">
-            <span>{{ item.name }}</span>
+            <span class="font-style-italic">{{ item.name }}</span>
           </el-menu-item>
         </el-menu>
         <div class="mt-10" style="padding: 15px 15px;border-radius: 4px;">
@@ -42,16 +42,16 @@
                 <div class="collapse-title">
                   <svg t="1742608687334" class="icon-theme-1 svg-translateY-4 mr-10" viewBox="0 0 1024 1024"
                        version="1.1"
-                       xmlns="http://www.w3.org/2000/svg" p-id="71871" width="22" height="22">
+                       xmlns="http://www.w3.org/2000/svg" p-id="71871" width="20" height="20">
                     <path
                       d="M945.11 945.25c-10.18 10.88-27.29 11.47-38.26 1.29L795.81 835.51c-10.58-10.98-10.48-28.38 0.3-39.26 10.78-10.78 28.28-10.97 39.15-0.29L946.3 906.99c10.28 10.98 9.69 27.99-1.19 38.26z m-455.6-36.18c-231.66 0-419.42-187.76-419.42-419.42 0-231.66 187.76-419.52 419.52-419.52 231.66 0 419.52 187.76 419.52 419.52 0 111.23-44.19 217.92-122.9 296.62-78.71 78.6-185.49 122.8-296.72 122.8z m0-782.97c-147.03 0-279.61 88.59-335.87 224.44-56.26 135.85-25.11 292.17 78.8 396.19 104.02 104.01 260.33 135.06 396.19 78.8 135.85-56.26 224.44-188.85 224.44-335.87-0.01-200.82-162.75-363.56-363.56-363.56z m0 0"
                       p-id="71872"></path>
                   </svg>
-                  <span class="font-bold">
+                  <span class="font-bold font-s-16 color-grey">
                     推荐专辑
-                    <span class="color-grey-2 ml-2 mr-2">/</span>
+                    <span class="color-grey-3 ml-2 mr-2">/</span>
                     热门作者
-                  <span class="color-grey-2 ml-2 mr-2">/</span>
+                  <span class="color-grey-3 ml-2 mr-2">/</span>
                     热门标签
                   </span>
                 </div>
@@ -74,7 +74,7 @@
                                   :src="item.cover" fit="cover"></el-image>
                         <el-image class="dictum-cover-img" v-else src="/img/shu.jpg" fit="cover"></el-image>
                       </div>
-                      <div class="mt-10 hover-cl overflow-nowrap-1" style="width: 90px" :title="item.name">
+                      <div class="mt-10 hover-cl overflow-nowrap-1" style="width: 80px" :title="item.name">
                         {{ item.name }}
                       </div>
                     </nuxt-link>
@@ -229,7 +229,7 @@ export default {
 .dictum-group-list {
   border-radius: 25px;
   padding: 6px;
-  background-color: #ecf0f1;
+  background-color: #F3F3F3;
   //background: rgb(238, 174, 202);
   //background: radial-gradient(circle, rgba(238, 174, 202, 0.4) 0%, rgba(148, 187, 233, 0.4) 100%);
 }
@@ -250,8 +250,8 @@ export default {
 }
 
 .dictum-cover-div {
-  width: 90px;
-  height: 86px;
+  width: 80px;
+  height: 76px;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -271,13 +271,12 @@ export default {
 }
 
 .album-tj-cl {
-  margin: 0 10px 5px 0;
+  margin: 0 15px 5px 0;
   background-color: #fefefe;
-  padding: 10px;
+  padding: 10px 10px 6px 10px;
   cursor: pointer;
   text-align: center;
   border-radius: 4px;
-  height: 125px;
   border: 1px solid #dfe4ea;
 }
 

@@ -109,7 +109,7 @@ export default {
 
 .tool-list-left {
   padding: 10px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 2px;
 }
 </style>

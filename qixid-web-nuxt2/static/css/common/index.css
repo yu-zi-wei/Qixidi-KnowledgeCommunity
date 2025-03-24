@@ -546,6 +546,7 @@ mr-auto {
 .padding-le-ri-5 {
   padding: 0 5px;
 }
+
 .padding-top-bo-10 {
   padding: 10px 0px;
 }
@@ -603,17 +604,6 @@ mr-auto {
 }
 
 .text-underline {
-  text-decoration: underline
-}
-
-.hover-fw-bold {
-}
-
-.hover-fw-bold:hover {
-  font-weight: bold;
-}
-
-.text-underline {
   text-decoration: underline;
 }
 
@@ -621,9 +611,15 @@ mr-auto {
   transition: .2s;
 }
 
-/*下划线*/
 .text-underline-hover:hover {
   text-decoration: underline;
+}
+
+.hover-fw-bold {
+}
+
+.hover-fw-bold:hover {
+  font-weight: bold;
 }
 
 .transform-translateY-hover-4,
@@ -659,4 +655,8 @@ mr-auto {
 
 .border-radius-4 {
   border-radius: 4px
+}
+
+.font-style-italic {
+  font-style: italic;
 }

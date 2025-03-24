@@ -6,7 +6,7 @@
           <div class="logo cursor-pointer" :title="websiteName">
             <nuxt-link to="/">
               <div class="flex-left align-items-center svg-translateY-3" style="height: 50px;">
-<!--                                <el-image style="height: 40px;width: 40px" src="/img/logo.png"/>-->
+                <!--                                <el-image style="height: 40px;width: 40px" src="/img/logo.png"/>-->
                 <svg t="1726902880139" class="icon" viewBox="0 0 1024 1024" version="1.1"
                      xmlns="http://www.w3.org/2000/svg" p-id="4593" width="34" height="34">
                   <path
@@ -56,11 +56,12 @@
                     </nuxt-link>
                   </el-menu-item>
                 </el-submenu>
-                <el-menu-item :index="$route.path">
-                  <a href="https://love.qixidi.top/" target="_blank" style="color: var(--default-color);">
-                    爱情小站</a>
-                </el-menu-item>
+<!--                <el-menu-item :index="$route.path">-->
+<!--                  <a href="https://love.qixidi.top/" target="_blank" style="color: var(&#45;&#45;default-color);">-->
+<!--                    爱情小站</a>-->
+<!--                </el-menu-item>-->
                 <!--                <el-menu-item index="/test">测试</el-menu-item>-->
+<!--                <el-menu-item index="/mood_notes">时光小记</el-menu-item>-->
               </el-menu>
             </ul>
             <ul class="nav-right-ul">
