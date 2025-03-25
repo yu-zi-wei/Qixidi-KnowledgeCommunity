@@ -230,7 +230,7 @@ export default {
 
 .content {
   height: calc(100vh - 300px);
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -247,7 +247,7 @@ export default {
 }
 
 .content::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 

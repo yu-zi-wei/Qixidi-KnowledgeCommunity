@@ -74,7 +74,7 @@ export default {
   background: linear-gradient(90deg, rgba(206, 237, 231, 0.4) 20%, rgba(236, 240, 241, 0.3) 100%);
   border-radius: 10px;
   padding: 4px 14px 14px 14px;
-  border: 1px solid #fefefe;
+  border: 1px solid #FFFFFF;
 }
 
 .follow-list-admin:hover {

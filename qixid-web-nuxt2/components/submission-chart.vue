@@ -192,8 +192,8 @@ export default {
 .submission-chart .calendar .column .date-wrapper {
   width: 13px;
   height: 13px;
-  background: #fefefe;
-  border: 1px solid #fefefe;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
   margin-bottom: 2px;
 }
 

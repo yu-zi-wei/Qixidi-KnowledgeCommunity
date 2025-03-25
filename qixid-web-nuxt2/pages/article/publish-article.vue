@@ -402,7 +402,7 @@ export default {
 .publish-article-catalogue::-webkit-scrollbar {
   width: 4px;
   height: 4px;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
 }
 
 .publish-article-catalogue::-webkit-scrollbar-track {
@@ -415,7 +415,7 @@ export default {
 
 .title-input-class {
   width: 100%;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   z-index: 99;
 }
 

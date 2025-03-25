@@ -115,7 +115,7 @@ export default {
 
 <style scoped>
 .follow-news-cl {
-  background-color: #FEFEFE;
+  background-color: #FFFFFF;
   margin: 15px;
   padding-bottom: 10px;
   border-radius: 4px;

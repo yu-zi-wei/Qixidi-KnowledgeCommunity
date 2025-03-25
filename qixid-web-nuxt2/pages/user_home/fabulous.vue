@@ -202,7 +202,7 @@ export default {
 
 .fabulousArr-ul {
   max-height: 50vh;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -214,7 +214,7 @@ export default {
 }
 
 .fabulousArr-ul::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 

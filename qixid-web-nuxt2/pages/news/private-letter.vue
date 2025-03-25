@@ -372,13 +372,13 @@ export default {
   font-size: 8px;
   height: 16px;
   width: 16px;
-  color: #fefefe;
+  color: #FFFFFF;
   margin-left: -12px;
   margin-bottom: 28px;
   line-height: 14px;
   text-align: center;
   white-space: nowrap;
-  border: 1px solid #fefefe;
+  border: 1px solid #FFFFFF;
 }
 
 .news-comment-cl {
@@ -419,7 +419,7 @@ textarea:focus {
 .comment-li-cl::-webkit-scrollbar-track,
 .news-comment-cl::-webkit-scrollbar-track,
 .user-list-left::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 4px;
 }
 
@@ -431,12 +431,12 @@ textarea:focus {
 }
 
 .news-import {
-  /*background-color: #fefefe;*/
+  /*background-color: #FFFFFF;*/
   padding: 10px 15px 15px 15px;
 }
 
 .el-aside {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   margin-right: 20px;
   max-height: 70vh;
   padding: 4px;
@@ -456,14 +456,14 @@ textarea:focus {
 
 .user-top-div {
   width: 100%;
-  background: #fefefe;
+  background: #FFFFFF;
   padding: 6px 0;
   height: 40px;
   border-bottom: 1px solid #F0F2F5;
 }
 
 .user-list-left {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   height: 100%;
   padding-left: 4px;
   overflow: scroll;
@@ -489,7 +489,7 @@ textarea:focus {
 
 .content-div {
   //height: 100%;
-  //background-color: #fefefe;
+  //background-color: #FFFFFF;
   //border-radius: 4px;
   //border-bottom: 1px solid #F0F2F5;
   //border-left: 1px solid #F0F2F5;
@@ -505,7 +505,7 @@ textarea:focus {
 /*-================================聊天框样式============================*/
 /*----------------右边-------------------*/
 .tooltip-right {
-  color: #fefefe;
+  color: #FFFFFF;
   font-size: 16px;
   max-width: 40ch;
   text-align: right;
@@ -539,7 +539,7 @@ textarea:focus {
 
 /*----------------左边-------------------*/
 .tooltip-left {
-  color: #fefefe;
+  color: #FFFFFF;
   font-size: 16px;
   line-height: 20px;
   max-width: 40ch;

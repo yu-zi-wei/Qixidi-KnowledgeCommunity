@@ -213,7 +213,7 @@ export default {
 }
 
 .follow-cl-ul::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 

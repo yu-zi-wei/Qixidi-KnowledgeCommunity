@@ -87,7 +87,7 @@
           </div>
         </div>
         <div v-if="!loading && feedbackList.length==0" style="text-align: center;margin-top: 10px">
-          <svg t="1666708559980" class="icon-theme" viewBox="0 0 1024 1024" version="1.1"
+          <svg t="1666708559980" class="icon-theme-2" viewBox="0 0 1024 1024" version="1.1"
                xmlns="http://www.w3.org/2000/svg"
                p-id="2698" width="40" height="60">
             <path
@@ -399,7 +399,7 @@ export default {
 }
 
 .issues-div::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 

@@ -1,5 +1,5 @@
 .article-content {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 40px 0 40px 20px;
   z-index: 10;
   width: 960px;
@@ -7,7 +7,7 @@
 
 /*关于作者*/
 .article-content-introduce {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 30px 0 40px 20px;
   z-index: 10;
   width: 1070px;
@@ -19,7 +19,7 @@
 }
 
 .fa-li-class {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   -webkit-box-shadow: 0px 2px 2px #d7d5f7;
   -moz-box-shadow: 0px 1px 1px #d7d5f7;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
@@ -119,7 +119,7 @@
   border-radius: 0 4px 4px 0;
   cursor: pointer;
   padding: 6px 6px 6px 0;
-  border-left: 2px solid #fefefe;
+  border-left: 2px solid #FFFFFF;
 }
 
 .left-catalogue-list-li:hover {
@@ -151,7 +151,7 @@
 }
 
 .article-catalogue::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 
@@ -164,7 +164,7 @@
   line-height: 12px;
   font-size: 12px;
   letter-spacing: 0px;
-  color: #fefefe;
+  color: #FFFFFF;
 }
 
 .circular-div {
@@ -234,7 +234,7 @@
 .comment-li-cl::-webkit-scrollbar-track,
 .news-comment-cl::-webkit-scrollbar-track,
 .user-list-left::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 4px;
 }
 

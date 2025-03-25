@@ -97,7 +97,7 @@ export default {
 }
 
 .album-info {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 20px;
   border-radius: 0 0 20px 20px;
   border-bottom: 4px solid #95a5a6;

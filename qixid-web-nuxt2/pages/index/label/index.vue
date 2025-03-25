@@ -105,7 +105,7 @@ export default {
 
 <style scoped>
 .label-item {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 20px 0px;
   margin: 20px;
   border-radius: 4px;

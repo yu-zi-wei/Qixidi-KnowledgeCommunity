@@ -98,7 +98,7 @@ export default {
   margin: 20px 0;
   border-radius: 4px;
   transition: .2s;
-  border: 1px solid #fefefe;
+  border: 1px solid #FFFFFF;
 }
 
 .browsing-list:hover {

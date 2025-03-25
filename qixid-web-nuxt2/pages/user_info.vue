@@ -58,7 +58,7 @@ export default {
 <style scoped>
 .top-cl-user-info {
   color: #747d8c;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 0 10px;
   font-size: 14px;
   border-radius: 4px;

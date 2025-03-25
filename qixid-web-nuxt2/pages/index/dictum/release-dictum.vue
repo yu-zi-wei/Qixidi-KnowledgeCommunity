@@ -425,7 +425,7 @@ export default {
 <style>
 .release-dictum-index {
   padding: 20px;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   box-shadow: 0 4px 8px 0 #ecf0f1;
 }

@@ -4,7 +4,7 @@
 
 .article-item {
   flex-grow: 1;
-  background: #fefefe;
+  background: #FFFFFF;
   transition: .3s;
   padding: 25px 5px;
   border: 1px solid #bdc3c7;
@@ -14,7 +14,7 @@
 
 .article-item:hover {
   background: #edeff0;
-  border: 1px solid #636e72;
+  border: 1px solid #a4b0be;
 }
 
 .article-item:hover .article-cover-img {
@@ -52,7 +52,7 @@
   font-family: '新宋体';
   letter-spacing: 2px;
   cursor: pointer;
-  color: #fefefe;
+  color: #FFFFFF;
   background: url(
   data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVQYV2NMKL/ty4ADMIIkF3SqbsYmP+gkAayXGgfe8HOVAAAAAElFTkSuQmCC
   ) repeat;

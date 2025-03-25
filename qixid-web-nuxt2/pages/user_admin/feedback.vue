@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #fefefe;padding: 20px 25px;border-radius: 4px">
+  <div style="background-color: #FFFFFF;padding: 20px 25px;border-radius: 4px">
     <template>
       <el-tabs v-model="activeName">
         <el-tab-pane label="反馈中心" name="反馈中心">

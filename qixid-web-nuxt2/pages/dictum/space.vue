@@ -271,7 +271,7 @@ export default {
 }
 
 .space-list::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 
@@ -313,15 +313,16 @@ export default {
   flex-direction: column;
   text-align: center;
   align-items: center;
-  box-shadow: 0 6px 6px 0 #f1f2f6;
+  box-shadow: 0 6px 6px 0 #ecf0f1;
+  background-color: #F3F3F3;
   border-radius: 2px;
   overflow: hidden;
   transition: .2s;
-  border: 1px solid #fefefe;
+  border: 1px solid #f1f2f6;
 }
 
 .dictum-background-color-acti {
-  box-shadow: 0 6px 6px 0 var(--forbidden-color);
+  box-shadow: 0 6px 6px 0 #a4b0be;
 }
 
 .albumList-box {
@@ -336,7 +337,7 @@ export default {
 
 
 .dictum-title-cl {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   width: 1320px;
   height: 70px;
   padding: 0 20px;

@@ -272,7 +272,7 @@ export default {
 
 .album-tj-cl {
   margin: 0 15px 5px 0;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 10px 10px 6px 10px;
   cursor: pointer;
   text-align: center;
@@ -291,7 +291,7 @@ export default {
   width: 100px;
   text-align: center;
   font-size: 14px !important;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   margin: 4px 15px !important;
   height: 40px !important;
   line-height: 36px !important;

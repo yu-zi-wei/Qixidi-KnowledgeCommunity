@@ -1,5 +1,5 @@
 .article-list-admin {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 0px 10px;
 }
 
@@ -14,5 +14,5 @@
 
 .article-list-li:hover {
   background: #E9EBEC;
-  border: 1px solid #636e72;
+  border: 1px solid #a4b0be;
 }

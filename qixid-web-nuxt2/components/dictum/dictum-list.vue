@@ -90,7 +90,7 @@
                   d="M512.01 959.33c-70.48 0-140.41-16.79-202.89-48.62H93.23V669.25c-18.96-50.4-28.56-103.26-28.56-157.26 0-246.66 200.68-447.32 447.34-447.32s447.32 200.66 447.32 447.32-200.66 447.34-447.32 447.34zM166.85 837.09h160.56l8.16 4.39c53.89 28.94 114.89 44.23 176.43 44.23 206.06 0 373.7-167.65 373.7-373.72 0-206.06-167.65-373.7-373.7-373.7-206.07 0-373.72 167.65-373.72 373.7 0 47.09 8.75 93.16 25.99 136.91l2.57 6.51v181.68z"
                   p-id="3485"></path>
               </svg>
-              {{ item.commentSum == null ? '评论' : item.commentSum }}
+              {{ item.commentSum == null ? '--' : item.commentSum }}
             </div>
             <!--            <div title="收藏" class="cursor-pointer icon-theme-1 mr-20" @click="$modal.notify('功能待开发！')">-->
             <!--              <svg t="1685705013960" class="icon icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024" version="1.1"-->
@@ -101,10 +101,8 @@
             <!--              </svg>-->
             <!--              收藏-->
             <!--            </div>-->
-            <div class="svg-translateY-4">
-              <nuxt-link class="text-underline hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
-                详情
-              </nuxt-link>
+            <div class="svg-translateY-4 text-underline hover-cl cursor-pointer" @click="viewCommentList(item)">
+              查看
             </div>
           </div>
           <div>
@@ -197,7 +195,7 @@
                   <!--                </el-tag>-->
                   <div v-if="item.labelList!=null"
                        v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
-                       class="font-s-13 color-grey">
+                       class="font-s-13 color-grey-2">
                     <span>#{{ items }}</span>
                     <span v-if="indexs+1!=item.labelList.length" class="ml-2 mr-2 color-grey-3">|</span>
                   </div>
@@ -222,7 +220,7 @@
                 </div>
               </div>
               <div class="flex-left font-s-13 color-grey-3 mt-20">
-                <div title="评论" class="cursor-pointer mr-15 hover-cl" @click="viewCommentList(item)">
+                <div title="评论" class="cursor-pointer mr-15 hover-cl">
                   <svg t="1685704893908" class="icon icon-theme-2 icon-size-16 svg-translateY-3 icon-hover"
                        viewBox="0 0 1024 1024"
                        version="1.1"
@@ -235,16 +233,14 @@
                       d="M512.01 959.33c-70.48 0-140.41-16.79-202.89-48.62H93.23V669.25c-18.96-50.4-28.56-103.26-28.56-157.26 0-246.66 200.68-447.32 447.34-447.32s447.32 200.66 447.32 447.32-200.66 447.34-447.32 447.34zM166.85 837.09h160.56l8.16 4.39c53.89 28.94 114.89 44.23 176.43 44.23 206.06 0 373.7-167.65 373.7-373.72 0-206.06-167.65-373.7-373.7-373.7-206.07 0-373.72 167.65-373.72 373.7 0 47.09 8.75 93.16 25.99 136.91l2.57 6.51v181.68z"
                       p-id="3485"></path>
                   </svg>
-                  {{ item.commentSum == null ? '评论' : item.commentSum }}
-                </div>
-                <div class="svg-translateY-4 mr-15">
-                  <nuxt-link class="text-underline-hover hover-cl" :to="`/dictum/dictum-details/`+$base64.encode(item.id)">
-                    详情
-                  </nuxt-link>
+                  {{ item.commentSum == null ? '--' : item.commentSum }}
                 </div>
                 <div class="font-s-13 mr-15 svg-translateY-4" title="记录时间">
                 <span class="" v-text="$utils.reckonTime(item.updateTime)"
                       :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')"></span>
+                </div>
+                <div class="svg-translateY-4 mr-15 text-underline-hover cursor-pointer" @click="viewCommentList(item)">
+                  查看
                 </div>
               </div>
               <div>
@@ -320,16 +316,21 @@
     <!--    评论列表-->
     <el-drawer
       :destroy-on-close="true"
-      :size="560"
+      size="45%"
       direction="rtl"
       :modal="true"
       :with-header="false"
       :visible.sync="commentViewLoading">
-      <div style="background-color: #F8F8FA;margin: 10px;padding: 10px;border-radius: 4px">
-        <vditor-preview :id="'dictum-content-comment-list-'+dictumInfo.id"
-                        :content="dictumInfo.content"></vditor-preview>
-      </div>
-      <div style="padding: 0px 20px 20px 20px">
+      <div style="margin: 20px">
+        <div class="text-right text-underline hover-cl font-s-13 color-grey-2 mb-20">
+          <nuxt-link :to="`/dictum/dictum-details/`+$base64.encode(dictumInfo.id)" target="_blank">
+            新页面打开
+          </nuxt-link>
+        </div>
+        <div style="background-color: #F8F8FA;border-radius: 4px;padding: 10px">
+          <vditor-preview :id="'dictum-content-comment-list-'+dictumInfo.id"
+                          :content="dictumInfo.content"></vditor-preview>
+        </div>
         <!--        评论-->
         <div style="margin-top: 40px">
           <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;">
@@ -754,11 +755,11 @@ export default {
 @import url("components/css/pc/dictum-comment.css");
 
 .dictum-info-cl {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 15px 20px;
   margin: 0 0 30px 0;
   border-radius: 15px;
-  border: 1px solid #fefefe;
+  border: 1px solid #FFFFFF;
   box-shadow: 0 4px 8px 0 #ecf0f1;
 }
 

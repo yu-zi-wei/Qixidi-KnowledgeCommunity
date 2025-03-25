@@ -136,7 +136,7 @@
                       </div>
                       <div class="content-div mt-10">
                         <mavon-editor class="markdown"
-                                      previewBackground="#fefefe"
+                                      previewBackground="#FFFFFF"
                                       :value="item.content"
                                       :subfield="false"
                                       :defaultOpen="prop.defaultOpen"
@@ -253,7 +253,7 @@
                           <!--                          内容-->
                           <div class="content-div mt-6">
                             <mavon-editor class="markdown"
-                                          previewBackground="#fefefe"
+                                          previewBackground="#FFFFFF"
                                           :value="items.content"
                                           :subfield="false"
                                           :defaultOpen="prop.defaultOpen"

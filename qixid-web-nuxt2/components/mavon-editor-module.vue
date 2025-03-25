@@ -12,8 +12,8 @@
       :ishljs="true"
       :navigation="false"
       fontSize="18px"
-      toolbarsBackground="#fefefe"
-      previewBackground="#fefefe"
+      toolbarsBackground="#FFFFFF"
+      previewBackground="#FFFFFF"
       style="height: 100%"
     >
       <!-- 右工具栏后加入自定义按钮  -->

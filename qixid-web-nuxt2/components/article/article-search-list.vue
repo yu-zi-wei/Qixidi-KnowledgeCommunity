@@ -183,7 +183,7 @@ export default {
 }
 
 .search-data-li {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   padding: 15px 10px;
   margin-bottom: 20px;
   border-bottom: 1px solid #dcdfe6;

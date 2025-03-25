@@ -131,7 +131,7 @@ export default {
 }
 
 .left-list::-webkit-scrollbar-track {
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 2px;
 }
 

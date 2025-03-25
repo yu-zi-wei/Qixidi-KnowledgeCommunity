@@ -97,7 +97,7 @@ export default {
 
 <style scoped>
 .tool-left-cl {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   border-right: 1px solid #f1f2f6;
 }

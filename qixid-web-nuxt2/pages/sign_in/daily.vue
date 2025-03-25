@@ -225,7 +225,7 @@ export default {
 .time-ticp-s {
   height: 60px;
   width: 100%;
-  color: #fefefe;
+  color: #FFFFFF;
   cursor: pointer;
   letter-spacing: 1px;
   text-align: center;
@@ -240,7 +240,7 @@ export default {
 }
 
 .the-same-day {
-  color: #fefefe;
+  color: #FFFFFF;
   padding: 4px;
   border-radius: 50%;
 }

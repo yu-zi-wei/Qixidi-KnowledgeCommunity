@@ -63,7 +63,7 @@ export default {
 
 <style scoped>
 .home-top-index {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   padding: 20px;
   min-height: 100px;

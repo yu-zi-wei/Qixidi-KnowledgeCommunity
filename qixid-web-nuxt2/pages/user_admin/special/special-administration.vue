@@ -106,7 +106,7 @@ export default {
 }
 
 .home-top-index {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   padding: 20px 10px 40px 20px;
   min-height: 100px;

@@ -30,7 +30,7 @@
               </el-menu-item>
             </el-menu>
           </div>
-          <div style="background: #fefefe;padding: 0 20px;" class="flex-1">
+          <div style="background: #FFFFFF;padding: 0 20px;" class="flex-1">
             <nuxt-child/>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default {
 
 <style>
 .sign-left-list {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   padding: 20px 10px;
   box-shadow: 0 4px 8px 0 #ecf0f1;

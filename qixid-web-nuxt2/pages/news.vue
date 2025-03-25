@@ -56,7 +56,7 @@ export default {
 
 .left-list-menu {
   padding: 0px 10px;
-  background: #fefefe;
+  background: #FFFFFF;
   border-radius: 4px;
   height: 80ch;
   position: fixed;

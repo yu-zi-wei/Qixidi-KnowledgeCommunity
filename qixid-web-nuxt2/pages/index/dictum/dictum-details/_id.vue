@@ -400,7 +400,7 @@ export default {
 
 .dictum-details-right {
   width: 260px;
-  background-color: #FEFEFE;
+  background-color: #FFFFFF;
   margin-left: 20px;
 }
 

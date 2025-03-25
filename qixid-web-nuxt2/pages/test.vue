@@ -48,7 +48,7 @@
                     :toolbarsFlag="prop.toolbarsFlag"
                     :editable="prop.editable"
                     fontSize="18px"
-                    previewBackground="#fefefe"
+                    previewBackground="#FFFFFF"
                     :scrollStyle="prop.scrollStyle"
                     :navigation="false"
                     ref="markdown"

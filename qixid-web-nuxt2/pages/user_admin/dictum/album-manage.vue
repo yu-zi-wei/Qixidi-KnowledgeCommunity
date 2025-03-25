@@ -241,7 +241,7 @@ export default {
 }
 
 .home-top-index {
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   padding: 10px;
   min-height: 100px;

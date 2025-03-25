@@ -49,12 +49,12 @@ export default {
 <style scoped>
 .data-page {
   margin-top: 10px;
-  background-color: #fefefe;
+  background-color: #FFFFFF;
   border-radius: 4px;
   padding-bottom: 20px;
 }
 
 .search-background {
-  background-color: #FEFEFE;
+  background-color: #FFFFFF;
 }
 </style>
