@@ -31,6 +31,10 @@ export default {
     outline: {
       type: Boolean,
       default: true
+    },
+    placeholder: {
+      type: String,
+      default: "编写内容......"
     }
   },
   data() {
@@ -57,7 +61,7 @@ export default {
         width: '100%',
         mode: this.mode,//wysiwyg-所见即所得、sv-分屏预览、ir-即时渲染、preview-预览模式
         value: this.content, // 设置要预览的 Markdown 内容
-        placeholder: '编写内容......',
+        placeholder: this.placeholder,
         theme: 'classic',
         counter: {
           enable: true,

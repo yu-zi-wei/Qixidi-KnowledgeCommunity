@@ -152,13 +152,13 @@
 }
 
 .publish-list-item {
-  padding: 5px 8px 5px 8px;
+  padding: 4px 12px 4px 12px;
   flex-grow: 1;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 4px;
   transition: all 0.1s linear 0s;
 }
 
 .publish-list-item:hover {
-  background: #f4f5f5;
+  background: #F2F6FA;
 }
