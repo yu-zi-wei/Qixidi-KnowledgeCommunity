@@ -101,6 +101,7 @@ export default {
         pageSize: 20,
         userId: null,
         articleTitle: null,
+        auditState: 2,
       },
       total: 0,
       scrollLoading: true,

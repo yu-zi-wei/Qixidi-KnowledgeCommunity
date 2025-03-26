@@ -61,7 +61,7 @@
                 <!--                    爱情小站</a>-->
                 <!--                </el-menu-item>-->
                 <!--                <el-menu-item index="/test">测试</el-menu-item>-->
-                <!--                <el-menu-item index="/mood_notes">时光小记</el-menu-item>-->
+                <!--                <el-menu-item index="/time_notes">时光小记</el-menu-item>-->
               </el-menu>
             </ul>
             <ul class="nav-right-ul">
@@ -370,67 +370,19 @@
         </div>
       </transition>
     </div>
-    <el-dialog
-      title="时光小记"
-      :visible.sync="jottingsDialogVisible"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      width="45%">
-      <div>
-        <div class="mb-20" style="background-color: #F3F3F3;padding: 15px;border-radius: 4px">
-          <p class="mb-10">记录时间:</p>
-          <el-date-picker
-            v-model="timeNotes.recordTime"
-            align="right"
-            type="date"
-            placeholder="记录时间">
-          </el-date-picker>
-          <p class="mb-10 mt-20">Title:</p>
-          <el-input
-            type="textarea"
-            prefix-icon="el-icon-link el-input__icon"
-            :rows="4"
-            placeholder="小记Title"
-            v-model="timeNotes.title">
-          </el-input>
-        </div>
-        <el-collapse accordion>
-          <el-collapse-item>
-            <template slot="title">
-              <div class="ml-10 mb-10">
-                <span class="text-underline font-s-14">编写详情</span>
-                <span class="font-s-13 color-grey-2">点击展开</span>
-                <svg t="1742898375461" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="44703" width="12" height="12">
-                  <path
-                    d="M966.4 323.2c-9.6-9.6-25.6-9.6-35.2 0l-416 416-425.6-416c-9.6-9.6-25.6-9.6-35.2 0-9.6 9.6-9.6 25.6 0 35.2l441.6 432c9.6 9.6 25.6 9.6 35.2 0l435.2-432C976 345.6 976 332.8 966.4 323.2z"
-                    p-id="44704"></path>
-                </svg>
-              </div>
-            </template>
-            <VditorMd :height="'400px'"
-                      :outline="false"
-                      :placeholder="'时光小记详情...'"
-                      :vditorId="'articlePublish'"
-                      :mdContent.sync="timeNotes.articleContent"
-                      v-if="jottingsDialogVisible"></VditorMd>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-      <div class="text-right mt-10">
-        <el-button type="primary" @click="jottingsPublish">发 布</el-button>
-      </div>
-    </el-dialog>
-
+    <time-notes-editing :time-notes-dialog-visible="jottingsDialogVisible"
+                        :time-notes="timeNotes"
+                        @timeNotesDialogVisibleMethod="timeNotesDialogVisibleMethod"></time-notes-editing>
   </div>
 </template>
 
 <script>
 import VditorMd from "./Vditor-md.vue";
+import TimeNotesEditing from "./time-notes-editing.vue";
 
 export default {
   name: "navigationBarModule",
-  components: {VditorMd},
+  components: {TimeNotesEditing, VditorMd},
   props: {
     // 是否允许滚动条下滑隐藏导航栏
     isConceal: {
@@ -441,6 +393,7 @@ export default {
   data() {
     return {
       timeNotes: {
+        id: null,
         title: null,
         content: null,
         recordTime: null,
@@ -477,16 +430,20 @@ export default {
   },
 
   methods: {
-    jottingsPublish() {
-      this.$modal.notify("待开发！");
-      this.jottingsDialogVisible = false;
+    timeNotesDialogVisibleMethod(val) {
+      this.jottingsDialogVisible = val;
     },
     jottings() {
       if (!this.isLogin) {
         this.isLoginBinlog = true;
         return;
       }
-      this.timeNotes.recordTime = new Date().getTime();
+      this.timeNotes = {
+        id: null,
+        title: null,
+        content: null,
+        recordTime: new Date(),
+      };
       this.jottingsDialogVisible = true;
     },
     getNavigationList(isList) {

@@ -9,6 +9,7 @@ const whiteList = [
   '/about_author',
   '/issues',
   '/content',
+  '/time_notes',
   '/error/**',
   '/search/**',
   '/article/**',

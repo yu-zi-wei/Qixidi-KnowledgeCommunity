@@ -319,6 +319,7 @@
       size="45%"
       direction="rtl"
       :modal="true"
+      style="padding: 20px"
       :with-header="false"
       :visible.sync="commentViewLoading">
       <div style="margin: 20px">
