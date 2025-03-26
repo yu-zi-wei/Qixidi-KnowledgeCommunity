@@ -322,7 +322,7 @@
       style="padding: 20px"
       :with-header="false"
       :visible.sync="commentViewLoading">
-      <div style="margin: 20px">
+      <div style="margin: 40px">
         <div class="text-right text-underline hover-cl font-s-13 color-grey-2 mb-20">
           <nuxt-link :to="`/dictum/dictum-details/`+$base64.encode(dictumInfo.id)" target="_blank">
             新页面打开

@@ -99,7 +99,7 @@
       :visible.sync="infoDrawer"
       style="padding: 20px"
       :with-header="false">
-      <div style="padding: 20px">
+      <div style="margin: 40px">
         <div class="mood-notes-title">
           <p>{{ moodNotes.title }}</p>
           <div class="flex-space-between mt-10">
@@ -224,7 +224,7 @@ export default {
 
 <style scoped>
 .mood-notes-title {
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   border-radius: 4px;
   margin-bottom: 20px;
   font-size: 24px;
