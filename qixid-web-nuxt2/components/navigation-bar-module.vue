@@ -61,7 +61,6 @@
                 <!--                    爱情小站</a>-->
                 <!--                </el-menu-item>-->
                 <!--                <el-menu-item index="/test">测试</el-menu-item>-->
-                <!--                <el-menu-item index="/time_notes">时光小记</el-menu-item>-->
               </el-menu>
             </ul>
             <ul class="nav-right-ul">

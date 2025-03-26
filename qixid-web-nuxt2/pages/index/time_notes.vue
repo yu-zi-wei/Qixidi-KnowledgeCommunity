@@ -95,6 +95,7 @@
     <el-drawer
       size="45%"
       direction="rtl"
+      :modal="false"
       :visible.sync="infoDrawer"
       style="padding: 20px"
       :with-header="false">
@@ -228,7 +229,7 @@ export default {
   margin-bottom: 20px;
   font-size: 24px;
   line-height: 30px;
-  border-bottom: 1px solid #ced6e0;
+  border-bottom: 1px solid #bdc3c7;
 }
 
 .list-item {

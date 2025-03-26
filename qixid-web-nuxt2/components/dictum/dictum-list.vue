@@ -318,7 +318,7 @@
       :destroy-on-close="true"
       size="45%"
       direction="rtl"
-      :modal="true"
+      :modal="false"
       style="padding: 20px"
       :with-header="false"
       :visible.sync="commentViewLoading">

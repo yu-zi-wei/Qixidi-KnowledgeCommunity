@@ -40,7 +40,8 @@
           <div v-if="moodNotesList.length==0">
             <div style="text-align: center">
               <div>
-                <svg t="1667825747332" class="icon" viewBox="0 0 1239 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                <svg t="1667825747332" class="icon" viewBox="0 0 1239 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
                      p-id="1560" width="50" height="50">
                   <path
                     d="M1215.146667 961.194667c0 35.498667-240.298667 62.805333-540.672 62.805333-297.642667 0-540.672-27.306667-540.672-62.805333 0-35.498667 240.298667-62.805333 540.672-62.805334 297.642667 0 540.672 27.306667 540.672 62.805334"
@@ -103,6 +104,7 @@
     <el-drawer
       size="45%"
       direction="rtl"
+      :modal="false"
       :visible.sync="infoDrawer"
       style="padding: 20px"
       :with-header="false">
@@ -264,7 +266,7 @@ export default {
   margin-bottom: 20px;
   font-size: 24px;
   line-height: 30px;
-  border-bottom: 1px solid #ced6e0;
+  border-bottom: 1px solid #bdc3c7;
 }
 
 </style>
