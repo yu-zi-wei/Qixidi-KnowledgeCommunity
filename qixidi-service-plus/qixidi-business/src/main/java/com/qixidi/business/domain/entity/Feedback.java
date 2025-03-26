@@ -21,7 +21,7 @@ public class Feedback {
     private static final long serialVersionUID = 1L;
 
     /**
-     *
+     *id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

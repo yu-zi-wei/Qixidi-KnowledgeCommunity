@@ -17,7 +17,6 @@ import java.util.List;
  * @author aurora
  * @date 2022-11-03
  */
-@Service
 public interface INewsUserInfoService {
 
     /**

@@ -7,6 +7,7 @@ import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @author aurora
  * @date 2022-11-03
  */
+@Mapper
 public interface NewsUserInfoMapper extends BaseMapperPlus<NewsUserInfoMapper, NewsUserInfo, NewsUserInfoVo> {
 
     @Select("SELECT type,state,been_read from b_news_user_info where been_read=0 and state=0 and recipient_id=#{uid}")
