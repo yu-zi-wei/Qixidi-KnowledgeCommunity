@@ -328,7 +328,7 @@
             新页面打开
           </nuxt-link>
         </div>
-        <div style="background-color: #F8F8FA;border-radius: 4px;padding: 10px">
+        <div style="background-color: #F8F8FA;border-radius: 4px;padding: 20px">
           <vditor-preview :id="'dictum-content-comment-list-'+dictumInfo.id"
                           :content="dictumInfo.content"></vditor-preview>
         </div>
