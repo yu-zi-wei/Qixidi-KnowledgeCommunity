@@ -240,7 +240,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .home-top-index {
   background-color: #FFFFFF;
   border-radius: 4px;
@@ -269,4 +269,7 @@ export default {
   border-bottom: 1px solid #bdc3c7;
 }
 
+.el-drawer {
+  border-radius: 20px;
+}
 </style>

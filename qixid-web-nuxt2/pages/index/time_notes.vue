@@ -222,7 +222,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .mood-notes-title {
   padding: 10px;
   border-radius: 4px;
@@ -253,4 +253,7 @@ export default {
   font-style: italic;
 }
 
+.el-drawer {
+  border-radius: 20px;
+}
 </style>

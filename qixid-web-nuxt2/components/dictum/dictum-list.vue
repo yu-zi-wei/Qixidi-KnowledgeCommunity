@@ -752,7 +752,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 @import url("components/css/pc/dictum-comment.css");
 
 .dictum-info-cl {
@@ -782,6 +782,10 @@ export default {
 
 .el-button--small {
   padding: 9px 15px;
+}
+
+.el-drawer {
+  border-radius: 20px;
 }
 
 .dictum-info-ul li {
