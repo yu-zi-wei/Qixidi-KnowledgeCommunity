@@ -1,19 +1,19 @@
 package com.qixidi.business.task;
 
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.light.core.constant.SystemConstant;
+import com.light.core.utils.DateUtils;
+import com.light.core.utils.email.MailUtils;
 import com.light.redission.utils.RedisUtils;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
-import com.light.core.constant.SystemConstant;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.qixidi.business.domain.enums.SystemTaskEnums;
-import com.light.core.utils.DateUtils;
-import com.light.core.utils.email.MailUtils;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +51,7 @@ public class DictumTask {
         try {
             List<DictumInfoVo> albumId = dictumInfoMapper.selectAlbumId();
             dictumAlbumMapper.updateList(albumId);
+
         } catch (Exception e) {
             MailUtils.sendText(SystemConstant.AdministratorMailboxList, "专辑分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
             e.printStackTrace();
@@ -70,15 +71,15 @@ public class DictumTask {
             if (CollectionUtils.isNotEmpty(listAuthors)) {
                 // 获取作者出现的频率，并按照出现次数降序排列
                 List<Map<String, String>> collect = listAuthors.stream()
-                    .map(item -> item.getAuthor()).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                    .entrySet().stream()
-                    .sorted(Comparator.comparing(e -> e.getValue(), Comparator.reverseOrder()))
-                    .map(e -> {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("author", String.valueOf(e.getKey()));
-                        map.put("count", String.valueOf(e.getValue()));
-                        return map;
-                    }).collect(Collectors.toList());
+                        .map(item -> item.getAuthor()).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                        .entrySet().stream()
+                        .sorted(Comparator.comparing(e -> e.getValue(), Comparator.reverseOrder()))
+                        .map(e -> {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("author", String.valueOf(e.getKey()));
+                            map.put("count", String.valueOf(e.getValue()));
+                            return map;
+                        }).collect(Collectors.toList());
 //        默认存前20个
                 Set<Map<String, String>> set = collect.stream().limit(20).collect(Collectors.toSet());
                 RedisUtils.deleteObject(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
@@ -96,14 +97,14 @@ public class DictumTask {
                     }
                 });
                 List<Map<String, String>> collectLabel = listLabels.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                    .entrySet().stream()
-                    .sorted(Comparator.comparing(e -> e.getValue(), Comparator.reverseOrder()))
-                    .map(e -> {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("label", String.valueOf(e.getKey()));
-                        map.put("count", String.valueOf(e.getValue()));
-                        return map;
-                    }).collect(Collectors.toList());
+                        .entrySet().stream()
+                        .sorted(Comparator.comparing(e -> e.getValue(), Comparator.reverseOrder()))
+                        .map(e -> {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("label", String.valueOf(e.getKey()));
+                            map.put("count", String.valueOf(e.getValue()));
+                            return map;
+                        }).collect(Collectors.toList());
 
                 //        默认存前20个
                 Set<Map<String, String>> setLabel = collectLabel.stream().limit(20).collect(Collectors.toSet());

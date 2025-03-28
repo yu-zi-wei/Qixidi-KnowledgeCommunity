@@ -109,14 +109,13 @@ public class UserTask {
             //  修复异常数据
             Integer extremelyInteger = countUserWebsiteMapper.updateExtremelyDate();
             log.info("异常数据完成，修复完成数：{}", extremelyInteger);
-
-
+            
+            systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCING_USER_SITE_DATA.getCode());
         } catch (Exception e) {
             e.printStackTrace();
             log.error("用户网站数据同步  执行异常异常：{}", e.getMessage());
             MailUtils.sendText(SystemConstant.AdministratorMailboxList, "用户网站数据同步（b_count_user_website,useWebsiteSync）任务异常", e.getMessage());
         }
-        systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCING_USER_SITE_DATA.getCode());
     }
 }
 

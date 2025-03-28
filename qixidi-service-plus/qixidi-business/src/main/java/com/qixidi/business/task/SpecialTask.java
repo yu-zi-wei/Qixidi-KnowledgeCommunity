@@ -2,15 +2,15 @@ package com.qixidi.business.task;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.light.core.constant.SystemConstant;
+import com.light.core.utils.email.MailUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
-import com.light.core.constant.SystemConstant;
-import com.qixidi.business.domain.enums.SystemTaskEnums;
-import com.light.core.utils.email.MailUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,16 +44,16 @@ public class SpecialTask {
         log.error("同步专栏文章数开始：{}", DateUtil.date());
         try {
             List<SpecialInformation> specialInformations = specialInformationMapper.selectList(
-                new LambdaQueryWrapper<SpecialInformation>().select(SpecialInformation::getId));
+                    new LambdaQueryWrapper<SpecialInformation>().select(SpecialInformation::getId));
 
             if (CollectionUtil.isEmpty(specialInformations)) return;
             List<Long> specialIds = specialInformations.stream().map(SpecialInformation::getId).collect(Collectors.toList());
             List<ArticleInformation> articleInformations = articleInformationMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
-                .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
-                .in(ArticleInformation::getSpecialId, specialIds)
-                .eq(ArticleInformation::getState, 0)
-                .eq(ArticleInformation::getAuditState, 2)
-                .isNotNull(ArticleInformation::getSpecialId));
+                    .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
+                    .in(ArticleInformation::getSpecialId, specialIds)
+                    .eq(ArticleInformation::getState, 0)
+                    .eq(ArticleInformation::getAuditState, 2)
+                    .isNotNull(ArticleInformation::getSpecialId));
             if (CollectionUtil.isEmpty(articleInformations)) return;
             Map<Long, Long> collectMap = articleInformations.stream().collect(Collectors.groupingBy(ArticleInformation::getSpecialId, Collectors.counting()));
             List<SpecialInformation> updateSpecialInformations = new ArrayList<>();
@@ -67,10 +67,10 @@ public class SpecialTask {
                 }
             });
             specialInformationMapper.updateBatchById(updateSpecialInformations);
+            systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_NUMBER_COLUMNS.getCode());
         } catch (Exception e) {
             log.error("同步专栏文章数失败", e);
             MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步专栏文章数(SpecialTask) 任务异常", e.getMessage());
         }
-        systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_NUMBER_COLUMNS.getCode());
     }
 }

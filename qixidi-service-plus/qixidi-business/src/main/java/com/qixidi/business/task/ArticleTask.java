@@ -164,22 +164,29 @@ public class ArticleTask {
      */
     @Scheduled(cron = "0 0 0 ? * SUN")
     public void syncFabulous() {
-        log.info("文章点赞开始同步");
+        try {
+            log.info("文章点赞开始同步");
 //         用户点赞的文章列表
-        Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
+            Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
 //         文章点赞人列表
-        Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+            Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
 //      文章点赞总数
-        Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
-        if (CollectionUtils.isNotEmpty(cacheMpa)) {
+            Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
+            if (CollectionUtils.isNotEmpty(cacheMpa)) {
 //            文章点赞记录落盘
-            syncArticleFl(articleMap, cacheMap);
-            RedisUtils.deleteObject(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
-            RedisUtils.deleteObject(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-            RedisUtils.deleteObject(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
+                syncArticleFl(articleMap, cacheMap);
+                RedisUtils.deleteObject(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
+                RedisUtils.deleteObject(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
+                RedisUtils.deleteObject(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
+            }
+            log.info("文章点赞同步结束");
+            systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_ARTICLE_CLICK_LIKE.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("同步文章点赞 执行异常异常：{}", e.getMessage());
+            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步文章点赞任务异常",
+                    String.format("{}，发生时间：{}", "同步文章点赞任务异常！syncFabulous", DateUtil.formatDateTime(new Date())));
         }
-        log.info("文章点赞同步结束");
-        systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_ARTICLE_CLICK_LIKE.getCode());
     }
 
     /**
