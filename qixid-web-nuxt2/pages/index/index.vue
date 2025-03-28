@@ -12,8 +12,19 @@
           text-color="#535c68"
           :active-text-color="themeColor"
           class="el-menu-demo">
+          <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
+                        :key="index">
+            <nuxt-link :to="item.route">
+<!--              <i v-if="item.sidebarIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+<!--                 v-html="item.sidebarIcon"></i>-->
+              {{ item.sidebarName }}
+            </nuxt-link>
+          </el-menu-item>
+          <el-menu-item >
+            <span class="color-grey-3">|</span>
+          </el-menu-item>
           <el-menu-item v-for="(item,index) in labelGroupingList" :index="'/popular-group/'+item.id"
-                        :title="'热门分类：'+item.groupingName" :key="index">
+                        :title="'分类：'+item.groupingName" :key="index">
             <nuxt-link :to="'/popular-group/'+item.id" class="font-s-14">
               <span>{{ item.groupingName }}</span>
             </nuxt-link>
@@ -24,7 +35,7 @@
     </div>
     <div class="index-main">
       <!--    左侧-->
-      <div class="index-left-width">
+      <div class="index-left-width" v-if="false">
         <div :class="{'index-left-cl':true, 'index-left-cl-true':goTopLoading,'index-left-cl-false':!goTopLoading}">
           <div class="auroora-card mb-15">
             <el-skeleton class="mt-10" style="width: 100%" :rows="4" animated v-show="sidebarDialog"/>
@@ -53,7 +64,7 @@
       <!--    右侧-->
       <div class="index-right">
         <div :class="{'recommend-article-div-true':positionCssRight,'recommend-article-div-false':!positionCssRight}">
-          <div class="mb-15 sigIn-info padding-10 border-radius-10" style="background-color: rgba(149, 225, 211,0.2);"
+          <div class="mb-15 sigIn-info padding-10 border-radius-10"
                v-show="positionCssRight">
             <div v-show="!reportLoading" class="flex-space-between">
               <div>
@@ -317,7 +328,7 @@ export default {
 
       this.selectedArticleListApi();
       this.getSiteInfo();
-      this.$API("/white/label/grouping/list", this.$get(), {pageNum: 0, pageSize: 14,}).then(res => {
+      this.$API("/white/label/grouping/list", this.$get(), {pageNum: 0, pageSize: 12,}).then(res => {
         this.labelGroupingList = res.rows;
         localStorage.setItem("labelGroupingList", JSON.stringify(this.labelGroupingList));
       }).finally(() => this.labelGroupingDialog = false);

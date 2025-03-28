@@ -30,7 +30,7 @@
                     <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
                       <div class="font-bold cursor-pointer overflow-nowrap-1">
                         <span class="text-underline">{{ item.name }}</span>
-                        <span class="font-s-14 line-height-24 color-grey ml-6">
+                        <span class="font-s-13 line-height-24 color-grey-2 ml-10">
                         创建时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}') }}
                         </span>
                       </div>
@@ -231,13 +231,13 @@ export default {
   padding: 12px;
   margin-bottom: 20px;
   transition: .2s;
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 4px 8px 0 #ecf0f1;
   border: 1px solid #fef0f0;
 }
 
 .album-info-cl:hover {
-  border: 1px solid var(--theme-color);
+  border-bottom: 1px solid var(--hover-color);
 }
 
 .home-top-index {

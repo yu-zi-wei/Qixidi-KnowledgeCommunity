@@ -1,6 +1,7 @@
 const defaultConfig = {
   //默认主题颜色
-  THEME_COLOR: '#1b875e',
+  // THEME_COLOR: '#1b875e',
+  THEME_COLOR: '#F4635E',
 }
 
 const config = {
@@ -9,7 +10,7 @@ const config = {
   dev: {
     NODE_ENV: 'dev',
     // 代理的后端请求服务器地址
-    // SERVER_URL: '127.0.0.1:9001',
+    SERVER_URL: '127.0.0.1:9001',
     SERVICE_PROTOCOL: 'http://',
     WEBSOCKET_PROTOCOL: 'ws://',
     THEME_COLOR: defaultConfig.THEME_COLOR,

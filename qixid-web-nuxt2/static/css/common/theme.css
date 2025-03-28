@@ -1,11 +1,11 @@
 /*主题颜色配置*/
 :root {
   /*主题颜色*/
-  --theme-color: #1b875e;
+  --theme-color: #F4635E;
   /*  hover-color*/
-  --hover-color: #1e9669;
+  --hover-color: #f47e7a;
   /*  active-color*/
-  --active-color: #198059;
+  --active-color: #f45b55;
   /*forbidden-color*/
   --theme-background_color: #FFFFFF;
   /*禁用按钮底色*/

@@ -6,13 +6,11 @@
 .article-list-li {
   margin-bottom: 25px;
   margin-top: 5px;
-  border-radius: 25px;
-  padding: 20px 15px;
-  border: 1px solid #bdc3c7;
+  padding: 20px 15px 40px 15px;
+  border-bottom: 1px solid #dfe4ea;
   transition: .3s;
 }
 
 .article-list-li:hover {
-  background: #E9EBEC;
-  border: 1px solid #a4b0be;
+  border-bottom: 1px solid var(--hover-color);
 }

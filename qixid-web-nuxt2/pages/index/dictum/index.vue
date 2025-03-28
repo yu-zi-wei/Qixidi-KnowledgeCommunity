@@ -4,7 +4,7 @@
     <div v-if="!loading" class="flex-space-between mt-30">
       <!--      类容-->
       <div class="flex-8">
-        <div class="mt-10" style="padding: 15px 15px;border-radius: 4px;">
+        <div style="padding: 15px 15px;border-radius: 4px;">
           <el-collapse accordion v-model="activeName1">
             <el-collapse-item name="1">
               <template slot="title">

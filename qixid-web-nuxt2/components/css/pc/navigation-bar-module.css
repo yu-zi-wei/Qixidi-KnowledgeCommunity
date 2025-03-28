@@ -43,8 +43,7 @@
   height: 60px;
   margin-left: 1.5rem;
   display: inline-block;
-  /*width: auto;*/
-  width: 60px;
+  width: auto;
 }
 
 .nav-list {

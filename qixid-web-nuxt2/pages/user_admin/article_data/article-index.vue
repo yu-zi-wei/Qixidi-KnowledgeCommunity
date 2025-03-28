@@ -240,12 +240,12 @@ export default {
 .article-cli {
   border-radius: 2px;
   padding: 10px;
-  border-bottom: 2px solid #e5e6eb;
+  border-bottom: 1px solid #e5e6eb;
   margin-bottom: 20px;
 }
 
 .article-cli:hover {
-  background-color: #f5f6fa;
+  border-bottom: 1px solid var(--hover-color);
 }
 
 </style>

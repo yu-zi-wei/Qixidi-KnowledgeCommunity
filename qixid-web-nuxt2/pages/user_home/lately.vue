@@ -102,7 +102,7 @@ export default {
 }
 
 .browsing-list:hover {
-  border: 1px solid #95a5a6;
+  border-bottom: 1px solid var(--hover-color);
 }
 
 .dialogContent li {

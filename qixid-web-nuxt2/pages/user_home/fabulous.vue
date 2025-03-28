@@ -10,7 +10,7 @@
               <div class="fabulousArr-li">
                 <!--          用户信息-->
                 <el-row :gutter="20" class="mb-20">
-                  <el-col :span="20" class="font-s-12">
+                  <el-col :span="20" class="font-s-13">
                     <nuxt-link class="font-bold cursor-pointer hover-cl"
                                :to="'/user_home/article?uuid='+$base64.encode(item.userId)" target="_blank">
                       {{ item.nickname }}

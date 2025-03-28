@@ -14,8 +14,8 @@
                    target="_blank" rel="noopener">
           {{ item.articleTitle }}
         </nuxt-link>
-        <div class="abstract-class mt-10 font-bold-300" v-text="item.articleAbstract"></div>
-        <div class="font-s-13 color-grey bo-list-loc flex-left">
+        <div class="abstract-class mt-10 color-grey" v-text="item.articleAbstract"></div>
+        <div class="font-s-13 color-grey-2 bo-list-loc flex-left">
           <div class="mr-4" title="浏览">
             <svg t="1741407328107" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                  version="1.1"

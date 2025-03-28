@@ -18,7 +18,7 @@
 .index-right {
   border-radius: 0.25rem;
   margin-left: 30px;
-  width: 16.25rem;
+  width: 300px;
 }
 
 .index-left-width {
@@ -32,7 +32,8 @@
 }
 
 .article-index-content {
-  width: 50rem;
+  width: 880px;
+  margin-left: 80px;
 }
 
 .recommend-article-item {
@@ -58,7 +59,9 @@
 }
 
 .sigIn-info {
-  padding: 1rem 0.625rem;
+  padding: 16px 10px;
+  margin: 0px 10px;
+  background-color: rgba(244, 99, 94, 0.1)
 }
 
 .selected-articles-info {
@@ -75,6 +78,6 @@
 }
 
 .label-grouping-div:hover {
-  border: 1px solid #7ed6df;
+  border: 1px solid var(--hover-color);
 }
 

@@ -21,13 +21,7 @@
                      v-text="userInfo.occupation==null?'职业-~-':userInfo.occupation"></p>
                 </div>
               </div>
-              <div :gutter="20" class="mt-15">
-                <div style="text-align: center;padding: 0 6px">
-                  <nuxt-link to="/article/publish-article" target="_blank">
-                    <el-button style="width: 100%;" type="primary">发布文章</el-button>
-                  </nuxt-link>
-                </div>
-              </div>
+              <hr class="hr-item mt-20 padding-le-ri-10"/>
               <div class="mt-10">
                 <div class="left-list">
                   <el-skeleton class="mt-10 mb-10" :rows="12" animated v-if="loading"/>
