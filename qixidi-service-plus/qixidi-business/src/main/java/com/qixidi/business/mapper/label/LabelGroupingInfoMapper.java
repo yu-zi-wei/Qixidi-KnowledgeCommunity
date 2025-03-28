@@ -1,14 +1,14 @@
 package com.qixidi.business.mapper.label;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.qixidi.business.domain.bo.label.LabelGroupingInfoBo;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
 import com.qixidi.business.domain.vo.label.LabelGroupingInfoVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.domain.vo.stat.StatReturnDataVo;
-import com.light.mybatisPlus.mapper.BaseMapperPlus;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -29,5 +29,5 @@ public interface LabelGroupingInfoMapper extends BaseMapperPlus<LabelGroupingInf
 
     IPage<LabelGroupingInfoVo> fdkGroupingList(@Param("bo") LabelGroupingInfoBo bo, Page<LabelGroupingInfo> build);
 
-    List<StatReturnDataVo> selectStatData(@Param("bo")StatDataInfoVo bo);
+    List<StatReturnDataVo> selectStatData(@Param("bo") StatDataInfoVo bo);
 }

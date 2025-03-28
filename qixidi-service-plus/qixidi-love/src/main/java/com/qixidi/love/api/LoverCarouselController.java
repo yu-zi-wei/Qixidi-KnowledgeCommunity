@@ -9,7 +9,7 @@ package com.qixidi.love.api;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.controller.BaseController;
+import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;

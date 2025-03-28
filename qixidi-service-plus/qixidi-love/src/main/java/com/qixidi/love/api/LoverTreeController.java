@@ -18,7 +18,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.controller.BaseController;
+import com.qixidi.auth.api.BaseController;
 import com.qixidi.love.domain.bo.LoverTreeBo;
 import com.qixidi.love.domain.vo.LoverTreeVo;
 import com.qixidi.love.service.ILoverTreeService;

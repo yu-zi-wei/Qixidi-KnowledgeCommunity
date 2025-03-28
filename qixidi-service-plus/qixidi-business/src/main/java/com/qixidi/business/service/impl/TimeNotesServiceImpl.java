@@ -55,9 +55,14 @@ public class TimeNotesServiceImpl implements TimeNotesService {
 
     @Override
     public TableDataInfo<TimeNotesVo> list(Page<TimeNotes> build) {
-        Page<TimeNotes> timeNotesPage = timeNotesMapper.selectPage(build, new LambdaQueryWrapper<TimeNotes>()
+        String tripartiteUuid = LoginHelper.getTripartiteUuid();
+        LambdaQueryWrapper<TimeNotes> lambdaQueryWrapper = new LambdaQueryWrapper<TimeNotes>()
                 .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime)
-                .orderByDesc(TimeNotes::getRecordTime));
+                .orderByDesc(TimeNotes::getRecordTime);
+        if (tripartiteUuid != null) {
+            lambdaQueryWrapper.eq(TimeNotes::getUid, tripartiteUuid);
+        }
+        Page<TimeNotes> timeNotesPage = timeNotesMapper.selectPage(build, lambdaQueryWrapper);
 
         List<TimeNotes> records = timeNotesPage.getRecords();
         TableDataInfo tableDataInfo = new TableDataInfo();

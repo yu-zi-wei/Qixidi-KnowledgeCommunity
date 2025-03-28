@@ -1,16 +1,20 @@
 package com.qixidi.business.task;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.light.core.constant.SystemConstant;
+import com.light.core.utils.DateUtils;
+import com.light.core.utils.email.MailUtils;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
+import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
+import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.user.UserFollowVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
+import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
-import com.light.core.constant.SystemConstant;
-import com.qixidi.business.domain.enums.SystemTaskEnums;
-import com.light.core.utils.DateUtils;
-import com.light.core.utils.email.MailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +30,8 @@ public class LabelTask {
 
     @Autowired
     private LabelInfoMapper labelInfoMapper;//标签
+    @Autowired
+    private LabelGroupingInfoMapper labelGroupingInfoMapper;
     @Autowired
     private UserFollowMapper userFollowMapper;//关注
     @Autowired
@@ -49,15 +55,15 @@ public class LabelTask {
             });
             // 获取标签出现的次数
             List<Map<String, String>> collect = strings.stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet().stream()
-                .sorted(Comparator.comparing(e -> e.getValue(), Comparator.reverseOrder()))
-                .map(e -> {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("label", String.valueOf(e.getKey()));
-                    map.put("count", String.valueOf(e.getValue()));
-                    return map;
-                }).collect(Collectors.toList());
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                    .entrySet().stream()
+                    .sorted(Comparator.comparing(e -> e.getValue(), Comparator.reverseOrder()))
+                    .map(e -> {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("label", String.valueOf(e.getKey()));
+                        map.put("count", String.valueOf(e.getValue()));
+                        return map;
+                    }).collect(Collectors.toList());
 
             List<LabelInfoVo> list1 = new ArrayList<>();
             collect.forEach(item -> {
@@ -78,5 +84,32 @@ public class LabelTask {
             e.printStackTrace();
         }
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCHRONIZE_b_label_infoRMATION_DATA.getCode());
+    }
+
+    /**
+     * 同步标签分组文章数据
+     */
+    @Scheduled(cron = "0 */45 * * * *")
+    public void syncLabelGroup() {
+        try {
+            List<ArticleInformation> articleInformations = articleInformationMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
+                    .select(ArticleInformation::getGroupingId, ArticleInformation::getId)
+                    .eq(ArticleInformation::getState, 0)
+                    .eq(ArticleInformation::getAuditState, 2));
+            Map<Long, Long> map = articleInformations.stream().collect(Collectors.groupingBy(ArticleInformation::getGroupingId, Collectors.counting()));
+            List<LabelGroupingInfo> labelGroupingInfos = labelGroupingInfoMapper.selectList(null);
+            labelGroupingInfos.forEach(item -> {
+                Long sum = map.get(item.getId());
+                if (sum != null) {
+                    item.setEntriesNumber(sum);
+                }
+            });
+            labelGroupingInfoMapper.updateById(labelGroupingInfos);
+            log.info("同步标签分组文章数据成功：时间：{}", DateUtils.getTime());
+        } catch (Exception e) {
+            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步标签分组文章数据（syncLabelGroup）任务异常", e.getMessage());
+            log.error("同步标签分组文章数据异常：时间：{}", DateUtils.getTime());
+            e.printStackTrace();
+        }
     }
 }

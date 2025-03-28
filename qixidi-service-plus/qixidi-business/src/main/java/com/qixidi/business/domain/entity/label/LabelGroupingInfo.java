@@ -43,6 +43,11 @@ public class LabelGroupingInfo {
      */
     private String groupingDescribe;
 
+    /**
+     * 收录数
+     */
+    private Long entriesNumber;
+
     private Long createBy;
 
     private Date createTime;
