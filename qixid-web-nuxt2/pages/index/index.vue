@@ -9,7 +9,7 @@
           :default-active="$route.path"
           :router="true"
           mode="horizontal"
-          text-color="#535c68"
+          text-color="#636e72"
           :active-text-color="themeColor"
           class="el-menu-demo">
           <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
@@ -161,7 +161,7 @@
             </div>
           </div>
           <!--        精选文章-->
-          <div class="selected-articles-info">
+          <div class="selected-articles-info mt-5">
             <div class="flex-space-between align-items-center mb-10">
               <div class="font-bold  ml-10">精选文章</div>
               <div>
@@ -186,7 +186,7 @@
                   </div>
                 </div>
                 <div class="cursor-pointer overflow-nowrap-1 flex-10">
-                  <nuxt-link class="text-underline-hover color-grey"
+                  <nuxt-link class="text-underline-hover"
                              :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank"
                              rel="noopener">
                     {{ item.articleTitle }}

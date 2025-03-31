@@ -22,6 +22,7 @@
           <el-menu
             :default-active="$route.path+'?tool='+$route.query.tool"
             :router="true"
+            text-color="#262626"
             class="el-menu-vertical-demo tool-list-left">
             <div v-for="item of toolArray">
               <el-menu-item :index="'/tool?tool='+item.id" @click="toolClick(item.id)">
