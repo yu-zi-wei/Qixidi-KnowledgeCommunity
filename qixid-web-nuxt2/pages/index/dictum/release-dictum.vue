@@ -266,6 +266,9 @@ import VditorMd from "../../../components/Vditor-md.vue";
 
 export default {
   name: "releaseDictum",
+  head: {
+    title: `记录名言 - ${process.env.PROJECT_NAME}`,
+  },
   components: {VditorMd},
   data() {
     return {

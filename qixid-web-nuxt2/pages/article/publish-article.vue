@@ -169,6 +169,9 @@ import VditorMd from "../../components/Vditor-md.vue";
 
 export default {
   name: "publishArticle",
+  head: {
+    title: `文章编写 - ${process.env.PROJECT_NAME}`,
+  },
   components: {VditorMd, MavonEditorModule},
   data() {
     return {

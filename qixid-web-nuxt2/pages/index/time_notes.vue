@@ -147,6 +147,9 @@ import TimeNotesEditing from "../../components/time-notes-editing.vue";
 
 export default {
   name: "moodNotes",
+  head: {
+    title: `时光小记 - ${process.env.PROJECT_NAME}`,
+  },
   components: {TimeNotesEditing, VditorPreview},
   data() {
     return {
