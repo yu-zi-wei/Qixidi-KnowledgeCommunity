@@ -79,7 +79,7 @@
 
     <select id="selectGroupId" resultType="com.qixidi.business.domain.vo.dictum.DictumInfoVo">
         SELECT group_id,
-               sum(group_id) AS `sum`
+               count(id) AS `sum`
         FROM b_dictum_info
         GROUP BY group_id
         HAVING COUNT(group_id) > 0
@@ -87,7 +87,7 @@
 
     <select id="selectAlbumId" resultType="com.qixidi.business.domain.vo.dictum.DictumInfoVo">
         SELECT album_id,
-               sum(album_id) AS `sum`
+               count(id) AS `sum`
         FROM b_dictum_info
         GROUP BY album_id
         HAVING COUNT(album_id) > 0

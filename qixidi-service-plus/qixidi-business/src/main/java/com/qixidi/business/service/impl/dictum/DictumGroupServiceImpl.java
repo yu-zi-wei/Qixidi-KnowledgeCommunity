@@ -51,7 +51,6 @@ public class DictumGroupServiceImpl implements IDictumGroupService {
      */
     @Override
     public TableDataInfo<DictumGroupVo> queryPageList(DictumGroupBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<DictumGroup> lqw = buildQueryWrapper(bo);
         IPage<DictumGroupVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
         return TableDataInfo.build(result);
     }

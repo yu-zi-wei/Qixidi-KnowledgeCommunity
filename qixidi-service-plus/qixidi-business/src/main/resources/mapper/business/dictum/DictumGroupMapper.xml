@@ -23,7 +23,7 @@
                dg.update_time
         from b_dictum_group as dg
         where dg.state = 0
-        order by dg.update_time desc
+        order by dg.employ_sum desc
     </select>
 
     <update id="updateList">
