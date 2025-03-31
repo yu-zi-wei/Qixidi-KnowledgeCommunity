@@ -7,7 +7,7 @@
            style="margin-bottom: 60px">
         <h1 class="mb-10 font-s-24">{{ item.recordTime }}</h1>
         <div v-for="(items,indexs) in item.list" :key="indexs">
-          <div class="color-grey list-item flex-space-between">
+          <div class="list-item flex-space-between">
             <div>
               <svg t="1742789451197" class="icon svg-translateY-8" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"

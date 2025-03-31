@@ -23,9 +23,10 @@
 }
 
 .vditor-reset blockquote {
-  border-left: 0.2rem solid #22a6b3 !important;
+  border-left: 3px solid #22a6b3 !important;
   background-color: #eef7fa !important;
-  padding: 6px !important;
+  padding: 10px !important;
+  border-radius: 14px;
 }
 
 .vditor-reset p {
