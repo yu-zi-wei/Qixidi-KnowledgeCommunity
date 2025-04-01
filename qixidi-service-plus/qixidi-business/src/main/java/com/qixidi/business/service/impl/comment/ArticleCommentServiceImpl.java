@@ -2,6 +2,7 @@ package com.qixidi.business.service.impl.comment;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -13,6 +14,7 @@ import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
 import com.light.core.utils.StringUtils;
+import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.word.WordFilter;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
@@ -29,6 +31,7 @@ import com.qixidi.business.domain.enums.StatusEnums;
 import com.qixidi.business.domain.enums.article.ArticleUpdateType;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.comment.ArticleCommentMapper;
@@ -140,7 +143,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         WordFilter wordFilter = new WordFilter(cacheList);
         int wordCount = wordFilter.wordCount(bo.getContent());
         if (wordCount > 1) {
-            throw new Exception("评论检测到敏感词！");
+            throw new Exception("检测到敏感词，操作失败");
         }
 
 //        前置处理
@@ -163,6 +166,11 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
                     newsUserRecordMapper.insert(newsUserRecord);
                     //WebSocket推送消息
                     WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
+                    //发送邮件通知
+                    TripartiteUserVo basicsUser = tripartiteUserMapper.getBasicsUser(bo.getCommentUid());
+                    if (StrUtil.isNotEmpty(basicsUser.getEmail())) {
+                        MailUtils.sendText(basicsUser.getEmail(), "栖息地-收到新评论", add.getContent());
+                    }
                 }
             });
         }

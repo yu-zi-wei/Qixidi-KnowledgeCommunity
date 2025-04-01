@@ -91,14 +91,18 @@ public class MailUtils {
      */
     public static void sendText(Collection<String> tos, String subject, String content, File... files) {
         tos.forEach(to -> {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(getSendMail()); // 发件人（需与配置中的 username 一致）
-            message.setTo(to);                   // 收件人
-            message.setSubject(subject);         // 邮件主题
-            message.setText(content);
-
-            // 发送邮件
-            javaMailSender.send(message);// 邮件内容
+            sendText(to, subject, content, files);
         });
+    }
+
+    public static void sendText(String to, String subject, String content, File... files) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(getSendMail()); // 发件人（需与配置中的 username 一致）
+        message.setTo(to);                   // 收件人
+        message.setSubject(subject);         // 邮件主题
+        message.setText(content);
+
+        // 发送邮件
+        javaMailSender.send(message);// 邮件内容
     }
 }
