@@ -167,7 +167,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
                     //WebSocket推送消息
                     WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
                     //发送邮件通知
-                    TripartiteUserVo basicsUser = tripartiteUserMapper.getBasicsUser(bo.getCommentUid());
+                    TripartiteUserVo basicsUser = tripartiteUserMapper.getBasicsUser(bo.getTargetUid());
                     if (StrUtil.isNotEmpty(basicsUser.getEmail())) {
                         MailUtils.sendText(basicsUser.getEmail(), "栖息地-收到新评论", add.getContent());
                     }
