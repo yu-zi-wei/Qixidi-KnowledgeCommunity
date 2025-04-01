@@ -15,18 +15,18 @@
           <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
                         :key="index">
             <nuxt-link :to="item.route">
-<!--              <i v-if="item.sidebarIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
-<!--                 v-html="item.sidebarIcon"></i>-->
-              {{ item.sidebarName }}
+              <!--              <i v-if="item.sidebarIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+              <!--                 v-html="item.sidebarIcon"></i>-->
+              <span class="font-s-14">{{ item.sidebarName }}</span>
             </nuxt-link>
           </el-menu-item>
-          <el-menu-item >
+          <el-menu-item>
             <span class="color-grey-3">|</span>
           </el-menu-item>
           <el-menu-item v-for="(item,index) in labelGroupingList" :index="'/popular-group/'+item.id"
                         :title="'分类：'+item.groupingName" :key="index">
             <nuxt-link :to="'/popular-group/'+item.id" class="font-s-14">
-              <span>{{ item.groupingName }}</span>
+              <span class="font-s-14">{{ item.groupingName }}</span>
             </nuxt-link>
           </el-menu-item>
         </el-menu>

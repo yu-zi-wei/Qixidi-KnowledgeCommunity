@@ -1,5 +1,7 @@
 .vditor-reset {
   width: 100%;
+  font-family: var(--sys-font-family) !important;
+  letter-spacing: 1.3px !important;
 }
 
 .vditor-reset::-webkit-scrollbar {

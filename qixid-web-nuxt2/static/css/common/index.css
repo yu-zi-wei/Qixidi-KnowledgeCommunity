@@ -12,7 +12,9 @@ body {
   width: 100%;
   background: var(--backdrop-color);
   overflow-x: hidden;
-  letter-spacing: 0.4px;
+  color: var(--default-color);
+  font-family: var(--sys-font-family) !important;
+  letter-spacing: 1.3px !important;
 }
 
 body::-webkit-scrollbar {
@@ -479,6 +481,11 @@ mr-auto {
 }
 
 .line-height-28 {
+  line-height: 28px;
+}
+
+.font-s-17 {
+  font-size: 17px;
   line-height: 28px;
 }
 

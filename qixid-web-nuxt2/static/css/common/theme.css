@@ -18,17 +18,12 @@
   /*-----------------------------特殊处理---------------------------------*/
   /*导航栏 hover背景颜色*/
   --el-menu-item-color-hover: #ecf0f1;
-
-  --sys-font-family: "JetBrainsMono Regular", Menlo, Monaco;
+  /*STZhongsong,*/
+  --sys-font-family: "SF Pro SC","SF Pro Text","SF Pro Icons","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
 }
 
 a, p, h1, h2, h3, h4 {
   /*color: var(--default-color);*/
-}
-
-body {
-  color: var(--default-color);
-  font-family: var(--sys-font-family)
 }
 
 /*默认颜色*/

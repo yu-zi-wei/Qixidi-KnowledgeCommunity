@@ -71,13 +71,13 @@
         <div class=" flex-space-between align-items-center">
           <div class="flex-8" style="padding: 0 15px">
             <div>
-              <h4 class="mb-20 font-bold">
-                <nuxt-link class="text-underline-hover font-s-18 font-bold"
+              <h1 class="mb-20 font-bold">
+                <nuxt-link class="text-underline-hover font-s-18"
                            :to="`/article/article-details/`+$base64.encode(item.id)"
                            rel="noopener" target="_blank">
                   {{ item.articleTitle }}
                 </nuxt-link>
-              </h4>
+              </h1>
               <p class="font-s-15 line-height-26 overflow-nowrap-2 color-grey">
                 {{ item.articleAbstract }}
               </p>
