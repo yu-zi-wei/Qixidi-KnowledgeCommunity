@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ import java.util.Objects;
 public class ToolTasks {
     public static final Logger logger = LoggerFactory.getLogger(ToolTasks.class);
 
-    @Scheduled(cron = "0 0 5 * * ?")//每天凌晨5点执行
+    @Scheduled(cron = "0 0 1,5 * * ?")//每天凌晨5点执行
 //    @Scheduled(cron = "0 */2 * * * ?")
     public void jueJin() throws IOException, MessagingException {
         logger.info("掘金签到开始");
@@ -51,9 +52,15 @@ public class ToolTasks {
         String error = map.get("err_msg");
         if (map.containsKey("err_msg") && !Objects.equals(error, "success")) {
             logger.error("签到失败：{}", error);
+            if (LocalDateTime.now().getHour() == 5) {
+                logger.error("重复签到：{}", error);
+                return;
+            }
             if (error.contains("must login")) {
                 MailUtils.sendText(SystemConstant.AdministratorMailboxList, "掘金签到失败-登录过期", "掘金签到失败-登录过期");
+                return;
             }
+            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "掘金签到失败", error);
             return;
         }
         // 抽奖
