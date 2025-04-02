@@ -32,7 +32,11 @@
 }
 
 .vditor-reset p {
-  line-height: 26px;
+  line-height: 32px !important;
+}
+
+.vditor-reset li {
+  line-height: 32px !important;
 }
 
 .vditor-reset a {

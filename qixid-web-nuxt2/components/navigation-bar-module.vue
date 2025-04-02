@@ -173,12 +173,12 @@
                 </el-dropdown>
               </li>
               <!--        用户信息模块-->
-              <li class="main-nav-left">
+              <li>
                 <div v-if="this.isLogin">
                   <el-dropdown trigger="click">
                     <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
-                      <el-avatar v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-                      <el-avatar v-else src="/img/tx.jpg"></el-avatar>
+                      <el-avatar :size="40" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                      <el-avatar :size="40" v-else src="/img/tx.jpg"></el-avatar>
                     </div>
                     <el-dropdown-menu slot="dropdown" style="padding: 15px">
                       <div class="data-info-dev">
@@ -339,10 +339,8 @@
                   </el-dropdown>
                 </div>
                 <div v-else>
-                  <div @click="loginWindow" class="cursor-pointer">
-                    <el-avatar>
-                      <span class="font-s-14">登录</span>
-                    </el-avatar>
+                  <div @click="loginWindow" class="cursor-pointer not-Logged-in">
+                    登录
                   </div>
                 </div>
               </li>

@@ -36,9 +36,9 @@
         <div>
           <el-divider></el-divider>
           <div class="flex-left align-items-center">
-            <div class="mr-15 font-bold">第三方登录</div>
+            <div class="font-bold">第三方登录</div>
             <div class="text-center flex-left">
-              <div @click="login('gitee')" title="Gitee" class="cursor-pointer">
+              <div @click="login('gitee')" title="Gitee" class="ml-20 cursor-pointer">
                 <svg t="1659862936090" class="icon svg-translateY-3" viewBox="0 0 1024 1024" version="1.1"
                      xmlns="http://www.w3.org/2000/svg"
                      p-id="736" width="21" height="21">
@@ -47,7 +47,7 @@
                     fill="#C71D23" p-id="737"></path>
                 </svg>
               </div>
-              <div @click="login('weibo')" title="微博" class="ml-15 cursor-pointer">
+              <div @click="login('weibo')" title="微博" class="ml-20 cursor-pointer">
                 <svg t="1664334516217" class="icon svg-translateY-1" viewBox="0 0 1024 1024" version="1.1"
                      xmlns="http://www.w3.org/2000/svg" p-id="6161" width="24" height="24">
                   <path

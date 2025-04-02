@@ -161,3 +161,20 @@
 .publish-list-item:hover {
   background: #F2F6FA;
 }
+
+.not-Logged-in {
+  border: 1px solid var(--theme-color);
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #747d8c;
+  transition: .3s;
+}
+
+.not-Logged-in:hover {
+  background-color: rgba(var(--theme-color-rgb), 0.3);
+  color: var(--default-color);
+}

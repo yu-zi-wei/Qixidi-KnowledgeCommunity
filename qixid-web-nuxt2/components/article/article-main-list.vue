@@ -71,7 +71,7 @@
         <div class=" flex-space-between align-items-center">
           <div class="flex-8" style="padding: 0 15px">
             <div>
-              <h1 class="mb-20 font-bold">
+              <h1 class="mb-20 font-bold-s">
                 <nuxt-link class="text-underline-hover font-s-18"
                            :to="`/article/article-details/`+$base64.encode(item.id)"
                            rel="noopener" target="_blank">
@@ -121,7 +121,8 @@
                 <!--              </div>-->
               </div>
               <div class="svg-translateY-3">
-                <el-tag type="info" size="small" effect="plain" class="cursor-pointer font-bold-300" title="分类">
+                <el-tag type="info" size="small" effect="plain" class="cursor-pointer font-bold-300"
+                        title="分类">
                   <nuxt-link :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
                     {{ item.groupingName }}
                   </nuxt-link>
@@ -165,6 +166,11 @@ export default {
     }
   },
   methods: {
+    // randomType() {
+    //   let types = ["", "success", "warning", "info", "danger"];
+    //   let randomIndex = Math.floor(Math.random() * types.length);
+    //   return types[randomIndex];
+    // },
     load() {
       if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;

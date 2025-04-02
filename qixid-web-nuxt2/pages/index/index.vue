@@ -73,7 +73,7 @@
                   }}天</span>
                 </p>
                 <p class="font-bold mb-8" v-if="!isReport">{{ $utils.obtainTimePeriod(new Date()) }}好！</p>
-                <p class="font-s-13 line-height-16 color-grey-2">点亮在{{ websiteName }}的每一天</p>
+                <p class="font-s-14 line-height-16 color-grey-2">点亮在{{ websiteName }}的每一天</p>
               </div>
               <el-button size="medium" @click="signIn">
                 {{ isReport ? '已签到' : '去签到' }}
