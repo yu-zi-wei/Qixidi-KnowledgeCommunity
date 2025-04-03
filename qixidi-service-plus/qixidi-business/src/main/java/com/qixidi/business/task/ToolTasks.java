@@ -32,7 +32,7 @@ import java.util.Objects;
 public class ToolTasks {
     public static final Logger logger = LoggerFactory.getLogger(ToolTasks.class);
 
-    @Scheduled(cron = "0 0 1,5 * * ?")//每天凌晨5点执行
+    @Scheduled(cron = "0 0 1,5 * * ?")//每天凌晨1点、5点执行
 //    @Scheduled(cron = "0 */2 * * * ?")
     public void jueJin() throws IOException, MessagingException {
         logger.info("掘金签到开始");
