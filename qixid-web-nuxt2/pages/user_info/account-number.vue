@@ -75,12 +75,12 @@
             </el-col>
             <el-col :span="8" v-if="userBindBo.type==2">
               <el-button :loading="registerLoading" type="primary" key="key" :disabled="disable"
-                         @click="getEmailCodes(userBindBo.originalData,'邮箱绑定')">{{ getCode }}
+                         @click="getEmailCodes(userBindBo.originalData,3)">{{ getCode }}
               </el-button>
             </el-col>
             <el-col :span="8" v-if="userBindBo.type==1">
               <el-button :loading="registerLoading" type="primary" key="key" :disabled="disable"
-                         @click="getEmailCodes(userBindBo.email,'邮箱绑定')">{{ getCode }}
+                         @click="getEmailCodes(userBindBo.email,3)">{{ getCode }}
               </el-button>
             </el-col>
           </el-row>
@@ -109,7 +109,7 @@
             </el-col>
             <el-col :span="8">
               <el-button :loading="registerLoading" type="primary" key="key" :disabled="disable"
-                         @click="setPhoneCode(userBindBo.originalData,'手机号绑定')">{{ getCode }}
+                         @click="setPhoneCode(userBindBo.originalData,4)">{{ getCode }}
               </el-button>
             </el-col>
           </el-row>
@@ -163,7 +163,7 @@ export default {
       registerLoading: false,
       emailLoading: false,
       phoneLoading: false,
-        getCode: '获取验证码',
+      getCode: '获取验证码',
       count: 60,
       disable: false,
       userInfo: {},
@@ -317,12 +317,12 @@ export default {
         }
       }, 1000)
     },
-    getEmailCodes(email, mag) {
+    getEmailCodes(email, type) {
       this.$refs['userBindBo'].validate((valid) => {
         if (valid) {
           this.registerLoading = true;
           this.getCode = "发送中";
-          this.$API(`/oauth/front-desk/code/${email}/${mag}`, "get").then().finally(() => this.registerLoading = false)
+          this.$API(`/oauth/front-desk/code/${email}/${type}`, "get").then().finally(() => this.registerLoading = false)
           let countDown = setInterval(() => {
             this.registerLoading = false;
             if (this.count < 1) {
