@@ -21,7 +21,7 @@
           <el-row :gutter="20" class="mb-10">
             <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
               <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer" title="查看文章">
-                <h1 class="line-height-24 font-s-16 mb-10 text-underline-hover font-bold-s">
+                <h1 class="line-height-24 font-s-16 mb-10 text-underline-hover">
                   {{ item.articleTitle }}
                 </h1>
                 <div class="font-s-14 line-height-26 abstract-cl-2 font-bold-300">

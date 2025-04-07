@@ -227,7 +227,7 @@ export default {
           //   return;
           // }
           const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          if (!emailReg.test(this.registerFrom.email)) {  // 注意字段名改为email
+          if (!emailReg.test(this.registerFrom.email)) {
             this.$modal.msgError(" 邮箱格式错误");
             return;
           }

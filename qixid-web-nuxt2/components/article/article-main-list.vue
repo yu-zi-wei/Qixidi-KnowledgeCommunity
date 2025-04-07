@@ -71,7 +71,7 @@
         <div class=" flex-space-between align-items-center">
           <div class="flex-8" style="padding: 0 15px">
             <div>
-              <h1 class="mb-20 font-bold-s">
+              <h1 class="mb-20">
                 <nuxt-link class="text-underline-hover font-s-18"
                            :to="`/article/article-details/`+$base64.encode(item.id)"
                            rel="noopener" target="_blank">
