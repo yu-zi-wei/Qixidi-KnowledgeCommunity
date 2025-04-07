@@ -91,7 +91,7 @@ public interface ITripartiteUserService {
 
     TripartiteUserVo BasicsUser();
 
-    R sendOutCode(String email,String mag);
+    R sendOutCode(String email,Integer type);
 
     List<TripartiteUserVo> fdUserList(UserInfoBo bo);
 
@@ -103,7 +103,7 @@ public interface ITripartiteUserService {
 
     boolean accountCancellation(String uuid);
 
-    R sendPhoneCode(String phone, String mag, HttpServletRequest request) throws Exception;
+    R sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception;
 
     Boolean phoneNumberBinding(PhoneBinding phoneBinding);
 

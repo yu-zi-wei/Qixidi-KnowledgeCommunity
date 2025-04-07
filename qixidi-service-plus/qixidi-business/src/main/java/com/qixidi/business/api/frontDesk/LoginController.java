@@ -103,28 +103,28 @@ public class LoginController extends BaseController {
      * 发送邮箱验证码
      *
      * @param email
-     * @param mag
+     * @param type
      * @return
      */
     @RepeatSubmit()
-    @GetMapping("/oauth/front-desk/code/{email}/{mag}")
-    public R sendOutCode(@PathVariable("email") String email, @PathVariable("mag") String mag) {
-        return iTripartiteUserService.sendOutCode(email, mag);
+    @GetMapping("/oauth/front-desk/code/{email}/{type}")
+    public R sendOutCode(@PathVariable("email") String email, @PathVariable("type") Integer type) {
+        return iTripartiteUserService.sendOutCode(email, type);
     }
 
     /**
      * 发送手机号验证码
      *
      * @param phone
-     * @param mag
+     * @param type
      * @param request
      * @return
      * @throws Exception
      */
     @RepeatSubmit()
-    @GetMapping("/oauth/phone/code/{phone}/{mag}")
-    public R sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("mag") String mag, HttpServletRequest request) throws Exception {
-        return iTripartiteUserService.sendPhoneCode(phone, mag, request);
+    @GetMapping("/oauth/phone/code/{phone}/{type}")
+    public R sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("type") Integer type, HttpServletRequest request) throws Exception {
+        return iTripartiteUserService.sendPhoneCode(phone, type, request);
     }
 
     /**

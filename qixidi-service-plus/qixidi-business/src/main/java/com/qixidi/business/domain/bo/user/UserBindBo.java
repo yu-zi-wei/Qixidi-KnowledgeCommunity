@@ -3,10 +3,10 @@ package com.qixidi.business.domain.bo.user;
 import com.light.core.core.domain.BaseEntity;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * 用户换绑bo
@@ -22,6 +22,7 @@ public class UserBindBo extends BaseEntity {
      */
     @NotNull(message = "操作类型异常", groups = {AddGroup.class, EditGroup.class})
     private Integer type;
+
     /**
      * 邮箱
      */
@@ -35,6 +36,7 @@ public class UserBindBo extends BaseEntity {
     /**
      * 验证码
      */
+    @NotBlank(message = "验证码不能为空", groups = {EditGroup.class})
     private String code;
 
     /**

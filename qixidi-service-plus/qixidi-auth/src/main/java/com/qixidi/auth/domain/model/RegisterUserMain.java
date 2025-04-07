@@ -24,8 +24,12 @@ public class RegisterUserMain {
     /**
      * 用户名
      */
-    @NotBlank(message = "手机号不能为空")
     private String phone;
+
+    /**
+     * 邮箱
+     */
+    private String email;
 
     /**
      * 用户密码

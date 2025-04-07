@@ -49,6 +49,7 @@ import com.qixidi.business.domain.bo.user.UserInfoBo;
 import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.entity.user.UserInformation;
+import com.qixidi.business.domain.enums.OutCodeType;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.UserFollowType;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
@@ -287,7 +288,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     @Override
     @Transactional(rollbackFor = Exception.class)
     public R register(RegisterUserMain registerUserMain) {
-        registerUserMain.setPassword(Base64.decodeStr(registerUserMain.getPassword()))
+        registerUserMain
+                .setPassword(Base64.decodeStr(registerUserMain.getPassword()))
+                .setEmail(Base64.decodeStr(registerUserMain.getEmail()))
                 .setPhone(Base64.decodeStr(registerUserMain.getPhone()))
                 .setCode(Base64.decodeStr(registerUserMain.getCode()));
 //        数据校验
@@ -296,8 +299,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         BeanUtils.copyProperties(registerUserMain, tripartiteUser);
         Long uuid = RandomNumberUtils.Snowflakes();
         tripartiteUser.setUuid(uuid.toString())
-                .setUsername("用户" + uuid)
-                .setNickname("用户" + uuid)
+                .setUsername("道友" + uuid)
+                .setNickname("道友" + uuid)
                 .setCreateTime(new Date())
                 .setPassword(SecureUtils.digesters(tripartiteUser.getPassword()))
                 .setState(UserStatus.OK.getIntegerCode())
@@ -317,8 +320,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 //            发送邮件
             executorService.execute(() -> {
                 StringBuffer mags = new StringBuffer();
-                mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，手机号：%s，密码：%s",
-                        "平台注册", tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
+                mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，邮箱：%s，密码：%s",
+                        "平台注册", tripartiteUser.getNickname(), tripartiteUser.getEmail(), tripartiteUser.getPassword()));
                 MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
             });
         }
@@ -326,18 +329,19 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     private boolean registerDataCheck(RegisterUserMain registerUserMain) {
-//校验手机号
-        phoneMatches(registerUserMain.getPhone(), 1);
+//校验手机号/邮箱格式
+        phoneMatches(registerUserMain.getEmail(), 2);
 //        验证码校验
-        String redisKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), registerUserMain.getPhone());
+        String redisKey = String.format(RedisBusinessKeyEnums.MAIL_CAPTCHA.getKey(), registerUserMain.getEmail());
         codeVerification(redisKey, registerUserMain.getCode());
-//        手机号校验
-        Long phone = baseMapper.selectCount(new QueryWrapper<TripartiteUser>()
-                .eq("phone", registerUserMain.getPhone()).eq("state", 0));
+//        手机号/邮箱校验
+        Long phone = baseMapper.selectCount(new LambdaQueryWrapper<TripartiteUser>()
+                .eq(TripartiteUser::getEmail, registerUserMain.getEmail())
+                .eq(TripartiteUser::getState, 0));
         if (registerUserMain.getRegisterType().equals(1) && phone > 0)
-            throw new ServiceException("该手机号已被使用！");
+            throw new ServiceException("该邮箱已被使用！");
         if (registerUserMain.getRegisterType().equals(2) && phone < 0)
-            throw new ServiceException("该手机号未注册！");
+            throw new ServiceException("该邮箱未注册！");
         //清除redis验证码
         RedisUtils.deleteObject(redisKey);
         return true;
@@ -393,8 +397,16 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     @Override
-    public R sendOutCode(String email, String mag) {
+    public R sendOutCode(String email, Integer type) {
+        String mag = OutCodeType.acquireTypeMessage(type);
         phoneMatches(email, 2);
+        TripartiteUser tripartiteUser = baseMapper.selectEmail(email);
+        if (type.equals(OutCodeType.RESET_PASSWORD.getCode())) {
+            if (tripartiteUser == null) throw new ServiceException("该邮箱未注册，请前往个人信息进行绑定");
+        }
+        if (type.equals(OutCodeType.MAILBOX_BINDING.getCode()) || type.equals(OutCodeType.SIGN_IN.getCode())) {
+            if (tripartiteUser != null) throw new ServiceException("该邮箱已被使用！");
+        }
         String mailCaptchaKey = String.format(RedisBusinessKeyEnums.MAIL_CAPTCHA.getKey(), email);
         if (RedisUtils.hasKey(mailCaptchaKey)) throw new ServiceException(MsgEnums.CAPTCHA_ALREADY_EXISTS.getValue());
         String code = RandomUtil.randomNumbers(5);
@@ -402,9 +414,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         mags.append("<div style=\"text-align: center\">");
         mags.append("<p>验证码</p>");
         mags.append("<p style=\"font-weight: bold;font-size: 26px\">" + code + "</p>");
-        mags.append("<p>【栖息地】您正在进行" + mag + "，您的验证码为：<b>" + code + "</b>,转发他人可能导致账号被盗，请勿泄露，谨防被骗；</p>");
+        mags.append("<p>【栖息地】您正在进行" + mag + "，您的验证码为：<b>" + code + "</b>，转发他人可能导致账号被盗，请勿泄露，谨防被骗。</p>");
         mags.append("</div>");
-        log.info("操作类型：{}，验证码：{}", mag, code);
+        log.info("操作类型：{}，邮箱：{}，验证码：{}", mag, email, code);
         try {
             MailUtils.sendHtml(email, "验证码通知", mags.toString());
         } catch (Exception e) {
@@ -447,15 +459,17 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 
     @Override
     public R resetPassword(RegisterUserMain registerUserMain) {
-        registerUserMain.setPassword(Base64.decodeStr(registerUserMain.getPassword()))
+        registerUserMain
+                .setPassword(Base64.decodeStr(registerUserMain.getPassword()))
+                .setEmail(Base64.decodeStr(registerUserMain.getEmail()))
                 .setPhone(Base64.decodeStr(registerUserMain.getPhone()))
                 .setCode(Base64.decodeStr(registerUserMain.getCode()));
         registerDataCheck(registerUserMain);
-        int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("password", SecureUtils.digesters(registerUserMain.getPassword()))
-                .eq("phone", registerUserMain.getPhone()));
+        int update = baseMapper.update(null, new LambdaUpdateWrapper<TripartiteUser>()
+                .set(TripartiteUser::getPassword, SecureUtils.digesters(registerUserMain.getPassword()))
+                .eq(TripartiteUser::getEmail, registerUserMain.getEmail()));
         if (update > 0) {
-            TripartiteUser tripartiteUser = baseMapper.selectPhone(registerUserMain.getPhone());
+            TripartiteUser tripartiteUser = baseMapper.selectEmail(registerUserMain.getEmail());
             executorService.execute(() -> {
 //            发送邮件
                 StringBuffer mags = new StringBuffer();
@@ -494,7 +508,14 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     @Override
-    public R sendPhoneCode(String phone, String mag, HttpServletRequest request) throws Exception {
+    public R sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception {
+        TripartiteUser tripartiteUser = baseMapper.selectPhone(phone);
+        if (type.equals(OutCodeType.RESET_PASSWORD.getCode())) {
+            if (tripartiteUser == null) throw new ServiceException("该手机号未注册，请前往个人信息进行绑定");
+        }
+        if (type.equals(OutCodeType.PHONE_BINDING.getCode()) || type.equals(OutCodeType.SIGN_IN.getCode())) {
+            if (tripartiteUser != null) throw new ServiceException("该手机号已被使用！");
+        }
         String CAPTCHA_DAILY_LIMIT_PHONE = String.format(RedisBusinessKeyEnums.CAPTCHA_DAILY_LIMIT_PHONE.getKey(), phone);
         String ip = AddressUtils.gainIp(request);
         String CAPTCHA_DAILY_LIMIT_IP = String.format(RedisBusinessKeyEnums.CAPTCHA_DAILY_LIMIT_IP.getKey(), ip);

@@ -33,5 +33,8 @@ public interface TripartiteUserMapper extends BaseMapperPlus<TripartiteUserMappe
     @Select("select nickname,email from b_user_main where phone=#{phone} and state=0")
     TripartiteUser selectPhone(@Param("phone") String phone);
 
+    @Select("select nickname,email from b_user_main where email=#{email} and state=0")
+    TripartiteUser selectEmail(@Param("email") String email);
+
     List<TripartiteUserVo> selectPrivacy();
 }
