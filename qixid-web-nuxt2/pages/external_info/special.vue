@@ -29,7 +29,7 @@
           <el-tabs v-model="activeName">
             <el-tab-pane label="专 栏" name="special">
               <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
-              <ul class="content" v-if="collectionUserLoading">
+              <ul class="content" v-if="!loading && articleList.length != 0">
                 <li v-if="articleList.length>0" v-for="(item,index) in articleList" class="contentItem" :key="index">
                   <div class="font-s-13 mb-20">
                     <span class="font-bold" v-text="item.nickname"></span>
@@ -97,7 +97,7 @@
                   </div>
                 </li>
               </ul>
-              <div v-if="articleList.length==0">
+              <div v-if="!loading && articleList.length == 0">
                 <div class="text-center">
                   <svg t="1666708559980" class="icon-theme" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg"
@@ -126,9 +126,8 @@ export default {
       activeName: 'special',
       profile: "",
       articleList: [],
-      loading: false,
+      loading: true,
       currentUser: false,
-      collectionUserLoading: false,
       scrollLoading: true,
       specialInfo: {
         specialName: null,
@@ -232,10 +231,6 @@ export default {
         this.articleList = res.data.records;
         this.total = res.data.total;
         this.loading = false;
-        this.collectionUserLoading = true;
-        if (this.articleList.length == 0) {
-          this.collectionUserLoading = false;
-        }
       })
     }
   },

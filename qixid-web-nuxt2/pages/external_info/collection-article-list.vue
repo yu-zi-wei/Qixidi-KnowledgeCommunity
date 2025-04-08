@@ -23,8 +23,8 @@
           <el-tabs v-model="activeName">
             <el-tab-pane label="收藏夹" name="collection">
               <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
-              <div v-show="!loading">
-                <ul class="content" v-if="collectionUserLoading">
+              <div v-if="!loading">
+                <ul class="content" v-if="articleList.length != 0">
                   <li v-for="item of articleList" class="contentItem">
                     <div class="font-s-13 mb-20">
                       <span v-text="item.nickname"></span>
@@ -139,9 +139,8 @@ export default {
     return {
       activeName: 'collection',
       articleList: [],
-      loading: false,
+      loading: true,
       currentUser: false,
-      collectionUserLoading: false,
       scrollLoading: true,
       collectionInfo: {
         collectionName: null,
@@ -257,10 +256,6 @@ export default {
         this.articleList = res.data.records;
         this.total = res.data.total;
         this.loading = false;
-        this.collectionUserLoading = true;
-        if (this.articleList.length == 0) {
-          this.collectionUserLoading = false;
-        }
       })
     }
   },
