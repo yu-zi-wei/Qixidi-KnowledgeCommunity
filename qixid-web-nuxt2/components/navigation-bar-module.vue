@@ -67,7 +67,7 @@
             <ul class="nav-right-ul">
               <!--          搜索-->
               <el-autocomplete
-                style="width: 300px;border-radius: 20px"
+                style="width: 360px;border-radius: 20px"
                 class="inline-input"
                 value-key="content"
                 v-model="search.keyword"
@@ -630,14 +630,19 @@ export default {
 
 /*搜索框历史记录*/
 .el-autocomplete-suggestion li {
-  font-size: 12px;
+  font-size: 14px;
   float: left;
-  padding: 7px 14px;
-  line-height: 12px;
+  padding: 8px 18px;
+  line-height: 14px;
   border: 1px solid #dfe4ea;
   margin: 4px;
   border-radius: 20px;
   list-style-type: none;
+}
+
+/*搜索框样式*/
+.nav-right-ul .el-input__inner {
+  border-radius: 25px;
 }
 
 .el-menu--popup {
