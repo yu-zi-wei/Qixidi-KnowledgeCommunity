@@ -61,7 +61,7 @@
 .sigIn-info {
   padding: 16px 10px;
   margin: 0px 10px;
-  background-color: rgba(244, 99, 94, 0.1)
+  background-color: #ecf0f1
 }
 
 .selected-articles-info {
@@ -70,14 +70,14 @@
 
 
 .label-grouping-div {
-  border: 1px solid #dfe4ea;
+  border-top: 1px solid #dfe4ea;
+  border-bottom: 1px solid #dfe4ea;
   background: #FFFFFF;
   margin-top: 8px;
-  border-radius: 20px;
   transition: all 0.2s linear 0s;
 }
 
 .label-grouping-div:hover {
-  border: 1px solid var(--hover-color);
+  /*border: 1px solid var(--hover-color);*/
 }
 

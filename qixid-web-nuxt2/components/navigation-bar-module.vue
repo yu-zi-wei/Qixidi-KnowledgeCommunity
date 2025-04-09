@@ -36,8 +36,8 @@
                 :active-text-color="themeColor">
                 <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
                   <nuxt-link :to="item.route">
-                    <!--                    <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
-                    <!--                       v-html="item.navigationIcon"></i>-->
+<!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+<!--                                           v-html="item.navigationIcon"></i>-->
                     {{ item.navigationName }}
                   </nuxt-link>
                 </el-menu-item>
@@ -45,8 +45,8 @@
                 <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
                             style="border-bottom-color: snow;border-bottom: none">
                   <template slot="title">
-                    <!--                    <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
-                    <!--                       v-html="item.navigationIcon"></i>-->
+<!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+<!--                                           v-html="item.navigationIcon"></i>-->
                     {{ item.navigationName }}
                   </template>
                   <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
@@ -83,11 +83,11 @@
               <li>
                 <el-dropdown class="el-dropdown-link ml-15" title="发布">
                   <div class="mt-4">
-                    <svg t="1735804208969" class="icon cursor-pointer" viewBox="0 0 1024 1024" version="1.1"
+                    <svg t="1735804208969" class="icon cursor-pointer icon-theme" viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="11397" width="30" height="30">
                       <path
                         d="M256.8704 769.5872s184.9344-508.416 428.9024-628.5824C420.096 359.424 223.5392 1014.8352 223.5392 1014.8352l338.8416-90.8288s-10.752-17.664-30.3104-12.3904l-271.6672 72.7552s31.5904-83.7632 65.2288-137.3184c171.0592-56.1152 317.184-115.8144 375.3984-312.8832 6.5536-42.8544-23.3984-31.4368-31.7952-29.184 70.912-60.0576 209.92-258.2528 162.2528-324.2496-14.6432-9.7792-21.3504-1.1264-21.3504-1.1264S918.016 44.544 836.096 18.5856c-82.0224-26.0096-236.8 90.8288-236.8 90.8288s2.6624-34.9696-33.792-25.1904C427.008 138.496 348.5184 282.7264 348.5184 282.7264s-10.24-38.3488-28.3648-16.384c-243.2 291.1744-63.2832 503.296-63.2832 503.296z"
-                        fill="#ff9066" p-id="11398"></path>
+                        fill="" p-id="11398"></path>
                     </svg>
                   </div>
                   <el-dropdown-menu slot="dropdown">
@@ -158,11 +158,11 @@
                     <!--                        d="M544 161.536a330.666667 330.666667 0 0 1 298.666667 329.130667h-0.341334c0.213333 1.493333 0.341333 2.986667 0.341334 4.565333v219.434667h39.68a32 32 0 0 1 0 64h-212.053334a160 160 0 0 1-316.586666 0H141.909333a32 32 0 1 1 0-64h39.424v-219.434667c0-1.578667 0.128-3.072 0.341334-4.565333H181.333333a330.666667 330.666667 0 0 1 298.666667-329.130667V128a32 32 0 1 1 64 0v33.536z m-298.666667 553.130667h533.333334v-219.434667c0-1.578667 0.128-3.072 0.341333-4.565333h-0.341333a266.666667 266.666667 0 1 0-533.333334 0h-0.341333c0.213333 1.493333 0.341333 2.986667 0.341333 4.565333v219.434667z m359.765334 64H418.901333a96 96 0 0 0 186.197334 0z"-->
                     <!--                        fill="#8a919f" p-id="2569"></path>-->
                     <!--                    </svg>-->
-                    <svg t="1744013810249" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    <svg t="1744013810249" class="icon-theme-1" viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="33327" width="30" height="30">
                       <path
                         d="M640 786.272C639.904 846.912 590.208 896 528 896c-61.76 0-111.904-48.896-112-109.728h224z m-37.344-590.08C602.656 158.592 569.28 128 528 128c-41.152 0-74.656 30.528-74.656 68.192 0 3.84 0.32 7.616 0.992 11.264-103.104 32.832-187.68 133.632-187.68 252.896v93.92s0 135.2-36.352 136.384C208.608 690.656 192 705.92 192 724.8c0 18.944 16.704 34.08 37.312 34.08h597.376c20.704 0 37.312-15.264 37.312-34.08 0-18.976-16.704-34.112-37.312-34.112-37.344 0-37.344-135.456-37.344-135.456v-94.816a264.224 264.224 0 0 0-187.68-252.992c0.64-3.712 0.992-7.456 0.992-11.2z"
-                        fill="#a4b0be" opacity=".9" p-id="33328"></path>
+                        opacity=".9" p-id="33328"></path>
                     </svg>
                     <div class="circular-div-admin" v-if="userNewsSum>0">
                       <span class="sum-span-div-admin" v-text="userNewsSum"></span>
