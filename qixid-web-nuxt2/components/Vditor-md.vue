@@ -156,8 +156,8 @@ export default {
         },
         upload: {
           url: '/api/system/oss/upload', // 后端上传接口地址
-          accept: 'image/*', // 允许上传的文件类型
-          max: 10 * 1024 * 1024, // 最大上传文件大小，这里设置为 10MB
+          accept: 'image/*,.mp4,.pdf,.pptx,.docx,.xlsx', // 允许上传的文件类型,多个以逗号隔开
+          max: 50 * 1024 * 1024, // 最大上传文件大小，这里设置为 50MB
           fieldName: 'file', // 上传文件的表单字段名
           multiple: false, // 是否允许上传多个文件
           headers: {
