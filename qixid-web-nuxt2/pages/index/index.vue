@@ -370,9 +370,8 @@ export default {
 @import url("static/css/server/pc/index/index.css");
 
 .el-menu-item {
-  height: 42px;
-  line-height: 38px;
-  border-radius: 20px;
+  height: 42px !important;
+  line-height: 42px !important;
 }
 
 .el-button--medium {
