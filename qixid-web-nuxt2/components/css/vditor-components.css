@@ -54,3 +54,7 @@
   color: #0085ad !important;
   font-weight: 500 !important;
 }
+
+.vditor-reset img {
+  border-radius: 8px;
+}
