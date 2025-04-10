@@ -18,20 +18,21 @@
             placeholder="记录时间">
           </el-date-picker>
           <p class="mb-10 mt-20">Title:</p>
-          <el-input
-            type="textarea"
-            prefix-icon="el-icon-link el-input__icon"
-            :rows="4"
-            placeholder="小记Title"
-            v-model="timeNotes.title">
-          </el-input>
+          <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;background: #ffffff">
+            <emoji-module :content.sync="timeNotes.title"
+                          id="time-notes-editing"></emoji-module>
+            <textarea style="white-space:pre-line" id="time-notes-editing"
+                      v-model="timeNotes.title"
+                      placeholder="小记Title..."
+                      rows="5" class="dictum-comment-cl"></textarea>
+          </div>
         </div>
         <el-collapse v-model="activeName" accordion>
           <el-collapse-item :name="timeNotes.content==null?'0':'1'">
             <template slot="title">
               <div class="ml-10 mb-10">
-                <span class="text-underline font-s-14">编写详情</span>
-                <span class="font-s-13 color-grey-2">点击展开</span>
+                <span class="font-s-14">编写详情</span>
+                <span class="font-s-14 color-grey-2">点击展开</span>
                 <svg t="1742898375461" class="icon" viewBox="0 0 1024 1024" version="1.1"
                      xmlns="http://www.w3.org/2000/svg" p-id="44703" width="12" height="12">
                   <path
@@ -61,10 +62,11 @@
 
 <script>
 import VditorMd from "./Vditor-md.vue";
+import EmojiModule from "./emoji-module.vue";
 
 export default {
   name: "timeNotesEditing",
-  components: {VditorMd},
+  components: {EmojiModule, VditorMd},
   props: {
     timeNotesDialogVisible: {
       type: Boolean,

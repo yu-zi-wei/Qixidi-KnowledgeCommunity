@@ -595,7 +595,6 @@ export default {
     }
   },
   methods: {
-
     deleteComment(id) {
       if (this.userInfo == null) {
         this.loginDialog = true;
