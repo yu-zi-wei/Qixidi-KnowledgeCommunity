@@ -29,7 +29,6 @@ Nuxt.js 对前台进行了重构，并赋予它新的名字——**栖息地**�
 
 ```text
 qixidi/
-└── qixidi-service  # 项目后端（基于SpringBoot-v2实现【已废弃】）
 │
 └── qixidi-service-plus  # 项目后端plus版本【持续更新中...】（基于SpringBoot-v3 + jdk17 完成）
     │
