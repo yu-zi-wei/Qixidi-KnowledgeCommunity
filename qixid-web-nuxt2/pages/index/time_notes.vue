@@ -1,7 +1,19 @@
 <template>
   <div class="mt-30">
     <div style="width: 1000px;margin: auto">
-      <div class="mood-title">记录每天小心情......</div>
+      <div class="mood-title flex-space-between">
+        <div>记录每天小心情......</div>
+        <div>
+          <el-popover
+            placement="top-start"
+            title="展示规则"
+            width="200"
+            trigger="hover"
+            content="在基于所有用户均可记录 “时光小记” 的前提下，系统将根据用户[登录状态]提供差异化展示：已登录用户仅可查看自己所记录的 “时光小记”，而未登录用户则能够浏览全部用户的 “时光小记” 内容。">
+            <div class="font-s-13 color-grey cursor-pointer hover-cl" slot="reference">展示规则！</div>
+          </el-popover>
+        </div>
+      </div>
       <el-skeleton class="mt-10" :rows="10" animated v-if="loading"/>
       <div v-if="moodNotesList!=null && !loading" v-for="(item, index) in moodNotesList" :key="index"
            style="margin-bottom: 60px">
@@ -252,7 +264,6 @@ export default {
   padding: 15px;
   margin-bottom: 30px;
   border-radius: 4px;
-  color: #636e72;
   font-style: italic;
 }
 

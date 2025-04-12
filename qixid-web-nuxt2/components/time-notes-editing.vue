@@ -6,7 +6,7 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :before-close="handleClose"
-      width="45%">
+      width="50%">
       <div v-if="timeNotesDialogVisible">
         <div class="mb-20" style="background-color: #F3F3F3;padding: 15px;border-radius: 4px">
           <p class="mb-10">记录时间:</p>
@@ -24,23 +24,10 @@
             <textarea style="white-space:pre-line" id="time-notes-editing"
                       v-model="timeNotes.title"
                       placeholder="小记Title..."
-                      rows="5" class="time-notes-editing-textarea"></textarea>
+                      rows="4" class="time-notes-editing-textarea"></textarea>
           </div>
-        </div>
-        <el-collapse v-model="activeName" accordion>
-          <el-collapse-item :name="timeNotes.content==null?'0':'1'">
-            <template slot="title">
-              <div class="ml-10 mb-10">
-                <span class="font-s-14">编写详情</span>
-                <span class="font-s-14 color-grey-2">点击展开</span>
-                <svg t="1742898375461" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="44703" width="12" height="12">
-                  <path
-                    d="M966.4 323.2c-9.6-9.6-25.6-9.6-35.2 0l-416 416-425.6-416c-9.6-9.6-25.6-9.6-35.2 0-9.6 9.6-9.6 25.6 0 35.2l441.6 432c9.6 9.6 25.6 9.6 35.2 0l435.2-432C976 345.6 976 332.8 966.4 323.2z"
-                    p-id="44704"></path>
-                </svg>
-              </div>
-            </template>
+          <div class="font-s-14 mt-20 mb-10">小记详情：</div>
+          <div style="margin: 2px">
             <VditorMd :height="'400px'"
                       :outline="false"
                       :placeholder="'时光小记详情...'"
@@ -48,8 +35,8 @@
                       :mdContent.sync="timeNotes.content"
                       :content="timeNotes.content"
                       v-if="timeNotesDialogVisible"></VditorMd>
-          </el-collapse-item>
-        </el-collapse>
+          </div>
+        </div>
       </div>
       <div class="text-right mt-10">
         <el-button type="primary" @click="jottingsPublish">
@@ -85,9 +72,7 @@ export default {
     }
   },
   data() {
-    return {
-      activeName: '1'
-    }
+    return {}
   },
   methods: {
     handleClose() {
