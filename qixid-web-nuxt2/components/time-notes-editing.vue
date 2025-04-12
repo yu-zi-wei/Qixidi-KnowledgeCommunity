@@ -24,7 +24,7 @@
             <textarea style="white-space:pre-line" id="time-notes-editing"
                       v-model="timeNotes.title"
                       placeholder="小记Title..."
-                      rows="5" class="dictum-comment-cl"></textarea>
+                      rows="5" class="time-notes-editing-textarea"></textarea>
           </div>
         </div>
         <el-collapse v-model="activeName" accordion>
@@ -124,5 +124,30 @@ export default {
 
 </script>
 <style scoped>
+.time-notes-editing-textarea {
+  width: 100%;
+  white-space: pre-wrap;
+  font-size: 16px;
+  border: unset;
+  padding: unset;
+  margin: unset;
+  resize: none;
+}
 
+.time-notes-editing-textarea::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #ced6e0;
+  border-radius: 4px;
+}
+
+.time-notes-editing-textarea::-webkit-scrollbar-track {
+  background: #FFFFFF;
+  border-radius: 4px;
+}
+
+.time-notes-editing-textarea::-webkit-scrollbar-thumb {
+  background: #ced6e0;
+  border-radius: 4px;
+}
 </style>

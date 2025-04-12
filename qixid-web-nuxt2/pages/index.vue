@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background-color-fefefe">
     <navigation-bar-module></navigation-bar-module>
     <div class="module-main">
       <nuxt-child/>

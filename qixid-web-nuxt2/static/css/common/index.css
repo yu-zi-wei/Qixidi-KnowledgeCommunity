@@ -10,7 +10,7 @@ body {
   overflow: scroll;
   height: 100%;
   width: 100%;
-  background: var(--backdrop-color);
+  background-color: var(--backdrop-color);
   overflow-x: hidden;
   color: var(--default-color);
   font-family: var(--sys-font-family) !important;
