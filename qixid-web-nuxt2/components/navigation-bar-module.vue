@@ -32,12 +32,12 @@
                 class="el-menu-vertical-demo"
                 @select="handleSelect"
                 :router="true"
-                text-color="#2f3542"
+                text-color="#2c3e50"
                 :active-text-color="themeColor">
                 <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
                   <nuxt-link :to="item.route">
-<!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
-<!--                                           v-html="item.navigationIcon"></i>-->
+                    <!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+                    <!--                                           v-html="item.navigationIcon"></i>-->
                     {{ item.navigationName }}
                   </nuxt-link>
                 </el-menu-item>
@@ -45,8 +45,8 @@
                 <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
                             style="border-bottom-color: snow;border-bottom: none">
                   <template slot="title">
-<!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
-<!--                                           v-html="item.navigationIcon"></i>-->
+                    <!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+                    <!--                                           v-html="item.navigationIcon"></i>-->
                     {{ item.navigationName }}
                   </template>
                   <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
@@ -234,17 +234,17 @@
                         <div class="mt-26">
                           <ul class="flex-space-between flex-wrap-wrap">
                             <li class="function-li-dev" @click="routeJumpUrl('/user_admin/data-index')">
-                              <svg t="1735798042107" class="icon icon-size-24 mr-6"
+                              <svg t="1735798042107" class="icon-theme-636e72 svg-translateY-1- icon-size-24 mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="33544">
                                 <path
                                   d="M568.832 37.888l358.4 238.8992A102.4 102.4 0 0 1 972.8 361.984v300.032a102.4 102.4 0 0 1-45.568 85.1968l-358.4 238.8992a102.4 102.4 0 0 1-113.664 0l-358.4-238.8992A102.4 102.4 0 0 1 51.2 662.016V361.984a102.4 102.4 0 0 1 45.568-85.1968l358.4-238.8992a102.4 102.4 0 0 1 113.664 0z m143.36 330.9056a27.392 27.392 0 0 0-37.9904-7.6288l-133.7856 89.2416a51.2 51.2 0 0 1-56.832 0L349.7984 361.216A27.392 27.392 0 0 0 307.2 384v23.808a51.2 51.2 0 0 0 22.784 42.5984l108.032 71.9872a51.2 51.2 0 0 1 22.784 42.5984v109.1584a51.2 51.2 0 0 0 102.4 0v-109.2096a51.2 51.2 0 0 1 22.784-42.5984l108.032-71.9872A51.2 51.2 0 0 0 716.8 407.7568v-23.808a27.392 27.392 0 0 0-4.608-15.1552z"
-                                  fill="#4285F4" p-id="33545"></path>
+                                  p-id="33545"></path>
                               </svg>
                               创作中心
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/article',userInfo.uuid)">
-                              <svg t="1720603953455" class="icon-theme-blue icon-size-24 svg-translateY-1- mr-6"
+                              <svg t="1720603953455" class="icon-theme-636e72 icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="14832" id="mx_n_1720603953456">
                                 <path
@@ -258,7 +258,7 @@
                             </li>
                             <li class="function-li-dev"
                                 @click="routeJumpUuid('/dictum/space/content-list',userInfo.uuid)">
-                              <svg t="1720603401642" class="icon-theme-stand-out icon-size-24 svg-translateY-1- mr-6"
+                              <svg t="1720603401642" class="icon-theme-636e72 icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024"
                                    version="1.1" xmlns="http://www.w3.org/2000/svg"
                                    p-id="8008">
@@ -269,7 +269,7 @@
                               名言空间
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/follow',userInfo.uuid)">
-                              <svg t="1704636202856" class="icon-theme-stand-out icon-size-24 svg-translateY-1- mr-6"
+                              <svg t="1704636202856" class="icon-theme-636e72 icon-size-24 svg-translateY-1- mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="5600">
                                 <path
@@ -279,7 +279,7 @@
                               我的关注
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/special',userInfo.uuid)">
-                              <svg t="1704636239327" class="icon icon-size-24 svg-translateY-1 mr-6 icon-theme"
+                              <svg t="1704636239327" class="icon-theme-636e72 icon-size-24 svg-translateY-1 mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="6694">
                                 <path
@@ -289,12 +289,12 @@
                               我的专栏
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/fabulous',userInfo.uuid)">
-                              <svg t="1704636283898" class="icon icon-size-24 icon-theme mr-6"
+                              <svg t="1704636283898" class="icon-theme-636e72 icon-size-24 mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="7693">
                                 <path
                                   d="M132.096 998.4c-9.216 0-18.432-3.072-25.6-10.24-14.336-14.336-14.336-36.864 0-50.176l306.176-306.176c14.336-14.336 36.864-14.336 50.176 0 14.336 14.336 14.336 36.864 0 50.176L156.672 988.16c-6.144 6.144-15.36 10.24-24.576 10.24z"
-                                  fill="#f9ca24" p-id="7694"></path>
+                                  p-id="7694"></path>
                                 <path
                                   d="M544.768 876.544H542.72c-12.288-1.024-22.528-8.192-27.648-19.456l-87.04-199.68-214.016-41.984c-12.288-2.048-21.504-11.264-24.576-22.528-3.072-11.264 1.024-24.576 9.216-32.768l162.816-144.384-26.624-216.064c-1.024-12.288 4.096-23.552 14.336-30.72 10.24-7.168 23.552-7.168 33.792-1.024l188.416 110.592 197.632-92.16c11.264-5.12 23.552-4.096 33.792 4.096 9.216 7.168 14.336 20.48 11.264 31.744L768 435.2l148.48 159.744c8.192 9.216 11.264 21.504 6.144 32.768s-14.336 19.456-26.624 20.48l-217.088 20.48L573.44 860.16c-6.144 10.24-16.384 16.384-28.672 16.384zM290.816 565.248l166.912 32.768c10.24 2.048 19.456 9.216 23.552 18.432l67.584 155.648 82.944-148.48c5.12-9.216 14.336-15.36 24.576-16.384l168.96-16.384-115.712-123.904c-7.168-8.192-10.24-18.432-8.192-28.672l36.864-165.888-154.624 71.68c-9.216 4.096-20.48 4.096-29.696-1.024L407.552 256l20.48 168.96c1.024 10.24-3.072 20.48-10.24 27.648l-126.976 112.64z"
                                   p-id="7695"></path>
@@ -305,7 +305,7 @@
                               我的点赞
                             </li>
                             <li class="function-li-dev" @click="routeJumpUuid('/user_home/lately',userInfo.uuid)">
-                              <svg t="1704636371057" class="icon icon-size-24 mr-6 icon-theme-1"
+                              <svg t="1704636371057" class="icon-theme-636e72 icon-size-24 mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="9933">
                                 <path

@@ -2,19 +2,19 @@
 :root {
   /*主题颜色*/
   /*--theme-color: rgb(244, 99, 94);*/
-  --theme-color: #11B981;
-  --theme-color-rgb: 17, 185, 129;
+  --theme-color: #7db9de;
+  --theme-color-rgb: 125, 185, 222;
 
   /*  hover-color*/
-  --hover-color: #1fcf94;
+  --hover-color: #95c2de;
   /*  active-color*/
-  --active-color: #10ab77;
+  --active-color: #6fb4de;
   /*forbidden-color*/
   --theme-background_color: #FFFFFF;
   /*禁用按钮底色*/
   --forbidden-color: #a7d4bb;
   /*默认颜色*/
-  --default-color: #000000;
+  --default-color: #475671;
   /*背景颜色*/
   --backdrop-color: #FFFFFF;
 
@@ -23,7 +23,7 @@
   --el-menu-item-color-hover: #ecf0f1;
   /*STZhongsong,*/
   --sys-font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  /*--sys-font-family: "STZhongsong";*/
+  /*--sys-font-family: MiSans;*/
 }
 
 a, p, h1, h2, h3, h4 {
@@ -58,6 +58,10 @@ a, p, h1, h2, h3, h4 {
 
 .icon-theme-66441d {
   fill: #66441D;
+}
+
+.icon-theme-636e72 {
+  fill: #636e72;
 }
 
 .icon-theme-1 {

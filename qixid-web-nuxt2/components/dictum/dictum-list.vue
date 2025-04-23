@@ -42,6 +42,7 @@
                 </div>
                 <el-dropdown-menu>
                   <el-dropdown-item @click.native="updateInfo(item)">编辑名言</el-dropdown-item>
+                  <el-dropdown-item @click.native="copyInfo(item)">复制名言</el-dropdown-item>
                   <el-dropdown-item @click.native="deleteInfo(item)">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -180,7 +181,7 @@
           <template>
             <div v-for="(item, index) in dictumInfoListArr" :key="index" class="box-item">
               <!-- 动态渲染每个列中的元素 -->
-              <div class="flex-space-between user-info align-items-center mb-15">
+              <div class="flex-space-between align-items-center mb-10" v-if="item.labelList!=null">
                 <div style="line-height: 1px"></div>
                 <div class="flex-right align-items-center">
                   <!--                <nuxt-link class="color-grey" :to="`/user_home/article?uuid=`+$base64.encode(item.uid)"-->
@@ -193,14 +194,14 @@
                   <!--                    {{ item.albumName }}-->
                   <!--                  </nuxt-link>-->
                   <!--                </el-tag>-->
-                  <div v-if="item.labelList!=null"
-                       v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
+                  <div v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
                        class="font-s-13 color-grey-2">
                     <span>#{{ items }}</span>
                     <span v-if="indexs+1!=item.labelList.length" class="ml-2 mr-2 color-grey-3">|</span>
                   </div>
                 </div>
               </div>
+              <hr class="hr-dictum mb-15" v-if="item.labelList!=null"/>
               <div class="dictum-content">
                 <vditor-preview :id="'dictum-content-waterfall-list-'+index"
                                 :content="item.content"></vditor-preview>
@@ -671,7 +672,13 @@ export default {
     updateInfo(item) {
       this.$router.push({
         path: '/dictum/release-dictum',
-        query: {code: this.$base64.encode(item.id)}
+        query: {code: this.$base64.encode(item.id), type: 1}
+      })
+    },
+    copyInfo(item) {
+      this.$router.push({
+        path: '/dictum/release-dictum',
+        query: {code: this.$base64.encode(item.id), type: 2}
       })
     },
     deleteInfo(item) {

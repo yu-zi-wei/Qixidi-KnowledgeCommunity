@@ -80,3 +80,9 @@ textarea:focus {
   background-color: #f7f7f7;
   border: 1px solid #ffffff;
 }
+
+.hr-dictum{
+  border: 0;
+  height: 1px;
+  background: #e9eef5;
+}

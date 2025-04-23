@@ -8,7 +8,7 @@
         </div>
         <div class="">
           <nuxt-link to="/" title="首页">
-            <svg t="1720603401642" class="icon-theme-stand-out icon-size-36 svg-translateY-10" viewBox="0 0 1024 1024"
+            <svg t="1720603401642" class="icon-theme-636e72 icon-size-36 svg-translateY-10" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="8008">
               <path
@@ -16,11 +16,11 @@
                 p-id="8009"></path>
             </svg>
           </nuxt-link>
-          <sap>名言空间</sap>
+          <span>名言空间</span>
         </div>
         <div>
           <el-button class="mr-10" plain size="medium" round>
-            <nuxt-link to="/dictum/release-dictum" target="_blank">
+            <nuxt-link to="/dictum/release-dictum">
               记录名言
             </nuxt-link>
           </el-button>

@@ -274,6 +274,7 @@ export default {
     return {
       update: {
         id: this.$route.query.code == null ? null : this.$base64.decode(this.$route.query.code),
+        type: this.$route.query.type == null ? null : this.$route.query.type,
         info: null,
         buttonTitle: '记录名言',
         pageTitle: '名言发布',
@@ -347,6 +348,9 @@ export default {
           if (this.dynamicTags.length > 0) {
             this.dictumInfo.label = this.dynamicTags.toString();
           }
+          if (this.update.type != 1) {//非编辑模式下，清空id
+            this.dictumInfo.id = null;
+          }
           this.$API("/frontDesk/dictum/info", "post", null, this.dictumInfo).then(res => {
             if (res.code == 200) {
               this.$router.push({
@@ -407,8 +411,10 @@ export default {
   mounted() {
     if (this.update.id != null) {
       this.loading = true;
-      this.update.buttonTitle = "更新名言";
-      this.update.pageTitle = "名言更新";
+      if (this.update.type == 1) {
+        this.update.buttonTitle = "更新名言";
+        this.update.pageTitle = "名言更新";
+      }
       this.$API("/frontDesk/dictum/info/" + this.update.id, "get").then(res => {
         this.dictumInfo = res.data;
         if (this.dictumInfo.label != null) {

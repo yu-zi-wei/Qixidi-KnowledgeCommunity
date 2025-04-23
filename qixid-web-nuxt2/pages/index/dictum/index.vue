@@ -256,7 +256,7 @@ export default {
   width: 100%;
   background-color: #F3F3F3;
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   border: 1px solid #F3F3F3;
   transition: .3s;;

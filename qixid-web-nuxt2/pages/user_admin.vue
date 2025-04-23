@@ -31,7 +31,7 @@
                     :default-openeds="openeds"
                     :router="true"
                     class="el-menu-vertical-demo">
-                    <div v-for="item of toUserSidebar">
+                    <div v-for="(item,index) in toUserSidebar" :key="index">
                       <el-menu-item v-if="item.isList==0" :index="item.route">
                         <template slot="title">
                           <i v-if="item.sidebarIcon!=null" v-html="item.sidebarIcon"></i>
