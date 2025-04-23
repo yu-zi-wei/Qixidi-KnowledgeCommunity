@@ -145,7 +145,7 @@ public class ToSidebarServiceImpl implements IToSidebarService {
     public void sidebarList() {
         ;
         List<ToSidebarVo> toSidebarVos = sidebarList(new LambdaQueryWrapper<ToSidebar>()
-                .eq(ToSidebar::getStatus, 1)
+                .eq(ToSidebar::getStatus, 0)
                 .orderByAsc(ToSidebar::getOrder));
         RedisUtils.setCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey(), toSidebarVos);
     }
