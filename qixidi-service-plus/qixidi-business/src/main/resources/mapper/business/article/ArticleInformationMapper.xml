@@ -285,7 +285,7 @@
           AND platform_type = 1
         ORDER BY heat_weight DESC,
                  like_times DESC,
-                 collection_times DESC LIMIT 0,8
+                 collection_times DESC LIMIT 0,10
     </select>
 
     <select id="selectCensusMonth" resultType="com.light.core.core.domain.vo.CensusVo">
