@@ -1,9 +1,9 @@
 <template>
   <div class="module-main">
     <el-skeleton class="mt-30" :rows="16" animated v-if="loading"/>
-    <div v-if="!loading" class="flex-space-between mt-30">
+    <div v-if="!loading" class="mt-30">
       <!--      类容-->
-      <div class="flex-8">
+      <div>
         <div class="flex-space-between collapse-title align-items-center" @click="searchPage" title="点击弹出检索页面">
           <div>
             <svg t="1742608687334" class="icon-theme-1 svg-translateY-4 mr-10" viewBox="0 0 1024 1024"

@@ -67,21 +67,21 @@ textarea:focus {
 }
 
 .box-item {
-  width: 360px;
-  margin: 4px 40px 35px 5px;
-  padding: 20px 10px;
-  border-radius: 4px;
+  width: 280px;
+  margin-bottom: 25px;
+  padding: 15px 8px;
+  border-radius: 6px;
   border: 1px solid #ecf0f1;
-  box-shadow: 0 2px 4px 0 #dfe4ea;
   transition: all 0.2s linear 0s;
+  background-color: #F8F8FA;
 }
 
 .box-item:hover {
-  background-color: #f7f7f7;
-  border: 1px solid #ffffff;
+  border: 1px solid #a4b0be;
+  background-color: #F3F3F3;
 }
 
-.hr-dictum{
+.hr-dictum {
   border: 0;
   height: 1px;
   background: #e9eef5;

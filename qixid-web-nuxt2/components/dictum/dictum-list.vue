@@ -174,10 +174,10 @@
         <p class="color-grey font-s-14">暂无数据</p>
       </div>
     </div>
+    <!-- 瀑布流布局 -->
     <div v-if="!loading && typography==1">
-      <!-- 瀑布流布局 -->
       <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="ml-10">
-        <waterfall :col='3' :data="dictumInfoListArr">
+        <waterfall :col='4' :data="dictumInfoListArr">
           <template>
             <div v-for="(item, index) in dictumInfoListArr" :key="index" class="box-item">
               <!-- 动态渲染每个列中的元素 -->
@@ -243,8 +243,6 @@
                 <div class="svg-translateY-4 mr-15 text-underline-hover cursor-pointer" @click="viewCommentList(item)">
                   查看
                 </div>
-              </div>
-              <div>
               </div>
             </div>
           </template>
