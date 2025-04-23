@@ -11,6 +11,7 @@
               </div>
               <el-dropdown-menu>
                 <el-dropdown-item @click.native="updateInfo(item)">编辑名言</el-dropdown-item>
+                <el-dropdown-item @click.native="copyInfo(item)">复制名言</el-dropdown-item>
                 <el-dropdown-item @click.native="deleteInfo(item)">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -165,7 +166,13 @@ export default {
     updateInfo(item) {
       this.$router.push({
         path: '/dictum/release-dictum',
-        query: {code: this.$base64.encode(item.id)}
+        query: {code: this.$base64.encode(item.id), type: 1}
+      })
+    },
+    copyInfo(item) {
+      this.$router.push({
+        path: '/dictum/release-dictum',
+        query: {code: this.$base64.encode(item.id), type: 2}
       })
     },
     deleteInfo(item) {
