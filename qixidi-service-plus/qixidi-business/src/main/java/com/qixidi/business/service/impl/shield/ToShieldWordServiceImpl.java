@@ -1,22 +1,22 @@
 package com.qixidi.business.service.impl.shield;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qixidi.business.domain.bo.shield.ToShieldWordBo;
-import com.qixidi.business.domain.entity.shield.ToShieldWord;
-import com.qixidi.business.domain.vo.shield.ToShieldWordVo;
-import com.qixidi.business.mapper.shield.ToShieldWordMapper;
-import com.qixidi.business.service.shield.IToShieldWordService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.light.redission.utils.RedisUtils;
-import com.light.core.utils.word.WordFilter;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.light.core.utils.word.WordFilter;
+import com.light.redission.utils.RedisUtils;
+import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.shield.ToShieldWordBo;
+import com.qixidi.business.domain.entity.shield.ToShieldWord;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.vo.shield.ToShieldWordVo;
+import com.qixidi.business.mapper.shield.ToShieldWordMapper;
+import com.qixidi.business.service.shield.IToShieldWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -129,6 +129,7 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
     public void ShieldWordRefresh() {
         List<String> list = baseMapper.selectKeyword();
 //        存入缓存
+        RedisUtils.deleteObject(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey());
         RedisUtils.setCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey(), list);
     }
 

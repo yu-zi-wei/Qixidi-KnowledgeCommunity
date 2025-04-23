@@ -1,23 +1,22 @@
 package com.qixidi.business.service.impl.configure;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qixidi.business.domain.bo.configure.ToNavigationBo;
-import com.qixidi.business.domain.bo.configure.ToSidebarBo;
-import com.qixidi.business.domain.entity.configure.ToSidebar;
-import com.qixidi.business.domain.vo.configure.ToSidebarVo;
-import com.qixidi.business.mapper.configure.ToSidebarMapper;
-import com.qixidi.business.service.configure.IToSidebarService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.light.core.utils.JsonUtils;
-import com.light.core.utils.StringUtils;
-import com.light.redission.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.JsonUtils;
+import com.light.core.utils.StringUtils;
+import com.light.redission.utils.RedisUtils;
+import com.qixidi.business.domain.bo.configure.ToNavigationBo;
+import com.qixidi.business.domain.bo.configure.ToSidebarBo;
+import com.qixidi.business.domain.entity.configure.ToSidebar;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.vo.configure.ToSidebarVo;
+import com.qixidi.business.mapper.configure.ToSidebarMapper;
+import com.qixidi.business.service.configure.IToSidebarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -130,22 +129,28 @@ public class ToSidebarServiceImpl implements IToSidebarService {
         Object cacheObject = RedisUtils.getCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey());
         if (ObjectUtils.isNotEmpty(cacheObject)) {
             List<ToSidebarVo> toSidebarVos = JsonUtils.castList(cacheObject, ToSidebarVo.class);
-            List<ToSidebarVo> collect = toSidebarVos.stream().filter(item -> item.getType().equals(bo.getType())).collect(Collectors.toList());
+            List<ToSidebarVo> collect = toSidebarVos.stream().filter(item -> item.getType()
+                    .equals(bo.getType()) && item.getStatus().equals(bo.getStatus())).collect(Collectors.toList());
             return collect;
         }
 //        缓存数据
         sidebarList();
-        QueryWrapper<ToSidebar> lqw = new QueryWrapper<ToSidebar>().orderByAsc("`order`").eq("type", bo.getType());
+        LambdaQueryWrapper<ToSidebar> lqw = new LambdaQueryWrapper<ToSidebar>()
+                .eq(ToSidebar::getType, bo.getType())
+                .orderByAsc(ToSidebar::getOrder);
         return sidebarList(lqw);
     }
 
     @Override
     public void sidebarList() {
-        List<ToSidebarVo> toSidebarVos = sidebarList(new QueryWrapper<ToSidebar>().orderByAsc("`order`"));
+        ;
+        List<ToSidebarVo> toSidebarVos = sidebarList(new LambdaQueryWrapper<ToSidebar>()
+                .eq(ToSidebar::getStatus, 1)
+                .orderByAsc(ToSidebar::getOrder));
         RedisUtils.setCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey(), toSidebarVos);
     }
 
-    public List<ToSidebarVo> sidebarList(QueryWrapper<ToSidebar> lqw) {
+    public List<ToSidebarVo> sidebarList(LambdaQueryWrapper<ToSidebar> lqw) {
         List<ToSidebarVo> toSidebarVos = baseMapper.selectVoList(lqw);
         //父级菜单
         List<ToSidebarVo> parentList = toSidebarVos.stream().filter(item -> item.getParentId() == null).collect(Collectors.toList());
