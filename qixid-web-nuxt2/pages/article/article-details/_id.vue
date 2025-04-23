@@ -598,7 +598,7 @@
         </div>
         <div v-for="item of collectionList" class="mt-15">
           <el-radio v-model="collectionParams.collectionId" :label="item.id" border size="medium" style="width: 100%">
-            {{ item.collectionIntroduce }}
+            {{ item.collectionName }}
           </el-radio>
         </div>
         <div slot="footer" class="dialog-footer">
