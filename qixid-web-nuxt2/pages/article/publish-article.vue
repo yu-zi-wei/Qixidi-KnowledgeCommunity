@@ -65,6 +65,7 @@
       <VditorMd :height="'90vh'"
                 :vditorId="'articlePublish'"
                 :mdContent.sync="article.articleContent"
+                :mode="'sv'"
                 :content="article.articleContent" v-if="isClient"></VditorMd>
     </div>
     <el-dialog title="文章发布" :visible.sync="articlePopupDialog" width="800px">

@@ -35,7 +35,9 @@
 .vditor-reset p {
   line-height: 32px !important;
 }
-
+.vditor-reset span{
+  line-height: 32px !important;
+}
 .vditor-reset li {
   line-height: 32px !important;
 }
