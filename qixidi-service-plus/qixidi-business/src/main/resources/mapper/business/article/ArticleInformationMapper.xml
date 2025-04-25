@@ -30,6 +30,7 @@
                ai.article_title,
                ai.article_cover,
                ai.article_abstract,
+               ai.article_content,
                ai.`type`,
                ai.`state`,
                ai.create_time,
