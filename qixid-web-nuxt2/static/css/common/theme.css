@@ -2,19 +2,19 @@
 :root {
   /*主题颜色*/
   /*--theme-color: rgb(244, 99, 94);*/
-  --theme-color: #7db9de;
+  --theme-color: #68b1de;
   --theme-color-rgb: 125, 185, 222;
 
   /*  hover-color*/
-  --hover-color: #95c2de;
+  --hover-color: #76b6de;
   /*  active-color*/
-  --active-color: #6fb4de;
+  --active-color: #5dadde;
   /*forbidden-color*/
   --theme-background_color: #FFFFFF;
   /*禁用按钮底色*/
-  --forbidden-color: #a7d4bb;
+  --forbidden-color: #b8d0de;
   /*默认颜色*/
-  --default-color: #39465e;
+  --default-color: #000;
   /*背景颜色*/
   --backdrop-color: #FFFFFF;
 

@@ -32,7 +32,7 @@
                 class="el-menu-vertical-demo"
                 @select="handleSelect"
                 :router="true"
-                text-color="#2c3e50"
+                text-color="#000000"
                 :active-text-color="themeColor">
                 <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
                   <nuxt-link :to="item.route">

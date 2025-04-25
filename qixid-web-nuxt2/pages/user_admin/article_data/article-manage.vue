@@ -9,7 +9,7 @@
       </el-row>
       <el-tab-pane label="文 章" name="article">
         <el-menu :default-active="$route.query.state"
-                 text-color="#0a3d62"
+                 text-color="#000000"
                  :active-text-color="themeColor"
                  class="el-menu-vertical-demo" mode="horizontal"
                  @select="handleClick">

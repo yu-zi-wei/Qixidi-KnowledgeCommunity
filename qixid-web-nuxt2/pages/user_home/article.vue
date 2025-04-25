@@ -10,9 +10,9 @@
           <span v-text="$utils.reckonTime(item.createTime)"
                 :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
         </div>
-        <nuxt-link class="text-underline-hover font-bold-s" :to="`/article/article-details/`+$base64.encode(item.id)"
+        <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)"
                    target="_blank" rel="noopener">
-          {{ item.articleTitle }}
+          <h1 class="text-underline-hover font-s-16">{{ item.articleTitle }}</h1>
         </nuxt-link>
         <div class="abstract-class mt-10 color-grey" v-text="item.articleAbstract"></div>
         <div class="font-s-13 color-grey-2 bo-list-loc flex-left">

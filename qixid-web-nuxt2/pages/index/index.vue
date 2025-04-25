@@ -9,7 +9,7 @@
           :default-active="$route.path"
           :router="true"
           mode="horizontal"
-          text-color="#636e72"
+          text-color="rgba(0, 0, 0, 0.5)"
           :active-text-color="themeColor"
           class="el-menu-demo">
           <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"

@@ -12,7 +12,7 @@
           <div class="overflow-hidden">
             <div class="fl-left left-details-cl">
               <div @click="specialIndex(item)">
-                <p class="details-1 text-underline-hover">{{ item.specialName }}</p>
+                <h1 class="font-s-16 text-underline-hover mb-8">{{ item.specialName }}</h1>
                 <p class="details-2 color-grey">{{ item.specialIntroduce }}</p>
               </div>
               <div class="details-3 color-grey-2">
@@ -204,16 +204,9 @@ export default {
 }
 
 .left-details-cl {
-  color: #5a5e66;
   width: 100%;
   margin-left: 10px;
   cursor: pointer;
-}
-
-.details-1 {
-  font-size: 18px;
-  color: #2f3542;
-  margin-bottom: 12px;
 }
 
 .details-2 {

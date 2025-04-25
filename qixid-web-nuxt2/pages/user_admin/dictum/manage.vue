@@ -9,7 +9,7 @@
           </el-col>
         </el-row>
         <el-menu :default-active="$route.query.state"
-                 text-color="#0a3d62"
+                 text-color="#000000"
                  :active-text-color="themeColor"
                  class="el-menu-demo" mode="horizontal"
                  @select="handleClick">

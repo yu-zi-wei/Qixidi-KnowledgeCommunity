@@ -61,7 +61,7 @@
             </div>
             <div class="assembly-top-cl">
               <el-menu :default-active="$route.path+'?uuid='+escapeUrl($route.query.uuid)"
-                       text-color="#0a3d62"
+                       text-color="#000000"
                        :router="true"
                        :active-text-color="themeColor"
                        class="el-menu-demo" mode="horizontal">

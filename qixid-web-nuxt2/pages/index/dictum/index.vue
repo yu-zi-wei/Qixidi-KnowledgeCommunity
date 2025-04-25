@@ -70,7 +70,7 @@
               :default-active="$route.path+($route.query.code==null?'':'?code='+$route.query.code)"
               :router="true"
               mode="horizontal"
-              text-color="#2c3e50"
+              text-color="#000000"
               :active-text-color="themeColor"
               class="el-menu-demo dictum-group-list">
               <el-menu-item index="/dictum" title="全 部" class="dictum-special-cl">

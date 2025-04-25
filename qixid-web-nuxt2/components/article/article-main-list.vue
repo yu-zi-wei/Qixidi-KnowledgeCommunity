@@ -71,7 +71,7 @@
         <div class=" flex-space-between align-items-center">
           <div class="flex-8" style="padding: 0 15px">
             <div>
-              <h1 class="mb-20">
+              <h1 class="mb-10">
                 <nuxt-link class="text-underline-hover font-s-16"
                            :to="`/article/article-details/`+$base64.encode(item.id)"
                            rel="noopener" target="_blank">
@@ -135,6 +135,7 @@
 
             </div>
           </div>
+
           <div v-if="item.articleCover" class="article-cover-div mt-15">
             <el-image class="article-cover-img" v-if="item.articleCover!=null && item.articleCover!=''"
                       :src="item.articleCover" fit="cover"></el-image>
