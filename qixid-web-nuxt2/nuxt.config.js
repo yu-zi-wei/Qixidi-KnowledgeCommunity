@@ -1,8 +1,5 @@
 import env from './env'
 import {encode} from 'base-64';
-import MarkdownIt from 'markdown-it';
-
-const md = new MarkdownIt();
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -141,7 +138,6 @@ export default {
               id: article.id,
               link: `${domainNameUrl}/article/article-details/${encode(article.id)}`, // 文章的链接
               description: article.articleAbstract,
-              content: md.render(article.articleContent), // 文章内容转换为html
               date: new Date(article.createTime), // 文章创建时间
             });
           });
