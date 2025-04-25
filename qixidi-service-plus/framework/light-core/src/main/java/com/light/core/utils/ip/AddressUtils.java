@@ -72,11 +72,6 @@ public class AddressUtils {
      * @return
      */
     public static String gainIp(HttpServletRequest request) {
-//        hutoos工具类获取
-//        String clientIP = ServletUtil.getClientIP(request, null);
-
-        // 一般项目会配置反向代理等，所以 x-forwarded-for 有时获取不到 用户真实地址
-        // 故而 加上 Proxy-Client-IP，WL-Proxy-Client-IP （此两条为 apache 对 request 的封装）
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");

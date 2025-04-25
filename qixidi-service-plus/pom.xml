@@ -36,6 +36,9 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <assertj-core.version>3.25.3</assertj-core.version>
 
+        <!--        解析ip地址归属地-->
+        <ip2region.version>2.7.0</ip2region.version>
+
         <!--        第三方登录-->
         <JustAuth.version>1.16.5</JustAuth.version>
 
@@ -353,6 +356,14 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+
+
+            <!-- https://mvnrepository.com/artifact/org.lionsoul/ip2region -->
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
