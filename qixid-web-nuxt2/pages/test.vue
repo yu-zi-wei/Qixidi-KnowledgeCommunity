@@ -13,15 +13,15 @@
       <el-button @click="websocketSend"> 发送消息</el-button>
       <el-button @click="websocketClose('ziwei1')"> 关闭链接ziwei1</el-button>
 
-<!--      <NumberAnimation-->
-<!--        ref="number1"-->
-<!--        :from="100"-->
-<!--        :to="10000"-->
-<!--        :format="theFormat"-->
-<!--        :duration="5"-->
-<!--        autoplay-->
-<!--        easing="linear"-->
-<!--      />-->
+      <!--      <NumberAnimation-->
+      <!--        ref="number1"-->
+      <!--        :from="100"-->
+      <!--        :to="10000"-->
+      <!--        :format="theFormat"-->
+      <!--        :duration="5"-->
+      <!--        autoplay-->
+      <!--        easing="linear"-->
+      <!--      />-->
 
     </div>
 
@@ -79,10 +79,11 @@ import SubmissionChart from "../components/submission-chart";
 import VditorMd from "../components/Vditor-md.vue";
 import VditorPreview from "../components/Vditor-preview.vue";
 import countTo from 'vue-count-to';
+import axios from "axios";
 // import WebSocket from 'websocket';
 export default {
   name: "test",
-  components: {VditorPreview, VditorMd, SubmissionChart,countTo },
+  components: {VditorPreview, VditorMd, SubmissionChart, countTo},
   computed: {
     prop() {
       let data = {
@@ -167,6 +168,14 @@ export default {
         }, {});
         this.submissionLoading = true;
       });
+
+      const response = axios.get('/api/white/article/recommend/list').then(res => {
+        return res;
+      })
+      console.log("articles:" + JSON.stringify(response))
+      // const articles = response.rows; // 假设数据在 response.data.data 中
+      // const data = response.json();
+
     },
     getColor(number) {
       let num = number / this.props.maxData;

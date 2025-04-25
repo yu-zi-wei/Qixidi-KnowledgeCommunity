@@ -1,4 +1,8 @@
 import env from './env'
+import {encode} from 'base-64';
+import MarkdownIt from 'markdown-it';
+
+const md = new MarkdownIt();
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -14,9 +18,17 @@ export default {
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: '栖息地知识社区，栖息地社区，知识社区，论坛，心灵栖息地'},
+      {
+        hid: 'description',
+        name: 'description',
+        content: '栖息地知识社区，知识社区，钰紫薇，钰紫薇博客，知识社区，论坛，心灵栖息地'
+      },
       {name: 'format-detection', content: 'telephone=no'},
-      {hid: 'keywords', name: 'keywords', content: "栖息地知识社区，极光社区，知识社区，论坛，心灵栖息地"},
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content: "栖息地知识社区，知识社区，钰紫薇，钰紫薇博客，知识社区，论坛，心灵栖息地"
+      },
       {name: "baidu-site-verification", content: "codeva-vo8bZBYJNH"}
     ],
     link: [
@@ -92,7 +104,64 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     'cookie-universal-nuxt',
+    '@nuxtjs/feed',
   ],
+
+  feed: [
+    {
+      path: '/rss.xml',
+      async create(feed) {
+        // 获取环境配置
+        const envConfig = env[process.env.NODE_ENV];
+        //网站域名
+        const domainNameUrl = `${envConfig.SERVICE_PROTOCOL}/qixidi.top`
+        // 获取当前年份
+        const currentYear = new Date().getFullYear();
+        // 设置 RSS 订阅源的基本信息
+        feed.options = {
+          title: '栖息地知识社区',
+          description: '栖息地知识社区，知识社区，钰紫薇，钰紫薇博客，知识社区，论坛，心灵栖息地',
+          link: `${domainNameUrl}/rss.xml`,
+          language: 'zh-CN',
+          copyright: `Copyright © ${currentYear} 栖息地知识社区. All rights reserved.`, // 添加版权信息
+          image: `${domainNameUrl}/static/img/logo.png`, // 添加网站图标
+        };
+        try {
+          const https = require('https');
+          const response = await fetch(`${envConfig.SERVICE_PROTOCOL}${envConfig.SERVER_URL}/white/article/recommend/list`, {
+            //不做https校验，如果你的https是被信任的建议注释该代码，因为http是不安全的
+            agent: new https.Agent({rejectUnauthorized: false})
+          });
+          const data = await response.json();
+          const articles = data.rows || [];
+          articles.forEach(article => {
+            // 为每篇文章添加到 RSS 订阅源中
+            feed.addItem({
+              title: article.articleTitle,
+              id: article.id,
+              link: `${domainNameUrl}/article/article-details/${encode(article.id)}`, // 文章的链接
+              description: article.articleAbstract,
+              content: md.render(article.articleContent), // 文章内容转换为html
+              date: new Date(article.createTime), // 文章创建时间
+            });
+          });
+        } catch (error) {
+          console.error('Error fetching articles:', error);
+          feed.addItem({
+            title: 'Error Fetching Articles',
+            id: 'error',
+            link: `${domainNameUrl}`,
+            description: 'There was an error fetching the latest articles. Please try again later.',
+            content: 'There was an error fetching the latest articles. Please try again later.',
+            date: new Date(),
+          });
+        }
+      },
+      cacheTime: 1000 * 60 * 15, // 缓存时间，15 分钟
+      type: 'rss2', // 订阅源类型，这里使用 RSS 2.0
+    },
+  ],
+
   axios: {
     proxy: true,
   },
