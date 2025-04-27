@@ -107,39 +107,52 @@ qixidi/
 ![前台功能.png](img%2F%E5%89%8D%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
 
 ### 前台页面截图
+
 #### 网站首页
 ![首页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%A6%96%E9%A1%B5.png)
+
 #### 名言广场
 ![名言广场.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA.png)
+
 ![名言广场2.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA2.png)
+
 #### 名言空间
 ![名言空间.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E7%A9%BA%E9%97%B4.png)
+
 #### 时光小记
 ![时光小记.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%97%B6%E5%85%89%E5%B0%8F%E8%AE%B0.png)
+
 #### 文章详情页
-![文章详情.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85.png)png)
+![文章详情.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85.png)
+
 #### 文章编辑/发布页
 ![文章编辑.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E7%BC%96%E8%BE%91.png)
+
 #### 用户私信
 ![私信.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%A7%81%E4%BF%A1.png)
+
 #### 用户后台
 ![用户后台.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E5%90%8E%E5%8F%B0.png)
+
 #### 用户主页
 ![用户主页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E4%B8%BB%E9%A1%B5.png)
 
 ### 爱情小站页面截图
 ![爱情小站.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%88%B1%E6%83%85%E5%B0%8F%E7%AB%99.png)
 ![爱情小站1.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%88%B1%E6%83%85%E5%B0%8F%E7%AB%991.png)
-### 后台功能点
 
+### 后台功能点
 ![后台功能.png](img%2F%E5%90%8E%E5%8F%B0%E5%8A%9F%E8%83%BD.png)
 
 ### 后台页面截图
-
 ![后台首页.png](img%2F%E5%90%8E%E5%8F%B0%2F%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5.png)
+
 ![用户管理.png](img%2F%E5%90%8E%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
+
 ![文章列为.png](img%2F%E5%90%8E%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E5%88%97%E4%B8%BA.png)
+
 ![系统任务.png](img%2F%E5%90%8E%E5%8F%B0%2F%E7%B3%BB%E7%BB%9F%E4%BB%BB%E5%8A%A1.png)
+
 ![导航配置.png](img%2F%E5%90%8E%E5%8F%B0%2F%E5%AF%BC%E8%88%AA%E9%85%8D%E7%BD%AE.png)
 
 ## 最后☕
