@@ -128,6 +128,8 @@ qixidi/
 #### 文章编辑/发布页
 ![文章编辑.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E7%BC%96%E8%BE%91.png)
 
+![文章发布.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E5%8F%91%E5%B8%83.png)
+
 #### 用户私信
 ![私信.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%A7%81%E4%BF%A1.png)
 
