@@ -202,8 +202,8 @@ export default {
   },
   methods: {
     passwordReset() {
-      if (this.userInfo.phone == null || this.userInfo.phone == '') {
-        this.$modal.notifyError("请先绑定手机号！");
+      if (this.userInfo.email == null || this.userInfo.email == '') {
+        this.$modal.notifyError("请先绑定邮箱！");
         return;
       }
       this.dialogVisible = true;
@@ -217,8 +217,8 @@ export default {
       this.phoneLoading = true;
     },
     emailBinding(type) {
-      if (this.userInfo.phone == null || this.userInfo.phone == '') {
-        this.$modal.notifyError("请先绑定手机号！");
+      if (this.userInfo.email == null || this.userInfo.email == '') {
+        this.$modal.notifyError("请先绑定邮箱！");
         return;
       }
       if (type == 2) {

@@ -1,7 +1,6 @@
 const defaultConfig = {
   //默认主题颜色
-  // THEME_COLOR: '#11B981',
-  THEME_COLOR: '#7db9de',
+  THEME_COLOR: '#68b1de',
 }
 
 const config = {
@@ -28,9 +27,9 @@ const config = {
   prod: {
     NODE_ENV: 'prod',
     // 代理的后端请求服务器地址
-    SERVER_URL: 'server.qixidi.top',
-    SERVICE_PROTOCOL: 'https://',
-    WEBSOCKET_PROTOCOL: 'wss://',
+    SERVER_URL: '116.198.203.132:9001',
+    SERVICE_PROTOCOL: 'http://',
+    WEBSOCKET_PROTOCOL: 'ws://',
     THEME_COLOR: defaultConfig.THEME_COLOR,
   },
 }
