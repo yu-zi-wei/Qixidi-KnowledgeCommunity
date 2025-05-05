@@ -107,7 +107,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @RepeatSubmit()
-    @GetMapping("/oauth/front-desk/code/{email}/{type}")
+    @GetMapping("/oauth/email/code/{email}/{type}")
     public R sendOutCode(@PathVariable("email") String email, @PathVariable("type") Integer type) {
         return iTripartiteUserService.sendOutCode(email, type);
     }
