@@ -23,14 +23,14 @@
       </li>
       <li>
         <div class="flex-space-between">
-          <div class="fl-li-cl">手机号换绑
+          <div class="fl-li-cl">手机号
             <span class="font-s-14 color-grey ml-20">
               {{
                 (userInfo.phone == null || userInfo.phone == '') ? '未绑定' : $utils.handlePhone(userInfo.phone)
               }}</span>
           </div>
           <div>
-            <el-button type="text" v-if="userInfo.phone==null  ||userInfo.phone==''" @click="phoneBinding(4)">
+            <el-button type="text" v-if="userInfo.phone==null || userInfo.phone==''" @click="phoneBinding(4)">
               绑定
             </el-button>
             <el-button type="text" v-else @click="phoneBinding(3)">换绑</el-button>
@@ -109,7 +109,7 @@
             </el-col>
             <el-col :span="8">
               <el-button :loading="registerLoading" type="primary" key="key" :disabled="disable"
-                         @click="setPhoneCode(userBindBo.originalData,4)">{{ getCode }}
+                         @click="sendPhoneCode(userBindBo.originalData,4)">{{ getCode }}
               </el-button>
             </el-col>
           </el-row>
@@ -138,7 +138,7 @@
             </el-col>
             <el-col :span="8">
               <el-button :loading="registerLoading" type="primary" key="key" :disabled="disable"
-                         @click="getVerifyCodes(registerFrom.phone,'密码重置')">{{ getCode }}
+                         @click="getVerifyCodes(registerFrom.email,2)">{{ getCode }}
               </el-button>
             </el-col>
           </el-row>
@@ -169,6 +169,7 @@ export default {
       userInfo: {},
       registerFrom: {
         phone: '',
+        email: '',
         password: null,
         code: null,
       },
@@ -208,6 +209,7 @@ export default {
       }
       this.dialogVisible = true;
       this.registerFrom.phone = this.userInfo.phone;
+      this.registerFrom.email = this.userInfo.email;
     },
     phoneBinding(type) {
       if (type == 3) {
@@ -217,7 +219,7 @@ export default {
       this.phoneLoading = true;
     },
     emailBinding(type) {
-      if (this.userInfo.email == null || this.userInfo.email == '') {
+      if ((this.userInfo.email == null || this.userInfo.email == '') && type == 2) {
         this.$modal.notifyError("请先绑定邮箱！");
         return;
       }
@@ -275,6 +277,7 @@ export default {
           let fromData = {
             phone: this.registerFrom.phone == null ? null : this.$base64.encode(this.registerFrom.phone),
             password: this.registerFrom.password == null ? null : this.$base64.encode(this.registerFrom.password),
+            email: this.registerFrom.email == null ? null : this.$base64.encode(this.registerFrom.email),
             code: this.registerFrom.code == null ? null : this.$base64.encode(this.registerFrom.code),
             registerType: 2
           }
@@ -289,14 +292,18 @@ export default {
         }
       });
     },
-    getVerifyCodes(phone, mag) {
+    getVerifyCodes(email, type) {
+      if (email == "" || email == null) {
+        this.$modal.notifyError("请先绑定邮箱！");
+        return;
+      }
       this.$refs['registerFrom'].validate((valid) => {
         if (valid) {
-          this.setPhoneCode(phone, mag);
+          this.sendEmailCode(email, type);
         }
       });
     },
-    setPhoneCode(phone, mag) {
+    sendPhoneCode(phone, mag) {
       if (phone == "" || phone == null) {
         this.$modal.notifyError("请先绑定手机号！");
         return;
@@ -317,12 +324,29 @@ export default {
         }
       }, 1000)
     },
+    sendEmailCode(phone, type) {
+      this.registerLoading = true;
+      this.getCode = "发送中";
+      this.$API(`/oauth/email/code/${phone}/${type}`, "get").then().finally(() => this.registerLoading = false)
+      let countDown = setInterval(() => {
+        this.registerLoading = false;
+        if (this.count < 1) {
+          this.disable = false;
+          this.getCode = '获取验证码';
+          this.count = 60;
+          clearInterval(countDown);
+        } else {
+          this.disable = true;
+          this.getCode = this.count-- + 's后重发';
+        }
+      }, 1000)
+    },
     getEmailCodes(email, type) {
       this.$refs['userBindBo'].validate((valid) => {
         if (valid) {
           this.registerLoading = true;
           this.getCode = "发送中";
-          this.$API(`/oauth/front-desk/code/${email}/${type}`, "get").then().finally(() => this.registerLoading = false)
+          this.$API(`/oauth/email/code/${email}/${type}`, "get").then().finally(() => this.registerLoading = false)
           let countDown = setInterval(() => {
             this.registerLoading = false;
             if (this.count < 1) {

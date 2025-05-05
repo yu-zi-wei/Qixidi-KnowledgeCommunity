@@ -68,9 +68,8 @@
                v-show="positionCssRight">
             <div v-show="!reportLoading" class="flex-space-between">
               <div>
-                <p class="font-bold mb-8" v-if="isReport">连续签到<span class="color-stand-out ml-4">{{
-                    ctnFatalism
-                  }}天</span>
+                <p class="font-bold mb-8" v-if="isReport">连续签到<span class="color-stand-out ml-4">
+                  {{ ctnFatalism }}天</span>
                 </p>
                 <p class="font-bold mb-8" v-if="!isReport">{{ $utils.obtainTimePeriod(new Date()) }}好！</p>
                 <p class="font-s-14 line-height-16 color-grey-2">点亮在{{ websiteName }}的每一天</p>
@@ -156,6 +155,64 @@
                       <p class="color-grey-2 hover-cl">名言</p>
                     </nuxt-link>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--            站点总数据-->
+          <div class="website-data mt-10" v-show="positionCssRight">
+            <p class="font-s-14 color-grey mb-10">
+              <svg t="1746426533762" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg" p-id="3564">
+                <path
+                  d="M921.6 0a102.4 102.4 0 0 0-102.4 102.4v819.2a102.4 102.4 0 0 0 204.8 0V102.4A102.4 102.4 0 0 0 921.6 0zM204.8 230.4a102.4 102.4 0 0 0-204.8 0v691.2a102.4 102.4 0 0 0 204.8 0V230.4z m409.6 268.8a102.4 102.4 0 0 0-204.8 0v422.4a102.4 102.4 0 0 0 204.8 0V499.2z"
+                  fill="#6F8DBB" p-id="3565"></path>
+              </svg>
+              <span class="ml-4">站点数据</span>
+            </p>
+            <hr class="hr-item mb-10"/>
+            <el-skeleton :rows="3" animated v-if="!statDataInfoLoading"/>
+            <div v-if="statDataInfoLoading">
+              <div class="flex-space-between text-center line-height-20"
+                   v-if="statDataInfoLoading">
+                <div>
+                  <h4 class="color-theme font-s-15">
+                    <countTo :startVal='0' :endVal='statDataInfoVo.userCount' :duration='2000'></countTo>
+                  </h4>
+                  <div class="color-grey-2 font-s-14">用户数</div>
+                </div>
+                <div>
+                  <h4 class="color-theme font-s-15">
+                    <countTo :startVal='0' :endVal='statDataInfoVo.specialCount' :duration='2000'></countTo>
+                  </h4>
+                  <div class="color-grey-2 font-s-14">专栏数</div>
+                </div>
+                <div>
+                  <h4 class="color-theme font-s-15">
+                    <countTo :startVal='0' :endVal='statDataInfoVo.labelCount' :duration='2000'></countTo>
+                  </h4>
+                  <div class="color-grey-2 font-s-14">标签数</div>
+                </div>
+              </div>
+              <div class="flex-space-between text-center line-height-20 mt-20">
+                <div>
+                  <h4 class="color-theme font-s-15">
+                    <countTo :startVal='0' :endVal='statDataInfoVo.articleCount' :duration='2000'></countTo>
+                  </h4>
+                  <div class="color-grey-2 font-s-14">文章数</div>
+                </div>
+                <div>
+                  <h4 class="color-theme font-s-15">
+                    <countTo :startVal='0' :endVal='statDataInfoVo.dictumCount' :duration='2000'></countTo>
+                  </h4>
+                  <div class="color-grey-2 font-s-14">名言数</div>
+                </div>
+                <div>
+                  <h4 class="color-theme font-s-15">
+                    <countTo :startVal='0' :endVal='statDataInfoVo.timeNotesCount' :duration='2000'></countTo>
+                  </h4>
+                  <div class="color-grey-2 font-s-14">小记数</div>
                 </div>
               </div>
             </div>
@@ -265,7 +322,9 @@ export default {
 
       siteInfoLoading: true,
       siteInfo: true,
-      siteOperationTime: null
+      siteOperationTime: null,
+      statDataInfoVo: {},
+      statDataInfoLoading: false,
     }
   },
   methods: {
@@ -297,6 +356,9 @@ export default {
         this.siteInfo = res.data;
         this.siteOperationTime = this.timeDifference(this.siteInfo.createTime);
       }).finally(() => this.siteInfoLoading = false);
+      this.$API("/white/site/total-data", this.$get()).then(res => {
+        this.statDataInfoVo = res.data;
+      }).finally(() => this.statDataInfoLoading = true);
     },
     timeDifference(targetDateString) {
       // 解析目标时间

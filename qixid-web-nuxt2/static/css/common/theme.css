@@ -2,13 +2,13 @@
 :root {
   /*主题颜色*/
   /*--theme-color: rgb(244, 99, 94);*/
-  --theme-color: #68b1de;
-  --theme-color-rgb: 125, 185, 222;
+  --theme-color: #6F8DBB;
+  --theme-color-rgb: 111, 141, 187;
 
   /*  hover-color*/
-  --hover-color: #76b6de;
+  --hover-color: #7696c7;
   /*  active-color*/
-  --active-color: #5dadde;
+  --active-color: #6587bb;
   /*forbidden-color*/
   --theme-background_color: #FFFFFF;
   /*禁用按钮底色*/

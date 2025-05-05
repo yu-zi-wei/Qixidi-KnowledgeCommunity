@@ -61,7 +61,7 @@
 .sigIn-info {
   padding: 16px 10px;
   margin: 0px 10px;
-  background-color: #ecf0f1
+  background-color: #F3F3F3
 }
 
 .selected-articles-info {
@@ -81,3 +81,9 @@
   /*border: 1px solid var(--hover-color);*/
 }
 
+.website-data {
+  background-color: #FFFFFF;
+  padding: 15px;
+  /*border: 1px solid var(--hover-color);*/
+  border-radius: 10px;
+}

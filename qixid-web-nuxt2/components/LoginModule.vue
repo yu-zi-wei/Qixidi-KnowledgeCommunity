@@ -234,7 +234,7 @@ export default {
           this.registerLoading = true;
           this.getCode = "发送中";
           // this.$API(`/oauth/phone/code/${this.registerFrom.phone}/${mag}`, "get").then().finally(() => this.registerLoading = false)
-          this.$API(`/oauth/front-desk/code/${this.registerFrom.email}/${type}`, "get").then().finally(() => this.registerLoading = false)
+          this.$API(`/oauth/email/code/${this.registerFrom.email}/${type}`, "get").then().finally(() => this.registerLoading = false)
           let countDown = setInterval(() => {
             this.registerLoading = false;
             if (this.count < 1) {

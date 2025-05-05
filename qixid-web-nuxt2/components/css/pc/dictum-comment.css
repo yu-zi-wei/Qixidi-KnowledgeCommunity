@@ -73,12 +73,11 @@ textarea:focus {
   border-radius: 6px;
   border: 1px solid #ecf0f1;
   transition: all 0.2s linear 0s;
-  background-color: #F8F8FA;
+  background-color: #F3F3F3;
 }
 
 .box-item:hover {
   border: 1px solid #a4b0be;
-  background-color: #F3F3F3;
 }
 
 .hr-dictum {

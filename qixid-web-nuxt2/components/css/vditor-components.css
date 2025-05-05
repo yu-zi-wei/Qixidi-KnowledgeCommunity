@@ -26,18 +26,22 @@
 }
 
 .vditor-reset blockquote {
-  border-left: 3px solid #22a6b3 !important;
-  background-color: #eef7fa !important;
-  padding: 10px !important;
+  /*border-left: 3px solid #22a6b3 !important;*/
+  border: 1px solid #ff7f50 !important;
+  /*background-color: #eef7fa !important;*/
+  background-color: #fefefe !important;
+  padding: 15px !important;
   border-radius: 6px;
 }
 
 .vditor-reset p {
   line-height: 32px !important;
 }
-.vditor-reset span{
+
+.vditor-reset span {
   line-height: 32px !important;
 }
+
 .vditor-reset li {
   line-height: 32px !important;
 }

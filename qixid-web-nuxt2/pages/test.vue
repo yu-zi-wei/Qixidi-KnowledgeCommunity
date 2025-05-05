@@ -117,6 +117,7 @@ export default {
     }
   },
   async asyncData({app, params}) {
+    console.log("test执行了asyncData方法")
     const https = require('https');
     const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/configure/tool/child/list?id=2`, {
       //不做https校验，如果你的https是被信任的建议注释该代码，因为http是不安全的
