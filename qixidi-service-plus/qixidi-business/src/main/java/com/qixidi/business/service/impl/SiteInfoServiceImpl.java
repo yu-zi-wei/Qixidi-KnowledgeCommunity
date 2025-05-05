@@ -51,9 +51,10 @@ public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInf
                 .eq(StatDataInfo::getStatTime, DateUtil.today()));
         Long labelCount = labelInfoMapper.selectCount(null);
         Long labelGroupCount = labelGroupingInfoMapper.selectCount(null);
-        
-        if (statDataInfoVo != null) {
-            statDataInfoVo = statDataInfoMapper.selectVoOne(new QueryWrapper<StatDataInfo>().orderByDesc("id").last("limit 1"));
+
+        if (statDataInfoVo == null) {
+            statDataInfoVo = statDataInfoMapper.selectVoOne(new QueryWrapper<StatDataInfo>()
+                    .orderByDesc("id").last("limit 1"));
         }
         statDataInfoVo.setLabelCount(labelCount);
         statDataInfoVo.setLabelGroupCount(labelGroupCount);
