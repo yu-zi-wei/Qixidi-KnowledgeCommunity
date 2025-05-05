@@ -2,7 +2,11 @@ package com.qixidi.business.service.impl.stat;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.light.core.utils.DateUtils;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
+import com.qixidi.business.domain.enums.StatDataEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.domain.vo.stat.StatReturnDataVo;
@@ -12,9 +16,6 @@ import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.stat.StatDataInfoMapper;
 import com.qixidi.business.mapper.stat.StatTheDataMapper;
 import com.qixidi.business.service.stat.IStatDataInfoService;
-import com.qixidi.business.domain.enums.StatDataEnums;
-import com.light.core.utils.DateUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qixidi.business.utils.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
         }
         Long labelCount = labelInfoMapper.selectCount(null);
         Long labelGroupCount = labelGroupingInfoMapper.selectCount(null);
-        StatDataInfoVo statData = baseMapper.selectVoOne(new QueryWrapper<StatDataInfo>().eq("stat_time", bo.getStatTime()));
+        StatDataInfoVo statData = baseMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>().eq(StatDataInfo::getStatTime, bo.getStatTime()));
         if (ObjectUtil.isNull(statData)) {
             statData = baseMapper.selectVoOne(new QueryWrapper<StatDataInfo>().orderByDesc("id").last("limit 1"));
         }
@@ -65,7 +66,7 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
                 Map<String, Object> classMap = ClassUtils.reflect(item);
                 if (classMap.containsKey(statDataEnums.getCode())) {
                     StatReturnDataVo statReturnDataVo = new StatReturnDataVo(statDataEnums.getValue(), item.getStatTime(),
-                        Long.valueOf(classMap.get(statDataEnums.getCode()).toString()));
+                            Long.valueOf(classMap.get(statDataEnums.getCode()).toString()));
                     statReturnDataVos.add(statReturnDataVo);
                 }
             }
@@ -82,9 +83,9 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
         list.forEach(item -> {
             for (int i = 0; i < 2; i++) {
                 StatReturnDataVo statReturnDataVo = new StatReturnDataVo()
-                    .setName(item.getLabelName())
-                    .setTwoName(i == 0 ? "文章数" : "关注数")
-                    .setData(Long.valueOf(i == 0 ? item.getArticleNumber().toString() : item.getFollowNumber().toString()));
+                        .setName(item.getLabelName())
+                        .setTwoName(i == 0 ? "文章数" : "关注数")
+                        .setData(Long.valueOf(i == 0 ? item.getArticleNumber().toString() : item.getFollowNumber().toString()));
                 lists.add(statReturnDataVo);
             }
         });

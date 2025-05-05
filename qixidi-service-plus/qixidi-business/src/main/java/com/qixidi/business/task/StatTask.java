@@ -9,6 +9,7 @@ import com.qixidi.business.domain.entity.stat.StatDataInfo;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
+import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
@@ -47,6 +48,8 @@ public class StatTask {
     private DictumInfoMapper dictumInfoMapper;//名言
     @Autowired
     private SystemTaskConfigMapper systemTaskConfigMapper;
+    @Autowired
+    private TimeNotesMapper timeNotesMapper;
 
     /**
      * 更新网站每日数据
@@ -62,6 +65,7 @@ public class StatTask {
             Long dictumGroupCount = dictumGroupMapper.selectCount(null);
             Long dictumAlbumCount = dictumAlbumMapper.selectCount(null);
             Long dictumInfoCount = dictumInfoMapper.selectCount(null);
+            Long timeNotesCount = timeNotesMapper.selectCount(null);
             StatDataInfo statDataInfo = new StatDataInfo()
                     .setArticleCount(articleCount)
                     .setUserCount(userCount)
@@ -69,6 +73,7 @@ public class StatTask {
                     .setStatTime(DateUtils.getDate())
                     .setDictumGroupCount(dictumGroupCount)
                     .setDictumAlbumCount(dictumAlbumCount)
+                    .setTimeNotesCount(timeNotesCount)
                     .setDictumCount(dictumInfoCount);
             statDataInfoMapper.insertUpdate(statDataInfo);
             log.info("网站数据更新成功：时间：{}，数据：{}", DateUtils.getTime(), statDataInfo);

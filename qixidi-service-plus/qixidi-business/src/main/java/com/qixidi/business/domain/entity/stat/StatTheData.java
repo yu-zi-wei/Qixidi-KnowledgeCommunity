@@ -61,5 +61,10 @@ public class StatTheData {
      */
     private Long dictumAlbumCount;
 
+    /**
+     * 时光小记总数
+     */
+    private Long timeNotesCount;
+
 }
 

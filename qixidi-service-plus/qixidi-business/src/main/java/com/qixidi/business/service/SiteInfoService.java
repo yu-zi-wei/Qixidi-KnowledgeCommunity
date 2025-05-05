@@ -2,6 +2,7 @@ package com.qixidi.business.service;
 
 import com.qixidi.business.domain.entity.ToSiteInfo;
 import com.qixidi.business.domain.vo.FriendLinkVo;
+import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface SiteInfoService {
 
     List<FriendLinkVo> friendLink();
 
+    StatDataInfoVo totalData();
 }

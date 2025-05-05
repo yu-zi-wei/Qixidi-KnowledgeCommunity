@@ -16,11 +16,12 @@
     <!--    如果存在即更新-->
     <insert id="insertUpdate">
         INSERT INTO b_stat_data_info (stat_time, user_count, onLine_user_count, article_count, special_count,
-                                    favorites_count, dictum_group_count, dictum_album_count, dictum_count)
+                                      favorites_count, dictum_group_count, dictum_album_count, time_notes_count,
+                                      dictum_count)
         VALUES (#{statDataInfo.statTime}, #{statDataInfo.userCount}, #{statDataInfo.onlineUserCount},
                 #{statDataInfo.articleCount}, #{statDataInfo.specialCount},
                 #{statDataInfo.favoritesCount}, #{statDataInfo.dictumGroupCount}, #{statDataInfo.dictumAlbumCount}
-                   , #{statDataInfo.dictumCount}) on duplicate key
+                   , #{statDataInfo.timeNotesCount}, #{statDataInfo.dictumCount}) on duplicate key
         update
             user_count= ifnull(#{statDataInfo.userCount},0),
             onLine_user_count=ifnull(#{statDataInfo.onlineUserCount},0),
@@ -29,6 +30,7 @@
             favorites_count=ifnull(#{statDataInfo.favoritesCount},0),
             dictum_group_count=ifnull(#{statDataInfo.dictumGroupCount},0),
             dictum_album_count=ifnull(#{statDataInfo.dictumAlbumCount},0),
+            time_notes_count=ifnull(#{statDataInfo.timeNotesCount},0),
             dictum_count=ifnull(#{statDataInfo.dictumCount},0)
     </insert>
 
@@ -42,6 +44,7 @@
             favorites_count,
             dictum_group_count,
             dictum_album_count,
+            time_notes_count,
             dictum_count
         FROM b_stat_data_info
         WHERE
