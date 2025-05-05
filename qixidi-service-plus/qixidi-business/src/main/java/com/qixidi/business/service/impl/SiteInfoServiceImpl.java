@@ -3,6 +3,7 @@ package com.qixidi.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qixidi.business.domain.entity.FriendLink;
 import com.qixidi.business.domain.entity.ToSiteInfo;
@@ -11,9 +12,11 @@ import com.qixidi.business.domain.vo.FriendLinkVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.mapper.FriendLinkMapper;
 import com.qixidi.business.mapper.ToSiteInfoMapper;
+import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
+import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.stat.StatDataInfoMapper;
 import com.qixidi.business.service.SiteInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +25,13 @@ import java.util.List;
  * @author ziwei
  * @date 2024年09月16日
  */
+@RequiredArgsConstructor
 @Service
 public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInfo> implements SiteInfoService {
-    @Autowired
-    private FriendLinkMapper friendLinkMapper;
-    @Autowired
-    private StatDataInfoMapper statDataInfoMapper;
+    private final FriendLinkMapper friendLinkMapper;
+    private final StatDataInfoMapper statDataInfoMapper;
+    private final LabelInfoMapper labelInfoMapper;
+    private final LabelGroupingInfoMapper labelGroupingInfoMapper;
 
     @Override
     public ToSiteInfo info() {
@@ -45,6 +49,14 @@ public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInf
     public StatDataInfoVo totalData() {
         StatDataInfoVo statDataInfoVo = statDataInfoMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>()
                 .eq(StatDataInfo::getStatTime, DateUtil.today()));
+        Long labelCount = labelInfoMapper.selectCount(null);
+        Long labelGroupCount = labelGroupingInfoMapper.selectCount(null);
+        
+        if (statDataInfoVo != null) {
+            statDataInfoVo = statDataInfoMapper.selectVoOne(new QueryWrapper<StatDataInfo>().orderByDesc("id").last("limit 1"));
+        }
+        statDataInfoVo.setLabelCount(labelCount);
+        statDataInfoVo.setLabelGroupCount(labelGroupCount);
         return statDataInfoVo;
     }
 }
