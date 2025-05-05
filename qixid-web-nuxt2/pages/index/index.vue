@@ -173,7 +173,7 @@
             </p>
             <hr class="hr-item mb-10"/>
             <el-skeleton :rows="3" animated v-if="!statDataInfoLoading"/>
-            <div v-if="statDataInfoLoading">
+            <div v-if="statDataInfoLoading" style="padding: 2px">
               <div class="flex-space-between text-center line-height-20"
                    v-if="statDataInfoLoading">
                 <div>

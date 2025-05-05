@@ -83,7 +83,6 @@
 
 .website-data {
   background-color: #FFFFFF;
-  padding: 15px;
-  /*border: 1px solid var(--hover-color);*/
+  padding: 16px;
   border-radius: 10px;
 }
