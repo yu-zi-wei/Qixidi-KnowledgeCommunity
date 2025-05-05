@@ -7,7 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qixidi.business.domain.entity.FriendLink;
 import com.qixidi.business.domain.entity.ToSiteInfo;
+import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
+import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
+import com.qixidi.business.domain.enums.StatusEnums;
 import com.qixidi.business.domain.vo.FriendLinkVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.mapper.FriendLinkMapper;
@@ -49,8 +52,8 @@ public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInf
     public StatDataInfoVo totalData() {
         StatDataInfoVo statDataInfoVo = statDataInfoMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>()
                 .eq(StatDataInfo::getStatTime, DateUtil.today()));
-        Long labelCount = labelInfoMapper.selectCount(null);
-        Long labelGroupCount = labelGroupingInfoMapper.selectCount(null);
+        Long labelCount = labelInfoMapper.selectCount(new LambdaQueryWrapper<LabelInfo>().eq(LabelInfo::getState, StatusEnums.NORMAL.getCode()));
+        Long labelGroupCount = labelGroupingInfoMapper.selectCount(new LambdaQueryWrapper<LabelGroupingInfo>().eq(LabelGroupingInfo::getState, StatusEnums.NORMAL.getCode()));
 
         if (statDataInfoVo == null) {
             statDataInfoVo = statDataInfoMapper.selectVoOne(new QueryWrapper<StatDataInfo>()

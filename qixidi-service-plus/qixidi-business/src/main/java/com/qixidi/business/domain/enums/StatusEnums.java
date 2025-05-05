@@ -1,7 +1,7 @@
 package com.qixidi.business.domain.enums;
 
 /**
- * 文章审核状态
+ * 统用状态
  */
 public enum StatusEnums {
     NORMAL(0, "正常"),

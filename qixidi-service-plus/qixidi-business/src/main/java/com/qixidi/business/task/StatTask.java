@@ -1,11 +1,16 @@
 package com.qixidi.business.task;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.light.core.constant.SystemConstant;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
+import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
+import com.qixidi.business.domain.entity.dictum.DictumAlbum;
+import com.qixidi.business.domain.entity.dictum.DictumGroup;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
+import com.qixidi.business.domain.enums.StatusEnums;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
@@ -59,12 +64,14 @@ public class StatTask {
     public void StatInfoUpdate() {
         try {
             log.info("网站数据更新开始：{}", DateUtils.getTime());
-            Long articleCount = articleInformationMapper.selectCount(new QueryWrapper<ArticleInformation>().eq("audit_state", ArticleAuditStateType.APPROV.getCode()));
+            Long articleCount = articleInformationMapper.selectCount(new LambdaQueryWrapper<ArticleInformation>()
+                    .eq(ArticleInformation::getAuditState, ArticleAuditStateType.APPROV.getCode())
+                    .eq(ArticleInformation::getState, StatusEnums.NORMAL.getCode()));
             Long specialCount = specialInformationMapper.selectCount(null);
-            Long userCount = tripartiteUserMapper.selectCount(null);
-            Long dictumGroupCount = dictumGroupMapper.selectCount(null);
-            Long dictumAlbumCount = dictumAlbumMapper.selectCount(null);
-            Long dictumInfoCount = dictumInfoMapper.selectCount(null);
+            Long userCount = tripartiteUserMapper.selectCount(new LambdaQueryWrapper<TripartiteUser>().eq(TripartiteUser::getState, StatusEnums.NORMAL.getCode()));
+            Long dictumGroupCount = dictumGroupMapper.selectCount(new LambdaQueryWrapper<DictumGroup>().eq(DictumGroup::getState, StatusEnums.NORMAL.getCode()));
+            Long dictumAlbumCount = dictumAlbumMapper.selectCount(new LambdaQueryWrapper<DictumAlbum>().eq(DictumAlbum::getState, StatusEnums.NORMAL.getCode()));
+            Long dictumInfoCount = dictumInfoMapper.selectCount(new LambdaQueryWrapper<DictumInfo>().eq(DictumInfo::getState, StatusEnums.NORMAL.getCode()));
             Long timeNotesCount = timeNotesMapper.selectCount(null);
             StatDataInfo statDataInfo = new StatDataInfo()
                     .setArticleCount(articleCount)

@@ -5,8 +5,11 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.light.core.utils.DateUtils;
+import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
+import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
 import com.qixidi.business.domain.enums.StatDataEnums;
+import com.qixidi.business.domain.enums.StatusEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.domain.vo.stat.StatReturnDataVo;
@@ -45,8 +48,8 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
         if (ObjectUtil.isNull(bo.getStatTime())) {
             bo.setStatTime(DateUtils.getDate());
         }
-        Long labelCount = labelInfoMapper.selectCount(null);
-        Long labelGroupCount = labelGroupingInfoMapper.selectCount(null);
+        Long labelCount = labelInfoMapper.selectCount(new LambdaQueryWrapper<LabelInfo>().eq(LabelInfo::getState, StatusEnums.NORMAL.getCode()));
+        Long labelGroupCount = labelGroupingInfoMapper.selectCount(new LambdaQueryWrapper<LabelGroupingInfo>().eq(LabelGroupingInfo::getState, StatusEnums.NORMAL.getCode()));
         StatDataInfoVo statData = baseMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>().eq(StatDataInfo::getStatTime, bo.getStatTime()));
         if (ObjectUtil.isNull(statData)) {
             statData = baseMapper.selectVoOne(new QueryWrapper<StatDataInfo>().orderByDesc("id").last("limit 1"));
