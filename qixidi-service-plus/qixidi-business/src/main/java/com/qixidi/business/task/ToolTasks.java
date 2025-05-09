@@ -56,7 +56,7 @@ public class ToolTasks {
                 MailUtils.sendText(SystemConstant.AdministratorMailboxList, "掘金签到失败-登录过期", "掘金签到失败-登录过期");
                 return;
             }
-            if (LocalDateTime.now().getHour() == 5) {
+            if (LocalDateTime.now().getHour() == 8) {
                 logger.error("重复签到：{}", error);
                 return;
             }
