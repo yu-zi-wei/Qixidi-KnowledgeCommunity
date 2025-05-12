@@ -43,6 +43,8 @@ public enum RedisBusinessKeyEnums {
     POPULAR_AUTHORS("POPULAR_AUTHORS", "(名言)热门作者"),
     POPULAR_LABEL("POPULAR_LABEL", "(名言)热门标签"),
 
+    JUEJING_TOKEN("JUEJING_TOKEN", "掘金token"),
+
     ;
 
     private String key;
