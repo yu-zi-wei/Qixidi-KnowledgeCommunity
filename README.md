@@ -96,11 +96,11 @@ qixidi/
 | vditor       | xx          | Makdwon 编辑器 |
 
 ### 部署文档
-服务端：https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-service-plus/README.md
+**服务端：** https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-service-plus/README.md
 
-前端-前台：https://gitee.com/yu-zi-wei/qixidi/blob/master/qixid-web-nuxt2/README.md
+**前端-前台：** https://gitee.com/yu-zi-wei/qixidi/blob/master/qixid-web-nuxt2/README.md
 
-前端-后台：https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-web-admin/README.md
+**前端-后台：** https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-web-admin/README.md
 
 ### 技术架构图🍂
 
