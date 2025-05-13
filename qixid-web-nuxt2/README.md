@@ -1,19 +1,26 @@
-# aurora-nuxt2
+# aurora-nuxt2 部署文档
 
-## 启动，部署文档
+## 本地运行
 
 ```bash
-# install dependencies
+# 下载依赖
 npm install
+# 或
 npm install --registry=http://registry.npmmirror.com
 
-# serve with hot reload at localhost:3000
+# 启动
 npm run dev
 
+# 访问地址
+http://127.0.0.1:9006
+
+```
+## 部署文档
+```shell
 # 打包
 # 打包之前建议先删除.nuxt文件
 npm run build
-## 部署上线
+## 部署上线（流程）
 # 1、在其他地方新建一个文件夹：nux2-deployment
 # 2、将 .nuxt、package.json、nuxt.config.js、static文件拷贝到nux2-deployment
 # 3、将nux2-deployment上传到服务器
@@ -59,7 +66,7 @@ pm2 startup #产生 init 脚本，保持进程活着；
 pm2 kill #杀死pm2进程
 ```
 
-# nginx 相关
+## nginx 相关
 ```shell
 #检查配置
 /data/app/nginx/sbin/nginx -t
