@@ -95,6 +95,13 @@ qixidi/
 | mavon-editor | 2.10.4      | Makdwon 编辑器 |
 | vditor       | xx          | Makdwon 编辑器 |
 
+### 部署文档
+服务端：https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-service-plus/README.md
+
+前端-前台：https://gitee.com/yu-zi-wei/qixidi/blob/master/qixid-web-nuxt2/README.md
+
+前端-后台：https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-web-admin/README.md
+
 ### 技术架构图🍂
 
 ![技术架构图.png](img%2F%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
