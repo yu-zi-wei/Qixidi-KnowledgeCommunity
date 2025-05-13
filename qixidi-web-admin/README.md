@@ -13,9 +13,12 @@ npm install --registry=https://registry.npmmirror.com
 
 # 启动服务
 npm run dev
+
+# 账号密码
+admin/123456
 ```
 
-浏览器访问 http://localhost:80
+浏览器访问 http://localhost:81
 
 ## 发布
 
