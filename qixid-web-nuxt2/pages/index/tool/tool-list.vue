@@ -5,7 +5,7 @@
       <li v-for="item of toolArray" class="fl-left">
         <div class="tool-list" :title="item.toolName">
           <a :href="item.toolUrl" target="_blank">
-            <div class="flex-left align-items-center">
+            <div class="flex-left align-items-center" style="border-bottom: 1px solid #dfe4ea;padding-bottom: 6px">
               <div class="mr-6">
                 <el-image v-if="item.icon" style="width: 40px; height: 40px" fit="cover"
                           :src="item.icon"></el-image>
@@ -32,11 +32,11 @@
                   </svg>
                 </div>
               </div>
-              <p class="tool-toolName text-underline-hover font-s-16 font-bold" v-text="item.toolName"></p>
+              <div class="tool-toolName text-underline-hover font-s-16 font-bold" v-text="item.toolName"></div>
             </div>
-            <hr class="hr-item mt-4 mb-8"/>
+            <!--            <hr class="hr-item mt-4 mb-8 "/>-->
           </a>
-          <div class="tool-describe color-grey font-s-14 line-height-20">
+          <div class="tool-describe color-grey font-s-14 line-height-20 mt-6">
             {{ item.describe }}
           </div>
         </div>

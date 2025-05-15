@@ -231,16 +231,16 @@
             <el-skeleton :rows="6" animated v-if="selectedArticleLoading"/>
             <ul v-show="!selectedArticleLoading">
               <li v-for="(item,index) in selectedArticleList" :key="index"
-                  class="recommend-article-item flex-left align-items-center font-s-15"
+                  class="recommend-article-item flex-left align-items-center font-s-14"
                   :title="item.articleTitle">
                 <div class="flex-1 mr-6 text-center">
-                  <div v-if="index<=2"
+                  <h1 v-if="index<=2" class="font-s-14"
                        :style="index==0?'color:#eb4d4b':index==1?'color:#f9ca24':'color:#4cd137'">
                     {{ index + 1 }}
-                  </div>
-                  <div v-else>
+                  </h1>
+                  <h1 class="font-s-15" v-else>
                     {{ index + 1 }}
-                  </div>
+                  </h1>
                 </div>
                 <div class="cursor-pointer overflow-nowrap-1 flex-10">
                   <nuxt-link class="text-underline-hover"
