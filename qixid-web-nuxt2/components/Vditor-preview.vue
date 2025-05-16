@@ -41,6 +41,12 @@ export default {
           },
           anchor: 1,
           after() {
+            // 让所有超链接在新标签页打开
+            document.querySelectorAll('.vditor-reset a').forEach(link => {
+              link.setAttribute('target', '_blank');
+              link.setAttribute('rel', 'noopener noreferrer');
+            });
+
             //生成目录
             let tocTags = ["H1", "H2", "H3", "H4"];//筛选目录
             let element = document.getElementById(id);

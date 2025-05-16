@@ -82,7 +82,7 @@
                 {{ item.articleAbstract }}
               </p>
             </div>
-            <div class="flex-space-between mt-10 mr-15">
+            <div class="flex-space-between mt-15 mr-15 color-grey-2">
               <div class="article-top font-s-13">
                 <div class="svg-translateY-2 font-bold-300">
                   <nuxt-link class="hover-cl"
@@ -90,12 +90,13 @@
                              target="_blank">
                     {{ item.nickname }}
                   </nuxt-link>
-                  <span class="color-grey ml-8 font-bold-300"
+                  <span class="ml-4 mr-4">/</span>
+                  <span class="font-bold-300"
                         :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
-                      {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>
+                    {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>
                 </div>
                 <div class="ml-15">
-                  <div v-if="item.type==1" class="font-s-12 color-grey-2 font-bold-300">
+                  <div v-if="item.type==1" class="font-s-12 font-bold-300">
                     <svg t="1719973854018" class="icon-theme-1 icon-size-14 svg-translateY-3" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="6365">
@@ -108,7 +109,7 @@
                     </svg>
                     原创
                   </div>
-                  <div v-if="item.type==2" class="font-s-12 color-grey">
+                  <div v-if="item.type==2" class="font-s-12">
                     <svg t="1719973895599" class="icon-theme-1 icon-size-14 svg-translateY-3" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="7373">
@@ -126,13 +127,12 @@
                 <!--                  </nuxt-link>-->
                 <!--                </el-tag>-->
                 <!--              </div>-->
-                <div class="svg-translateY-3 font-s-13 color-grey-2 hover-cl ml-15 font-bold-300" title="分类">
+                <div class="svg-translateY-3 font-s-13 hover-cl ml-15 font-bold-300" title="分类">
                   <nuxt-link :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
                     # {{ item.groupingName }}
                   </nuxt-link>
                 </div>
               </div>
-
             </div>
           </div>
 

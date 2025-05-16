@@ -6,8 +6,7 @@
           <div class="logo cursor-pointer" :title="websiteName">
             <nuxt-link to="/">
               <div class="flex-left align-items-center svg-translateY-3" style="height: 50px;">
-                <!--                <el-image style="height: 30px;margin-top: 8px" src="/img/logo1.png"/>-->
-                <!--                                <el-image style="height: 40px;width: 40px" src="/img/logo.png"/>-->
+                <!--                                                <el-image style="height: 40px;width: 40px" src="/img/logo.png"/>-->
                 <!--                <svg t="1726902880139" class="icon-theme" viewBox="0 0 1024 1024" version="1.1"-->
                 <!--                     xmlns="http://www.w3.org/2000/svg" p-id="4593" width="34" height="34">-->
                 <!--                  <path-->
@@ -63,11 +62,25 @@
                 <!--                </el-menu-item>-->
                 <!--                <el-menu-item index="/test">测试</el-menu-item>-->
               </el-menu>
+              <div class="search-div">
+                <!--              <el-autocomplete-->
+                <!--                style="width: 360px;border-radius: 20px;margin-top: 10px"-->
+                <!--                class="inline-input"-->
+                <!--                value-key="content"-->
+                <!--                v-model="search.keyword"-->
+                <!--                :fetch-suggestions="querySearch"-->
+                <!--                @keyup.enter.native="searchAurora"-->
+                <!--                :placeholder="'探索'+websiteName"-->
+                <!--                @select="handleSelect"-->
+                <!--                clearable>-->
+                <!--                <i class="el-icon-search el-input__icon" slot="suffix"></i>-->
+                <!--              </el-autocomplete>-->
+              </div>
             </ul>
-            <ul class="nav-right-ul">
+            <ul class="nav-right-ul search-div">
               <!--          搜索-->
               <el-autocomplete
-                style="width: 360px;border-radius: 20px"
+                style="width: 360px;border-radius: 20px;"
                 class="inline-input"
                 value-key="content"
                 v-model="search.keyword"
@@ -82,9 +95,9 @@
               <!--        创作中心-->
               <li>
                 <el-dropdown class="el-dropdown-link ml-15" title="发布">
-                  <div class="mt-4">
+                  <div class="mt-6">
                     <svg t="1735804208969" class="icon cursor-pointer icon-theme" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="11397" width="30" height="30">
+                         xmlns="http://www.w3.org/2000/svg" p-id="11397" width="28" height="28">
                       <path
                         d="M256.8704 769.5872s184.9344-508.416 428.9024-628.5824C420.096 359.424 223.5392 1014.8352 223.5392 1014.8352l338.8416-90.8288s-10.752-17.664-30.3104-12.3904l-271.6672 72.7552s31.5904-83.7632 65.2288-137.3184c171.0592-56.1152 317.184-115.8144 375.3984-312.8832 6.5536-42.8544-23.3984-31.4368-31.7952-29.184 70.912-60.0576 209.92-258.2528 162.2528-324.2496-14.6432-9.7792-21.3504-1.1264-21.3504-1.1264S918.016 44.544 836.096 18.5856c-82.0224-26.0096-236.8 90.8288-236.8 90.8288s2.6624-34.9696-33.792-25.1904C427.008 138.496 348.5184 282.7264 348.5184 282.7264s-10.24-38.3488-28.3648-16.384c-243.2 291.1744-63.2832 503.296-63.2832 503.296z"
                         fill="" p-id="11398"></path>
@@ -149,30 +162,15 @@
                 </el-dropdown>
               </li>
               <!--        消息-->
-              <li style="margin-top: 4px">
+              <li>
                 <el-dropdown>
-                  <div class="cursor-pointer flex-left" @click="newsJump">
-                    <!--                    <svg t="1672211911610" class="icon icon-size-28" viewBox="0 0 1024 1024" version="1.1"-->
-                    <!--                         xmlns="http://www.w3.org/2000/svg" p-id="2568">-->
-                    <!--                      <path-->
-                    <!--                        d="M544 161.536a330.666667 330.666667 0 0 1 298.666667 329.130667h-0.341334c0.213333 1.493333 0.341333 2.986667 0.341334 4.565333v219.434667h39.68a32 32 0 0 1 0 64h-212.053334a160 160 0 0 1-316.586666 0H141.909333a32 32 0 1 1 0-64h39.424v-219.434667c0-1.578667 0.128-3.072 0.341334-4.565333H181.333333a330.666667 330.666667 0 0 1 298.666667-329.130667V128a32 32 0 1 1 64 0v33.536z m-298.666667 553.130667h533.333334v-219.434667c0-1.578667 0.128-3.072 0.341333-4.565333h-0.341333a266.666667 266.666667 0 1 0-533.333334 0h-0.341333c0.213333 1.493333 0.341333 2.986667 0.341333 4.565333v219.434667z m359.765334 64H418.901333a96 96 0 0 0 186.197334 0z"-->
-                    <!--                        fill="#8a919f" p-id="2569"></path>-->
-                    <!--                    </svg>-->
+                  <div class="cursor-pointer flex-left mt-6" @click="newsJump">
                     <svg t="1744013810249" class="icon-theme-1" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="33327" width="30" height="30">
+                         xmlns="http://www.w3.org/2000/svg" p-id="33327" width="28" height="28">
                       <path
                         d="M640 786.272C639.904 846.912 590.208 896 528 896c-61.76 0-111.904-48.896-112-109.728h224z m-37.344-590.08C602.656 158.592 569.28 128 528 128c-41.152 0-74.656 30.528-74.656 68.192 0 3.84 0.32 7.616 0.992 11.264-103.104 32.832-187.68 133.632-187.68 252.896v93.92s0 135.2-36.352 136.384C208.608 690.656 192 705.92 192 724.8c0 18.944 16.704 34.08 37.312 34.08h597.376c20.704 0 37.312-15.264 37.312-34.08 0-18.976-16.704-34.112-37.312-34.112-37.344 0-37.344-135.456-37.344-135.456v-94.816a264.224 264.224 0 0 0-187.68-252.992c0.64-3.712 0.992-7.456 0.992-11.2z"
                         opacity=".9" p-id="33328"></path>
                     </svg>
-                    <!--                    <svg t="1745568259846" class="icon-theme-1" viewBox="0 0 1024 1024" version="1.1"-->
-                    <!--                         xmlns="http://www.w3.org/2000/svg" p-id="3893" width="28" height="28">-->
-                    <!--                      <path-->
-                    <!--                        d="M506.31 162.55C362.92 165.58 247.6 282.77 247.6 426.87V631.5l-79.76 106.34c-16.33 21.78-11.92 52.67 9.86 69.01a49.28 49.28 0 0 0 29.57 9.86h609.47c10.64 0 21-3.45 29.52-9.82l2.51-2.03c19.73-16.88 22.98-46.17 7.44-66.96l-79.87-106.79V426.87c0-146.01-118.37-264.37-264.37-264.37l-5.66 0.05z m5.66 62.68c111.36 0 201.64 90.28 201.64 201.64v215.08l0.13 2.83c0.61 6.58 3.26 12.82 7.64 17.82l1.31 1.49 67.21 89.89H234.14l69.92-93.2a31.371 31.371 0 0 0 6.27-18.82V426.87c0-111.36 90.28-201.64 201.64-201.64z"-->
-                    <!--                        p-id="3894"></path>-->
-                    <!--                      <path-->
-                    <!--                        d="M453.31 839.11c0 34.65 28.09 62.73 62.73 62.73 34.65 0 62.73-28.09 62.73-62.73m-17.92-672.13c0.01-24.75-20.04-44.82-44.79-44.83-24.75-0.01-44.82 20.04-44.83 44.79v0.04"-->
-                    <!--                        p-id="3895"></path>-->
-                    <!--                    </svg>-->
                     <div class="circular-div-admin" v-if="userNewsSum>0">
                       <span class="sum-span-div-admin" v-text="userNewsSum"></span>
                     </div>
@@ -192,8 +190,8 @@
                 <div v-if="this.isLogin">
                   <el-dropdown trigger="click">
                     <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
-                      <el-avatar :size="40" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-                      <el-avatar :size="40" v-else src="/img/tx.jpg"></el-avatar>
+                      <el-avatar :size="38" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                      <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
                     </div>
                     <el-dropdown-menu slot="dropdown" style="padding: 15px">
                       <div class="data-info-dev">
@@ -650,8 +648,9 @@ export default {
 }
 
 /*搜索框样式*/
-.nav-right-ul .el-input__inner {
+.search-div .el-input__inner {
   border-radius: 25px;
+  //padding: 0px;
 }
 
 .el-menu--popup {

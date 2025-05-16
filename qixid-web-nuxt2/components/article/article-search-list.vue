@@ -13,17 +13,19 @@
                   </nuxt-link>
                   </span>
               <span class="color-grey-3 ml-2 mr-2">|</span>
-              <span class="">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
+              <span class="color-grey-2">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
               <span class="color-grey-3 ml-2 mr-2">|</span>
-              <span class="font-bold-300">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
+              <span class="font-bold-300 color-grey-2">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
             </el-col>
           </el-row>
-          <el-row :gutter="20" class="mb-10">
-            <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
-              <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer" title="查看文章">
-                <h1 class="line-height-24 font-s-16 mb-10 text-underline-hover">
-                  {{ item.articleTitle }}
-                </h1>
+          <div class="mb-10 flex-space-between">
+            <div>
+              <div class="">
+                <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
+                  <h1 class="line-height-24 font-s-16 mb-10 text-underline-hover cursor-pointer">
+                    {{ item.articleTitle }}
+                  </h1>
+                </nuxt-link>
                 <div class="font-s-14 color-grey line-height-26 abstract-cl-2">
                   {{ item.articleAbstract }}
                 </div>
@@ -65,13 +67,13 @@
                           v-text="item.commentTimes>0?item.commentTimes:'--'"></span>
                   </div>
                 </div>
-              </el-col>
-              <el-col :span="3" v-if="item.articleCover" class="mt-20">
-                <el-image :src="item.articleCover" fit="cover"
-                          style="width: 130px;height: 90px;border-radius: 2px"></el-image>
-              </el-col>
-            </nuxt-link>
-          </el-row>
+              </div>
+            </div>
+            <div v-if="item.articleCover">
+              <el-image :src="item.articleCover" fit="cover"
+                        style="width: 150px;height: 90px;border-radius: 4px;margin-right: 15px"></el-image>
+            </div>
+          </div>
         </li>
       </ul>
       <div v-show="listInformationList.length==0" style="margin: auto;max-width: 200px">

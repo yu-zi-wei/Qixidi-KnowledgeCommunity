@@ -148,7 +148,13 @@ export default {
             "chicken": "🐔",
           },
         },
-        after: {},
+        after() {
+          // 让所有超链接在新标签页打开
+          document.querySelectorAll('.vditor-reset a').forEach(link => {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+          });
+        },
         input: (value) => {
           this.$emit('update:mdContent', value);
           //更新主题

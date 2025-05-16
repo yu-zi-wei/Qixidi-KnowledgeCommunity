@@ -2,6 +2,14 @@
   <div class="module-main">
     <el-skeleton class="mt-30" :rows="16" animated v-if="loading"/>
     <div v-if="!loading" class="mt-30">
+      <div class="font-s-15 line-height-28 mb-15 color-grey ml-10">
+        为什么做这个模块？
+        <br/>
+        对抗遗忘：好观点转瞬即逝，记录能让它们真正成为自己的养分
+        <br/>
+        共鸣：如果某句话也曾让你心头一动，欢迎在评论区聊聊你的版本
+        <p class="font-bold-s">这是一个「思想笔记本」——不追求权威，只在乎真实与触动</p>
+      </div>
       <!--      类容-->
       <div>
         <div class="flex-space-between collapse-title align-items-center" @click="searchPage" title="点击弹出检索页面">
