@@ -128,7 +128,7 @@
                 <!--              </div>-->
                 <div class="svg-translateY-3 font-s-13 color-grey-2 hover-cl ml-15 font-bold-300" title="分类">
                   <nuxt-link :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
-                    #{{ item.groupingName }}
+                    # {{ item.groupingName }}
                   </nuxt-link>
                 </div>
               </div>

@@ -4,9 +4,9 @@
 }
 
 .article-list-li {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   margin-top: 5px;
-  padding: 20px 15px 40px 15px;
+  padding: 20px 15px 25px 15px;
   border-bottom: 1px solid #dfe4ea;
   transition: .3s;
 }
