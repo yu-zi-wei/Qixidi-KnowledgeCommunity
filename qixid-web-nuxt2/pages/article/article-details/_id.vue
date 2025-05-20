@@ -80,18 +80,18 @@
                 <div class="article-user-info-two">
                   <div class="ml-8 flex-space-between align-items-center">
                     <div class="flex-left">
-                      <div class="cursor-pointer font-bold font-s-14 mr-10 svg-translateY-1"
+                      <div class="cursor-pointer font-bold font-s-14 mr-10"
                            :title="'作者：'+articleInfo.nickname">
                         <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)"
                                    target="_blank">
                           {{ articleInfo.nickname }}
                         </nuxt-link>
                       </div>
-                      <div class="font-s-14 mr-15 svg-translateY-1">
-                        {{ $utils.parseTime(articleInfo.createTime, '{y}年{m}月{d}日 {h}:{s}') }}
+                      <div class="font-s-14 mr-15 ">
+                        {{ $utils.parseTime(articleInfo.createTime, '{y}-{m}-{d} {h}:{s}') }}
                       </div>
                       <div>
-                        <svg t="1741407328107" class="icon svg-translateY-1 icon-size-14"
+                        <svg t="1741407328107" class="icon  icon-size-14"
                              viewBox="0 0 1024 1024"
                              version="1.1"
                              xmlns="http://www.w3.org/2000/svg" p-id="30371">
@@ -102,8 +102,8 @@
                             d="M512 341.333333c-94.2592 0-170.666667 76.407467-170.666667 170.666667s76.407467 170.666667 170.666667 170.666667 170.666667-76.407467 170.666667-170.666667-76.407467-170.666667-170.666667-170.666667z m0 68.266667a102.4 102.4 0 1 1 0 204.8 102.4 102.4 0 0 1 0-204.8z"
                             p-id="30373"></path>
                         </svg>
-                        <span class="font-s-14"> {{ articleInfo.numberTimes }}</span>
                       </div>
+                      <div class="font-s-14 ml-4"> {{ articleInfo.numberTimes }}</div>
                     </div>
                     <div v-if="isOwn" @click="articleEdit(articleInfo.id)"
                          class="font-s-13 cursor-pointer ml-10 color-grey-2">编辑

@@ -90,7 +90,7 @@
                              target="_blank">
                     {{ item.nickname }}
                   </nuxt-link>
-                  <span class="ml-4 mr-4">/</span>
+                  <span class="ml-4 mr-4">|</span>
                   <span class="font-bold-300"
                         :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                     {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>

@@ -15,7 +15,9 @@
               <span class="color-grey-3 ml-2 mr-2">|</span>
               <span class="color-grey-2">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
               <span class="color-grey-3 ml-2 mr-2">|</span>
-              <span class="font-bold-300 color-grey-2">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
+              <span class="font-bold-300 color-grey-2"
+                    :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
+                {{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
             </el-col>
           </el-row>
           <div class="mb-10 flex-space-between">

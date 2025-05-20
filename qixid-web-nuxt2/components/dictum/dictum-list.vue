@@ -237,7 +237,7 @@
                   {{ item.commentSum == null ? '--' : item.commentSum }}
                 </div>
                 <div class="font-s-13 mr-15 svg-translateY-4" title="记录时间">
-                <span class="" v-text="$utils.reckonTime(item.updateTime)"
+                <span class="" v-text="$utils.reckonTime(item.updateTime,'{y}-{m}-{d}')"
                       :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')"></span>
                 </div>
                 <div class="svg-translateY-4 mr-15 text-underline-hover cursor-pointer" @click="viewCommentList(item)">

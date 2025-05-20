@@ -14,12 +14,12 @@
               {{ item.nickname }}
             </nuxt-link>
             <span class="color-grey-3 ml-2 mr-2">|</span>
-            <span class="color-grey" v-if="item.occupation!=null">
+            <span class="color-grey-2" v-if="item.occupation!=null">
               {{ item.occupation }}
               <span class="color-grey-3 ml-2 mr-2">|</span>
             </span>
-            <span class="color-grey font-bold-300" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
-                                        {{ $utils.reckonTime(item.createTime) }}</span>
+            <span class="color-grey-2 font-bold-300" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
+                                        {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>
           </div>
           <div>
             <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
