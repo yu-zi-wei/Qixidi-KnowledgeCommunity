@@ -71,10 +71,9 @@ textarea:focus {
   margin-bottom: 25px;
   padding: 15px 8px;
   border-radius: 6px;
-  border: 1px solid #ecf0f1;
   transition: all 0.2s linear 0s;
   /*box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.08);*/
-  background-color: #F8F8FA;
+  background-color: #F3F3F3;
   border: 1px solid #cfd8e3;
 }
 
