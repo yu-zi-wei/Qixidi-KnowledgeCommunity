@@ -73,8 +73,9 @@ textarea:focus {
   border-radius: 6px;
   border: 1px solid #ecf0f1;
   transition: all 0.2s linear 0s;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.08);
-  /*background-color: #F8F8FA;*/
+  /*box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.08);*/
+  background-color: #F8F8FA;
+  border: 1px solid #cfd8e3;
 }
 
 .box-item:hover {
