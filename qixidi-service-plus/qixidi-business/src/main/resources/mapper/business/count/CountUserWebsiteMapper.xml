@@ -39,6 +39,9 @@
             <if test="code==11">
                 circle_count=circle_count+1
             </if>
+            <if test="code==14">
+                time_notes_count=time_notes_count+1
+            </if>
         </trim>
         where uuid=#{uuid}
     </update>
@@ -79,26 +82,15 @@
             <if test="code==11">
                 circle_count=circle_count-1
             </if>
+            <if test="code==14">
+                time_notes_count=time_notes_count-1
+            </if>
         </trim>
         where uuid=#{uuid}
     </update>
 
     <select id="selectCensus" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        select uuid,
-               fabulous_count,
-               fans_fabulous_count,
-               collection_count,
-               follow_count,
-               fans_follow_count,
-               comment_count,
-               fans_comment_count,
-               article_count,
-               special_column_count,
-               fans_special_column,
-               circle_count,
-               album_count,
-               dictum_count,
-               update_time
+        select *
         from b_count_user_website
         where uuid = #{uid} LIMIT 1;
     </select>
@@ -154,6 +146,15 @@
             <foreach collection="list" item="item" separator=";">
                 update b_count_user_website
                 set`dictum_count` = #{item.dictumCount},
+                `update_time` = #{item.updateTime}
+                where `uuid` = #{item.uuid}
+            </foreach>
+        </if>
+        <!--        小记-->
+        <if test="code==14">
+            <foreach collection="list" item="item" separator=";">
+                update b_count_user_website
+                set`time_notes_count` = #{item.dictumCount},
                 `update_time` = #{item.updateTime}
                 where `uuid` = #{item.uuid}
             </foreach>

@@ -71,4 +71,8 @@ public class CountUserWebsiteEntity implements Serializable {
      * 名言数
      */
     private int dictumCount;
+    /**
+     * 时光小记数
+     */
+    private int timeNotesCount;
 }

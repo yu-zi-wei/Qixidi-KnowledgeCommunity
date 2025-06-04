@@ -91,7 +91,7 @@ public interface ITripartiteUserService {
 
     TripartiteUserVo BasicsUser();
 
-    R sendOutCode(String email,Integer type);
+    R sendOutCode(String email, Integer type);
 
     List<TripartiteUserVo> fdUserList(UserInfoBo bo);
 
@@ -109,5 +109,5 @@ public interface ITripartiteUserService {
 
     Boolean bindEmail(UserBindBo bo);
 
-   AuthRequest getAuthRequest(String source);
+    AuthRequest getAuthRequest(String source);
 }

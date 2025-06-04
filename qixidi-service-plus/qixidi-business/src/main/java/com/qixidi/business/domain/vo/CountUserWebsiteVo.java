@@ -70,6 +70,10 @@ public class CountUserWebsiteVo {
      */
     private int dictumCount;
     /**
+     * 时光小记数
+     */
+    private int timeNotesCount;
+    /**
      * 更新时间
      */
     private Date updateTime = new Date();

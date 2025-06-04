@@ -11,12 +11,15 @@ import com.light.core.core.page.TableDataInfo;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.TimeNotesBo;
 import com.qixidi.business.domain.entity.TimeNotes;
+import com.qixidi.business.domain.enums.CountUserType;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
+import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.service.TimeNotesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -34,12 +37,15 @@ import java.util.stream.Collectors;
 public class TimeNotesServiceImpl implements TimeNotesService {
 
     private final TimeNotesMapper timeNotesMapper;
+    private final CountUserWebsiteMapper countUserWebsiteMapper;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(TimeNotesBo bo) {
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
         timeNotes.setUid(LoginHelper.getTripartiteUuid());
         timeNotesMapper.insert(timeNotes);
+        countUserWebsiteMapper.updateAdd(LoginHelper.getTripartiteUuid(), CountUserType.B_TIME_NOTES.getCode());
     }
 
     @Override
@@ -48,9 +54,11 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         timeNotesMapper.updateById(timeNotes);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(Long id) {
         timeNotesMapper.deleteById(id);
+        countUserWebsiteMapper.updateDelete(LoginHelper.getTripartiteUuid(), CountUserType.B_TIME_NOTES.getCode());
     }
 
     @Override
