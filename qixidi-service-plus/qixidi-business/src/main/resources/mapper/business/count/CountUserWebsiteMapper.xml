@@ -154,7 +154,7 @@
         <if test="code==14">
             <foreach collection="list" item="item" separator=";">
                 update b_count_user_website
-                set`time_notes_count` = #{item.dictumCount},
+                set`time_notes_count` = #{item.timeNotesCount},
                 `update_time` = #{item.updateTime}
                 where `uuid` = #{item.uuid}
             </foreach>
