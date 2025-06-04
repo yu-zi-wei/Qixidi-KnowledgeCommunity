@@ -208,13 +208,13 @@
                         </div>
                         <hr class="hr-item mt-10 mb-15"/>
                         <div class="flex-space-between padding-le-ri-10 mb-20">
-                          <div class="cursor-pointer hover-cl">
-                            <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
-                                       rel="noopener">
-                              <p>关注</p>
-                              <p class="flex-center mt-6">{{ userInfo.fansFollowCount }}</p>
-                            </nuxt-link>
-                          </div>
+                          <!--                          <div class="cursor-pointer hover-cl">-->
+                          <!--                            <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"-->
+                          <!--                                       rel="noopener">-->
+                          <!--                              <p>关注</p>-->
+                          <!--                              <p class="flex-center mt-6">{{ userInfo.fansFollowCount }}</p>-->
+                          <!--                            </nuxt-link>-->
+                          <!--                          </div>-->
                           <div class="cursor-pointer hover-cl">
                             <nuxt-link :to="`/user_home/collection?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                        rel="noopener">
@@ -235,6 +235,12 @@
                                        rel="noopener">
                               <p class="hover-cl">名言</p>
                               <p class="flex-center mt-6">{{ userInfo.dictumCount }}</p>
+                            </nuxt-link>
+                          </div>
+                          <div class="cursor-pointer hover-cl">
+                            <nuxt-link :to="'/user_admin/time_motes_admin'" rel="noopener">
+                              <p class="hover-cl">小记</p>
+                              <p class="flex-center mt-6">{{ userInfo.timeNotesCount }}</p>
                             </nuxt-link>
                           </div>
                         </div>

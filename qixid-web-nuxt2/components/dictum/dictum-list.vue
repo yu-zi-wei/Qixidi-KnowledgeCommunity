@@ -324,7 +324,7 @@
       <div style="margin: 40px">
         <div class="text-right text-underline hover-cl font-s-13 color-grey-2 mb-20">
           <nuxt-link :to="`/dictum/dictum-details/`+$base64.encode(dictumInfo.id)" target="_blank">
-            新页面打开
+            新标签页打开
           </nuxt-link>
         </div>
         <div style="background-color: #F8F8FA;border-radius: 4px;padding: 20px">

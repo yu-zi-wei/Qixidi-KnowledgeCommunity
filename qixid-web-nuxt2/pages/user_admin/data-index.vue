@@ -7,7 +7,6 @@
           <div>
             <div class="color-grey mr-10 font-s-14" v-if="!userDateLoading">
               统计时间：{{ $utils.parseTime(countUseInfo.updateTime, '{y}-{m}-{d}') }}
-              <span> | 查看更多</span>
             </div>
           </div>
         </div>
@@ -101,7 +100,7 @@
                 <el-col :span="1" style="height: 1px"/>
                 <el-col :span="5">
                   <el-card shadow="hover" class="ba-color-grey-2 text-center" title="名言总数">
-                    <div class="cursor-pointer hover-cl  font-s-4 mb-12">
+                    <div class="cursor-pointer hover-cl font-s-4 mb-12">
                       <nuxt-link :to="'/dictum/space/content-list?uuid='+$base64.encode(countUseInfo.uuid)"
                                  target="_blank">
                         名言总数
@@ -109,6 +108,19 @@
                     </div>
                     <div class="sum-data-cl">
                       <countTo :startVal='0' :endVal='countUseInfo.dictumCount' :duration='2000'></countTo>
+                    </div>
+                  </el-card>
+                </el-col>
+                <el-col :span="1" style="height: 1px"/>
+                <el-col :span="5">
+                  <el-card shadow="hover" class="ba-color-grey-2 text-center" title="名言总数">
+                    <div class="cursor-pointer hover-cl font-s-4 mb-12">
+                      <nuxt-link :to="'/user_admin/time_motes_admin'">
+                        时光小记数
+                      </nuxt-link>
+                    </div>
+                    <div class="sum-data-cl">
+                      <countTo :startVal='0' :endVal='countUseInfo.timeNotesCount' :duration='2000'></countTo>
                     </div>
                   </el-card>
                 </el-col>

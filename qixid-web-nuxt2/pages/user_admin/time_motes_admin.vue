@@ -1,7 +1,7 @@
 <template>
   <div class="home-top-index">
     <el-tabs v-model="tabs">
-      <el-tab-pane label="时光小计" name="tabs">
+      <el-tab-pane label="时光小记" name="tabs">
         <el-skeleton class="mt-20" v-if="loading" :rows="4" animated/>
         <div v-else class="mt-20 mb-20">
           <div v-if="moodNotesList.length>0" v-for="(item,index) in moodNotesList" :key="index">

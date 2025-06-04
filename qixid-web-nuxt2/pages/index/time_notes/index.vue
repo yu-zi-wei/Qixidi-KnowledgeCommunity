@@ -112,6 +112,11 @@
       style="padding: 20px"
       :with-header="false">
       <div style="margin: 40px">
+        <div class="text-right text-underline hover-cl font-s-13 color-grey-2 mb-20">
+          <nuxt-link :to="`/time_notes/details/`+$base64.encode(moodNotes.id)" target="_blank">
+            新标签页打开
+          </nuxt-link>
+        </div>
         <div class="mood-notes-title">
           <p>{{ moodNotes.title }}</p>
           <div class="flex-space-between mt-10">
@@ -154,11 +159,11 @@
 </template>
 
 <script>
-import VditorPreview from "../../components/Vditor-preview.vue";
-import TimeNotesEditing from "../../components/time-notes-editing.vue";
+import VditorPreview from "../../../components/Vditor-preview.vue";
+import TimeNotesEditing from "../../../components/time-notes-editing.vue";
 
 export default {
-  name: "moodNotes",
+  name: "moodNotesIndex",
   head: {
     title: `时光小记 - ${process.env.PROJECT_NAME}`,
   },
