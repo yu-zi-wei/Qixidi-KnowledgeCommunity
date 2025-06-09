@@ -23,6 +23,7 @@ const whiteList = [
   '/article/article-details/**',
   '/external_info/**',
   '/dictum/dictum-details/**',
+  '/time_notes/details/**',
 
 ];
 
