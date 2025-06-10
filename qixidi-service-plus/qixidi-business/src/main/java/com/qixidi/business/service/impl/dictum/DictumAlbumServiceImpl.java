@@ -1,6 +1,14 @@
 package com.qixidi.business.service.impl.dictum;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
 import com.qixidi.business.domain.entity.dictum.DictumAlbum;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
@@ -8,15 +16,6 @@ import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.qixidi.business.service.dictum.IDictumAlbumService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -133,7 +132,7 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
 
     @Override
     public Boolean deleteWithValidById(Long id) throws Exception {
-        Long selectCount = dictumInfoMapper.selectCount(new QueryWrapper<DictumInfo>().eq("album_id", id));
+        Long selectCount = dictumInfoMapper.selectCount(new LambdaQueryWrapper<DictumInfo>().eq(DictumInfo::getAlbumId, id));
         if (selectCount > 0) {
             throw new Exception("当前专辑存在名言，不可删除！");
         }
@@ -142,8 +141,8 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
 
     @Override
     public List<DictumAlbumVo> recommendedAlbum() {
-        IPage iPage = baseMapper.selectVoPage(new Page(0, 9),
-            new QueryWrapper<DictumAlbum>().orderByDesc("employ_sum").lambda());
+        IPage iPage = baseMapper.selectVoPage(new Page(0, 12),
+                new LambdaQueryWrapper<DictumAlbum>().orderByDesc(DictumAlbum::getEmploySum));
         return iPage.getRecords();
     }
 
