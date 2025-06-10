@@ -220,7 +220,7 @@ export default {
 }
 
 .contentItem:hover {
-  background-color: #f4f5f5;
+  background-color: #F3F3F3;
 }
 
 .content::-webkit-scrollbar {
