@@ -1,8 +1,7 @@
-
 <p align=center>
    <img src="./img/logo.png" alt="栖息地" style="width:200px;height:200px"/>
-<p align=center>
 <h1 align=center>栖息地</h1>
+<p align="center">
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/star.svg?theme=dark" ></img>
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/fork.svg?theme=dark" ></img>
 </p>
@@ -104,6 +103,7 @@ qixidi/
 | vditor       | xx          | Makdwon 编辑器 |
 
 ### 部署文档
+
 **服务端：** https://gitee.com/yu-zi-wei/qixidi/blob/master/qixidi-service-plus/README.md
 
 **前端-前台：** https://gitee.com/yu-zi-wei/qixidi/blob/master/qixid-web-nuxt2/README.md
