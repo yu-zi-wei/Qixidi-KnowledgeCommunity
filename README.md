@@ -1,4 +1,12 @@
-![logo.png](img%2Flogo.png)
+
+<p align=center>
+   <img src="./img/logo.png" alt="栖息地" style="width:200px;height:200px"/>
+<div style="text-align: center">
+<h1>栖息地</h1>
+<img src="https://gitee.com/yu-zi-wei/qixidi/badge/star.svg?theme=dark" ></img>
+<img src="https://gitee.com/yu-zi-wei/qixidi/badge/fork.svg?theme=dark" ></img>
+</div>
+</p>
 
 ## 前言🔥
 
