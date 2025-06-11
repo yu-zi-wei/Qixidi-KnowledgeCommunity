@@ -1,5 +1,5 @@
 <p align=center>
-   <img src="./img/logo.png" alt="栖息地" style="width:200px;height:200px"/>
+   <img src="./img/logo.png" alt="栖息地" style="width:160px;height:160px"/>
 <h1 align=center>栖息地</h1>
 <p align="center">
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/star.svg?theme=dark" ></img>
