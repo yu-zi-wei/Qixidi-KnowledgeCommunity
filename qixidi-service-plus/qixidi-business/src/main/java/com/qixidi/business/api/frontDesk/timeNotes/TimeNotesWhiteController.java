@@ -3,6 +3,7 @@ package com.qixidi.business.api.frontDesk.timeNotes;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.service.TimeNotesService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class TimeNotesWhiteController {
 
     private final TimeNotesService timeNotesService;
+
     /**
      * 获取时光小计详情
      *
@@ -36,11 +38,12 @@ public class TimeNotesWhiteController {
     /**
      * 获取时光小计列表
      *
-     * @param pageQuery
+     * @param bo
      */
-    @GetMapping("/list")
-    public TableDataInfo<TimeNotesVo> list(PageQuery pageQuery) {
-        return timeNotesService.list(pageQuery.build());
+    @PostMapping("/list")
+    public TableDataInfo<TimeNotesVo> list(@RequestBody TimeNotesSearchBo bo) {
+        PageQuery query = bo;
+        return timeNotesService.list(bo, query.build());
     }
 
 }

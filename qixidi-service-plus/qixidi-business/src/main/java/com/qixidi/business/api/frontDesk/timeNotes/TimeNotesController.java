@@ -3,7 +3,8 @@ package com.qixidi.business.api.frontDesk.timeNotes;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.bo.TimeNotesBo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.service.TimeNotesService;
@@ -72,11 +73,12 @@ public class TimeNotesController {
     /**
      * 获取时光小计列表
      *
-     * @param pageQuery
+     * @param bo
      */
-    @GetMapping("/list")
-    public TableDataInfo<TimeNotes> queryList(PageQuery pageQuery) {
-        return timeNotesService.queryList(pageQuery.build());
+    @PostMapping("/list")
+    public TableDataInfo<TimeNotes> queryList(@RequestBody TimeNotesSearchBo bo) {
+        PageQuery pageQuery = bo;
+        return timeNotesService.queryList(bo,pageQuery.build());
     }
 
 }

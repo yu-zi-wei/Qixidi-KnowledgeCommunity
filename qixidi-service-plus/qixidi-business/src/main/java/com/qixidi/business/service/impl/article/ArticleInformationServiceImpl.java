@@ -4,10 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
@@ -45,6 +45,7 @@ import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.UserFollowType;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
 import com.qixidi.business.domain.enums.article.ArticleUpdateType;
+import com.qixidi.business.domain.vo.article.ArticleArchiveVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionRecordVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
@@ -66,6 +67,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -229,9 +232,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             return;
         }
 //                修改文章状态
-        baseMapper.update(null, new UpdateWrapper<ArticleInformation>()
-                .set("audit_state", 2).set("audit_time", new Date())
-                .eq("id", id));
+        baseMapper.update(null, new LambdaUpdateWrapper<ArticleInformation>()
+                .set(ArticleInformation::getAuditState, 2).set(ArticleInformation::getAuditTime, new Date())
+                .eq(ArticleInformation::getId, id));
         //文章数量加一
         countUserWebsiteMapper.updateAdd(uuid, CountUserType.ARTICLE_COUNT.getCode());
 //        发送消息
@@ -450,6 +453,41 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public List<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
         return baseMapper.latelyArticleList(bo, pageQuery.build());
+    }
+
+    @Override
+    public TableDataInfo<ArticleArchiveVo> articleArchive(PageQuery pageQuery) {
+        LambdaQueryWrapper<ArticleInformation> wrapper = new LambdaQueryWrapper<ArticleInformation>()
+                .orderByDesc(ArticleInformation::getCreateTime);
+        String tripartiteUuid = LoginHelper.getTripartiteUuid();
+        if (tripartiteUuid != null) {
+            wrapper.eq(ArticleInformation::getUserId, tripartiteUuid);
+        }
+        Page<ArticleInformation> articleInformationPage = baseMapper.selectPage(pageQuery.build(), wrapper);
+        List<ArticleInformation> records = articleInformationPage.getRecords();
+        TableDataInfo tableDataInfo = new TableDataInfo();
+        if (CollectionUtil.isEmpty(records)) return tableDataInfo;
+
+        Map<String, List<ArticleInformation>> collect = records.stream().collect(Collectors.groupingBy(
+                item -> DateUtil.format(item.getCreateTime(), "yyyy")));
+        //对key 按时间降序排序
+        List<Map.Entry<String, List<ArticleInformation>>> entryList = new ArrayList<>(collect.entrySet());
+        // 定义时间格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+        entryList.sort((o1, o2) -> {
+            Year year1 = Year.parse(o1.getKey(), formatter);
+            Year year2 = Year.parse(o2.getKey(), formatter);
+            return year2.compareTo(year1);
+        });
+        List<ArticleArchiveVo> list = new ArrayList<>();
+        for (Map.Entry<String, List<ArticleInformation>> entry : entryList) {
+            ArticleArchiveVo articleArchiveVo = new ArticleArchiveVo(entry.getKey(), entry.getValue());
+            list.add(articleArchiveVo);
+        }
+        tableDataInfo.setTotal(articleInformationPage.getTotal());
+        tableDataInfo.setCode(HttpStatus.HTTP_OK);
+        tableDataInfo.setRows(list);
+        return tableDataInfo;
     }
 
     @Override

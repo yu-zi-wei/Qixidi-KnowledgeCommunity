@@ -67,7 +67,7 @@ public class ArticleInformation {
      */
     private String reprintUrl;
     /**
-     *文章状态（0：正常，1：已删除）
+     * 文章状态（0：正常，1：已删除）
      */
     private Integer state;
     /**
@@ -116,7 +116,9 @@ public class ArticleInformation {
      * 审核时间
      */
     private Date auditTime;
+
     private Date updateTime;
+
     private Date createTime;
     /**
      * 热度权重

@@ -1,4 +1,4 @@
-package com.qixidi.business.domain.bo;
+package com.qixidi.business.domain.bo.timeNotes;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

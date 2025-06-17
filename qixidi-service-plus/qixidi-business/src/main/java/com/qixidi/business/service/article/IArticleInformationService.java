@@ -9,6 +9,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
+import com.qixidi.business.domain.vo.article.ArticleArchiveVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -104,5 +105,7 @@ public interface IArticleInformationService {
     IPage<ArticleInformationVo> articleRecommendList(ArticleInformationBo bo, PageQuery pageQuery);
 
     List<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery);
+
+    TableDataInfo<ArticleArchiveVo> articleArchive(PageQuery pageQuery);
 }
 

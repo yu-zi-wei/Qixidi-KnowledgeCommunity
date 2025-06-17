@@ -689,6 +689,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     public UserInfoIdNameDto getTripartiteUser() {
         TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
         if (tripartiteUser == null) return null;
-        return new UserInfoIdNameDto(tripartiteUser.getUuid(), tripartiteUser.getUsername());
+        return new UserInfoIdNameDto(tripartiteUser.getUuid(), tripartiteUser.getNickname());
     }
 }

@@ -8,13 +8,16 @@ import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.page.TableDataInfo;
+import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.business.domain.bo.TimeNotesBo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.enums.CountUserType;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
+import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.service.TimeNotesService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
 
     private final TimeNotesMapper timeNotesMapper;
     private final CountUserWebsiteMapper countUserWebsiteMapper;
+    private final TripartiteUserMapper tripartiteUserMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -62,10 +66,11 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     }
 
     @Override
-    public TableDataInfo<TimeNotesVo> list(Page<TimeNotes> build) {
+    public TableDataInfo<TimeNotesVo> list(TimeNotesSearchBo bo, Page<TimeNotes> build) {
         String tripartiteUuid = LoginHelper.getTripartiteUuid();
         LambdaQueryWrapper<TimeNotes> lambdaQueryWrapper = new LambdaQueryWrapper<TimeNotes>()
                 .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime)
+                .like(bo.getTitle() != null, TimeNotes::getTitle, bo.getTitle())
                 .orderByDesc(TimeNotes::getRecordTime);
         if (tripartiteUuid != null) {
             lambdaQueryWrapper.eq(TimeNotes::getUid, tripartiteUuid);
@@ -112,10 +117,11 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     }
 
     @Override
-    public TableDataInfo<TimeNotes> queryList(Page<TimeNotes> build) {
+    public TableDataInfo<TimeNotes> queryList(TimeNotesSearchBo bo, Page<TimeNotes> build) {
         Page<TimeNotes> timeNotesPage = timeNotesMapper.selectPage(build, new LambdaQueryWrapper<TimeNotes>()
                 .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime)
                 .eq(TimeNotes::getUid, LoginHelper.getTripartiteUuid())
+                .like(bo.getTitle() != null, TimeNotes::getTitle, bo.getTitle())
                 .orderByDesc(TimeNotes::getRecordTime));
         return TableDataInfo.build(timeNotesPage);
     }

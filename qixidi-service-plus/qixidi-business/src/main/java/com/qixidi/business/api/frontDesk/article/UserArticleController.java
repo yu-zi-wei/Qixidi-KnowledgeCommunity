@@ -44,8 +44,7 @@ public class UserArticleController extends BaseController {
         }
         bo.setAuditState(1);
         ArticleInformationVo vo = iArticleInformationService.insertByBo(bo);
-        if (vo.getId() < -10) return R.ok(vo);
-        return vo.getId() > 0 ? R.ok(vo) : R.fail();
+        return R.ok(vo);
     }
 
     /**
@@ -56,7 +55,7 @@ public class UserArticleController extends BaseController {
     @PutMapping("/update/article")
     public R<ArticleInformationVo> edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
         ArticleInformationVo vo = iArticleInformationService.updateByBo(bo);
-        return vo.getId() > 0 ? R.ok(vo) : R.fail();
+        return R.ok(vo);
     }
 
     /**

@@ -2,7 +2,8 @@ package com.qixidi.business.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.bo.TimeNotesBo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
+import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
@@ -18,9 +19,9 @@ public interface TimeNotesService {
 
     void delete(Long id);
 
-    TableDataInfo<TimeNotesVo> list(Page<TimeNotes> build);
+    TableDataInfo<TimeNotesVo> list(TimeNotesSearchBo bo, Page<TimeNotes> build);
 
     TimeNotesInfoVo getInfo(Long id);
 
-    TableDataInfo<TimeNotes> queryList(Page<TimeNotes> build);
+    TableDataInfo<TimeNotes> queryList(TimeNotesSearchBo bo, Page<TimeNotes> build);
 }

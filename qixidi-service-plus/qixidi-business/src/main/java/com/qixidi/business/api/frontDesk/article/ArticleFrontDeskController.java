@@ -8,6 +8,7 @@ import com.light.core.core.validate.QueryGroup;
 import com.qixidi.auth.api.BaseController;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
+import com.qixidi.business.domain.vo.article.ArticleArchiveVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -167,4 +168,14 @@ public class ArticleFrontDeskController extends BaseController {
         return toAjax(iArticleInformationService.addArticleBrowse(id, label, request));
     }
 
+    /**
+     * 文章归档
+     *
+     * @param pageQuery
+     * @return
+     */
+    @GetMapping("/article/archive")
+    public TableDataInfo<ArticleArchiveVo> articleArchive(PageQuery pageQuery) {
+        return iArticleInformationService.articleArchive(pageQuery);
+    }
 }
