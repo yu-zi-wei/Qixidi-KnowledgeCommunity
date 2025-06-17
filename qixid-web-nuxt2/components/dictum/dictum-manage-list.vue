@@ -159,7 +159,7 @@ export default {
       this.dictumInfoRoleLists();
     },
     keyword() {
-      this.dictumInfoRoleLists();
+      this.dictumInfoRoleListsDebounceTimer();
     },
   },
   methods: {
@@ -184,18 +184,22 @@ export default {
         this.$modal.msgSuccess("删除成功!");
       }).finally(() => this.loading = false)
     },
-    dictumInfoRoleLists() {
+    dictumInfoRoleListsDebounceTimer() {
+      this.loading = true;
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
-        this.queryParams.pageNum = 1;
-        this.queryParams.dictumState = this.state;
-        this.queryParams.content = this.keyword;
-        this.loading = true;
-        this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
-          this.dictumList = res.rows;
-          this.total = res.total;
-        }).finally(() => this.loading = false);
+        this.dictumInfoRoleLists();
       }, this.debounceTime);
+    },
+    dictumInfoRoleLists() {
+      this.queryParams.pageNum = 1;
+      this.queryParams.dictumState = this.state;
+      this.queryParams.content = this.keyword;
+      this.loading = true;
+      this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
+        this.dictumList = res.rows;
+        this.total = res.total;
+      }).finally(() => this.loading = false);
     },
 
     getData() {
