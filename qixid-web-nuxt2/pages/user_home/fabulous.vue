@@ -21,7 +21,7 @@
                   </el-col>
                 </el-row>
                 <el-row :gutter="20" class="mb-10">
-                  <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
+                  <nuxt-link :to="`/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
                     <el-col :span=" item.articleCover==null?24:20" class="cursor-pointer">
                       <p class="font-s-16 font-bold mb-8 text-underline-hover">{{ item.articleTitle }}</p>
                     </el-col>

@@ -136,7 +136,7 @@ export default {
             feed.addItem({
               title: article.articleTitle,
               id: article.id,
-              link: `${domainNameUrl}/article/article-details/${encode(article.id)}`, // 文章的链接
+              link: `${domainNameUrl}/article-details/${encode(article.id)}`, // 文章的链接
               description: article.articleAbstract,
               date: new Date(article.createTime), // 文章创建时间
             });

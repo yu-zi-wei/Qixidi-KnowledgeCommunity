@@ -22,7 +22,7 @@
                                         {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>
           </div>
           <div>
-            <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
+            <nuxt-link :to="`/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
               <h1 class="font-s-16 mb-10 cursor-pointer text-underline-hover" v-text="item.articleTitle"></h1>
             </nuxt-link>
             <p class="overflow-nowrap-2 font-s-14 line-height-26 color-grey mb-10">

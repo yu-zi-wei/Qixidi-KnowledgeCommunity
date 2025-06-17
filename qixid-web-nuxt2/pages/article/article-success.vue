@@ -5,7 +5,7 @@
     </div>
     <div class="box-two">
       <div>
-        <nuxt-link class="box-title" :to="`/article/article-details/`+$base64.encode(article.id)"
+        <nuxt-link class="box-title" :to="`/article-details/`+$base64.encode(article.id)"
                    rel="noopener">
           {{ article.articleTitle }}
         </nuxt-link>

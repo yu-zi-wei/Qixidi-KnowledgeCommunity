@@ -32,7 +32,7 @@
                       <span class="color-grey" v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                     </div>
                     <nuxt-link class="title-class text-underline-hover"
-                               :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
+                               :to="`/article-details/`+$base64.encode(item.id)" target="_blank">
                       {{ item.articleTitle }}
                     </nuxt-link>
                     <div class="abstract-class mt-10 font-bold-300" v-text="item.articleAbstract"></div>

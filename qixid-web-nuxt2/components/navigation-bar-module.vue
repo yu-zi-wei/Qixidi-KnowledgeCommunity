@@ -395,7 +395,7 @@
 
 <script>
 import VditorMd from "./Vditor-md.vue";
-import TimeNotesEditing from "./time-notes-editing.vue";
+import TimeNotesEditing from "./timeNotes/time-notes-editing.vue";
 
 export default {
   name: "navigationBarModule",
@@ -414,6 +414,8 @@ export default {
         title: null,
         content: null,
         recordTime: null,
+        userName: null,
+        createBy: null,
       },
       websiteName: process.env.PROJECT_NAME,
       themeColor: process.env.THEME_COLOR,
@@ -537,7 +539,7 @@ export default {
         return;
       }
       let pth = this.$route.path;
-      let patns = '/search/data';
+      let patns = '/search/article';
       if (this.url.indexOf(pth) !== -1) {
         patns = pth;
       }

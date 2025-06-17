@@ -23,7 +23,7 @@
           <div class="mb-10 flex-space-between">
             <div>
               <div class="">
-                <nuxt-link :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank">
+                <nuxt-link :to="`/article-details/`+$base64.encode(item.id)" target="_blank">
                   <h1 class="line-height-24 font-s-16 mb-10 text-underline-hover cursor-pointer">
                     {{ item.articleTitle }}
                   </h1>

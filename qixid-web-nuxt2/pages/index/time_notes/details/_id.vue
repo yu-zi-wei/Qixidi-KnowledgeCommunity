@@ -42,7 +42,7 @@
 
 <script>
 import VditorPreview from "../../../../components/Vditor-preview.vue";
-import TimeNotesEditing from "../../../../components/time-notes-editing.vue";
+import TimeNotesEditing from "../../../../components/timeNotes/time-notes-editing.vue";
 
 export default {
   name: "details",

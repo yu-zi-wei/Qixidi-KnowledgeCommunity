@@ -7,7 +7,7 @@
           <div>
             <span class="font-s-16 color-grey">浏览了[{{ item.targetType == 1 ? '文章' : '帖子' }}]：</span>
             <nuxt-link class="font-s-16 cursor-pointer text-underline hover-cl"
-                       :to="`/article/article-details/`+$base64.encode(item.targetId)" target="_blank" rel="noopener">
+                       :to="`/article-details/`+$base64.encode(item.targetId)" target="_blank" rel="noopener">
               {{ item.targetTitle }}
             </nuxt-link>
           </div>

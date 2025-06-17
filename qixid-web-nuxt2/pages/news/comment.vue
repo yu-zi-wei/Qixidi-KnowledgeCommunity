@@ -13,13 +13,13 @@
           </div>
           <div class="font-s-14 color-grey">{{ item.type == 1 ? "评论了你的文章：" : "回复了你的评论：" }}</div>
           <div class="cursor-pointer text-underline hover-cl" title="查看详情">
-            <nuxt-link :to="`/article/article-details/`+$base64.encode(item.articleId)" target="_blank">
+            <nuxt-link :to="`/article-details/`+$base64.encode(item.articleId)" target="_blank">
               [ {{ item.articleTitle }} ]
             </nuxt-link>
           </div>
         </div>
         <div class="comment-div padding-10" title="查看详情">
-          <nuxt-link :to="`/article/article-details/`+$base64.encode(item.articleId)" target="_blank">
+          <nuxt-link :to="`/article-details/`+$base64.encode(item.articleId)" target="_blank">
             <vditor-preview :id="'aiEditor-news-introduce-'+index" :content="item.content"
                             v-if="!loading"></vditor-preview>
           </nuxt-link>

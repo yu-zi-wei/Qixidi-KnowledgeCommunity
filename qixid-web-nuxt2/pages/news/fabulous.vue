@@ -15,7 +15,7 @@
                 {{ item.senderName }}
               </nuxt-link>
               <span class="font-s-13 color-grey">赞了你的文章</span>
-              <nuxt-link class="hover-cl text-underline" :to="`/article/article-details/`+$base64.encode(item.targetId)"
+              <nuxt-link class="hover-cl text-underline" :to="`/article-details/`+$base64.encode(item.targetId)"
                          target="_blank">
                 [ {{ item.newsContent }} ]
               </nuxt-link>

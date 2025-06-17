@@ -244,7 +244,7 @@
                 </div>
                 <div class="cursor-pointer overflow-nowrap-1 flex-10">
                   <nuxt-link class="text-underline-hover"
-                             :to="`/article/article-details/`+$base64.encode(item.id)" target="_blank"
+                             :to="`/article-details/`+$base64.encode(item.id)" target="_blank"
                              rel="noopener">
                     {{ item.articleTitle }}
                   </nuxt-link>

@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import TimeNotesEditing from "../../components/time-notes-editing.vue";
+import TimeNotesEditing from "../../components/timeNotes/time-notes-editing.vue";
 import VditorPreview from "../../components/Vditor-preview.vue";
 
 export default {
@@ -163,6 +163,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 20,
+        title: null,
       },
       total: 0,
       scrollLoading: true,
@@ -204,7 +205,7 @@ export default {
     getList() {
       this.loading = true;
       this.infoDrawer = false;
-      this.$API("/frontDesk/time/notes/list", "get", this.queryParams).then(res => {
+      this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
         this.moodNotesList = res.rows;
         this.total = res.total;
         this.loading = false;
@@ -219,7 +220,7 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/frontDesk/time/notes/list", this.$get(), this.queryParams).then(res => {
+          this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
             res.rows.forEach(item => {
               this.moodNotesList.push(item)
             })

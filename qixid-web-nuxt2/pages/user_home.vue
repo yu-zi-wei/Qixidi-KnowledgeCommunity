@@ -207,7 +207,6 @@
               class="color-ffc312 font-bold">{{ item.currency }} A币</span></div>
           </div>
         </div>
-
       </el-dialog>
       <!--    A币 中心-->
       <el-drawer
@@ -515,17 +514,7 @@ export default {
       })
     }
     ,
-  }
-  ,
-  watch: {
-    // 监听路由是否变化
-    '$route'() {
-      this.getWebsiteInfos();
-      this.isCurrentUser();
-      this.fdUserDatas();
-    }
-  }
-  ,
+  },
   mounted() {
     this.getWebsiteInfos();
     this.listNavigations();

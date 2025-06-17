@@ -20,10 +20,11 @@ const whiteList = [
   '/last-article',
   '/user_home/**',
   '/popular-group/**',
-  '/article/article-details/**',
+  '/article-details/**',
   '/external_info/**',
   '/dictum/dictum-details/**',
   '/time_notes/details/**',
+  '/article_archive',
 
 ];
 

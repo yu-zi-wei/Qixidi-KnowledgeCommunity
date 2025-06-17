@@ -6,8 +6,8 @@
                @select="handleSelect"
                text-color="#000000"
                :active-text-color="themeColor">
-        <el-menu-item index="/search/data">综合</el-menu-item>
         <el-menu-item index="/search/article">文章</el-menu-item>
+        <el-menu-item index="/search/time_notes">小记</el-menu-item>
         <el-menu-item index="/search/label">标签</el-menu-item>
         <el-menu-item index="/search/user">用户</el-menu-item>
       </el-menu>
@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     handleSelect(path) {
-      // console.log("data",data)
       this.$router.push({
         path: path,
         query: {
