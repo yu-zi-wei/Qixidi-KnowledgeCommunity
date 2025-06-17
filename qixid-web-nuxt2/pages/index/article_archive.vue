@@ -33,7 +33,7 @@
         <h1 class="mb-10 font-s-24">{{ item.createTime }}
           <span class="font-s-16 color-grey-2" title="文章总数">「{{ item.list.length }}」</span></h1>
         <div v-for="(items,indexs) in item.list" :key="indexs">
-          <div class="list-item">
+          <div class="article-archive-list-item">
             <div>
               <span class="color-grey-2 mr-8">
                 {{ $utils.parseTime(items.createTime, '{m}-{d}') }}</span>
@@ -149,15 +149,15 @@ export default {
 
 <style>
 
-.list-item {
-  margin: 20px 0px;
+.article-archive-list-item {
+  margin: 15px 0px;
   width: auto;
   padding: 5px;
   border-radius: 4px;
   transition: .2s;
 }
 
-.list-item:hover {
+.article-archive-list-item:hover {
   background-color: #F3F3F3;
 }
 

@@ -9,7 +9,7 @@
         <el-skeleton class="mt-20" v-if="loading" :rows="4" animated/>
         <div v-else class="mt-20 mb-20">
           <div v-if="moodNotesList.length>0" v-for="(item,index) in moodNotesList" :key="index">
-            <div class="list-item">
+            <div class="time-motes-admin-list-item">
               <div class="flex-space-between">
                 <div>
                   <span class="color-grey-2 mr-4">{{ item.recordTime }}</span>
@@ -265,7 +265,7 @@ export default {
   min-height: 100px;
 }
 
-.list-item {
+.time-motes-admin-list-item {
   margin: 10px 0px;
   width: auto;
   padding: 8px;
@@ -273,7 +273,7 @@ export default {
   transition: .2s;
 }
 
-.list-item:hover {
+.time-motes-admin-list-item:hover {
   background-color: #F3F3F3;
 }
 
