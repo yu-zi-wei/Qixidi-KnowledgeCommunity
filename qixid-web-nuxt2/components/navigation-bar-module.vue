@@ -344,14 +344,14 @@
                             </li>
                           </ul>
                         </div>
-                        <hr class="hr-item mt-20 mb-10 padding-le-ri-10"/>
-                        <div class="flex-space-between padding-le-ri-10">
+                        <hr class="hr-item mt-15 mb-15 padding-le-ri-10"/>
+                        <div class="flex-space-between padding-le-ri-10 font-s-13 font-bold-300 color-grey">
                           <div class="cursor-pointer hover-cl">
                             <nuxt-link to="/user_info/settings" target="_blank" rel="noopener">
                               我的设置
                             </nuxt-link>
                           </div>
-                          <div class="cursor-pointer hover-cl" @click="oauthLogout">退出</div>
+                          <div class="cursor-pointer hover-cl" @click="oauthLogout">退出登录</div>
                         </div>
                       </div>
                     </el-dropdown-menu>
@@ -504,7 +504,7 @@ export default {
     },
     //退出登录
     oauthLogout() {
-      this.$confirm('确定要离开吗!', '提示', {
+      this.$confirm('确定要离开吗!', '退出登录', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

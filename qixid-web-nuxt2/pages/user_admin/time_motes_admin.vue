@@ -2,12 +2,17 @@
   <div class="home-top-index">
     <el-tabs v-model="tabs">
       <el-tab-pane label="时光小记" name="tabs">
+        <div style="width: 45%">
+          <el-input v-model="queryParams.title" placeholder="请输入标题关键字"
+                    suffix-icon="el-icon-el-input__icon el-icon-search"></el-input>
+        </div>
         <el-skeleton class="mt-20" v-if="loading" :rows="4" animated/>
         <div v-else class="mt-20 mb-20">
           <div v-if="moodNotesList.length>0" v-for="(item,index) in moodNotesList" :key="index">
             <div class="list-item">
               <div class="flex-space-between">
                 <div>
+                  <span class="color-grey-2 mr-4">{{ item.recordTime }}</span>
                   <svg t="1742789451197" class="icon svg-translateY-8" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg"
                        p-id="12540" width="26" height="26">
@@ -22,7 +27,7 @@
                       fill="#211F1E" p-id="12543"></path>
                   </svg>
                   <span style="border-bottom: 1px solid #dfe4ea;padding-bottom: 4px; display: inline-block"
-                        class="cursor-pointer" @click="getInfo(item.id)">{{ item.title }}</span>
+                        class="cursor-pointer ml-2" @click="getInfo(item.id)">{{ item.title }}</span>
                 </div>
                 <div @click="deleteById(item.id)">
                   <svg t="1742976118757" class="icon-theme-2 icon-hover cursor-pointer icon-size-16 svg-translateY-8"
@@ -162,7 +167,7 @@ export default {
       tabs: 'tabs',
       queryParams: {
         pageNum: 1,
-        pageSize: 20,
+        pageSize: 40,
         title: null,
       },
       total: 0,
@@ -173,8 +178,16 @@ export default {
       moodNotes: {},
       timeNotesDialogVisible: false,
       infoDrawer: false,
+      debounceTimer: null,//防抖
+      debounceTime: 400,//防抖时间
     }
   },
+  watch: {
+    'queryParams.title'() {
+      this.getList();
+    },
+  },
+
   methods: {
     update() {
       this.timeNotesDialogVisible = true;
@@ -205,11 +218,14 @@ export default {
     getList() {
       this.loading = true;
       this.infoDrawer = false;
-      this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
-        this.moodNotesList = res.rows;
-        this.total = res.total;
-        this.loading = false;
-      })
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
+          this.moodNotesList = res.rows;
+          this.total = res.total;
+          this.loading = false;
+        })
+      }, this.debounceTime);
     },
     getData() {
       let scrollTop = document.documentElement.scrollTop

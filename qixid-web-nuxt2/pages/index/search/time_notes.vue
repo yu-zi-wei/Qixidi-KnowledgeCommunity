@@ -15,7 +15,7 @@ export default {
     return {
       queryParams: {
         pageNum: 1,
-        pageSize: 20,
+        pageSize: 40,
         title: this.$route.query.data,
       },
       reloadNum: 1,

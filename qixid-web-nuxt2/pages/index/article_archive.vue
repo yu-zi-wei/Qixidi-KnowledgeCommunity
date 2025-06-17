@@ -150,7 +150,7 @@ export default {
 <style>
 
 .list-item {
-  margin: 15px 0px;
+  margin: 20px 0px;
   width: auto;
   padding: 5px;
   border-radius: 4px;
