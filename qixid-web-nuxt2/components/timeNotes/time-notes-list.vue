@@ -21,7 +21,7 @@
                 fill="#211F1E" p-id="12543"></path>
             </svg>
             <span style="border-bottom: 1px solid #dfe4ea;padding-bottom: 4px; display: inline-block"
-                  class="cursor-pointer" @click="getInfo(items.id)">{{ items.title }}</span>
+                  class="cursor-pointer ml-2" @click="getInfo(items.id)">{{ items.title }}</span>
           </div>
           <div class="svg-translateY-8 font-s-13 color-fefefe">
             {{ $utils.parseTime(items.recordTime, '{m}-{d}') }}
