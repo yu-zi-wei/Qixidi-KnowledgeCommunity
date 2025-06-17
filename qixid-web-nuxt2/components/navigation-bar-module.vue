@@ -433,9 +433,9 @@ export default {
       userNewsSum: 0,
       userNewsList: [],
       //搜索展示路由
-      url: [
-        '/search/data',
+      searchUrl: [
         '/search/article',
+        '/search/time_notes',
         '/search/label',
         '/search/user',
       ],
@@ -540,7 +540,7 @@ export default {
       }
       let pth = this.$route.path;
       let patns = '/search/article';
-      if (this.url.indexOf(pth) !== -1) {
+      if (this.searchUrl.indexOf(pth) !== -1) {
         patns = pth;
       }
       this.$router.push({
