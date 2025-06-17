@@ -184,7 +184,7 @@ export default {
   },
   watch: {
     'queryParams.title'() {
-      this.getList();
+      this.getListDebounceTimer();
     },
   },
 
@@ -215,17 +215,23 @@ export default {
         this.infoDrawer = true;
       })
     },
-    getList() {
+    getListDebounceTimer() {
       this.loading = true;
       this.infoDrawer = false;
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
-        this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
-          this.moodNotesList = res.rows;
-          this.total = res.total;
-          this.loading = false;
-        })
+        this.getList();
       }, this.debounceTime);
+    },
+
+    getList() {
+      this.loading = true;
+      this.infoDrawer = false;
+      this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
+        this.moodNotesList = res.rows;
+        this.total = res.total;
+        this.loading = false;
+      })
     },
     getData() {
       let scrollTop = document.documentElement.scrollTop

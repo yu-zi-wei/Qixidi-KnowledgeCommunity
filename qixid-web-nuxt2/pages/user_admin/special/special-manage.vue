@@ -118,7 +118,7 @@ export default {
   },
   watch: {
     'queryParams.specialName'() {
-      this.specialListUids();
+      this.specialListUidsDebounceTime();
     },
   },
   methods: {
@@ -215,14 +215,18 @@ export default {
         this.specialListUids()
       });
     },
-    specialListUids() {
+    specialListUidsDebounceTime() {
+      this.loading = true;
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
-        this.$API("/white/special/list", "get", this.queryParams).then(res => {
-          this.specialUserList = res.data;
-          this.loading = false;
-        })
+        this.specialListUids();
       }, this.debounceTime);
+    },
+    specialListUids() {
+      this.$API("/white/special/list", "get", this.queryParams).then(res => {
+        this.specialUserList = res.data;
+        this.loading = false;
+      })
     }
   },
   mounted() {
