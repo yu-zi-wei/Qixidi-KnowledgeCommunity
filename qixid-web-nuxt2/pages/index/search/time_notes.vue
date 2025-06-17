@@ -1,6 +1,6 @@
 <template>
   <div class="mt-20">
-    <time-notes-list :query-params="queryParams"></time-notes-list>
+    <time-notes-list :query-params="queryParams" :reload="reloadNum"></time-notes-list>
   </div>
 </template>
 
