@@ -9,8 +9,8 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserFollowBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.entity.user.UserFollow;
-import com.qixidi.business.domain.enums.CountUserType;
-import com.qixidi.business.domain.enums.UserFollowType;
+import com.qixidi.business.domain.enums.CountUserTypeEnums;
+import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
@@ -55,9 +55,9 @@ public class UserFollowServiceImpl implements IUserFollowService {
         if (CollectionUtil.isNotEmpty(userFollows)) {
             throw new BaseException("你已经关注了该对象");
         }
-        if (bo.getType().equals(UserFollowType.b_user_follow.getCode())) {//  用户关注
-            countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserType.FOLLOW_COUNT.getCode());
-            countUserWebsiteMapper.updateAdd(bo.getTargetId(), CountUserType.FANS_FOLLOW_COUNT.getCode());
+        if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) {//  用户关注
+            countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
+            countUserWebsiteMapper.updateAdd(bo.getTargetId(), CountUserTypeEnums.FANS_FOLLOW_COUNT.getCode());
 //            发送消息
             executorService.execute(new Runnable() {
                 @Override
@@ -72,11 +72,11 @@ public class UserFollowServiceImpl implements IUserFollowService {
                     WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
                 }
             });
-        } else if (bo.getType().equals(UserFollowType.LABEL_FOLLOW.getCode())) { //标签关注
+        } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注
             labelInfoMapper.updateAddFollow(bo.getTargetId());
             Long aLong = baseMapper.selectCount(new QueryWrapper<UserFollow>()
-                    .eq("target_id", bo.getTargetId()).eq("uid", bo.getUid()).eq("type", UserFollowType.LABEL_FOLLOW.getCode()));
-            log.error("关注异常，重复关注，target_id：uid：{}，type：{}", bo.getTargetId(), bo.getUid(), UserFollowType.LABEL_FOLLOW.getCode());
+                    .eq("target_id", bo.getTargetId()).eq("uid", bo.getUid()).eq("type", UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
+            log.error("关注异常，重复关注，target_id：uid：{}，type：{}", bo.getTargetId(), bo.getUid(), UserFollowTypeEnums.LABEL_FOLLOW.getCode());
             if (aLong > 0) return false;
         }
         return baseMapper.insert(add) > 0;
@@ -86,9 +86,9 @@ public class UserFollowServiceImpl implements IUserFollowService {
     @Override
     public boolean cancelFollow(UserFollowBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        if (bo.getType().equals(UserFollowType.b_user_follow.getCode())) { //用户关注取消
-            countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserType.FOLLOW_COUNT.getCode());
-            countUserWebsiteMapper.updateDelete(bo.getTargetId(), CountUserType.FANS_FOLLOW_COUNT.getCode());
+        if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注取消
+            countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
+            countUserWebsiteMapper.updateDelete(bo.getTargetId(), CountUserTypeEnums.FANS_FOLLOW_COUNT.getCode());
             //发送消息
             executorService.execute(new Runnable() {
                 @Override
@@ -101,7 +101,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
                     WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
                 }
             });
-        } else if (bo.getType().equals(UserFollowType.LABEL_FOLLOW.getCode())) { //标签关注取消
+        } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注取消
             labelInfoMapper.updateDeleteFollow(bo.getTargetId());
         }
 
@@ -112,9 +112,9 @@ public class UserFollowServiceImpl implements IUserFollowService {
 
     @Override
     public Object followList(String uid, Integer type) {
-        if (type.equals(UserFollowType.b_user_follow.getCode())) { //用户关注列表
+        if (type.equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注列表
             return baseMapper.followUserList(uid, type);
-        } else if (type.equals(UserFollowType.LABEL_FOLLOW.getCode())) {//标签关注列表
+        } else if (type.equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) {//标签关注列表
             return baseMapper.followLabelList(uid, type);
         }
         return null;
@@ -123,9 +123,9 @@ public class UserFollowServiceImpl implements IUserFollowService {
     @Override
     public Object followRoleList(Integer type) {
         String uid = LoginHelper.getTripartiteUuid();
-        if (type.equals(UserFollowType.b_user_follow.getCode())) { //用户关注列表
+        if (type.equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注列表
             return baseMapper.followUserList(uid, type);
-        } else if (type.equals(UserFollowType.LABEL_FOLLOW.getCode())) {//标签关注列表
+        } else if (type.equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) {//标签关注列表
             return baseMapper.followLabelList(uid, type);
         }
         return null;

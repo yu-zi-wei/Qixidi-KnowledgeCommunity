@@ -15,7 +15,7 @@ import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.CommentType;
+import com.qixidi.business.domain.enums.CommentTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.qixidi.business.domain.enums.news.NewsType;
@@ -243,7 +243,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
 
     @Override
     public Object fabulousList(UserHomeBo bo, PageQuery pageQuery) {
-        if (bo.getType().equals(CommentType.ARTICLE_TYPE.getCode()))
+        if (bo.getType().equals(CommentTypeEnums.ARTICLE_TYPE.getCode()))
             return baseMapper.fabulousArticleList(bo, pageQuery.build());
 //        if (bo.getType().equals(CommentType.COMMENT_TYPE.getCode())) return baseMapper.fabulousCommentList(bo);
         return null;

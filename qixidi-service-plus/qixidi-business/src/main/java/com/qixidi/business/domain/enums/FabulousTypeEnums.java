@@ -1,17 +1,18 @@
 package com.qixidi.business.domain.enums;
 
 /**
- * 统用状态
+ * 点赞类型
  */
-public enum StatusEnums {
-    NORMAL(0, "正常"),
-    DELETE(1, "已删除"),
+public enum FabulousTypeEnums {
+    ARTICLE_TYPE(1, "文章"),
+    ACTIVITY_TYPE(2, "活动"),
+    CIRCLE_NEWS_TYPE(3, "圈子"),
+    COMMENT_TYPE(4, "评论"),
     ;
-
     private Integer code;
     private String value;
 
-    StatusEnums(Integer code, String value) {
+    FabulousTypeEnums(Integer code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -32,4 +33,3 @@ public enum StatusEnums {
         this.value = value;
     }
 }
-

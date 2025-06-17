@@ -14,7 +14,7 @@ import com.qixidi.business.service.IFeedbackService;
 import com.light.core.core.domain.PageQuery;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.FeedbackStatus;
+import com.qixidi.business.domain.enums.FeedbackStatusEnums;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
@@ -152,7 +152,7 @@ public class FeedbackServiceImpl implements IFeedbackService {
             TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
             FeedbackVo FeedbackVo = baseMapper.selectVoById(id);
             //发送系统消息
-            String content = String.format("%s 修改了任务：#%s 状态为-[%s]", tripartiteUser.getNickname(), FeedbackVo.getFeedbackTitle(), FeedbackStatus.acquireStatusMessage(status));
+            String content = String.format("%s 修改了任务：#%s 状态为-[%s]", tripartiteUser.getNickname(), FeedbackVo.getFeedbackTitle(), FeedbackStatusEnums.acquireStatusMessage(status));
             NewsSystemInfo newsSystemInfo = new NewsSystemInfo()
                     .setNewsTitle(content)
                     .setNewsContent(content)
@@ -175,13 +175,13 @@ public class FeedbackServiceImpl implements IFeedbackService {
         if (CollectionUtil.isEmpty(Feedbacks)) return FeedbackStatusSumVo;
         Map<Integer, Long> collect = Feedbacks.stream().collect(Collectors.groupingBy(Feedback::getStatus, Collectors.counting()));
         collect.forEach((k, v) -> {
-            if (k.equals(FeedbackStatus.TO_BE_PROCESSED.getCode())) {
+            if (k.equals(FeedbackStatusEnums.TO_BE_PROCESSED.getCode())) {
                 FeedbackStatusSumVo.setToBeProcessed(v);
-            } else if (k.equals(FeedbackStatus.UNDER_WAY.getCode())) {
+            } else if (k.equals(FeedbackStatusEnums.UNDER_WAY.getCode())) {
                 FeedbackStatusSumVo.setUnderWay(v);
-            } else if (k.equals(FeedbackStatus.COMPLETED.getCode())) {
+            } else if (k.equals(FeedbackStatusEnums.COMPLETED.getCode())) {
                 FeedbackStatusSumVo.setCompleted(v);
-            } else if (k.equals(FeedbackStatus.CLOSED.getCode())) {
+            } else if (k.equals(FeedbackStatusEnums.CLOSED.getCode())) {
                 FeedbackStatusSumVo.setClosed(v);
             }
         });

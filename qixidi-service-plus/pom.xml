@@ -76,6 +76,7 @@
         <module>qixidi-auth</module>
         <module>qixidi-business</module>
         <module>qixidi-love</module>
+        <module>qixidi-common</module>
     </modules>
 
     <dependencyManagement>
@@ -146,6 +147,12 @@
             <dependency>
                 <groupId>com.light</groupId>
                 <artifactId>qixidi-business</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-common</artifactId>
                 <version>${revision}</version>
             </dependency>
 

@@ -1,6 +1,6 @@
 package com.qixidi.business.domain.enums;
 
-public enum CountUserType {
+public enum CountUserTypeEnums {
 
     FABULOUS_COUNT(1, "点赞数"),
     FANS_FABULOUS_COUNT(2, "被点赞数"),
@@ -20,7 +20,7 @@ public enum CountUserType {
     private Integer code;
     private String value;
 
-    CountUserType(Integer code, String value) {
+    CountUserTypeEnums(Integer code, String value) {
         this.code = code;
         this.value = value;
     }

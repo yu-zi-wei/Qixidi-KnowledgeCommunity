@@ -1,18 +1,15 @@
-package com.qixidi.business.domain.enums;
+package com.qixidi.business.domain.enums.article;
 
-/**
- * 评论 点赞 类型
- */
-public enum CommentType {
-    ARTICLE_TYPE(1, "文章"),
-    COMMENT_TYPE(2, "评论"),
-    CIRCLE_NEWS_TYPE(3, "圈子"),
-    ACTIVITY_NEWS_TYPE(4, "活动");
+public enum ArticleUpdateTypeEnums {
+    FABULOUS_COUNT(1, "点赞数"),
+    COMMENT_COUNT(2, "评论数 "),
+    COLLECTION_COUNT(3, "收藏数"),
+    BROWSE_COUNT(4, "浏览次数");
 
     private Integer code;
     private String value;
 
-    CommentType(Integer code, String value) {
+    ArticleUpdateTypeEnums(Integer code, String value) {
         this.code = code;
         this.value = value;
     }

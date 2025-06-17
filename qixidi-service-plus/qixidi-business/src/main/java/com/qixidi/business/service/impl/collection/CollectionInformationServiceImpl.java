@@ -17,7 +17,7 @@ import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.CountUserType;
+import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -227,14 +227,14 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         if (flag) {
             bo.setId(add.getId());
         }
-        countUserWebsiteMapper.updateAdd(add.getUid(), CountUserType.COLLECTION_COUNT.getCode());
+        countUserWebsiteMapper.updateAdd(add.getUid(), CountUserTypeEnums.COLLECTION_COUNT.getCode());
         return flag;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeCollection(Long id) {
-        countUserWebsiteMapper.updateDelete(LoginHelper.getTripartiteUuid(), CountUserType.COLLECTION_COUNT.getCode());
+        countUserWebsiteMapper.updateDelete(LoginHelper.getTripartiteUuid(), CountUserTypeEnums.COLLECTION_COUNT.getCode());
         collectionRecordMapper.update(null,
             new UpdateWrapper<CollectionRecord>().set("state", 1).eq("collection_id", id));
         return baseMapper.deleteById(id) > 0;

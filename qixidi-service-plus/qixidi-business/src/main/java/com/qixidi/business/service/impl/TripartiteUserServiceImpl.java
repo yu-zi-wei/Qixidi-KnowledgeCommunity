@@ -37,7 +37,7 @@ import com.light.mybatisPlus.interfaces.UserInfoInterface;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
-import com.qixidi.auth.domain.enums.UserStatus;
+import com.qixidi.auth.domain.enums.UserStatusEnums;
 import com.qixidi.auth.domain.model.LoginUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
@@ -49,9 +49,9 @@ import com.qixidi.business.domain.bo.user.UserInfoBo;
 import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.entity.user.UserInformation;
-import com.qixidi.business.domain.enums.OutCodeType;
+import com.qixidi.business.domain.enums.OutCodeTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.qixidi.business.domain.enums.UserFollowType;
+import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.domain.vo.user.UserFollowVo;
@@ -303,8 +303,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 .setNickname("道友" + uuid)
                 .setCreateTime(new Date())
                 .setPassword(SecureUtils.digesters(tripartiteUser.getPassword()))
-                .setState(UserStatus.OK.getIntegerCode())
-                .setRoleId(UserStatus.GENERAL_USER.getLogCode())
+                .setState(UserStatusEnums.OK.getIntegerCode())
+                .setRoleId(UserStatusEnums.GENERAL_USER.getLogCode())
                 .setSource("平台注册");
         int insert = baseMapper.insert(tripartiteUser);
         CountUserWebsiteEntity countUserWebsiteEntity = new CountUserWebsiteEntity()
@@ -360,7 +360,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new QueryWrapper<UserFollow>()
                 .eq("target_id", uuid)
-                .eq("type", UserFollowType.b_user_follow.getCode())
+                .eq("type", UserFollowTypeEnums.b_user_follow.getCode())
                 .eq("uid", uuid1));
         if (ObjectUtils.isNotEmpty(userFollow) && userFollow.getTargetId().equals(uuid)) {
             tripartiteUserVo.setIsFollow(true);
@@ -398,13 +398,13 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 
     @Override
     public R sendOutCode(String email, Integer type) {
-        String mag = OutCodeType.acquireTypeMessage(type);
+        String mag = OutCodeTypeEnums.acquireTypeMessage(type);
         phoneMatches(email, 2);
         TripartiteUser tripartiteUser = baseMapper.selectEmail(email);
-        if (type.equals(OutCodeType.RESET_PASSWORD.getCode())) {
+        if (type.equals(OutCodeTypeEnums.RESET_PASSWORD.getCode())) {
             if (tripartiteUser == null) throw new ServiceException("该邮箱未注册，请前往个人信息进行绑定");
         }
-        if (type.equals(OutCodeType.MAILBOX_BINDING.getCode()) || type.equals(OutCodeType.SIGN_IN.getCode())) {
+        if (type.equals(OutCodeTypeEnums.MAILBOX_BINDING.getCode()) || type.equals(OutCodeTypeEnums.SIGN_IN.getCode())) {
             if (tripartiteUser != null) throw new ServiceException("该邮箱已被使用！");
         }
         String mailCaptchaKey = String.format(RedisBusinessKeyEnums.MAIL_CAPTCHA.getKey(), email);
@@ -510,10 +510,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     @Override
     public R sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception {
         TripartiteUser tripartiteUser = baseMapper.selectPhone(phone);
-        if (type.equals(OutCodeType.RESET_PASSWORD.getCode())) {
+        if (type.equals(OutCodeTypeEnums.RESET_PASSWORD.getCode())) {
             if (tripartiteUser == null) throw new ServiceException("该手机号未注册，请前往个人信息进行绑定");
         }
-        if (type.equals(OutCodeType.PHONE_BINDING.getCode()) || type.equals(OutCodeType.SIGN_IN.getCode())) {
+        if (type.equals(OutCodeTypeEnums.PHONE_BINDING.getCode()) || type.equals(OutCodeTypeEnums.SIGN_IN.getCode())) {
             if (tripartiteUser != null) throw new ServiceException("该手机号已被使用！");
         }
         String CAPTCHA_DAILY_LIMIT_PHONE = String.format(RedisBusinessKeyEnums.CAPTCHA_DAILY_LIMIT_PHONE.getKey(), phone);

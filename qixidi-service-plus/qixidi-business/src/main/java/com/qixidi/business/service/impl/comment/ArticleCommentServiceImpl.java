@@ -24,11 +24,11 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
-import com.qixidi.business.domain.enums.CommentType;
-import com.qixidi.business.domain.enums.CountUserType;
+import com.qixidi.business.domain.enums.CommentTypeEnums;
+import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.qixidi.business.domain.enums.StatusEnums;
-import com.qixidi.business.domain.enums.article.ArticleUpdateType;
+import com.qixidi.common.domain.enums.StatusEnums;
+import com.qixidi.business.domain.enums.article.ArticleUpdateTypeEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
@@ -148,8 +148,8 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
 
 //        前置处理
         commentPreprocessing(bo);
-        if (bo.getType().equals(CommentType.COMMENT_TYPE.getCode())) {
-            countUserWebsiteMapper.updateAdd(bo.getTargetUid(), CountUserType.FANS_COMMENT_COUNT.getCode());
+        if (bo.getType().equals(CommentTypeEnums.COMMENT_TYPE.getCode())) {
+            countUserWebsiteMapper.updateAdd(bo.getTargetUid(), CountUserTypeEnums.FANS_COMMENT_COUNT.getCode());
         }
         boolean flag = baseMapper.insert(add) > 0;
         if (!bo.getCommentUid().equals(bo.getTargetUid())) {
@@ -183,11 +183,11 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     @Async
     public void commentPreprocessing(ArticleCommentBo bo) {
         //        修改评论人评论次数
-        countUserWebsiteMapper.updateAdd(bo.getCommentUid(), CountUserType.COMMENT_COUNT.getCode());
+        countUserWebsiteMapper.updateAdd(bo.getCommentUid(), CountUserTypeEnums.COMMENT_COUNT.getCode());
         //        修改作品作者被评论数
-        countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserType.FANS_COMMENT_COUNT.getCode());
+        countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserTypeEnums.FANS_COMMENT_COUNT.getCode());
         //修改文章评论数
-        articleInformationMapper.updateAdd(bo.getArticleId(), ArticleUpdateType.COMMENT_COUNT.getCode());
+        articleInformationMapper.updateAdd(bo.getArticleId(), ArticleUpdateTypeEnums.COMMENT_COUNT.getCode());
         //WebSocket推送消息
         WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
     }
@@ -301,12 +301,12 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     @Async
     public void commentDeletePreprocessing(ArticleCommentBo bo, Integer size) {
         //        修改评论人评论次数
-        countUserWebsiteMapper.updateDelete(bo.getCommentUid(), CountUserType.COMMENT_COUNT.getCode());
+        countUserWebsiteMapper.updateDelete(bo.getCommentUid(), CountUserTypeEnums.COMMENT_COUNT.getCode());
         //        修改作品作者被评论数
-        countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserType.FANS_COMMENT_COUNT.getCode());
+        countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserTypeEnums.FANS_COMMENT_COUNT.getCode());
         //修改文章评论数
         articleInformationMapper.updateDeleteNumber(bo.getArticleId(),
-                ArticleUpdateType.COMMENT_COUNT.getCode(), size);
+                ArticleUpdateTypeEnums.COMMENT_COUNT.getCode(), size);
     }
 
     @Override

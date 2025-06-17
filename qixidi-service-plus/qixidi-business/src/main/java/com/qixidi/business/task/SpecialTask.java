@@ -8,9 +8,11 @@ import com.light.core.utils.email.MailUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
+import com.qixidi.common.domain.enums.StatusEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -51,8 +53,8 @@ public class SpecialTask {
             List<ArticleInformation> articleInformations = articleInformationMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
                     .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
                     .in(ArticleInformation::getSpecialId, specialIds)
-                    .eq(ArticleInformation::getState, 0)
-                    .eq(ArticleInformation::getAuditState, 2)
+                    .eq(ArticleInformation::getState, StatusEnums.NORMAL.getCode())
+                    .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode())
                     .isNotNull(ArticleInformation::getSpecialId));
             if (CollectionUtil.isEmpty(articleInformations)) return;
             Map<Long, Long> collectMap = articleInformations.stream().collect(Collectors.groupingBy(ArticleInformation::getSpecialId, Collectors.counting()));

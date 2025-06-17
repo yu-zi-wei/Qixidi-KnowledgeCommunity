@@ -10,9 +10,9 @@ import com.qixidi.business.domain.entity.dictum.DictumAlbum;
 import com.qixidi.business.domain.entity.dictum.DictumGroup;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
-import com.qixidi.business.domain.enums.StatusEnums;
+import com.qixidi.common.domain.enums.StatusEnums;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
-import com.qixidi.business.domain.enums.article.ArticleAuditStateType;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
@@ -65,7 +65,7 @@ public class StatTask {
         try {
             log.info("网站数据更新开始：{}", DateUtils.getTime());
             Long articleCount = articleInformationMapper.selectCount(new LambdaQueryWrapper<ArticleInformation>()
-                    .eq(ArticleInformation::getAuditState, ArticleAuditStateType.APPROV.getCode())
+                    .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode())
                     .eq(ArticleInformation::getState, StatusEnums.NORMAL.getCode()));
             Long specialCount = specialInformationMapper.selectCount(null);
             Long userCount = tripartiteUserMapper.selectCount(new LambdaQueryWrapper<TripartiteUser>().eq(TripartiteUser::getState, StatusEnums.NORMAL.getCode()));

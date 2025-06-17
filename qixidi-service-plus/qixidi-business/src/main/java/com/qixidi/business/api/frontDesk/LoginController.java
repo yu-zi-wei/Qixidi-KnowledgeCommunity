@@ -11,7 +11,7 @@ import com.light.redission.annotation.RepeatSubmit;
 import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.api.BaseController;
 import com.qixidi.auth.domain.entity.TripartiteUser;
-import com.qixidi.auth.domain.enums.UserStatus;
+import com.qixidi.auth.domain.enums.UserStatusEnums;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
@@ -205,7 +205,7 @@ public class LoginController extends BaseController {
         }
         TripartiteUser tripartiteUser = new TripartiteUser(authResponse);
         tripartiteUser.setUpdateTime(new Date())
-                .setRoleId(UserStatus.GENERAL_USER.getLogCode())
+                .setRoleId(UserStatusEnums.GENERAL_USER.getLogCode())
                 .setUserType(justAuthConfig.getTripartiteUserType());
         iTripartiteUserService.oauthLogin(tripartiteUser);
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();

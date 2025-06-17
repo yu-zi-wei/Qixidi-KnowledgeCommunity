@@ -23,6 +23,11 @@
 
         <dependency>
             <groupId>com.light</groupId>
+            <artifactId>qixidi-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.light</groupId>
             <artifactId>light-exception</artifactId>
         </dependency>
 

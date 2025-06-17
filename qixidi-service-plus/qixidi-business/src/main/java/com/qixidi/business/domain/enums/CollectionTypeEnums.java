@@ -1,19 +1,16 @@
-package com.qixidi.business.domain.enums.article;
+package com.qixidi.business.domain.enums;
 
 /**
- * 文章审核状态
+ * 收藏类型
  */
-public enum ArticleAuditStateType {
-    UNDER_REVIEW(1, "审核中"),
-    APPROV(2, "审核通过"),
-    FAILED_TO_PASS_REVIEW(3, "审核不通过"),
-    DRAFT(4, "草稿"),
-    ;
+public enum CollectionTypeEnums {
+    ARTICLE_TYPE(1, "文章"),
+    COMMENT_TYPE(2, "评论");
 
     private Integer code;
     private String value;
 
-    ArticleAuditStateType(Integer code, String value) {
+    CollectionTypeEnums(Integer code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -34,4 +31,3 @@ public enum ArticleAuditStateType {
         this.value = value;
     }
 }
-

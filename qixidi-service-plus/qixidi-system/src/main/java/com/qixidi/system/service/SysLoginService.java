@@ -8,8 +8,8 @@ import com.light.core.constant.Constants;
 import com.light.core.core.domain.dto.RoleDTO;
 import com.light.core.core.service.LogininforService;
 import com.light.core.enums.DeviceType;
-import com.qixidi.auth.domain.enums.LoginType;
-import com.qixidi.auth.domain.enums.UserStatus;
+import com.qixidi.auth.domain.enums.LoginTypeEnums;
+import com.qixidi.auth.domain.enums.UserStatusEnums;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.ServletUtils;
 import com.light.core.utils.StringUtils;
@@ -59,7 +59,7 @@ public class SysLoginService {
 //            validateCaptcha(username, code, uuid, request);
 //        }
         SysUser user = loadUserByUsername(username);
-        checkLogin(LoginType.PASSWORD, username, () -> !BCrypt.checkpw(password, user.getPassword()));
+        checkLogin(LoginTypeEnums.PASSWORD, username, () -> !BCrypt.checkpw(password, user.getPassword()));
         // 此处可根据登录用户的数据不同 自行创建 loginUser
         LoginUser loginUser = buildLoginUser(user);
         // 生成token
@@ -75,7 +75,7 @@ public class SysLoginService {
         SysUser user = loadUserByPhonenumber(phonenumber);
 
         HttpServletRequest request = ServletUtils.getRequest();
-        checkLogin(LoginType.SMS, user.getUserName(), () -> !validateSmsCode(phonenumber, smsCode));
+        checkLogin(LoginTypeEnums.SMS, user.getUserName(), () -> !validateSmsCode(phonenumber, smsCode));
         // 此处可根据登录用户的数据不同 自行创建 loginUser
         LoginUser loginUser = buildLoginUser(user);
         // 生成token
@@ -149,10 +149,10 @@ public class SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
             throw new ServiceException(String.format("对不起，您的账号：%s 不存在", username));
-        } else if (UserStatus.DELETED.getCode().equals(user.getDelFlag())) {
+        } else if (UserStatusEnums.DELETED.getCode().equals(user.getDelFlag())) {
             log.info("登录用户：{} 已被删除.", username);
             throw new ServiceException(String.format("对不起，您的账号：%s 已被删除", username));
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnums.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
             throw new ServiceException(String.format("对不起，您的账号：%s 已被禁用，请联系管理员", username));
         }
@@ -164,10 +164,10 @@ public class SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", phonenumber);
             throw new ServiceException(String.format("对不起，您的账号：%s 不存在", phonenumber));
-        } else if (UserStatus.DELETED.getCode().equals(user.getDelFlag())) {
+        } else if (UserStatusEnums.DELETED.getCode().equals(user.getDelFlag())) {
             log.info("登录用户：{} 已被删除.", phonenumber);
             throw new ServiceException(String.format("对不起，您的账号：%s 已被删除", phonenumber));
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnums.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", phonenumber);
             throw new ServiceException(String.format("对不起，您的账号：%s 已被禁用，请联系管理员", phonenumber));
         }
@@ -181,10 +181,10 @@ public class SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", openid);
             // todo 用户不存在 业务逻辑自行实现
-        } else if (UserStatus.DELETED.getCode().equals(user.getDelFlag())) {
+        } else if (UserStatusEnums.DELETED.getCode().equals(user.getDelFlag())) {
             log.info("登录用户：{} 已被删除.", openid);
             // todo 用户已被删除 业务逻辑自行实现
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnums.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", openid);
             // todo 用户已被停用 业务逻辑自行实现
         }
@@ -225,7 +225,7 @@ public class SysLoginService {
     /**
      * 登录校验
      */
-    private void checkLogin(LoginType loginType, String username, Supplier<Boolean> supplier) {
+    private void checkLogin(LoginTypeEnums loginTypeEnums, String username, Supplier<Boolean> supplier) {
         HttpServletRequest request = ServletUtils.getRequest();
         String errorKey = Constants.LOGIN_ERROR + username;
         Integer errorLimitTime = Constants.LOGIN_ERROR_LIMIT_TIME;
@@ -236,8 +236,8 @@ public class SysLoginService {
         Integer errorNumber = RedisUtils.getCacheObject(errorKey);
         // 锁定时间内登录 则踢出
         if (ObjectUtil.isNotNull(errorNumber) && errorNumber.equals(setErrorNumber)) {
-            asyncService.recordLogininfor(username, loginFail, String.format(loginType.getRetryLimitExceed(), errorLimitTime), request);
-            throw new ServiceException(String.format(loginType.getRetryLimitExceed(), errorLimitTime));
+            asyncService.recordLogininfor(username, loginFail, String.format(loginTypeEnums.getRetryLimitExceed(), errorLimitTime), request);
+            throw new ServiceException(String.format(loginTypeEnums.getRetryLimitExceed(), errorLimitTime));
         }
 
         if (supplier.get()) {
@@ -246,13 +246,13 @@ public class SysLoginService {
             // 达到规定错误次数 则锁定登录
             if (errorNumber.equals(setErrorNumber)) {
                 RedisUtils.setCacheObject(errorKey, errorNumber, errorLimitTime, TimeUnit.MINUTES);
-                asyncService.recordLogininfor(username, loginFail, String.format(loginType.getRetryLimitExceed(), errorLimitTime), request);
-                throw new ServiceException(String.format(loginType.getRetryLimitExceed(), errorLimitTime));
+                asyncService.recordLogininfor(username, loginFail, String.format(loginTypeEnums.getRetryLimitExceed(), errorLimitTime), request);
+                throw new ServiceException(String.format(loginTypeEnums.getRetryLimitExceed(), errorLimitTime));
             } else {
                 // 未达到规定错误次数 则递增
                 RedisUtils.setCacheObject(errorKey, errorNumber);
-                asyncService.recordLogininfor(username, loginFail, String.format(loginType.getRetryLimitCount(), errorNumber), request);
-                throw new ServiceException(String.format(loginType.getRetryLimitCount(), errorNumber));
+                asyncService.recordLogininfor(username, loginFail, String.format(loginTypeEnums.getRetryLimitCount(), errorNumber), request);
+                throw new ServiceException(String.format(loginTypeEnums.getRetryLimitCount(), errorNumber));
             }
         }
         // 登录成功 清空错误次数

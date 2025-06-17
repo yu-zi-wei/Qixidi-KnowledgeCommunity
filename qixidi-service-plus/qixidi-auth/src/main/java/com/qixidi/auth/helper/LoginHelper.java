@@ -5,7 +5,7 @@ import com.light.core.constant.UserConstants;
 import com.light.core.enums.DeviceType;
 import com.light.core.utils.StringUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
-import com.qixidi.auth.domain.enums.UserType;
+import com.qixidi.auth.domain.enums.UserTypeEnums;
 import com.qixidi.auth.domain.model.LoginUser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -69,7 +69,7 @@ public class LoginHelper {
     public static LoginUser getLoginUser() {
         String loginIdAsString = StpUtil.getLoginIdAsString();
         String type = loginIdAsString.split(JOIN_CODE)[0];
-        if (type.equals(UserType.TRIPARTITE_USER.getUserType())) return null;
+        if (type.equals(UserTypeEnums.TRIPARTITE_USER.getUserType())) return null;
         return (LoginUser) StpUtil.getTokenSession().get(loginIdAsString);
     }
 
@@ -81,7 +81,7 @@ public class LoginHelper {
         if (loginIdAsObj == null) return null;
         String loginIdAsString = String.valueOf(loginIdAsObj);
         String type = loginIdAsString.split(JOIN_CODE)[0];
-        if (type.equals(UserType.SYS_USER.getUserType())) return null;
+        if (type.equals(UserTypeEnums.SYS_USER.getUserType())) return null;
         return (TripartiteUser) StpUtil.getTokenSession().get(loginIdAsString);
     }
 
@@ -93,7 +93,7 @@ public class LoginHelper {
         if (StringUtils.isBlank(loginIdAsString)) return null;
         String[] split = loginIdAsString.split(JOIN_CODE);
         String type = split[0];//获取类型
-        if (type.equals(UserType.SYS_USER.getUserType())) {//前台用户
+        if (type.equals(UserTypeEnums.SYS_USER.getUserType())) {//前台用户
             LoginUser loginUser = getLoginUser();
             return loginUser.getUserId();
         }

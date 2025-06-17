@@ -9,7 +9,7 @@ import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
 import com.light.redission.utils.RedisUtils;
 import com.qixidi.auth.domain.entity.SysUser;
-import com.qixidi.auth.domain.enums.UserType;
+import com.qixidi.auth.domain.enums.UserTypeEnums;
 import com.qixidi.auth.domain.model.RegisterBody;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class SysRegisterService {
         String username = registerBody.getUsername();
         String password = registerBody.getPassword();
         // 校验用户类型是否存在
-        String userType = UserType.getUserType(registerBody.getUserType()).getUserType();
+        String userType = UserTypeEnums.getUserType(registerBody.getUserType()).getUserType();
 
         boolean captchaOnOff = configService.selectCaptchaOnOff();
         // 验证码开关

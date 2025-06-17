@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ToSiteFileType {
+public enum ToSiteFileTypeEnums {
 
 
     SITE_DOCUMENTATION("网站文档");

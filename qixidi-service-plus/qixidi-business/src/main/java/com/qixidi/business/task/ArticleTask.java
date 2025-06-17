@@ -10,7 +10,7 @@ import com.light.core.utils.email.MailUtils;
 import com.light.redission.utils.RedisUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
-import com.qixidi.business.domain.enums.CommentType;
+import com.qixidi.business.domain.enums.CommentTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
@@ -204,7 +204,7 @@ public class ArticleTask {
                         fabulousRecord.setTypeId(Long.valueOf(k));
                         fabulousRecord.setUid(uid);
                         fabulousRecord.setCreateTime(new Date());
-                        fabulousRecord.setType(CommentType.ARTICLE_TYPE.getCode());
+                        fabulousRecord.setType(CommentTypeEnums.ARTICLE_TYPE.getCode());
                         list.add(fabulousRecord);
                     }
 //                        同步点赞表

@@ -17,7 +17,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.CountUserType;
+import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.light.core.enums.MsgEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -125,7 +125,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         SpecialInformation add = BeanUtil.toBean(bo, SpecialInformation.class);
         validEntityBeforeSave(add);
 //        同步用户数据
-        countUserWebsiteMapper.updateAdd(add.getUid(), CountUserType.SPECIAL_COLUMN_COUNT.getCode());
+        countUserWebsiteMapper.updateAdd(add.getUid(), CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
@@ -207,7 +207,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         List<ArticleInformationVo> list = articleInformationMapper.selectSpecial(id, uuid);
         if (CollectionUtils.isNotEmpty(list)) throw new Exception(MsgEnums.SPECIAL_CONDITION_ERROR.getValue());
         //        同步用户数据
-        countUserWebsiteMapper.updateDelete(uuid, CountUserType.SPECIAL_COLUMN_COUNT.getCode());
+        countUserWebsiteMapper.updateDelete(uuid, CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
         boolean bs = baseMapper.deleteById(id) > 0;
         if (!bs) throw new Exception(MsgEnums.DELETE_ERROR.getValue());
         return R.ok();

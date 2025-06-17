@@ -9,7 +9,7 @@ import com.qixidi.business.mapper.configure.ToSiteFileMapper;
 import com.qixidi.business.service.configure.IToSiteFileService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.ToSiteFileType;
+import com.qixidi.business.domain.enums.ToSiteFileTypeEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -94,7 +94,7 @@ public class ToSiteFileServiceImpl implements IToSiteFileService {
         ToSiteFile add = BeanUtil.toBean(bo, ToSiteFile.class);
         add.setUid(LoginHelper.getUserId());
         add.setCreateTime(new Date());
-        add.setType(ToSiteFileType.SITE_DOCUMENTATION.getVersion());
+        add.setType(ToSiteFileTypeEnums.SITE_DOCUMENTATION.getVersion());
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());

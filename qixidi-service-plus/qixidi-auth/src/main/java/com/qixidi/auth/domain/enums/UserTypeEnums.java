@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserType {
+public enum UserTypeEnums {
 
     /**
      * pc端
@@ -31,8 +31,8 @@ public enum UserType {
 
     private final String userType;
 
-    public static UserType getUserType(String str) {
-        for (UserType value : values()) {
+    public static UserTypeEnums getUserType(String str) {
+        for (UserTypeEnums value : values()) {
             if (StringUtils.contains(str, value.getUserType())) {
                 return value;
             }

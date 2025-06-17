@@ -1,6 +1,6 @@
 package com.qixidi.business.domain.enums;
 
-public enum UserFollowType {
+public enum UserFollowTypeEnums {
     b_user_follow(1, "用户关注"),
     LABEL_FOLLOW(2, "标签关注"),
     ACTIVITY_FOLLOW(3, "活动关注"),
@@ -9,7 +9,7 @@ public enum UserFollowType {
     private Integer code;
     private String value;
 
-    UserFollowType(Integer code, String value) {
+    UserFollowTypeEnums(Integer code, String value) {
         this.code = code;
         this.value = value;
     }

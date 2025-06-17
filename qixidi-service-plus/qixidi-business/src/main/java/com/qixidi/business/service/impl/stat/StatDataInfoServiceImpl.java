@@ -9,7 +9,7 @@ import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
 import com.qixidi.business.domain.enums.StatDataEnums;
-import com.qixidi.business.domain.enums.StatusEnums;
+import com.qixidi.common.domain.enums.StatusEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.domain.vo.stat.StatReturnDataVo;

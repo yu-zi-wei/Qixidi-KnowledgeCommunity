@@ -9,7 +9,7 @@ import lombok.Getter;
  * @create 2025/4/7 9:57
  */
 @Getter
-public enum OutCodeType {
+public enum OutCodeTypeEnums {
     SIGN_IN(1, "注册"),
     RESET_PASSWORD(2, "重置密码"),
     MAILBOX_BINDING(3, "邮箱绑定"),
@@ -18,13 +18,13 @@ public enum OutCodeType {
     private Integer code;
     private String message;
 
-    OutCodeType(Integer code, String message) {
+    OutCodeTypeEnums(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
 
     public static String acquireTypeMessage(Integer code) {
-        for (OutCodeType value : values()) {
+        for (OutCodeTypeEnums value : values()) {
             if (value.getCode().equals(code)) {
                 return value.getMessage();
             }

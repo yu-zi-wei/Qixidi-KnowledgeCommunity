@@ -8,6 +8,7 @@ import com.light.core.utils.email.MailUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.user.UserFollowVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
@@ -15,6 +16,7 @@ import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
+import com.qixidi.common.domain.enums.StatusEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -95,8 +97,8 @@ public class LabelTask {
         try {
             List<ArticleInformation> articleInformations = articleInformationMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
                     .select(ArticleInformation::getGroupingId, ArticleInformation::getId)
-                    .eq(ArticleInformation::getState, 0)
-                    .eq(ArticleInformation::getAuditState, 2));
+                    .eq(ArticleInformation::getState, StatusEnums.NORMAL.getCode())
+                    .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode()));
             Map<Long, Long> map = articleInformations.stream().collect(Collectors.groupingBy(ArticleInformation::getGroupingId, Collectors.counting()));
             List<LabelGroupingInfo> labelGroupingInfos = labelGroupingInfoMapper.selectList(null);
             labelGroupingInfos.forEach(item -> {

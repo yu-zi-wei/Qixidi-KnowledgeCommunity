@@ -5,7 +5,7 @@ package com.qixidi.auth.domain.enums;
  *
  * @author ziwei
  */
-public enum UserStatus {
+public enum UserStatusEnums {
     OK("0", "正常"),
     DISABLE("1", "停用"),
     DELETED("2", "删除"),
@@ -15,7 +15,7 @@ public enum UserStatus {
     private final String code;
     private final String info;
 
-    UserStatus(String code, String info) {
+    UserStatusEnums(String code, String info) {
         this.code = code;
         this.info = info;
     }
