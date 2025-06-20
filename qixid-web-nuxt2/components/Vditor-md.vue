@@ -22,7 +22,7 @@ export default {
     },
     mode: {
       type: String,
-      default: 'wysiwyg'
+      default: 'sv'
     },
     height: {
       type: String,
