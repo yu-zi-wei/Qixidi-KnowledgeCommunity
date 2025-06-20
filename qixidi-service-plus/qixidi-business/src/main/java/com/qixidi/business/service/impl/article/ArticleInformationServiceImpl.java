@@ -285,6 +285,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         update.setUpdateId(uuid);
         update.setUpdateTime(new Date());
         if (integer > 0) {
+            update.setCreateTime(new Date());
             ArticleInformationVo articleInformationVo = BeanUtil.toBean(update, ArticleInformationVo.class);
             List<ArticleInformationVo> list = new ArrayList();
             list.add(articleInformationVo);
