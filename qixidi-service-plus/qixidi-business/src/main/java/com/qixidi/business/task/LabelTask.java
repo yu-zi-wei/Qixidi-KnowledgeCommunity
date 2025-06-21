@@ -47,7 +47,8 @@ public class LabelTask {
      * 同步标签信息数据
      * 每20分钟一次
      */
-    @Scheduled(cron = "0 */20 * * * *")
+//    @Scheduled(cron = "0 */20 * * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     public void syncLabel() {
         try {
             List<UserFollowVo> userFollowVos = userFollowMapper.selectVoLabelGroup();
@@ -83,13 +84,14 @@ public class LabelTask {
             //清理数据
             labelInfoMapper.update(new LambdaUpdateWrapper<LabelInfo>()
                     .set(LabelInfo::getArticleNumber, 0)
-                    .set(LabelInfo::getFollowNumber, 0));
+                    .set(LabelInfo::getFollowNumber, 0)
+                    .eq(LabelInfo::getState, 0));
             labelInfoMapper.updateTaskList(list1);
             log.info("同步标签信息数据成功：时间：{}", DateUtils.getTime());
 
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCHRONIZE_b_label_infoRMATION_DATA.getCode());
         } catch (Exception e) {
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步标签信息数据（syncLabel）任务异常", e.getMessage());
+//            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步标签信息数据（syncLabel）任务异常", e.getMessage());
             log.error("同步标签信息数据异常：时间：{}", DateUtils.getTime());
             e.printStackTrace();
         }
