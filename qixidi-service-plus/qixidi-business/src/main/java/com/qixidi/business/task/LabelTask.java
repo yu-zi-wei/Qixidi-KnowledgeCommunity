@@ -2,11 +2,13 @@ package com.qixidi.business.task;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.light.core.constant.SystemConstant;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
+import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
@@ -78,6 +80,10 @@ public class LabelTask {
                 infoVo.setArticleNumber(Integer.valueOf(item.get("count")));
                 list1.add(infoVo);
             });
+            //清理数据
+            labelInfoMapper.update(new LambdaUpdateWrapper<LabelInfo>()
+                    .set(LabelInfo::getArticleNumber, 0)
+                    .set(LabelInfo::getFollowNumber, 0));
             labelInfoMapper.updateTaskList(list1);
             log.info("同步标签信息数据成功：时间：{}", DateUtils.getTime());
 

@@ -93,7 +93,7 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     Page<ArticleInformationVo> LabelGArticleInfoList(@Param("bo") SortTypeBo bo, Page<ArticleInformation> build);
 
-    @Select("select label_id from b_article_information where audit_state=2 and state=0 and label_id is not null and label_id!=''")
+    @Select("select label_id from b_article_information where audit_state=2 and state=0 and platform_type=1 and label_id is not null and label_id!=''")
     List<String> selectLabel();
 
     IPage<ArticleInformationVo> articleRecommendList(@Param("bo") ArticleInformationBo bo, @Param("labelResult") String labelResult, Page<Object> build);
