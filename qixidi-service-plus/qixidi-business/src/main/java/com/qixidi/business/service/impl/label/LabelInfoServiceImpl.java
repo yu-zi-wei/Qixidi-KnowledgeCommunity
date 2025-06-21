@@ -195,15 +195,13 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
 
     @Override
     public List<LabelInfoVo> systemLabel(String label) {
-        List<LabelInfoVo> list = new ArrayList<>();
-        if (StringUtils.isNotBlank(label)) {
-            list = baseMapper.selectVoList(new QueryWrapper<LabelInfo>().like("label_name", label));
-        } else {
-            list = baseMapper.selectVoList(null);
-        }
+        List<LabelInfoVo> list = baseMapper.selectVoList(new LambdaQueryWrapper<LabelInfo>()
+                .like(StringUtils.isNotBlank(label), LabelInfo::getLabelName, label)
+                .orderByDesc(LabelInfo::getArticleNumber, LabelInfo::getFollowNumber, LabelInfo::getCreateTime));
         String uuid = LoginHelper.getTripartiteUuid();
         if (StringUtils.isEmpty(uuid)) return list;
-        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>().eq("type", 2));
+        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getType, 2));
         if (CollectionUtils.isEmpty(userFollowVos)) return list;
 
         Map<String, String> collect = new HashMap<>();
