@@ -7,6 +7,9 @@
       <div v-for="(items,indexs) in item.list" :key="indexs">
         <div class="time-motes-list-item flex-space-between">
           <div>
+            <span class="svg-translateY-8 font-s-14 color-grey-2 mr-4" title="记录时间">
+            {{ $utils.parseTime(items.recordTime, '{m}-{d}') }}
+            </span>
             <svg t="1742789451197" class="icon svg-translateY-8" viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg"
                  p-id="12540" width="26" height="26">
@@ -22,9 +25,6 @@
             </svg>
             <span style="border-bottom: 1px solid #dfe4ea;padding-bottom: 4px; display: inline-block"
                   class="cursor-pointer ml-2" @click="getInfo(items.id)">{{ items.title }}</span>
-          </div>
-          <div class="svg-translateY-8 font-s-13 color-fefefe">
-            {{ $utils.parseTime(items.recordTime, '{m}-{d}') }}
           </div>
         </div>
       </div>
