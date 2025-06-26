@@ -5,6 +5,17 @@
   padding: 0;
 }
 
+@media (max-width: 510px) {
+  ._module_hiding {
+    display: none;
+  }
+
+  ._module_explicit {
+    display: block;
+  }
+}
+
+
 /*页面永远保持有滚动条*/
 body {
   overflow: scroll;
@@ -566,6 +577,8 @@ mr-auto {
   -webkit-line-clamp: 1;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  white-space: normal; /* 允许正常换行 */
+  word-break: break-word; /* 允许在单词内换行 */
 }
 
 .overflow-nowrap-2 {
@@ -576,6 +589,8 @@ mr-auto {
   -webkit-line-clamp: 2;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  white-space: normal; /* 允许正常换行 */
+  word-break: break-word; /* 允许在单词内换行 */
 }
 
 .overflow-nowrap-3 {
@@ -586,6 +601,8 @@ mr-auto {
   -webkit-line-clamp: 3;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  white-space: normal; /* 允许正常换行 */
+  word-break: break-word; /* 允许在单词内换行 */
 }
 
 .hr-item {

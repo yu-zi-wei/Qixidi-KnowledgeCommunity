@@ -232,7 +232,7 @@
 
 <script>
 import EmojiModule from "../../../../components/emoji-module.vue";
-import VditorPreview from "../../../../components/Vditor-preview.vue";
+import VditorPreview from "../../../../components/vditorComponents/Vditor-preview.vue";
 
 export default {
   name: "dictumDetails",

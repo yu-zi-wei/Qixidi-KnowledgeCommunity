@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import VditorMd from "../Vditor-md.vue";
+import VditorMd from "../vditorComponents/Vditor-md.vue";
 import EmojiModule from "../emoji-module.vue";
 
 export default {

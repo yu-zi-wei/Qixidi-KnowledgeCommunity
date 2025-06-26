@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import VditorPreview from "../../../../components/Vditor-preview.vue";
+import VditorPreview from "../../../../components/vditorComponents/Vditor-preview.vue";
 import TimeNotesEditing from "../../../../components/timeNotes/time-notes-editing.vue";
 
 export default {

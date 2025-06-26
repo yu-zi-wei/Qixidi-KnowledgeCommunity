@@ -187,6 +187,8 @@ export default {
   -webkit-line-clamp: 2;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  white-space: normal;      /* 允许正常换行 */
+  word-break: break-word;   /* 允许在单词内换行 */
 }
 
 .search-data-li {

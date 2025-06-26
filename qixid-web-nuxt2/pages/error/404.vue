@@ -17,8 +17,8 @@
           </div>
           <div class="msg">OH!<span class="triangle"></span></div>
         </div>
-        <h2 class="h1">页面走丢了！
-          <nuxt-link to="/">返回主页</nuxt-link>
+        <h2>页面走丢了！
+          <nuxt-link class="text-underline" to="/">返回主页</nuxt-link>
         </h2>
       </div>
     </div>
@@ -34,10 +34,6 @@ export default {
 </script>
 
 <style scoped>
-/** {*/
-/*  font-family: 'PT Sans Caption', sans-serif, 'arial', 'Times New Roman';*/
-/*}*/
-
 /* Error Page */
 .error .clip .shadow {
   height: 180px; /*Contrall*/
@@ -127,7 +123,7 @@ export default {
   position: relative;
   top: 8%;
   color: white;
-  background: #07B3F9;
+  background: var(--theme-color);
   border-radius: 50%;
   display: inline-block;
   transform: skew(45deg);
@@ -222,140 +218,6 @@ export default {
 
   /* Error Page */
 }
-
-/*--------------------------------------------Framework --------------------------------*/
-
-.overlay {
-  position: relative;
-  z-index: 20;
-}
-
-/*done*/
-.ground-color {
-  background: white;
-}
-
-/*done*/
-.item-bg-color {
-  background: #EAEAEA
-}
-
-/*done*/
-
-/* Padding Section*/
-.padding-top {
-  padding-top: 10px;
-}
-
-/*done*/
-.padding-bottom {
-  padding-bottom: 10px;
-}
-
-/*done*/
-.padding-vertical {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.padding-horizontal {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.padding-all {
-  padding: 10px;
-}
-
-/*done*/
-
-.no-padding-left {
-  padding-left: 0px;
-}
-
-/*done*/
-.no-padding-right {
-  padding-right: 0px;
-}
-
-/*done*/
-.no-vertical-padding {
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-
-.no-horizontal-padding {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-.no-padding {
-  padding: 0px;
-}
-
-/*done*/
-/* Padding Section*/
-
-/* Margin section */
-.margin-top {
-  margin-top: 10px;
-}
-
-/*done*/
-.margin-bottom {
-  margin-bottom: 10px;
-}
-
-/*done*/
-.margin-right {
-  margin-right: 10px;
-}
-
-/*done*/
-.margin-left {
-  margin-left: 10px;
-}
-
-/*done*/
-.margin-horizontal {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-/*done*/
-.margin-vertical {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-/*done*/
-.margin-all {
-  margin: 10px;
-}
-
-/*done*/
-.no-margin {
-  margin: 0px;
-}
-
-/*done*/
-
-.no-vertical-margin {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-.no-horizontal-margin {
-  margin-left: 0px;
-  margin-right: 0px;
-}
-
-.inside-col-shrink {
-  margin: 0px 20px;
-}
-
-/*done - For the inside sections that has also Title section*/
-/* Margin section */
 
 hr {
   margin: 0px;

@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import VditorPreview from "../Vditor-preview.vue";
+import VditorPreview from "../vditorComponents/Vditor-preview.vue";
 import TimeNotesEditing from "./time-notes-editing.vue";
 
 export default {

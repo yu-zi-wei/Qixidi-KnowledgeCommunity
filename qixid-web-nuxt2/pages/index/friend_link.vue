@@ -367,7 +367,7 @@
 
 <script>
 
-import VditorPreview from "../../components/Vditor-preview.vue";
+import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
 
 export default {
   name: "friendLink",

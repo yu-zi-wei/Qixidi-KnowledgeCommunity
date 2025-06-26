@@ -77,6 +77,6 @@ export default {
 </script>
 
 <style>
-@import url("components/css/vditor-components.css");
-@import url("components/css/vditor-hljs.css");
+@import url("../css/vditor-components.css");
+@import url("../css/vditor-hljs.css");
 </style>

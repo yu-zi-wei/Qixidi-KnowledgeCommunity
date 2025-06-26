@@ -76,8 +76,8 @@
 
 <script>
 import SubmissionChart from "../components/submission-chart";
-import VditorMd from "../components/Vditor-md.vue";
-import VditorPreview from "../components/Vditor-preview.vue";
+import VditorMd from "../components/vditorComponents/Vditor-md.vue";
+import VditorPreview from "../components/vditorComponents/Vditor-preview.vue";
 import countTo from 'vue-count-to';
 import axios from "axios";
 // import WebSocket from 'websocket';

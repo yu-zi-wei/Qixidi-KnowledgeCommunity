@@ -166,7 +166,7 @@
 
 <script>
 import MavonEditorModule from "../../components/mavon-editor-module.vue";
-import VditorMd from "../../components/Vditor-md.vue";
+import VditorMd from "../../components/vditorComponents/Vditor-md.vue";
 
 export default {
   name: "publishArticle",

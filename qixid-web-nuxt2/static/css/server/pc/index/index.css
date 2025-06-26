@@ -34,6 +34,11 @@
 .article-index-content {
   width: 880px;
   margin-left: 80px;
+
+  @media screen and (max-width: 510px) {
+    width: 100%;
+    margin-left: 0px;
+  }
 }
 
 .recommend-article-item {

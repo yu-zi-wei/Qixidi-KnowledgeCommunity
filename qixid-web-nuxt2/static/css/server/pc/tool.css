@@ -44,6 +44,8 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   padding: 6px 4px 4px 4px;
+  white-space: normal;      /* 允许正常换行 */
+  word-break: break-word;   /* 允许在单词内换行 */
 }
 
 .tool-toolName {

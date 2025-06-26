@@ -34,35 +34,15 @@
       <div style="min-height: 1px"></div>
     </div>
     <div class="index-main">
-      <!--    左侧-->
-      <div class="index-left-width" v-if="false">
-        <div :class="{'index-left-cl':true, 'index-left-cl-true':goTopLoading,'index-left-cl-false':!goTopLoading}">
-          <div class="auroora-card mb-15">
-            <el-skeleton class="mt-10" style="width: 100%" :rows="4" animated v-show="sidebarDialog"/>
-            <el-menu
-              v-show="!sidebarDialog"
-              :router="true"
-              :default-active="$route.path"
-              style="width:100px"
-              class="el-menu-vertical-demo tool-list-left">
-              <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
-                            :key="index">
-                <nuxt-link :to="item.route">
-                  <i v-if="item.sidebarIcon!=null" :class="$route.path==item.route?'icon-theme':''"
-                     v-html="item.sidebarIcon"></i>
-                  {{ item.sidebarName }}
-                </nuxt-link>
-              </el-menu-item>
-            </el-menu>
-          </div>
-        </div>
+      <!--      左侧-->
+      <div style="line-height: 1px">
       </div>
-      <!--    中间内容区域-->
+      <!--    中间侧-->
       <div class="article-index-content">
         <nuxt-child/>
       </div>
       <!--    右侧-->
-      <div class="index-right">
+      <div class="index-right _module_hiding">
         <div :class="{'recommend-article-div-true':positionCssRight,'recommend-article-div-false':!positionCssRight}">
           <div class="mb-15 sigIn-info padding-10 border-radius-10"
                v-show="positionCssRight">
@@ -235,7 +215,7 @@
                   :title="item.articleTitle">
                 <div class="flex-1 mr-6 text-center">
                   <h1 v-if="index<=2" class="font-s-14"
-                       :style="index==0?'color:#eb4d4b':index==1?'color:#f9ca24':'color:#4cd137'">
+                      :style="index==0?'color:#eb4d4b':index==1?'color:#f9ca24':'color:#4cd137'">
                     {{ index + 1 }}
                   </h1>
                   <h1 class="font-s-15" v-else>

@@ -4,7 +4,7 @@
       <div :class="{'main':true, 'hide-div':goTopLoading,'appear-div':!goTopLoading}">
         <div class="main-nav">
           <div class="logo cursor-pointer" :title="websiteName">
-            <nuxt-link to="/">
+            <nuxt-link to="/static">
               <div class="flex-left align-items-center svg-translateY-3" style="height: 50px;">
                 <!--                                                <el-image style="height: 40px;width: 40px" src="/img/logo.png"/>-->
                 <!--                <svg t="1726902880139" class="icon-theme" viewBox="0 0 1024 1024" version="1.1"-->
@@ -394,8 +394,8 @@
 </template>
 
 <script>
-import VditorMd from "./Vditor-md.vue";
-import TimeNotesEditing from "./timeNotes/time-notes-editing.vue";
+import VditorMd from "../vditorComponents/Vditor-md.vue";
+import TimeNotesEditing from "../timeNotes/time-notes-editing.vue";
 
 export default {
   name: "navigationBarModule",
@@ -641,7 +641,7 @@ export default {
 </script>
 
 <style>
-@import url("components/css/pc/navigation-bar-module.css");
+@import url("../css/pc/navigation-bar-module.css");
 
 /*搜索框历史记录*/
 .el-autocomplete-suggestion li {

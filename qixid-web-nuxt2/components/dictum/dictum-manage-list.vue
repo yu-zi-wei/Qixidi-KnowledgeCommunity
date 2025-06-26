@@ -129,7 +129,7 @@
 
 <script>
 
-import VditorPreview from "../Vditor-preview.vue";
+import VditorPreview from "../vditorComponents/Vditor-preview.vue";
 
 export default {
   name: "dictumManageList",

@@ -1,6 +1,8 @@
 import env from './env'
 import {encode} from 'base-64';
 
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   server: {
@@ -203,6 +205,10 @@ export default {
           }
         }
       });
+      if (isClient.isClient) {
+        // 在客户端构建时使用 optimize-css-assets-webpack-plugin
+        config.optimization.minimizer.push(new OptimizeCSSPlugin());
+      }
     },
     // 防止多次打包
     vendor: ['element-ui', 'axios'],

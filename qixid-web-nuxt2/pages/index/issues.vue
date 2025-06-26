@@ -202,8 +202,8 @@
 </template>
 
 <script>
-import VditorMd from "../../components/Vditor-md.vue";
-import VditorPreview from "../../components/Vditor-preview.vue";
+import VditorMd from "../../components/vditorComponents/Vditor-md.vue";
+import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
 
 export default {
   components: {VditorPreview, VditorMd},

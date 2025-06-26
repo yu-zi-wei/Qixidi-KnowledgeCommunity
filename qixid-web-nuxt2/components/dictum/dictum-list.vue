@@ -505,7 +505,7 @@
 
 
 import EmojiModule from "../emoji-module.vue";
-import VditorPreview from "../Vditor-preview.vue";
+import VditorPreview from "../vditorComponents/Vditor-preview.vue";
 
 export default {
   name: "dictumList",

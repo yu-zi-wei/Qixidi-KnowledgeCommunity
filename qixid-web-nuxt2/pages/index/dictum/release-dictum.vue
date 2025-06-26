@@ -262,7 +262,7 @@
 </template>
 
 <script>
-import VditorMd from "../../../components/Vditor-md.vue";
+import VditorMd from "../../../components/vditorComponents/Vditor-md.vue";
 
 export default {
   name: "releaseDictum",

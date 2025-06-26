@@ -157,7 +157,7 @@
 
 <script>
 import TimeNotesEditing from "../../components/timeNotes/time-notes-editing.vue";
-import VditorPreview from "../../components/Vditor-preview.vue";
+import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
 
 export default {
   name: "timeMotesAdmin",
