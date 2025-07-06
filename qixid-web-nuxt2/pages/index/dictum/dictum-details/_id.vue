@@ -1,9 +1,9 @@
 <template>
   <div class="mt-30">
-    <div style="width: 1000px;margin: auto;">
+    <div class="dictum-details-model">
       <div class="flex-left">
         <div class="flex-9 background-color-fefefe">
-          <div style="padding: 60px 60px 100px 60px;border-radius: 10px;border: 1px solid #e2e2e5">
+          <div class="dictum-details-content">
             <vditor-preview :id="'aiEditor-dictum'" :content="dictumInfo.content"></vditor-preview>
             <div class="flex-right mt-20">
               <div
@@ -187,7 +187,7 @@
 
           </div>
         </div>
-        <div class="flex-2">
+        <div class="flex-2 _module_hiding">
           <div class="padding-10 dictum-details-right">
             <div class="dictum-re-name-cl mt-20 mb-10">作 者</div>
             <div class="flex-left">
@@ -408,4 +408,26 @@ export default {
   padding: 9px 15px;
 }
 
+.dictum-details-model {
+  width: 1000px;
+  margin: auto;
+}
+
+.dictum-details-content {
+  padding: 60px 60px 100px 60px;
+  border-radius: 10px;
+  border: 1px solid #e2e2e5;
+}
+
+@media (max-width: 510px) {
+  .dictum-details-model {
+    width: 100%;
+    margin: auto;
+    padding: 0 10px;
+  }
+  .dictum-details-content {
+    padding: 20px 20px 60px 20px;
+  }
+
+}
 </style>

@@ -3,9 +3,8 @@
     <navigation-bar-module :isConceal="false"></navigation-bar-module>
     <div class="mt-30">
       <div class="module-main">
-        <el-row>
-          <el-col :span="1" style="min-height: 1px"/>
-          <el-col :span="16">
+        <div class="flex-left">
+          <div class="user-home-left-modem">
             <div class="home-top-cl">
               <div class="flex-left">
                 <div>
@@ -43,11 +42,10 @@
                           d="M256 573.44h409.6a20.48 20.48 0 0 0 0-40.96H256a20.48 20.48 0 0 0 0 40.96zM768 706.56H256a20.48 20.48 0 0 0 0 40.96h512a20.48 20.48 0 0 0 0-40.96z"
                           p-id="5327"></path>
                       </svg>
-
-                      <span v-text="userInfo.introduce==null?'简介':userInfo.introduce"></span>
+                      <span class="font-s-16" v-text="userInfo.introduce==null?'简介':userInfo.introduce"></span>
                     </div>
                   </div>
-                  <div class="align-self-end">
+                  <div class="align-self-end _module_hiding">
                     <el-button v-show="currentUser" plain size="small" @click="routeJump('/user_info/settings')">编辑个人资料
                     </el-button>
                     <el-button size="small" v-show="!currentUser" :loading="userInfo.buttonLoading"
@@ -76,9 +74,9 @@
                 <nuxt-child/>
               </div>
             </div>
-          </el-col>
-          <el-col :span="1" style="min-height: 1px"/>
-          <el-col :span="4">
+          </div>
+
+          <div style="width: 240px;margin-left: 50px" class="_module_hiding">
             <div class="home-left-cl">
               <div class="flex-space-between">
                 <div class="font-bold color-grey5"
@@ -184,8 +182,9 @@
                 </p>
               </div>
             </div>
-          </el-col>
-        </el-row>
+          </div>
+
+        </div>
       </div>
       <!--    充值页面-->
       <el-dialog title="获取 A币" :visible.sync="rechargeVisible" width="650px">
@@ -530,5 +529,17 @@ export default {
 
 .user-data-cl p {
   margin-bottom: 15px;
+}
+
+.user-home-left-modem {
+  width: 940px;
+  margin: auto;
+}
+
+@media (max-width: 510px) {
+  .user-home-left-modem {
+    width: 100%;
+    margin: auto;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-skeleton class="mt-10" :rows="10" animated v-if="loading"/>
+    <el-skeleton class="mt-10 _module_explicit-padding-lf-10" :rows="10" animated v-if="loading"/>
     <div v-if="!loading && typography==2">
       <ul v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="dictum-info-ul">
         <li v-for="(item,index) in dictumInfoListArr" class="dictum-info-cl" :key="index">
@@ -102,8 +102,15 @@
             <!--              </svg>-->
             <!--              收藏-->
             <!--            </div>-->
-            <div class="svg-translateY-4 text-underline hover-cl cursor-pointer" @click="viewCommentList(item)">
+            <div class="svg-translateY-4 text-underline hover-cl cursor-pointer _module_hiding"
+                 @click="viewCommentList(item)">
               查看
+            </div>
+
+            <div class="svg-translateY-4 text-underline hover-cl cursor-pointer _module_explicit">
+              <nuxt-link :to="`/dictum/dictum-details/`+$base64.encode(item.id)" target="_blank">
+                查看
+              </nuxt-link>
             </div>
           </div>
           <div>

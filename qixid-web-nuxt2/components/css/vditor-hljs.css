@@ -1,9 +1,17 @@
 
 pre code.hljs {
   display: block !important;
-  overflow-x: auto !important;
+  overflow-x: hidden !important;
   padding: 1em
 }
+
+/*不允许出现x 轴滚动条 用换行实现，解决手机端适配问题*/
+.vditor-reset pre > code {
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
+
 
 code.hljs {
   padding: 3px 5px

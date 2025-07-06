@@ -12,8 +12,9 @@
         </p>
       </div>
       <!--      类容-->
-      <div>
-        <div class="flex-space-between collapse-title align-items-center" @click="searchPage" title="点击弹出检索页面">
+      <div class="_module_hiding">
+        <div class="flex-space-between collapse-title align-items-center" @click="searchPage"
+             title="点击弹出检索页面">
           <div>
             <svg t="1742608687334" class="icon-theme-1 svg-translateY-4 mr-10" viewBox="0 0 1024 1024"
                  version="1.1"
@@ -54,6 +55,14 @@
                       :typography="1"
                       :author="author"></dictumList>
         </div>
+      </div>
+      <div class="_module_explicit" style="padding: 6px 16px">
+        <hr class="hr-item mb-25"/>
+        <dictumList :groupId="groupId==null?null:parseInt(groupId)"
+                    :content="contents"
+                    :label="label"
+                    :typography="2"
+                    :author="author"></dictumList>
       </div>
     </div>
     <el-drawer

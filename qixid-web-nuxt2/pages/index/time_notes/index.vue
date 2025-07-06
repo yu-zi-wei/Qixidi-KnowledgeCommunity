@@ -1,6 +1,6 @@
 <template>
   <div class="mt-30">
-    <div style="width: 1000px;margin: auto">
+    <div class="time-notes-model">
       <div class="mood-title flex-space-between">
         <div>
           记录每天小心情......
@@ -47,4 +47,15 @@ export default {
 </script>
 
 <style>
+.time-notes-model {
+  width: 1000px;
+  margin: auto
+}
+
+@media (max-width: 510px) {
+  .time-notes-model {
+    width: 100%;
+    margin: auto;
+  }
+}
 </style>

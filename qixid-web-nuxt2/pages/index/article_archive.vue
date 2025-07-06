@@ -1,6 +1,6 @@
 <template>
   <div class="mt-30">
-    <div style="width: 1000px;margin: auto">
+    <div class="article-archive-model">
       <div class="mood-title flex-space-between">
         <div>
           <svg t="1750124650705" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024"
@@ -37,7 +37,7 @@
             <div>
               <span class="color-grey-2 mr-8">
                 {{ $utils.parseTime(items.createTime, '{m}-{d}') }}</span>
-              <span style="border-bottom: 1px solid #dfe4ea; display: inline-block" class="cursor-pointer">
+              <span class="article-archive-item-title cursor-pointer">
                   <nuxt-link class="text-underline-hover font-s-16"
                              :to="`/article-details/`+$base64.encode(items.id)"
                              rel="noopener" target="_blank">
@@ -148,6 +148,10 @@ export default {
 </script>
 
 <style>
+.article-archive-model {
+  width: 1000px;
+  margin: auto
+}
 
 .article-archive-list-item {
   margin: 15px 0px;
@@ -171,5 +175,17 @@ export default {
 
 .el-drawer {
   border-radius: 20px;
+}
+
+.article-archive-item-title {
+  border-bottom: 1px solid #dfe4ea;
+  display: inline-block
+}
+
+@media (max-width: 510px) {
+  .article-archive-model {
+    width: 100%;
+    margin: auto;
+  }
 }
 </style>

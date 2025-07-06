@@ -1,6 +1,74 @@
 <template>
   <div>
-    <div class="main-div">
+    <!--    手机导航-->
+    <div class="_module_explicit">
+      <div class="flex-space-between align-items-center padding-6 ">
+        <div>
+          <el-dropdown trigger="click">
+            <div class="el-dropdown-link">
+              <svg t="1751723953084" class="icon icon-size-28 svg-translateY-3" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg"
+                   p-id="1514">
+                <path
+                  d="M170.666667 213.333333h682.666666v85.333334H170.666667V213.333333z m0 512h426.666666v85.333334H170.666667v-85.333334z m0-256h682.666666v85.333334H170.666667v-85.333334z"
+                  fill="#444444" p-id="1515"></path>
+              </svg>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-menu
+                :default-active="activeIndex"
+                class="el-menu-vertical-demo"
+                @select="handleSelect"
+                :router="true"
+                text-color="#000000"
+                :active-text-color="themeColor">
+                <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
+                  <nuxt-link :to="item.route">
+                    {{ item.navigationName }}
+                  </nuxt-link>
+                </el-menu-item>
+                <!--                存在下拉的菜单-->
+                <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
+                            style="border-bottom-color: snow;border-bottom: none">
+                  <template slot="title">
+                    {{ item.navigationName }}
+                  </template>
+                  <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
+                    <nuxt-link :to="item1.route">
+                      {{ item1.navigationName }}
+                    </nuxt-link>
+                  </el-menu-item>
+                </el-submenu>
+                <hr class="hr-item mt-6 mb-6"/>
+                <div class="cursor-pointer hover-cl font-s-14 color-grey text-center">
+                  <div class="mt-4 mb-4" @click="oauthLogout">
+                    退出登录
+                  </div>
+                </div>
+              </el-menu>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <div class="font-bold-s">
+          <nuxt-link to="/">栖息地</nuxt-link>
+        </div>
+        <div>
+          <div v-if="this.isLogin">
+            <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
+              <el-avatar :size="38" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+              <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
+            </div>
+          </div>
+          <div v-else>
+            <div @click="loginWindow" class="cursor-pointer not-Logged-in">
+              登录
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--    pc导航-->
+    <div class="main-div _module_hiding">
       <div :class="{'main':true, 'hide-div':goTopLoading,'appear-div':!goTopLoading}">
         <div class="main-nav">
           <div class="logo cursor-pointer" :title="websiteName">
@@ -368,6 +436,7 @@
         </div>
       </div>
     </div>
+
     <div>
       <LoginModule :isLogin="isLoginBinlog" @loginDialogMethod="loginDialogMethod"></LoginModule>
     </div>

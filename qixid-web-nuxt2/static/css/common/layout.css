@@ -3,6 +3,14 @@
   width: 1280px;
 }
 
+@media (max-width: 510px) {
+  .module-main {
+    margin: auto;
+    width: 100%;
+  }
+
+}
+
 .module-main-2 {
   margin: auto;
   width: 1000px;
@@ -54,6 +62,7 @@
 .align-items-center {
   align-items: center;
 }
+
 /*水平居中*/
 .justify-content-center {
   justify-content: center;
@@ -121,4 +130,11 @@
 .page-content-width {
   width: 85rem;
   margin: auto;
+}
+
+@media (max-width: 510px) {
+  .page-content-width {
+    width: 100%;
+    margin: auto;
+  }
 }

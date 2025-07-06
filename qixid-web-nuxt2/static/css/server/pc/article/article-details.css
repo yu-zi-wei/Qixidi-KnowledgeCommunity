@@ -280,3 +280,10 @@
 .article-summary-dev:hover {
   border: 1px solid var(--theme-color);
 }
+
+@media (max-width: 510px) {
+  .article-content {
+    z-index: 10;
+    width: 90%;
+  }
+}

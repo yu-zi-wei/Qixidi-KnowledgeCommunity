@@ -1,6 +1,6 @@
 <template>
   <div class="mt-30">
-    <div style="width: 940px;margin: auto;">
+    <div class="time-notes-details">
       <div class="mood-notes-title">
         <p>{{ moodNotes.title }}</p>
         <div class="flex-space-between mt-10">
@@ -17,7 +17,7 @@
             </svg>
             {{ moodNotes.recordTime }}
           </div>
-          <div v-if="moodNotes.isAuthor==0" @click="update">
+          <div class="_module_hiding" v-if="moodNotes.isAuthor==0" @click="update">
             <svg t="1742972825057" class="icon-theme-2 icon-hover cursor-pointer icon-size-18 svg-translateY-3"
                  viewBox="0 0 1024 1024"
                  version="1.1"
@@ -94,6 +94,16 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
+.time-notes-details {
+  width: 940px;
+  margin: auto
+}
 
+@media (max-width: 510px) {
+  .time-notes-details {
+    width: 100%;
+    margin: auto;
+  }
+}
 </style>

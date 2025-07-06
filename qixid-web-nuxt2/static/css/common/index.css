@@ -5,6 +5,18 @@
   padding: 0;
 }
 
+._module_hiding {
+  display: block;
+}
+
+._module_explicit {
+  display: none;
+}
+
+._module_explicit-padding-lf-10 {
+  padding: 0;
+}
+
 @media (max-width: 510px) {
   ._module_hiding {
     display: none;
@@ -12,6 +24,10 @@
 
   ._module_explicit {
     display: block;
+  }
+
+  ._module_explicit-padding-lf-10 {
+    padding: 0 10px;
   }
 }
 
@@ -82,6 +98,12 @@ a:hover {
 }
 
 /*!* 定义H系列标签，覆盖H系列标签默认属性 *!*/
+
+span, p, h1, h2, h3, h4, h5, h6 {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+}
 
 h1 {
   font-size: 24px;
