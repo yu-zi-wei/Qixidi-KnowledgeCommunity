@@ -256,8 +256,6 @@ export default {
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 20px;
-  font-size: 24px;
-  line-height: 30px;
   border-bottom: 1px solid #bdc3c7;
 }
 

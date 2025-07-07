@@ -1,7 +1,7 @@
 <template>
   <div class="mt-30">
     <div class="dictum-details-model">
-      <div class="flex-left">
+      <div class="flex-left _module_explicit-padding-lf-10">
         <div class="flex-9 background-color-fefefe">
           <div class="dictum-details-content">
             <vditor-preview :id="'aiEditor-dictum'" :content="dictumInfo.content"></vditor-preview>
@@ -423,8 +423,8 @@ export default {
   .dictum-details-model {
     width: 100%;
     margin: auto;
-    padding: 0 10px;
   }
+
   .dictum-details-content {
     padding: 20px 20px 60px 20px;
   }

@@ -1,8 +1,8 @@
 <template>
   <div class="mt-30">
     <div class="time-notes-details">
-      <div class="mood-notes-title">
-        <p>{{ moodNotes.title }}</p>
+      <div class="mood-notes-details-id-title">
+        <h2 class="font-s-24 line-height-28">{{ moodNotes.title }}</h2>
         <div class="flex-space-between mt-10">
           <div class="font-s-14 color-grey-2">
             <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="padding-10">
+      <div>
         <vditor-preview v-if="moodNotes.content!=null" :id="'moodNotes-content-'+moodNotes.id"
                         :content="moodNotes.content"></vditor-preview>
       </div>
@@ -98,6 +98,15 @@ export default {
 .time-notes-details {
   width: 940px;
   margin: auto
+}
+
+.mood-notes-details-id-title {
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 24px;
+  line-height: 30px;
+  border-bottom: 1px solid #bdc3c7;
 }
 
 @media (max-width: 510px) {
