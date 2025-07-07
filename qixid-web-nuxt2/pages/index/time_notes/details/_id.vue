@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="padding-10">
         <vditor-preview v-if="moodNotes.content!=null" :id="'moodNotes-content-'+moodNotes.id"
                         :content="moodNotes.content"></vditor-preview>
       </div>
@@ -102,10 +102,7 @@ export default {
 
 .mood-notes-details-id-title {
   padding: 10px;
-  border-radius: 4px;
   margin-bottom: 20px;
-  font-size: 24px;
-  line-height: 30px;
   border-bottom: 1px solid #bdc3c7;
 }
 
