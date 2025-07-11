@@ -13,7 +13,7 @@
   display: none;
 }
 
-._module_explicit-padding-lf-10 {
+._module_explicit-padding-lf-20 {
   padding: 0;
 }
 
@@ -26,8 +26,8 @@
     display: block;
   }
 
-  ._module_explicit-padding-lf-10 {
-    padding: 0 10px;
+  ._module_explicit-padding-lf-20 {
+    padding: 0 20px;
   }
 }
 
@@ -705,4 +705,20 @@ mr-auto {
 
 .font-style-italic {
   font-style: italic;
+}
+
+.textarea-like {
+  width: 100%;
+  min-height: 10px;
+  padding: 8px;
+  background-color: #f5f5f5;
+  white-space: pre-wrap; /* 保留换行 */
+  word-wrap: break-word; /* 自动换行 */
+  overflow-y: auto; /* 需要时显示滚动条 */
+  border-radius: 4px;
+  /* 新增样式 */
+  display: block; /* 确保是块级元素 */
+  vertical-align: top; /* 顶部对齐 */
+  text-align: left; /* 左对齐文本 */
+  line-height: 1.5; /* 合理的行高 */
 }

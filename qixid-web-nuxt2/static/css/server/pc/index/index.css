@@ -91,3 +91,29 @@
   padding: 16px;
   border-radius: 10px;
 }
+
+.marquee {
+  width: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  border: 1px solid #ffbe76;
+  margin: auto;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 25px;
+}
+
+.marquee p {
+  display: inline-block;
+  animation: marquee 15s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    margin-left: 100%;
+  }
+  100% {
+    margin-left: -100%;
+  }
+}

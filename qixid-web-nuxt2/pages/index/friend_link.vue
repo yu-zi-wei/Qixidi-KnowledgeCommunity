@@ -31,10 +31,10 @@
             </ul>
           </div>
         </div>
-        <el-skeleton class="mt-10" :rows="8" animated v-if="loading"/>
+        <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="8" animated v-if="loading"/>
         <div class="article-content-introduce">
-          <div class="mb-20 flex-space-between">
-            <div>
+          <div class="_module_explicit-padding-lf-20">
+            <div class="mb-20 flex-space-between">
               <h3 class="article-title color-theme">
                 <svg t="1726580146454" class="icon icon-size-26 svg-translateY-4 icon-theme" viewBox="0 0 1024 1024"
                      version="1.1"
@@ -49,311 +49,262 @@
                 {{ articleInfo.articleTitle }}
                 (<span class="font-bold">{{ friendLinkList.length }}</span>)
               </h3>
-            </div>
-            <div>
+              <div>
             <span v-if="isOwn" @click="articleEdit(articleInfo.id)"
                   class="font-s-13 cursor-pointer color-theme mr-20">编辑</span>
+              </div>
+            </div>
+            <hr class="hr-item mb-20 mt-10 "/>
+            <div class="flex-space-between flex-wrap-wrap ">
+              <div v-for="(item,index) in friendLinkList" :key="index" class="friend-link-item">
+                <a :href="item.linkUrl" target="_blank">
+                  <div class="flex-left align-items-center" style="height: 100px">
+                    <div class="lex-8">
+                      <el-avatar :src="item.linkAvatar" :size="70"></el-avatar>
+                    </div>
+                    <div class="ml-10">
+                      <p class="font-s-18 mb-10">{{ item.linkName }}</p>
+                      <p class="font-s-16 overflow-nowrap-1 color-grey-2">{{ item.linkIntro }}</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="">
+              <VditorPreview :id="'friendLinkVditor'" :content="articleInfo.articleContent"></VditorPreview>
             </div>
           </div>
-          <hr class="hr-item mb-20 mt-10"/>
-          <div class="flex-space-between flex-wrap-wrap" style="padding-right:20px">
-            <div v-for="(item,index) in friendLinkList" :key="index" class="friend-link-item">
-              <a :href="item.linkUrl" target="_blank">
-                <div class="flex-left align-items-center" style="height: 100px">
-                  <div class="lex-8">
-                    <el-avatar :src="item.linkAvatar" :size="70"></el-avatar>
-                  </div>
-                  <div class="ml-10">
-                    <p class="font-s-18 mb-10">{{ item.linkName }}</p>
-                    <p class="font-s-16 overflow-nowrap-1 color-grey-2">{{ item.linkIntro }}</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-          <VditorPreview :id="'friendLinkVditor'" :content="articleInfo.articleContent"></VditorPreview>
           <!--   ============================= 评论开始  =============================   -->
-          <div class="mt-20" id="comment">
-            <p class="font-s-18 font-bold mb-20">
-              评论<span class="ml-6" v-text="commentTotal"></span>
-            </p>
-            <div class="flex-left">
-              <div style="width: 40px">
-                <el-avatar v-if="userInfo && userInfo.avatar" :size="35" :src="userInfo.avatar"></el-avatar>
-                <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
-              </div>
-              <div class="comment-input-div overflow-hidden flex-1" v-if="radio=='2'">
-                <mavon-editor-module v-if="commentTextLoading" :mdContent.sync="comment.content"
-                                     :mavonHeight="300">
-                </mavon-editor-module>
-                <el-button size="small" plain type="primary" class="mt-6 fl-right mr-6" :loading="buttonLoading"
-                           :disabled="comment.content==null || comment.content==''"
-                           @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
-                  评 论
-                </el-button>
-              </div>
-              <div v-else class="flex-12">
-                <div class="comment-import" v-if="commentTextLoading">
+          <div class="article-content-introduce">
+            <div class="mt-20 _module_explicit-padding-lf-20" id="comment">
+              <p class="font-s-18 font-bold mb-20">
+                评论<span class="ml-6" v-text="commentTotal"></span>
+              </p>
+              <div class="flex-left">
+                <div style="width: 40px">
+                  <el-avatar v-if="userInfo && userInfo.avatar" :size="35" :src="userInfo.avatar"></el-avatar>
+                  <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
+                </div>
+                <div class="comment-input-div overflow-hidden flex-1" v-if="radio=='2'">
+                  <mavon-editor-module v-if="commentTextLoading" :mdContent.sync="comment.content"
+                                       :mavonHeight="300">
+                  </mavon-editor-module>
+                  <el-button size="small" plain type="primary" class="mt-6 fl-right mr-6" :loading="buttonLoading"
+                             :disabled="comment.content==null || comment.content==''"
+                             @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
+                    评 论
+                  </el-button>
+                </div>
+                <div v-else class="flex-12">
+                  <div class="comment-import" v-if="commentTextLoading">
                   <textarea style="white-space:pre-line" id="articleComment" v-model="comment.content"
                             placeholder="请输入内容..."
                             rows="3" class="news-comment-cl"/>
-                  <div class="overflow-hidden">
-                    <emoji-module :content.sync="comment.content" :id="'articleComment'" :placement="'bottom-start'"
-                                  class="fl-left"></emoji-module>
-                    <el-button plain type="primary" class="fl-right" size="small"
-                               :disabled="comment.content==null ||comment.content==''"
-                               :loading="buttonLoading"
-                               @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
-                      评 论
-                    </el-button>
+                    <div class="overflow-hidden">
+                      <emoji-module :content.sync="comment.content" :id="'articleComment'" :placement="'bottom-start'"
+                                    class="fl-left"></emoji-module>
+                      <el-button plain type="primary" class="fl-right" size="small"
+                                 :disabled="comment.content==null ||comment.content==''"
+                                 :loading="buttonLoading"
+                                 @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
+                        评 论
+                      </el-button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div style="margin-left: 50px">
-              <el-radio-group v-model="radio" size="mini">
-                <el-radio-button label="1">文本编辑器</el-radio-button>
-                <el-radio-button label="2">Markdown</el-radio-button>
-              </el-radio-group>
-            </div>
-
-            <div v-if="articleComment.length!=0">
-              <div class="mt-20 font-bold">热门评论</div>
-              <!--                      一级评论-->
-              <div style="margin-top: 10px;padding: 10px">
-                <div v-for="(item,ineex) in articleComment" class="mb-20" :key="ineex">
-                  <div class="font-s-16 flex-left">
-                    <div class="mr-2">
-                      <el-avatar v-if="item.commentAvatar" :size="35" :src="item.commentAvatar"></el-avatar>
-                      <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
-                    </div>
-                    <div class="flex-8">
-                      <div class="flex-left align-items-center">
-                        <nuxt-link class="ml-6 cursor-pointer hover-cl"
-                                   :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)"
-                                   target="_blank">
-                          {{ item.commentName }}
-                        </nuxt-link>
-                        <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
-                                class="ml-6">作者
-                        </el-tag>
-                        <span class="color-grey-2 font-s-12 ml-10"
-                              v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
+              <div style="margin-left: 50px">
+                <el-radio-group v-model="radio" size="mini">
+                  <el-radio-button label="1">文本编辑器</el-radio-button>
+                  <el-radio-button label="2">Markdown</el-radio-button>
+                </el-radio-group>
+              </div>
+              <div v-if="articleComment.length!=0">
+                <div class="mt-20 font-bold">热门评论</div>
+                <!--                      一级评论-->
+                <div style="margin-top: 10px;padding: 10px">
+                  <div v-for="(item,ineex) in articleComment" class="mb-20" :key="ineex">
+                    <div class="font-s-16 flex-left">
+                      <div class="mr-2">
+                        <el-avatar v-if="item.commentAvatar" :size="35" :src="item.commentAvatar"></el-avatar>
+                        <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
                       </div>
-                      <div class="content-div mt-10">
-                        <mavon-editor class="markdown"
-                                      previewBackground="#FFFFFF"
-                                      :value="item.content"
-                                      :subfield="false"
-                                      :defaultOpen="prop.defaultOpen"
-                                      :boxShadow="prop.boxShadow"
-                                      :toolbarsFlag="prop.toolbarsFlag"
-                                      :editable="prop.editable"
-                                      :codeStyle="articleInfo.theme"
-                                      :scrollStyle="prop.scrollStyle"
-                                      :navigation="false"
-                                      ref="markdown"
-                        />
-                      </div>
-                      <div class="flex-left">
-                        <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
-                             class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
-                             @click="deleteComment(item)">
-                          <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
-                               viewBox="0 0 1024 1024" version="1.1"
-                               xmlns="http://www.w3.org/2000/svg" p-id="6428">
-                            <path
-                              d="M525.696 590.336l-168.96 169.024a35.968 35.968 0 0 1-50.816-0.896 35.904 35.904 0 0 1-0.96-50.816l169.024-168.96-181.952-181.952a35.968 35.968 0 0 1 0.96-50.816 35.968 35.968 0 0 1 50.816-0.96l181.888 181.952 181.952-181.952a35.904 35.904 0 0 1 50.816 0.96c14.272 14.272 14.72 36.992 0.896 50.752L577.408 538.624l169.024 169.024a35.904 35.904 0 0 1-0.896 50.816 35.904 35.904 0 0 1-50.816 0.896l-168.96-168.96zM512 950.848A438.848 438.848 0 1 0 512 73.152a438.848 438.848 0 0 0 0 877.696zM512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z"
-                              p-id="6429"></path>
-                          </svg>
-                          删除
+                      <div class="flex-8">
+                        <div class="flex-left align-items-center">
+                          <nuxt-link class="ml-6 cursor-pointer hover-cl"
+                                     :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)"
+                                     target="_blank">
+                            {{ item.commentName }}
+                          </nuxt-link>
+                          <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
+                                  class="ml-6">作者
+                          </el-tag>
+                          <span class="color-grey-2 font-s-12 ml-10"
+                                v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                         </div>
-                        <div class="flex-left flex-12">
-                          <el-collapse accordion style="width: 100%;">
-                            <el-collapse-item>
-                              <template slot="title">
-                                <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-5">
-                                  <svg t="1741407164890"
-                                       class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
-                                       viewBox="0 0 1024 1024"
-                                       version="1.1"
-                                       xmlns="http://www.w3.org/2000/svg" p-id="27498">
-                                    <path
-                                      d="M157.568 751.296c-11.008-18.688-18.218667-31.221333-21.802667-37.909333A424.885333 424.885333 0 0 1 85.333333 512C85.333333 276.362667 276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667a424.778667 424.778667 0 0 1-219.125333-60.501334 2786.56 2786.56 0 0 0-20.053334-11.765333l-104.405333 28.48c-23.893333 6.506667-45.802667-15.413333-39.285333-39.296l28.437333-104.288z m65.301333 3.786667l-17.258666 63.306666 63.306666-17.258666a32 32 0 0 1 24.522667 3.210666 4515.84 4515.84 0 0 1 32.352 18.944A360.789333 360.789333 0 0 0 512 874.666667c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512c0 60.586667 14.848 118.954667 42.826667 171.136 3.712 6.912 12.928 22.826667 27.370667 47.232a32 32 0 0 1 3.338666 24.714667z m145.994667-70.773334a32 32 0 1 1 40.917333-49.205333A159.189333 159.189333 0 0 0 512 672c37.888 0 73.674667-13.173333 102.186667-36.885333a32 32 0 0 1 40.917333 49.216A223.178667 223.178667 0 0 1 512 736a223.178667 223.178667 0 0 1-143.136-51.690667z"
-                                      p-id="27499"></path>
-                                  </svg>
-                                  回复
-                                </div>
-                              </template>
-                              <div class="comment-input-div overflow-hidden" v-if="radio2=='2'">
-                                <mavon-editor-module v-if="commentTextLoading" :mdContent.sync="item.recoverContent"
-                                                     :mavonHeight="300">
-                                </mavon-editor-module>
-                                <el-button size="small" plain type="primary" class="mt-10 fl-right mr-6"
-                                           :loading="buttonLoading"
-                                           :disabled="item.recoverContent==null || item.recoverContent==''"
-                                           @click="sendComment(item.id,item.content,item.recoverContent,2,item.id,item.commentUid,2)">
-                                  回 复
-                                </el-button>
-                              </div>
-                              <div class="comment-import" v-if="commentTextLoading && radio2=='1'">
+                        <div class="content-div mt-10">
+                          <div class="textarea-like font-s-14 line-height-24" contenteditable="false">{{
+                              item.content
+                            }}
+                          </div>
+                        </div>
+                        <div class="flex-left">
+                          <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
+                               class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
+                               @click="deleteComment(item)">
+                            <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
+                                 viewBox="0 0 1024 1024" version="1.1"
+                                 xmlns="http://www.w3.org/2000/svg" p-id="6428">
+                              <path
+                                d="M525.696 590.336l-168.96 169.024a35.968 35.968 0 0 1-50.816-0.896 35.904 35.904 0 0 1-0.96-50.816l169.024-168.96-181.952-181.952a35.968 35.968 0 0 1 0.96-50.816 35.968 35.968 0 0 1 50.816-0.96l181.888 181.952 181.952-181.952a35.904 35.904 0 0 1 50.816 0.96c14.272 14.272 14.72 36.992 0.896 50.752L577.408 538.624l169.024 169.024a35.904 35.904 0 0 1-0.896 50.816 35.904 35.904 0 0 1-50.816 0.896l-168.96-168.96zM512 950.848A438.848 438.848 0 1 0 512 73.152a438.848 438.848 0 0 0 0 877.696zM512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z"
+                                p-id="6429"></path>
+                            </svg>
+                            删除
+                          </div>
+                          <div class="flex-left flex-12">
+                            <el-collapse accordion style="width: 100%;">
+                              <el-collapse-item>
+                                <template slot="title">
+                                  <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-5">
+                                    <svg t="1741407164890"
+                                         class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
+                                         viewBox="0 0 1024 1024"
+                                         version="1.1"
+                                         xmlns="http://www.w3.org/2000/svg" p-id="27498">
+                                      <path
+                                        d="M157.568 751.296c-11.008-18.688-18.218667-31.221333-21.802667-37.909333A424.885333 424.885333 0 0 1 85.333333 512C85.333333 276.362667 276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667a424.778667 424.778667 0 0 1-219.125333-60.501334 2786.56 2786.56 0 0 0-20.053334-11.765333l-104.405333 28.48c-23.893333 6.506667-45.802667-15.413333-39.285333-39.296l28.437333-104.288z m65.301333 3.786667l-17.258666 63.306666 63.306666-17.258666a32 32 0 0 1 24.522667 3.210666 4515.84 4515.84 0 0 1 32.352 18.944A360.789333 360.789333 0 0 0 512 874.666667c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512c0 60.586667 14.848 118.954667 42.826667 171.136 3.712 6.912 12.928 22.826667 27.370667 47.232a32 32 0 0 1 3.338666 24.714667z m145.994667-70.773334a32 32 0 1 1 40.917333-49.205333A159.189333 159.189333 0 0 0 512 672c37.888 0 73.674667-13.173333 102.186667-36.885333a32 32 0 0 1 40.917333 49.216A223.178667 223.178667 0 0 1 512 736a223.178667 223.178667 0 0 1-143.136-51.690667z"
+                                        p-id="27499"></path>
+                                    </svg>
+                                    回复
+                                  </div>
+                                </template>
+                                <div class="comment-import" v-if="commentTextLoading">
                                 <textarea style="white-space:pre-line" :id="'articleComment2'+ineex"
                                           v-model="item.recoverContent"
                                           placeholder="请输入内容..." rows="3" class="news-comment-cl"/>
-                                <div class="overflow-hidden">
-                                  <emoji-module :content.sync="item.recoverContent" :id="'articleComment2'+ineex"
-                                                :placement="'bottom-start'" class="fl-left"></emoji-module>
-                                  <el-button plain type="primary" class="fl-right" size="small"
-                                             :disabled="item.recoverContent==null || item.recoverContent==''"
-                                             :loading="buttonLoading"
-                                             @click="sendComment(item.id,item.content,item.recoverContent,2,item.id,item.commentUid,2)">
-                                    回 复
-                                  </el-button>
+                                  <div class="overflow-hidden">
+                                    <emoji-module :content.sync="item.recoverContent" :id="'articleComment2'+ineex"
+                                                  :placement="'bottom-start'" class="fl-left"></emoji-module>
+                                    <el-button plain type="primary" class="fl-right" size="small"
+                                               :disabled="item.recoverContent==null || item.recoverContent==''"
+                                               :loading="buttonLoading"
+                                               @click="sendComment(item.id,item.content,item.recoverContent,2,item.id,item.commentUid,2)">
+                                      回 复
+                                    </el-button>
+                                  </div>
                                 </div>
-                              </div>
-                              <el-radio-group v-model="radio2" size="mini" class="ml-10">
-                                <el-radio-button label="1">文本编辑器</el-radio-button>
-                                <el-radio-button label="2">Markdown</el-radio-button>
-                              </el-radio-group>
-
-                            </el-collapse-item>
-                          </el-collapse>
+                              </el-collapse-item>
+                            </el-collapse>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!--二级评论-->
-                  <div v-if="item.mountComment.length!=0" class="comment-li">
-                    <div v-for="(items,index2) in item.mountComment" class="mb-20" :key="index2">
-                      <div class="flex-left">
-                        <div class="mr-2">
-                          <el-avatar v-if="items.commentAvatar" :size="30" :src="items.commentAvatar"></el-avatar>
-                          <el-avatar v-else :size="30" src="/img/tx.jpg"></el-avatar>
-                        </div>
-                        <div class="flex-8">
-                          <div class="flex-left align-items-center">
-                            <div class="ml-6 mr-10">
-                              <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
-                                         target="_blank" class="cursor-pointer hover-cl">
-                                {{ items.commentName }}
-                              </nuxt-link>
-                              <el-tag v-if="items.commentUid==articleInfo.userId" type="info" effect="plain"
-                                      size="mini" class="ml-2">作者
-                              </el-tag>
-                            </div>
-                            <div v-if="items.commentGrade==3" class="mr-10">
-                              <span class="color-grey-3 font-s-12 mr-4">回复</span>
-                              <nuxt-link class="cursor-pointer hover-cl"
-                                         :to="'/user_home/article?uuid='+$base64.encode(items.targetUid)"
-                                         target="_blank">
-                                {{ items.targetName }}
-                              </nuxt-link>
-                              <el-tag v-if="items.targetUid==articleInfo.userId" type="info" effect="plain"
-                                      size="mini"
-                                      class="ml-2">作者
-                              </el-tag>
-                            </div>
-                            <span class="color-grey-2 font-s-12"
-                                  v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
+                    <!--二级评论-->
+                    <div v-if="item.mountComment.length!=0" class="comment-li">
+                      <div v-for="(items,index2) in item.mountComment" class="mb-20" :key="index2">
+                        <div class="flex-left">
+                          <div class="mr-2">
+                            <el-avatar v-if="items.commentAvatar" :size="30" :src="items.commentAvatar"></el-avatar>
+                            <el-avatar v-else :size="30" src="/img/tx.jpg"></el-avatar>
                           </div>
-                          <!--                          内容-->
-                          <div class="content-div mt-6">
-                            <mavon-editor class="markdown"
-                                          previewBackground="#FFFFFF"
-                                          :value="items.content"
-                                          :subfield="false"
-                                          :defaultOpen="prop.defaultOpen"
-                                          :boxShadow="prop.boxShadow"
-                                          :toolbarsFlag="prop.toolbarsFlag"
-                                          :editable="prop.editable"
-                                          :codeStyle="articleInfo.theme"
-                                          :scrollStyle="prop.scrollStyle"
-                                          :navigation="false"
-                                          ref="markdown"
-                            />
-                          </div>
-                          <div class="flex-left mb-10">
-                            <div class="font-s-12 hover-cl cursor-pointer color-grey-2 mr-10"
-                                 v-if="userInfo!=null && userInfo.uuid==items.commentUid"
-                                 @click="deleteComment(items)">
-                              <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
-                                   viewBox="0 0 1024 1024" version="1.1"
-                                   xmlns="http://www.w3.org/2000/svg" p-id="6428">
-                                <path
-                                  d="M525.696 590.336l-168.96 169.024a35.968 35.968 0 0 1-50.816-0.896 35.904 35.904 0 0 1-0.96-50.816l169.024-168.96-181.952-181.952a35.968 35.968 0 0 1 0.96-50.816 35.968 35.968 0 0 1 50.816-0.96l181.888 181.952 181.952-181.952a35.904 35.904 0 0 1 50.816 0.96c14.272 14.272 14.72 36.992 0.896 50.752L577.408 538.624l169.024 169.024a35.904 35.904 0 0 1-0.896 50.816 35.904 35.904 0 0 1-50.816 0.896l-168.96-168.96zM512 950.848A438.848 438.848 0 1 0 512 73.152a438.848 438.848 0 0 0 0 877.696zM512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z"
-                                  p-id="6429"></path>
-                              </svg>
-                              删除
+                          <div class="flex-8">
+                            <div class="flex-left align-items-center">
+                              <div class="ml-6 mr-10">
+                                <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
+                                           target="_blank" class="cursor-pointer hover-cl">
+                                  {{ items.commentName }}
+                                </nuxt-link>
+                                <el-tag v-if="items.commentUid==articleInfo.userId" type="info" effect="plain"
+                                        size="mini" class="ml-2">作者
+                                </el-tag>
+                              </div>
+                              <div v-if="items.commentGrade==3" class="mr-10">
+                                <span class="color-grey-3 font-s-12 mr-4">回复</span>
+                                <nuxt-link class="cursor-pointer hover-cl"
+                                           :to="'/user_home/article?uuid='+$base64.encode(items.targetUid)"
+                                           target="_blank">
+                                  {{ items.targetName }}
+                                </nuxt-link>
+                                <el-tag v-if="items.targetUid==articleInfo.userId" type="info" effect="plain"
+                                        size="mini"
+                                        class="ml-2">作者
+                                </el-tag>
+                              </div>
+                              <span class="color-grey-2 font-s-12"
+                                    v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                             </div>
-                            <div class="flex-12 flex-left">
-                              <el-collapse accordion style="width: 100%;">
-                                <el-collapse-item>
-                                  <template slot="title">
-                                    <div class="hover-cl font-s-12 color-grey-2">
-                                      <svg t="1741407164890"
-                                           class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
-                                           viewBox="0 0 1024 1024"
-                                           version="1.1"
-                                           xmlns="http://www.w3.org/2000/svg" p-id="27498">
-                                        <path
-                                          d="M157.568 751.296c-11.008-18.688-18.218667-31.221333-21.802667-37.909333A424.885333 424.885333 0 0 1 85.333333 512C85.333333 276.362667 276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667a424.778667 424.778667 0 0 1-219.125333-60.501334 2786.56 2786.56 0 0 0-20.053334-11.765333l-104.405333 28.48c-23.893333 6.506667-45.802667-15.413333-39.285333-39.296l28.437333-104.288z m65.301333 3.786667l-17.258666 63.306666 63.306666-17.258666a32 32 0 0 1 24.522667 3.210666 4515.84 4515.84 0 0 1 32.352 18.944A360.789333 360.789333 0 0 0 512 874.666667c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512c0 60.586667 14.848 118.954667 42.826667 171.136 3.712 6.912 12.928 22.826667 27.370667 47.232a32 32 0 0 1 3.338666 24.714667z m145.994667-70.773334a32 32 0 1 1 40.917333-49.205333A159.189333 159.189333 0 0 0 512 672c37.888 0 73.674667-13.173333 102.186667-36.885333a32 32 0 0 1 40.917333 49.216A223.178667 223.178667 0 0 1 512 736a223.178667 223.178667 0 0 1-143.136-51.690667z"
-                                          p-id="27499"></path>
-                                      </svg>
-                                      回复
-                                    </div>
-                                  </template>
-                                  <div>
-                                    <div class="comment-input-div overflow-hidden" v-if="radio3=='2'">
-                                      <mavon-editor-module v-if="commentTextLoading"
-                                                           :mdContent.sync="items.recoverContent"
-                                                           :mavonHeight="300">
-                                      </mavon-editor-module>
-                                      <el-button size="small" type="primary" plain class="mt-10 fl-right mr-6"
-                                                 :loading="buttonLoading"
-                                                 :disabled="items.recoverContent==null || items.recoverContent==''"
-                                                 @click="sendComment(item.id,item.content,items.recoverContent,3,items.id,items.commentUid,2)">
-                                        回 复
-                                      </el-button>
-                                    </div>
-
-                                    <div class="comment-import" v-if="commentTextLoading && radio3=='1'">
+                            <!--                          内容-->
+                            <div class="content-div mt-6">
+                              <div class="textarea-like font-s-14" contenteditable="false">
+                                {{ items.content }}
+                              </div>
+                            </div>
+                            <div class="flex-left mb-10">
+                              <div class="font-s-12 hover-cl cursor-pointer color-grey-2 mr-10"
+                                   v-if="userInfo!=null && userInfo.uuid==items.commentUid"
+                                   @click="deleteComment(items)">
+                                <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
+                                     viewBox="0 0 1024 1024" version="1.1"
+                                     xmlns="http://www.w3.org/2000/svg" p-id="6428">
+                                  <path
+                                    d="M525.696 590.336l-168.96 169.024a35.968 35.968 0 0 1-50.816-0.896 35.904 35.904 0 0 1-0.96-50.816l169.024-168.96-181.952-181.952a35.968 35.968 0 0 1 0.96-50.816 35.968 35.968 0 0 1 50.816-0.96l181.888 181.952 181.952-181.952a35.904 35.904 0 0 1 50.816 0.96c14.272 14.272 14.72 36.992 0.896 50.752L577.408 538.624l169.024 169.024a35.904 35.904 0 0 1-0.896 50.816 35.904 35.904 0 0 1-50.816 0.896l-168.96-168.96zM512 950.848A438.848 438.848 0 1 0 512 73.152a438.848 438.848 0 0 0 0 877.696zM512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z"
+                                    p-id="6429"></path>
+                                </svg>
+                                删除
+                              </div>
+                              <div class="flex-12 flex-left">
+                                <el-collapse accordion style="width: 100%;">
+                                  <el-collapse-item>
+                                    <template slot="title">
+                                      <div class="hover-cl font-s-12 color-grey-2">
+                                        <svg t="1741407164890"
+                                             class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
+                                             viewBox="0 0 1024 1024"
+                                             version="1.1"
+                                             xmlns="http://www.w3.org/2000/svg" p-id="27498">
+                                          <path
+                                            d="M157.568 751.296c-11.008-18.688-18.218667-31.221333-21.802667-37.909333A424.885333 424.885333 0 0 1 85.333333 512C85.333333 276.362667 276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667a424.778667 424.778667 0 0 1-219.125333-60.501334 2786.56 2786.56 0 0 0-20.053334-11.765333l-104.405333 28.48c-23.893333 6.506667-45.802667-15.413333-39.285333-39.296l28.437333-104.288z m65.301333 3.786667l-17.258666 63.306666 63.306666-17.258666a32 32 0 0 1 24.522667 3.210666 4515.84 4515.84 0 0 1 32.352 18.944A360.789333 360.789333 0 0 0 512 874.666667c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512c0 60.586667 14.848 118.954667 42.826667 171.136 3.712 6.912 12.928 22.826667 27.370667 47.232a32 32 0 0 1 3.338666 24.714667z m145.994667-70.773334a32 32 0 1 1 40.917333-49.205333A159.189333 159.189333 0 0 0 512 672c37.888 0 73.674667-13.173333 102.186667-36.885333a32 32 0 0 1 40.917333 49.216A223.178667 223.178667 0 0 1 512 736a223.178667 223.178667 0 0 1-143.136-51.690667z"
+                                            p-id="27499"></path>
+                                        </svg>
+                                        回复
+                                      </div>
+                                    </template>
+                                    <div>
+                                      <div class="comment-import" v-if="commentTextLoading">
                                       <textarea style="white-space:pre-line" :id="'articleComment3'+index2"
                                                 v-model="items.recoverContent"
                                                 placeholder="请输入内容..." rows="3" class="news-comment-cl"/>
-                                      <div class="overflow-hidden">
-                                        <emoji-module :content.sync="items.recoverContent"
-                                                      :id="'articleComment3'+index2"
-                                                      :placement="'bottom-start'" class="fl-left"></emoji-module>
-                                        <el-button plain type="primary" class="fl-right" size="small"
-                                                   :disabled="items.recoverContent==null || items.recoverContent==''"
-                                                   :loading="buttonLoading"
-                                                   @click="sendComment(item.id,item.content,items.recoverContent,3,items.id,items.commentUid,2)">
-                                          回 复
-                                        </el-button>
+                                        <div class="overflow-hidden">
+                                          <emoji-module :content.sync="items.recoverContent"
+                                                        :id="'articleComment3'+index2"
+                                                        :placement="'bottom-start'" class="fl-left"></emoji-module>
+                                          <el-button plain type="primary" class="fl-right" size="small"
+                                                     :disabled="items.recoverContent==null || items.recoverContent==''"
+                                                     :loading="buttonLoading"
+                                                     @click="sendComment(item.id,item.content,items.recoverContent,3,items.id,items.commentUid,2)">
+                                            回 复
+                                          </el-button>
+                                        </div>
                                       </div>
                                     </div>
-                                    <el-radio-group v-model="radio3" size="mini" class="ml-10">
-                                      <el-radio-button label="1">文本编辑器</el-radio-button>
-                                      <el-radio-button label="2">Markdown</el-radio-button>
-                                    </el-radio-group>
-                                  </div>
-                                </el-collapse-item>
-                              </el-collapse>
+                                  </el-collapse-item>
+                                </el-collapse>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div v-if="articleComment.length>commentTotal" class="text-center font-s-14 color-grey hover-cl">
+                  <div v-if="articleComment.length>commentTotal" class="text-center font-s-14 color-grey hover-cl">
                       <span class="cursor-pointer"> 查看更多
                       <i class="fa fa-angle-double-down" aria-hidden="true"></i></span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-else class="text-center mt-20 font-s-14 color-grey-3">
-              快来抢占沙发~
+              <div v-else class="text-center mt-20 font-s-14 color-grey-3">
+                快来抢占沙发~
+              </div>
             </div>
           </div>
           <!--   ============================= 评论结束  =============================   -->
@@ -368,10 +319,11 @@
 <script>
 
 import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
+import Test from "../test.vue";
 
 export default {
   name: "friendLink",
-  components: {VditorPreview},
+  components: {Test, VditorPreview},
   head() {
     return {
       title: `${this.articleInfo.articleTitle == undefined ? process.env.PROJECT_NAME : this.articleInfo.articleTitle + ' - ' + process.env.PROJECT_NAME}`,
@@ -446,7 +398,6 @@ export default {
       commentTextLoading: true,
       //评论编辑器切换
       radio: '1',
-      radio2: '1',
       radio3: '1',
     }
   },

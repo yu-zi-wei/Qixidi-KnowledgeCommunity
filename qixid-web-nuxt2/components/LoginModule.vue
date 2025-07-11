@@ -7,7 +7,8 @@
       :visible.sync="isLogin"
       @close="loginClose()"
       :before-close="handleClose"
-      width="400px">
+      custom-class="login-module-dialog-width"
+    >
       <!--      登录-->
       <div v-show="loginDialogType==1">
         <el-form :model="form" :rules="registerRules" ref="form" class="demo-ruleForm">
@@ -357,11 +358,18 @@ export default {
     },
   },
   mounted() {
-
   }
 }
 </script>
 
 <style>
+.login-module-dialog-width {
+  width: 400px;
+}
 
+@media (max-width: 510px) {
+  .login-module-dialog-width {
+    width: 90%;
+  }
+}
 </style>

@@ -1,67 +1,75 @@
 <template>
   <div>
     <!--    手机导航-->
-    <div class="_module_explicit">
-      <div class="flex-space-between align-items-center padding-6 ">
-        <div>
-          <el-dropdown trigger="click">
-            <div class="el-dropdown-link">
-              <svg t="1751723953084" class="icon icon-size-28 svg-translateY-3" viewBox="0 0 1024 1024" version="1.1"
-                   xmlns="http://www.w3.org/2000/svg"
-                   p-id="1514">
-                <path
-                  d="M170.666667 213.333333h682.666666v85.333334H170.666667V213.333333z m0 512h426.666666v85.333334H170.666667v-85.333334z m0-256h682.666666v85.333334H170.666667v-85.333334z"
-                  fill="#444444" p-id="1515"></path>
-              </svg>
-            </div>
-            <el-dropdown-menu slot="dropdown">
-              <el-menu
-                :default-active="activeIndex"
-                class="el-menu-vertical-demo"
-                @select="handleSelect"
-                :router="true"
-                text-color="#000000"
-                :active-text-color="themeColor">
-                <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
-                  <nuxt-link :to="item.route">
-                    {{ item.navigationName }}
-                  </nuxt-link>
-                </el-menu-item>
-                <!--                存在下拉的菜单-->
-                <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
-                            style="border-bottom-color: snow;border-bottom: none">
-                  <template slot="title">
-                    {{ item.navigationName }}
-                  </template>
-                  <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
-                    <nuxt-link :to="item1.route">
-                      {{ item1.navigationName }}
+    <div class="_module_explicit" style="  height: 58px;margin: auto; z-index: 99;">
+      <div class="main">
+        <div class="flex-space-between align-items-center padding-6">
+          <div>
+            <el-dropdown trigger="click">
+              <div class="el-dropdown-link">
+                <svg t="1751723953084" class="icon icon-size-28 svg-translateY-3" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     p-id="1514">
+                  <path
+                    d="M170.666667 213.333333h682.666666v85.333334H170.666667V213.333333z m0 512h426.666666v85.333334H170.666667v-85.333334z m0-256h682.666666v85.333334H170.666667v-85.333334z"
+                    fill="#444444" p-id="1515"></path>
+                </svg>
+              </div>
+              <el-dropdown-menu slot="dropdown">
+                <el-menu
+                  :default-active="activeIndex"
+                  class="el-menu-vertical-demo"
+                  @select="handleSelect"
+                  :router="true"
+                  text-color="#000000"
+                  :active-text-color="themeColor">
+                  <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
+                    <nuxt-link :to="item.route">
+                      {{ item.navigationName }}
                     </nuxt-link>
                   </el-menu-item>
-                </el-submenu>
-                <hr class="hr-item mt-6 mb-6"/>
-                <div class="cursor-pointer hover-cl font-s-14 color-grey text-center">
-                  <div class="mt-4 mb-4" @click="oauthLogout">
-                    退出登录
+                  <!--                存在下拉的菜单-->
+                  <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
+                              style="border-bottom-color: snow;border-bottom: none">
+                    <template slot="title">
+                      {{ item.navigationName }}
+                    </template>
+                    <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
+                      <nuxt-link :to="item1.route">
+                        {{ item1.navigationName }}
+                      </nuxt-link>
+                    </el-menu-item>
+                  </el-submenu>
+                  <hr class="hr-item mt-6 mb-6"/>
+                  <div class="cursor-pointer hover-cl font-s-14 color-grey text-center">
+                    <div class="mt-4 mb-4" @click="oauthLogout">
+                      退出登录
+                    </div>
                   </div>
-                </div>
-              </el-menu>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-        <div class="font-bold-s">
-          <nuxt-link to="/">栖息地</nuxt-link>
-        </div>
-        <div>
-          <div v-if="this.isLogin">
-            <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
-              <el-avatar :size="38" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-              <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
-            </div>
+                </el-menu>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
-          <div v-else>
-            <div @click="loginWindow" class="cursor-pointer not-Logged-in">
-              登录
+          <div class="font-bold-s">
+            <nuxt-link to="/">栖息地</nuxt-link>
+          </div>
+          <div>
+            <div v-if="this.isLogin">
+              <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
+                <el-avatar :size="38" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
+              </div>
+            </div>
+            <div v-else>
+              <div @click="loginWindow" class="cursor-pointer not-Logged-in">
+                <svg t="1751959069173" class="icon icon-size-20 svg-translateY-5 icon-theme" viewBox="0 0 1024 1024"
+                     version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="4649">
+                  <path
+                    d="M521.7 82c-152.5-0.4-286.7 78.5-363.4 197.7-3.4 5.3 0.4 12.3 6.7 12.3h70.3c4.8 0 9.3-2.1 12.3-5.8 7-8.5 14.5-16.7 22.4-24.5 32.6-32.5 70.5-58.1 112.7-75.9 43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 32.6 32.5 58.1 70.4 76 112.5C865.7 417.8 875 464.1 875 512c0 47.9-9.4 94.2-27.8 137.8-17.8 42.1-43.4 80-76 112.5s-70.5 58.1-112.7 75.9c-43.6 18.4-90 27.8-137.9 27.8-47.9 0-94.3-9.4-137.9-27.8-42.2-17.8-80.1-43.4-112.7-75.9-7.9-7.9-15.3-16.1-22.4-24.5-3-3.7-7.6-5.8-12.3-5.8H165c-6.3 0-10.2 7-6.7 12.3C234.9 863.2 368.5 942 520.6 942c236.2 0 428-190.1 430.4-425.6C953.4 277.1 761.3 82.6 521.7 82zM395.025 624v-76h-314c-4.4 0-8-3.6-8-8v-56c0-4.4 3.6-8 8-8h314v-76c0-6.7 7.8-10.5 13-6.3l141.9 112c4.1 3.2 4.1 9.4 0 12.6l-141.9 112c-5.2 4.1-13 0.4-13-6.3z"
+                    p-id="4650"></path>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -427,7 +435,13 @@
                 </div>
                 <div v-else>
                   <div @click="loginWindow" class="cursor-pointer not-Logged-in">
-                    登录
+                    <svg t="1751959069173" class="icon icon-size-20 svg-translateY-5 icon-theme" viewBox="0 0 1024 1024"
+                         version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="4649">
+                      <path
+                        d="M521.7 82c-152.5-0.4-286.7 78.5-363.4 197.7-3.4 5.3 0.4 12.3 6.7 12.3h70.3c4.8 0 9.3-2.1 12.3-5.8 7-8.5 14.5-16.7 22.4-24.5 32.6-32.5 70.5-58.1 112.7-75.9 43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 32.6 32.5 58.1 70.4 76 112.5C865.7 417.8 875 464.1 875 512c0 47.9-9.4 94.2-27.8 137.8-17.8 42.1-43.4 80-76 112.5s-70.5 58.1-112.7 75.9c-43.6 18.4-90 27.8-137.9 27.8-47.9 0-94.3-9.4-137.9-27.8-42.2-17.8-80.1-43.4-112.7-75.9-7.9-7.9-15.3-16.1-22.4-24.5-3-3.7-7.6-5.8-12.3-5.8H165c-6.3 0-10.2 7-6.7 12.3C234.9 863.2 368.5 942 520.6 942c236.2 0 428-190.1 430.4-425.6C953.4 277.1 761.3 82.6 521.7 82zM395.025 624v-76h-314c-4.4 0-8-3.6-8-8v-56c0-4.4 3.6-8 8-8h314v-76c0-6.7 7.8-10.5 13-6.3l141.9 112c4.1 3.2 4.1 9.4 0 12.6l-141.9 112c-5.2 4.1-13 0.4-13-6.3z"
+                        p-id="4650"></path>
+                    </svg>
                   </div>
                 </div>
               </li>
@@ -576,7 +590,7 @@ export default {
       this.$confirm('确定要离开吗!', '退出登录', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       }).then(() => {
         this.$API("/oauth/logout", this.$post()).then(res => {
           this.pathname = this.$route.fullPath;

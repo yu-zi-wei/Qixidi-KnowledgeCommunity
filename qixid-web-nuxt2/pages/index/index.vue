@@ -1,37 +1,44 @@
 <template>
   <div>
-    <div class="flex-space-between mb-40">
-      <div style="min-height: 1px"></div>
-      <!--      热门分类-->
-      <div class="label-grouping-div">
-        <el-menu
-          v-if="!labelGroupingDialog"
-          :default-active="$route.path"
-          :router="true"
-          mode="horizontal"
-          text-color="rgba(0, 0, 0, 0.5)"
-          :active-text-color="themeColor"
-          class="el-menu-demo">
-          <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
-                        :key="index">
-            <nuxt-link :to="item.route">
-              <!--              <i v-if="item.sidebarIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
-              <!--                 v-html="item.sidebarIcon"></i>-->
-              <span class="font-s-14">{{ item.sidebarName }}</span>
-            </nuxt-link>
-          </el-menu-item>
-          <el-menu-item>
-            <span class="color-grey-3">|</span>
-          </el-menu-item>
-          <el-menu-item v-for="(item,index) in labelGroupingList" :index="'/popular-group/'+item.id"
-                        :title="'分类：'+item.groupingName" :key="index">
-            <nuxt-link :to="'/popular-group/'+item.id" class="font-s-14">
-              <span class="font-s-14">{{ item.groupingName }}</span>
-            </nuxt-link>
-          </el-menu-item>
-        </el-menu>
+    <div class="mb-40">
+      <div class="flex-space-between">
+        <div style="min-height: 1px"></div>
+        <!--      热门分类-->
+        <div class="label-grouping-div">
+          <el-menu
+            v-if="!labelGroupingDialog"
+            :default-active="$route.path"
+            :router="true"
+            mode="horizontal"
+            text-color="rgba(0, 0, 0, 0.5)"
+            :active-text-color="themeColor"
+            class="el-menu-demo">
+            <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
+                          :key="index">
+              <nuxt-link :to="item.route">
+                <!--              <i v-if="item.sidebarIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
+                <!--                 v-html="item.sidebarIcon"></i>-->
+                <span class="font-s-14">{{ item.sidebarName }}</span>
+              </nuxt-link>
+            </el-menu-item>
+            <el-menu-item>
+              <span class="color-grey-3">|</span>
+            </el-menu-item>
+            <el-menu-item v-for="(item,index) in labelGroupingList" :index="'/popular-group/'+item.id"
+                          :title="'分类：'+item.groupingName" :key="index">
+              <nuxt-link :to="'/popular-group/'+item.id" class="font-s-14">
+                <span class="font-s-14">{{ item.groupingName }}</span>
+              </nuxt-link>
+            </el-menu-item>
+          </el-menu>
+        </div>
+        <div style="min-height: 1px"></div>
       </div>
-      <div style="min-height: 1px"></div>
+      <div class="_module_explicit mt-20">
+        <div class="marquee">
+          <p class="color-grey">📱 手机端只开放部分功能 | 💻 推荐使用PC端体验完整功能...</p>
+        </div>
+      </div>
     </div>
     <div class="index-main">
       <!--      左侧-->

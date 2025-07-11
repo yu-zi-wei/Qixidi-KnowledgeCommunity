@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1">
     <div class="flex-grow-1">
-      <el-skeleton class="mt-10 _module_explicit-padding-lf-10" style="width: 100%" :rows="16" animated v-show="!scrollLoading"/>
+      <el-skeleton class="mt-10 _module_explicit-padding-lf-20" style="width: 100%" :rows="16" animated v-show="!scrollLoading"/>
       <div v-for="item of listInformationList" :key="item.id" class="article-item">
         <div class=" flex-space-between align-items-center">
           <div class="flex-8" style="padding: 0 15px">

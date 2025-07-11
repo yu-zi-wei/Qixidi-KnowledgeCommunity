@@ -1,11 +1,11 @@
 <template>
   <div class="module-main">
-    <div style="width: 30%;margin-left: 26px" class="mt-30">
+    <div style="width: 30%;margin-left: 26px" class="mt-30 _module_hiding">
       <el-input placeholder="标签关键字" v-model="labelName" @keyup.enter.native="labelSearch">
         <el-button slot="append" icon="el-icon-search" @click="labelSearch"></el-button>
       </el-input>
     </div>
-    <el-skeleton :rows="12" class="mt-20" animated v-if="loading"/>
+    <el-skeleton :rows="12" class="mt-20 _module_explicit-padding-lf-20" animated v-if="loading"/>
     <div v-if="!loading" class="flex-space-around flex-wrap-wrap">
       <div v-for="(item,index) in dateList" :key="index" class="label-item">
         <div class="flex-space-around">

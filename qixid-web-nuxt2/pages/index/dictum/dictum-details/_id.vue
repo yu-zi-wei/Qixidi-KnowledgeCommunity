@@ -1,7 +1,7 @@
 <template>
   <div class="mt-30">
     <div class="dictum-details-model">
-      <div class="flex-left _module_explicit-padding-lf-10">
+      <div class="flex-left _module_explicit-padding-lf-20">
         <div class="flex-9 background-color-fefefe">
           <div class="dictum-details-content">
             <vditor-preview :id="'aiEditor-dictum'" :content="dictumInfo.content"></vditor-preview>

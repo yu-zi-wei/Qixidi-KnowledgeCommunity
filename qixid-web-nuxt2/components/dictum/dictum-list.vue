@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-skeleton class="mt-10 _module_explicit-padding-lf-10" :rows="10" animated v-if="loading"/>
+    <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="10" animated v-if="loading"/>
     <div v-if="!loading && typography==2">
       <ul v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="dictum-info-ul">
         <li v-for="(item,index) in dictumInfoListArr" class="dictum-info-cl" :key="index">
