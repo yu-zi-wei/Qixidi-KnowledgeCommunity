@@ -10,5 +10,5 @@ import java.util.List;
  * @create 2024/11/10 18:21
  */
 public interface SystemConstant {
-    List<String> AdministratorMailboxList = Arrays.asList("2978824265@qq.com");
+    List<String> AdministratorMailboxList = Arrays.asList("@qq.com");
 }
