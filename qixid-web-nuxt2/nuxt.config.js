@@ -81,7 +81,7 @@ export default {
     '~/plugins/base64.js',  //base64加解密
     '~/plugins/utils.js',
     '~/plugins/init.js',//全局配置
-    '~/plugins/mavon-editor.js',//富文本编辑器
+    // '~/plugins/mavon-editor.js',//富文本编辑器
     //=================api==================
     '~/api/API.js', // axios 请求封装
     '~/api/requestType.js', // axios 请求类型封装

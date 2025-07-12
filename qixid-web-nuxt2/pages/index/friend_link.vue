@@ -85,17 +85,7 @@
                   <el-avatar v-if="userInfo && userInfo.avatar" :size="35" :src="userInfo.avatar"></el-avatar>
                   <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
                 </div>
-                <div class="comment-input-div overflow-hidden flex-1" v-if="radio=='2'">
-                  <mavon-editor-module v-if="commentTextLoading" :mdContent.sync="comment.content"
-                                       :mavonHeight="300">
-                  </mavon-editor-module>
-                  <el-button size="small" plain type="primary" class="mt-6 fl-right mr-6" :loading="buttonLoading"
-                             :disabled="comment.content==null || comment.content==''"
-                             @click="sendComment(articleInfo.id,articleInfo.articleTitle,comment.content,1,articleInfo.id,articleInfo.userId,1)">
-                    评 论
-                  </el-button>
-                </div>
-                <div v-else class="flex-12">
+                <div class="flex-12">
                   <div class="comment-import" v-if="commentTextLoading">
                   <textarea style="white-space:pre-line" id="articleComment" v-model="comment.content"
                             placeholder="请输入内容..."
@@ -113,12 +103,6 @@
                   </div>
                 </div>
               </div>
-              <div style="margin-left: 50px">
-                <el-radio-group v-model="radio" size="mini">
-                  <el-radio-button label="1">文本编辑器</el-radio-button>
-                  <el-radio-button label="2">Markdown</el-radio-button>
-                </el-radio-group>
-              </div>
               <div v-if="articleComment.length!=0">
                 <div class="mt-20 font-bold">热门评论</div>
                 <!--                      一级评论-->
@@ -130,29 +114,29 @@
                         <el-avatar v-else :size="35" src="/img/tx.jpg"></el-avatar>
                       </div>
                       <div class="flex-8">
-                        <div class="flex-left align-items-center">
-                          <nuxt-link class="ml-6 cursor-pointer hover-cl"
-                                     :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)"
-                                     target="_blank">
-                            {{ item.commentName }}
-                          </nuxt-link>
-                          <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
-                                  class="ml-6">作者
-                          </el-tag>
-                          <span class="color-grey-2 font-s-12 ml-10"
-                                v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
-                        </div>
-                        <div class="content-div mt-10">
-                          <div class="textarea-like font-s-14 line-height-24" contenteditable="false">{{
-                              item.content
-                            }}
+                        <div class="flex-left flex-wrap-wrap align-items-center">
+                          <div>
+                            <nuxt-link class="ml-6 cursor-pointer hover-cl"
+                                       :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)"
+                                       target="_blank">
+                              {{ item.commentName }}
+                            </nuxt-link>
+                            <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
+                                    class="ml-2">作者
+                            </el-tag>
                           </div>
+                          <div class="color-grey-2 font-s-12 ml-10"
+                               v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
+                          </div>
+                        </div>
+                        <div class="content-div mt-4">
+                          <el-input type="textarea" autosize resize="none" :readonly="true" v-model="item.content"/>
                         </div>
                         <div class="flex-left">
                           <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
                                class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
                                @click="deleteComment(item)">
-                            <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
+                            <svg t="1742632616926" class="icon-size-14 icon-theme-1 icon-hover svg-translateY-3"
                                  viewBox="0 0 1024 1024" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg" p-id="6428">
                               <path
@@ -165,7 +149,7 @@
                             <el-collapse accordion style="width: 100%;">
                               <el-collapse-item>
                                 <template slot="title">
-                                  <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-5">
+                                  <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-3">
                                     <svg t="1741407164890"
                                          class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
                                          viewBox="0 0 1024 1024"
@@ -203,13 +187,13 @@
                     <div v-if="item.mountComment.length!=0" class="comment-li">
                       <div v-for="(items,index2) in item.mountComment" class="mb-20" :key="index2">
                         <div class="flex-left">
-                          <div class="mr-2">
+                          <div class="mr-6">
                             <el-avatar v-if="items.commentAvatar" :size="30" :src="items.commentAvatar"></el-avatar>
                             <el-avatar v-else :size="30" src="/img/tx.jpg"></el-avatar>
                           </div>
                           <div class="flex-8">
-                            <div class="flex-left align-items-center">
-                              <div class="ml-6 mr-10">
+                            <div class="flex-left flex-wrap-wrap align-items-center">
+                              <div class="mr-10">
                                 <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(items.commentUid)"
                                            target="_blank" class="cursor-pointer hover-cl">
                                   {{ items.commentName }}
@@ -226,18 +210,17 @@
                                   {{ items.targetName }}
                                 </nuxt-link>
                                 <el-tag v-if="items.targetUid==articleInfo.userId" type="info" effect="plain"
-                                        size="mini"
-                                        class="ml-2">作者
+                                        size="mini" class="ml-2">作者
                                 </el-tag>
                               </div>
-                              <span class="color-grey-2 font-s-12"
-                                    v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
+                              <div class="color-grey-2 font-s-12"
+                                   v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
+                              </div>
                             </div>
                             <!--                          内容-->
-                            <div class="content-div mt-6">
-                              <div class="textarea-like font-s-14" contenteditable="false">
-                                {{ items.content }}
-                              </div>
+                            <div class="content-div mt-4">
+                              <el-input type="textarea" autosize resize="none" :readonly="true"
+                                        v-model="items.content"/>
                             </div>
                             <div class="flex-left mb-10">
                               <div class="font-s-12 hover-cl cursor-pointer color-grey-2 mr-10"
@@ -319,11 +302,10 @@
 <script>
 
 import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
-import Test from "../test.vue";
 
 export default {
   name: "friendLink",
-  components: {Test, VditorPreview},
+  components: {VditorPreview},
   head() {
     return {
       title: `${this.articleInfo.articleTitle == undefined ? process.env.PROJECT_NAME : this.articleInfo.articleTitle + ' - ' + process.env.PROJECT_NAME}`,
@@ -336,19 +318,6 @@ export default {
         {hid: 'keywords', name: 'keywords', content: this.articleInfo.articleTitle || this.articleInfo.articleAbstract}
       ]
     }
-  },
-  computed: {
-    prop() {
-      let data = {
-        subfield: false,// 单双栏模式
-        defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
-        editable: false,
-        toolbarsFlag: false,
-        scrollStyle: true,
-        boxShadow: false,  //边框阴影
-      }
-      return data
-    },
   },
   data() {
     return {
@@ -396,9 +365,6 @@ export default {
         worksContent: '',
       },
       commentTextLoading: true,
-      //评论编辑器切换
-      radio: '1',
-      radio3: '1',
     }
   },
   async asyncData({app, params, store}) {
@@ -469,7 +435,7 @@ export default {
       }
       this.$API('/article/comment/insert', this.$post(), null, this.comment).then(res => {
         if (res.code === 200) {
-          this.commentTextLoading = false;
+          // this.commentTextLoading = false;
           this.$modal.msg("感谢你的评论！");
           this.articleCommentLists()
         }
@@ -583,5 +549,10 @@ export default {
 .friend-link-item:hover {
   background-color: #fad8cf;
   border: 1px solid #ff4757;
+}
+
+.el-textarea__inner {
+  border: none !important;
+  color: var(--default-color) !important;
 }
 </style>

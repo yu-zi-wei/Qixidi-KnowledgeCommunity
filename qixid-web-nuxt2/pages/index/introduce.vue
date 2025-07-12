@@ -286,7 +286,7 @@
             <!--   ============================= 评论结束  =============================   -->
           </div>
         </div>
-        <div style="min-height: 1px;width: 100px"></div>
+        <div class="_module_hiding" style="min-height: 1px;width: 100px"></div>
       </div>
     </div>
     <LoginModule :isLogin="loginDialog" @loginDialogMethod="loginDialogMethod"></LoginModule>
@@ -355,7 +355,7 @@ export default {
     }
   },
   async asyncData({app, params, store}) {
-    const id = -13;//关于作者
+    const id = -11;//关于栖息地
     let token = store.state.token;
     const https = require('https');
     const response = await fetch(`${process.env.SERVICE_PROTOCOL}${process.env.SERVER_URL}/white/article/details/${id}`, {
@@ -544,5 +544,5 @@ export default {
 </script>
 
 <style>
-@import url("static/css/server/pc/article/article-details.css");
+@import url("../../static/css/server/pc/article/article-details.css");
 </style>

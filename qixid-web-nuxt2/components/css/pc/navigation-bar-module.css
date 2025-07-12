@@ -107,7 +107,7 @@
 }
 
 .go-top {
-  z-index: 99;
+  z-index: 999;
   right: 6%;
   bottom: 4%;
   position: fixed;

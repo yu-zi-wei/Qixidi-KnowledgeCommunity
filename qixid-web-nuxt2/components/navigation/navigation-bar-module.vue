@@ -138,20 +138,6 @@
                 <!--                </el-menu-item>-->
                 <!--                <el-menu-item index="/test">测试</el-menu-item>-->
               </el-menu>
-              <div class="search-div">
-                <!--              <el-autocomplete-->
-                <!--                style="width: 360px;border-radius: 20px;margin-top: 10px"-->
-                <!--                class="inline-input"-->
-                <!--                value-key="content"-->
-                <!--                v-model="search.keyword"-->
-                <!--                :fetch-suggestions="querySearch"-->
-                <!--                @keyup.enter.native="searchAurora"-->
-                <!--                :placeholder="'探索'+websiteName"-->
-                <!--                @select="handleSelect"-->
-                <!--                clearable>-->
-                <!--                <i class="el-icon-search el-input__icon" slot="suffix"></i>-->
-                <!--              </el-autocomplete>-->
-              </div>
             </ul>
             <ul class="nav-right-ul search-div">
               <!--          搜索-->
@@ -457,7 +443,7 @@
     <div>
       <!--    回到顶部-->
       <transition name="el-zoom-in-bottom">
-        <div class="go-top" @click="goTop" v-show="goTopLoadingButton">
+        <div class="go-top _module_hiding" @click="goTop" v-show="goTopLoadingButton">
           <div title="回到顶部">
             <svg t="1734083582523" class="icon icon-size-32 " viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg"

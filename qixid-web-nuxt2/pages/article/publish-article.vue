@@ -165,7 +165,6 @@
 </template>
 
 <script>
-import MavonEditorModule from "../../components/mavon-editor-module.vue";
 import VditorMd from "../../components/vditorComponents/Vditor-md.vue";
 
 export default {
@@ -173,7 +172,7 @@ export default {
   head: {
     title: `文章编写 - ${process.env.PROJECT_NAME}`,
   },
-  components: {VditorMd, MavonEditorModule},
+  components: {VditorMd},
   data() {
     return {
       isClient: false,
