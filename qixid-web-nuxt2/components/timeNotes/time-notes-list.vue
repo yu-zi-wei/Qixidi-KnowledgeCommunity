@@ -150,7 +150,7 @@
     <time-notes-editing :time-notes-dialog-visible="timeNotesDialogVisible"
                         :time-notes="moodNotes"
                         @timeNotesDialogVisibleMethod="timeNotesDialogVisibleMethod"
-                        @success="getList"></time-notes-editing>
+                        @success="updateList"></time-notes-editing>
   </div>
 </template>
 
@@ -190,10 +190,18 @@ export default {
   },
   watch: {
     reload() {
-      this.getList();
+      this.updateList();
     },
   },
   methods: {
+    updateList() {
+      this.queryParams = {
+        pageNum: 1,
+        pageSize: 100,
+        title: null
+      }
+      this.getList();
+    },
     update() {
       this.timeNotesDialogVisible = true;
     },
