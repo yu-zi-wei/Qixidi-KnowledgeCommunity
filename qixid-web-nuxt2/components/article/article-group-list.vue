@@ -185,6 +185,7 @@ export default {
     getArticleList() {
       this.loading = true;
       this.queryParams.groupingId = this.$route.params.id;
+      this.queryParams.pageNum = 1;
       switch (this.type) {
         case 1:
           this.$API("/white/article/follow/list", this.$get(), this.queryParams).then(res => {
