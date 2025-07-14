@@ -64,6 +64,7 @@
         <minio.version>8.3.8</minio.version>
         <!--        图片压缩工具-->
         <thumbnailator.version>0.4.20</thumbnailator.version>
+        <webp-imageio.version>0.1.6</webp-imageio.version>
 
         <!-- Sa-Token libs -->
         <sa-token-spring-boot3-starter.version>1.37.0</sa-token-spring-boot3-starter.version>
@@ -233,6 +234,12 @@
                 <groupId>net.coobird</groupId>
                 <artifactId>thumbnailator</artifactId>
                 <version>${thumbnailator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.sejda.imageio</groupId>
+                <artifactId>webp-imageio</artifactId>
+                <version>${webp-imageio.version}</version>
             </dependency>
 
             <dependency>
