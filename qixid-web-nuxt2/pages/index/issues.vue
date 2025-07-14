@@ -208,6 +208,9 @@ import VditorMd from "../../components/vditorComponents/Vditor-md.vue";
 import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
 
 export default {
+  head: {
+    title: `issues - ${process.env.PROJECT_NAME}`,
+  },
   components: {VditorPreview, VditorMd},
   data() {
     return {

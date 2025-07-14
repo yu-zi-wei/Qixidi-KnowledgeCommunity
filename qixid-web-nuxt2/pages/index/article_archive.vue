@@ -118,6 +118,9 @@
 <script>
 
 export default {
+  head: {
+    title: `文章归档 - ${process.env.PROJECT_NAME}`,
+  },
   name: "articleArchive",
   data() {
     return {
