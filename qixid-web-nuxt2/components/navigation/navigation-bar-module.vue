@@ -40,12 +40,6 @@
                       </nuxt-link>
                     </el-menu-item>
                   </el-submenu>
-                  <hr class="hr-item mt-6 mb-6"/>
-                  <div class="cursor-pointer hover-cl font-s-14 color-grey text-center">
-                    <div class="mt-4 mb-4" @click="oauthLogout">
-                      退出登录
-                    </div>
-                  </div>
                 </el-menu>
               </el-dropdown-menu>
             </el-dropdown>
@@ -55,10 +49,21 @@
           </div>
           <div>
             <div v-if="this.isLogin">
-              <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
-                <el-avatar :size="38" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
-                <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
-              </div>
+              <el-dropdown trigger="click">
+                <div class="el-dropdown-link">
+                  <div class="el-dropdown-link cursor-pointer" v-if="userInfo!=null">
+                    <el-avatar :size="38" v-if="userInfo.avatar" :src="userInfo.avatar"></el-avatar>
+                    <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
+                  </div>
+                </div>
+                <el-dropdown-menu slot="dropdown">
+                  <div class="cursor-pointer hover-cl color-grey text-center">
+                    <div class="padding-6 font-s-13" @click="oauthLogout">
+                      退出登录
+                    </div>
+                  </div>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
             <div v-else>
               <div @click="loginWindow" class="cursor-pointer not-Logged-in">
