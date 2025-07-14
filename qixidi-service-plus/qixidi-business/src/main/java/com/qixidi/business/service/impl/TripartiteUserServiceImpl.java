@@ -237,7 +237,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                     mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，手机号：%s，密码：%s",
                             tripartiteUser.getSource(),
                             tripartiteUser.getNickname(), tripartiteUser.getPhone(), tripartiteUser.getPassword()));
-                    MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
+                    MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "【栖息地】新用户注册", mags.toString());
                 });
             }
         }
@@ -322,7 +322,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 StringBuffer mags = new StringBuffer();
                 mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，邮箱：%s，密码：%s",
                         "平台注册", tripartiteUser.getNickname(), tripartiteUser.getEmail(), tripartiteUser.getPassword()));
-                MailUtils.sendHtml(SystemConstant.AdministratorMailboxList, "【栖息地】新用户注册", mags.toString());
+                MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "【栖息地】新用户注册", mags.toString());
             });
         }
         return insert > 0 ? R.ok("注册成功！") : R.fail("注册异常！");

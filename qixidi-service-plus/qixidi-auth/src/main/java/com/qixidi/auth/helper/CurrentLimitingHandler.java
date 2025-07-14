@@ -36,7 +36,7 @@ public class CurrentLimitingHandler {
                 //保存黑名单
                 SysBlackListManager.inst().addIp(ip, blackListMap);
                 //                发送邮件
-                MailUtils.sendText(SystemConstant.AdministratorMailboxList, "新增黑名单", "已封禁IP：" + ip + "IP归属地：" + AddressUtils.getRealAddressByIP(ip)
+                MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "新增黑名单", "已封禁IP：" + ip + "IP归属地：" + AddressUtils.getRealAddressByIP(ip)
                         + "；请求接口：" + url + " 请求方式：" + request.getMethod());
                 throw new Exception("当前IP：[" + ip + "]，检测到非法操作，已被加入黑名单");
             } else {

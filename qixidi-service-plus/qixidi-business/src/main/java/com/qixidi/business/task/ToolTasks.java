@@ -58,14 +58,14 @@ public class ToolTasks {
         if (map.containsKey("err_msg") && !Objects.equals(error, "success")) {
             logger.error("签到失败：{}", error);
             if (error.contains("must login")) {
-                MailUtils.sendText(SystemConstant.AdministratorMailboxList, "掘金签到失败-登录过期", "掘金签到失败-登录过期");
+                MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "掘金签到失败-登录过期", "掘金签到失败-登录过期");
                 return;
             }
             if (LocalDateTime.now().getHour() == 8) {
                 logger.error("重复签到：{}", error);
                 return;
             }
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "掘金签到失败", error);
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "掘金签到失败", error);
             return;
         }
         // 抽奖

@@ -91,7 +91,7 @@ public class LabelTask {
 
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCHRONIZE_b_label_infoRMATION_DATA.getCode());
         } catch (Exception e) {
-//            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步标签信息数据（syncLabel）任务异常", e.getMessage());
+//            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "同步标签信息数据（syncLabel）任务异常", e.getMessage());
             log.error("同步标签信息数据异常：时间：{}", DateUtils.getTime());
             e.printStackTrace();
         }
@@ -118,7 +118,7 @@ public class LabelTask {
             labelGroupingInfoMapper.updateById(labelGroupingInfos);
             log.info("同步标签分组文章数据成功：时间：{}", DateUtils.getTime());
         } catch (Exception e) {
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步标签分组文章数据（syncLabelGroup）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "同步标签分组文章数据（syncLabelGroup）任务异常", e.getMessage());
             log.error("同步标签分组文章数据异常：时间：{}", DateUtils.getTime());
             e.printStackTrace();
         }

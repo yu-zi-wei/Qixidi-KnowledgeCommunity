@@ -55,14 +55,14 @@ public class ArticleTask {
         try {
             //等待所有的任务都结束（实时判断是否全完成），若所有任务都已完成，则返回true，若超时未完成，则返回false
             if (!pool.awaitTermination(timeout, unit)) {
-                MailUtils.sendText(SystemConstant.AdministratorMailboxList, "线程超时", "计算文章权重任务超时！ArticleCalculateWeight");
+                MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "线程超时", "计算文章权重任务超时！ArticleCalculateWeight");
                 log.error("计算文章权重任务超时,{}", pool.getClass().getName());
                 return false;
             }
             return true;
         } catch (InterruptedException e) {
             // awaitTermination方法被中断的时候也中止线程池中全部的线程的执行。
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "线程异常中断", "计算文章权重任务异常中断！ArticleCalculateWeight");
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "线程异常中断", "计算文章权重任务异常中断！ArticleCalculateWeight");
             log.error("计算文章权重任务异常中断,{}", pool.getClass().getName());
             return false;
         }
@@ -148,7 +148,7 @@ public class ArticleTask {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("计算文章权重 执行异常异常：{}", e.getMessage());
-                MailUtils.sendText(SystemConstant.AdministratorMailboxList, "计算文章权重任务异常",
+                MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "计算文章权重任务异常",
                         String.format("{}，发生时间：{}", "计算文章权重任务异常！ArticleCalculateWeight", DateUtil.formatDateTime(new Date())));
                 log.error("计算文章权重任务异常,异常信息：{}", e.getMessage());
                 state = false;
@@ -184,7 +184,7 @@ public class ArticleTask {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("同步文章点赞 执行异常异常：{}", e.getMessage());
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步文章点赞任务异常",
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "同步文章点赞任务异常",
                     String.format("{}，发生时间：{}", "同步文章点赞任务异常！syncFabulous", DateUtil.formatDateTime(new Date())));
         }
     }
@@ -223,7 +223,7 @@ public class ArticleTask {
                 e.printStackTrace();
                 log.error("点赞同步 执行异常异常：{}", e.getMessage());
 //                    发送异常邮件
-                MailUtils.sendText(SystemConstant.AdministratorMailboxList, "点赞信息同步异常->定时任务：syncFabulous", e.getMessage());
+                MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "点赞信息同步异常->定时任务：syncFabulous", e.getMessage());
             }
         });
     }

@@ -72,7 +72,7 @@ public class SpecialTask {
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_NUMBER_COLUMNS.getCode());
         } catch (Exception e) {
             log.error("同步专栏文章数失败", e);
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "同步专栏文章数(SpecialTask) 任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "同步专栏文章数(SpecialTask) 任务异常", e.getMessage());
         }
     }
 }

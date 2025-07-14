@@ -227,7 +227,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
         if (wordCount > 10 || wordCount1 > 10 || wordCount2 > 10) {
             //            发送人工审核消息
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "文章自动审核失败",
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "文章自动审核失败",
                     String.format("文章名称：%s，标题触发敏感词数：%s，内容触发敏感词数：%s，摘要触发敏感词数：%s",
                             Title, wordCount, wordCount1, wordCount2));
             return;

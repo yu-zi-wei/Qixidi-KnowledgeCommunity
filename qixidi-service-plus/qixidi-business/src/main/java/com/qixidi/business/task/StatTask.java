@@ -87,7 +87,7 @@ public class StatTask {
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.UPDATE_WEBSITE_DAILY_DATA.getCode());
         } catch (Exception e) {
             e.printStackTrace();
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "网站数据更新（StatInfoUpdate）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "网站数据更新（StatInfoUpdate）任务异常", e.getMessage());
             log.error("网站数据更新异常：时间：{}", DateUtils.getTime());
         }
     }
@@ -107,7 +107,7 @@ public class StatTask {
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.UPDATE_WEBSITE_MONTHLY_DATA.getCode());
         } catch (Exception e) {
             e.printStackTrace();
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "网站数据更新（StatTheInfoUpdate）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "网站数据更新（StatTheInfoUpdate）任务异常", e.getMessage());
             log.error("网站每月数据更新异常：时间：{}", DateUtils.getTime());
         }
     }

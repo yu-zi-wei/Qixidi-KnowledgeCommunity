@@ -49,7 +49,7 @@ spring:
         # 注意这个值和druid原生不一致，默认启动了stat
         filters: stat
 
-  #        邮件配置
+  # 邮件配置
   mail:
     host: ${config.mail.host}     # QQ 邮箱 SMTP 服务器地址
     port: ${config.mail.port}     # SMTP 服务端口（SSL）
@@ -62,6 +62,11 @@ spring:
           auth: true           # 启用认证
           starttls.enable: true # 启用 TLS
           ssl.enable: true      # 启用 SSL 加密
+
+--- # 系统相关配置
+system:
+  admin:
+    mailboxes: ${config.system.admin.mailboxes}
 
 --- # druid 配置
 spring.datasource.druid:
@@ -208,3 +213,4 @@ deep-seek:
     url: ${config.deepSeek.url}
     model: ${config.deepSeek.model}
     role: ${config.deepSeek.role}
+

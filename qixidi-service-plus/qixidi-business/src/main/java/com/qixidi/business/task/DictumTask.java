@@ -46,14 +46,14 @@ public class DictumTask {
             dictumGroupMapper.updateList(dictumInfoVos);
         } catch (Exception e) {
             e.printStackTrace();
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "名言分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "名言分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
         }
         try {
             List<DictumInfoVo> albumId = dictumInfoMapper.selectAlbumId();
             dictumAlbumMapper.updateList(albumId);
 
         } catch (Exception e) {
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "专辑分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "专辑分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
             e.printStackTrace();
         }
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCING_QUOTES_DATA.getCode());
@@ -114,7 +114,7 @@ public class DictumTask {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "热门作者（标签）同步异常（countPopularAuthors）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "热门作者（标签）同步异常（countPopularAuthors）任务异常", e.getMessage());
             log.error("热门作者（标签）数据同步异常：时间：{}", DateUtils.getTime());
         }
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.CALCULATING_HOT_DATA.getCode());

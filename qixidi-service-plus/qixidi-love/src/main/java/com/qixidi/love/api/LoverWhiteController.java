@@ -1,5 +1,6 @@
 package com.qixidi.love.api;
 
+import com.light.core.constant.SystemConstant;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
@@ -55,7 +56,7 @@ public class LoverWhiteController {
      */
     @GetMapping("/mail")
     public void mailCont() {
-        MailUtils.sendHtml("2978824265@qq.com", "验证码通知", "Lover发送邮件");
+        MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "验证码通知", "Lover发送邮件");
     }
 
     /**

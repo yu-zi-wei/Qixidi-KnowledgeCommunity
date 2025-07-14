@@ -106,7 +106,7 @@ public class UserTask {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("用户网站数据同步  执行异常异常：{}", e.getMessage());
-            MailUtils.sendText(SystemConstant.AdministratorMailboxList, "用户网站数据同步（b_count_user_website,useWebsiteSync）任务异常", e.getMessage());
+            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "用户网站数据同步（b_count_user_website,useWebsiteSync）任务异常", e.getMessage());
         }
     }
 }

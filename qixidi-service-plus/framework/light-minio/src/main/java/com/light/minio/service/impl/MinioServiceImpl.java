@@ -3,16 +3,22 @@ package com.light.minio.service.impl;
 import com.light.minio.config.MinioConfig;
 import com.light.minio.domain.dto.MinioDto;
 import com.light.minio.service.MinioService;
+import com.luciad.imageio.webp.WebPWriteParam;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,6 +27,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.UUID;
 
 
@@ -52,20 +60,31 @@ public class MinioServiceImpl implements MinioService {
         String extension = null;
         InputStream inputStream = null;
         String contentType = null;
-
         if (isImage(originalFilename)) {//图片文件
-            extension = ".jpg";//压缩为.webp
-            // 使用Thumbnailator处理图片
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Thumbnails.of(file.getInputStream())
-                    .scale(1.0)  // 可调整缩放比例
-                    .outputQuality(0.8)  // 压缩质量，0.8表示80%质量
-                    .outputFormat("jpg")
-                    .toOutputStream(outputStream);
-            // 准备转换后的数据流
-            byte[] imageBytes = outputStream.toByteArray();
+            extension = ".webp";//压缩为.webp
+            byte[] imageBytes = null;
+            BufferedImage originalImage = ImageIO.read(file.getInputStream());
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                WebPWriteParam writeParam = new WebPWriteParam(Locale.getDefault());
+                writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                writeParam.setCompressionType(writeParam.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]);
+                writeParam.setCompressionQuality(0.8f);
+                Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/webp");
+                if (!writers.hasNext()) {
+                    throw new IllegalStateException("No writers found for WebP format");
+                }
+                ImageWriter writer = writers.next();
+
+                try (ImageOutputStream ios = ImageIO.createImageOutputStream(baos)) {
+                    writer.setOutput(ios);
+                    writer.write(null, new IIOImage(originalImage, null, null), writeParam);
+                } finally {
+                    writer.dispose();
+                }
+                imageBytes = baos.toByteArray();
+            }
             inputStream = new ByteArrayInputStream(imageBytes);
-            contentType = "image/jpg";
+            contentType = "image/webp";
 
         } else {//非图片文件
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
