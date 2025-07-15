@@ -159,12 +159,14 @@
               </el-col>
             </el-row>
             <el-form-item label="名言：" prop="content">
-              <div style="border: 1px solid #DCDFE6;border-radius: 2px">
-                <VditorMd :height="'300px'"
-                          :outline="false"
-                          :vditorId="'releaseDictum'"
-                          :mdContent.sync="dictumInfo.content"
-                          :content="dictumInfo.content" v-if="!loading"></VditorMd>
+              <div style="border: 1px solid #DCDFE6;border-radius: 2px;padding: 10px">
+                  <textarea style="white-space:pre-line" id="articleComment" v-model="dictumInfo.content"
+                            placeholder="名言内容..."
+                            rows="8" class="news-comment-cl"/>
+                <div class="overflow-hidden">
+                  <emoji-module :content.sync="dictumInfo.content" :id="'articleComment'" :placement="'bottom-start'"
+                                class="fl-left"></emoji-module>
+                </div>
               </div>
             </el-form-item>
             <el-row>
@@ -262,14 +264,12 @@
 </template>
 
 <script>
-import VditorMd from "../../../components/vditorComponents/Vditor-md.vue";
 
 export default {
   name: "releaseDictum",
   head: {
     title: `记录名言 - ${process.env.PROJECT_NAME}`,
   },
-  components: {VditorMd},
   data() {
     return {
       update: {
@@ -432,6 +432,8 @@ export default {
 </script>
 
 <style>
+@import url("static/css/server/pc/article/article-details.css");
+
 .release-dictum-index {
   padding: 20px;
   background-color: #FFFFFF;

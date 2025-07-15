@@ -47,3 +47,14 @@
 .el-menu--horizontal > .el-menu-item {
   border: none;
 }
+
+/*element*/
+.el-textarea__inner {
+  border: none !important;
+  color: var(--default-color) !important;
+  font-family: var(--sys-font-family) !important;
+  background-color: transparent !important;
+  font-size: 16px;
+  line-height: 28px;
+}
+

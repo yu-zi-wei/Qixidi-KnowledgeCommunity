@@ -49,7 +49,8 @@
             </div>
           </div>
           <div class="dictum-content">
-            <vditor-preview :id="'dictum-content-'+index" :content="item.content"></vditor-preview>
+            <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
+                      v-model="item.content"/>
             <div class="flex-right mt-20" style="width: 100%">
               <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                    class="color-grey-2 font-s-13">——
@@ -191,16 +192,6 @@
               <div class="flex-space-between align-items-center mb-10" v-if="item.labelList!=null">
                 <div style="line-height: 1px"></div>
                 <div class="flex-right align-items-center">
-                  <!--                <nuxt-link class="color-grey" :to="`/user_home/article?uuid=`+$base64.encode(item.uid)"-->
-                  <!--                           target="_blank">-->
-                  <!--                  <p class="font-s-14 cursor-pointer text-underline-hover hover-cl">{{ item.nickname }}</p>-->
-                  <!--                </nuxt-link>-->
-                  <!--                <el-tag class="cursor-pointer mr-5" size="medium" type="info" effect="plain" title="收录专辑"-->
-                  <!--                        v-if="item.albumName!=null">-->
-                  <!--                  <nuxt-link :to="`/external_info/album-info?data=`+item.albumId" target="_blank" rel="noopener">-->
-                  <!--                    {{ item.albumName }}-->
-                  <!--                  </nuxt-link>-->
-                  <!--                </el-tag>-->
                   <div v-for="(items,indexs) in item.labelList" title="标签" :key="indexs"
                        class="font-s-13 color-grey-2">
                     <span>#{{ items }}</span>
@@ -208,11 +199,11 @@
                   </div>
                 </div>
               </div>
-              <hr class="hr-dictum mb-15" v-if="item.labelList!=null"/>
+              <hr class="hr-dictum mb-5" v-if="item.labelList!=null"/>
               <div class="dictum-content">
-                <vditor-preview :id="'dictum-content-waterfall-list-'+index"
-                                :content="item.content"></vditor-preview>
-                <div class="flex-right mt-30" style="width: 100%">
+                <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
+                          v-model="item.content"/>
+                <div class="flex-right mt-20" style="width: 100%">
                   <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                        class="color-grey-2 font-s-13">——
                     <span v-if="item.author!=null" class="cursor-pointer text-underline-hover"
@@ -227,7 +218,7 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-left font-s-13 color-grey-3 mt-20">
+              <div class="flex-left font-s-13 color-grey-3 mt-10">
                 <div title="评论" class="cursor-pointer mr-15 hover-cl">
                   <svg t="1685704893908" class="icon icon-theme-2 icon-size-16 svg-translateY-3 icon-hover"
                        viewBox="0 0 1024 1024"
@@ -510,13 +501,8 @@
 
 <script>
 
-
-import EmojiModule from "../emoji-module.vue";
-import VditorPreview from "../vditorComponents/Vditor-preview.vue";
-
 export default {
   name: "dictumList",
-  components: {VditorPreview, EmojiModule},
   props: {
     // 内容
     content: String,

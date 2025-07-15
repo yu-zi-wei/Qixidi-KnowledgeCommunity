@@ -31,7 +31,8 @@
             </el-tag>
           </div>
           <div>
-            <vditor-preview :id="'dictum-manage-content'+index" :content="item.content"></vditor-preview>
+            <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
+                      v-model="item.content"/>
           </div>
           <div class="flex-space-between mt-15">
             <div class="color-grey-2 font-s-12" title="记录时间">
@@ -129,11 +130,8 @@
 
 <script>
 
-import VditorPreview from "../vditorComponents/Vditor-preview.vue";
-
 export default {
   name: "dictumManageList",
-  components: {VditorPreview},
   props: {
     state: Number,
     keyword: String
