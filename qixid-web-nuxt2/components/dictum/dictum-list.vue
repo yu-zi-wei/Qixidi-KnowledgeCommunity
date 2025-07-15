@@ -326,8 +326,8 @@
           </nuxt-link>
         </div>
         <div style="background-color: #F8F8FA;border-radius: 4px;padding: 20px">
-          <vditor-preview :id="'dictum-content-comment-list-'+dictumInfo.id"
-                          :content="dictumInfo.content"></vditor-preview>
+          <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
+                    v-model="dictumInfo.content"/>
         </div>
         <!--        评论-->
         <div style="margin-top: 40px">

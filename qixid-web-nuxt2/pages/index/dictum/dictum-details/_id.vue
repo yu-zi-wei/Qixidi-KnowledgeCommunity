@@ -4,7 +4,8 @@
       <div class="flex-left _module_explicit-padding-lf-20">
         <div class="flex-9 background-color-fefefe">
           <div class="dictum-details-content">
-            <vditor-preview :id="'aiEditor-dictum'" :content="dictumInfo.content"></vditor-preview>
+            <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
+                      v-model="dictumInfo.content"/>
             <div class="flex-right mt-20">
               <div
                 v-if="(dictumInfo.worksName!=null && dictumInfo.worksName!='')||(dictumInfo.author!=null && dictumInfo.author!='')"
@@ -231,12 +232,9 @@
 </template>
 
 <script>
-import EmojiModule from "../../../../components/emoji-module.vue";
-import VditorPreview from "../../../../components/vditorComponents/Vditor-preview.vue";
 
 export default {
   name: "dictumDetails",
-  components: {VditorPreview, EmojiModule},
   head() {
     return {
       title: "名言详情" + ' - ' + process.env.PROJECT_NAME,
