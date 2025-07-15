@@ -1,8 +1,6 @@
 import env from './env'
 import {encode} from 'base-64';
 
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   server: {
@@ -189,6 +187,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: {allChunks: true},// 将内嵌的样式提取到外部，解决查看网页源代码是出现css问题
+    purgeCSS: true,
     extend(config, {isDev, isClient}) {
       config.module.rules.push({
         // test: /\.js$/,
@@ -205,16 +204,25 @@ export default {
           }
         }
       });
-      if (isClient.isClient) {
-        // 在客户端构建时使用 optimize-css-assets-webpack-plugin
-        config.optimization.minimizer.push(new OptimizeCSSPlugin());
-      }
+      // CSS优化已由Nuxt内置处理，无需手动添加CSS优化插件
     },
     // 防止多次打包
     vendor: ['element-ui', 'axios'],
     optimization: {
       splitChunks: {
         chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          elementUI: {
+            test: /[\\/]node_modules[\\/]element-ui[\\/]/,
+            name: 'element-ui',
+            chunks: 'all',
+          }
+        }
       },
     },
   }
