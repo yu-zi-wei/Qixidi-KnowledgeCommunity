@@ -118,11 +118,11 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 999;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -137,9 +137,8 @@ export default {
   position: absolute;
   top: 20px;
   right: 30px;
-  color: white;
+  color: #ffffff;
   font-size: 30px;
-  background: transparent;
   border: none;
   cursor: pointer;
   width: 40px;
@@ -147,10 +146,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
 }
 </style>
