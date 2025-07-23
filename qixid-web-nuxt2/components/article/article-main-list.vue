@@ -131,7 +131,6 @@ export default {
       let scrollHeight = document.documentElement.scrollHeight
       if ((scrollTop + clientHeight + clientHeight) >= scrollHeight) {
         if (!this.scrollLoading) return;
-        console.log("触底")
         this.load()
       }
     },
