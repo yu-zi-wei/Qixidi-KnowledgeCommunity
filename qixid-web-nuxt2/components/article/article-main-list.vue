@@ -1,7 +1,8 @@
 <template>
   <div class="flex-1">
     <div class="flex-grow-1">
-      <el-skeleton class="mt-10 _module_explicit-padding-lf-20" style="width: 100%" :rows="16" animated v-show="!scrollLoading"/>
+      <el-skeleton class="mt-10 _module_explicit-padding-lf-20" style="width: 100%" :rows="16" animated
+                   v-show="!scrollLoading"/>
       <div v-for="item of listInformationList" :key="item.id" class="article-item">
         <div class=" flex-space-between align-items-center">
           <div class="flex-8" style="padding: 0 15px">
@@ -107,6 +108,7 @@ export default {
     // },
     load() {
       if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+        this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.$API("/white/article/recommend/list", this.$get(), this.queryParams).then(res => {
           res.rows.forEach(item => {
@@ -129,6 +131,7 @@ export default {
       let scrollHeight = document.documentElement.scrollHeight
       if ((scrollTop + clientHeight + clientHeight) >= scrollHeight) {
         if (!this.scrollLoading) return;
+        console.log("触底")
         this.load()
       }
     },

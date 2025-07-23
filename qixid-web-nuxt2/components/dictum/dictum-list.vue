@@ -773,7 +773,7 @@ export default {
 
 .dictum-content {
   display: flex;
-  padding: 10px 0px;
+  padding: 5px 0 10px 0;
   flex-wrap: wrap;
 }
 
