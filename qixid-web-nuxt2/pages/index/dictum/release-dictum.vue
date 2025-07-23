@@ -235,10 +235,12 @@
             <el-input v-model="albumInfo.name" clearable></el-input>
           </el-form-item>
           <el-form-item label="简介：" prop="briefIntroduction">
-            <el-input type="textarea" maxlength="200"
-                      :rows="6"
-                      clearable
-                      show-word-limit v-model="albumInfo.briefIntroduction"></el-input>
+            <div class="border-all-1-DCDFE6 border-radius-4">
+              <el-input type="textarea" maxlength="200"
+                        :rows="6"
+                        clearable
+                        show-word-limit v-model="albumInfo.briefIntroduction"></el-input>
+            </div>
           </el-form-item>
           <el-form-item label="封面：">
             <div class="articleCoverCa">

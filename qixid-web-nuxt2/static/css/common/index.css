@@ -700,7 +700,11 @@ mr-auto {
 }
 
 .border-radius-4 {
-  border-radius: 4px
+  border-radius: 4px;
+}
+
+.border-all-1-DCDFE6 {
+  border: 1px solid #DCDFE6;
 }
 
 .font-style-italic {

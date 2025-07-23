@@ -57,12 +57,14 @@
 
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="内容">
-        <el-input
-          type="textarea"
-          :rows="2"
-          placeholder="请输入内容"
-          v-model="form.textarea">
-        </el-input>
+        <div class="border-all-1-DCDFE6 border-radius-4">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="form.textarea">
+          </el-input>
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="sendContent" :disabled="form.textarea==null">发送</el-button>

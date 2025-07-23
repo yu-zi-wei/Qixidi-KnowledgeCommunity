@@ -18,8 +18,10 @@
             <el-input maxlength="60" show-word-limit v-model="form.homepage" placeholder="个人主页"/>
           </el-form-item>
           <el-form-item label="个人介绍">
-            <el-input type="textarea" :rows="6" maxlength="200" show-word-limit v-model="form.introduce"
-                      placeholder="个人介绍"/>
+            <div class="border-all-1-DCDFE6 border-radius-4">
+              <el-input type="textarea" :rows="6" maxlength="200" show-word-limit v-model="form.introduce"
+                        placeholder="个人介绍"/>
+            </div>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" :loading="buttonLoading" @click="uploadInfos">保存修改</el-button>

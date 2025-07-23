@@ -66,8 +66,10 @@
           <el-input maxlength="20" show-word-limit v-model="form.specialName" placeholder="专栏名称"/>
         </el-form-item>
         <el-form-item label="简介:" prop="specialIntroduce">
-          <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.specialIntroduce"
-                    placeholder="专栏简介"/>
+          <div class="border-all-1-DCDFE6 border-radius-4">
+            <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.specialIntroduce"
+                      placeholder="专栏简介"/>
+          </div>
         </el-form-item>
         <el-form-item label="封面:">
           <imageUpload v-model="value" :limit="1"/>

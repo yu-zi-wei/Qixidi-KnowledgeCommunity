@@ -73,12 +73,14 @@
     </el-tabs>
     <el-dialog :title="tips.title" :visible.sync="dialogVisible" width="30%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="收藏夹名称:" prop="collectionName">
+        <el-form-item label="名称:" prop="collectionName">
           <el-input maxlength="20" show-word-limit v-model="form.collectionName" placeholder="收藏夹名称"/>
         </el-form-item>
         <el-form-item label="简介:">
-          <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.collectionIntroduce"
-                    placeholder="收藏夹简介"/>
+          <div class="border-all-1-DCDFE6 border-radius-4">
+            <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.collectionIntroduce"
+                      placeholder="收藏夹简介"/>
+          </div>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

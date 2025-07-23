@@ -203,7 +203,7 @@
               <div class="dictum-content">
                 <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
                           v-model="item.content"/>
-                <div class="flex-right mt-20" style="width: 100%">
+                <div class="flex-right mt-15" style="width: 100%">
                   <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                        class="color-grey-2 font-s-13">——
                     <span v-if="item.author!=null" class="cursor-pointer text-underline-hover"
@@ -773,7 +773,7 @@ export default {
 
 .dictum-content {
   display: flex;
-  padding: 20px 10px;
+  padding: 10px 0px;
   flex-wrap: wrap;
 }
 

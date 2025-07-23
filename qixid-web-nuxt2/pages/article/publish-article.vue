@@ -117,13 +117,15 @@
             inactive-text="手动填写">
           </el-switch>
           <div v-if="!article.abstractSelect">
-            <el-input type="textarea"
-                      :rows="6"
-                      placeholder="文章摘要 ..."
-                      maxlength="400"
-                      show-word-limit
-                      v-model="article.articleAbstract">
-            </el-input>
+            <div class="border-all-1-DCDFE6 border-radius-4">
+              <el-input type="textarea"
+                        :rows="6"
+                        placeholder="文章摘要 ..."
+                        maxlength="400"
+                        show-word-limit
+                        v-model="article.articleAbstract">
+              </el-input>
+            </div>
           </div>
         </el-form-item>
 

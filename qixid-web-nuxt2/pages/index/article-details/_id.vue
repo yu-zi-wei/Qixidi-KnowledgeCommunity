@@ -177,7 +177,8 @@
                             placeholder="请输入内容..."
                             rows="3" class="news-comment-cl"/>
                         <div class="overflow-hidden">
-                          <emoji-module :content.sync="comment.content" :id="'articleComment'" :placement="'bottom-start'"
+                          <emoji-module :content.sync="comment.content" :id="'articleComment'"
+                                        :placement="'bottom-start'"
                                         class="fl-left"></emoji-module>
                           <el-button plain type="primary" class="fl-right" size="small"
                                      :disabled="comment.content==null ||comment.content==''"
@@ -207,7 +208,8 @@
                                            target="_blank">
                                   {{ item.commentName }}
                                 </nuxt-link>
-                                <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
+                                <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain"
+                                        size="mini"
                                         class="ml-2">作者
                                 </el-tag>
                               </div>
@@ -500,8 +502,10 @@
               <el-input maxlength="20" show-word-limit v-model="form.collectionName" placeholder="收藏夹名称"/>
             </el-form-item>
             <el-form-item label="简介:">
-              <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.collectionIntroduce"
-                        placeholder="收藏夹简介"/>
+              <div class="border-all-1-DCDFE6 border-radius-4">
+                <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.collectionIntroduce"
+                          placeholder="收藏夹简介"/>
+              </div>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
