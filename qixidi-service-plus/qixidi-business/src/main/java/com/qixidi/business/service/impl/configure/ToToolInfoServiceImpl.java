@@ -1,18 +1,17 @@
 package com.qixidi.business.service.impl.configure;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.utils.StringUtils;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
 import com.qixidi.business.domain.entity.configure.ToToolInfo;
 import com.qixidi.business.domain.vo.configure.ToToolInfoVo;
 import com.qixidi.business.mapper.configure.ToToolInfoMapper;
 import com.qixidi.business.service.configure.IToToolInfoService;
-import com.light.core.core.domain.PageQuery;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,8 +51,8 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
         Map<String, Object> map = new HashMap();
         LambdaQueryWrapper<ToToolInfo> lqw = buildQueryWrapper(bo);
         Page<ToToolInfoVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        List<ToToolInfoVo> toToolInfoVos = baseMapper.selectVoList(new QueryWrapper<ToToolInfo>()
-            .eq("is_parent", 1).eq("state", 0));
+        List<ToToolInfoVo> toToolInfoVos = baseMapper.selectVoList(new LambdaQueryWrapper<ToToolInfo>()
+                .eq(ToToolInfo::getIsParent, 1).eq(ToToolInfo::getState, 0));
         map.put("parentFalse", result);
         map.put("parentTrue", toToolInfoVos);
         return map;

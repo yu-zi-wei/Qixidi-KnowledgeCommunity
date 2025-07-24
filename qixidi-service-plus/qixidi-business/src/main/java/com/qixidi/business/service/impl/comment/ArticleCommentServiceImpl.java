@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -27,7 +26,6 @@ import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.CommentTypeEnums;
 import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.qixidi.common.domain.enums.StatusEnums;
 import com.qixidi.business.domain.enums.article.ArticleUpdateTypeEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
@@ -39,9 +37,9 @@ import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.service.comment.IArticleCommentService;
+import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,8 +65,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     private ExecutorService executorService;
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
-    @Autowired
-    private TripartiteUserMapper tripartiteUserMapper;
+    private final TripartiteUserMapper tripartiteUserMapper;
 
     /**
      * 查询文章评论
@@ -284,8 +281,9 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteWithValidById(ArticleCommentBo bo) {
         //        获取该评论的所以子集评论
-        List<ArticleComment> articleComments = baseMapper.selectList(new QueryWrapper<ArticleComment>()
-                .eq("parent_id", bo.getId()).or().eq("target_id", bo.getId()));
+        List<ArticleComment> articleComments = baseMapper.selectList(new LambdaQueryWrapper<ArticleComment>()
+                .eq(ArticleComment::getParentId, bo.getId()).or()
+                .eq(ArticleComment::getTargetId, bo.getId()));
         List<Long> collect = articleComments.stream().map(item -> item.getId()).collect(Collectors.toList());
         collect.add(bo.getId());
         executorService.execute(new Runnable() {

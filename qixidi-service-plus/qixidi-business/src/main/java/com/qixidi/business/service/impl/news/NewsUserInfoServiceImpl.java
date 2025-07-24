@@ -1,9 +1,25 @@
 package com.qixidi.business.service.impl.news;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.light.redission.utils.RedisUtils;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserInfo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
+import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
@@ -12,23 +28,7 @@ import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.news.NewsUserInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
-import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.business.service.news.INewsUserInfoService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
-import com.light.webSocket.domain.enums.WebSocketEnum;
-import com.qixidi.business.domain.enums.news.NewsType;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.light.redission.utils.RedisUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -238,10 +238,10 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
             }
             RedisUtils.setCacheSet(key, cacheSet);
         }
-        newsUserRecordMapper.update(null, new UpdateWrapper<NewsUserRecord>()
-                .set("been_read", bo.getBeenRead())
-                .eq("type", bo.getType())
-                .eq("uid", uuid)
+        newsUserRecordMapper.update(new LambdaUpdateWrapper<NewsUserRecord>()
+                .set(NewsUserRecord::getBeenRead, bo.getBeenRead())
+                .eq(NewsUserRecord::getType, bo.getType())
+                .eq(NewsUserRecord::getUid, uuid)
         );
         //WebSocket推送消息
         WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);

@@ -2,19 +2,19 @@ package com.qixidi.business.service.impl.configure;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qixidi.business.domain.bo.configure.ToSiteFileBo;
-import com.qixidi.business.domain.entity.configure.ToSiteFile;
-import com.qixidi.business.domain.vo.configure.ToSiteFileVo;
-import com.qixidi.business.mapper.configure.ToSiteFileMapper;
-import com.qixidi.business.service.configure.IToSiteFileService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.ToSiteFileTypeEnums;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.configure.ToSiteFileBo;
+import com.qixidi.business.domain.entity.configure.ToSiteFile;
+import com.qixidi.business.domain.enums.ToSiteFileTypeEnums;
+import com.qixidi.business.domain.vo.configure.ToSiteFileVo;
+import com.qixidi.business.mapper.configure.ToSiteFileMapper;
+import com.qixidi.business.service.configure.IToSiteFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,7 +78,7 @@ public class ToSiteFileServiceImpl implements IToSiteFileService {
         lqw.like(StringUtils.isNotBlank(bo.getTitle()), ToSiteFile::getTitle, bo.getTitle());
         lqw.eq(bo.getState() != null, ToSiteFile::getState, bo.getState());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            ToSiteFile::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
+                ToSiteFile::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         lqw.like(StringUtils.isNotBlank(bo.getType()), ToSiteFile::getType, bo.getType());
         return lqw;
     }

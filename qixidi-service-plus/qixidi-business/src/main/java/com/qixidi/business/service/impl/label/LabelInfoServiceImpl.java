@@ -148,12 +148,13 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         List<LabelInfoVo> list = new ArrayList<>();
         if (ObjectUtils.isEmpty(bo.getLabelName())) return list;
 
-        list = baseMapper.selectVoList(new QueryWrapper<LabelInfo>()
-                .like("label_name", bo.getLabelName()));
+        list = baseMapper.selectVoList(new LambdaQueryWrapper<LabelInfo>()
+                .like(LabelInfo::getLabelName, bo.getLabelName()));
         if (ObjectUtils.isEmpty(bo.getUid()) || CollectionUtils.isEmpty(list)) return list;
 
-        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>()
-                .eq("uid", bo.getUid()).eq("type", bo.getType()));
+        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getUid, bo.getUid())
+                .eq(UserFollow::getType, bo.getType()));
         if (CollectionUtils.isEmpty(userFollowVos)) return list;
 
         Map<String, String> collect = userFollowVos.stream().collect(Collectors.toMap(UserFollowVo::getTargetId, UserFollowVo::getUid));

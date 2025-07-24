@@ -1,6 +1,14 @@
 package com.qixidi.business.service.impl.dictum;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
@@ -11,16 +19,7 @@ import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.qixidi.business.service.dictum.IDictumInfoService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
 import com.qixidi.common.domain.enums.StatusEnums;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,9 +76,9 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
             uids.add(item.getUid());
         });
         List<DictumComment> dictumComments = dictumCommentMapper.selectList(new LambdaQueryWrapper<DictumComment>()
-            .select(DictumComment::getId, DictumComment::getDictumId)
-            .in(DictumComment::getDictumId, ids)
-            .eq(DictumComment::getStatus, StatusEnums.NORMAL.getCode())
+                .select(DictumComment::getId, DictumComment::getDictumId)
+                .in(DictumComment::getDictumId, ids)
+                .eq(DictumComment::getStatus, StatusEnums.NORMAL.getCode())
         );
         Map<Long, Long> sumMap = dictumComments.stream().collect(Collectors.groupingBy(DictumComment::getDictumId, Collectors.counting()));
 
@@ -177,7 +176,8 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteWithValidById(Long id, Long groupId) {
         dictumGroupMapper.deleteEmploySum(groupId);
-        DictumInfoVo dictumInfoVo = baseMapper.selectVoOne(new QueryWrapper<DictumInfo>().eq("id", id));
+        DictumInfoVo dictumInfoVo = baseMapper.selectVoOne(new LambdaQueryWrapper<DictumInfo>()
+                .eq(DictumInfo::getId, id));
         if (ObjectUtils.isNotEmpty(dictumInfoVo.getAlbumId())) {
             baseMapper.deleteEmploy(dictumInfoVo.getAlbumId());
         }

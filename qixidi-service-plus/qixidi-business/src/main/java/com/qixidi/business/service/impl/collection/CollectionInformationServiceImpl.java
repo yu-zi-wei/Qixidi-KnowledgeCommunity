@@ -2,23 +2,6 @@ package com.qixidi.business.service.impl.collection;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
-import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
-import com.qixidi.business.domain.entity.collection.CollectionInformation;
-import com.qixidi.business.domain.entity.collection.CollectionRecord;
-import com.qixidi.business.domain.vo.article.ArticleInformationVo;
-import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
-import com.qixidi.business.mapper.collection.CollectionInformationMapper;
-import com.qixidi.business.mapper.collection.CollectionRecordMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
-import com.qixidi.business.service.collection.ICollectionInformationService;
-import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.vo.CensusVo;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
-import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -26,6 +9,23 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.vo.CensusVo;
+import com.light.core.core.page.TableDataInfo;
+import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
+import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
+import com.qixidi.business.domain.entity.collection.CollectionInformation;
+import com.qixidi.business.domain.entity.collection.CollectionRecord;
+import com.qixidi.business.domain.enums.CountUserTypeEnums;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
+import com.qixidi.business.mapper.collection.CollectionInformationMapper;
+import com.qixidi.business.mapper.collection.CollectionRecordMapper;
+import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
+import com.qixidi.business.service.collection.ICollectionInformationService;
+import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +59,8 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
      */
     @Override
     public CollectionInformationVo queryById(Long id) {
-        Long count = collectionRecordMapper.selectCount(new QueryWrapper<CollectionRecord>().eq("collection_id", id));
+        Long count = collectionRecordMapper.selectCount(new LambdaQueryWrapper<CollectionRecord>()
+                .eq(CollectionRecord::getCollectionId, id));
         CollectionInformationVo collectionInformationVo = baseMapper.selectVoById(id);
         collectionInformationVo.setIncludedCount(Integer.valueOf(count.toString()));
         return collectionInformationVo;
@@ -98,7 +99,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         lqw.eq(bo.getState() != null, CollectionInformation::getState, bo.getState());
         lqw.eq(bo.getUid() != null, CollectionInformation::getUid, bo.getUid());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            CollectionInformation::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
+                CollectionInformation::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
@@ -110,7 +111,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         lqw.eq(bo.getState() != null, "ci.state", bo.getState());
         lqw.like(bo.getUid() != null, "uid", bo.getUid());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            "ci.create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
+                "ci.create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
@@ -161,8 +162,8 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
 
     @Override
     public List<CollectionInformationVo> listUid(String uid) {
-        List<CollectionInformationVo> list1 = baseMapper.selectVoList(new QueryWrapper<CollectionInformation>()
-            .eq("uid", uid).eq("state", 0));
+        List<CollectionInformationVo> list1 = baseMapper.selectVoList(new LambdaQueryWrapper<CollectionInformation>()
+                .eq(CollectionInformation::getUid, uid).eq(CollectionInformation::getState, 0));
         List<CollectionInformationVo> list = collectionRecordMapper.selectGroupOn(uid);
         if (CollectionUtils.isNotEmpty(list) && CollectionUtils.isNotEmpty(list)) {
             Map<Long, Integer> collect = list.stream().collect(Collectors.toMap(CollectionInformationVo::getId, CollectionInformationVo::getIncludedCount));
@@ -208,11 +209,11 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     @Override
     public boolean collectionUpdate(CollectionRecordBo bo) {
         int update = collectionRecordMapper.update(null, new UpdateWrapper<CollectionRecord>()
-            .set("collection_id", bo.getCollectionId())
-            .set("update_time", new Date())
-            .eq("target_id", bo.getTargetId())
-            .eq("type", bo.getType())
-            .eq("uid", LoginHelper.getTripartiteUuid()));
+                .set("collection_id", bo.getCollectionId())
+                .set("update_time", new Date())
+                .eq("target_id", bo.getTargetId())
+                .eq("type", bo.getType())
+                .eq("uid", LoginHelper.getTripartiteUuid()));
         return update > 0;
     }
 
@@ -236,7 +237,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     public boolean removeCollection(Long id) {
         countUserWebsiteMapper.updateDelete(LoginHelper.getTripartiteUuid(), CountUserTypeEnums.COLLECTION_COUNT.getCode());
         collectionRecordMapper.update(null,
-            new UpdateWrapper<CollectionRecord>().set("state", 1).eq("collection_id", id));
+                new UpdateWrapper<CollectionRecord>().set("state", 1).eq("collection_id", id));
         return baseMapper.deleteById(id) > 0;
     }
 

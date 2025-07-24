@@ -70,7 +70,6 @@ public class LabelGroupingInfoServiceImpl implements ILabelGroupingInfoService {
     }
 
     private LambdaQueryWrapper<LabelGroupingInfo> buildQueryWrapper(LabelGroupingInfoBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<LabelGroupingInfo> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getGroupingName()), LabelGroupingInfo::getGroupingName, bo.getGroupingName());
         lqw.eq(bo.getState() != null, LabelGroupingInfo::getState, bo.getState());

@@ -69,7 +69,6 @@ public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
     }
 
     private LambdaQueryWrapper<NewsSystemInfo> buildQueryWrapper(NewsSystemInfoBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<NewsSystemInfo> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getNewsTitle()), NewsSystemInfo::getNewsTitle, bo.getNewsTitle());
         lqw.eq(StringUtils.isNotBlank(bo.getNewsContent()), NewsSystemInfo::getNewsContent, bo.getNewsContent());

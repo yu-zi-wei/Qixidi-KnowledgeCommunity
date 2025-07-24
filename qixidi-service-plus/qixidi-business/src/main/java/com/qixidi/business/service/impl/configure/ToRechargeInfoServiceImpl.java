@@ -1,18 +1,17 @@
 package com.qixidi.business.service.impl.configure;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.DateUtils;
 import com.qixidi.business.domain.bo.configure.ToRechargeInfoBo;
 import com.qixidi.business.domain.entity.configure.ToRechargeInfo;
 import com.qixidi.business.domain.vo.configure.ToRechargeInfoVo;
 import com.qixidi.business.mapper.configure.ToRechargeInfoMapper;
 import com.qixidi.business.service.configure.IToRechargeInfoService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.light.core.utils.DateUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -125,20 +124,20 @@ public class ToRechargeInfoServiceImpl implements IToRechargeInfoService {
 
     @Override
     public TableDataInfo<ToRechargeInfoVo> list(ToRechargeInfoBo bo) {
-        List<ToRechargeInfoVo> toRechargeInfos = baseMapper.selectVoList(new QueryWrapper<ToRechargeInfo>()
-            .orderByAsc("money"));
+        List<ToRechargeInfoVo> toRechargeInfos = baseMapper.selectVoList(new LambdaQueryWrapper<ToRechargeInfo>()
+                .orderByAsc(ToRechargeInfo::getMoney));
         TableDataInfo tableDataInfo = new TableDataInfo();
         toRechargeInfos.forEach(item -> {
             if (item.getIsDiscount() == 1
-                && DateUtils.isEffectiveDate(new Date(), item.getStartTime(), item.getEndTime())) {
+                    && DateUtils.isEffectiveDate(new Date(), item.getStartTime(), item.getEndTime())) {
                 item.setMoveMoney(
-                    BigDecimal.valueOf(item.getMoney().intValue())
-                        .multiply((BigDecimal.valueOf(item.getDiscount())).divide(BigDecimal.valueOf(10))));
+                        BigDecimal.valueOf(item.getMoney().intValue())
+                                .multiply((BigDecimal.valueOf(item.getDiscount())).divide(BigDecimal.valueOf(10))));
                 item.setIsFinish(false);
             }
             if (item.getMemberDiscount() > 0) {
                 item.setMemberMoney(BigDecimal.valueOf(item.getMoney().intValue())
-                    .multiply((BigDecimal.valueOf(item.getMemberDiscount())).divide(BigDecimal.valueOf(10))));
+                        .multiply((BigDecimal.valueOf(item.getMemberDiscount())).divide(BigDecimal.valueOf(10))));
             }
         });
         tableDataInfo.setRows(toRechargeInfos);

@@ -13,6 +13,7 @@ import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
 import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
+import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import jakarta.servlet.http.HttpServletRequest;
 import me.zhyd.oauth.request.AuthRequest;
@@ -75,7 +76,7 @@ public interface ITripartiteUserService {
 
     void oauthLogin(TripartiteUser tripartiteUser);
 
-    Map isLogin();
+    UserLoginStatusVo isLogin();
 
     void frontDeskLogin(LoginUserMain loginUserMain);
 

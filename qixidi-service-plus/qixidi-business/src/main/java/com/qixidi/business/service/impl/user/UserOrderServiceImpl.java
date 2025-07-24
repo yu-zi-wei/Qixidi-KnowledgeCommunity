@@ -69,7 +69,6 @@ public class UserOrderServiceImpl implements IUserOrderService {
     }
 
     private QueryWrapper<UserOrder> buildQueryWrapper(UserOrderBo bo) {
-        Map<String, Object> params = bo.getParams();
         QueryWrapper<UserOrder> lqw = Wrappers.query();
         lqw.eq(StringUtils.isNotBlank(bo.getUid()), "uo.uid", bo.getUid());
         lqw.like(StringUtils.isNotBlank(bo.getNickname()), " um.nickname", bo.getNickname());

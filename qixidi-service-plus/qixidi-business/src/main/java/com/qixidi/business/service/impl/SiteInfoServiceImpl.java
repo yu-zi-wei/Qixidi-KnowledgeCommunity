@@ -3,14 +3,12 @@ package com.qixidi.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qixidi.business.domain.entity.FriendLink;
 import com.qixidi.business.domain.entity.ToSiteInfo;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
-import com.qixidi.common.domain.enums.StatusEnums;
 import com.qixidi.business.domain.vo.FriendLinkVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.mapper.FriendLinkMapper;
@@ -19,6 +17,7 @@ import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.stat.StatDataInfoMapper;
 import com.qixidi.business.service.SiteInfoService;
+import com.qixidi.common.domain.enums.StatusEnums;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,8 +55,8 @@ public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInf
         Long labelGroupCount = labelGroupingInfoMapper.selectCount(new LambdaQueryWrapper<LabelGroupingInfo>().eq(LabelGroupingInfo::getState, StatusEnums.NORMAL.getCode()));
 
         if (statDataInfoVo == null) {
-            statDataInfoVo = statDataInfoMapper.selectVoOne(new QueryWrapper<StatDataInfo>()
-                    .orderByDesc("id").last("limit 1"));
+            statDataInfoVo = statDataInfoMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>()
+                    .orderByDesc(StatDataInfo::getId).last("limit 1"));
         }
         statDataInfoVo.setLabelCount(labelCount);
         statDataInfoVo.setLabelGroupCount(labelGroupCount);

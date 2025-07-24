@@ -16,7 +16,6 @@ import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
-import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.service.TimeNotesService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,6 @@ public class TimeNotesServiceImpl implements TimeNotesService {
 
     private final TimeNotesMapper timeNotesMapper;
     private final CountUserWebsiteMapper countUserWebsiteMapper;
-    private final TripartiteUserMapper tripartiteUserMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override

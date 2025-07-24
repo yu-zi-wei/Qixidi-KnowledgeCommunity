@@ -3,13 +3,11 @@ package com.qixidi.business.service.impl.stat;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.light.core.utils.DateUtils;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
 import com.qixidi.business.domain.enums.StatDataEnums;
-import com.qixidi.common.domain.enums.StatusEnums;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.domain.vo.stat.StatReturnDataVo;
@@ -20,6 +18,7 @@ import com.qixidi.business.mapper.stat.StatDataInfoMapper;
 import com.qixidi.business.mapper.stat.StatTheDataMapper;
 import com.qixidi.business.service.stat.IStatDataInfoService;
 import com.qixidi.business.utils.ClassUtils;
+import com.qixidi.common.domain.enums.StatusEnums;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +51,8 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
         Long labelGroupCount = labelGroupingInfoMapper.selectCount(new LambdaQueryWrapper<LabelGroupingInfo>().eq(LabelGroupingInfo::getState, StatusEnums.NORMAL.getCode()));
         StatDataInfoVo statData = baseMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>().eq(StatDataInfo::getStatTime, bo.getStatTime()));
         if (ObjectUtil.isNull(statData)) {
-            statData = baseMapper.selectVoOne(new QueryWrapper<StatDataInfo>().orderByDesc("id").last("limit 1"));
+            statData = baseMapper.selectVoOne(new LambdaQueryWrapper<StatDataInfo>()
+                    .orderByDesc(StatDataInfo::getId).last("limit 1"));
         }
         statData.setLabelCount(labelCount);
         statData.setLabelGroupCount(labelGroupCount);

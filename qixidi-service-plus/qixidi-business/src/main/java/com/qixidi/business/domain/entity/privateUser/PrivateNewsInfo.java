@@ -25,14 +25,17 @@ public class PrivateNewsInfo {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
     /**
      * 用户id
      */
     private String uid;
+
     /**
      * 消息内容
      */
     private String newsComment;
+
     /**
      * 目标uid
      */
@@ -43,6 +46,9 @@ public class PrivateNewsInfo {
      */
     private Integer timeMark;
 
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
     /**

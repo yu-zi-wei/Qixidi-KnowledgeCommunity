@@ -71,7 +71,6 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
     }
 
     private LambdaQueryWrapper<ToShieldWord> buildQueryWrapper(ToShieldWordBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<ToShieldWord> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getKeyword()), ToShieldWord::getKeyword, bo.getKeyword());
         lqw.eq(bo.getType() != null, ToShieldWord::getType, bo.getType());
@@ -146,7 +145,7 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
         Map<String, Object> map = new HashMap<>();
         Set<String> strings = wordFilter.wordList(text);
         int i = wordFilter.wordCount(text);
-        map.put("明早敏感词：", strings);
+        map.put("敏感词：", strings);
         map.put("命中次数", i);
         return map;
     }

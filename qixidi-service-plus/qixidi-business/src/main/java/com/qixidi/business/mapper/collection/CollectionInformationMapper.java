@@ -1,15 +1,16 @@
 package com.qixidi.business.mapper.collection;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.vo.CensusVo;
+import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
 import com.qixidi.business.domain.entity.collection.CollectionInformation;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.vo.CensusVo;
-import com.light.mybatisPlus.mapper.BaseMapperPlus;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author aurora
  * @date 2022-09-29
  */
+@Mapper
 public interface CollectionInformationMapper extends BaseMapperPlus<CollectionInformationMapper, CollectionInformation, CollectionInformationVo> {
 
     Page<ArticleInformationVo> articleList(@Param("bo") CollectionRecordBo bo, Page buildy);

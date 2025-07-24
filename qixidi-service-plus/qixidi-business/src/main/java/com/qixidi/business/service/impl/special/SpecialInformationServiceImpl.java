@@ -1,10 +1,25 @@
 package com.qixidi.business.service.impl.special;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.R;
+import com.light.core.core.domain.vo.CensusVo;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.enums.MsgEnums;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
+import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
@@ -12,21 +27,6 @@ import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.service.special.ISpecialInformationService;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
-import com.light.core.core.domain.vo.CensusVo;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
-import com.light.core.enums.MsgEnums;
-import com.qixidi.auth.helper.LoginHelper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +96,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         lqw.eq(bo.getState() != null, SpecialInformation::getState, bo.getState());
         lqw.like(bo.getUid() != null, SpecialInformation::getUid, bo.getUid());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            SpecialInformation::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
+                SpecialInformation::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
@@ -109,7 +109,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         lqw.eq(bo.getState() != null, "state", bo.getState());
         lqw.like(bo.getUid() != null, "uid", bo.getUid());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            "update_time", params.get("beginCreateTime"), params.get("endCreateTime"));
+                "update_time", params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
@@ -172,15 +172,17 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     @Override
     public List<SpecialInformationVo> specialListUid(SpecialInformationBo bo) {
         return baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>().eq(true, SpecialInformation::getUid, bo.getUid())
-            .like(StringUtils.isNotBlank(bo.getSpecialName()), SpecialInformation::getSpecialName, bo.getSpecialName())
-            .orderByDesc(SpecialInformation::getCreateTime));
+                .like(StringUtils.isNotBlank(bo.getSpecialName()), SpecialInformation::getSpecialName, bo.getSpecialName())
+                .orderByDesc(SpecialInformation::getCreateTime));
     }
 
     @Override
     public List<SpecialInformationVo> specialList() {
         String uuid = LoginHelper.getTripartiteUuid();
-        return baseMapper.selectVoList(new QueryWrapper<SpecialInformation>().eq("uid", uuid)
-            .eq("state", 0).orderByDesc("create_time"));
+        return baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>()
+                .eq(SpecialInformation::getUid, uuid)
+                .eq(SpecialInformation::getState, 0)
+                .orderByDesc(SpecialInformation::getCreateTime));
     }
 
     @Override
@@ -191,10 +193,10 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateSpecial(Long id, String uid, List<String> ids) {
-        int update = articleInformationMapper.update(null, new UpdateWrapper<ArticleInformation>()
-            .set("special_id", null)
-            .eq("special_id", id)
-            .eq("user_id", uid));
+        int update = articleInformationMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
+                .set(ArticleInformation::getSpecialId, null)
+                .eq(ArticleInformation::getSpecialId, id)
+                .eq(ArticleInformation::getUserId, uid));
         if (CollectionUtils.isEmpty(ids)) return update;
         int integer = articleInformationMapper.updateSpecial(ids, id);
         return integer;
@@ -241,7 +243,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = oneYearAgo.format(formatter);
         String uuid = LoginHelper.getTripartiteUuid();
-        return articleInformationMapper.submissionCensus(uuid,formattedDate);
+        return articleInformationMapper.submissionCensus(uuid, formattedDate);
     }
 
 }

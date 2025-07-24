@@ -3,21 +3,20 @@ package com.qixidi.business.service.impl.user;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.light.exception.base.BaseException;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserFollowBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.enums.UserFollowTypeEnums;
-import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
-import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.business.service.user.IUserFollowService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -74,9 +73,11 @@ public class UserFollowServiceImpl implements IUserFollowService {
             });
         } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注
             labelInfoMapper.updateAddFollow(bo.getTargetId());
-            Long aLong = baseMapper.selectCount(new QueryWrapper<UserFollow>()
-                    .eq("target_id", bo.getTargetId()).eq("uid", bo.getUid()).eq("type", UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
-            log.error("关注异常，重复关注，target_id：uid：{}，type：{}", bo.getTargetId(), bo.getUid(), UserFollowTypeEnums.LABEL_FOLLOW.getCode());
+            Long aLong = baseMapper.selectCount(new LambdaQueryWrapper<UserFollow>()
+                    .eq(UserFollow::getTargetId, bo.getTargetId())
+                    .eq(UserFollow::getUid, bo.getUid())
+                    .eq(UserFollow::getType, UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
+            log.error("关注异常，重复关注，target_id：uid：{}，type：{},具体业务：{}", bo.getTargetId(), bo.getUid(), UserFollowTypeEnums.LABEL_FOLLOW.getCode());
             if (aLong > 0) return false;
         }
         return baseMapper.insert(add) > 0;
@@ -93,10 +94,10 @@ public class UserFollowServiceImpl implements IUserFollowService {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    newsUserRecordMapper.delete(new QueryWrapper<NewsUserRecord>()
-                            .eq("target_uid", bo.getUid())
-                            .eq("uid", bo.getTargetId())
-                            .eq("type", NewsType.FOLLOW_NEWS.getCode()));
+                    newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+                            .eq(NewsUserRecord::getTargetId, bo.getUid())
+                            .eq(NewsUserRecord::getUid, bo.getTargetId())
+                            .eq(NewsUserRecord::getType, NewsType.FOLLOW_NEWS.getCode()));
                     //WebSocket推送消息
                     WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
                 }
@@ -105,8 +106,10 @@ public class UserFollowServiceImpl implements IUserFollowService {
             labelInfoMapper.updateDeleteFollow(bo.getTargetId());
         }
 
-        int delete = baseMapper.delete(new QueryWrapper<UserFollow>()
-                .eq("uid", bo.getUid()).eq("target_id", bo.getTargetId()).eq("type", bo.getType()));
+        int delete = baseMapper.delete(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getUid, bo.getUid())
+                .eq(UserFollow::getTargetId, bo.getTargetId())
+                .eq(UserFollow::getType, bo.getType()));
         return delete > 0;
     }
 

@@ -74,7 +74,6 @@ public class UserReportServiceImpl implements IUserReportService {
     }
 
     private LambdaQueryWrapper<UserReport> buildQueryWrapper(UserReportBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<UserReport> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getUid()), UserReport::getUid, bo.getUid());
         lqw.eq(bo.getReportTime() != null, UserReport::getReportTime, bo.getReportTime());

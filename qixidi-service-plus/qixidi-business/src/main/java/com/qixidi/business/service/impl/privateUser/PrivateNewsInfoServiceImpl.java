@@ -2,8 +2,7 @@ package com.qixidi.business.service.impl.privateUser;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,18 +23,14 @@ import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
-import com.qixidi.business.service.news.INewsUserInfoService;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
 import com.qixidi.business.service.privateUser.IPrivateUserService;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 
 /**
  * 私信记录Service业务层处理
@@ -50,11 +45,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
 
     private final PrivateNewsInfoMapper baseMapper;
     private final PrivateUserMapper privateUserMapper;
-    @Autowired
-    private IPrivateUserService iPrivateUserService;
-    private final INewsUserInfoService iNewsUserInfoService;
-    @Resource(name = "threadPoolInstance")
-    private ExecutorService executorService;
+    private final IPrivateUserService iPrivateUserService;
 
     /**
      * 查询私信记录
@@ -93,7 +84,6 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     }
 
     private LambdaQueryWrapper<PrivateNewsInfo> buildQueryWrapper(PrivateNewsInfoBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<PrivateNewsInfo> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getUid()), PrivateNewsInfo::getUid, bo.getUid());
         lqw.eq(StringUtils.isNotBlank(bo.getNewsComment()), PrivateNewsInfo::getNewsComment, bo.getNewsComment());
@@ -125,8 +115,9 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         if (ObjectUtils.isNotEmpty(privateNewsInfoVo)) {
             Map<String, Integer> datePoor = DateUtils.getDatePoor(privateNewsInfoVo.getCreateTime(), new Date());
             if (datePoor.get("min") > 20) {
-                baseMapper.update(null, new UpdateWrapper<PrivateNewsInfo>()
-                        .set("time_mark", 1).eq("id", privateNewsInfoVo.getId()));
+                baseMapper.update(new LambdaUpdateWrapper<PrivateNewsInfo>()
+                        .set(PrivateNewsInfo::getTimeMark, 1)
+                        .eq(PrivateNewsInfo::getId, privateNewsInfoVo.getId()));
             }
         }
 //        添加消息
@@ -164,8 +155,8 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
 
     public void updatePrivateNews(String uid, String replyTargetUid, String newsComment) {
 
-        PrivateUserVo privateUserVo = privateUserMapper.selectVoOne(new QueryWrapper<PrivateUser>()
-                .eq("target_uid", uid).eq("uid", replyTargetUid));
+        PrivateUserVo privateUserVo = privateUserMapper.selectVoOne(new LambdaQueryWrapper<PrivateUser>()
+                .eq(PrivateUser::getTargetUid, uid).eq(PrivateUser::getUid, replyTargetUid));
         if (ObjectUtils.isEmpty(privateUserVo)) {
             PrivateUser privateUser = new PrivateUser().setUid(replyTargetUid)
                     .setTargetUid(uid)
@@ -174,10 +165,15 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
             privateUserMapper.insert(privateUser);
         }
         // 更新用户私信表
-        privateUserMapper.update(null, new UpdateWrapper<PrivateUser>()
-                .set("last_news", newsComment).set("update_time", new Date())
-                .eq("uid", uid).eq("target_uid", replyTargetUid)
-                .or().eq("target_uid", uid).eq("uid", replyTargetUid));
+        privateUserMapper.update(new LambdaUpdateWrapper<PrivateUser>()
+                .set(PrivateUser::getLastNews, newsComment)
+                .set(PrivateUser::getUpdateTime, new Date())
+                .eq(PrivateUser::getUid, uid)
+                .eq(PrivateUser::getTargetUid, replyTargetUid)
+                .or(wrapper -> {
+                    wrapper.eq(PrivateUser::getTargetUid, uid)
+                            .eq(PrivateUser::getUid, replyTargetUid);
+                }));
     }
 
     /**
@@ -206,8 +202,10 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     @Override
     public void beenRead(String targetUid) {
         String uuid = LoginHelper.getTripartiteUuid();
-        baseMapper.update(null, new UpdateWrapper<PrivateNewsInfo>().set("been_read", 2)
-                .eq("reply_target_uid", uuid).eq("uid", targetUid));
+        baseMapper.update(new LambdaUpdateWrapper<PrivateNewsInfo>()
+                .set(PrivateNewsInfo::getBeenRead, 2)
+                .eq(PrivateNewsInfo::getReplyTargetUid, uuid)
+                .eq(PrivateNewsInfo::getUid, targetUid));
         //        webSocket站内消息推送
         WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
         //        webSocket站内私信红点消息推送

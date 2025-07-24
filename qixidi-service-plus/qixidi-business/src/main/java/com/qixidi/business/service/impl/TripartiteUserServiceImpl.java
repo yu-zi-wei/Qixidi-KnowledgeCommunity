@@ -6,14 +6,11 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.Maps;
 import com.light.core.config.SmsSendingConfig;
 import com.light.core.config.justAuth.BaiDuPlatformConfig;
 import com.light.core.config.justAuth.GiteePlatformConfig;
@@ -55,6 +52,7 @@ import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.domain.vo.user.UserFollowVo;
+import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
@@ -147,7 +145,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     private LambdaQueryWrapper<TripartiteUser> buildQueryWrapper(TripartiteUserBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<TripartiteUser> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getUsername()), TripartiteUser::getUsername, bo.getUsername());
         lqw.like(StringUtils.isNotBlank(bo.getNickname()), TripartiteUser::getNickname, bo.getNickname());
@@ -217,7 +214,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void oauthLogin(TripartiteUser tripartiteUser) {
-        TripartiteUser uuidInfo = baseMapper.selectOne(new QueryWrapper<TripartiteUser>().eq("uuid", tripartiteUser.getUuid()));
+        TripartiteUser uuidInfo = baseMapper.selectOne(new LambdaQueryWrapper<TripartiteUser>()
+                .eq(TripartiteUser::getUuid, tripartiteUser.getUuid()));
         if (uuidInfo == null) {
             tripartiteUser.setCreateTime(new Date());
             baseMapper.insert(tripartiteUser);
@@ -242,26 +240,26 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             }
         }
 //        更新用户数据
-        baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("username", tripartiteUser.getUsername())
-                .set("avatar", tripartiteUser.getAvatar())
-                .eq("uuid", tripartiteUser.getUuid()));
+        baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
+                .set(TripartiteUser::getUsername, tripartiteUser.getUsername())
+                .set(TripartiteUser::getAvatar, tripartiteUser.getAvatar())
+                .eq(TripartiteUser::getUuid, tripartiteUser.getUuid()));
         //记录用户信息，登录
         LoginHelper.tripartiteLoginByDevice(tripartiteUser, DeviceType.PC);
     }
 
     @Override
-    public Map isLogin() {
-        Map map = Maps.newHashMap();
+    public UserLoginStatusVo isLogin() {
+        UserLoginStatusVo vo = new UserLoginStatusVo();
         TripartiteUser tripartiteUsers = LoginHelper.getTripartiteUser();
-        if (tripartiteUsers == null) return map;
+        if (tripartiteUsers == null) return vo;
         Boolean isBackstage = tripartiteUsers.getUserType().equals("tripartite_user") ? false : true;
-        map.put("uuid", tripartiteUsers.getUuid());
-        map.put("tokenInfo", StpUtil.getTokenInfo());
-        map.put("isLogin", StpUtil.isLogin());
-        map.put("isBackstage", isBackstage);
-        map.put("tripartiteUser", tripartiteUsers);
-        return map;
+        vo.setUuid(tripartiteUsers.getUuid());
+        vo.setToken(StpUtil.getTokenInfo().tokenValue);
+        vo.setIsLogin(StpUtil.isLogin());
+        vo.setIsBackstage(isBackstage);
+        vo.setTripartiteUser(tripartiteUsers);
+        return vo;
     }
 
     @Override
@@ -271,9 +269,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         TripartiteUser tripartiteUser = new TripartiteUser();
         BeanUtils.copyProperties(loginUserMain, tripartiteUser);
 
-        TripartiteUser tripartiteUsers = baseMapper.selectOne(new QueryWrapper<TripartiteUser>()
-                .eq("email", tripartiteUser.getUsername()).or()
-                .eq("phone", tripartiteUser.getUsername()));
+        TripartiteUser tripartiteUsers = baseMapper.selectOne(new LambdaQueryWrapper<TripartiteUser>()
+                .eq(TripartiteUser::getEmail, tripartiteUser.getUsername()).or()
+                .eq(TripartiteUser::getPhone, tripartiteUser.getUsername()));
         if (ObjectUtils.isEmpty(tripartiteUsers)) throw new ServiceException("账号不存在！");
         if (tripartiteUsers.getState().equals(2)) throw new ServiceException("账号已注销！");
         if (tripartiteUsers.getState().equals(1)) throw new ServiceException("账号已冻结！");
@@ -358,10 +356,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     public TripartiteUserVo getWebsiteInfo(String uuid) {
         TripartiteUserVo tripartiteUserVo = baseMapper.selectWebInfo(uuid);
         String uuid1 = LoginHelper.getTripartiteUuid();
-        UserFollow userFollow = userFollowMapper.selectOne(new QueryWrapper<UserFollow>()
-                .eq("target_id", uuid)
-                .eq("type", UserFollowTypeEnums.b_user_follow.getCode())
-                .eq("uid", uuid1));
+        UserFollow userFollow = userFollowMapper.selectOne(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getTargetId, uuid)
+                .eq(UserFollow::getType, UserFollowTypeEnums.b_user_follow.getCode())
+                .eq(UserFollow::getUid, uuid1));
         if (ObjectUtils.isNotEmpty(userFollow) && userFollow.getTargetId().equals(uuid)) {
             tripartiteUserVo.setIsFollow(true);
         }
@@ -384,8 +382,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         UserInformation userInformation = new UserInformation();
         BeanUtils.copyProperties(bo, tripartiteUser);
         BeanUtils.copyProperties(bo, userInformation);
-        int uuidUpdate = baseMapper.update(tripartiteUser, new QueryWrapper<TripartiteUser>().eq("uuid", bo.getUuid()));
-        int uuidUpdate1 = userInformationMapper.update(userInformation, new QueryWrapper<UserInformation>().eq("uuid", bo.getUuid()));
+        int uuidUpdate = baseMapper.update(tripartiteUser, new LambdaQueryWrapper<TripartiteUser>()
+                .eq(TripartiteUser::getUuid, bo.getUuid()));
+        int uuidUpdate1 = userInformationMapper.update(userInformation, new LambdaQueryWrapper<UserInformation>()
+                .eq(UserInformation::getUuid, bo.getUuid()));
         return uuidUpdate + uuidUpdate1 > 0;
     }
 
@@ -436,8 +436,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         list = baseMapper.fdUserList(bo);
         if (ObjectUtils.isEmpty(bo.getUuid()) || CollectionUtils.isEmpty(list)) return list;
 
-        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>()
-                .eq("uid", bo.getUuid()).eq("type", bo.getType()));
+        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getUid, bo.getUuid()).eq(UserFollow::getType, bo.getType()));
 
         if (CollectionUtils.isEmpty(userFollowVos)) return list;
 
@@ -453,7 +453,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     @Override
     public CountUserWebsiteEntity fdUserData(String uuid) {
         CountUserWebsiteEntity countUserWebsiteEntity = countUserWebsiteMapper.selectOne(
-                new QueryWrapper<CountUserWebsiteEntity>().eq("uuid", uuid));
+                new LambdaQueryWrapper<CountUserWebsiteEntity>().eq(CountUserWebsiteEntity::getUuid, uuid));
         return countUserWebsiteEntity;
     }
 
@@ -490,7 +490,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 
     @Override
     public UserSimpleInfoVo isOnline(String userid) {
-        TripartiteUser tripartiteUser = baseMapper.selectOne(new QueryWrapper<TripartiteUser>().eq("uuid", userid));
+        TripartiteUser tripartiteUser = baseMapper.selectOne(new LambdaQueryWrapper<TripartiteUser>()
+                .eq(TripartiteUser::getUuid, userid));
         UserSimpleInfoVo userSimpleInfoVo = new UserSimpleInfoVo();
         if (ObjectUtils.isNotEmpty(tripartiteUser)) {
             BeanUtils.copyProperties(tripartiteUser, userSimpleInfoVo);
@@ -501,10 +502,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 
     @Override
     public boolean accountCancellation(String uuid) {
-        return baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("state", 2)
-                .set("update_time", new Date())
-                .eq("uuid", uuid)) > 0;
+        return baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
+                .set(TripartiteUser::getState, 2)
+                .set(TripartiteUser::getUpdateTime, new Date())
+                .eq(TripartiteUser::getUuid, uuid)) > 0;
     }
 
     @Override
@@ -576,10 +577,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         //清除redis验证码
         RedisUtils.deleteObject(redisKey);
         String uuid = LoginHelper.getTripartiteUuid();
-        int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                .set("phone", phoneBinding.getPhone())
-                .set("update_time", new Date())
-                .eq("uuid", uuid)
+        int update = baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
+                .set(TripartiteUser::getPhone, phoneBinding.getPhone())
+                .set(TripartiteUser::getUpdateTime, new Date())
+                .eq(TripartiteUser::getUuid, uuid)
         );
         return update > 0;
     }
@@ -599,8 +600,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             }
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
-            int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                    .set("email", bo.getEmail()).eq("uuid", bo.getUuid()));
+            int update = baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
+                    .set(TripartiteUser::getEmail, bo.getEmail()).eq(TripartiteUser::getUuid, bo.getUuid()));
             return update > 0;
         }
         if (bo.getType().equals(3)) {// 手机号换绑
@@ -612,8 +613,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             String redisKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), bo.getOriginalData());
             codeVerification(redisKey, bo.getCode());
             RedisUtils.deleteObject(redisKey);
-            int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                    .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
+            int update = baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
+                    .set(TripartiteUser::getPhone, bo.getPhone()).eq(TripartiteUser::getUuid, bo.getUuid()));
             return update > 0;
         }
         if (bo.getType().equals(4)) {// 手机号绑定
@@ -621,8 +622,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             Map<String, String> collect = tripartiteUserVo.stream().collect(Collectors.toMap(TripartiteUserVo::getPhone, TripartiteUserVo::getPhone));
             if (collect.get(bo.getPhone()) != null && !collect.get(bo.getPhone()).equals(bo.getUuid()))
                 throw new ServiceException("手机号已被使用");
-            int update = baseMapper.update(null, new UpdateWrapper<TripartiteUser>()
-                    .set("phone", bo.getPhone()).eq("uuid", bo.getUuid()));
+            int update = baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
+                    .set(TripartiteUser::getPhone, bo.getPhone()).eq(TripartiteUser::getUuid, bo.getUuid()));
             return update > 0;
         }
         return false;

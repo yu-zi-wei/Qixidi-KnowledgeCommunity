@@ -270,8 +270,8 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/oauth/isLogin")
-    public SaResult isLogin() {
-        return SaResult.ok().setData(iTripartiteUserService.isLogin());
+    public R isLogin() {
+        return R.ok(iTripartiteUserService.isLogin());
     }
 
 

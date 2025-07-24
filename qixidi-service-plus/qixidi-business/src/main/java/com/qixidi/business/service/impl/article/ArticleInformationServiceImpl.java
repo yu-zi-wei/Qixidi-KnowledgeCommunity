@@ -499,10 +499,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public ArticleInformationVo details(Long id) {
         ArticleInformationVo details = baseMapper.details(id);
         String uuid1 = LoginHelper.getTripartiteUuid();
-        UserFollow userFollow = userFollowMapper.selectOne(new QueryWrapper<UserFollow>()
-                .eq("target_id", details.getUserId())
-                .eq("type", UserFollowTypeEnums.b_user_follow.getCode())
-                .eq("uid", uuid1));
+        UserFollow userFollow = userFollowMapper.selectOne(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getTargetId, details.getUserId())
+                .eq(UserFollow::getType, UserFollowTypeEnums.b_user_follow.getCode())
+                .eq(UserFollow::getUid, uuid1));
         if (ObjectUtils.isNotEmpty(userFollow) && userFollow.getTargetId().equals(details.getUserId())) {
             details.setIsFollow(true);
         }
@@ -538,10 +538,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             details.setFabulousUserSet(FaMap.get(details.getId().toString()));
         }
 //        获取收藏数据
-        CollectionRecordVo collectionRecordVo = collectionRecordMapper.selectVoOne(new QueryWrapper<CollectionRecord>()
-                .eq("uid", uuid)
-                .eq("type", CollectionTypeEnums.ARTICLE_TYPE.getCode())
-                .eq("target_id", details.getId()));
+        CollectionRecordVo collectionRecordVo = collectionRecordMapper.selectVoOne(new LambdaQueryWrapper<CollectionRecord>()
+                .eq(CollectionRecord::getUid, uuid)
+                .eq(CollectionRecord::getType, CollectionTypeEnums.ARTICLE_TYPE.getCode())
+                .eq(CollectionRecord::getTargetId, details.getId()));
         if (ObjectUtils.isEmpty(collectionRecordVo)) {
             details.setIsCollection(false);
         } else {
