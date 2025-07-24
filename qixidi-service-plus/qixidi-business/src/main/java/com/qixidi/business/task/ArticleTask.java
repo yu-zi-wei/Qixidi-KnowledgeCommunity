@@ -1,7 +1,7 @@
 package com.qixidi.business.task;
 
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.light.core.constant.SystemConstant;
 import com.light.core.utils.AlgorithmUtils;
@@ -122,8 +122,8 @@ public class ArticleTask {
     @Scheduled(cron = "0 0 * * * ?")
 //    @Scheduled(cron = "0 */2 * * * ?")
     public void ArticleCalculateWeight() {
-        Long aLong = articleInformationMapper.selectCount(new QueryWrapper<ArticleInformation>()
-                .eq("state", 0).eq("audit_state", 2));
+        Long aLong = articleInformationMapper.selectCount(new LambdaQueryWrapper<ArticleInformation>()
+                .eq(ArticleInformation::getState, 0).eq(ArticleInformation::getAuditState, 2));
         log.info("计算文章权重任务开始,文章总条数：{}", aLong);
         Boolean state = true;
         //当前最大文章id

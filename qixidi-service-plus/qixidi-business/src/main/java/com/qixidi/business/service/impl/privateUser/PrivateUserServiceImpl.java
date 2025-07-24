@@ -1,6 +1,16 @@
 package com.qixidi.business.service.impl.privateUser;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.privateUser.PrivateUserBo;
 import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
 import com.qixidi.business.domain.entity.privateUser.PrivateUser;
@@ -8,16 +18,6 @@ import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
 import com.qixidi.business.service.privateUser.IPrivateUserService;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.qixidi.auth.helper.LoginHelper;
-import com.light.core.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -138,10 +138,10 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
     public Boolean deleteById(String id) {
         String uuid = LoginHelper.getTripartiteUuid();
         privateNewsInfoMapper.delete(new QueryWrapper<PrivateNewsInfo>()
-            .eq("uid", uuid).eq("reply_target_uid", id));
+                .eq("uid", uuid).eq("reply_target_uid", id));
         return baseMapper.delete(new QueryWrapper<PrivateUser>()
-            .eq("uid", uuid)
-            .eq("target_uid", id)) > 0;
+                .eq("uid", uuid)
+                .eq("target_uid", id)) > 0;
     }
 
     @Override
@@ -149,22 +149,22 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
     public Boolean deleteAll() {
         String uuid = LoginHelper.getTripartiteUuid();
         privateNewsInfoMapper.delete(new QueryWrapper<PrivateNewsInfo>()
-            .eq("uid", uuid));
+                .eq("uid", uuid));
         return baseMapper.delete(new QueryWrapper<PrivateUser>()
-            .eq("uid", uuid)) > 0;
+                .eq("uid", uuid)) > 0;
     }
 
     @Override
     public boolean addPrivateUser(String targetUid) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (StringUtils.isEmpty(uuid)) return true;
-        PrivateUserVo privateUserVo = baseMapper.selectVoOne(new QueryWrapper<PrivateUser>()
-            .eq("uid", uuid).eq("target_uid", targetUid));
+        PrivateUserVo privateUserVo = baseMapper.selectVoOne(new LambdaQueryWrapper<PrivateUser>()
+                .eq(PrivateUser::getUid, uuid).eq(PrivateUser::getTargetUid, targetUid));
         if (ObjectUtils.isNotEmpty(privateUserVo)) return true;
         PrivateUser privateUser = new PrivateUser().setUid(uuid)
-            .setTargetUid(targetUid)
-            .setCreateTime(new Date())
-            .setUpdateTime(new Date());
+                .setTargetUid(targetUid)
+                .setCreateTime(new Date())
+                .setUpdateTime(new Date());
         return baseMapper.insert(privateUser) > 0;
     }
 }

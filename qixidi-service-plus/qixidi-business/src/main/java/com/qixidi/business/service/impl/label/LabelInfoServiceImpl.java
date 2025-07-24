@@ -172,8 +172,8 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return infoVo;
 
-        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new QueryWrapper<UserFollow>()
-                .eq("uid", uuid).eq("type", type));
+        List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getUid, uuid).eq(UserFollow::getType, type));
         if (CollectionUtils.isEmpty(userFollowVos)) return infoVo;
 
         userFollowVos.forEach(item -> {
