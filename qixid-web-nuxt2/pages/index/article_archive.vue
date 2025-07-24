@@ -32,7 +32,7 @@
         <div v-if="articleList!=null && !loading" v-for="(item, index) in articleList" :key="index"
              style="margin-bottom: 60px">
           <h1 class="mb-10 font-s-24">{{ item.createTime }}
-            <span class="font-s-16 color-grey-2" title="文章总数">「{{ item.list.length }}」</span></h1>
+            <span class="font-s-16 color-grey-2" title="文章总数">「{{ item.list.length }}篇」</span></h1>
           <div v-for="(items,indexs) in item.list" :key="indexs">
             <div class="article-archive-list-item">
               <div>

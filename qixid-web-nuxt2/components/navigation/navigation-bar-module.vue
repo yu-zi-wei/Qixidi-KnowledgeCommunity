@@ -521,7 +521,6 @@ export default {
       jottingsDialogVisible: false,
     };
   },
-
   methods: {
     timeNotesDialogVisibleMethod(val) {
       this.jottingsDialogVisible = val;
@@ -653,6 +652,11 @@ export default {
         }
       });
     },
+    getLoginStatus() {
+      this.$API("/oauth/isLogin", this.$get()).then(res => {
+        console.log(res.data)
+      })
+    },
     //建立webSocket连接
     connectWebSocket(uuid) {
       if (uuid == null) return;
@@ -709,6 +713,7 @@ export default {
   watch: {
     $route(to) {
       this.activeIndex = to.path;
+      // this.getLoginStatus();
     }
   }
 }

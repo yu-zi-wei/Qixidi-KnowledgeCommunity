@@ -3,7 +3,9 @@
     <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="10" animated v-if="loading"/>
     <div v-if="moodNotesList!=null && !loading" v-for="(item, index) in moodNotesList" :key="index"
          style="margin-bottom: 60px" class="_module_explicit-padding-lf-20">
-      <h1 class="mb-10 font-s-24">{{ item.recordTime }}</h1>
+      <h1 class="mb-10 font-s-24">{{ item.recordTime }}
+        <span class="font-s-16 color-grey-2" title="小记总数">「{{ item.list.length }}条」</span>
+      </h1>
       <div v-for="(items,indexs) in item.list" :key="indexs">
         <div class="time-motes-list-item _module_hiding">
             <span class="svg-translateY-8 font-s-14 color-grey-2 mr-4" title="记录时间">
