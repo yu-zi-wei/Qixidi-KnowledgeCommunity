@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,9 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author zi-wei
@@ -66,7 +67,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     public TableDataInfo<TimeNotesVo> list(TimeNotesSearchBo bo, Page<TimeNotes> build) {
         String tripartiteUuid = LoginHelper.getTripartiteUuid();
         LambdaQueryWrapper<TimeNotes> lambdaQueryWrapper = new LambdaQueryWrapper<TimeNotes>()
-                .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime)
+                .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime, TimeNotes::getContent)
                 .like(bo.getTitle() != null, TimeNotes::getTitle, bo.getTitle())
                 .orderByDesc(TimeNotes::getRecordTime);
         if (tripartiteUuid != null) {
@@ -77,10 +78,14 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         List<TimeNotes> records = timeNotesPage.getRecords();
         TableDataInfo tableDataInfo = new TableDataInfo();
         if (CollectionUtil.isEmpty(records)) return tableDataInfo;
-        Map<String, List<TimeNotes>> collect = records.stream().collect(Collectors.groupingBy(
-                item -> LocalDateTimeUtil.format(item.getRecordTime(), DatePattern.NORM_MONTH_PATTERN)
-        ));
-
+        Map<String, List<TimeNotes>> collect = new HashMap<>();
+        for (TimeNotes item : records) {
+            if (StrUtil.isNotEmpty(item.getContent()) && !"".equals(item.getContent())) {
+                item.setIsContent(true);
+            }
+            String recordTime = LocalDateTimeUtil.format(item.getRecordTime(), DatePattern.NORM_MONTH_PATTERN);
+            collect.computeIfAbsent(recordTime, v -> new ArrayList<>()).add(item);
+        }
         //对key 按时间降序排序
         List<Map.Entry<String, List<TimeNotes>>> entryList = new ArrayList<>(collect.entrySet());
         // 定义时间格式化器
