@@ -224,11 +224,8 @@ export default {
   },
   methods: {
     updateList() {
-      this.queryParams = {
-        pageNum: 1,
-        pageSize: 100,
-        title: null
-      }
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 100;
       this.getList();
     },
     update() {
