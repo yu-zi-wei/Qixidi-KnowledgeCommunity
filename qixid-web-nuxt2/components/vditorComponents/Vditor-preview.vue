@@ -73,7 +73,6 @@ export default {
             });
           }
         }
-
         this.tocArray = newTocArray;
         this.$emit('update:outline', newTocArray);
       }, 150); // 150ms 的防抖延迟
@@ -183,7 +182,7 @@ export default {
               // 创建加载文本
               const loadingText = document.createElement('div');
               loadingText.className = 'loading-text';
-              loadingText.textContent = '正在加载...';
+              loadingText.textContent = '正在加载图片...';
               loadingStatus.appendChild(loadingText);
 
               // 将加载状态容器添加到蒙层
@@ -341,12 +340,12 @@ export default {
 /* 图片容器样式 */
 .vditor-reset .img-container {
   position: relative;
-  display: inline-block;
   min-width: 100px;
   min-height: 100px;
   background: #f8f9fa;
   border-radius: 4px;
   overflow: hidden;
+  display: flex;
 }
 
 /* 图片加载动画样式 */
@@ -370,12 +369,11 @@ export default {
   width: 100%;
   height: 100%;
   background: #ffffff;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease-in-out;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .vditor-reset .img-container .loading-overlay.hidden {
