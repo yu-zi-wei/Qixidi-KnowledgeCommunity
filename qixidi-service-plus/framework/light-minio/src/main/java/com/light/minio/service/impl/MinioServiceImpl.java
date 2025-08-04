@@ -44,6 +44,9 @@ public class MinioServiceImpl implements MinioService {
     private final MinioClient minioClient;
     private final MinioConfig minioConfig;
 
+    //是否开启压缩
+    private static final boolean compressionStatus = false;
+
     @SneakyThrows
     @Override
     public MinioDto upload(MultipartFile file) {
@@ -60,8 +63,7 @@ public class MinioServiceImpl implements MinioService {
         String extension = null;
         InputStream inputStream = null;
         String contentType = null;
-        if (isImage(originalFilename)) {//图片文件
-            extension = ".webp";//压缩为.webp
+        if (compressionStatus && isImage(originalFilename)) {//图片文件
             byte[] imageBytes = null;
             BufferedImage originalImage = ImageIO.read(file.getInputStream());
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -83,6 +85,7 @@ public class MinioServiceImpl implements MinioService {
                 }
                 imageBytes = baos.toByteArray();
             }
+            extension = ".webp";//压缩为.webp
             inputStream = new ByteArrayInputStream(imageBytes);
             contentType = "image/webp";
 
