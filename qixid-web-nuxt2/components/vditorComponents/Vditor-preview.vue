@@ -340,12 +340,12 @@ export default {
 /* 图片容器样式 */
 .vditor-reset .img-container {
   position: relative;
-  min-width: 100px;
-  min-height: 100px;
   background: #f8f9fa;
   border-radius: 4px;
   overflow: hidden;
   display: flex;
+  margin: 15px 0;
+  height: 80%;
 }
 
 /* 图片加载动画样式 */
