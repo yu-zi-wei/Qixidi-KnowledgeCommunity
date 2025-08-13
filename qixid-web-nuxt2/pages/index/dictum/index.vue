@@ -1,6 +1,5 @@
 <template>
   <div class="module-main">
-    <el-skeleton class="mt-30" :rows="16" animated v-if="loading"/>
     <div v-if="!loading" class="mt-30">
       <div class="font-s-15 line-height-34 mb-15 ml-10 font-style-italic">
         这是一个「思想笔记本」——不追求权威，只在乎真实与触动......
@@ -138,7 +137,6 @@
     </el-drawer>
   </div>
 </template>
-
 <script>
 
 export default {
