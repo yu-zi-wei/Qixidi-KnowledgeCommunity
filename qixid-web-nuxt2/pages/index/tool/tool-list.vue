@@ -2,7 +2,7 @@
   <div class="tool-index">
     <el-skeleton :rows="6" animated v-if="loading"/>
     <ul v-if="toolArray.length>0 && !loading" class="tool-ui">
-      <li v-for="item of toolArray" class="fl-left">
+      <li v-for="(item,index) in toolArray" class="fl-left" :key="index" :ref="`toolItem${index}`">
         <div class="tool-list" :title="item.toolName">
           <a :href="item.toolUrl" target="_blank">
             <div class="flex-left align-items-center" style="border-bottom: 1px solid #dfe4ea;padding-bottom: 6px">
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "toolList",
@@ -74,6 +75,7 @@ export default {
       },
       debounceTimer: null,//防抖
       debounceTime: 400,//防抖时间
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -107,10 +109,13 @@ export default {
       this.$API("/white/configure/tool/child/list", "get", {id: this.id, isParent: 2}).then(res => {
         this.toolArray = res;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.toolArray, 'toolItem');
       })
     }
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'searchArticle');
     this.toolChildLists();
   }
 }

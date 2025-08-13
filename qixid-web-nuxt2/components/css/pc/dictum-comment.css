@@ -67,7 +67,7 @@ textarea:focus {
 }
 
 .box-item {
-  width: 285px;
+  /*width: 285px;*/
   margin-bottom: 25px;
   padding: 15px 8px;
   border-radius: 6px;

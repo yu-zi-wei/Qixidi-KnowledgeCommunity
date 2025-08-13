@@ -6,7 +6,7 @@
       <h1 class="mb-10 font-s-24">{{ item.recordTime }}
         <span class="font-s-16 color-grey-2" title="小记总数">「{{ item.list.length }}条」</span>
       </h1>
-      <div v-for="(items,indexs) in item.list" :key="indexs">
+      <div v-for="(items,indexs) in item.list" :key="indexs" :ref="`timeNotesItem${index}_${indexs}`">
         <div class="time-motes-list-item _module_hiding">
             <span class="svg-translateY-8 font-s-14 color-grey-2 mr-4" title="记录时间">
             {{ $utils.parseTime(items.recordTime, '{m}-{d}') }}
@@ -186,6 +186,7 @@
 <script>
 import VditorPreview from "../vditorComponents/Vditor-preview.vue";
 import TimeNotesEditing from "./time-notes-editing.vue";
+import {createAnimator, triggerNestedAnimation} from '~/plugins/animationUtils'
 
 export default {
   name: "timeNotesList",
@@ -215,6 +216,7 @@ export default {
       moodNotes: {},
       infoDrawer: false,
       timeNotesDialogVisible: false,
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -240,7 +242,12 @@ export default {
       this.$API("/white/time/notes/list", "post", null, this.queryParams).then(res => {
         this.moodNotesList = res.rows;
         this.total = res.total;
+      }).finally(() => {
         this.loading = false;
+        // 等待DOM更新后触发嵌套项目的动画
+        this.$nextTick(() => {
+          triggerNestedAnimation(this, this.moodNotesList, 'timeNotesItem{groupIndex}_{subIndex}');
+        });
       })
     },
     getData() {
@@ -253,6 +260,9 @@ export default {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
           this.$API("/white/time/notes/list", "post", null, this.queryParams).then(res => {
+            // 记录更新前的状态，用于计算新增的项目
+            const originalData = JSON.parse(JSON.stringify(this.moodNotesList));
+
             res.rows.forEach(outerItem => {
               let recordTime = outerItem.recordTime;
               let existingItem = this.moodNotesList.find(innerItem => innerItem.recordTime === recordTime);
@@ -263,6 +273,11 @@ export default {
               }
             })
             this.total = res.total;
+
+            // 触发新增项目的动画
+            this.$nextTick(() => {
+              this.triggerIncrementalAnimation(originalData, res.rows);
+            });
           }).finally(() => this.scrollLoading = true)
         }
       }
@@ -272,9 +287,69 @@ export default {
         this.moodNotes = res.data;
         this.infoDrawer = true;
       })
+    },
+
+    // 触发增量动画 - 针对触底加载的新数据
+    triggerIncrementalAnimation(originalData, newDataRows) {
+      const newElements = [];
+      // 遍历当前的所有数据，找出新增的项目
+      for (let groupIndex = 0; groupIndex < this.moodNotesList.length; groupIndex++) {
+        const currentGroup = this.moodNotesList[groupIndex];
+        const originalGroup = originalData.find(og => og.recordTime === currentGroup.recordTime);
+
+        if (!originalGroup) {
+          // 这是一个全新的时间组，所有子项都需要动画
+          for (let subIndex = 0; subIndex < currentGroup.list.length; subIndex++) {
+            const refKey = `timeNotesItem${groupIndex}_${subIndex}`;
+            const element = this.$refs[refKey]?.[0];
+            if (element) {
+              newElements.push(element);
+            }
+          }
+        } else {
+          // 现有时间组，只对新增的子项添加动画
+          const originalLength = originalGroup.list.length;
+          for (let subIndex = originalLength; subIndex < currentGroup.list.length; subIndex++) {
+            const refKey = `timeNotesItem${groupIndex}_${subIndex}`;
+            const element = this.$refs[refKey]?.[0];
+            if (element) {
+              newElements.push(element);
+            }
+          }
+        }
+      }
+
+      if (newElements.length === 0) return;
+
+      // 初始化新元素为隐藏状态
+      newElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'none';
+      });
+
+      // 逐个显示动画
+      let currentIndex = 0;
+      const animate = () => {
+        if (currentIndex < newElements.length) {
+          const element = newElements[currentIndex];
+          requestAnimationFrame(() => {
+            element.style.transition = 'opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // 缩短动画时长
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+          });
+          currentIndex++;
+          setTimeout(() => animate(), 50); // 进一步减少间隔：80ms → 50ms
+        }
+      };
+
+      // 减少延迟：100ms → 60ms
+      setTimeout(() => animate(), 60);
     }
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'commonList')
     this.getList();
     window.addEventListener('scroll', this.getData, true);
   },

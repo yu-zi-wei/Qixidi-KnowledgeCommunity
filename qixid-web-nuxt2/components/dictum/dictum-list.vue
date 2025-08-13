@@ -2,8 +2,12 @@
   <div>
     <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="10" animated v-if="loading"/>
     <div v-if="!loading && typography==2">
-      <ul v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="dictum-info-ul">
-        <li v-for="(item,index) in dictumInfoListArr" class="dictum-info-cl" :key="index">
+      <transition-group name="qx-slide-up" tag="ul" v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0"
+                        class="dictum-info-ul" appear>
+        <li v-for="(item,index) in dictumInfoListArr"
+            class="dictum-info-cl qx-dictum-list-slide-up"
+            :key="item.id || index"
+            :style="{ animationDelay: `${index * 0.15}s` }">
           <div class="flex-space-between user-info align-items-center">
             <div class="flex-left align-items-center">
               <div class="ml-6">
@@ -49,8 +53,7 @@
             </div>
           </div>
           <div class="dictum-content">
-            <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
-                      v-model="item.content"/>
+            <div class="dictum-text-content" v-text="item.content"></div>
             <div class="flex-right mt-20" style="width: 100%">
               <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                    class="color-grey-2 font-s-13">——
@@ -117,7 +120,7 @@
           <div>
           </div>
         </li>
-      </ul>
+      </transition-group>
       <div v-else class="text-center mt-20">
         <svg t="1682476949715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
              p-id="1648" width="80" height="80">
@@ -185,9 +188,15 @@
     <!-- 瀑布流布局 -->
     <div v-if="!loading && typography==1">
       <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="ml-10">
-        <waterfall :col='4' :data="dictumInfoListArr">
-          <template>
-            <div v-for="(item, index) in dictumInfoListArr" :key="index" class="box-item">
+        <waterfall-layout
+          :items="dictumInfoListArr"
+          :columns="4"
+          :gap="20"
+          :animation-delay="120"
+          :enable-animation="true"
+          ref="waterfallLayout">
+          <template #default="{ item, index }">
+            <div class="box-item">
               <!-- 动态渲染每个列中的元素 -->
               <div class="flex-space-between align-items-center mb-10" v-if="item.labelList!=null">
                 <div style="line-height: 1px"></div>
@@ -201,8 +210,7 @@
               </div>
               <hr class="hr-dictum mb-5" v-if="item.labelList!=null"/>
               <div class="dictum-content">
-                <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
-                          v-model="item.content"/>
+                <div class="dictum-text-content" v-text="item.content"></div>
                 <div class="flex-right mt-15" style="width: 100%">
                   <div v-if="(item.worksName!=null && item.worksName!='')||(item.author!=null && item.author!='')"
                        class="color-grey-2 font-s-13">——
@@ -244,7 +252,7 @@
               </div>
             </div>
           </template>
-        </waterfall>
+        </waterfall-layout>
       </div>
       <div v-else class="text-center mt-20">
         <svg t="1682476949715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -500,9 +508,13 @@
 </template>
 
 <script>
+import WaterfallLayout from '~/components/waterfall-layout.vue'
 
 export default {
   name: "dictumList",
+  components: {
+    WaterfallLayout
+  },
   props: {
     // 内容
     content: String,
@@ -727,9 +739,16 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
         this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
-          res.rows.forEach(item => {
-            this.dictumInfoListArr.push(item)
-          })
+          if (this.typography === 1 && this.$refs.waterfallLayout) {
+            // 瀑布流模式：使用组件的addItems方法增量添加
+            this.$refs.waterfallLayout.addItems(res.rows);
+            // 注意：这里不修改dictumInfoListArr，避免触发重新渲染
+          } else {
+            // 列表模式：直接添加到数组
+            res.rows.forEach(item => {
+              this.dictumInfoListArr.push(item)
+            })
+          }
           this.total = res.total;
         }).finally(() => this.scrollLoading = true)
       } else {
@@ -775,7 +794,23 @@ export default {
   display: flex;
   padding: 5px 0 10px 0;
   flex-wrap: wrap;
+  flex-direction: column;
 }
+
+/* 自定义文本显示样式 - 替代textarea */
+.dictum-text-content {
+  width: 100%;
+  font-size: 16px;
+  line-height: 36px;
+  color: var(--default-color);
+  word-wrap: break-word;
+  white-space: pre-wrap; /* 保持换行和空格 */
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
 
 .el-button--small {
   padding: 9px 15px;
@@ -787,5 +822,11 @@ export default {
 
 .dictum-info-ul li {
   list-style: none;
+}
+
+/* 重置瀑布流中的 box-item 样式 */
+.waterfall-item .box-item {
+  width: 100% !important; /* 使用瀑布流组件设置的宽度 */
+  margin-bottom: 0 !important; /* 间距由瀑布流组件控制 */
 }
 </style>

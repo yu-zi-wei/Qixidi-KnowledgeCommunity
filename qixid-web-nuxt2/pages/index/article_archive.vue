@@ -33,7 +33,7 @@
              style="margin-bottom: 60px">
           <h1 class="mb-10 font-s-24">{{ item.createTime }}
             <span class="font-s-16 color-grey-2" title="文章总数">「{{ item.list.length }}篇」</span></h1>
-          <div v-for="(items,indexs) in item.list" :key="indexs">
+          <div v-for="(items,indexs) in item.list" :key="indexs" :ref="`articleArchiveItem${index}_${indexs}`">
             <div class="article-archive-list-item">
               <div>
               <span class="color-grey-2 mr-8">
@@ -117,6 +117,8 @@
 
 <script>
 
+import {createAnimator, triggerNestedAnimation} from '~/plugins/animationUtils'
+
 export default {
   head: {
     title: `文章归档 - ${process.env.PROJECT_NAME}`,
@@ -144,10 +146,15 @@ export default {
         this.articleList = res.rows;
         this.total = res.total;
         this.loading = false;
+        this.$nextTick(() => {
+          triggerNestedAnimation(this, this.articleList, 'articleArchiveItem{groupIndex}_{subIndex}');
+        });
       })
     },
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'commonList')
     this.getList();
   },
 }

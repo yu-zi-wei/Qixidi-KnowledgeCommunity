@@ -3,7 +3,7 @@
     <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
     <div v-show="!initialLoading">
       <ul>
-        <li v-for="(item,index) in labelList" :key="index">
+        <li v-for="(item,index) in labelList" :key="index" :ref="`searchLabelItem${index}`">
           <div class="flex-left align-items-center" style="padding: 10px 20px 0 20px">
             <div class="mr-10">
               <div  v-if="item.labelCover" v-html="item.labelCover" class="svg-translateY-4"></div>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 export default {
   name: "searchLabel",
   data() {
@@ -64,6 +65,7 @@ export default {
       initialLoading: true,
       loginDialog: false,
       userInfo: null,
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -109,10 +111,13 @@ export default {
       this.$API("/white/label/list", "get", this.queryParams).then(res => {
         this.labelList = res;
         this.initialLoading = false;
+        this.animator.triggerAllItemsAnimation(this.labelList, 'searchLabelItem');
       })
     },
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'searchArticle');
     this.fdLabelLists();
     this.getBasicsUsers();
   }

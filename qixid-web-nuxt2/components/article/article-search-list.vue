@@ -3,7 +3,9 @@
     <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initLoading"/>
     <div v-show="!initLoading">
       <ul>
-        <li v-for="item of listInformationList" :key="item.id" class="search-data-li">
+        <li v-for="(item, index) of listInformationList" :key="item.id"
+            class="search-data-li"
+            :ref="`articleSearchItem${index}`">
           <!--          用户信息-->
           <el-row :gutter="20" class="mb-15">
             <el-col :span="20" class="font-s-12">
@@ -99,6 +101,8 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   name: "articleSearchList",
   props: {
@@ -123,6 +127,7 @@ export default {
       total: 0,
       loading: false,
       scrollLoading: true,
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -136,6 +141,8 @@ export default {
         this.listInformationList = res.rows;
         this.total = res.total;
         this.initLoading = false;
+        // 数据加载完成后触发动画
+        this.animator.triggerAllItemsAnimation(this.listInformationList, 'articleSearchItem');
       })
     },
     getData() {
@@ -152,31 +159,42 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.loading = true;
+        const startIndex = this.listInformationList.length; // 记录新增前的索引
         this.$API('/white/article/list', 'get', this.queryParams).then(res => {
           res.rows.forEach(item => {
             this.listInformationList.push(item)
           })
           this.total = res.total;
+          // 为新增的项目触发动画
+          this.triggerNewSearchItemAnimations(startIndex, res.rows.length);
         }).finally(() => this.scrollLoading = true)
       } else {
         this.loading = false;
       }
     },
+
+    // 为新增的项目触发动画
+    triggerNewSearchItemAnimations(startIndex, count) {
+      this.animator.triggerNewItemsAnimation(startIndex, count, 'articleSearchItem');
+    },
+  },
+  mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'searchArticle');
+    //添加滚动监听事件
+    window.addEventListener('scroll', this.getData, true);
+    this.articleWhiteList();
   },
   destroyed() {
     //离开页面时删除该监听
     window.removeEventListener('scroll', this.getData, true)
-  },
-  mounted() {
-    //添加滚动监听事件
-    window.addEventListener('scroll', this.getData, true);
-    this.articleWhiteList();
   }
 
 }
 </script>
 
 <style scoped>
+
 .abstract-cl-2 {
   /*超出的文本隐藏*/
   overflow: hidden;
@@ -187,8 +205,8 @@ export default {
   -webkit-line-clamp: 2;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  white-space: normal;      /* 允许正常换行 */
-  word-break: break-word;   /* 允许在单词内换行 */
+  white-space: normal; /* 允许正常换行 */
+  word-break: break-word; /* 允许在单词内换行 */
 }
 
 .search-data-li {

@@ -7,7 +7,7 @@
     </div>
     <el-skeleton :rows="12" class="mt-20 _module_explicit-padding-lf-20" animated v-if="loading"/>
     <div v-if="!loading" class="flex-space-around flex-wrap-wrap">
-      <div v-for="(item,index) in dateList" :key="index" class="label-item">
+      <div v-for="(item,index) in dateList" :key="index" class="label-item" :ref="`labelItem${index}`">
         <div class="flex-space-around">
           <div v-html="item.labelCover"></div>
           <div>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   head: {
     title: `标签 - ${process.env.PROJECT_NAME}`,
@@ -63,10 +65,12 @@ export default {
       labelName: null,
       loginDialog: false,
       userInfo: null,
+      animator: null, // 动画器实例
     }
   },
   methods: {
     labelSearch() {
+      this.loading = true; // 搜索时显示loading状态
       this.getDate();
     },
     followClick(item) {
@@ -79,15 +83,15 @@ export default {
         item.isFollow = false;
         this.$API("/user/follow/cancel", "post", null, {targetId: item.id, type: 2,})
           .finally(() => {
-            this.getDate()
             item.buttonLoading = false;
+            this.getDate(); // 重新获取数据，会触发动画
           });
       } else {
         item.isFollow = true;
         this.$API("/user/follow/add", "post", null, {targetId: item.id, type: 2,})
           .finally(() => {
-            this.getDate()
             item.buttonLoading = false;
+            this.getDate(); // 重新获取数据，会触发动画
           });
       }
     },
@@ -104,10 +108,18 @@ export default {
     getDate() {
       this.$API("/white/dictum/system/label", this.$get(), {"label": this.labelName}).then(res => {
         this.dateList = res.data;
-      }).finally(() => this.loading = false);
+      }).finally(() => {
+        this.loading = false;
+        // 确保loading完成并且DOM更新后再触发动画
+        this.$nextTick(() => {
+          this.animator.triggerAllItemsAnimation(this.dateList, 'labelItem');
+        });
+      });
     }
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'commonList')
     this.getDate();
     this.getBasicsUsers();
   }

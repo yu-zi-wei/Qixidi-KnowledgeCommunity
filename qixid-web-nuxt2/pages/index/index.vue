@@ -217,7 +217,7 @@
             </div>
             <el-skeleton :rows="6" animated v-if="selectedArticleLoading"/>
             <ul v-show="!selectedArticleLoading">
-              <li v-for="(item,index) in selectedArticleList" :key="index"
+              <li v-for="(item,index) in selectedArticleList" :key="index" :ref="`selectedArticlesItem${index}`"
                   class="recommend-article-item flex-left align-items-center font-s-14"
                   :title="item.articleTitle">
                 <div class="flex-1 mr-6 text-center">
@@ -276,8 +276,8 @@
 </template>
 
 <script>
-
 import countTo from 'vue-count-to';
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "index",
@@ -312,6 +312,7 @@ export default {
       siteOperationTime: null,
       statDataInfoVo: {},
       statDataInfoLoading: false,
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -335,7 +336,12 @@ export default {
       this.selectedArticleLoading = true;
       this.$API("/white/article/selected", this.$get()).then(res => {
         this.selectedArticleList = res.data;
-      }).finally(() => this.selectedArticleLoading = false);
+      }).finally(() => {
+        this.selectedArticleLoading = false
+        this.$nextTick(() => {
+          this.animator.triggerAllItemsAnimation(this.selectedArticleList, 'selectedArticlesItem');
+        });
+      });
     },
     getSiteInfo() {
       this.siteInfoLoading = true;
@@ -416,6 +422,8 @@ export default {
     },
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'commonList');
     this.gitUserInfo();
     this.listSidebar();
     window.addEventListener('scroll', this.handleScroll, true);// 向页面添加滚动事件

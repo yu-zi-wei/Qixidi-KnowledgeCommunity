@@ -2,7 +2,7 @@
   <div>
     <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
     <div v-show="!initialLoading">
-      <div v-for="(item,index) in userList" :key="index">
+      <div v-for="(item,index) in userList" :key="index" :ref="`searchUserItem${index}`">
         <div class="flex-space-between padding-10 align-items-center">
           <div class="flex-left">
             <div>
@@ -17,7 +17,9 @@
                 </nuxt-link>
                 <span class="ml-6 font-s-13 color-grey">{{ item.occupation }}</span>
               </div>
-              <p class="font-s-14 color-grey mt-8">关注数：{{ item.fansFollowCount == 0 ? '--' : item.fansFollowCount }}</p>
+              <p class="font-s-14 color-grey mt-8">关注数：{{
+                  item.fansFollowCount == 0 ? '--' : item.fansFollowCount
+                }}</p>
             </div>
           </div>
           <div>
@@ -49,6 +51,8 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   name: "searchUser",
   data() {
@@ -62,6 +66,7 @@ export default {
       initialLoading: true,
       userInfo: null,
       loginDialog: false,
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -96,7 +101,6 @@ export default {
           });
       }
     },
-
     getBasicsUsers() {
       this.$API("/front-desk/user/basics", "get").then(res => {
         if (res != null) {
@@ -108,10 +112,13 @@ export default {
       this.$API("/white/user/list", "get", this.queryParams).then(res => {
         this.userList = res;
         this.initialLoading = false;
+        this.animator.triggerAllItemsAnimation(this.userList, 'searchUserItem');
       })
     },
   },
   mounted() {
+    // 初始化动画器
+    this.animator = createAnimator(this, 'searchArticle');
     this.getBasicsUsers();
     this.fdUserLists();
   }
