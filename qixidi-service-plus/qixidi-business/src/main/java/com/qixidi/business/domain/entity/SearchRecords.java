@@ -17,14 +17,12 @@ import java.util.Date;
 @Data
 @TableName("b_search_records")
 public class SearchRecords {
-
-    private static final long serialVersionUID = 1L;
-
     /**
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
     /**
      * 用户id
      */
@@ -34,6 +32,9 @@ public class SearchRecords {
      */
     private String content;
 
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
 }

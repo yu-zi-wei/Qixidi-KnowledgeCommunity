@@ -425,11 +425,19 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid != null || bo.getArticleTitle() != null) {
             executorService.execute(() -> {
-                SearchRecords searchRecords = new SearchRecords();
-                searchRecords.setUid(uuid);
-                searchRecords.setCreateTime(new Date());
-                searchRecords.setContent(bo.getArticleTitle());
-                searchRecordsMapper.insert(searchRecords);
+                SearchRecords searchRecordsInfo = searchRecordsMapper.selectOne(new LambdaQueryWrapper<SearchRecords>()
+                        .eq(SearchRecords::getUid, uuid)
+                        .eq(SearchRecords::getContent, bo.getArticleTitle()));
+                if (searchRecordsInfo != null) {
+                    searchRecordsInfo.setCreateTime(new Date());
+                    searchRecordsMapper.updateById(searchRecordsInfo);
+                } else {
+                    SearchRecords searchRecords = new SearchRecords();
+                    searchRecords.setUid(uuid);
+                    searchRecords.setCreateTime(new Date());
+                    searchRecords.setContent(bo.getArticleTitle());
+                    searchRecordsMapper.insert(searchRecords);
+                }
             });
         }
         return baseMapper.articleList(bo, pageQuery.build());
