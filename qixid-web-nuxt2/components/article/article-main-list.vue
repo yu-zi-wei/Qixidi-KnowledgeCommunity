@@ -2,8 +2,8 @@
   <div class="flex-1">
     <div class="flex-grow-1">
       <el-skeleton class="mt-10 _module_explicit-padding-lf-20" style="width: 100%" :rows="8" animated
-                   v-show="!scrollLoading"/>
-      <div v-if="scrollLoading">
+                   v-show="initLoading"/>
+      <div>
         <div v-for="(item, index) of listInformationList" :key="item.id"
              class="article-item"
              :ref="`articleItem${index}`">
@@ -69,10 +69,15 @@
             </div>
 
             <div v-if="item.articleCover" class="article-cover-div mt-15 _module_hiding">
-              <el-image class="article-cover-img" v-if="item.articleCover!=null && item.articleCover!=''"
-                        :src="item.articleCover" fit="cover"></el-image>
+              <lazy-image
+                v-if="item.articleCover!=null && item.articleCover!=''"
+                :src="item.articleCover"
+                :alt="item.articleTitle"
+                image-class="article-cover-img"
+              />
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -81,9 +86,13 @@
 
 <script>
 import {createAnimator} from '~/plugins/animationUtils'
+import LazyImage from '~/components/lazy-image.vue'
 
 export default {
   name: "articleMainList",
+  components: {
+    LazyImage
+  },
   props: {
     uid: {
       type: String,
@@ -103,6 +112,7 @@ export default {
       },
       total: 0,
       scrollLoading: true,
+      initLoading: true,
       animator: null, // 动画器实例
     }
   },
@@ -114,6 +124,7 @@ export default {
     // },
     load() {
       if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
+        this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         const startIndex = this.listInformationList.length; // 记录新增前的索引
         this.$API("/white/article/recommend/list", this.$get(), this.queryParams).then(res => {
@@ -127,17 +138,12 @@ export default {
       }
     },
     listInformation() {
-      this.scrollLoading = false;
       this.$API("/white/article/recommend/list", this.$get(), this.queryParams).then(res => {
         this.listInformationList = res.rows
         this.total = res.total;
-      }).finally(() => {
-        this.scrollLoading = true
-        this.$nextTick(() => {
-          // 数据加载完成后触发动画
-          this.animator.triggerAllItemsAnimation(this.listInformationList, 'articleItem');
-        });
-      });
+        // 数据加载完成后触发动画
+        this.triggerArticleAnimations();
+      }).finally(() => this.initLoading = false);
     },
     getData() {
       let scrollTop = document.documentElement.scrollTop
@@ -149,10 +155,16 @@ export default {
       }
     },
 
+    // 触发文章项目动画
+    triggerArticleAnimations() {
+      this.animator.triggerAllItemsAnimation(this.listInformationList, 'articleItem');
+    },
+
     // 为新增的项目触发动画
     triggerNewItemAnimations(startIndex, count) {
       this.animator.triggerNewItemsAnimation(startIndex, count, 'articleItem');
     },
+
   },
   mounted() {
     // 初始化动画器
@@ -169,6 +181,32 @@ export default {
 
 <style scoped>
 @import url("components/css/pc/article-index-list.css");
+
+.daily-check-in {
+  background: #74ebd5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, rgb(116, 235, 213), rgb(172, 182, 229)); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, rgb(116, 235, 213), rgb(172, 182, 229)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.article-release {
+  background: #3494e6;
+  background: -webkit-linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173));
+  background: linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173));
+}
+
+.famous-words-square {
+  background: #005aa7; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, rgb(0, 90, 167), rgb(255, 253, 228)); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, rgb(0, 90, 167), rgb(255, 253, 228)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.common-tool {
+  background: #ffd89b;
+  background: -webkit-linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123));
+  background: linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123));
+}
 
 .el-carousel__item h3 {
   color: #475669;

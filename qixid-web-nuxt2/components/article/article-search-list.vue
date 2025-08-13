@@ -73,9 +73,12 @@
                 </div>
               </div>
             </div>
-            <div v-if="item.articleCover">
-              <el-image :src="item.articleCover" fit="cover"
-                        style="width: 150px;height: 90px;border-radius: 4px;margin-right: 15px"></el-image>
+            <div v-if="item.articleCover" style="width: 150px;height: 90px;margin-right: 15px">
+              <lazy-image
+                :src="item.articleCover"
+                :alt="item.articleTitle"
+                image-class="search-cover-img"
+              />
             </div>
           </div>
         </li>
@@ -102,9 +105,13 @@
 
 <script>
 import {createAnimator} from '~/plugins/animationUtils'
+import LazyImage from '~/components/lazy-image.vue'
 
 export default {
   name: "articleSearchList",
+  components: {
+    LazyImage
+  },
   props: {
     //请求参数
     queryParams: {
@@ -177,6 +184,7 @@ export default {
     triggerNewSearchItemAnimations(startIndex, count) {
       this.animator.triggerNewItemsAnimation(startIndex, count, 'articleSearchItem');
     },
+
   },
   mounted() {
     // 初始化动画器
