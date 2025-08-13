@@ -3,7 +3,7 @@
     <el-skeleton class="mt-10" :rows="6" animated v-if="loading"/>
     <div v-if="!loading">
       <ul v-if="dictumList!=null && dictumList.length!=0">
-        <li v-for="(item,index) in dictumList" class="info-li-cl" :key="index">
+        <li v-for="(item,index) in dictumList" class="info-li-cl" :key="index" :ref="`dictumManageListItem${index}`">
           <div class="fl-right cursor-pointer" title="更多操作">
             <el-dropdown size="medium" trigger="click">
               <div class="el-dropdown-link">
@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils';
 
 export default {
   name: "dictumManageList",
@@ -150,6 +151,7 @@ export default {
       moreLoading: true,
       debounceTimer: null,//防抖
       debounceTime: 400,//防抖时间
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -197,7 +199,10 @@ export default {
       this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
         this.dictumList = res.rows;
         this.total = res.total;
-      }).finally(() => this.loading = false);
+      }).finally(() =>{
+        this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.dictumList, 'dictumManageListItem');
+      });
     },
 
     getData() {
@@ -214,11 +219,13 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
+        const startIndex = this.dictumList.length; // 记录新增前的索引
         this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
           res.rows.forEach(item => {
             this.dictumList.push(item)
           })
           this.total = res.total;
+          this.animator.triggerNewItemsAnimation(startIndex, res.rows.length, 'dictumManageListItem');
         }).finally(() => this.scrollLoading = true)
       } else {
         this.moreLoading = false;
@@ -232,6 +239,7 @@ export default {
   },
   mounted() {
     //添加滚动监听事件
+    this.animator = createAnimator(this, 'commonList');
     window.addEventListener('scroll', this.getData, true);
     this.dictumInfoRoleLists();
   }

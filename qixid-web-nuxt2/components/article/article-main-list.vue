@@ -68,12 +68,13 @@
               </div>
             </div>
 
-            <div v-if="item.articleCover" class="article-cover-div mt-15 _module_hiding">
+            <div v-if="item.articleCover" class="article-cover-wrapper mt-15 _module_hiding">
               <lazy-image
                 v-if="item.articleCover!=null && item.articleCover!=''"
                 :src="item.articleCover"
-                :alt="item.articleTitle"
                 image-class="article-cover-img"
+                :width="158"
+                :height="98"
               />
             </div>
           </div>
@@ -85,8 +86,8 @@
 </template>
 
 <script>
-import {createAnimator} from '~/plugins/animationUtils'
-import LazyImage from '~/components/lazy-image.vue'
+import {createAnimator} from '~/plugins/animationUtils';
+import LazyImage from '~/components/lazy-image.vue';
 
 export default {
   name: "articleMainList",
@@ -133,7 +134,7 @@ export default {
           })
           this.total = res.total;
           // 为新增的项目触发动画
-          this.triggerNewItemAnimations(startIndex, res.rows.length);
+          this.animator.triggerNewItemsAnimation(startIndex, res.rows.length, 'articleItem');
         }).finally(() => this.scrollLoading = true)
       }
     },
@@ -142,7 +143,7 @@ export default {
         this.listInformationList = res.rows
         this.total = res.total;
         // 数据加载完成后触发动画
-        this.triggerArticleAnimations();
+        this.animator.triggerAllItemsAnimation(this.listInformationList, 'articleItem');
       }).finally(() => this.initLoading = false);
     },
     getData() {
@@ -153,16 +154,6 @@ export default {
         if (!this.scrollLoading) return;
         this.load()
       }
-    },
-
-    // 触发文章项目动画
-    triggerArticleAnimations() {
-      this.animator.triggerAllItemsAnimation(this.listInformationList, 'articleItem');
-    },
-
-    // 为新增的项目触发动画
-    triggerNewItemAnimations(startIndex, count) {
-      this.animator.triggerNewItemsAnimation(startIndex, count, 'articleItem');
     },
 
   },
@@ -181,32 +172,6 @@ export default {
 
 <style scoped>
 @import url("components/css/pc/article-index-list.css");
-
-.daily-check-in {
-  background: #74ebd5; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, rgb(116, 235, 213), rgb(172, 182, 229)); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, rgb(116, 235, 213), rgb(172, 182, 229)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-}
-
-.article-release {
-  background: #3494e6;
-  background: -webkit-linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173));
-  background: linear-gradient(to right, rgb(52, 148, 230), rgb(236, 110, 173));
-}
-
-.famous-words-square {
-  background: #005aa7; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, rgb(0, 90, 167), rgb(255, 253, 228)); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, rgb(0, 90, 167), rgb(255, 253, 228)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-}
-
-.common-tool {
-  background: #ffd89b;
-  background: -webkit-linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123));
-  background: linear-gradient(to right, rgb(255, 216, 155), rgb(25, 84, 123));
-}
 
 .el-carousel__item h3 {
   color: #475669;

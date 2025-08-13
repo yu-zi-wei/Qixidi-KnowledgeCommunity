@@ -14,13 +14,15 @@
         </el-row>
         <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
         <ul class="content" v-if="specialUserList.length>0 && !loading">
-          <li v-for="item of specialUserList" class="contentItem">
+          <li v-for="(item,index) in specialUserList" class="contentItem" :key="index"
+              :ref="`userAdminSpecialItem${index}`">
             <div class="flex-space-between">
               <div class="flex-left">
                 <div>
                   <el-image v-if="item.cover" :src="item.cover" fit="cover"
-                            style="height: 80px;width: 100px"></el-image>
-                  <el-image v-else src="/img/shu.jpg" fit="cover" style="height: 80px;width: 100px"></el-image>
+                            style="height: 80px;width: 100px;border-radius: 2px"></el-image>
+                  <el-image v-else src="/img/shu.jpg" fit="cover"
+                            style="height: 80px;width: 100px;border-radius: 2px"></el-image>
                 </div>
                 <div class="ml-10">
                   <div @click="specialIndex(item)">
@@ -84,6 +86,8 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   name: "specialManage.vue",
   data() {
@@ -116,6 +120,7 @@ export default {
       value: [],
       debounceTimer: null,//防抖
       debounceTime: 400,//防抖时间
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -228,10 +233,12 @@ export default {
       this.$API("/white/special/list", "get", this.queryParams).then(res => {
         this.specialUserList = res.data;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.specialUserList, 'userAdminSpecialItem');
       })
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.isCurrentUser();
   }
 }

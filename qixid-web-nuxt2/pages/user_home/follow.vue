@@ -5,7 +5,7 @@
         <div style="min-height: 200px;">
           <el-skeleton class="mt-10" v-if="loginLoading" :rows="4" animated/>
           <ul v-show="followArrList.length>0 && !loginLoading" class="follow-cl-ul">
-            <li v-for="item of followArrList">
+            <li v-for="(item,index) in followArrList" :key="index" :ref="`userHomeFollowUserItem${index}`">
               <div style="padding: 10px 20px 0 20px" class="flex-left align-items-center">
                 <div>
                   <el-avatar v-if="item.avatar" :size="60"
@@ -52,7 +52,7 @@
         <div style="min-height: 200px;">
           <el-skeleton class="mt-10" v-if="loginLoading" :rows="4" animated/>
           <ul v-show="followArrList.length>0 && !loginLoading" class="follow-cl-ul">
-            <li v-for="item of followArrList">
+            <li v-for="(item,index) of followArrList" :key="index" :ref="`userHomeFollowLabelItem${index}`">
               <div class="flex-left align-items-center" :gutter="20" style="padding: 10px 20px 0 20px">
                 <div v-html="item.labelCover" class="mr-10"></div>
                 <div class="flex-8">
@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   name: "userFollow",
   data() {
@@ -136,6 +138,7 @@ export default {
       },
       followArrList: [],
       loginLoading: true,
+      animator: null, // 动画器实例
     }
   },
 
@@ -190,10 +193,15 @@ export default {
       this.queryParams.uid = this.$base64.decode(this.$route.query.uuid)
       this.$API(`/white/user/follow/list/${this.queryParams.uid}/${this.queryParams.type}`, "get").then(res => {
         this.followArrList = res.data;
-      }).finally(() => this.loginLoading = false);
+      }).finally(() => {
+        this.loginLoading = false
+        this.animator.triggerAllItemsAnimation(this.followArrList, 'userHomeFollowLabelItem');
+        this.animator.triggerAllItemsAnimation(this.followArrList, 'userHomeFollowUserItem');
+      });
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.followLists();
   }
 }

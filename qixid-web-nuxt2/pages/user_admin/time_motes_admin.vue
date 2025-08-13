@@ -8,7 +8,8 @@
         </div>
         <el-skeleton class="mt-20" v-if="loading" :rows="4" animated/>
         <div v-else class="mt-20 mb-20">
-          <div v-if="moodNotesList.length>0" v-for="(item,index) in moodNotesList" :key="index">
+          <div v-if="moodNotesList.length>0" v-for="(item,index) in moodNotesList" :key="index"
+               :ref="`userAdminTimeMotesAdminItem${index}`">
             <div class="time-motes-admin-list-item">
               <div class="flex-space-between">
                 <div>
@@ -158,6 +159,7 @@
 <script>
 import TimeNotesEditing from "../../components/timeNotes/time-notes-editing.vue";
 import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
+import {createAnimator} from '~/plugins/animationUtils';
 
 export default {
   name: "timeMotesAdmin",
@@ -180,6 +182,7 @@ export default {
       infoDrawer: false,
       debounceTimer: null,//防抖
       debounceTime: 400,//防抖时间
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -231,6 +234,7 @@ export default {
         this.moodNotesList = res.rows;
         this.total = res.total;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.moodNotesList, 'userAdminTimeMotesAdminItem');
       })
     },
     getData() {
@@ -242,17 +246,20 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
+          const startIndex = this.moodNotesList.length; // 记录新增前的索引
           this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
             res.rows.forEach(item => {
               this.moodNotesList.push(item)
             })
             this.total = res.total;
+            this.animator.triggerNewItemsAnimation(startIndex, res.rows.length, 'userAdminTimeMotesAdminItem');
           }).finally(() => this.scrollLoading = true)
         }
       }
     },
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.getList();
     window.addEventListener('scroll', this.getData, true);
   },

@@ -13,7 +13,7 @@
         <el-skeleton class="mt-10 ml-10" v-if="loading" :rows="4" animated/>
         <div v-if="collectionUserLoading" class="mt-20 ml-10">
           <ul v-show="!loading">
-            <li v-for="item of collectionUserList" class="contentItem">
+            <li v-for="(item,index) in collectionUserList" class="contentItem" :key="index" :ref="`userAdminCollectionItem${index}`">
               <div class="flex-space-between">
                 <div class="details-1 text-underline-hover cursor-pointer" @click="specialIndex(item)">
                   <svg t="1736501888880" class="icon-theme-1 svg-translateY-6 mr-10" viewBox="0 0 1024 1024"
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-
+import {createAnimator} from '~/plugins/animationUtils'
 export default {
   name: "userAdminCollection",
   data() {
@@ -117,7 +117,8 @@ export default {
         collectionName: [
           {required: true, message: "名称不能为空", trigger: "blur"}
         ],
-      }
+      },
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -204,10 +205,12 @@ export default {
         if (this.collectionUserList.length == 0) {
           this.collectionUserLoading = false;
         }
+        this.animator.triggerAllItemsAnimation(this.collectionUserList, 'userAdminCollectionItem');
       })
     },
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.collectionListUids();
   }
 }

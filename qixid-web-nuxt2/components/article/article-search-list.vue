@@ -73,11 +73,14 @@
                 </div>
               </div>
             </div>
-            <div v-if="item.articleCover" style="width: 150px;height: 90px;margin-right: 15px">
+            <div v-if="item.articleCover" style="margin-right: 15px;margin-top: 15px">
               <lazy-image
                 :src="item.articleCover"
-                :alt="item.articleTitle"
                 image-class="search-cover-img"
+                :width="150"
+                :height="90"
+                fit="cover"
+                :center="true"
               />
             </div>
           </div>

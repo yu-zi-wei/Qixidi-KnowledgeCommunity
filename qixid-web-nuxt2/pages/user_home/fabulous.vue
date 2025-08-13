@@ -6,7 +6,7 @@
           <el-skeleton class="mt-10" v-if="loginLoading" :rows="4" animated/>
           <ul v-if="fabulousArr.length>0 && !loginLoading" class="fabulousArr-ul" ref="dialogContent"
               @scroll="divScroll($event)">
-            <li v-for="item of fabulousArr">
+            <li v-for="(item,index) in fabulousArr" :key="index" :ref="`userHomeFabulousUserItem${index}`">
               <div class="fabulousArr-li">
                 <!--          用户信息-->
                 <el-row :gutter="20" class="mb-20">
@@ -26,11 +26,12 @@
                       <p class="font-s-16 font-bold mb-8 text-underline-hover">{{ item.articleTitle }}</p>
                     </el-col>
                     <el-col :span="3" v-if="item.articleCover">
-                      <el-image :src="item.articleCover" fit="cover" style="width: 100px;height: 60px;border-radius: 2px"></el-image>
+                      <el-image :src="item.articleCover" fit="cover"
+                                style="width: 100px;height: 60px;border-radius: 2px"></el-image>
                     </el-col>
                   </nuxt-link>
                 </el-row>
-                <div class="overflow-hidden mt-10 font-s-14">
+                <div class="overflow-hidden font-s-14">
                   <div class="fl-left mr-20">
                     <svg t="1741407328107" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                          version="1.1"
@@ -107,6 +108,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "userFabulous",
@@ -124,6 +126,7 @@ export default {
       total: 0,
       scrollLoading: true,
       activeName: 'fabulousArticle',
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -166,7 +169,10 @@ export default {
           this.fabulousArr = res.data.records;
           this.total = res.data.total;
         }
-      }).finally(() => this.loginLoading = false);
+      }).finally(() => {
+        this.animator.triggerAllItemsAnimation(this.fabulousArr, 'userHomeFabulousUserItem');
+        this.loginLoading = false;
+      });
     }
   },
   watch: {
@@ -176,6 +182,7 @@ export default {
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.fabulousLists();
   }
 }
@@ -192,8 +199,8 @@ export default {
   -webkit-line-clamp: 2;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  white-space: normal;      /* 允许正常换行 */
-  word-break: break-word;   /* 允许在单词内换行 */
+  white-space: normal; /* 允许正常换行 */
+  word-break: break-word; /* 允许在单词内换行 */
 }
 
 .fabulousArr-li {

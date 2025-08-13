@@ -2,26 +2,17 @@
   <div>
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <ul ref="dialogContent" @scroll="divScroll($event)" v-if="latelyList.length!=0">
-      <li v-for="item of latelyList">
+      <li v-for="(item,index) in latelyList" :ref="`userHomeLatelyItem${index}`">
         <div class="browsing-list">
           <div>
-            <span class="font-s-16 color-grey">浏览了[{{ item.targetType == 1 ? '文章' : '帖子' }}]：</span>
+            <span class="font-s-13 mt-10 color-grey" :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
+              「{{ $utils.reckonTime(item.updateTime) }}」
+            </span>
+            <span class="font-s-16 color-grey">浏览了「{{ item.targetType == 1 ? '文章' : '帖子' }}」：</span>
             <nuxt-link class="font-s-16 cursor-pointer text-underline hover-cl"
                        :to="`/article-details/`+$base64.encode(item.targetId)" target="_blank" rel="noopener">
               {{ item.targetTitle }}
             </nuxt-link>
-          </div>
-          <div class="font-s-13 mt-10 color-grey">
-            <svg t="1682313364070" class="icon icon-size-14 svg-translateY-2" viewBox="0 0 1024 1024" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg" p-id="2551">
-              <path
-                d="M512 29.9008A482.0992 482.0992 0 1 0 994.0992 512 482.7136 482.7136 0 0 0 512 29.9008z m0 915.2512A433.152 433.152 0 1 1 945.152 512 433.5616 433.5616 0 0 1 512 945.152z"
-                p-id="2552"></path>
-              <path
-                d="M755.0976 487.5264H536.4736V279.1424a24.4736 24.4736 0 0 0-49.0496 0V512a24.4736 24.4736 0 0 0 24.576 24.4736h243.0976a24.4736 24.4736 0 1 0 0-49.0496z"
-                p-id="2553"></path>
-            </svg>
-            {{ $utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}') }}
           </div>
         </div>
       </li>
@@ -40,6 +31,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "lately",
@@ -53,6 +45,7 @@ export default {
         pageNum: 1,
         pageSize: 20
       },
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -82,10 +75,14 @@ export default {
           this.latelyList = res.rows;
           this.total = res.data.total;
         }
-      }).finally(() => this.loading = false)
+      }).finally(() => {
+        this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.latelyList, 'userHomeLatelyItem');
+      })
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.browsingHistoryLists();
   }
 }

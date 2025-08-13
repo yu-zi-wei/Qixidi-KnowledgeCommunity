@@ -5,7 +5,7 @@
         <el-skeleton class="mt-10 mb-10" :rows="8" animated v-if="loading"/>
         <div v-if="!loading">
           <div v-if="dictumAlbumListArr.length>0">
-            <div v-for="item of dictumAlbumListArr">
+            <div v-for="(item,index) in dictumAlbumListArr" :key="index" :ref="`userAdminAlbumManageItem${index}`">
               <div class="album-info-cl">
                 <div class="fl-right cursor-pointer" title="更多...">
                   <el-dropdown size="medium" trigger="click">
@@ -22,7 +22,7 @@
                   <div>
                     <el-image v-if="item.cover" style="height: 100px;width: 120px;border-radius: 2px" :src="item.cover"
                               fit="cover"></el-image>
-                    <el-image v-else style="height: 100px;width: 120px;border-radius: 2px"
+                    <el-image v-else style="height: 80px;width: 120px;border-radius: 2px"
                               src="/img/shu.jpg" fit="cover"></el-image>
                   </div>
 
@@ -119,10 +119,10 @@
         </el-form-item>
         <el-form-item label="简介：" prop="briefIntroduction">
           <div class="border-all-1-DCDFE6 border-radius-4">
-          <el-input type="textarea" maxlength="200"
-                    :rows="6"
-                    clearable
-                    show-word-limit v-model="albumInfo.briefIntroduction"></el-input>
+            <el-input type="textarea" maxlength="200"
+                      :rows="6"
+                      clearable
+                      show-word-limit v-model="albumInfo.briefIntroduction"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="封面：">
@@ -147,6 +147,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "albumManage",
@@ -177,6 +178,7 @@ export default {
         pageNum: 1,
         pageSize: 100,
       },
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -218,11 +220,13 @@ export default {
       this.$API("/frontDesk/dictum/album/role/list", "get", this.queryParams).then(res => {
         this.dictumAlbumListArr = res.rows;
       }).finally(() => {
-        this.loading = false
+        this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.dictumAlbumListArr, 'userAdminAlbumManageItem');
       })
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.dictumAlbumRoleLists();
   }
 }

@@ -28,7 +28,7 @@
             </el-popover>
           </div>
         </div>
-        <el-skeleton class="mt-10" :rows="10" animated v-if="loading"/>
+        <el-skeleton class="mt-10" :rows="5" animated v-if="loading"/>
         <div v-if="articleList!=null && !loading" v-for="(item, index) in articleList" :key="index"
              style="margin-bottom: 60px">
           <h1 class="mb-10 font-s-24">{{ item.createTime }}

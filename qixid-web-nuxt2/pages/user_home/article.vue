@@ -3,7 +3,7 @@
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <div v-if="loading" style="width: 100%;"></div>
     <ul class="content" v-if="collectionUserLoading" ref="dialogContent" @scroll="divScroll($event)">
-      <li v-for="item of articleList" class="contentItem">
+      <li v-for="(item,index) in articleList" class="contentItem" :key="index" :ref="`userHomeArticle${index}`">
         <div class="font-s-13 color-grey mb-20">
           <span v-text="item.nickname"></span>
           <span>|</span>
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "userArticle",
@@ -105,6 +106,7 @@ export default {
       },
       total: 0,
       scrollLoading: true,
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -144,11 +146,14 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
+          const startIndex = this.articleList.length; // 记录新增前的索引
           this.$API("/white/article/user/list", "get", this.queryParams).then(res => {
             res.data.records.forEach(item => {
               this.articleList.push(item)
             })
             this.total = res.data.total;
+            // 为新增的项目触发动画
+            this.animator.triggerNewItemsAnimation(startIndex, res.data.records.length, 'userHomeArticle');
           }).finally(() => this.scrollLoading = true)
         }
       }
@@ -163,6 +168,7 @@ export default {
         if (this.articleList.length == 0) {
           this.collectionUserLoading = false;
         }
+        this.animator.triggerAllItemsAnimation(this.articleList, 'userHomeArticle');
       })
     }
   },
@@ -173,6 +179,7 @@ export default {
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.isCurrentUser();
   }
 }

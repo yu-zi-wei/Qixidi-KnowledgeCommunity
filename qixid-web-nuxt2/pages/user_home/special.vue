@@ -3,11 +3,13 @@
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <div v-if="loading" style="width: 100%;"></div>
     <ul class="content" v-if="specialUserList.length>0 && !loading">
-      <li v-for="item of specialUserList" class="contentItem">
+      <li v-for="(item,index) in specialUserList" class="contentItem" :key="index" :ref="`userHomeSpecial${index}`">
         <div class="overflow-hidden">
           <div class="fl-left">
-            <el-image v-if="item.cover" :src="item.cover" fit="cover" style="height: 80px;width: 100px"></el-image>
-            <el-image v-else src="/img/shu.jpg" fit="cover" style="height: 80px;width: 100px"></el-image>
+            <el-image v-if="item.cover" :src="item.cover" fit="cover"
+                      style="height: 80px;width: 100px;border-radius: 2px"></el-image>
+            <el-image v-else src="/img/shu.jpg" fit="cover"
+                      style="height: 80px;width: 100px;border-radius: 2px"></el-image>
           </div>
           <div class="overflow-hidden">
             <div class="fl-left left-details-cl">
@@ -53,8 +55,8 @@
         </el-form-item>
         <el-form-item label="简介:">
           <div class="border-all-1-DCDFE6 border-radius-4">
-          <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.specialIntroduce"
-                    placeholder="专栏简介"/>
+            <el-input type="textarea" :rows="4" maxlength="200" show-word-limit v-model="form.specialIntroduce"
+                      placeholder="专栏简介"/>
           </div>
         </el-form-item>
         <el-form-item label="封面:">
@@ -70,6 +72,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "userSpecial",
@@ -94,6 +97,7 @@ export default {
       keyword: null,
       currentUser: false,
       value: [],
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -177,10 +181,12 @@ export default {
       this.$API("/white/special/list", "get", queryParams).then(res => {
         this.specialUserList = res.data;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.specialUserList, 'userHomeSpecial');
       })
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.isCurrentUser();
   }
 }

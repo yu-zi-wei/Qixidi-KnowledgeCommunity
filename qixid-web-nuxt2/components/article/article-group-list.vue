@@ -230,7 +230,6 @@ export default {
           break
         case 3:
           this.queryParams.createTime = 1;
-          console.log(" this.queryParams.createTime:", this.queryParams.createTime)
           this.$API("/white/article/sort", this.$get(), this.queryParams).then(res => {
             this.articleList = res.rows;
             this.total = res.total;

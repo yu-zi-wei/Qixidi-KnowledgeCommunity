@@ -1,7 +1,7 @@
 <template>
   <div class="waterfall-container" ref="container" :class="{ 'layout-calculating': !isInitialLayoutDone }">
-    <div 
-      v-for="(item, index) in items" 
+    <div
+      v-for="(item, index) in items"
       :key="item.id || index"
       class="waterfall-item"
       :ref="`item${index}`"
@@ -66,12 +66,12 @@ export default {
         this.layout();
       });
     },
-    
+
     calculateDimensions() {
       if (!this.$refs.container) return;
-      
+
       this.containerWidth = this.$refs.container.clientWidth;
-      
+
       // 响应式列数
       if (this.containerWidth < 480) {
         this.actualColumns = 1;
@@ -82,46 +82,43 @@ export default {
       } else {
         this.actualColumns = this.columns;
       }
-      
       this.columnWidth = (this.containerWidth - (this.actualColumns - 1) * this.gap) / this.actualColumns;
-      
-      console.log(`容器宽度: ${this.containerWidth}, 列数: ${this.actualColumns}, 列宽: ${this.columnWidth}`);
     },
-    
+
     layout() {
       if (!this.containerWidth || !this.items.length) return;
-      
+
       // 初始化列高度数组
       this.columnHeights = new Array(this.actualColumns).fill(0);
-      
+
       // 等待一点时间确保DOM渲染完成
       setTimeout(() => {
         this.items.forEach((item, index) => {
           this.positionItem(index);
         });
-        
+
         // 设置容器高度
         const maxHeight = Math.max(...this.columnHeights);
         this.$refs.container.style.height = `${maxHeight}px`;
-        
+
         // 标记布局完成，显示容器
         this.isInitialLayoutDone = true;
-        
+
         // 触发动画
         this.triggerAnimations();
-        
+
       }, 100);
     },
-    
+
     positionItem(index) {
       const element = this.$refs[`item${index}`]?.[0];
       if (!element) return;
-      
+
       // 一次性设置所有样式，减少重排
       const shortestColumn = this.columnHeights.indexOf(Math.min(...this.columnHeights));
       const left = shortestColumn * (this.columnWidth + this.gap);
       const top = this.columnHeights[shortestColumn];
-      
+
       // 批量应用样式，新元素有更平稳的初始状态
       Object.assign(element.style, {
         position: 'absolute',
@@ -134,19 +131,14 @@ export default {
         backfaceVisibility: 'hidden',
         visibility: 'visible' // 确保元素可见
       });
-      
       // 等待一帧确保内容完全渲染，然后获取高度
       element.offsetHeight; // 触发重排
-      
       // 再次获取准确高度
       const height = element.offsetHeight;
-      
       // 更新列高度
       this.columnHeights[shortestColumn] += height + this.gap;
-      
-      console.log(`Item ${index}: 列${shortestColumn}, left=${left}, top=${top}, height=${height}`);
     },
-    
+
     triggerAnimations() {
       // 确保布局完成后再开始动画
       setTimeout(() => {
@@ -159,10 +151,10 @@ export default {
               element.style.transition = 'none';
               element.style.opacity = '0';
               element.style.transform = 'translateY(20px) translateZ(0)';
-              
+
               // 强制重排
               element.offsetHeight;
-              
+
               // 下一帧开始动画
               requestAnimationFrame(() => {
                 element.style.transition = 'opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
@@ -171,16 +163,16 @@ export default {
               });
             }
             currentIndex++;
-            
+
             // 保持一致的延迟
             setTimeout(() => animate(), 80);
           }
         };
-        
+
         animate();
       }, 50); // 给布局一些时间
     },
-    
+
     handleResize() {
       clearTimeout(this.resizeTimer);
       this.resizeTimer = setTimeout(() => {
@@ -188,55 +180,55 @@ export default {
         this.layout();
       }, 300);
     },
-    
+
     // 公共方法：增量添加新项目
     addItems(newItems) {
       if (!newItems || newItems.length === 0) return;
-      
+
       const startIndex = this.items.length;
       const isFirstLoad = startIndex === 0; // 判断是否为第一次加载
-      
+
       // 如果是第一次加载，隐藏容器直到布局完成
       if (isFirstLoad) {
         this.isInitialLayoutDone = false;
       }
-      
+
       // 添加到items数组（内部操作，不会触发watch）
       this.items.push(...newItems);
-      
+
       // 等待DOM更新
       this.$nextTick(() => {
         // 第一次加载需要更多时间来初始化瀑布流
         const delay = isFirstLoad ? 150 : 50;
-        
+
         setTimeout(() => {
           // 只布局新添加的元素
           newItems.forEach((item, i) => {
             const index = startIndex + i;
             this.positionItem(index);
           });
-          
+
           // 更新容器高度
           const maxHeight = Math.max(...this.columnHeights);
           this.$refs.container.style.height = `${maxHeight}px`;
-          
+
           // 确保容器可见（对于增量添加）
           if (!isFirstLoad) {
             this.isInitialLayoutDone = true;
           }
-          
+
           // 只为新元素触发动画
           this.triggerNewItemAnimations(startIndex, newItems.length, isFirstLoad);
-          
+
         }, delay);
       });
     },
-    
+
     // 只为新添加的元素触发动画
     triggerNewItemAnimations(startIndex, count, isFirstLoad = false) {
       // 第一次加载需要更多时间确保稳定
       const animationDelay = isFirstLoad ? 200 : 100;
-      
+
       setTimeout(() => {
         let currentIndex = 0;
         const animate = () => {
@@ -248,10 +240,10 @@ export default {
               element.style.transition = 'none';
               element.style.opacity = '0';
               element.style.transform = 'translateY(20px) translateZ(0)';
-              
+
               // 强制重排，确保状态生效
               element.offsetHeight;
-              
+
               // 使用双重RAF确保状态完全应用（特别是第一次加载）
               requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
@@ -262,13 +254,13 @@ export default {
               });
             }
             currentIndex++;
-            
+
             // 第一次加载稍微慢一些，确保稳定
             const itemDelay = isFirstLoad ? 100 : 80;
             setTimeout(() => animate(), itemDelay);
           }
         };
-        
+
         animate();
       }, animationDelay);
     }

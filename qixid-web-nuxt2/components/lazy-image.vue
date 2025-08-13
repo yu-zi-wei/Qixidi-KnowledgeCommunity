@@ -1,20 +1,21 @@
 <template>
-  <div class="lazy-image-container" :class="{ 'loading': loading }">
-    <img 
+  <div class="lazy-image-container" :class="[{ 'loading': loading, 'fill-container': fill, 'center-image': center }, containerClass]" :style="containerStyle">
+    <img
       v-show="loaded"
-      :src="currentSrc" 
+      :src="currentSrc"
       :alt="alt"
       :class="imageClass"
+      :style="{ objectFit: fit }"
       @load="onLoad"
       @error="onError"
     />
-    
+
     <!-- 加载状态 -->
     <div v-show="loading" class="lazy-loading-placeholder">
       <div class="lazy-loading-spinner"></div>
       <span class="lazy-loading-text">{{ loadingText }}</span>
     </div>
-    
+
     <!-- 错误状态 -->
     <div v-show="error" class="lazy-error-placeholder" @click="retry">
       <div class="lazy-error-icon">⚠</div>
@@ -46,6 +47,37 @@ export default {
     loadingText: {
       type: String,
       default: '正在加载...'
+    },
+    // 是否填充满父容器
+    fill: {
+      type: Boolean,
+      default: false
+    },
+    // 自定义容器样式类
+    containerClass: {
+      type: String,
+      default: ''
+    },
+    // 图片填充方式，类似 element 的 fit 属性
+    fit: {
+      type: String,
+      default: 'cover',
+      validator: value => ['fill', 'contain', 'cover', 'none', 'scale-down'].includes(value)
+    },
+    // 组件宽度
+    width: {
+      type: [String, Number],
+      default: ''
+    },
+    // 组件高度
+    height: {
+      type: [String, Number],
+      default: ''
+    },
+    // 图片是否在容器中居中显示
+    center: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -55,6 +87,21 @@ export default {
       error: false,
       currentSrc: '',
       observer: null
+    }
+  },
+  computed: {
+    // 容器样式
+    containerStyle() {
+      const style = {}
+      if (this.width) {
+        style.width = typeof this.width === 'number' ? `${this.width}px` : this.width
+      }
+      if (this.height) {
+        style.height = typeof this.height === 'number' ? `${this.height}px` : this.height
+        // 当传入高度时，移除最小高度限制
+        style.minHeight = 'unset'
+      }
+      return style
     }
   },
   mounted() {
@@ -80,23 +127,23 @@ export default {
           threshold: 0.1, // 当10%的元素可见时触发
           rootMargin: '50px' // 提前50px开始加载
         });
-        
+
         this.observer.observe(this.$el);
       } else {
         // 兜底：不支持 Intersection Observer 时立即加载
         this.loadImage();
       }
     },
-    
+
     // 加载图片
     loadImage() {
       if (this.currentSrc) return; // 防止重复加载
-      
+
       this.loading = true;
       this.error = false;
       this.currentSrc = this.src;
     },
-    
+
     // 图片加载成功
     onLoad() {
       this.loading = false;
@@ -104,7 +151,7 @@ export default {
       this.error = false;
       this.$emit('load');
     },
-    
+
     // 图片加载失败
     onError() {
       this.loading = false;
@@ -112,7 +159,7 @@ export default {
       this.error = true;
       this.$emit('error');
     },
-    
+
     // 重试加载
     retry() {
       this.currentSrc = '';
@@ -133,11 +180,48 @@ export default {
   overflow: hidden;
 }
 
+/* 填充父容器模式 */
+.lazy-image-container.fill-container {
+  height: 100%;
+  min-height: unset;
+  /* 宽度继承父容器，不强制设置100% */
+}
+
 .lazy-image-container img {
+  transition: opacity 0.3s ease;
+}
+
+/* 普通模式下的图片样式 */
+.lazy-image-container:not(.fill-container) img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+/* 填充模式下的图片样式 */
+.lazy-image-container.fill-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: opacity 0.3s ease;
+}
+
+/* 当传入了宽高时，图片填充整个容器 */
+.lazy-image-container[style*="width"][style*="height"] img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 图片居中模式 */
+.lazy-image-container.center-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lazy-image-container.center-image img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
 }
 
 /* 加载状态样式 */
@@ -215,12 +299,12 @@ export default {
   .lazy-image-container {
     min-height: 100px;
   }
-  
+
   .lazy-loading-spinner {
     width: 20px;
     height: 20px;
   }
-  
+
   .lazy-loading-text,
   .lazy-error-text {
     font-size: 11px;
@@ -229,16 +313,10 @@ export default {
 
 /* 文章封面图片样式适配 */
 .lazy-image-container :deep(.article-cover-img) {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   border-radius: 4px;
 }
 
 .lazy-image-container :deep(.search-cover-img) {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   border-radius: 4px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <ul v-if="!loading">
-      <li v-if="articleList.length>0" v-for="item of articleList" class="article-cli">
+      <li v-if="articleList.length>0" v-for="(item,index) in articleList" class="article-cli" :key="index" :ref="`articleAdminArticle${index}`">
         <nuxt-link class="font-s-16 text-underline-hover"
                    :to="`/article-details/`+$base64.encode(item.id)"
                    target="_blank">
@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils'
 export default {
   name: "articleIndex",
   props: {
@@ -149,6 +150,7 @@ export default {
       scrollLoading: true,
       debounceTimer: null,//防抖
       debounceTime: 400,//防抖时间
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -212,10 +214,12 @@ export default {
         if (this.articleList.length == 0) {
           this.collectionUserLoading = false;
         }
+        this.animator.triggerAllItemsAnimation(this.articleList, 'articleAdminArticle');
       })
     }
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     this.getArticleInfos();
     window.addEventListener('scroll', this.getData, true);
   },

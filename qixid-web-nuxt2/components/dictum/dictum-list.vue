@@ -1,13 +1,10 @@
 <template>
   <div>
-    <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="10" animated v-if="loading"/>
+    <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="6" animated v-if="loading"/>
     <div v-if="!loading && typography==2">
-      <transition-group name="qx-slide-up" tag="ul" v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0"
-                        class="dictum-info-ul" appear>
-        <li v-for="(item,index) in dictumInfoListArr"
-            class="dictum-info-cl qx-dictum-list-slide-up"
-            :key="item.id || index"
-            :style="{ animationDelay: `${index * 0.15}s` }">
+      <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="dictum-info-ul">
+        <div v-for="(item,index) in dictumInfoListArr" :key="index" :ref="`dictumListItem${index}`"
+             class="dictum-info-cl qx-dictum-list-slide-up">
           <div class="flex-space-between user-info align-items-center">
             <div class="flex-left align-items-center">
               <div class="ml-6">
@@ -117,10 +114,8 @@
               </nuxt-link>
             </div>
           </div>
-          <div>
-          </div>
-        </li>
-      </transition-group>
+        </div>
+      </div>
       <div v-else class="text-center mt-20">
         <svg t="1682476949715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
              p-id="1648" width="80" height="80">
@@ -509,6 +504,7 @@
 
 <script>
 import WaterfallLayout from '~/components/waterfall-layout.vue'
+import {createAnimator} from '~/plugins/animationUtils'
 
 export default {
   name: "dictumList",
@@ -579,6 +575,7 @@ export default {
       commentListLoading: false,
       userInfo: {},
       dictumInfo: {},
+      animator: null, // 动画器实例
     }
   },
   watch: {
@@ -709,11 +706,11 @@ export default {
       this.queryParams.type = this.type;
       this.dictumInfoListArr = [];
       this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
-
         this.dictumInfoListArr = res.rows;
         this.total = res.total;
       }).finally(() => {
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.dictumInfoListArr, 'dictumListItem');
       })
       this.getBasicsUsers();
     },
@@ -738,16 +735,16 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
+        const startIndex = this.dictumInfoListArr.length; // 记录新增前的索引
         this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
           if (this.typography === 1 && this.$refs.waterfallLayout) {
-            // 瀑布流模式：使用组件的addItems方法增量添加
             this.$refs.waterfallLayout.addItems(res.rows);
-            // 注意：这里不修改dictumInfoListArr，避免触发重新渲染
           } else {
             // 列表模式：直接添加到数组
             res.rows.forEach(item => {
               this.dictumInfoListArr.push(item)
             })
+            this.animator.triggerNewItemsAnimation(startIndex, res.rows.length, 'dictumListItem');
           }
           this.total = res.total;
         }).finally(() => this.scrollLoading = true)
@@ -761,6 +758,7 @@ export default {
     window.removeEventListener('scroll', this.getData, true)
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList')
     //添加滚动监听事件
     window.addEventListener('scroll', this.getData, true);
     this.dictumInfoLists();
