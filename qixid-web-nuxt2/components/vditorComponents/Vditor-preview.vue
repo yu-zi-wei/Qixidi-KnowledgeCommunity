@@ -193,40 +193,83 @@ export default {
               // 保存原始图片地址
               const originalSrc = img.src;
 
-              // 创建新的Image对象来预加载
-              const tempImg = new Image();
+              // 使用 XMLHttpRequest 监听真实下载进度
+              const xhr = new XMLHttpRequest();
+              let overlayHidden = false;
+              
+              const hideOverlayOnce = () => {
+                if (!overlayHidden) {
+                  overlayHidden = true;
+                  loadingText.textContent = '正在渲染...';
+                  
+                  setTimeout(() => {
+                    img.src = originalSrc;
+                    img.classList.add('img-loaded');
+                    overlay.classList.add('hidden');
+                  }, 100);
+                }
+              };
 
+              // 监听下载进度
+              xhr.addEventListener('progress', function(e) {
+                if (e.lengthComputable) {
+                  const percentComplete = (e.loaded / e.total) * 100;
+                  loadingText.textContent = `正在加载 ${Math.round(percentComplete)}%`;
+                  
+                  // 当下载进度达到 20% 时隐藏蒙层
+                  if (percentComplete >= 20) {
+                    hideOverlayOnce();
+                  }
+                } else {
+                  // 无法获取总大小时，检查已下载的字节数
+                  if (e.loaded > 8192) { // 8KB 数据后隐藏蒙层
+                    hideOverlayOnce();
+                  }
+                }
+              });
 
               // 处理加载成功
-              tempImg.onload = function () {
-                loadingText.textContent = '加载完成';
+              xhr.addEventListener('load', function() {
+                if (xhr.status === 200) {
+                  // 确保蒙层已隐藏
+                  hideOverlayOnce();
+                } else {
+                  // 处理HTTP错误
+                  overlay.classList.add('error');
+                  loadingText.textContent = '加载失败，点击重试';
+                  loadingIcon.style.animation = 'none';
+                }
+              });
 
-                setTimeout(() => {
-                  img.src = originalSrc;
-                  img.classList.add('img-loaded');
-                  overlay.classList.add('hidden');
-                }, 200);
-              };
-
-              // 处理加载失败
-              tempImg.onerror = function () {
+              // 处理网络错误
+              xhr.addEventListener('error', function() {
                 overlay.classList.add('error');
-                loadingText.textContent = '加载失败，点击重试';
+                loadingText.textContent = '网络错误，点击重试';
                 loadingIcon.style.animation = 'none';
+              });
 
-                // 点击重试
-                loadingStatus.title = '点击重试加载';
-                loadingStatus.onclick = function () {
-                  // 重置状态
-                  overlay.classList.remove('error');
-                  loadingStatus.title = '';
-                  loadingText.textContent = '正在加载...';
-                  loadingIcon.style.animation = 'spin 1s linear infinite';
-
-                  tempImg.src = originalSrc;
-                };
+              // 重试函数
+              const startLoading = () => {
+                overlayHidden = false;
+                overlay.classList.remove('error');
+                loadingStatus.title = '';
+                loadingText.textContent = '正在连接...';
+                loadingIcon.style.animation = 'spin 1s linear infinite';
+                
+                xhr.open('GET', originalSrc, true);
+                xhr.responseType = 'blob';
+                xhr.send();
               };
-              tempImg.src = originalSrc;
+
+              // 点击重试
+              loadingStatus.onclick = function () {
+                if (overlay.classList.contains('error')) {
+                  startLoading();
+                }
+              };
+              
+              // 开始首次加载
+              startLoading();
               // 给图片添加可点击样式
               img.style.cursor = 'zoom-in';
               // 绑定点击事件
@@ -420,6 +463,9 @@ export default {
   color: #666;
   font-weight: 500;
   text-shadow: 0 1px 0 #fff;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  text-align: center;
 }
 
 /* 加载失败状态样式 */
