@@ -196,12 +196,12 @@ export default {
               // 使用 XMLHttpRequest 监听真实下载进度
               const xhr = new XMLHttpRequest();
               let overlayHidden = false;
-              
+
               const hideOverlayOnce = () => {
                 if (!overlayHidden) {
                   overlayHidden = true;
                   loadingText.textContent = '正在渲染...';
-                  
+
                   setTimeout(() => {
                     img.src = originalSrc;
                     img.classList.add('img-loaded');
@@ -211,11 +211,11 @@ export default {
               };
 
               // 监听下载进度
-              xhr.addEventListener('progress', function(e) {
+              xhr.addEventListener('progress', function (e) {
                 if (e.lengthComputable) {
                   const percentComplete = (e.loaded / e.total) * 100;
                   loadingText.textContent = `正在加载 ${Math.round(percentComplete)}%`;
-                  
+
                   // 当下载进度达到 20% 时隐藏蒙层
                   if (percentComplete >= 20) {
                     hideOverlayOnce();
@@ -229,7 +229,7 @@ export default {
               });
 
               // 处理加载成功
-              xhr.addEventListener('load', function() {
+              xhr.addEventListener('load', function () {
                 if (xhr.status === 200) {
                   // 确保蒙层已隐藏
                   hideOverlayOnce();
@@ -242,7 +242,7 @@ export default {
               });
 
               // 处理网络错误
-              xhr.addEventListener('error', function() {
+              xhr.addEventListener('error', function () {
                 overlay.classList.add('error');
                 loadingText.textContent = '网络错误，点击重试';
                 loadingIcon.style.animation = 'none';
@@ -253,9 +253,9 @@ export default {
                 overlayHidden = false;
                 overlay.classList.remove('error');
                 loadingStatus.title = '';
-                loadingText.textContent = '正在连接...';
+                loadingText.textContent = '正在加载...';
                 loadingIcon.style.animation = 'spin 1s linear infinite';
-                
+
                 xhr.open('GET', originalSrc, true);
                 xhr.responseType = 'blob';
                 xhr.send();
@@ -267,7 +267,7 @@ export default {
                   startLoading();
                 }
               };
-              
+
               // 开始首次加载
               startLoading();
               // 给图片添加可点击样式
