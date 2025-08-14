@@ -2,7 +2,7 @@
   <div style="min-height: 85vh">
     <el-skeleton class="mt-10 ml-10" :rows="4" animated v-if="loading"/>
     <div>
-      <div v-for="item of newsList" class="mb-20 for-div">
+      <div v-for="(item,index) in newsList" class="mb-20 for-div" :key="index" :ref="`newsFabulousItem${index}`">
         <div class="flex-left">
           <div>
             <el-avatar v-if="item.senderAvatar" :src="item.senderAvatar"></el-avatar>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils';
 
 export default {
   name: "fabulous",
@@ -71,6 +72,7 @@ export default {
       },
       scrollLoading: true,
       moreLoading: true,
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -82,6 +84,7 @@ export default {
         this.newsList = res.data.records;
         this.total = res.data.records.total;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.newsList, 'newsFabulousItem');
       })
     },
     getData() {
@@ -90,7 +93,6 @@ export default {
       let scrollHeight = document.documentElement.scrollHeight
       if (scrollHeight - (scrollTop + clientHeight) <= 1) {
         if (!this.scrollLoading) return;
-        // this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.load()
       }
     },
@@ -99,11 +101,13 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
+        const startIndex = this.newsList.length; // 记录新增前的索引
         this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
           res.records.forEach(item => {
             this.newsList.push(item)
           })
           this.total = res.total;
+          this.animator.triggerNewItemsAnimation(startIndex, res.records.length, 'newsFabulousItem');
         }).finally(() => this.scrollLoading = true)
       } else {
         this.moreLoading = false;
@@ -115,6 +119,7 @@ export default {
     window.removeEventListener('scroll', this.getData, true)
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList');
     window.addEventListener('scroll', this.getData, true);
     this.userNewsFaLists();
     this.userNewsReads();

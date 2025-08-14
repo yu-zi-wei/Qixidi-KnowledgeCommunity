@@ -5,8 +5,12 @@
 
 .for-div {
   background-color: #fefefe;
-  padding: 16px 40px 8px 20px;
-  border-radius: 4px;
+  padding: 10px 40px 15px 20px;
+  border-bottom: 1px solid #dfe4ea;
+}
+
+.for-div:hover {
+  border-bottom: 1px solid var(--theme-color);
 }
 
 .comment-div {

@@ -2,7 +2,8 @@
   <div style="min-height: 85vh">
     <el-skeleton class="mt-10 ml-10" :rows="4" animated v-if="loading"/>
     <div class="ml-10">
-      <div v-if="newsList.length>0" v-for="(item,index) in newsList" class="mb-20 for-div">
+      <div v-if="newsList.length>0" v-for="(item,index) in newsList" class="mb-20 for-div"
+           :key="index" :ref="`newsCommentItem${index}`">
         <div class="flex-left align-items-center">
           <div class="mr-10" @click="routeWindow('/user_home/article',item.commentUid)">
             <el-avatar v-if="item.commentAvatar" :src="item.commentAvatar" :size="35"></el-avatar>
@@ -19,10 +20,7 @@
           </div>
         </div>
         <div class="comment-div padding-10" title="查看详情">
-          <nuxt-link :to="`/article-details/`+$base64.encode(item.articleId)" target="_blank">
-            <vditor-preview :id="'aiEditor-news-introduce-'+index" :content="item.content"
-                            v-if="!loading"></vditor-preview>
-          </nuxt-link>
+          <el-input type="textarea" autosize resize="none" :readonly="true" v-model="item.content"/>
         </div>
         <div class="flex-left color-grey-2" style="margin-left: 45px">
           <div class="font-s-13" title="时间">
@@ -43,16 +41,17 @@
               placement="bottom-start"
               width="800"
               trigger="click">
-              <div class="mt-20">
-                <vditor-md v-if="commentState" :vditor-id="'aiEditor-news-introduce1-'+index"
-                           :mdContent.sync="comment.content"
-                           :content="comment.content"
-                           :outline="false"
-                           :height="'200px'"
-                ></vditor-md>
-                <el-button class="fl-right mt-10" type="primary" plain @click="sendComment(item)" size="medium">回复
-                </el-button>
+              <div style="border: 1px solid #DCDFE6;border-radius: 4px;padding: 10px" v-if="commentState">
+                   <textarea style="white-space:pre-line" :id="'newsArticleComment'+index"
+                             v-model="comment.content"
+                             placeholder="请输入内容..." rows="3" class="news-comment-cl"/>
+                <div class="overflow-hidden">
+                  <emoji-module :content.sync="comment.content" :id="'newsArticleComment'+index"
+                                :placement="'bottom-start'" class="fl-left"></emoji-module>
+                </div>
               </div>
+              <el-button class="fl-right mt-10" type="primary" plain @click="sendComment(item)" size="medium">回复
+              </el-button>
               <div v-if="!commentState">
                 评论已删除
               </div>
@@ -93,12 +92,12 @@
 
 <script>
 
-import VditorMd from "../../components/vditorComponents/Vditor-md.vue";
 import VditorPreview from "../../components/vditorComponents/Vditor-preview.vue";
+import {createAnimator} from '~/plugins/animationUtils';
 
 export default {
   name: "comment",
-  components: {VditorPreview, VditorMd},
+  components: {VditorPreview},
   data() {
     return {
       newsList: [],
@@ -125,12 +124,10 @@ export default {
       },
       scrollLoading: true,
       moreLoading: true,
+      animator: null, // 动画器实例
     }
   },
   methods: {
-    routeArticle(id) {
-
-    },
     routeWindow(url, id) {
       let routeInfo = this.$router.resolve({
         path: url,
@@ -166,6 +163,7 @@ export default {
       this.$API("/article/comment/insert", "post", null, this.comment).then(res => {
         if (res.code === 200) {
           this.$modal.msg("回复成功！");
+          this.comment.content = null;
         }
       }).finally(() => this.buttonLoading = false)
     },
@@ -174,6 +172,7 @@ export default {
         this.newsList = res.data.records;
         this.total = res.data.records.total;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.newsList, 'newsCommentItem');
       })
     },
     getData() {
@@ -190,11 +189,13 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
+        const startIndex = this.newsList.length; // 记录新增前的索引
         this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
           res.records.forEach(item => {
             this.newsList.push(item)
           })
           this.total = res.total;
+          this.animator.triggerNewItemsAnimation(startIndex, res.records.length, 'newsCommentItem');
         }).finally(() => this.scrollLoading = true)
       } else {
         this.moreLoading = false;
@@ -206,6 +207,7 @@ export default {
     window.removeEventListener('scroll', this.getData, true)
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList');
     window.addEventListener('scroll', this.getData, true);
     this.userNewsLists();
     this.userNewsReads();

@@ -1,8 +1,8 @@
 <template>
   <div style="min-height: 85vh">
     <el-skeleton class="mt-10 ml-10" :rows="4" animated v-if="loading"/>
-    <ul class="background-color-fefefe padding-10" v-if="newsList.length!=0">
-      <li v-for="item of newsList" class="news-system-cl">
+    <ul class="background-color-fefefe padding-10" v-if="newsList.length!=0 && !loading">
+      <li v-for="(item,index) in newsList" class="news-system-cl" :key="index" :ref="`newsSystemItem${index}`">
         <div title="系统消息" class="text-left">
           <svg t="1681980494552" class="icon icon-size-20 svg-translateY-4" viewBox="0 0 1024 1024" version="1.1"
                xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,7 @@
         <hr class="hr-item mt-4"/>
       </li>
     </ul>
-    <div v-else style="text-align: center;margin-top: 10px">
+    <div v-if="newsList.length==0 && !loading" style="text-align: center;margin-top: 10px">
       <svg t="1666708559980" class="icon-theme-2" viewBox="0 0 1024 1024" version="1.1"
            xmlns="http://www.w3.org/2000/svg"
            p-id="2698" width="40" height="60">
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import {createAnimator} from '~/plugins/animationUtils';
 
 export default {
   name: "system",
@@ -49,6 +50,7 @@ export default {
       },
       scrollLoading: true,
       moreLoading: true,
+      animator: null, // 动画器实例
     }
   },
   methods: {
@@ -60,6 +62,7 @@ export default {
         this.newsList = res.data.records;
         this.total = res.data.records.total;
         this.loading = false;
+        this.animator.triggerAllItemsAnimation(this.newsList, 'newsSystemItem');
       })
     },
     getData() {
@@ -68,7 +71,6 @@ export default {
       let scrollHeight = document.documentElement.scrollHeight
       if (scrollHeight - (scrollTop + clientHeight) <= 1) {
         if (!this.scrollLoading) return;
-        // this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.load()
       }
     },
@@ -77,11 +79,13 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
+        const startIndex = this.newsList.length; // 记录新增前的索引
         this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
           res.records.forEach(item => {
             this.newsList.push(item)
           })
           this.total = res.total;
+          this.animator.triggerNewItemsAnimation(startIndex, res.records.length, 'newsSystemItem');
         }).finally(() => this.scrollLoading = true)
       } else {
         this.moreLoading = false;
@@ -93,6 +97,7 @@ export default {
     window.removeEventListener('scroll', this.getData, true)
   },
   mounted() {
+    this.animator = createAnimator(this, 'commonList');
     window.addEventListener('scroll', this.getData, true);
     this.userNewsFaLists()
     this.userNewsReads()
