@@ -295,7 +295,15 @@ mr-auto {
 }
 
 .font-bold {
+  font-weight: 500;
+}
+
+.font-bol-s {
   font-weight: bold;
+}
+
+.color-theme {
+  color: #0363FF;
 }
 
 .color-blue {
