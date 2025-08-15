@@ -47,8 +47,8 @@ public class LabelTask {
      * 同步标签信息数据
      * 每20分钟一次
      */
-//    @Scheduled(cron = "0 */20 * * * *")
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 */21 * * * *")
+//    @Scheduled(cron = "0 */1 * * * *")
     public void syncLabel() {
         try {
             List<UserFollowVo> userFollowVos = userFollowMapper.selectVoLabelGroup();
@@ -100,7 +100,7 @@ public class LabelTask {
     /**
      * 同步标签分组文章数据
      */
-    @Scheduled(cron = "0 */45 * * * *")
+    @Scheduled(cron = "0 */47 * * * *")
     public void syncLabelGroup() {
         try {
             List<ArticleInformation> articleInformations = articleInformationMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()

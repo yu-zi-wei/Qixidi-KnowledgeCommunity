@@ -64,7 +64,7 @@ public class DictumTask {
      * 计算名言广场热门数据（作者、标签）
      * 每10分钟一次
      */
-    @Scheduled(cron = "0 */10 * * * *")
+    @Scheduled(cron = "0 */12 * * * *")
     public void countPopularAuthors() {
         try {
             List<DictumInfoVo> listAuthors = dictumInfoMapper.selectAuthorAuthors();
