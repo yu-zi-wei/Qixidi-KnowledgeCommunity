@@ -32,6 +32,11 @@
               </li>
               <li class="fa-li-class" title="评论">
                 <div class="fa-li-div" @click="goComment">
+                  <div
+                    :class="{'circular-div':true,'background-color-c2c8d1':true}"
+                    v-if="articleInfo.commentTimes!=0 && articleInfo.commentTimes!=null">
+                    <span class="sum-span-div">{{ articleInfo.commentTimes }}</span>
+                  </div>
                   <svg t="1741407164890" class="icon-theme-1 icon-size-20 mt-10 icon-hover" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="27498">

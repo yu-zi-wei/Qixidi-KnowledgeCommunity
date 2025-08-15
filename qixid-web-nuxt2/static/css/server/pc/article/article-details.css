@@ -251,7 +251,7 @@
   margin: 10px 15px 15px 10px;
   padding: 6px 6px 0px 6px;
   /*改宽度改动会导致二级评论末尾被遮挡*/
-  width: 90%;
+  width: 85%;
 }
 
 /*隐藏折叠面板 尖括号图标*/
