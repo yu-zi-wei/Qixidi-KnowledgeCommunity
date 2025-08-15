@@ -315,5 +315,12 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         }
         return R.ok(newsUserRecord);
     }
+
+    @Override
+    public Long fillArticleGetCount(Long id) {
+        return baseMapper.selectCount(new LambdaQueryWrapper<ArticleComment>()
+                .eq(ArticleComment::getArticleId, id)
+                .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode()));
+    }
 }
 

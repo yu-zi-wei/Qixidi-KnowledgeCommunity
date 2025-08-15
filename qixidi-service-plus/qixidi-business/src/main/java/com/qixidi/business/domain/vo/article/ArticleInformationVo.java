@@ -150,14 +150,17 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
      */
     @ExcelProperty(value = "点赞次数")
     private Long likeTimes = 0L;
+
     /**
      * 是否点赞
      */
     private Set<String> fabulousUserSet;
+
     /**
      * 是否收藏
      */
     private Boolean isCollection;
+
     /**
      * 收藏夹文章id
      */
@@ -168,6 +171,7 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
      */
     @ExcelProperty(value = "评论次数")
     private Long commentTimes = 0L;
+
     /**
      * 收藏次数
      */
@@ -203,6 +207,7 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
 
     @ExcelProperty(value = "创建时间")
     private Date createTime;
+
     /**
      * 热度权重
      */
@@ -213,18 +218,22 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
      */
     @ExcelProperty(value = "职业")
     private String occupation;
+
     /**
      * 账号名称
      */
     private String username;
+
     /**
      * 用户名称
      */
     private String nickname;
+
     /**
      * 用户头像
      */
     private String avatar;
+
     /**
      * 是否被关注
      */

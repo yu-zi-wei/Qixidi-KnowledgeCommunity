@@ -60,6 +60,7 @@ import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.article.IArticleInformationService;
+import com.qixidi.business.service.comment.IArticleCommentService;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -85,19 +86,21 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleInformationServiceImpl implements IArticleInformationService {
 
+    @Resource(name = "threadPoolInstance")
+    private ExecutorService executorService;
+
     private final ArticleInformationMapper baseMapper;
     private final LabelInfoMapper labelInfoMapper;
     private final LabelGroupingInfoMapper labelGroupingInfoMapper;
     private final CountUserWebsiteMapper countUserWebsiteMapper;
     private final CollectionRecordMapper collectionRecordMapper;
     private final UserFollowMapper userFollowMapper;
-    @Resource(name = "threadPoolInstance")
-    private ExecutorService executorService;
     private final SearchRecordsMapper searchRecordsMapper;
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
     private final SpecialInformationMapper specialInformationMapper;
     private final DeepSeekService deepSeekService;
+    private final IArticleCommentService iArticleCommentService;
 
     /**
      * 查询文章信息
@@ -531,11 +534,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             });
             details.setLabelList(list);
         }
-//        获取专栏数据
+        //获取专栏数据
         details.setGroupingName(labelGroupingInfoMapper.selectNameById(details.getGroupingId()));
-        String uuid = LoginHelper.getTripartiteUuid();
-        if (ObjectUtils.isEmpty(uuid)) return details;
-//        获取点赞数据
+        // 获取点赞数据
         Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
         if (CollectionUtils.isNotEmpty(cacheMap)) {
             details.setLikeTimes(cacheMap.get(details.getId().toString()) == null
@@ -545,7 +546,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (CollectionUtils.isNotEmpty(FaMap)) {
             details.setFabulousUserSet(FaMap.get(details.getId().toString()));
         }
-//        获取收藏数据
+        //获取评论数据
+        Long commentCount = iArticleCommentService.fillArticleGetCount(details.getId());
+        details.setCommentTimes(commentCount);
+
+        String uuid = LoginHelper.getTripartiteUuid();
+        if (ObjectUtils.isEmpty(uuid)) return details;
+        //获取收藏数据
         CollectionRecordVo collectionRecordVo = collectionRecordMapper.selectVoOne(new LambdaQueryWrapper<CollectionRecord>()
                 .eq(CollectionRecord::getUid, uuid)
                 .eq(CollectionRecord::getType, CollectionTypeEnums.ARTICLE_TYPE.getCode())

@@ -1,10 +1,10 @@
 package com.qixidi.business.service.comment;
 
-import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
-import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
+import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
+import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -70,5 +70,7 @@ public interface IArticleCommentService {
 
     boolean deleteWithValidById(ArticleCommentBo bo);
 
-    R<Void> getComment(Long id);
+    R getComment(Long id);
+
+    Long fillArticleGetCount(Long id);
 }
