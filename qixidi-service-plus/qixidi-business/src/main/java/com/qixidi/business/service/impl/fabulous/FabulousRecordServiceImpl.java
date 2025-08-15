@@ -3,7 +3,6 @@ package com.qixidi.business.service.impl.fabulous;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -200,7 +199,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
     }
 
     @Override
-    public R<Void> cancelFabulous(FabulousRecordBo bo) {
+    public void cancelFabulous(FabulousRecordBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
         log.info("取消点赞开始，articleId:{}，uid:{}，FabulousSum:{}", bo.getType(), bo.getUid(), bo.getFabulousSum());
         synchronized (this) {
@@ -227,17 +226,16 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    newsUserRecordMapper.delete(new QueryWrapper<NewsUserRecord>()
-                            .eq("target_uid", bo.getUid())
-                            .eq("uid", bo.getTargetUid())
-                            .eq("type", NewsType.FABULOUS_NEWS.getCode()));
+                    newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+                            .eq(NewsUserRecord::getTargetUid, bo.getUid())
+                            .eq(NewsUserRecord::getUid, bo.getTargetUid())
+                            .eq(NewsUserRecord::getType, NewsType.FABULOUS_NEWS.getCode()));
                     //WebSocket推送消息
                     WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
                 }
             });
         }
         log.info("取消点赞结束");
-        return null;
     }
 
     @Override

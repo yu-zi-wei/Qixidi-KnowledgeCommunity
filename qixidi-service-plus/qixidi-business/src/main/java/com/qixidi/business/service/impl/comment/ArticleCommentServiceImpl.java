@@ -151,23 +151,20 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         boolean flag = baseMapper.insert(add) > 0;
         if (!bo.getCommentUid().equals(bo.getTargetUid())) {
             //        发送消息
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    NewsUserRecord newsUserRecord = new NewsUserRecord();
-                    newsUserRecord.setUid(bo.getTargetUid());
-                    newsUserRecord.setNewsId(add.getId());
-                    newsUserRecord.setTargetUid(bo.getCommentUid());
-                    newsUserRecord.setType(NewsType.COMMENT_NEWS.getCode());
-                    newsUserRecord.setCreateTime(new Date());
-                    newsUserRecordMapper.insert(newsUserRecord);
-                    //WebSocket推送消息
-                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
-                    //发送邮件通知
-                    TripartiteUserVo basicsUser = tripartiteUserMapper.getBasicsUser(bo.getTargetUid());
-                    if (StrUtil.isNotEmpty(basicsUser.getEmail())) {
-                        MailUtils.sendText(basicsUser.getEmail(), "栖息地-收到新评论", add.getContent());
-                    }
+            executorService.execute(() -> {
+                NewsUserRecord newsUserRecord = new NewsUserRecord();
+                newsUserRecord.setUid(bo.getTargetUid());
+                newsUserRecord.setNewsId(add.getId());
+                newsUserRecord.setTargetUid(bo.getCommentUid());
+                newsUserRecord.setType(NewsType.COMMENT_NEWS.getCode());
+                newsUserRecord.setCreateTime(new Date());
+                newsUserRecordMapper.insert(newsUserRecord);
+                //WebSocket推送消息
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
+                //发送邮件通知
+                TripartiteUserVo basicsUser = tripartiteUserMapper.getBasicsUser(bo.getTargetUid());
+                if (StrUtil.isNotEmpty(basicsUser.getEmail())) {
+                    MailUtils.sendText(basicsUser.getEmail(), "栖息地-收到新评论", add.getContent());
                 }
             });
         }
@@ -286,12 +283,9 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
                 .eq(ArticleComment::getTargetId, bo.getId()));
         List<Long> collect = articleComments.stream().map(item -> item.getId()).collect(Collectors.toList());
         collect.add(bo.getId());
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                //        异步更新数据
-                commentDeletePreprocessing(bo, collect.size());
-            }
+        executorService.execute(() -> {
+            //        异步更新数据
+            commentDeletePreprocessing(bo, collect.size());
         });
         return baseMapper.deleteBatchIds(collect) > 0;
     }

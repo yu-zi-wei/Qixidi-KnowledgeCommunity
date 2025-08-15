@@ -1,14 +1,14 @@
 package com.qixidi.business.api.frontDesk;
 
-import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
-import com.qixidi.business.domain.bo.user.UserHomeBo;
-import com.qixidi.business.service.fabulous.IFabulousRecordService;
-import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.api.BaseController;
+import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
+import com.qixidi.business.domain.bo.user.UserHomeBo;
+import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +38,9 @@ public class FdFabulousRecordController extends BaseController {
      */
     @Log(title = "取消点赞", businessType = BusinessType.INSERT)
     @PostMapping("/cancel")
-    public R<Void> cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
-        return iFabulousRecordService.cancelFabulous(bo);
+    public R cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
+        iFabulousRecordService.cancelFabulous(bo);
+        return R.ok();
     }
 
     /**

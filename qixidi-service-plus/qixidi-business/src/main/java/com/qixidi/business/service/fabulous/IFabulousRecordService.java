@@ -69,7 +69,7 @@ public interface IFabulousRecordService {
 
     R spotFabulous(FabulousRecordBo bo);
 
-    R<Void> cancelFabulous(FabulousRecordBo bo);
+    void cancelFabulous(FabulousRecordBo bo);
 
     Object fabulousList(UserHomeBo bo, PageQuery pageQuery);
 
