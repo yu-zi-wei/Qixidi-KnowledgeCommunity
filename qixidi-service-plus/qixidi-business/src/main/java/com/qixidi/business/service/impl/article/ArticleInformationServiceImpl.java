@@ -546,9 +546,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (CollectionUtils.isNotEmpty(FaMap)) {
             details.setFabulousUserSet(FaMap.get(details.getId().toString()));
         }
-        //获取评论数据
-        Long commentCount = iArticleCommentService.fillArticleGetCount(details.getId());
-        details.setCommentTimes(commentCount);
 
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return details;
