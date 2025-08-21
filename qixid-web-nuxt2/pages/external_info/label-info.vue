@@ -1,7 +1,7 @@
 <template>
   <div class="module-main-2">
     <div class="label-info-cl flex-space-between">
-      <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
+      <el-skeleton style="padding: 20px 10px" :rows="3" animated v-if="initialLoading"/>
       <div style="line-height: 1px"></div>
       <div v-show="!initialLoading">
         <div class="flex-left">
@@ -108,6 +108,13 @@ export default {
   background: url(
   data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAa0lEQVQoU2NkgIKmQ37/6+w2MYK4xpnX/h9piWDgFL4E54MZhBSdna7FyEiMIpBhYBNxWQcyCWYjTjchKwK5nRGbw9EVga3+/lbvP7LvsCkCGYbiRlyKdtW2QDwD0oFPkbDUMogbCSkCGQYAka1/qtQO9d8AAAAASUVORK5CYII=
   ) repeat;
+}
+
+@media (max-width: 510px) {
+  .label-info-cl {
+    height: 120px;
+    margin: 10px;
+  }
 }
 
 .el-button--small {

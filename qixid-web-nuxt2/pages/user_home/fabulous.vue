@@ -32,7 +32,7 @@
                   </nuxt-link>
                 </el-row>
                 <div class="overflow-hidden font-s-14">
-                  <div class="fl-left mr-20">
+                  <div class="fl-left mr-20" title="浏览">
                     <svg t="1741407328107" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="30371">
@@ -46,7 +46,7 @@
                     <span class="font-s-13 color-grey-2"
                           v-text="item.numberTimes>0?item.numberTimes:'--'"></span>
                   </div>
-                  <div class="fl-left mr-20">
+                  <div class="fl-left mr-20" title="点赞">
                     <svg t="1741407060928" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="25461">
@@ -57,7 +57,7 @@
                     <span class="font-s-13 color-grey-2"
                           v-text="item.likeTimes>0?item.likeTimes:'--'"></span>
                   </div>
-                  <div class="fl-left mr-20">
+                  <div class="fl-left mr-20" title="评论">
                     <svg t="1741407164890" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                          version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="27498">

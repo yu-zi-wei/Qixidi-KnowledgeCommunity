@@ -3,17 +3,22 @@
   width: 1280px;
 }
 
+.module-main-2 {
+  margin: auto;
+  width: 1000px;
+}
+
 @media (max-width: 510px) {
   .module-main {
     margin: auto;
     width: 100%;
   }
 
-}
+  .module-main-2 {
+    margin: auto;
+    width: 100%;
+  }
 
-.module-main-2 {
-  margin: auto;
-  width: 1000px;
 }
 
 .flex-left {
