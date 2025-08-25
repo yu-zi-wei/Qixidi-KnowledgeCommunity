@@ -472,7 +472,9 @@
                     <el-timeline-item v-for="(item, index) in tocArray" :key="index" size="normal"
                                       :type="highlightType()==index?'primary':''">
                       <div @click="gotoAnchor(item.pos)" class="font-s-13 line-height-16 color-grey">
+                        <span :class="{'font-bold-s':item.level==1 ||item.level==2}">
                         {{ item.text }}
+                        </span>
                       </div>
                     </el-timeline-item>
                   </el-timeline>
