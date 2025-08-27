@@ -46,6 +46,10 @@
   line-height: 32px !important;
 }
 
+.vditor-reset ul {
+
+}
+
 .vditor-reset a {
   color: #00a8ff;
 }
@@ -64,4 +68,9 @@
 
 .vditor-reset img {
   border-radius: 10px;
+}
+
+.vditor-reset table {
+  max-width: 100vw !important;
+  overflow: auto;
 }
