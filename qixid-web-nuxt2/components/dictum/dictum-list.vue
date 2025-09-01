@@ -185,8 +185,8 @@
       <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="ml-10">
         <waterfall-layout
           :items="dictumInfoListArr"
-          :columns="4"
-          :gap="20"
+          :columns="2"
+          :gap="40"
           :animation-delay="120"
           :enable-animation="true"
           ref="waterfallLayout">

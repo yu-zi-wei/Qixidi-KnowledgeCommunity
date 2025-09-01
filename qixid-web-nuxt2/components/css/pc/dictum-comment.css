@@ -68,18 +68,17 @@ textarea:focus {
 
 .box-item {
   /*width: 285px;*/
-  margin-bottom: 25px;
+  margin-bottom: 35px;
   padding: 15px 8px;
-  border-radius: 6px;
+  border-radius: 4px;
   transition: all 0.2s linear 0s;
-  /*box-shadow: 1px 1px 6px 0 rgba(0, 0, 0, 0.08);*/
   /*background-color: #F3F3F3;*/
   background-color: #ffffff;
-  border: 1px solid #c8d1db;
+  border: 1px dashed #f1f2f6;
 }
 
 .box-item:hover {
-  border: 1px solid #a4b0be;
+  border: 1px solid #F8F8FA;
   background-color: #F8F8FA;
   box-shadow: 1px 1px 6px 0 rgba(0, 0, 0, 0.1);
 }
