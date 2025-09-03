@@ -65,7 +65,6 @@ public class ToolTasks {
                 logger.error("重复签到：{}", error);
                 return;
             }
-            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "掘金签到失败", error);
             return;
         }
         // 抽奖
