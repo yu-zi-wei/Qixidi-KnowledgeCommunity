@@ -45,7 +45,7 @@ public class MinioServiceImpl implements MinioService {
     private final MinioConfig minioConfig;
 
     //是否开启压缩
-    private static final boolean compressionStatus = false;
+    private static final boolean compressionStatus = true;
 
     @SneakyThrows
     @Override
