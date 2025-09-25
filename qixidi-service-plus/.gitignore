@@ -17,6 +17,7 @@ target/
 .project
 .settings
 .springBeans
+config.properties
 
 ### IntelliJ IDEA ###
 .idea
