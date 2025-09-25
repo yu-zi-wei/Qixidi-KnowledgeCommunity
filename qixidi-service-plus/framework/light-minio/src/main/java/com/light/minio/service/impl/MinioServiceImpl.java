@@ -7,6 +7,7 @@ import com.luciad.imageio.webp.WebPWriteParam;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -41,16 +42,32 @@ import java.util.UUID;
 @Slf4j
 public class MinioServiceImpl implements MinioService {
 
-    private final MinioClient minioClient;
+    private MinioClient minioClient;
     private final MinioConfig minioConfig;
 
     //是否开启压缩
     private static final boolean compressionStatus = true;
 
+    @PostConstruct
+    public void initMinioClient() {
+        if (!minioConfig.getEnabledSwitch()) return;
+        if (minioClient == null) {
+            log.info("初始化Minio客户端");
+            minioClient = MinioClient.builder()
+                    .endpoint(minioConfig.getEndpoint())
+                    .credentials(minioConfig.getAccessKey(), minioConfig.getSecretKey())
+                    .build();
+        }
+    }
+
     @SneakyThrows
     @Override
     public MinioDto upload(MultipartFile file) {
         String bucketName = minioConfig.getBucketName();
+
+        if (minioClient == null) {
+            throw new RuntimeException("Minio客户端未初始化");
+        }
 
         //获取原生文件名
         String originalFilename = file.getOriginalFilename();

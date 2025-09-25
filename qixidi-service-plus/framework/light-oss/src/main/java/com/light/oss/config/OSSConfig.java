@@ -12,18 +12,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Data
 public class OSSConfig {
+
     /**
      * 区域
      */
     private String endPoint;
+
     /**
      * accessKeyId
      */
     private String accessKeyId;
+
     /**
      * accessKeySecret
      */
     private String accessKeySecret;
+
     /**
      * 上传的桶
      */
@@ -33,5 +37,10 @@ public class OSSConfig {
      * http协议
      */
     private String httpProtocol;
+
+    /**
+     * 开关
+     */
+    private Boolean enabledSwitch = false;
 
 }

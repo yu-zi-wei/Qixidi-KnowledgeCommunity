@@ -6,6 +6,7 @@ import com.aliyun.oss.model.PutObjectResult;
 import com.light.oss.config.OSSConfig;
 import com.light.oss.domain.dto.OssDto;
 import com.light.oss.service.OssService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,17 +27,27 @@ import java.util.UUID;
 public class OSSConfigImpl implements OssService {
 
     private final OSSConfig ossConfig;
+    private OSS ossClient;
+
+    @PostConstruct
+    public void initOssClient() {
+        if (!ossConfig.getEnabledSwitch()) return;
+        if (ossClient == null) {
+            log.info("初始化OSS客户端");
+            ossClient = new OSSClientBuilder().build(ossConfig.getEndPoint(),
+                    ossConfig.getAccessKeyId(),
+                    ossConfig.getAccessKeySecret());
+        }
+    }
 
     @Override
     public OssDto upload(MultipartFile file) {
         String bucketName = ossConfig.getBucketName();
         String endPoint = ossConfig.getEndPoint();
-        String accessKeyId = ossConfig.getAccessKeyId();
-        String accessKeySecret = ossConfig.getAccessKeySecret();
         String httpProtocol = ossConfig.getHttpProtocol();
-
-        //创建OSS对象
-        OSS ossClient = new OSSClientBuilder().build(endPoint, accessKeyId, accessKeySecret);
+        if (ossClient == null) {
+            throw new RuntimeException("OSS客户端未初始化");
+        }
 
         //获取原生文件名
         String originalFilename = file.getOriginalFilename();

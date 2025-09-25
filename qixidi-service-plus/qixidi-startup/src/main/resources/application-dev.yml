@@ -191,6 +191,7 @@ lipay:
 # 阿里云OSS配置
 aliyun:
   oss:
+    enabled-switch: false
     end-point: ${config.aliyun.oss.end_point}
     access-key-id: ${config.aliyun.oss.access_key_id}
     access-key-secret: ${config.aliyun.oss.access_key_secret}
@@ -200,6 +201,7 @@ aliyun:
 # minio配置
 minio:
   storage:
+    enabled-switch: true
     bucket-name: ${config.minio.storage.bucket_name}
     endpoint: ${config.minio.storage.endpoint}
     access-port: ${config.minio.storage.access_port}
