@@ -110,7 +110,7 @@
 
             <div class="svg-translateY-4 text-underline hover-cl cursor-pointer _module_explicit">
               <nuxt-link :to="`/dictum/dictum-details/`+$base64.encode(item.id)" target="_blank">
-                查看
+                详情
               </nuxt-link>
             </div>
           </div>
@@ -242,7 +242,7 @@
                       :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')"></span>
                 </div>
                 <div class="svg-translateY-4 mr-15 text-underline-hover cursor-pointer" @click="viewCommentList(item)">
-                  查看
+                  详情
                 </div>
               </div>
             </div>
