@@ -130,9 +130,9 @@ qixidi/
 
 #### 名言广场
 
-![名言广场.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA.png)
+![阅读随笔.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%98%85%E8%AF%BB%E9%9A%8F%E7%AC%94.png)
 
-![名言广场2.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E5%B9%BF%E5%9C%BA2.png)
+![阅读随笔2.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%98%85%E8%AF%BB%E9%9A%8F%E7%AC%942.png)
 
 #### 名言空间
 
