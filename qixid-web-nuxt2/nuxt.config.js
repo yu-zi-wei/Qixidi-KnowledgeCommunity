@@ -124,7 +124,7 @@ export default {
         };
         try {
           const https = require('https');
-          const response = await fetch(`${envConfig.SERVICE_PROTOCOL}${envConfig.SERVER_URL}/white/article/recommend/list`, {
+          const response = await fetch(`${envConfig.SERVICE_PROTOCOL}${envConfig.SERVER_URL}/white/article/sort?createTime=1`, {
             //不做https校验，如果你的https是被信任的建议注释该代码，因为http是不安全的
             agent: new https.Agent({rejectUnauthorized: false})
           });

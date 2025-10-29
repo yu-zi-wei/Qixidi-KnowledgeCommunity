@@ -163,11 +163,15 @@
             <div v-if="statDataInfoLoading" style="padding: 2px">
               <div class="flex-space-between text-center line-height-20"
                    v-if="statDataInfoLoading">
-                <div>
-                  <h4 class="color-theme font-s-15">
-                    <countTo :startVal='0' :endVal='statDataInfoVo.userCount' :duration='2000'></countTo>
-                  </h4>
-                  <div class="color-grey-2 font-s-14">用户数</div>
+                <div title="点击跳转">
+                  <nuxt-link to="/white/user_lit" rel="noopener">
+                    <h4 class="color-theme font-s-15">
+                      <countTo :startVal='0' :endVal='statDataInfoVo.userCount' :duration='2000'></countTo>
+                    </h4>
+                    <div class="color-grey5 font-s-14">
+                      用户数
+                    </div>
+                  </nuxt-link>
                 </div>
                 <div>
                   <h4 class="color-theme font-s-15">
@@ -175,11 +179,13 @@
                   </h4>
                   <div class="color-grey-2 font-s-14">专栏数</div>
                 </div>
-                <div>
-                  <h4 class="color-theme font-s-15">
-                    <countTo :startVal='0' :endVal='statDataInfoVo.labelCount' :duration='2000'></countTo>
-                  </h4>
-                  <div class="color-grey-2 font-s-14">标签数</div>
+                <div title="点击跳转">
+                  <nuxt-link to="/label" rel="noopener">
+                    <h4 class="color-theme font-s-15">
+                      <countTo :startVal='0' :endVal='statDataInfoVo.labelCount' :duration='2000'></countTo>
+                    </h4>
+                    <div class="color-grey5 font-s-14">标签数</div>
+                  </nuxt-link>
                 </div>
               </div>
               <div class="flex-space-between text-center line-height-20 mt-20">

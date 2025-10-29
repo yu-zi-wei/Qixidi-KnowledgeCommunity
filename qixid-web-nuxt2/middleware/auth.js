@@ -24,6 +24,7 @@ const whiteList = [
   '/external_info/**',
   '/dictum/dictum-details/**',
   '/time_notes/details/**',
+  '/white/**',
   '/article_archive',
 
 ];
