@@ -32,6 +32,8 @@ Nuxt.js 对前台进行了重构，并赋予它新的名字——**栖息地**�
 
 ### 开源地址（Gitee）：https://gitee.com/yu-zi-wei/qixidi
 
+### 开源地址（GitHub）：https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity
+
 ### 目录结构
 
 ```text
