@@ -168,9 +168,7 @@
                     <h4 class="color-theme font-s-15">
                       <countTo :startVal='0' :endVal='statDataInfoVo.userCount' :duration='2000'></countTo>
                     </h4>
-                    <div class="color-grey5 font-s-14">
-                      用户数
-                    </div>
+                    <div class="color-grey-2 font-s-14 text-underline-hover">用户数</div>
                   </nuxt-link>
                 </div>
                 <div>
@@ -184,7 +182,7 @@
                     <h4 class="color-theme font-s-15">
                       <countTo :startVal='0' :endVal='statDataInfoVo.labelCount' :duration='2000'></countTo>
                     </h4>
-                    <div class="color-grey5 font-s-14">标签数</div>
+                    <div class="color-grey-2 font-s-14 text-underline-hover">标签数</div>
                   </nuxt-link>
                 </div>
               </div>
@@ -195,17 +193,21 @@
                   </h4>
                   <div class="color-grey-2 font-s-14">文章数</div>
                 </div>
-                <div>
-                  <h4 class="color-theme font-s-15">
-                    <countTo :startVal='0' :endVal='statDataInfoVo.dictumCount' :duration='2000'></countTo>
-                  </h4>
-                  <div class="color-grey-2 font-s-14">名言数</div>
+                <div title="点击跳转">
+                  <nuxt-link to="/dictum" rel="noopener">
+                    <h4 class="color-theme font-s-15">
+                      <countTo :startVal='0' :endVal='statDataInfoVo.dictumCount' :duration='2000'></countTo>
+                    </h4>
+                    <div class="color-grey-2 font-s-14 text-underline-hover">随笔数</div>
+                  </nuxt-link>
                 </div>
-                <div>
-                  <h4 class="color-theme font-s-15">
-                    <countTo :startVal='0' :endVal='statDataInfoVo.timeNotesCount' :duration='2000'></countTo>
-                  </h4>
-                  <div class="color-grey-2 font-s-14">小记数</div>
+                <div title="点击跳转">
+                  <nuxt-link to="/time_notes" rel="noopener">
+                    <h4 class="color-theme font-s-15">
+                      <countTo :startVal='0' :endVal='statDataInfoVo.timeNotesCount' :duration='2000'></countTo>
+                    </h4>
+                    <div class="color-grey-2 font-s-14 text-underline-hover">小记数</div>
+                  </nuxt-link>
                 </div>
               </div>
             </div>
