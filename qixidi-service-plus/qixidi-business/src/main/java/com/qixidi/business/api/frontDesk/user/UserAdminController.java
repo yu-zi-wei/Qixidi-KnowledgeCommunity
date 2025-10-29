@@ -1,10 +1,10 @@
 package com.qixidi.business.api.frontDesk.user;
 
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.R;
 import com.qixidi.business.service.article.IArticleInformationService;
 import com.qixidi.business.service.collection.ICollectionInformationService;
 import com.qixidi.business.service.special.ISpecialInformationService;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -111,4 +111,7 @@ public interface ITripartiteUserService {
     Boolean bindEmail(UserBindBo bo);
 
     AuthRequest getAuthRequest(String source);
+
+    List<TripartiteUserVo> fdUserAllList();
+
 }

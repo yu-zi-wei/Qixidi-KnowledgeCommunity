@@ -1,18 +1,17 @@
 package com.qixidi.business.api.frontDesk.user;
 
-import com.qixidi.business.domain.bo.user.UserFollowBo;
-import com.qixidi.business.service.user.IUserFollowService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.api.BaseController;
+import com.qixidi.business.domain.bo.user.UserFollowBo;
+import com.qixidi.business.service.user.IUserFollowService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * 【前台】用户关注管理

@@ -1,29 +1,29 @@
 package com.qixidi.business.api.frontDesk.user;
 
+import com.light.core.core.domain.R;
+import com.light.core.core.validate.EditGroup;
+import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.api.BaseController;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
 import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.user.IUserFollowService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
-import com.light.core.core.domain.R;
-import com.light.core.core.validate.EditGroup;
-import com.light.core.enums.BusinessType;
-import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.system.domain.entity.SysOss;
 import com.qixidi.system.service.ISysOssService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +62,16 @@ public class UserWebInfoController extends BaseController {
     @GetMapping("/white/user/list")
     public List<TripartiteUserVo> fdUserList(UserInfoBo bo) {
         return iTripartiteUserService.fdUserList(bo);
+    }
+
+    /**
+     * 获取所有用户列表-白名单
+     *
+     * @return
+     */
+    @GetMapping("/white/userAllList")
+    public List<TripartiteUserVo> fdUserAllList() {
+        return iTripartiteUserService.fdUserAllList();
     }
 
     /**

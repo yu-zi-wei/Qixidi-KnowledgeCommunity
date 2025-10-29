@@ -59,6 +59,7 @@ import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
 import com.qixidi.business.service.ITripartiteUserService;
+import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -335,7 +336,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 //        手机号/邮箱校验
         Long phone = baseMapper.selectCount(new LambdaQueryWrapper<TripartiteUser>()
                 .eq(TripartiteUser::getEmail, registerUserMain.getEmail())
-                .eq(TripartiteUser::getState, 0));
+                .eq(TripartiteUser::getState, StatusEnums.NORMAL.getCode()));
         if (registerUserMain.getRegisterType().equals(1) && phone > 0)
             throw new ServiceException("该邮箱已被使用！");
         if (registerUserMain.getRegisterType().equals(2) && phone < 0)
@@ -671,12 +672,41 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 break;
 
             default:
-                break;
-        }
-        if (null == authRequest) {
-            throw new AuthException("未获取到有效的Auth配置");
+                throw new AuthException("未获取到有效的Auth配置");
         }
         return authRequest;
+    }
+
+    @Override
+    public List<TripartiteUserVo> fdUserAllList() {
+        List<TripartiteUser> tripartiteUsers = baseMapper.selectList(new LambdaQueryWrapper<TripartiteUser>()
+                .eq(TripartiteUser::getState, StatusEnums.NORMAL.getCode())
+                .orderByAsc(TripartiteUser::getCreateTime)
+        );
+        List<String> uuids = tripartiteUsers.stream().map(TripartiteUser::getUuid).toList();
+        List<CountUserWebsiteEntity> countUserWebsiteEntities = countUserWebsiteMapper.selectList(new LambdaQueryWrapper<CountUserWebsiteEntity>()
+                .in(CountUserWebsiteEntity::getUuid, uuids));
+        Map<String, CountUserWebsiteEntity> countUserWebsiteMap = countUserWebsiteEntities.stream()
+                .collect(Collectors.toMap(CountUserWebsiteEntity::getUuid, a -> a));
+        List<UserInformation> userInformationEntities = userInformationMapper.selectList(new LambdaQueryWrapper<UserInformation>()
+                .in(UserInformation::getUuid, uuids));
+        Map<String, UserInformation> userInformationMap = userInformationEntities.stream()
+                .collect(Collectors.toMap(UserInformation::getUuid, a -> a));
+
+        List<TripartiteUserVo> voList = new ArrayList<>();
+        tripartiteUsers.forEach(tripartiteUser -> {
+            TripartiteUserVo tripartiteUserVo = BeanUtil.copyProperties(tripartiteUser, TripartiteUserVo.class);
+            CountUserWebsiteEntity countUserWebsiteEntity = countUserWebsiteMap.get(tripartiteUser.getUuid());
+            if (countUserWebsiteEntity != null) {
+                tripartiteUserVo.fillCountUserWebsite(countUserWebsiteEntity);
+            }
+            UserInformation userInformation = userInformationMap.get(tripartiteUser.getUuid());
+            if (userInformation != null) {
+                tripartiteUserVo.fillUserInformation(userInformation);
+            }
+            voList.add(tripartiteUserVo);
+        });
+        return voList;
     }
 
     @Override

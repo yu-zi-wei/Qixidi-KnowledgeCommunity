@@ -2,9 +2,10 @@ package com.qixidi.business.domain.vo.user;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
+import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
+import com.qixidi.business.domain.entity.user.UserInformation;
 import lombok.Data;
 
 import java.util.Date;
@@ -156,10 +157,11 @@ public class TripartiteUserVo extends CountUserWebsiteEntity {
      * 用户经验值
      */
     private Integer empirical;
+
     /**
      * 用户等级
      */
-        private String grade;
+    private String grade;
 
     /**
      * 用户状态（0：正常，1：已删除，2：冻结）
@@ -171,4 +173,11 @@ public class TripartiteUserVo extends CountUserWebsiteEntity {
      */
     private Date createTime;
 
+    public void fillUserInformation(UserInformation userInformation) {
+        this.introduce = userInformation.getIntroduce();
+        this.homepage = userInformation.getHomepage();
+        this.empirical = userInformation.getEmpirical().intValue();
+        this.grade = userInformation.getGrade();
+        this.userState = userInformation.getUserState();
+    }
 }

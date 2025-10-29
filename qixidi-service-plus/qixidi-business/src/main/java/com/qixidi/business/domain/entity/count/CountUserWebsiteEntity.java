@@ -3,6 +3,7 @@ package com.qixidi.business.domain.entity.count;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @ExcelIgnoreUnannotated
 @TableName("b_count_user_website")
 @Accessors(chain = true)
+@NoArgsConstructor
 public class CountUserWebsiteEntity implements Serializable {
     /**
      * 用户id
@@ -75,4 +77,21 @@ public class CountUserWebsiteEntity implements Serializable {
      * 时光小记数
      */
     private int timeNotesCount;
+
+    public void fillCountUserWebsite(CountUserWebsiteEntity countUserWebsiteEntity) {
+        this.fabulousCount = countUserWebsiteEntity.getFabulousCount();
+        this.fansFabulousCount = countUserWebsiteEntity.getFansFabulousCount();
+        this.collectionCount = countUserWebsiteEntity.getCollectionCount();
+        this.followCount = countUserWebsiteEntity.getFollowCount();
+        this.fansFollowCount = countUserWebsiteEntity.getFansFollowCount();
+        this.commentCount = countUserWebsiteEntity.getCommentCount();
+        this.fansCommentCount = countUserWebsiteEntity.getFansCommentCount();
+        this.articleCount = countUserWebsiteEntity.getArticleCount();
+        this.specialColumnCount = countUserWebsiteEntity.getSpecialColumnCount();
+        this.fansSpecialColumn = countUserWebsiteEntity.getFansSpecialColumn();
+        this.circleCount = countUserWebsiteEntity.getCircleCount();
+        this.albumCount = countUserWebsiteEntity.getAlbumCount();
+        this.dictumCount = countUserWebsiteEntity.getDictumCount();
+        this.timeNotesCount = countUserWebsiteEntity.getTimeNotesCount();
+    }
 }

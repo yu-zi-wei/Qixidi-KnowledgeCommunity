@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/frontDesk/order")
 public class FdUserOrderController extends BaseController {
     private final IUserOrderService iUserOrderService;
-//    private final AliAayService aliAayService;
 
     /**
      * 查询用户订单列表
