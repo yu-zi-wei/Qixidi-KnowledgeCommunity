@@ -28,7 +28,7 @@
               <div v-for="item of toolArray">
                 <el-menu-item :index="'/tool?tool='+item.id" @click="toolClick(item.id)">
                   <template slot="title">
-                    <span v-text="item.toolName"></span>
+                    <span class="font-s-16 font-bold-s" v-text="item.toolName"></span>
                   </template>
                 </el-menu-item>
               </div>

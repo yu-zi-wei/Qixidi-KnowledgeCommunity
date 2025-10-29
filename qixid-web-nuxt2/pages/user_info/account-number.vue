@@ -7,7 +7,7 @@
         <div class="flex-space-between">
           <div class="fl-li-cl">
             邮箱绑定
-            <span class="font-s-14 color-grey ml-20">
+            <span class="font-s-16 color-grey ml-20">
               {{
                 (userInfo.email == null || userInfo.email == '') ? '未绑定' : $utils.handleEmail(userInfo.email)
               }}</span>
@@ -24,7 +24,7 @@
       <li>
         <div class="flex-space-between">
           <div class="fl-li-cl">手机号
-            <span class="font-s-14 color-grey ml-20">
+            <span class="font-s-16 color-grey ml-20">
               {{
                 (userInfo.phone == null || userInfo.phone == '') ? '未绑定' : $utils.handlePhone(userInfo.phone)
               }}</span>
@@ -381,7 +381,7 @@ export default {
 
 <style scoped>
 .fl-li-cl {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 40px;
 }
 

@@ -85,18 +85,18 @@
                 <div class="article-user-info-two">
                   <div class="ml-8 flex-space-between align-items-center">
                     <div class="flex-left">
-                      <div class="cursor-pointer font-bold font-s-14 mr-10"
+                      <div class="cursor-pointer font-bold font-s-16 mr-10"
                            :title="'作者：'+articleInfo.nickname">
                         <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(articleInfo.userId)"
                                    target="_blank">
                           {{ articleInfo.nickname }}
                         </nuxt-link>
                       </div>
-                      <div class="font-s-14 mr-15 ">
+                      <div class="font-s-16 mr-15 ">
                         {{ $utils.parseTime(articleInfo.createTime, '{y}-{m}-{d} {h}:{s}') }}
                       </div>
                       <div>
-                        <svg t="1741407328107" class="icon  icon-size-14"
+                        <svg t="1741407328107" class="icon icon-size-16"
                              viewBox="0 0 1024 1024"
                              version="1.1"
                              xmlns="http://www.w3.org/2000/svg" p-id="30371">
@@ -108,10 +108,10 @@
                             p-id="30373"></path>
                         </svg>
                       </div>
-                      <div class="font-s-14 ml-4"> {{ articleInfo.numberTimes }}</div>
+                      <div class="font-s-16 ml-4"> {{ articleInfo.numberTimes }}</div>
                     </div>
                     <div v-if="isOwn" @click="articleEdit(articleInfo.id)"
-                         class="font-s-13 cursor-pointer ml-10 color-grey-2">编辑
+                         class="font-s-14 cursor-pointer ml-10 color-grey">编辑
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
               <div class="mt-20">
                 <!--          ai总结  -->
                 <div class="article-summary-dev" v-if="articleInfo.articleSummary!=null">
-                  <div class="font-bold mb-6">
+                  <div class="font-bold mb-6 font-s-16">
                     <svg t="1741333845009" class="icon-theme-stand-out icon-size-16 svg-translateY-1"
                          viewBox="0 0 1024 1024"
                          version="1.1"
@@ -130,7 +130,7 @@
                     </svg>
                     AI总结：
                   </div>
-                  <p class="font-bold-300"> {{ articleInfo.articleSummary }}</p>
+                  <p class="font-bold-300 font-s-16 line-height-28 color-grey"> {{ articleInfo.articleSummary }}</p>
                 </div>
                 <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContent"
                                 :outline.sync="tocArray"></vditor-preview>
@@ -182,8 +182,7 @@
                             placeholder="请输入内容..."
                             rows="3" class="news-comment-cl"/>
                         <div class="overflow-hidden">
-                          <emoji-module :content.sync="comment.content" :id="'articleComment'"
-                                        :placement="'bottom-start'"
+                          <emoji-module :content.sync="comment.content" :id="'articleComment'" :placement="'bottom-start'"
                                         class="fl-left"></emoji-module>
                           <el-button plain type="primary" class="fl-right" size="small"
                                      :disabled="comment.content==null ||comment.content==''"
@@ -213,12 +212,11 @@
                                            target="_blank">
                                   {{ item.commentName }}
                                 </nuxt-link>
-                                <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain"
-                                        size="mini"
+                                <el-tag v-if="item.commentUid==articleInfo.userId" type="info" effect="plain" size="mini"
                                         class="ml-2">作者
                                 </el-tag>
                               </div>
-                              <div class="color-grey-2 font-s-12 ml-10"
+                              <div class="color-grey font-s-14 ml-10"
                                    v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                               </div>
                             </div>
@@ -227,7 +225,7 @@
                             </div>
                             <div class="flex-left">
                               <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
-                                   class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
+                                   class="font-s-13 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
                                    @click="deleteComment(item)">
                                 <svg t="1742632616926" class="icon-size-14 icon-theme-1 icon-hover svg-translateY-3"
                                      viewBox="0 0 1024 1024" version="1.1"
@@ -238,11 +236,11 @@
                                 </svg>
                                 删除
                               </div>
-                              <div class="flex-left flex-12">
+                              <div class=" flex-12">
                                 <el-collapse accordion style="width: 100%;">
                                   <el-collapse-item>
                                     <template slot="title">
-                                      <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-3">
+                                      <div class="hover-cl icon-hover font-s-13 color-grey-2 svg-translateY-1">
                                         <svg t="1741407164890"
                                              class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
                                              viewBox="0 0 1024 1024"
@@ -292,21 +290,21 @@
                                       {{ items.commentName }}
                                     </nuxt-link>
                                     <el-tag v-if="items.commentUid==articleInfo.userId" type="info" effect="plain"
-                                            size="mini" class="ml-2">作者
+                                            size="mini">作者
                                     </el-tag>
                                   </div>
                                   <div v-if="items.commentGrade==3" class="mr-10">
-                                    <span class="color-grey-3 font-s-12 mr-4">回复</span>
+                                    <span class="color-grey-2 font-s-13 mr-4">回复</span>
                                     <nuxt-link class="cursor-pointer hover-cl"
                                                :to="'/user_home/article?uuid='+$base64.encode(items.targetUid)"
                                                target="_blank">
                                       {{ items.targetName }}
                                     </nuxt-link>
                                     <el-tag v-if="items.targetUid==articleInfo.userId" type="info" effect="plain"
-                                            size="mini" class="ml-2">作者
+                                            size="mini">作者
                                     </el-tag>
                                   </div>
-                                  <div class="color-grey-2 font-s-12"
+                                  <div class="color-grey font-s-14"
                                        v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                                   </div>
                                 </div>
@@ -316,7 +314,7 @@
                                             v-model="items.content"/>
                                 </div>
                                 <div class="flex-left mb-10">
-                                  <div class="font-s-12 hover-cl cursor-pointer color-grey-2 mr-10"
+                                  <div class="font-s-13 hover-cl cursor-pointer color-grey-2 mr-10"
                                        v-if="userInfo!=null && userInfo.uuid==items.commentUid"
                                        @click="deleteComment(items)">
                                     <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
@@ -332,7 +330,7 @@
                                     <el-collapse accordion style="width: 100%;">
                                       <el-collapse-item>
                                         <template slot="title">
-                                          <div class="hover-cl font-s-12 color-grey-2">
+                                          <div class="hover-cl font-s-13 color-grey-2 svg-translateY-1">
                                             <svg t="1741407164890"
                                                  class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
                                                  viewBox="0 0 1024 1024"
@@ -471,7 +469,7 @@
                   <el-timeline>
                     <el-timeline-item v-for="(item, index) in tocArray" :key="index" size="normal"
                                       :type="highlightType()==index?'primary':''">
-                      <div @click="gotoAnchor(item.pos)" class="font-s-13 line-height-16 color-grey">
+                      <div @click="gotoAnchor(item.pos)" class="font-s-14 line-height-16 color-grey">
                         <span :class="{'font-bold-s':item.level==1 ||item.level==2}">
                         {{ item.text }}
                         </span>
@@ -505,7 +503,7 @@
         width="30%">
         <el-dialog title="创建收藏夹" :visible.sync="createCoDialog" width="400px" append-to-body>
           <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-            <el-form-item label="收藏夹名称:" prop="collectionName">
+            <el-form-item label="名称:" prop="collectionName">
               <el-input maxlength="20" show-word-limit v-model="form.collectionName" placeholder="收藏夹名称"/>
             </el-form-item>
             <el-form-item label="简介:">

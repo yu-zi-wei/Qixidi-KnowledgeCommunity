@@ -4,12 +4,11 @@
       <div class="flex-left _module_explicit-padding-lf-20">
         <div class="flex-9 background-color-fefefe">
           <div class="dictum-details-content">
-            <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
-                      v-model="dictumInfo.content"/>
+            <div class="dictum-text-content" v-text="dictumInfo.content"></div>
             <div class="flex-right mt-20">
               <div
                 v-if="(dictumInfo.worksName!=null && dictumInfo.worksName!='')||(dictumInfo.author!=null && dictumInfo.author!='')"
-                class="font-s-14 color-fb7299">——
+                class="font-s-15 color-fb7299">——
                 <span v-if="dictumInfo.author!=null" class="cursor-pointer text-underline-hover" title="作者"
                       @click="jumpUrlBaidu('www.baidu.com',dictumInfo.author)">
                 {{ dictumInfo.author }}
@@ -44,23 +43,23 @@
                 <div class="padding-10">
                   <div class="flex-left align-items-center">
                     <div>
-                      <el-avatar :size="35" v-if="item.avatar" :src="item.avatar"></el-avatar>
-                      <el-avatar :size="35" v-else src="/img/tx.jpg"></el-avatar>
+                      <el-avatar :size="38" v-if="item.avatar" :src="item.avatar"></el-avatar>
+                      <el-avatar :size="38" v-else src="/img/tx.jpg"></el-avatar>
                     </div>
                     <div class="ml-15" style="width: 100%">
                       <div>
-                        <nuxt-link class="font-s-13 font-bold-s mr-10 hover-cl"
+                        <nuxt-link class="font-s-15 font-bold-s mr-10 hover-cl"
                                    :to="'/user_home/article?uuid='+$base64.encode(item.commentUid)" target="_blank">
                           {{ item.nickname }}
                         </nuxt-link>
-                        <span class="font-s-13 line-height-24">{{ item.content }}</span>
+                        <span class="font-s-15 line-height-24">{{ item.content }}</span>
                       </div>
-                      <div class="font-s-12 flex-space-between mt-4">
-                        <div class="color-grey-3"> {{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{s}') }}</div>
+                      <div class="font-s-14 flex-space-between mt-4">
+                        <div class="color-grey-2"> {{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{s}') }}</div>
                         <div class="flex-right align-items-center">
                           <el-popover
                             placement="bottom"
-                            width="600"
+                            width="500"
                             trigger="click">
                             <div>
                               <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;">
@@ -109,33 +108,33 @@
                     <div v-for="(item2,index2) in item.dictumCommentVoList" :key="index2" class="mb-15">
                       <div class="align-items-center">
                         <div v-if="item2.commentGrade!=3">
-                          <nuxt-link class="font-s-13 font-bold-s mr-10 hover-cl"
+                          <nuxt-link class="font-s-14 font-bold-s mr-10 hover-cl"
                                      :to="'/user_home/article?uuid='+$base64.encode(item2.commentUid)" target="_blank">
                             {{ item2.nickname }}
                           </nuxt-link>
-                          <span class="font-s-13 line-height-24">{{ item2.content }}</span>
+                          <span class="font-s-14 line-height-24">{{ item2.content }}</span>
                         </div>
                         <div v-else>
-                          <nuxt-link class="font-s-13 font-bold-s mr-10 hover-cl"
+                          <nuxt-link class="font-s-14 font-bold-s mr-10 hover-cl"
                                      :to="'/user_home/article?uuid='+$base64.encode(item2.commentUid)" target="_blank">
                             {{ item2.nickname }}
                           </nuxt-link>
-                          <span class="font-s-13">
-                          <span class="mr-4 font-s-12 color-grey-2">回复</span>
-                           <nuxt-link class="font-s-13 font-bold-s mr-10 hover-cl"
+                          <span class="font-s-14">
+                          <span class="mr-4 font-s-13 color-grey-2">回复</span>
+                           <nuxt-link class="font-bold-s mr-10 hover-cl"
                                       :to="'/user_home/article?uuid='+$base64.encode(item2.targetUid)" target="_blank">
                              {{ item2.targetNickname }}
                            </nuxt-link>
                         </span>
-                          <span class="font-s-13 line-height-24">{{ item2.content }}</span>
+                          <span class="font-s-14 line-height-24">{{ item2.content }}</span>
                         </div>
-                        <div class="font-s-12 flex-space-between mt-4">
+                        <div class="font-s-13 flex-space-between mt-4">
                           <div class="color-grey-3"> {{ $utils.parseTime(item2.createTime, '{y}-{m}-{d} {h}:{s}') }}
                           </div>
                           <div class="flex-right align-items-center">
                             <el-popover
                               placement="bottom"
-                              width="600"
+                              width="500"
                               trigger="click">
                               <div>
                                 <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;">
@@ -204,11 +203,11 @@
                            target="_blank">
                   <p class="text-underline-hover">{{ dictumInfo.tripartiteUser.nickname }}</p>
                 </nuxt-link>
-                <p class="font-s-13 color-grey-2 mt-4 line-height-18">{{ dictumInfo.tripartiteUser.occupation }}</p>
+                <p class="font-s-14 color-grey mt-4 line-height-18">{{ dictumInfo.tripartiteUser.occupation }}</p>
               </div>
             </div>
             <!--          作者数据-->
-            <div class="flex-space-between mt-20 font-s-14 mb-20" style="padding: 0 30px">
+            <div class="flex-space-between mt-20 font-s-15 mb-20" style="padding: 0 30px">
               <div class="text-center">
                 <p class="color-grey">随笔</p>
                 <p class="mt-6 font-bold-s">{{ dictumInfo.tripartiteUser.dictumCount }}</p>
@@ -412,7 +411,7 @@ export default {
 }
 
 .dictum-details-content {
-  padding: 60px 60px 100px 60px;
+  padding: 40px 40px 80px 40px;
   border-radius: 10px;
   border: 1px solid #e2e2e5;
 }
@@ -424,7 +423,7 @@ export default {
   }
 
   .dictum-details-content {
-    padding: 20px 20px 60px 20px;
+    padding: 15px 15px 40px 15px;
   }
 
 }

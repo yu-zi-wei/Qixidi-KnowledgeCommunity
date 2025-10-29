@@ -1,6 +1,6 @@
 <template>
   <div class="mt-30">
-    <div class="white-user-title">
+    <div class="white-user-title font-s-17">
       站点中状态正常的所有用户......
     </div>
     <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initialLoading"/>
@@ -14,14 +14,14 @@
           <div class="ml-10">
             <nuxt-link class="text-underline-hover"
                        :to="'/user_home/article?uuid='+$base64.encode(item.uuid)" target="_blank">
-              <p class="font-s-18 line-height-28 font-bold">{{ item.nickname }}</p>
+              <p class="font-s-18 line-height-28 font-bold-s">{{ item.nickname }}</p>
             </nuxt-link>
             <p class="font-s-16 line-height-28 color-grey">{{ item.occupation ? item.occupation : '职业 --' }}</p>
           </div>
         </div>
         <div class="flex-space-between flex-wrap-wrap mt-10">
           <div class="flex-8 mr-10">
-            <p>
+            <p class="font-s-16">
               <svg t="1761648078672" class="icon svg-translateY-7" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="18045" width="30" height="30">
                 <path
@@ -37,7 +37,7 @@
               基本信息
             </p>
             <hr class="hr-item mt-8"/>
-            <div class="mt-8 font-s-15 line-height-28 color-grey">
+            <div class="mt-8 font-s-16 line-height-28 color-grey">
               <div class="color-grey5" :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                 加入时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}
               </div>
@@ -51,7 +51,7 @@
             </div>
           </div>
           <div class="flex-4">
-            <p>
+            <p class="font-s-16">
               <svg t="1761647955636" class="icon svg-translateY-7" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="14048" width="30" height="30">
                 <path
@@ -76,7 +76,7 @@
               荣誉/贡献
             </p>
             <hr class="hr-item mt-8"/>
-            <div class="mt-8 font-s-15 line-height-28 color-grey">
+            <div class="mt-8 font-s-16 line-height-28 color-grey">
               <div class="">文章数：{{ item.articleCount }}</div>
               <div class="">随笔数：{{ item.dictumCount }}</div>
               <div class="">小记数：{{ item.timeNotesCount }}</div>

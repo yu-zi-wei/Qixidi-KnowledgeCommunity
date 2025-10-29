@@ -7,11 +7,11 @@
           <a :href="item.toolUrl" target="_blank">
             <div class="flex-left align-items-center" style="border-bottom: 1px solid #dfe4ea;padding-bottom: 6px">
               <div class="mr-6">
-                <el-image v-if="item.icon" style="width: 40px; height: 40px" fit="cover"
+                <el-image v-if="item.icon" style="width: 50px; height: 50px" fit="cover"
                           :src="item.icon"></el-image>
                 <div v-else>
                   <svg t="1727666944637" class="icon svg-translateY-2" viewBox="0 0 1024 1024" version="1.1"
-                       xmlns="http://www.w3.org/2000/svg" p-id="10786" width="40" height="40">
+                       xmlns="http://www.w3.org/2000/svg" p-id="10786" width="50" height="50">
                     <path d="M0.038225 0.129008h1023.870992v1023.870992h-1023.870992z" fill="#FF0000" fill-opacity="0"
                           p-id="10787"></path>
                     <path
@@ -32,11 +32,11 @@
                   </svg>
                 </div>
               </div>
-              <div class="tool-toolName text-underline-hover font-s-16 font-bold" v-text="item.toolName"></div>
+              <div class="tool-toolName text-underline-hover font-s-18 font-bold-s" v-text="item.toolName"></div>
             </div>
             <!--            <hr class="hr-item mt-4 mb-8 "/>-->
           </a>
-          <div class="tool-describe color-grey font-s-14 line-height-20 mt-6">
+          <div class="overflow-nowrap-2 color-grey font-s-16 line-height-24 mt-6">
             {{ item.describe }}
           </div>
         </div>

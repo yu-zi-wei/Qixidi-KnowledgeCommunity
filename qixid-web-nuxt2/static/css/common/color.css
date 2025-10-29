@@ -22,11 +22,12 @@
 .color-grey5 {
   color: #31445b;
 }
+
 /*6B7280*/
 .color-grey {
-  /*color: rgba(107, 114, 128);*/
+  color: rgba(0, 0, 0, 0.6);
   /*color: #6B7280;*/
-  color: #727986;
+  /*color: #727986;*/
 
 }
 

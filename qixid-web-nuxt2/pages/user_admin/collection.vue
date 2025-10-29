@@ -15,7 +15,7 @@
           <ul v-show="!loading">
             <li v-for="(item,index) in collectionUserList" class="contentItem" :key="index" :ref="`userAdminCollectionItem${index}`">
               <div class="flex-space-between">
-                <div class="details-1 text-underline-hover cursor-pointer" @click="specialIndex(item)">
+                <div class="font-s-18 font-bold-s text-underline-hover cursor-pointer" @click="specialIndex(item)">
                   <svg t="1736501888880" class="icon-theme-1 svg-translateY-6 mr-10" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="6429" width="26" height="26">
@@ -38,8 +38,8 @@
                   </el-dropdown>
                 </div>
               </div>
-              <div class="font-s-14 color-grey-2 mt-15">
-                <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
+              <div class="font-s-16 color-grey mt-15">
+                <svg t="1741416645564" class="icon-theme-1 icon-size-18 svg-translateY-3" viewBox="0 0 1024 1024"
                      version="1.1" xmlns="http://www.w3.org/2000/svg"
                      p-id="38483">
                   <path
@@ -53,7 +53,7 @@
                   {{ $utils.reckonTime(item.createTime) }}
                 </span>
                 <span>.</span>
-                <span>{{ item.includedCount }} 篇文章</span>
+                <span>{{ item.includedCount }}篇文章</span>
               </div>
               <hr class="hr_gradient"/>
             </li>
@@ -240,16 +240,6 @@ export default {
 
 .left-loc-cl:hover {
   color: #1890ff;
-}
-
-.details-1 {
-  font-size: 18px;
-  color: #2f3542;
-}
-
-.details-3 {
-  font-size: 14px;
-  margin-top: 10px;
 }
 
 .contentItem {

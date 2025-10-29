@@ -1,7 +1,7 @@
 <template>
   <div class="module-main">
     <div v-if="!loading" class="mt-30">
-      <div class="font-s-15 line-height-34 mb-15 ml-10 font-style-italic">
+      <div class="font-s-16 line-height-30 mb-15 ml-10">
         这是一个「思想笔记本」——不追求权威，只在乎真实与触动......
         <br/>
         为什么做这个模块？
@@ -127,7 +127,7 @@
           <div class="mt-15 flex-left flex-wrap-wrap mb-10">
             <div v-for="item of popularLabelArr"
                  class="mr-10 mb-10 cursor-pointer hover-fw-bold">
-              <el-tag effect="plain" :type="randomType()" @click="selectDictum('label',item.label)">
+              <el-tag effect="plain" size="medium" :type="randomType()" @click="selectDictum('label',item.label)">
                 {{ item.label }}+{{ item.count }}
               </el-tag>
             </div>

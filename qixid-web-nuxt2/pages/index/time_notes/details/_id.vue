@@ -4,8 +4,8 @@
       <div class="mood-notes-details-id-title">
         <h2 class="font-s-24 line-height-28">{{ moodNotes.title }}</h2>
         <div class="flex-space-between mt-10">
-          <div class="font-s-14 color-grey-2">
-            <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
+          <div class="font-s-16 color-grey">
+            <svg t="1741416645564" class="icon-theme-1 icon-size-18 svg-translateY-3" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="38483">
               <path

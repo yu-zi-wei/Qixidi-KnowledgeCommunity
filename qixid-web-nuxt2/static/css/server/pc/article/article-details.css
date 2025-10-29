@@ -161,8 +161,8 @@
 }
 
 .sum-span-div {
-  line-height: 12px;
-  font-size: 12px;
+  line-height: 20px;
+  font-size: 14px;
   letter-spacing: 0px;
   color: #FFFFFF;
 }
@@ -171,9 +171,9 @@
   position: fixed;
   border-radius: 50%;
   display: inline-block;
-  height: 20px;
-  min-width: 20px;
-  margin-left: 20px;
+  height: 22px;
+  min-width: 22px;
+  margin-left: 22px;
   text-align: center;
   justify-items: center;
 }

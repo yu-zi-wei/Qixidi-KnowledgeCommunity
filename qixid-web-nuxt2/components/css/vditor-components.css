@@ -4,7 +4,6 @@
   letter-spacing: 1.3px !important;
   color: var(--default-color);
 }
-
 .vditor-reset::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -35,14 +34,17 @@
 }
 
 .vditor-reset p {
+  font-size: 18px !important;
   line-height: 32px !important;
 }
 
 .vditor-reset span {
+  font-size: 18px !important;
   line-height: 32px !important;
 }
 
 .vditor-reset li {
+  font-size: 18px !important;
   line-height: 32px !important;
 }
 

@@ -4,7 +4,7 @@
     <div v-if="loading" style="width: 100%;"></div>
     <ul class="content" v-if="collectionUserLoading" ref="dialogContent" @scroll="divScroll($event)">
       <li v-for="(item,index) in articleList" class="contentItem" :key="index" :ref="`userHomeArticle${index}`">
-        <div class="font-s-13 color-grey mb-20">
+        <div class="font-s-14 color-grey mb-20">
           <span v-text="item.nickname"></span>
           <span>|</span>
           <span v-text="$utils.reckonTime(item.createTime)"
@@ -12,10 +12,10 @@
         </div>
         <nuxt-link :to="`/article-details/`+$base64.encode(item.id)"
                    target="_blank" rel="noopener">
-          <h1 class="text-underline-hover font-s-16">{{ item.articleTitle }}</h1>
+          <h1 class="text-underline-hover font-s-18">{{ item.articleTitle }}</h1>
         </nuxt-link>
-        <div class="abstract-class mt-10 color-grey" v-text="item.articleAbstract"></div>
-        <div class="font-s-13 color-grey-2 bo-list-loc flex-left">
+        <div class="abstract-class font-s-16 mt-10 color-grey" v-text="item.articleAbstract"></div>
+        <div class="font-s-14 color-grey bo-list-loc flex-left">
           <div class="mr-4" title="浏览">
             <svg t="1741407328107" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                  version="1.1"
@@ -206,8 +206,6 @@ export default {
 .abstract-class {
   white-space: nowrap;
   overflow: hidden;
-  font-size: 14px;
-  line-height: 24px;
   text-overflow: ellipsis;
   padding: 6px 20px 6px 0;
 }

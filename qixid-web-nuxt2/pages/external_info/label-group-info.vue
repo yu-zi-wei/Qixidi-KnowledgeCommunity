@@ -4,7 +4,7 @@
       <el-skeleton style="padding: 20px 10px" :rows="3" animated v-if="initialLoading"/>
       <div v-show="!initialLoading" class="margin-auto">
         <p class="font-s-32 font-bold text-center">{{ labelGroupInfo.groupingName }}</p>
-        <div class="font-s-13 line-height-24 color-fefefe text-center mt-6">
+        <div class="font-s-16 line-height-24 text-center mt-6">
           <span>文章数：{{ labelGroupInfo.articleNumber }}</span>
         </div>
       </div>

@@ -9,21 +9,21 @@
             <el-avatar v-if="item.commentAvatar" :src="item.commentAvatar" :size="35"></el-avatar>
             <el-avatar v-else src="/img/tx.jpg" :size="35"></el-avatar>
           </div>
-          <div class="hover-cl cursor-pointer mr-8"
+          <div class="hover-cl cursor-pointer mr-8 font-s-16"
                @click="routeWindow('/user_home/article',item.commentUid)">{{ item.commentName }}
           </div>
           <div class="font-s-14 color-grey">{{ item.type == 1 ? "评论了你的文章：" : "回复了你的评论：" }}</div>
-          <div class="cursor-pointer text-underline hover-cl" title="查看详情">
+          <div class="cursor-pointer text-underline-hover font-s-16" title="查看详情">
             <nuxt-link :to="`/article-details/`+$base64.encode(item.articleId)" target="_blank">
-              [ {{ item.articleTitle }} ]
+              [{{ item.articleTitle }}]
             </nuxt-link>
           </div>
         </div>
         <div class="comment-div padding-10" title="查看详情">
           <el-input type="textarea" autosize resize="none" :readonly="true" v-model="item.content"/>
         </div>
-        <div class="flex-left color-grey-2" style="margin-left: 45px">
-          <div class="font-s-13" title="时间">
+        <div class="flex-left color-grey" style="margin-left: 45px">
+          <div class="font-s-14" title="时间">
             <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="38483">

@@ -15,10 +15,10 @@
                 <div class="flex-space-between">
                   <div class="ml-10 mb-6">
                     <div>
-                <span class="cursor-pointer color-theme text-underline-hover"
+                <span class="cursor-pointer color-theme text-underline-hover font-s-16 font-bold-s"
                       @click="routeJumpWindowUuid('/user_home/article',item.uuid)"
                       v-text="item.nickname"></span>
-                      <span class="ml-8 font-s-13 color-grey">{{ item.occupation }}</span>
+                      <span class="ml-8 font-s-14 color-grey">{{ item.occupation }}</span>
                     </div>
                     <div class="font-s-14 color-grey mt-15">
                       <span class="mr-8">关注数：{{ item.fansFollowCount == 0 ? '--' : item.fansFollowCount }}</span>
@@ -56,7 +56,7 @@
               <div class="flex-left align-items-center" :gutter="20" style="padding: 10px 20px 0 20px">
                 <div v-html="item.labelCover" class="mr-10"></div>
                 <div class="flex-8">
-                  <p class="font-bold cursor-pointer mb-8 text-underline-hover" @click="jumpLabel(item)"
+                  <p class="font-bold-s font-s-16 cursor-pointer mb-8 text-underline-hover" @click="jumpLabel(item)"
                      v-text="item.labelName"></p>
                   <div class="font-s-14 color-grey">
                     <span class="mr-8">文章数：{{ item.articleNumber == 0 ? '--' : item.articleNumber }}</span>

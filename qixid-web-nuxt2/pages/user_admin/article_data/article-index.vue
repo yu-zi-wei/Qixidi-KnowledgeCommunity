@@ -3,7 +3,7 @@
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <ul v-if="!loading">
       <li v-if="articleList.length>0" v-for="(item,index) in articleList" class="article-cli" :key="index" :ref="`articleAdminArticle${index}`">
-        <nuxt-link class="font-s-16 text-underline-hover"
+        <nuxt-link class="font-s-16 line-height-28 font-bold-s text-underline-hover"
                    :to="`/article-details/`+$base64.encode(item.id)"
                    target="_blank">
           {{ item.articleTitle }}

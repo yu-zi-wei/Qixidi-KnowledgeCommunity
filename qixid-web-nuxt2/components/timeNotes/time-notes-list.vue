@@ -3,17 +3,17 @@
     <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="5" animated v-if="loading"/>
     <div v-if="moodNotesList!=null && !loading" v-for="(item, index) in moodNotesList" :key="index"
          style="margin-bottom: 60px" class="_module_explicit-padding-lf-20">
-      <h1 class="mb-10 font-s-24">{{ item.recordTime }}
-        <span class="font-s-16 color-grey-2" title="小记总数">「{{ item.list.length }}条」</span>
+      <h1 class="mb-10 font-s-26">{{ item.recordTime }}
+        <span class="font-s-16 color-grey" title="小记总数">「{{ item.list.length }}条」</span>
       </h1>
       <div v-for="(items,indexs) in item.list" :key="indexs" :ref="`timeNotesItem${index}_${indexs}`">
         <div class="time-motes-list-item _module_hiding">
-            <span class="svg-translateY-8 font-s-14 color-grey-2 mr-4" title="记录时间">
+            <span class="svg-translateY-8 font-s-16 color-grey-2 mr-4" title="记录时间">
             {{ $utils.parseTime(items.recordTime, '{m}-{d}') }}
             </span>
           <svg t="1742789451197" class="icon svg-translateY-8" viewBox="0 0 1024 1024" version="1.1"
                xmlns="http://www.w3.org/2000/svg"
-               p-id="12540" width="26" height="26">
+               p-id="12540" width="28" height="28">
             <path
               d="M790.1 423.9c0 76.5-62 138.5-138.5 138.5s-138.5-62-138.5-138.5 62-138.5 138.5-138.5c76.4 0 138.5 62 138.5 138.5z"
               fill="#FBBA22" p-id="12541"></path>
@@ -24,7 +24,7 @@
               d="M797.6 294.2c4.4 0 8.9-1.7 12.2-5.1l34.7-34.7c6.8-6.8 6.8-17.7 0-24.5-6.8-6.8-17.7-6.8-24.5 0l-34.7 34.7c-6.8 6.8-6.8 17.7 0 24.5 3.4 3.4 7.9 5.1 12.3 5.1zM492.4 289.2c3.4 3.4 7.8 5.1 12.2 5.1 4.4 0 8.9-1.7 12.2-5.1 6.8-6.8 6.8-17.7 0-24.5L482 229.9c-6.8-6.8-17.7-6.8-24.5 0-6.8 6.8-6.8 17.7 0 24.5l34.9 34.8zM651.5 233.4c9.6 0 17.3-7.8 17.3-17.3v-52c0-9.6-7.8-17.3-17.3-17.3-9.6 0-17.3 7.8-17.3 17.3v52c0 9.5 7.8 17.3 17.3 17.3zM911.8 406.6h-52.4c-9.6 0-17.3 7.8-17.3 17.3 0 9.6 7.7 17.3 17.3 17.3h52.4c9.6 0 17.3-7.8 17.3-17.3s-7.7-17.3-17.3-17.3zM802.5 461.6c3.1-12.1 4.9-24.7 4.9-37.7 0-85.9-69.9-155.8-155.9-155.8-67.7 0-125.3 43.5-146.7 104-2.1-0.1-4.2-0.2-6.3-0.2-75 0-141.8 44.9-171.6 113.4-13.5-4.5-27.5-6.8-41.8-6.8-74.6 0-135.3 61.5-135.3 137.2 0 75.6 60.7 137.2 135.3 137.2h418.5c1.5 0 3-0.2 4.4-0.6 85.4-6 151.7-77.8 151.7-164.9 0.1-50.3-22.2-95.4-57.2-125.8z m-151-158.9c66.8 0 121.2 54.4 121.2 121.2 0 5.6-0.4 11.2-1.2 16.6-22.5-11.8-47.9-18.6-74.9-18.6-20.7 0-40.8 3.9-60 11.7-26-28.8-59.6-48.4-96.5-56.9 18.5-43.4 61.3-74 111.4-74zM702.8 718c-0.9 0-1.8 0.2-2.7 0.3h-415c-55.5 0-100.6-46-100.6-102.6 0-56.5 45.1-102.5 100.6-102.5 15.2 0 30 3.5 44 10.4 4.5 2.2 9.8 2.4 14.4 0.4 4.6-1.9 8.2-5.8 9.8-10.6 20.8-63.9 79.2-106.9 145.3-106.9 46.8 0 90.4 21.5 119.7 58.9 5.1 6.5 14.1 8.5 21.4 4.8 18-9.1 37.2-13.7 57-13.7 70.9 0 128.6 58.7 128.6 130.9-0.1 69.9-53.9 127.2-122.5 130.6z"
               fill="#211F1E" p-id="12543"></path>
           </svg>
-          <span class="cursor-pointer ml-2 time-notes-item-title" @click="getInfo(items.id)">{{ items.title }}</span>
+          <span class="cursor-pointer ml-2 time-notes-item-title font-s-18" @click="getInfo(items.id)">{{ items.title }}</span>
           <span v-if="items.isContent" title="存在内容，点击看详情">
             <svg t="1753688601498" class="icon-theme-2 svg-translateY-3 icon-size-16" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -135,16 +135,16 @@
       style="padding: 20px"
       :with-header="false">
       <div style="margin: 40px">
-        <div class="text-right text-underline hover-cl font-s-13 color-grey-2 mb-20">
+        <div class="text-right text-underline hover-cl font-s-14 color-grey-2 mb-20">
           <nuxt-link :to="`/time_notes/details/`+$base64.encode(moodNotes.id)" target="_blank">
             新标签页打开
           </nuxt-link>
         </div>
         <div class="mood-notes-title">
-          <p>{{ moodNotes.title }}</p>
+          <p class="font-s-24">{{ moodNotes.title }}</p>
           <div class="flex-space-between mt-10">
-            <div class="font-s-14 color-grey-2">
-              <svg t="1750064730469" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
+            <div class="font-s-14">
+              <svg t="1750064730469" class="icon icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                    version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="4314">
                 <path
@@ -156,7 +156,7 @@
                          title="作者">
                 {{ moodNotes.createBy }}
               </nuxt-link>
-              <span title="记录时间">{{ moodNotes.recordTime }}</span>
+              <span class="color-grey" title="记录时间">{{ moodNotes.recordTime }}</span>
             </div>
             <div v-if="moodNotes.isAuthor==0" @click="update">
               <svg t="1742972825057" class="icon-theme-2 icon-hover cursor-pointer icon-size-18 svg-translateY-3"

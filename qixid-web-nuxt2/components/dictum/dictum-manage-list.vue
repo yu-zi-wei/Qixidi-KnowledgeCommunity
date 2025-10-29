@@ -17,46 +17,45 @@
             </el-dropdown>
           </div>
           <div class="text-left" style="border-bottom: 1px solid #dfe4ea;padding-bottom: 10px;margin-bottom: 10px">
-            <el-tag class="mr-10 cursor-pointer" type="warning" size="small" title="分类" v-if="item.groupName!=null">
+            <el-tag class="mr-10 cursor-pointer" type="warning" size="medium" title="分类" v-if="item.groupName!=null">
               {{ item.groupName }}
             </el-tag>
-            <el-tag class="cursor-pointer" type="success" size="small" title="收录专辑" v-if="item.albumName!=null">
+            <el-tag class="cursor-pointer" type="success" size="medium" title="收录专辑" v-if="item.albumName!=null">
               <nuxt-link :to="`/external_info/album-info?data=`+item.albumId" target="_blank" rel="noopener">
                 {{ item.albumName }}
               </nuxt-link>
             </el-tag>
-            <el-tag class="ml-10 cursor-pointer" size="small" type="info" effect="plain" v-if="item.labelList!=null"
-                    v-for="(items,indexs) in item.labelList" title="标签" :key="indexs">
+            <span class="ml-10 cursor-pointer font-s-15 color-grey" size="small" type="info" effect="plain"
+                  v-if="item.labelList!=null"
+                  v-for="(items,indexs) in item.labelList" title="标签" :key="indexs">
               #{{ items }}
-            </el-tag>
+            </span>
           </div>
           <div>
-            <el-input type="textarea" autosize resize="none" :readonly="true" style="font-size: 16px"
-                      v-model="item.content"/>
-          </div>
-          <div class="flex-space-between mt-15">
-            <div class="color-grey-2 font-s-12" title="记录时间">
-              <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
-                   version="1.1" xmlns="http://www.w3.org/2000/svg"
-                   p-id="38483">
-                <path
-                  d="M512 64C264.946 64 64 264.946 64 512s200.946 448 448 448 448-200.946 448-448S759.054 64 512 64z m0 831.828c-211.613 0-383.828-172.215-383.828-383.828S300.216 128.172 512 128.172c211.785 0 383.828 172.044 383.828 383.828 0 211.785-172.215 383.828-383.828 383.828z"
-                  p-id="38484"></path>
-                <path
-                  d="M672.172 512h-160V288.173c0-17.72-14.28-32.172-32-32.172s-32 14.451-32 32.172v256c0 17.719 14.28 31.999 32 31.999h192c17.72 0 32.173-14.28 32.173-31.999C704.172 526.28 689.721 512 672.172 512z"
-                  p-id="38485"></path>
-              </svg>
-              <span class="ml-2" v-text="$utils.reckonTime(item.updateTime)"
-                    :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
-                  </span>
-            </div>
-            <div v-if="item.author!=null ||item.worksName!=null" class="font-s-13 color-grey-2">—— {{ item.author }}
+            <div class="dictum-text-content" v-text="item.content"></div>
+            <div v-if="item.author!=null ||item.worksName!=null" class="font-s-15 color-grey fl-right mt-20">——
+              {{ item.author }}
               <span v-if="item.worksName!=null">
                 《
               <span>{{ item.worksName }}</span>
                 》
               </span>
             </div>
+          </div>
+          <div class="color-grey font-s-14 mt-40" title="记录时间">
+            <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
+                 version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="38483">
+              <path
+                d="M512 64C264.946 64 64 264.946 64 512s200.946 448 448 448 448-200.946 448-448S759.054 64 512 64z m0 831.828c-211.613 0-383.828-172.215-383.828-383.828S300.216 128.172 512 128.172c211.785 0 383.828 172.044 383.828 383.828 0 211.785-172.215 383.828-383.828 383.828z"
+                p-id="38484"></path>
+              <path
+                d="M672.172 512h-160V288.173c0-17.72-14.28-32.172-32-32.172s-32 14.451-32 32.172v256c0 17.719 14.28 31.999 32 31.999h192c17.72 0 32.173-14.28 32.173-31.999C704.172 526.28 689.721 512 672.172 512z"
+                p-id="38485"></path>
+            </svg>
+            <span class="ml-2" v-text="$utils.reckonTime(item.updateTime)"
+                  :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
+                  </span>
           </div>
         </li>
       </ul>
@@ -199,7 +198,7 @@ export default {
       this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
         this.dictumList = res.rows;
         this.total = res.total;
-      }).finally(() =>{
+      }).finally(() => {
         this.loading = false;
         this.animator.triggerAllItemsAnimation(this.dictumList, 'dictumManageListItem');
       });

@@ -12,9 +12,9 @@
         <div>
           <nuxt-link :to="`/user_home/article?uuid=`+$base64.encode(item.senderId)" target="_blank">
             <span class="mr-6 cursor-pointer hover-cl">{{ item.senderName }} </span>
-            <span class="font-s-13 color-grey mr-6">关注了</span>您
+            <span class="font-s-14 color-grey mr-6">关注了</span>您
           </nuxt-link>
-          <div class="mt-8 font-s-13 color-grey-2">
+          <div class="mt-8 font-s-14 color-grey">
             <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="38483">

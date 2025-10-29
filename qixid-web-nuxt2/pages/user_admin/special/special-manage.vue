@@ -26,13 +26,17 @@
                 </div>
                 <div class="ml-10">
                   <div @click="specialIndex(item)">
-                    <p class="details-1 font-bold text-underline-hover cursor-pointer">{{ item.specialName }}</p>
-                    <p class="details-2">{{ item.specialIntroduce }}</p>
+                    <p class="font-s-18 font-bold-s mb-12 text-underline-hover cursor-pointer">{{
+                        item.specialName
+                      }}</p>
+                    <p class="font-s-16 mb-12 overflow-nowrap-1">
+                      {{ item.specialIntroduce ? item.specialIntroduce : '--' }}
+                    </p>
                   </div>
-                  <div class="details-3 color-grey-2">
+                  <div class="font-s-14 color-grey">
                     <span v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d}')"></span>
-                    <span class="ml-4 mr-4">.</span>
-                    <span>{{ item.includedCount }} 篇文章</span>
+                    <span>.</span>
+                    <span>{{ item.includedCount }}篇文章</span>
                   </div>
                 </div>
               </div>
@@ -270,31 +274,13 @@ export default {
   color: var(--theme-color);
 }
 
-.details-1 {
-  font-size: 18px;
-  color: #2f3542;
-  margin-bottom: 12px;
-}
-
-.details-2 {
-  white-space: nowrap;
-  overflow: hidden;
-  font-size: 14px;
-  text-overflow: ellipsis;
-  margin-bottom: 12px;
-}
-
-.details-3 {
-  font-size: 14px;
-}
-
 .content {
   margin-top: 30px;
   background-color: #FFFFFF;
 }
 
 .contentItem {
-  margin: 10px 0;
+  margin: 15px 0;
   padding: 4px 0;
 }
 </style>

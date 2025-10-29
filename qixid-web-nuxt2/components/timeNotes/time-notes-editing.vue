@@ -9,7 +9,7 @@
       width="50%">
       <div v-if="timeNotesDialogVisible">
         <div class="mb-20" style="background-color: #F3F3F3;padding: 15px;border-radius: 4px">
-          <p class="mb-10">记录时间:</p>
+          <p class="mb-10 font-s-16">记录时间:</p>
           <el-date-picker
             v-model="timeNotes.recordTime"
             align="right"
@@ -17,7 +17,7 @@
             value-format="yyyy-MM-dd"
             placeholder="记录时间">
           </el-date-picker>
-          <p class="mb-10 mt-20">Title:</p>
+          <p class="mb-10 mt-20 font-s-16">Title:</p>
           <div style="padding: 0px 6px 6px 6px;border: 1px solid #e2e2e5;border-radius: 4px;background: #ffffff">
             <emoji-module :content.sync="timeNotes.title"
                           id="time-notes-editing"></emoji-module>
@@ -26,7 +26,7 @@
                       placeholder="小记Title..."
                       rows="4" class="time-notes-editing-textarea"></textarea>
           </div>
-          <div class="font-s-14 mt-20 mb-10">小记详情：</div>
+          <div class="mt-20 mb-10 font-s-16">小记详情：</div>
           <div style="margin: 2px">
             <VditorMd :height="'400px'"
                       :outline="false"

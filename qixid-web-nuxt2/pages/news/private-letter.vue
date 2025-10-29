@@ -5,21 +5,21 @@
       <!--          头部-->
       <div class="user-top-div flex-center">
         <div>
-          <el-avatar :size="35" v-if="positionUserInfo.avatar" :src="positionUserInfo.avatar"></el-avatar>
-          <el-avatar :size="35" v-else src="/img/tx.jpg"></el-avatar>
+          <el-avatar :size="40" v-if="positionUserInfo.avatar" :src="positionUserInfo.avatar"></el-avatar>
+          <el-avatar :size="40" v-else src="/img/tx.jpg"></el-avatar>
         </div>
         <div class="ml-6" v-if="positionUserInfo.nickname!=null">
-          <p class="font-s-14 font-bold">{{ positionUserInfo.nickname }}</p>
-          <p class="font-s-10 mt-4 color-grey">{{ positionUserInfo.isOnline ? '在线' : '已下线' }}</p>
+          <p class="font-s-16 font-bold line-height-20">{{ positionUserInfo.nickname }}</p>
+          <p class="font-s-14 mt-4 color-grey">{{ positionUserInfo.isOnline ? '在线' : '已下线' }}</p>
         </div>
       </div>
       <div class="flex-left">
         <!--        侧边栏-->
-        <div style="width: 240px">
+        <div style="width: 260px">
           <div class="user-list-left">
             <div class="flex-space-between mt-6">
-              <div class="ml-10 mb-6 font-s-14 font-bold">私信列表</div>
-              <div class="mr-8">
+              <div class="ml-10 mb-10 mt-5 font-s-16 font-bold">私信列表</div>
+              <div class="mr-8 mt-5">
                 <el-dropdown trigger="click">
                   <div class="el-dropdown-link">
                     <i class="el-icon-more el-icon--right cursor-pointer"></i>
@@ -39,21 +39,23 @@
                 <div class="user-li flex-space-between">
                   <div class="flex-left align-items-center">
                     <div>
-                      <el-avatar :size="30" v-if="item.targetAvatar" :src="item.targetAvatar"></el-avatar>
-                      <el-avatar :size="30" v-else src="/img/tx.jpg"></el-avatar>
+                      <el-avatar :size="40" v-if="item.targetAvatar" :src="item.targetAvatar"></el-avatar>
+                      <el-avatar :size="40" v-else src="/img/tx.jpg"></el-avatar>
                       <div class="news-div-red" v-if="item.unreadCount>0">
                         <span>{{ item.unreadCount }}</span>
                       </div>
                     </div>
-                    <div class="ml-4">
-                      <div class="font-s-12 color-grey" :title="item.targetName">{{ item.targetName }}</div>
-                      <div class="font-s-14 mt-4 news-content">
+                    <div class="ml-6">
+                      <div class="font-s-14 color-grey" :title="item.targetName">{{ item.targetName }}</div>
+                      <div class="font-s-16 mt-4 news-content">
                         {{ item.lastNews }}
                       </div>
                     </div>
                   </div>
-                  <div><i class="el-icon-delete-solid deleteIco" style="font-size: 14px" title="删除"
-                          @click="deletePrivate(item)"></i></div>
+                  <div style="width: 6px">
+                    <i class="el-icon-delete-solid deleteIco" style="font-size: 14px" title="删除"
+                       @click="deletePrivate(item)"></i>
+                  </div>
                 </div>
               </el-menu-item>
               <div v-if="privateUserList.length==0" class="color-grey-2 mt-20 font-s-14 text-center">
@@ -74,8 +76,8 @@
                     <div>
                       <div class="" style="display: flex;align-items: center;justify-content: right;">
                         <div class="mr-4">
-                          <span class="color-grey-2 font-s-12">{{ $utils.reckonTime(item.createTime) }}</span>
-                          <span>{{ item.nickname }}</span>
+                          <span class="color-grey font-s-13">{{ $utils.reckonTime(item.createTime) }}</span>
+                          <span class="font-s-16">{{ item.nickname }}</span>
                         </div>
                         <el-avatar v-if="item.userAvatar" :src="item.userAvatar"></el-avatar>
                         <el-avatar v-else src="/img/tx.jpg"></el-avatar>
@@ -88,8 +90,8 @@
                       <el-avatar v-if="item.userAvatar" :src="item.userAvatar"></el-avatar>
                       <el-avatar v-else src="/img/tx.jpg"></el-avatar>
                       <div class="ml-4">
-                        <span>{{ item.nickname }}</span>
-                        <span class="color-grey-2 font-s-12">{{ $utils.reckonTime(item.createTime) }}</span>
+                        <span class="font-s-16">{{ item.nickname }}</span>
+                        <span class="color-grey font-s-13">{{ $utils.reckonTime(item.createTime) }}</span>
                       </div>
                     </div>
                     <div class="tooltip-left">{{ item.newsComment }}</div>
@@ -359,7 +361,7 @@ export default {
 <style scoped>
 .time-mark-cl {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: #c0c4cc;
   margin-bottom: 20px;
 }

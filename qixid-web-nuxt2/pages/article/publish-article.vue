@@ -89,7 +89,7 @@
                 :content="article.articleContent" v-if="isClient"></VditorMd>
     </div>
     <el-dialog title="文章发布" :visible.sync="articlePopupDialog" width="800px">
-      <el-form :model="article" :rules="rules" ref="article" label-width="100px" class="demo-ruleForm">
+      <el-form :model="article" :rules="rules" ref="article" label-width="120px" class="demo-ruleForm">
         <el-form-item label="分类：" prop="groupingId">
           <el-radio-group v-model="article.groupingId" size="small" :border="false">
             <el-radio-button border v-for="(item,index) in labelGroupList"

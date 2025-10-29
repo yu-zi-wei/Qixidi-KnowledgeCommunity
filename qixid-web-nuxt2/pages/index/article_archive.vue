@@ -3,7 +3,7 @@
     <div class="article-archive-model">
       <div class="_module_explicit-padding-lf-20">
         <div class="mood-title flex-space-between">
-          <div>
+          <div class="font-s-16">
             <svg t="1750124650705" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024"
                  version="1.1"
                  xmlns="http://www.w3.org/2000/svg"
@@ -15,31 +15,31 @@
                 d="M753.775644 675.555556H412.442311a14.222222 14.222222 0 1 0 0 28.444444h341.333333a14.222222 14.222222 0 0 0 0-28.444444zM753.775644 547.555556H412.442311a14.222222 14.222222 0 1 0 0 28.444444h341.333333a14.222222 14.222222 0 0 0 0-28.444444zM398.220089 433.777778a14.222222 14.222222 0 0 0 14.222222 14.222222h341.333333a14.222222 14.222222 0 0 0 0-28.444444H412.442311a14.222222 14.222222 0 0 0-14.222222 14.222222z"
                 p-id="5254"></path>
             </svg>
-            <span class="ml-4">文章归档</span>
+            <span>文章归档</span>
           </div>
-          <div>
+          <div class="svg-translateY-2">
             <el-popover
               placement="top-start"
               title="展示规则"
               width="200"
               trigger="hover"
               content="在基于所有用户均可发布 “文章” 的前提下，系统将根据用户[登录状态]提供差异化展示：已登录用户仅可查看自己所发布 “文章” 归档，而未登录用户则能够查看整个站点的 “文章” 归档。只有状态正常的文章才会进行归档">
-              <div class="font-s-13 color-grey cursor-pointer hover-cl" slot="reference">展示规则！</div>
+              <div class="font-s-14 color-grey cursor-pointer hover-cl" slot="reference">展示规则！</div>
             </el-popover>
           </div>
         </div>
         <el-skeleton class="mt-10" :rows="5" animated v-if="loading"/>
         <div v-if="articleList!=null && !loading" v-for="(item, index) in articleList" :key="index"
              style="margin-bottom: 60px">
-          <h1 class="mb-10 font-s-24">{{ item.createTime }}
-            <span class="font-s-16 color-grey-2" title="文章总数">「{{ item.list.length }}篇」</span></h1>
+          <h1 class="mb-20 font-s-26">{{ item.createTime }}
+            <span class="font-s-16 color-grey" title="文章总数">「{{ item.list.length }}篇」</span></h1>
           <div v-for="(items,indexs) in item.list" :key="indexs" :ref="`articleArchiveItem${index}_${indexs}`">
             <div class="article-archive-list-item">
               <div>
-              <span class="color-grey-2 mr-8">
+              <span class="color-grey font-s-16 mr-8">
                 {{ $utils.parseTime(items.createTime, '{m}-{d}') }}</span>
                 <span class="article-archive-item-title cursor-pointer">
-                  <nuxt-link class="text-underline-hover font-s-16"
+                  <nuxt-link class="text-underline-hover font-s-18"
                              :to="`/article-details/`+$base64.encode(items.id)"
                              rel="noopener" target="_blank">
                      {{ items.articleTitle }}

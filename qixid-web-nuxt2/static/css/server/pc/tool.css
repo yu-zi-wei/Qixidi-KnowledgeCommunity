@@ -23,7 +23,7 @@
 
 .tool-list {
   width: 285px;
-  height: 90px;
+  height: 100px;
   background-color: #FFFFFF;
   cursor: pointer;
   transition: all 0.1s linear 0s;
@@ -35,17 +35,6 @@
 
 .tool-list:hover {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-}
-
-.tool-describe {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  padding: 6px 4px 4px 4px;
-  white-space: normal;      /* 允许正常换行 */
-  word-break: break-word;   /* 允许在单词内换行 */
 }
 
 .tool-toolName {

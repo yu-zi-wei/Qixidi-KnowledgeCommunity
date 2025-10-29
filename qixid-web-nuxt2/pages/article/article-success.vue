@@ -93,7 +93,7 @@ export default {
   background-repeat: no-repeat;
   background-position: center 0;
   background-size: 100px;
-  font-size: 16px;
+  font-size: 18px;
   color: #666;
 }
 

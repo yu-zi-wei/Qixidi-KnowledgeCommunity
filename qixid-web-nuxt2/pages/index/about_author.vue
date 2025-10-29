@@ -66,7 +66,7 @@
             <div class="mb-10">
               <h2 class="article-title text-center">{{ articleInfo.articleTitle }}</h2>
               <span v-if="isOwn" @click="articleEdit(articleInfo.id)"
-                    class="font-s-13 cursor-pointer ml-10 color-theme">编辑</span>
+                    class="font-s-14 cursor-pointer ml-10 color-theme">编辑</span>
             </div>
             <hr class="hr-item mb-10 mt-10"/>
             <div class="mb-30">
@@ -123,7 +123,7 @@
                                       class="ml-2">作者
                               </el-tag>
                             </div>
-                            <div class="color-grey-2 font-s-12 ml-10"
+                            <div class="color-grey font-s-14 ml-10"
                                  v-text=" $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                             </div>
                           </div>
@@ -132,7 +132,7 @@
                           </div>
                           <div class="flex-left">
                             <div v-if="userInfo!=null&& userInfo.uuid==item.commentUid"
-                                 class="font-s-12 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
+                                 class="font-s-13 color-grey-2 cursor-pointer hover-cl icon-hover mr-10"
                                  @click="deleteComment(item)">
                               <svg t="1742632616926" class="icon-size-14 icon-theme-1 icon-hover svg-translateY-3"
                                    viewBox="0 0 1024 1024" version="1.1"
@@ -143,11 +143,11 @@
                               </svg>
                               删除
                             </div>
-                            <div class="flex-left flex-12">
+                            <div class=" flex-12">
                               <el-collapse accordion style="width: 100%;">
                                 <el-collapse-item>
                                   <template slot="title">
-                                    <div class="hover-cl icon-hover font-s-12 color-grey-2 svg-translateY-3">
+                                    <div class="hover-cl icon-hover font-s-13 color-grey-2 svg-translateY-1">
                                       <svg t="1741407164890"
                                            class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
                                            viewBox="0 0 1024 1024"
@@ -197,21 +197,21 @@
                                     {{ items.commentName }}
                                   </nuxt-link>
                                   <el-tag v-if="items.commentUid==articleInfo.userId" type="info" effect="plain"
-                                          size="mini" class="ml-2">作者
+                                          size="mini">作者
                                   </el-tag>
                                 </div>
                                 <div v-if="items.commentGrade==3" class="mr-10">
-                                  <span class="color-grey-3 font-s-12 mr-4">回复</span>
+                                  <span class="color-grey-2 font-s-13 mr-4">回复</span>
                                   <nuxt-link class="cursor-pointer hover-cl"
                                              :to="'/user_home/article?uuid='+$base64.encode(items.targetUid)"
                                              target="_blank">
                                     {{ items.targetName }}
                                   </nuxt-link>
                                   <el-tag v-if="items.targetUid==articleInfo.userId" type="info" effect="plain"
-                                          size="mini" class="ml-2">作者
+                                          size="mini">作者
                                   </el-tag>
                                 </div>
-                                <div class="color-grey-2 font-s-12"
+                                <div class="color-grey font-s-14"
                                      v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                                 </div>
                               </div>
@@ -221,7 +221,7 @@
                                           v-model="items.content"/>
                               </div>
                               <div class="flex-left mb-10">
-                                <div class="font-s-12 hover-cl cursor-pointer color-grey-2 mr-10"
+                                <div class="font-s-13 hover-cl cursor-pointer color-grey-2 mr-10"
                                      v-if="userInfo!=null && userInfo.uuid==items.commentUid"
                                      @click="deleteComment(items)">
                                   <svg t="1742632616926" class="icon-size-14 icon-theme-1 svg-translateY-2 icon-hover"
@@ -237,7 +237,7 @@
                                   <el-collapse accordion style="width: 100%;">
                                     <el-collapse-item>
                                       <template slot="title">
-                                        <div class="hover-cl font-s-12 color-grey-2">
+                                        <div class="hover-cl font-s-13 color-grey-2 svg-translateY-1">
                                           <svg t="1741407164890"
                                                class="icon-hover icon-theme-1 icon-size-14 svg-translateY-2"
                                                viewBox="0 0 1024 1024"

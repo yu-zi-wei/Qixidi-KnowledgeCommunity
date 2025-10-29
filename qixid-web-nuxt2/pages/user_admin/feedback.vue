@@ -4,7 +4,7 @@
       <el-tabs v-model="activeName">
         <el-tab-pane label="反馈中心" name="反馈中心">
           <div class="mb-10">
-            <div class="mb-20 font-s-14 color-grey5" style="line-height: 1.5">
+            <div class="mb-20 font-s-16 color-grey5" style="line-height: 1.5">
               <div class="font-bold mb-8">反馈内容</div>
               1、网站bug反馈，指出bug产生页面，bug产生频率，描述bug细节。<br/>
               2、用户体验优化反馈，给出优化页面，并希望留下您的优化建议。<br/>

@@ -154,7 +154,7 @@ export default {
   margin: auto;
   margin-top: 20px;
   padding: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .submission-chart .calendar {
@@ -171,7 +171,7 @@ export default {
 
 .submission-chart .calendar .weeks .week {
   margin-top: 13px;
-  width: 30px;
+  width: 60px;
   height: 14px;
 }
 

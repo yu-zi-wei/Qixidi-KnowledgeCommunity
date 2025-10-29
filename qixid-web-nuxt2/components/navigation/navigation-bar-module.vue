@@ -24,7 +24,7 @@
                   text-color="#000000"
                   :active-text-color="themeColor">
                   <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
-                    <nuxt-link :to="item.route">
+                    <nuxt-link class="font-s-16" :to="item.route">
                       {{ item.navigationName }}
                     </nuxt-link>
                   </el-menu-item>
@@ -32,10 +32,10 @@
                   <el-submenu v-for="(item,index) in getNavigationList(1)" :key="index+'-'" :index="index+'-'"
                               style="border-bottom-color: snow;border-bottom: none">
                     <template slot="title">
-                      {{ item.navigationName }}
+                      <span class="font-s-16">{{ item.navigationName }}</span>
                     </template>
                     <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
-                      <nuxt-link :to="item1.route">
+                      <nuxt-link class="font-s-16" :to="item1.route">
                         {{ item1.navigationName }}
                       </nuxt-link>
                     </el-menu-item>
@@ -117,7 +117,7 @@
                 text-color="#000000"
                 :active-text-color="themeColor">
                 <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
-                  <nuxt-link :to="item.route">
+                  <nuxt-link class="font-s-17" :to="item.route">
                     <!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
                     <!--                                           v-html="item.navigationIcon"></i>-->
                     {{ item.navigationName }}
@@ -129,10 +129,10 @@
                   <template slot="title">
                     <!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
                     <!--                                           v-html="item.navigationIcon"></i>-->
-                    {{ item.navigationName }}
+                    <span class="font-s-17">{{ item.navigationName }}</span>
                   </template>
                   <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
-                    <nuxt-link :to="item1.route">
+                    <nuxt-link class="font-s-16" :to="item1.route">
                       <!--                      <i v-if="item1.navigationIcon!=null" :class="$route.path==item1.route?'icon-theme':''"-->
                       <!--                         v-html="item1.navigationIcon"></i>-->
                       {{ item1.navigationName }}
@@ -173,7 +173,7 @@
                     </svg>
                   </div>
                   <el-dropdown-menu slot="dropdown">
-                    <div class="flex-left font-s-13" style="margin: 6px 20px">
+                    <div class="flex-left font-s-14" style="margin: 6px 20px">
                       <div class="publish-list-item text-center" @click="publishData('/article/publish-article')">
                         <svg t="1742893652691" class="icon" viewBox="0 0 1024 1024" version="1.1"
                              xmlns="http://www.w3.org/2000/svg" p-id="32972" width="30" height="35">
@@ -246,7 +246,7 @@
                   </div>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-for="(items,index) in userNewsList" :key="index">
-                      <div class="flex-left" @click="$router.push(items.route)">
+                      <div class="flex-left font-s-16" @click="$router.push(items.route)">
                         <div v-text="items.typeInfo"></div>
                         <div v-if="items.newsSum>0" v-text="items.newsSum" class="badge-news"></div>
                       </div>
@@ -270,20 +270,13 @@
                             <el-avatar v-else src="/img/tx.jpg"></el-avatar>
                           </div>
                           <div>
-                            <p class="mb-6 font-bold overflow-nowrap-1">{{ userInfo.nickname }}</p>
+                            <p class="mb-6 font-bold overflow-nowrap-1 font-s-16">{{ userInfo.nickname }}</p>
                             <p class="font-s-14 color-grey">
                               {{ userInfo.occupation == null ? '职业-~-' : userInfo.occupation }}</p>
                           </div>
                         </div>
                         <hr class="hr-item mt-10 mb-15"/>
-                        <div class="flex-space-between padding-le-ri-10 mb-20">
-                          <!--                          <div class="cursor-pointer hover-cl">-->
-                          <!--                            <nuxt-link :to="`/user_home/follow?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"-->
-                          <!--                                       rel="noopener">-->
-                          <!--                              <p>关注</p>-->
-                          <!--                              <p class="flex-center mt-6">{{ userInfo.fansFollowCount }}</p>-->
-                          <!--                            </nuxt-link>-->
-                          <!--                          </div>-->
+                        <div class="flex-space-between padding-le-ri-10 mb-20 font-s-16">
                           <div class="cursor-pointer hover-cl">
                             <nuxt-link :to="`/user_home/collection?uuid=`+$base64.encode(userInfo.uuid)" target="_blank"
                                        rel="noopener">
@@ -314,7 +307,7 @@
                           </div>
                         </div>
                         <div class="mt-26">
-                          <ul class="flex-space-between flex-wrap-wrap">
+                          <ul class="flex-space-between flex-wrap-wrap font-s-16">
                             <li class="function-li-dev" @click="routeJumpUrl('/user_admin/data-index')">
                               <svg t="1735798042107" class="icon-theme-636e72 svg-translateY-1- icon-size-24 mr-6"
                                    viewBox="0 0 1024 1024" version="1.1"
@@ -340,7 +333,8 @@
                             </li>
                             <li class="function-li-dev"
                                 @click="routeJumpUuid('/dictum/space/content-list',userInfo.uuid)">
-                              <svg t="1761705729814" class="icon-theme-636e72 icon-size-26 svg-translateY-1 mr-6" viewBox="0 0 1024 1024" version="1.1"
+                              <svg t="1761705729814" class="icon-theme-636e72 icon-size-26 svg-translateY-1 mr-6"
+                                   viewBox="0 0 1024 1024" version="1.1"
                                    xmlns="http://www.w3.org/2000/svg" p-id="32118" width="16" height="16">
                                 <path
                                   d="M934.961 201.805c-199.514-56.676-348.872 34.158-395.761 68.189l-0.19 570.382a53.415 53.415 0 0 0 4.988-2.618c136.694-85.714 307.166-72.09 378.807-61.089a30.13 30.13 0 0 0 24.016-7.378A30.118 30.118 0 0 0 956.9 746.28V231.292c0.136-13.639-8.837-25.698-21.939-29.487m-86.757 338.471c-4.286 12.147-17.593 18.515-29.73 14.287-3.555-1.214-80.793-26.658-127.688 36.937-4.584 6.212-11.654 9.494-18.822 9.494a23.263 23.263 0 0 1-13.849-4.559c-10.386-7.656-12.59-22.279-4.935-32.666 54.199-73.484 141.941-66.994 180.765-53.292 12.167 4.292 18.55 17.638 14.259 29.799m0-101.537c-4.286 12.151-17.593 18.525-29.73 14.287-3.555-1.214-80.793-26.658-127.688 36.937-4.584 6.207-11.654 9.494-18.822 9.494a23.263 23.263 0 0 1-13.849-4.559c-10.386-7.661-12.59-22.284-4.935-32.671 54.199-73.479 141.941-66.984 180.765-53.287 12.167 4.292 18.55 17.638 14.259 29.799"
@@ -417,7 +411,7 @@
                         <hr class="hr-item mt-15 mb-15 padding-le-ri-10"/>
                         <div class="flex-space-between padding-le-ri-10 font-s-13 font-bold-300 color-grey">
                           <div class="cursor-pointer hover-cl">
-                            <nuxt-link to="/user_info/settings" target="_blank" rel="noopener">
+                            <nuxt-link class="color-grey" to="/user_info/settings" target="_blank" rel="noopener">
                               我的设置
                             </nuxt-link>
                           </div>
@@ -729,7 +723,7 @@ export default {
 
 /*搜索框历史记录*/
 .el-autocomplete-suggestion li {
-  font-size: 14px;
+  font-size: 15px;
   float: left;
   padding: 8px 18px;
   line-height: 14px;
@@ -756,11 +750,11 @@ export default {
 .el-menu--horizontal > .el-menu-item {
   height: 58px;
   line-height: 58px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .el-menu--horizontal > .el-submenu .el-submenu__title {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .nav-right-ul li {

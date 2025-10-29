@@ -14,14 +14,13 @@
           <div class="overflow-hidden">
             <div class="fl-left left-details-cl">
               <div @click="specialIndex(item)">
-                <h1 class="font-s-16 text-underline-hover mb-8">{{ item.specialName }}</h1>
-                <p class="details-2 color-grey">{{ item.specialIntroduce }}</p>
+                <h1 class="font-s-18 font-bold-s text-underline-hover mb-8">{{ item.specialName }}</h1>
+                <p class="font-s-16 mb-12 color-grey">{{ item.specialIntroduce }}</p>
               </div>
-              <div class="details-3 color-grey-2">
+              <div class="font-s-14 color-grey">
                 <span v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d}')"></span>
-                <span style="margin: 0 4px">.</span>
-                <span>文章数:</span>
-                <span v-text="item.includedCount"></span>
+                <span>.</span>
+                <span>{{ item.includedCount }}篇文章</span>
                 <span v-if="currentUser" class="fl-right">
                <el-dropdown trigger="click">
                 <span class="left-loc-cl" title="更多"><i class="el-icon-more"></i></span>
@@ -217,18 +216,6 @@ export default {
   cursor: pointer;
 }
 
-.details-2 {
-  white-space: nowrap;
-  overflow: hidden;
-  font-size: 14px;
-  text-overflow: ellipsis;
-  margin-bottom: 12px;
-}
-
-.details-3 {
-  font-size: 14px;
-}
-
 .content {
   height: calc(100vh - 300px);
   background-color: #FFFFFF;
@@ -237,7 +224,7 @@ export default {
 }
 
 .contentItem {
-  margin: 10px 0;
+  margin: 15px 0;
   padding: 4px 0;
 }
 

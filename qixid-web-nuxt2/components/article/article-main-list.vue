@@ -9,8 +9,8 @@
              :ref="`articleItem${index}`">
           <div class="flex-space-between align-items-center">
             <div class="flex-8" style="padding: 0 15px">
-              <div class="flex-space-between mb-15 mr-15 color-grey-2">
-                <div class="article-top font-s-13">
+              <div class="flex-space-between mb-15 mr-15 ">
+                <div class="article-top font-s-14">
                   <div class="">
                     <nuxt-link class="hover-cl color-grey"
                                :to="`/user_home/article?uuid=`+$base64.encode(item.userId)"
@@ -18,25 +18,25 @@
                       {{ item.nickname }}
                     </nuxt-link>
                     <span class="ml-4 mr-4 color-grey-3">/</span>
-                    <span class=""
+                    <span class="color-grey"
                           :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                     {{ $utils.reckonTime(item.createTime, '{y}-{m}-{d}') }}</span>
                   </div>
-                  <div class=" hover-cl ml-12 font-bold-300" title="分类">
-                    <nuxt-link :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
+                  <div class=" hover-cl ml-12" title="分类">
+                    <nuxt-link class="color-grey" :to="`/external_info/label-group-info?data=`+item.groupingId" target="_blank">
                       #{{ item.groupingName }}
                     </nuxt-link>
                   </div>
                 </div>
               </div>
               <h1 class="mb-10">
-                <nuxt-link class="text-underline-hover font-s-16"
+                <nuxt-link class="text-underline-hover font-s-18 line-height-28 font-bold-s"
                            :to="`/article-details/`+$base64.encode(item.id)"
                            rel="noopener" target="_blank">
                   {{ item.articleTitle }}
                 </nuxt-link>
               </h1>
-              <p class="font-s-14 line-height-28 overflow-nowrap-2 color-grey mb-10">
+              <p class="font-s-16 line-height-28 overflow-nowrap-2 color-grey mb-10">
                 {{ item.articleAbstract }}
               </p>
             </div>

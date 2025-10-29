@@ -1,10 +1,10 @@
 <template>
   <div class="home-top-index">
     <el-tabs v-model="dictum">
-      <el-tab-pane label="名 言" name="dictum" style="padding: 0 10px">
+      <el-tab-pane label="阅读随笔" name="dictum" style="padding: 0 10px">
         <el-row>
           <el-col :span="10">
-            <el-input v-model="keyword" placeholder="请输入标题关键字"
+            <el-input v-model="keyword" placeholder="请输入关键字"
                       suffix-icon="el-icon-el-input__icon el-icon-search"></el-input>
           </el-col>
         </el-row>

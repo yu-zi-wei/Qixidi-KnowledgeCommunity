@@ -4,7 +4,7 @@
     <ul class="background-color-fefefe padding-10" v-if="newsList.length!=0 && !loading">
       <li v-for="(item,index) in newsList" class="news-system-cl" :key="index" :ref="`newsSystemItem${index}`">
         <div title="系统消息" class="text-left">
-          <svg t="1681980494552" class="icon icon-size-20 svg-translateY-4" viewBox="0 0 1024 1024" version="1.1"
+          <svg t="1681980494552" class="icon icon-size-22 svg-translateY-4" viewBox="0 0 1024 1024" version="1.1"
                xmlns="http://www.w3.org/2000/svg"
                p-id="2130">
             <path
@@ -16,7 +16,7 @@
           </svg>
           {{ item.newsContent }}
         </div>
-        <div class="mt-4 color-grey-2 text-right">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{s}') }}</div>
+        <div class="mt-4 color-grey text-right font-s-14">{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{s}') }}</div>
         <hr class="hr-item mt-4"/>
       </li>
     </ul>
@@ -107,7 +107,7 @@ export default {
 
 <style scoped>
 .news-system-cl {
-  font-size: 14px;
+  font-size: 16px;
   padding: 8px 15px;
 }
 </style>

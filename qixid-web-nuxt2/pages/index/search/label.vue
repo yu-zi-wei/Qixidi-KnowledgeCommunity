@@ -11,11 +11,11 @@
                         src="/img/label.jpg" fit="cover"></el-image>
             </div>
             <div class="flex-8">
-              <nuxt-link class="font-bold cursor-pointer mb-8" target="_blank"
+              <nuxt-link class="font-bold-s cursor-pointer mb-8 font-s-18" target="_blank"
                          :to="'/external_info/label-info?data='+item.id+'&type='+2">
                 {{ item.labelName }}
               </nuxt-link>
-              <div class="font-s-14 color-grey mt-8">
+              <div class="font-s-16 color-grey mt-8">
                 <span class="mr-8">关注数：{{ item.followNumber == 0 ? '--' : item.followNumber }}</span>
                 <span>文章数：{{ item.articleNumber == 0 ? '--' : item.articleNumber }}</span>
               </div>
@@ -23,7 +23,7 @@
             <div>
               <div class="mt-20">
                 <el-button size="small" @click="followClick(item)" :loading="item.buttonLoading"
-                           :type="item.isFollow?'primary':''">{{ item.isFollow ? '已关注' : '关注' }}
+                           :type="item.isFollow?'primary':''">{{ item.isFollow ? '已关注' : '关 注' }}
                 </el-button>
               </div>
             </div>

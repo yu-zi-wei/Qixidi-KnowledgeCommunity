@@ -8,16 +8,16 @@
             :ref="`articleSearchItem${index}`">
           <!--          用户信息-->
           <el-row :gutter="20" class="mb-15">
-            <el-col :span="20" class="font-s-12">
+            <el-col :span="20" class="font-s-14">
                 <span class="font-bold cursor-pointer hover-cl">
                   <nuxt-link :to="'/user_home/article?uuid='+$base64.encode(item.userId)" target="_blank">
                     {{ item.nickname }}
                   </nuxt-link>
                   </span>
               <span class="color-grey-3 ml-2 mr-2">|</span>
-              <span class="color-grey-2">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
+              <span class="color-grey">{{ item.occupation == null ? '职业-~-' : item.occupation }}</span>
               <span class="color-grey-3 ml-2 mr-2">|</span>
-              <span class="font-bold-300 color-grey-2"
+              <span class="font-bold-300 color-grey"
                     :title="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')">
                 {{ $utils.parseTime(item.createTime, '{y}-{m}-{d}') }}</span>
             </el-col>
@@ -26,11 +26,11 @@
             <div>
               <div class="">
                 <nuxt-link :to="`/article-details/`+$base64.encode(item.id)" target="_blank">
-                  <h1 class="line-height-24 font-s-16 mb-10 text-underline-hover cursor-pointer">
+                  <h1 class="line-height-28 font-s-18  mb-10 text-underline-hover cursor-pointer font-bold-s">
                     {{ item.articleTitle }}
                   </h1>
                 </nuxt-link>
-                <div class="font-s-14 color-grey line-height-26 abstract-cl-2">
+                <div class="font-s-16 color-grey line-height-28 abstract-cl-2">
                   {{ item.articleAbstract }}
                 </div>
                 <div class="mt-15 font-s-14 flex-left font-bold-300 color-grey-2">
@@ -73,7 +73,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="item.articleCover" style="margin-right: 15px;margin-top: 15px" class="_module_hiding">
+            <div v-if="item.articleCover" style="margin-right: 15px;margin-top: 15px;margin-left: 10px" class="_module_hiding">
               <lazy-image
                 :src="item.articleCover"
                 image-class="search-cover-img"

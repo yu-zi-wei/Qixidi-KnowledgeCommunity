@@ -5,7 +5,7 @@
       <div v-show="!loading" class="flex-left">
         <div class="flex-2">
           <div class="font-s-18">
-            <svg t="1682398969024" class="icon-size-20 svg-translateY-4 icon-theme-stand-out" viewBox="0 0 1024 1024"
+            <svg t="1682398969024" class="icon-size-20 svg-translateY-3 icon-theme-stand-out" viewBox="0 0 1024 1024"
                  version="1.1"
                  xmlns="http://www.w3.org/2000/svg" p-id="2153">
               <path
@@ -15,7 +15,7 @@
                 d="M512.55808 188.04224c-89.18528 0.65024-161.82272 73.83552-161.82272 163.05152 0.00512 91.20256 75.66336 165.13536 166.90176 163.10272 88.99584-1.98656 160.5632-76.40576 159.2576-165.62176-1.28512-89.10848-75.06944-161.1776-164.33664-160.53248z m3.70688 264.7296c-0.76288 0.01536-1.536 0.0256-2.304 0.0256-56.12032 0-101.78048-45.62432-101.7856-101.7088 0-55.62368 45.23008-101.20704 100.82816-101.61152h0.74752c55.29088 0 100.9152 44.85632 101.7088 99.98336 0.81408 55.73632-43.68384 102.07232-99.19488 103.31136zM770.45248 608.11264a3239.42912 3239.42912 0 0 1-35.68128 51.72736c12.0576 4.8384 23.57248 10.05056 34.304 15.70304 52.224 27.50464 83.4048 62.41792 83.4048 93.40416 0 30.98112-31.1808 65.8944-83.4048 93.39904C703.75936 896.74752 611.93216 916.48 517.13536 916.48s-186.624-19.73248-251.94496-54.12864c-52.224-27.50464-83.4048-62.41792-83.4048-93.39904s31.1808-65.89952 83.40992-93.40416a359.61856 359.61856 0 0 1 30.0544-13.97248 3924.16256 3924.16256 0 0 1-35.57888-51.56352c-85.22752 38.32832-139.32544 95.29344-139.32544 158.94528 0 115.40992 177.64864 208.96768 396.78976 208.96768s396.78464-93.55776 396.78464-208.96768c0-64.69632-55.82336-122.50624-143.46752-160.8448z"
                 p-id="2155"></path>
             </svg>
-            当前页面&nbsp;/&nbsp;<span class="font-s-14 color-grey">{{ update.pageTitle }}</span>
+            当前页面/<span class="font-s-16 color-grey">{{ update.pageTitle }}</span>
           </div>
           <div class="mt-20 mb-10 text-center">
             <svg t="1735800738498" class="icon" viewBox="0 0 1470 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -109,29 +109,29 @@
             </svg>
 
           </div>
-          <div class="mr-20 line-height-24">
+          <div class="mr-20 line-height-24 font-s-18">
             <div class="mb-20 color-stand-out"><i class="el-icon-edit mr-6"></i>随笔分类
               <hr class="hr-item mt-6 mb-8"/>
-              <p class="font-s-14 color-grey">
+              <p class="font-s-16 color-grey">
                 选择对应的分类，更方便大家筛选到你的阅读随笔。
               </p>
             </div>
             <div class="mb-20 color-stand-out"><i class="el-icon-edit mr-6"></i>专辑
               <hr class="hr-item mt-6 mb-8"/>
-              <p class="font-s-14 color-grey">
+              <p class="font-s-16 color-grey">
                 合理创建专辑更方便随笔的管理。
               </p>
             </div>
             <div class="color-stand-out"><i class="el-icon-edit mr-6"></i>标签
               <hr class="hr-item mt-6 mb-8"/>
-              <p class="font-s-14 color-grey">
+              <p class="font-s-16 color-grey">
                 添加与阅读随笔相关的标签，如作者，作品名称，与作品相关的热词，阅读随笔更容易被检索到。
               </p>
             </div>
           </div>
         </div>
         <div class="release-dictum-index flex-10">
-          <el-form :model="dictumInfo" :rules="rules" ref="dictumInfo" label-width="100px" class="demo-ruleForm">
+          <el-form :model="dictumInfo" :rules="rules" ref="dictumInfo" label-width="120px" class="demo-ruleForm">
             <el-form-item label="随笔分类：" prop="groupId">
               <div>
                 <el-radio-group :border="false" v-model="dictumInfo.groupId">

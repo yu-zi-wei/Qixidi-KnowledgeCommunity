@@ -9,7 +9,7 @@
         </div>
         <div>
           <div class="ml-20">
-            <div class="font-s-20 font-bold">
+            <div class="font-s-20 font-bold-s">
               <svg t="1682497983576" class="icon icon-size-32 icon-theme svg-translateY-6" viewBox="0 0 1024 1024"
                    version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
@@ -25,13 +25,13 @@
               <el-tag class="mr-10" type="warning" size="medium">关注 --</el-tag>
               <el-tag class="mr-10" size="medium" type="danger">点赞 --</el-tag>
             </div>
-            <div class="mt-15">
-              <div class="color-grey font-s-14">
+            <div class="mt-15 color-grey font-s-16">
+              <div>
                 创建时间：
                 {{ $utils.parseTime(info.createTime, '{y}年{m}月{d}日') }}
               </div>
-              <div class="mt-10">介绍:
-                <span class="font-s-14 color-grey">{{ info.briefIntroduction }}</span>
+              <div class="mt-8">
+                介绍:<span class="color-grey">{{ info.briefIntroduction }}</span>
               </div>
             </div>
           </div>

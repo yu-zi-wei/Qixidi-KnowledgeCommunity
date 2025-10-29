@@ -2,7 +2,7 @@
   <div class="mt-30">
     <div class="time-notes-model">
       <div class="mood-title flex-space-between">
-        <div>
+        <div class="font-s-16">
           记录每天小心情......
         </div>
         <div>
@@ -12,7 +12,7 @@
             width="200"
             trigger="hover"
             content="在基于所有用户均可记录 “时光小记” 的前提下，系统将根据用户[登录状态]提供差异化展示：已登录用户仅可查看自己所记录的 “时光小记”，而未登录用户则能够浏览全部用户的 “时光小记” 内容。">
-            <div class="font-s-13 color-grey cursor-pointer hover-cl" slot="reference">展示规则！</div>
+            <div class="font-s-14 color-grey cursor-pointer hover-cl" slot="reference">展示规则！</div>
           </el-popover>
         </div>
       </div>

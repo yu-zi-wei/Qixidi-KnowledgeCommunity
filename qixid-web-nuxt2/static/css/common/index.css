@@ -510,7 +510,6 @@ h6 {
 
 .font-s-16 {
   font-size: 16px;
-  line-height: 28px;
 }
 
 .line-height-28 {
@@ -519,7 +518,6 @@ h6 {
 
 .font-s-17 {
   font-size: 17px;
-  line-height: 28px;
 }
 
 .font-s-18 {
@@ -532,6 +530,14 @@ h6 {
 
 .font-s-24 {
   font-size: 24px;
+}
+
+.font-s-26 {
+  font-size: 26px;
+}
+
+.font-s-28 {
+  font-size: 28px;
 }
 
 .line-height-26 {

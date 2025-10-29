@@ -11,7 +11,7 @@
                      class="el-menu-demo">
               <el-menu-item v-for="(item,index) in userNewsList" :index="item.route" style="font-size: 16px"
                             :key="index">
-                {{ item.typeInfo }}
+                <span class="font-s-16 font-bold-s">{{ item.typeInfo }}</span>
               </el-menu-item>
             </el-menu>
           </div>

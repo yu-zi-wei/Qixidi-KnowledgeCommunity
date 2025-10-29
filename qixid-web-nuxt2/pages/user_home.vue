@@ -14,7 +14,7 @@
                 <div class="flex-left">
                   <div class="ml-12 flex-10">
                     <p v-text="userInfo.nickname" style="font-size: 24px;font-weight: bold" class="mb-15"></p>
-                    <div class="mb-10 color-grey font-s-14">
+                    <div class="mb-10 color-grey font-s-16">
                       <svg t="1710986117946" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024"
                            version="1.1"
                            xmlns="http://www.w3.org/2000/svg" p-id="4317">
@@ -22,10 +22,9 @@
                           d="M383.616 291.712c1.536 4.736 7.808 7.808 12.544 7.808h117.248c4.736 0 9.344-3.072 12.544-7.808l92.16-151.68c1.536-4.736 1.536-9.344 0-14.08-3.072-4.736-6.272-6.272-10.88-6.272H314.752c-4.736 0-9.344 1.536-10.88 6.272-3.072 3.072-3.072 9.344-1.536 12.544l81.28 153.216zM547.2 344.96l112.512 300.032h54.784v-64zM572.16 477.312l-282.88 282.88 50.048 48.384 256.256-256.256zM606.336 577.152L356.224 825.6l53.248 51.584 220.416-220.416zM538.112 372.736L311.424 599.424l-39.04 134.4c-1.536 3.072 0 6.272 0 7.808l289.152-289.152-23.424-79.744zM383.616 338.688l-9.344 32.768 42.24-42.24h-20.352c-6.272 0.128-11.008 4.736-12.544 9.472zM317.952 557.44L527.36 348.032l-3.072-7.808c-1.536-6.272-7.808-9.344-12.544-9.344h-70.4l-79.744 79.744-43.648 146.816zM642.048 683.136L427.904 895.744l35.968 35.968c3.072 3.072 6.272 4.736 9.344 4.736s6.272-1.536 9.344-4.736l175.104-170.368c3.072-3.072 4.736-9.344 3.072-14.08l-18.688-64.128z"
                           p-id="4318"></path>
                       </svg>
-
                       <span v-text="userInfo.occupation==null?'职业-~-':userInfo.occupation"></span>
                     </div>
-                    <div class="color-grey font-s-14">
+                    <div class="color-grey font-s-16">
                       <svg t="1710986208928" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024"
                            version="1.1"
                            xmlns="http://www.w3.org/2000/svg" p-id="5322">
@@ -42,13 +41,13 @@
                           d="M256 573.44h409.6a20.48 20.48 0 0 0 0-40.96H256a20.48 20.48 0 0 0 0 40.96zM768 706.56H256a20.48 20.48 0 0 0 0 40.96h512a20.48 20.48 0 0 0 0-40.96z"
                           p-id="5327"></path>
                       </svg>
-                      <span class="font-s-16" v-text="userInfo.introduce==null?'简介':userInfo.introduce"></span>
+                      <span v-text="userInfo.introduce==null?'简介':userInfo.introduce"></span>
                     </div>
                   </div>
                   <div class="align-self-end _module_hiding">
-                    <el-button v-show="currentUser" plain size="small" @click="routeJump('/user_info/settings')">编辑个人资料
+                    <el-button v-show="currentUser" plain size="medium" @click="routeJump('/user_info/settings')">编辑个人资料
                     </el-button>
-                    <el-button size="small" v-show="!currentUser" :loading="userInfo.buttonLoading"
+                    <el-button size="medium" v-show="!currentUser" :loading="userInfo.buttonLoading"
                                @click="followClick(userInfo)"
                                :type="userInfo.isFollow?'primary':''">{{ userInfo.isFollow ? '已关注' : '关注Ta' }}
                     </el-button>

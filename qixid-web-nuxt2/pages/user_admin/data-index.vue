@@ -3,9 +3,9 @@
     <el-card class="box-card">
       <div>
         <div class="flex-space-between mb-20">
-          <div>数据概括</div>
+          <div class="font-s-18 font-bold-s">数据概括</div>
           <div>
-            <div class="color-grey mr-10 font-s-14" v-if="!userDateLoading">
+            <div class="color-grey mr-10 font-s-16" v-if="!userDateLoading">
               统计时间：{{ $utils.parseTime(countUseInfo.updateTime, '{y}-{m}-{d}') }}
             </div>
           </div>
@@ -15,7 +15,7 @@
           <div class="mb-40">
             <el-skeleton class="mt-10" v-if="userDateLoading" :rows="6" animated/>
             <div v-show="!userDateLoading">
-              <el-row class="font-s-14">
+              <el-row class="font-s-16">
                 <el-col :span="5">
                   <el-card shadow="hover" class="ba-color-grey-2 text-center" title="文章总数">
                     <div class="cursor-pointer hover-cl font-s-4 mb-12">

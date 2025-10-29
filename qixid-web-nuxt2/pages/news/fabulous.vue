@@ -14,13 +14,13 @@
                          :to="`/user_home/article?uuid=`+$base64.encode(item.senderId)" target="_blank">
                 {{ item.senderName }}
               </nuxt-link>
-              <span class="font-s-13 color-grey">赞了你的文章</span>
-              <nuxt-link class="hover-cl text-underline" :to="`/article-details/`+$base64.encode(item.targetId)"
+              <span class="font-s-14 color-grey">赞了你的文章</span>
+              <nuxt-link class="text-underline-hover font-s-16" :to="`/article-details/`+$base64.encode(item.targetId)"
                          target="_blank">
-                [ {{ item.newsContent }} ]
+                [{{ item.newsContent }}]
               </nuxt-link>
             </div>
-            <div class="mt-8 font-s-13 color-grey-2">
+            <div class="mt-8 font-s-14 color-grey">
               <svg t="1741416645564" class="icon-theme-1 icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"
                    version="1.1" xmlns="http://www.w3.org/2000/svg"
                    p-id="38483">

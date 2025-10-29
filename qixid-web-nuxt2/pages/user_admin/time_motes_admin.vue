@@ -13,10 +13,10 @@
             <div class="time-motes-admin-list-item">
               <div class="flex-space-between">
                 <div>
-                  <span class="color-grey-2 mr-4">{{ item.recordTime }}</span>
+                  <span class="color-grey mr-4 font-s-16">{{ item.recordTime }}</span>
                   <svg t="1742789451197" class="icon svg-translateY-8" viewBox="0 0 1024 1024" version="1.1"
                        xmlns="http://www.w3.org/2000/svg"
-                       p-id="12540" width="26" height="26">
+                       p-id="12540" width="28" height="28">
                     <path
                       d="M790.1 423.9c0 76.5-62 138.5-138.5 138.5s-138.5-62-138.5-138.5 62-138.5 138.5-138.5c76.4 0 138.5 62 138.5 138.5z"
                       fill="#FBBA22" p-id="12541"></path>
@@ -28,7 +28,7 @@
                       fill="#211F1E" p-id="12543"></path>
                   </svg>
                   <span style="border-bottom: 1px solid #dfe4ea;padding-bottom: 4px; display: inline-block"
-                        class="cursor-pointer ml-2" @click="getInfo(item.id)">{{ item.title }}</span>
+                        class="cursor-pointer ml-2 font-s-18" @click="getInfo(item.id)">{{ item.title }}</span>
                 </div>
                 <div @click="deleteById(item.id)">
                   <svg t="1742976118757" class="icon-theme-2 icon-hover cursor-pointer icon-size-16 svg-translateY-8"

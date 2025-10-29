@@ -2,7 +2,7 @@
   <div class="admin-index">
     <div class="home-index">
       <div class="collect-list-admin">
-        <p class="font-s-24 font-bold text-center" v-text="collectionInfo.collectionName"></p>
+        <p class="font-s-28 font-bold text-center" v-text="collectionInfo.collectionName"></p>
         <el-row>
           <el-col :span="19" class="ml-4 color-grey4">
             <div class="font-s-14 flex-left align-items-center">
@@ -10,9 +10,11 @@
               <el-avatar v-else src="/img/tx.jpg" :size="50"></el-avatar>
               <div class="ml-6 font-s-18" v-text="userinfo.nickname"></div>
             </div>
-            <div class="info-b-cl mb-10">
+            <div class="mt-15 font-s-16 mb-10">
               <span>暂无关注</span>
+              <span class="font-s-14 color-grey-2 ml-2 mr-2">|</span>
               <span>共 {{ collectionInfo.includedCount }} 篇文章</span>
+              <span class="font-s-14 color-grey-2 ml-2 mr-2">|</span>
               <span>创建于 {{ $utils.parseTime(collectionInfo.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
             </div>
           </el-col>
@@ -26,7 +28,7 @@
               <div v-if="!loading">
                 <ul class="content" v-if="articleList.length != 0">
                   <li v-for="item of articleList" class="contentItem">
-                    <div class="font-s-13 mb-20">
+                    <div class="font-s-14 mb-20">
                       <span v-text="item.nickname"></span>
                       <span class="color-grey">|</span>
                       <span class="color-grey" v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
@@ -35,8 +37,8 @@
                                :to="`/article-details/`+$base64.encode(item.id)" target="_blank">
                       {{ item.articleTitle }}
                     </nuxt-link>
-                    <div class="abstract-class mt-10 font-bold-300" v-text="item.articleAbstract"></div>
-                    <div class="font-s-13 color-grey bo-list-loc flex-left">
+                    <div class="abstract-class mt-5 font-s-16 line-height-28" v-text="item.articleAbstract"></div>
+                    <div class="font-s-14 color-grey bo-list-loc flex-left">
                       <div class="mr-6" title="浏览">
                         <svg t="1741407328107" class="icon-theme-1 icon-size-16 svg-translateY-3"
                              viewBox="0 0 1024 1024"
@@ -49,7 +51,7 @@
                             d="M512 341.333333c-94.2592 0-170.666667 76.407467-170.666667 170.666667s76.407467 170.666667 170.666667 170.666667 170.666667-76.407467 170.666667-170.666667-76.407467-170.666667-170.666667-170.666667z m0 68.266667a102.4 102.4 0 1 1 0 204.8 102.4 102.4 0 0 1 0-204.8z"
                             p-id="30373"></path>
                         </svg>
-                        <span class="color-grey-2" v-text="item.numberTimes==0?'--':item.numberTimes"></span>
+                        <span v-text="item.numberTimes==0?'--':item.numberTimes"></span>
                       </div>
                       <div class="mr-6" title="点赞">
                         <svg t="1741407060928" class="icon-theme-1 icon-size-16 svg-translateY-3"
@@ -60,7 +62,7 @@
                             d="M757.76 852.906667c36.906667-0.021333 72.832-30.208 79.296-66.56l51.093333-287.04c10.069333-56.469333-27.093333-100.522667-84.373333-100.096l-10.261333 0.085333a19972.266667 19972.266667 0 0 1-52.842667 0.362667 3552.853333 3552.853333 0 0 1-56.746667 0l-30.997333-0.426667 11.498667-28.8c10.24-25.642667 21.76-95.744 21.504-128.021333-0.618667-73.045333-31.36-114.858667-69.290667-114.410667-46.613333 0.554667-69.461333 23.466667-69.333333 91.136 0.213333 112.661333-102.144 226.112-225.130667 225.109333a1214.08 1214.08 0 0 0-20.629333 0l-3.52 0.042667c-0.192 0 0.64 409.109333 0.64 409.109333 0-0.085333 459.093333-0.490667 459.093333-0.490666z m-17.301333-495.914667a15332.288 15332.288 0 0 0 52.693333-0.362667l10.282667-0.085333c84.010667-0.618667 141.44 67.52 126.72 150.250667L879.061333 793.813333c-10.090667 56.661333-63.68 101.696-121.258666 101.76l-458.922667 0.384A42.666667 42.666667 0 0 1 256 853.546667l-0.853333-409.173334a42.624 42.624 0 0 1 42.346666-42.730666l3.669334-0.042667c5.909333-0.064 13.12-0.064 21.333333 0 98.176 0.789333 182.293333-92.437333 182.144-182.378667C504.469333 128.021333 546.24 86.186667 616.106667 85.333333c65.173333-0.768 111.68 62.506667 112.448 156.714667 0.256 28.48-6.848 78.826667-15.701334 115.050667 8.021333 0 17.28-0.042667 27.584-0.106667zM170.666667 448v405.333333h23.466666a21.333333 21.333333 0 0 1 0 42.666667H154.837333A26.709333 26.709333 0 0 1 128 869.333333v-437.333333c0-14.784 12.074667-26.666667 26.773333-26.666667h38.912a21.333333 21.333333 0 0 1 0 42.666667H170.666667z"
                             p-id="25462"></path>
                         </svg>
-                        <span class="color-grey-2" v-text="item.likeTimes==0?'--':item.likeTimes"></span>
+                        <span v-text="item.likeTimes==0?'--':item.likeTimes"></span>
                       </div>
                       <div class="mr-6" title="评论">
                         <svg t="1741407164890" class="icon-theme-1 icon-size-16 svg-translateY-3"
@@ -71,7 +73,7 @@
                             d="M157.568 751.296c-11.008-18.688-18.218667-31.221333-21.802667-37.909333A424.885333 424.885333 0 0 1 85.333333 512C85.333333 276.362667 276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667a424.778667 424.778667 0 0 1-219.125333-60.501334 2786.56 2786.56 0 0 0-20.053334-11.765333l-104.405333 28.48c-23.893333 6.506667-45.802667-15.413333-39.285333-39.296l28.437333-104.288z m65.301333 3.786667l-17.258666 63.306666 63.306666-17.258666a32 32 0 0 1 24.522667 3.210666 4515.84 4515.84 0 0 1 32.352 18.944A360.789333 360.789333 0 0 0 512 874.666667c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512c0 60.586667 14.848 118.954667 42.826667 171.136 3.712 6.912 12.928 22.826667 27.370667 47.232a32 32 0 0 1 3.338666 24.714667z m145.994667-70.773334a32 32 0 1 1 40.917333-49.205333A159.189333 159.189333 0 0 0 512 672c37.888 0 73.674667-13.173333 102.186667-36.885333a32 32 0 0 1 40.917333 49.216A223.178667 223.178667 0 0 1 512 736a223.178667 223.178667 0 0 1-143.136-51.690667z"
                             p-id="27499"></path>
                         </svg>
-                        <span class="ml-4 color-grey-2" v-text="item.commentTimes==0?'--':item.commentTimes"></span>
+                        <span class="ml-4" v-text="item.commentTimes==0?'--':item.commentTimes"></span>
                       </div>
                       <div title="文章状态" class="svg-translateY-2 mr-6">
                         <el-tag v-if="item.auditState==1" size="mini">审核中</el-tag>

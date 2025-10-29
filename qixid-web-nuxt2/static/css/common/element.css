@@ -58,3 +58,6 @@
   line-height: 32px;
 }
 
+.el-tabs__item{
+  font-size: 16px;
+}

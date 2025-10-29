@@ -6,9 +6,9 @@
       <div v-show="!initialLoading">
         <div class="flex-left">
           <div v-if="labelInfo.labelCover" v-html="labelInfo.labelCover" class="svg-translateY-5- mr-10"></div>
-          <div class="font-s-32 font-bold text-center">{{ labelInfo.labelName }}</div>
+          <div class="font-s-32 font-bold-s text-center">{{ labelInfo.labelName }}</div>
         </div>
-        <div class="font-s-14 color-grey text-center mt-6">
+        <div class="font-s-16 text-center mt-6">
           <span class="mr-6">{{ labelInfo.followNumber }}关注</span>
           <span class="ml-6">{{ labelInfo.articleNumber }}文章</span>
         </div>

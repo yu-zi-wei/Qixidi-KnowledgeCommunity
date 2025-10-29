@@ -4,8 +4,8 @@
       <div style="padding: 15px 20px">
         <div class="font-s-18 font-bold color-stand-out mb-10 flex-space-between">
           <div></div>
-          <div>
-            <svg t="1731231591693" class="icon-size-24 icon-theme-stand-out svg-translateY-5" viewBox="0 0 1024 1024"
+          <div class="font-s-24">
+            <svg t="1731231591693" class="icon-size-26 icon-theme-stand-out svg-translateY-5" viewBox="0 0 1024 1024"
                  version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="9129" width="200" height="200">
               <path
@@ -30,9 +30,9 @@
           <el-skeleton v-if="loading" :rows="5" animated/>
           <div v-else="!loading" v-for="(item,index) in feedbackList" :key="index" class="issues-item">
 
-            <div class="font-s-16 font-bold mb-20 mt-10 flex-space-between">
+            <div class="font-bold mb-20 mt-10 flex-space-between">
               <div>
-              <span class="text-underline-hover cursor-pointer" @click="viewInfo(item)">
+              <span class="text-underline-hover cursor-pointer font-s-17" @click="viewInfo(item)">
             {{ item.feedbackTitle }}
             </span>
                 <svg v-if="userInfo && userInfo.uuid==item.uid && item.status==1" t="1731225888795"
@@ -64,7 +64,7 @@
 
               </div>
             </div>
-            <div class="flex-direction-row font-s-14 color-grey-2 mr-10">
+            <div class="flex-direction-row font-s-14 color-grey mr-10">
               <div class="cursor-pointer hover-cl">
                 <el-tag :type="getTagType(item.status)[1]" size="mini" effect="plain" class="mr-5">
                   {{ getTagType(item.status)[0] }}
@@ -82,7 +82,7 @@
                   {{ item.nickname }}
                 </nuxt-link>
               </div>
-              <div class="font-s-13" :title="'创建数据：'+item.createTime">
+              <div class="font-s-14" :title="'创建时间：'+item.createTime">
                 {{ $utils.reckonTime(item.updateTime) }}
               </div>
             </div>
