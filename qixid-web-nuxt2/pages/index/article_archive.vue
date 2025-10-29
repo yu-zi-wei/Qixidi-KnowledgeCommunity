@@ -169,7 +169,7 @@ export default {
 .article-archive-list-item {
   margin: 15px 0px;
   width: auto;
-  padding: 5px;
+  padding: 8px;
   border-radius: 4px;
   transition: .2s;
 }
