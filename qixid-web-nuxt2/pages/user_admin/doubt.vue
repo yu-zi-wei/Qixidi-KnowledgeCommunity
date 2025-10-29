@@ -81,13 +81,13 @@
             </el-collapse>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="名言广场" name="名言广场">
+        <el-tab-pane label="阅读随笔" name="阅读随笔">
           <div class="mt-10">
             <el-collapse accordion :accordion="true">
               <el-collapse-item>
                 <template slot="title">
                   <div class="font-bold font-s-14 color-grey4">
-                    名言广场是什么
+                    阅读随笔是什么
                   </div>
                 </template>
                 <div class="font-s-14 color-grey4">
@@ -101,9 +101,9 @@
                   </div>
                 </template>
                 <div class="font-s-14 color-grey5">
-                  1. 名言发布主要有三个选项，分别是名言分类，名言内容，收录的专辑。<br/>
-                  2. 名言分类：有网站提供，主要有《电影台词》、《文学作品》、《小时摘抄》等。<br/>
-                  3. 名言内容：作品里非常有意义的短句，对话，或自己的经验总结等。<br/>
+                  1. 随笔发布主要有三个选项，分别是随笔分类，随笔内容，收录的专辑。<br/>
+                  2. 随笔分类：有网站提供，主要有《电影台词》、《文学作品》、《小时摘抄》等。<br/>
+                  3. 随笔内容：作品里非常有意义的短句，对话，或自己的经验总结等。<br/>
                   4. 专辑：专辑有用户自己创建，创建专辑时可选择公开，方便被网站推荐给更多的人。
                 </div>
               </el-collapse-item>

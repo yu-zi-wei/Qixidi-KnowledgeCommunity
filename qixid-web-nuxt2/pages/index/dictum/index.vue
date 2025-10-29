@@ -25,7 +25,7 @@
             <span class="font-bold font-s-16 font-style-italic">
                      搜索
                     <span class="color-grey-3 ml-6 mr-6">/</span>
-                    名言分类
+                    随笔分类
                     <span class="color-grey-3 ml-6 mr-6">/</span>
                     推荐专辑
                     <span class="color-grey-3 ml-6 mr-6">/</span>
@@ -75,13 +75,13 @@
         <div class="mt-15 mb-10">
           <div class="mb-20" style="width: 600px">
             <el-input
-              placeholder="名言关键字"
+              placeholder="随笔关键字"
               v-model="content"
               @keyup.enter.native="searchDictum"
               suffix-icon="el-icon-search">
             </el-input>
           </div>
-          <div class="font-s-16 font-bold hot-title-solid mb-10">名言分类</div>
+          <div class="font-s-16 font-bold hot-title-solid mb-10">随笔分类</div>
           <div class="mb-20">
             <el-menu
               :default-active="$route.path+($route.query.code==null?'':'?code='+$route.query.code)"
@@ -142,7 +142,7 @@
 export default {
   name: "index",
   head: {
-    title: `名言广场 - ${process.env.PROJECT_NAME}`,
+    title: `阅读随笔 - ${process.env.PROJECT_NAME}`,
   },
   data() {
     return {

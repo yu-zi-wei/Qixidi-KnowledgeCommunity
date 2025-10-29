@@ -10,8 +10,8 @@
                 <i class="el-icon-more"></i>
               </div>
               <el-dropdown-menu>
-                <el-dropdown-item @click.native="updateInfo(item)">编辑名言</el-dropdown-item>
-                <el-dropdown-item @click.native="copyInfo(item)">复制名言</el-dropdown-item>
+                <el-dropdown-item @click.native="updateInfo(item)">编辑随笔</el-dropdown-item>
+                <el-dropdown-item @click.native="copyInfo(item)">复制随笔</el-dropdown-item>
                 <el-dropdown-item @click.native="deleteInfo(item)">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -176,7 +176,7 @@ export default {
       })
     },
     deleteInfo(item) {
-      this.$modal.confirm('确认要删除该名言吗？').then(() => {
+      this.$modal.confirm('确认要删除该随笔吗？').then(() => {
         this.loading = true;
         return this.$API(`/frontDesk/dictum/info/${item.id}/${item.groupId}`, "delete");
       }).then(res => {

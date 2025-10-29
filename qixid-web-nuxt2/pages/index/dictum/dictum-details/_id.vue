@@ -14,7 +14,7 @@
                       @click="jumpUrlBaidu('www.baidu.com',dictumInfo.author)">
                 {{ dictumInfo.author }}
                 </span>
-                <span v-if="dictumInfo.worksName!=null && dictumInfo.worksName!=''" title="名言出处">
+                <span v-if="dictumInfo.worksName!=null && dictumInfo.worksName!=''" title="随笔出处">
                 《<span class="cursor-pointer text-underline-hover"
                        @click="jumpUrlBaidu('www.baidu.com',dictumInfo.worksName)">{{ dictumInfo.worksName }}</span>》
                 </span>
@@ -210,7 +210,7 @@
             <!--          作者数据-->
             <div class="flex-space-between mt-20 font-s-14 mb-20" style="padding: 0 30px">
               <div class="text-center">
-                <p class="color-grey">名言</p>
+                <p class="color-grey">随笔</p>
                 <p class="mt-6 font-bold-s">{{ dictumInfo.tripartiteUser.dictumCount }}</p>
               </div>
               <div class="text-center">
@@ -237,7 +237,7 @@ export default {
   name: "dictumDetails",
   head() {
     return {
-      title: "名言详情" + ' - ' + process.env.PROJECT_NAME,
+      title: "随笔详情" + ' - ' + process.env.PROJECT_NAME,
       meta: [
         {
           hid: 'description',

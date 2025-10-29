@@ -78,13 +78,13 @@
             <hr class="hr-item mt-8"/>
             <div class="mt-8 font-s-15 line-height-28 color-grey">
               <div class="">文章数：{{ item.articleCount }}</div>
-              <div class="">名言数：{{ item.dictumCount }}</div>
+              <div class="">随笔数：{{ item.dictumCount }}</div>
               <div class="">小记数：{{ item.timeNotesCount }}</div>
               <div class="">专栏数：{{ item.specialColumnCount }}</div>
               <div class="">专辑数：{{ item.albumCount }}</div>
               <div class="">获赞数：{{ item.fansFabulousCount }}</div>
               <div class="">关注数：{{ item.followCount }}</div>
-              <div class="">被关注数：{{ item.fansFollowCount }}</div>
+              <div class="">关注Ta：{{ item.fansFollowCount }}</div>
               <div class="">评论数：{{ item.commentCount }}</div>
             </div>
           </div>

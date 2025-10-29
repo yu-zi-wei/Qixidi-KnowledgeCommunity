@@ -99,11 +99,11 @@
                 </el-col>
                 <el-col :span="1" style="height: 1px"/>
                 <el-col :span="5">
-                  <el-card shadow="hover" class="ba-color-grey-2 text-center" title="名言总数">
+                  <el-card shadow="hover" class="ba-color-grey-2 text-center" title="阅读随笔">
                     <div class="cursor-pointer hover-cl font-s-4 mb-12">
                       <nuxt-link :to="'/dictum/space/content-list?uuid='+$base64.encode(countUseInfo.uuid)"
                                  target="_blank">
-                        名言总数
+                        阅读随笔
                       </nuxt-link>
                     </div>
                     <div class="sum-data-cl">
@@ -113,7 +113,7 @@
                 </el-col>
                 <el-col :span="1" style="height: 1px"/>
                 <el-col :span="5">
-                  <el-card shadow="hover" class="ba-color-grey-2 text-center" title="名言总数">
+                  <el-card shadow="hover" class="ba-color-grey-2 text-center" title="时光小记数">
                     <div class="cursor-pointer hover-cl font-s-4 mb-12">
                       <nuxt-link :to="'/user_admin/time_motes_admin'">
                         时光小记数

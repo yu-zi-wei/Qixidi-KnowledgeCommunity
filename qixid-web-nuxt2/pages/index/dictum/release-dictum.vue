@@ -110,29 +110,29 @@
 
           </div>
           <div class="mr-20 line-height-24">
-            <div class="mb-20 color-stand-out"><i class="el-icon-edit mr-6"></i>名言分类
+            <div class="mb-20 color-stand-out"><i class="el-icon-edit mr-6"></i>随笔分类
               <hr class="hr-item mt-6 mb-8"/>
               <p class="font-s-14 color-grey">
-                选择对应的分类，更方便大家筛选到名言。
+                选择对应的分类，更方便大家筛选到你的阅读随笔。
               </p>
             </div>
             <div class="mb-20 color-stand-out"><i class="el-icon-edit mr-6"></i>专辑
               <hr class="hr-item mt-6 mb-8"/>
               <p class="font-s-14 color-grey">
-                合理创建专辑更方便名言的管理。
+                合理创建专辑更方便随笔的管理。
               </p>
             </div>
             <div class="color-stand-out"><i class="el-icon-edit mr-6"></i>标签
               <hr class="hr-item mt-6 mb-8"/>
               <p class="font-s-14 color-grey">
-                添加与名言相关的标签，如作者，作品名称，与作品相关的热词，名言更容易被检索到。
+                添加与阅读随笔相关的标签，如作者，作品名称，与作品相关的热词，阅读随笔更容易被检索到。
               </p>
             </div>
           </div>
         </div>
         <div class="release-dictum-index flex-10">
           <el-form :model="dictumInfo" :rules="rules" ref="dictumInfo" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="名言分类：" prop="groupId">
+            <el-form-item label="随笔分类：" prop="groupId">
               <div>
                 <el-radio-group :border="false" v-model="dictumInfo.groupId">
                   <el-radio-button v-for="(item,index) in dictumGroupListArr" :key="index" :label="item.id"
@@ -144,24 +144,24 @@
             </el-form-item>
             <el-row>
               <el-col :span="10">
-                <el-tooltip class="item" content="名言的作者名称" placement="top-end" effect="light">
-                  <el-form-item label="名言作者：" prop="author">
+                <el-tooltip class="item" content="阅读随笔的作者名称" placement="top-end" effect="light">
+                  <el-form-item label="作者：" prop="author">
                     <el-input v-model="dictumInfo.author" clearable></el-input>
                   </el-form-item>
                 </el-tooltip>
               </el-col>
               <el-col :span="14">
-                <el-tooltip class="item" content="名言出处的作品名称" placement="top-end" effect="light">
+                <el-tooltip class="item" content="阅读随笔出处的作品名称" placement="top-end" effect="light">
                   <el-form-item label="作品名称：" prop="worksName">
                     <el-input v-model="dictumInfo.worksName" clearable></el-input>
                   </el-form-item>
                 </el-tooltip>
               </el-col>
             </el-row>
-            <el-form-item label="名言：" prop="content">
+            <el-form-item label="随笔：" prop="content">
               <div style="border: 1px solid #DCDFE6;border-radius: 2px;padding: 10px">
                   <textarea style="white-space:pre-line" id="articleComment" v-model="dictumInfo.content"
-                            placeholder="名言内容..."
+                            placeholder="随笔内容..."
                             rows="8" class="news-comment-cl"/>
                 <div class="overflow-hidden">
                   <emoji-module :content.sync="dictumInfo.content" :id="'articleComment'" :placement="'bottom-start'"
@@ -210,7 +210,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="名言类型：" prop="dictumState">
+            <el-form-item label="随笔类型：" prop="dictumState">
               <el-radio-group v-model="dictumInfo.dictumState">
                 <el-radio :label="1">公开</el-radio>
                 <el-radio :label="2">私有</el-radio>
@@ -270,7 +270,7 @@
 export default {
   name: "releaseDictum",
   head: {
-    title: `记录名言 - ${process.env.PROJECT_NAME}`,
+    title: `记录随笔 - ${process.env.PROJECT_NAME}`,
   },
   data() {
     return {
@@ -278,8 +278,8 @@ export default {
         id: this.$route.query.code == null ? null : this.$base64.decode(this.$route.query.code),
         type: this.$route.query.type == null ? null : this.$route.query.type,
         info: null,
-        buttonTitle: '记录名言',
-        pageTitle: '名言发布',
+        buttonTitle: '记录随笔',
+        pageTitle: '发布随笔',
       },
       albumInfo: {
         albumState: 1,
@@ -312,10 +312,10 @@ export default {
       userInfos: null,
       rules: {
         content: [
-          {required: true, message: '请输入名言内容', trigger: 'blur'},
+          {required: true, message: '请输入随笔内容', trigger: 'blur'},
         ],
         groupId: [
-          {required: true, message: '请选择名言分类', trigger: 'blur'}
+          {required: true, message: '请选择随笔分类', trigger: 'blur'}
         ],
         dictumState: [
           {required: true, message: '请选择发布状态', trigger: 'blur'}
@@ -414,8 +414,8 @@ export default {
     if (this.update.id != null) {
       this.loading = true;
       if (this.update.type == 1) {
-        this.update.buttonTitle = "更新名言";
-        this.update.pageTitle = "名言更新";
+        this.update.buttonTitle = "更新随笔";
+        this.update.pageTitle = "随笔更新";
       }
       this.$API("/frontDesk/dictum/info/" + this.update.id, "get").then(res => {
         this.dictumInfo = res.data;

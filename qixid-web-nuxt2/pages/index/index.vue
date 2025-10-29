@@ -139,7 +139,7 @@
                       <p class="flex-center mb-6">
                         <countTo :startVal='0' :endVal='userInfo.dictumCount' :duration='2000'></countTo>
                       </p>
-                      <p class="color-grey-2 hover-cl">名言</p>
+                      <p class="color-grey-2 hover-cl">随笔</p>
                     </nuxt-link>
                   </div>
                 </div>

@@ -42,8 +42,8 @@
                   </svg>
                 </div>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click.native="updateInfo(item)">编辑名言</el-dropdown-item>
-                  <el-dropdown-item @click.native="copyInfo(item)">复制名言</el-dropdown-item>
+                  <el-dropdown-item @click.native="updateInfo(item)">编辑随笔</el-dropdown-item>
+                  <el-dropdown-item @click.native="copyInfo(item)">复制随笔</el-dropdown-item>
                   <el-dropdown-item @click.native="deleteInfo(item)">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -58,7 +58,7 @@
                       @click="jumpUrlBaidu('www.baidu.com',item.author)">
                 {{ item.author }}
                 </span>
-                <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处">
+                <span v-if="item.worksName!=null && item.worksName!=''" title="随笔出处">
                 《<span class="cursor-pointer text-underline-hover color-fb7299"
                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                 </span>
@@ -214,7 +214,7 @@
                           @click="jumpUrlBaidu('www.baidu.com',item.author)">
                                 {{ item.author }}
                                 </span>
-                    <span v-if="item.worksName!=null && item.worksName!=''" title="名言出处">
+                    <span v-if="item.worksName!=null && item.worksName!=''" title="随笔出处">
                                 《<span class="cursor-pointer text-underline-hover color-fb7299"
                                        @click="jumpUrlBaidu('www.baidu.com',item.worksName)">{{ item.worksName }}</span>》
                                 </span>
@@ -621,7 +621,7 @@ export default {
      * @param targetId 目标id
      * @param targetUid 目标用户id
      * @param content 评论内容
-     * @param type 评论类型（1：名言，2：评论）
+     * @param type 评论类型（1：随笔，2：评论）
      */
     addComment(parentId, commentGrade, targetId, targetUid, content, type) {
       if (this.userInfo == null) {
@@ -682,7 +682,7 @@ export default {
       })
     },
     deleteInfo(item) {
-      this.$modal.confirm('确认要删除该名言吗？').then(() => {
+      this.$modal.confirm('确认要删除该随笔吗？').then(() => {
         this.loading = true;
         return this.$API(`/frontDesk/dictum/info/${item.id}/${item.groupId}`, "delete");
       }).then(res => {
