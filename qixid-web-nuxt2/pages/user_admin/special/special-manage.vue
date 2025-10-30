@@ -67,7 +67,7 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog :title="tips.title" :visible.sync="dialogVisible" width="30%">
-      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="专栏名称:" prop="specialName">
           <el-input maxlength="20" show-word-limit v-model="form.specialName" placeholder="专栏名称"/>
         </el-form-item>

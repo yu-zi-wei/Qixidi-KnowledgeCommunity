@@ -53,11 +53,11 @@
                v-show="positionCssRight">
             <div v-show="!reportLoading" class="flex-space-between">
               <div>
-                <p class="font-bold font-s-16 line-height-28" v-if="isReport">连续签到<span
+                <p class="font-bold font-s-16 mb-6" v-if="isReport">连续签到<span
                   class="color-stand-out ml-4">
                   {{ ctnFatalism }}天</span>
                 </p>
-                <p class="font-bold font-s-16 line-height-28" v-if="!isReport">{{
+                <p class="font-bold font-s-16 mb-6" v-if="!isReport">{{
                     $utils.obtainTimePeriod(new Date())
                   }}好！</p>
                 <p class="font-s-14 line-height-18 color-grey">点亮在{{ websiteName }}的每一天</p>

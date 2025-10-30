@@ -146,14 +146,14 @@
         title="添加专辑"
         :visible.sync="dialogVisible"
         width="35%">
-        <el-form :model="albumInfo" :rules="albumInfoRules" ref="albumInfo" label-width="100px" class="demo-ruleForm">
+        <el-form :model="albumInfo" :rules="albumInfoRules" ref="albumInfo" label-width="120px" class="demo-ruleForm">
           <el-form-item label="专辑名称：" prop="name">
             <el-input v-model="albumInfo.name" clearable></el-input>
           </el-form-item>
           <el-form-item label="简介：" prop="briefIntroduction">
             <div class="border-all-1-DCDFE6 border-radius-4">
               <el-input type="textarea" maxlength="200"
-                        :rows="6"
+                        :rows="4"
                         clearable
                         show-word-limit v-model="albumInfo.briefIntroduction"></el-input>
             </div>
