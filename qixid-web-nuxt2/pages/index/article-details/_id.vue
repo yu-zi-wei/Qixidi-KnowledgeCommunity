@@ -119,7 +119,7 @@
               <div class="mt-20">
                 <!--          ai总结  -->
                 <div class="article-summary-dev" v-if="articleInfo.articleSummary!=null">
-                  <div class="font-bold mb-6 font-s-16">
+                  <div class="mb-6 font-s-16">
                     <svg t="1741333845009" class="icon-theme-stand-out icon-size-16 svg-translateY-1"
                          viewBox="0 0 1024 1024"
                          version="1.1"
@@ -130,7 +130,7 @@
                     </svg>
                     AI总结：
                   </div>
-                  <p class="font-bold-300 font-s-16 line-height-28 color-grey"> {{ articleInfo.articleSummary }}</p>
+                  <p class="font-s-16 line-height-28 color-grey"> {{ articleInfo.articleSummary }}</p>
                 </div>
                 <vditor-preview :id="'articleVditor'" :content="articleInfo.articleContent"
                                 :outline.sync="tocArray"></vditor-preview>

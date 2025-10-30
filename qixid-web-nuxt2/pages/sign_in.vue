@@ -11,22 +11,22 @@
               <el-avatar :size="100" v-else src="/img/tx.jpg"></el-avatar>
               <nuxt-link class="" :to="`/user_home/article?uuid=`+$base64.encode(userInfo.uuid)"
                          target="_blank" rel="noopener">
-                <p class="font-bold font-s-20 line-height-24 mt-4 overflow-nowrap-1">{{ userInfo.nickname }}</p>
+                <p class="font-s-20 line-height-24 mt-4 overflow-nowrap-1">{{ userInfo.nickname }}</p>
               </nuxt-link>
-              <span class="font-s-13 line-height-24 color-grey">{{ userInfo.occupation }}</span>
+              <span class="font-s-14 line-height-24 color-grey">{{ userInfo.occupation }}</span>
             </div>
             <el-menu
               :default-active="$route.path"
               :router="true"
               class="el-menu-vertical-demo">
               <el-menu-item index="/sign_in/daily">
-                <span slot="title">每日签到</span>
+                <span slot="title" class="font-s-16">每日签到</span>
               </el-menu-item>
               <el-menu-item index="/sign_in/money-changer">
-                <span slot="title">我的收获</span>
+                <span slot="title" class="font-s-16">我的收获</span>
               </el-menu-item>
               <el-menu-item index="/sign_in/my-harvest">
-                <span slot="title">兑换中心</span>
+                <span slot="title" class="font-s-16">兑换中心</span>
               </el-menu-item>
             </el-menu>
           </div>

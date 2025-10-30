@@ -117,7 +117,7 @@
                 text-color="#000000"
                 :active-text-color="themeColor">
                 <el-menu-item v-for="(item,index) in getNavigationList(0)" :key="index" :index="item.route">
-                  <nuxt-link class="font-s-17" :to="item.route">
+                  <nuxt-link class="font-s-17 font-bold-s" :to="item.route">
                     <!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
                     <!--                                           v-html="item.navigationIcon"></i>-->
                     {{ item.navigationName }}
@@ -129,7 +129,7 @@
                   <template slot="title">
                     <!--                                        <i v-if="item.navigationIcon!=null" :class="$route.path==item.route?'icon-theme':''"-->
                     <!--                                           v-html="item.navigationIcon"></i>-->
-                    <span class="font-s-17">{{ item.navigationName }}</span>
+                    <span class="font-s-17 font-bold-s">{{ item.navigationName }}</span>
                   </template>
                   <el-menu-item v-for="(item1,index1) in item.levelList" :key="index1+'--'" :index="item1.route">
                     <nuxt-link class="font-s-16" :to="item1.route">
