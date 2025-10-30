@@ -37,12 +37,10 @@ public class ToolTasks {
     @Scheduled(cron = "0 0 1,5 * * ?")//每天凌晨1点、5点执行
 //    @Scheduled(cron = "0 */2 * * * ?")
     public void jueJin() throws IOException, MessagingException {
-        logger.info("掘金签到开始");
         String cacheObject = RedisUtils.getCacheObject(RedisBusinessKeyEnums.JUEJING_TOKEN.getKey());
         if (cacheObject != null) {
             ofJueJin(cacheObject);
         }
-        logger.info("掘金签到结束");
     }
 
     /**
@@ -56,13 +54,11 @@ public class ToolTasks {
         Map<String, String> map = apiQuest("https://api.juejin.cn/growth_api/v1/check_in", cookie, "POST");
         String error = map.get("err_msg");
         if (map.containsKey("err_msg") && !Objects.equals(error, "success")) {
-            logger.error("签到失败：{}", error);
             if (error.contains("must login")) {
                 MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "掘金签到失败-登录过期", "掘金签到失败-登录过期");
                 return;
             }
             if (LocalDateTime.now().getHour() == 8) {
-                logger.error("重复签到：{}", error);
                 return;
             }
             return;

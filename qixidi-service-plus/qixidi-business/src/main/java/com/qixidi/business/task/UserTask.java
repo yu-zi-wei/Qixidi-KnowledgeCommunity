@@ -55,7 +55,6 @@ public class UserTask {
             List<CountUserWebsiteVo> articleTask = articleInformationMapper.selectUserArticleTask();
             if (CollectionUtil.isNotEmpty(articleTask)) {
                 Integer articleTaskSum = countUserWebsiteMapper.updateList(articleTask, CountUserTypeEnums.ARTICLE_COUNT.getCode());
-                log.info("用户文章总数同步完成，同步数：{}", articleTaskSum);
             }
 //        查询用户评论总数
 
@@ -63,44 +62,37 @@ public class UserTask {
             List<CountUserWebsiteVo> followTask = userFollowMapper.selectFollowTask();
             if (CollectionUtil.isNotEmpty(followTask)) {
                 Integer followTaskSum = countUserWebsiteMapper.updateList(followTask, CountUserTypeEnums.FOLLOW_COUNT.getCode());
-                log.info("用户关注总数同步完成，同步数：{}", followTaskSum);
             }
 
 //         查询专栏总数
             List<CountUserWebsiteVo> specialTask = specialInformationMapper.selectSpecialTask();
             if (CollectionUtil.isNotEmpty(specialTask)) {
                 Integer specialTaskSum = countUserWebsiteMapper.updateList(specialTask, CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
-                log.info("用户专栏总数同步完成，同步数：{}", specialTaskSum);
             }
 //            用户收藏夹总数
             List<CountUserWebsiteVo> collectionTask = collectionRecordMapper.selectCollectionTask();
             if (CollectionUtil.isNotEmpty(collectionTask)) {
                 Integer collectionTaskSum = countUserWebsiteMapper.updateList(collectionTask, CountUserTypeEnums.COLLECTION_COUNT.getCode());
-                log.info("收藏夹总数同步完成，同步数：{}", collectionTaskSum);
             }
 
             //            用户专辑总数
             List<CountUserWebsiteVo> albumTask = dictumAlbumMapper.selectAlbumTask();
             if (CollectionUtil.isNotEmpty(albumTask)) {
                 Integer albumTaskSum = countUserWebsiteMapper.updateList(albumTask, CountUserTypeEnums.ALBUM_COUNT.getCode());
-                log.info("专辑总数同步完成，同步数：{}", albumTaskSum);
             }
             //            用户名言总数
             List<CountUserWebsiteVo> dictumInfo = dictumInfoMapper.selectDictumInfo();
             if (CollectionUtil.isNotEmpty(dictumInfo)) {
                 Integer dictumInfoSum = countUserWebsiteMapper.updateList(dictumInfo, CountUserTypeEnums.B_DICTUM_INFO_COUNT.getCode());
-                log.info("用户名言总数同步完成，同步数：{}", dictumInfoSum);
             }
 
             //            时光小记数
             List<CountUserWebsiteVo> timeNotesTask = timeNotesMapper.selectNotesCount();
             if (CollectionUtil.isNotEmpty(timeNotesTask)) {
                 Integer dictumInfoSum = countUserWebsiteMapper.updateList(timeNotesTask, CountUserTypeEnums.B_TIME_NOTES.getCode());
-                log.info("用户小记总数同步完成，同步数：{}", dictumInfoSum);
             }
             //  修复异常数据
             Integer extremelyInteger = countUserWebsiteMapper.updateExtremelyDate();
-            log.info("异常数据完成，修复完成数：{}", extremelyInteger);
 
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCING_USER_SITE_DATA.getCode());
         } catch (Exception e) {

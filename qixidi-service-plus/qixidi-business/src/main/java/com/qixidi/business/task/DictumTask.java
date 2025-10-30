@@ -84,7 +84,6 @@ public class DictumTask {
                 Set<Map<String, String>> set = collect.stream().limit(20).collect(Collectors.toSet());
                 RedisUtils.deleteObject(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
                 RedisUtils.setCacheSet(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey(), set);
-                log.info("热门作者数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), set);
             }
             List<DictumInfoVo> listLabel = dictumInfoMapper.selectAuthorLabel();
             if (CollectionUtils.isNotEmpty(listLabel)) {
@@ -110,7 +109,6 @@ public class DictumTask {
                 Set<Map<String, String>> setLabel = collectLabel.stream().limit(20).collect(Collectors.toSet());
                 RedisUtils.deleteObject(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
                 RedisUtils.setCacheSet(RedisBusinessKeyEnums.POPULAR_LABEL.getKey(), setLabel);
-                log.info("热门标签数据同步成功：时间：{}，数据：{}", DateUtils.getTime(), setLabel);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -43,7 +43,6 @@ public class SpecialTask {
      */
     @Scheduled(cron = "0 */13 * * * *")
     public void recalculationColumn() {
-        log.error("同步专栏文章数开始：{}", DateUtil.date());
         try {
             List<SpecialInformation> specialInformations = specialInformationMapper.selectList(
                     new LambdaQueryWrapper<SpecialInformation>().select(SpecialInformation::getId));

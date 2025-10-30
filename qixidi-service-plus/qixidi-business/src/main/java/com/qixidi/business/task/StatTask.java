@@ -63,7 +63,6 @@ public class StatTask {
     @Scheduled(cron = "0 0 23 * * ?")
     public void StatInfoUpdate() {
         try {
-            log.info("网站数据更新开始：{}", DateUtils.getTime());
             Long articleCount = articleInformationMapper.selectCount(new LambdaQueryWrapper<ArticleInformation>()
                     .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode())
                     .eq(ArticleInformation::getState, StatusEnums.NORMAL.getCode()));
@@ -83,7 +82,6 @@ public class StatTask {
                     .setTimeNotesCount(timeNotesCount)
                     .setDictumCount(dictumInfoCount);
             statDataInfoMapper.insertUpdate(statDataInfo);
-            log.info("网站数据更新成功：时间：{}，数据：{}", DateUtils.getTime(), statDataInfo);
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.UPDATE_WEBSITE_DAILY_DATA.getCode());
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,11 +97,9 @@ public class StatTask {
     @Scheduled(cron = "0 0 0 * * ?")
     public void StatTheInfoUpdate() {
         try {
-            log.error("网站每月数据更新开始：{}", DateUtils.getTime());
             StatDataInfo statDataInfo = statDataInfoMapper.selectLists(DateUtils.getThe());
             if (statDataInfo == null) return;
             statTheDataMapper.insertLists(statDataInfo);
-            log.info("网站每月数据更新结束：时间：{}，数据：{}", DateUtils.getTime(), statDataInfo);
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.UPDATE_WEBSITE_MONTHLY_DATA.getCode());
         } catch (Exception e) {
             e.printStackTrace();

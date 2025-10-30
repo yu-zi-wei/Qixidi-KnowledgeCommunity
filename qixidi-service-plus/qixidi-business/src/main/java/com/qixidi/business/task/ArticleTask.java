@@ -101,9 +101,6 @@ public class ArticleTask {
                     + (articleInformation.getCollectionTimes() * 2)
                     + (articleInformation.getNumberTimes())
                     + (AlgorithmUtils.directionExport(day));
-            log.info("点赞次数：{}，评论次数：{}，收藏次数：{}，浏览：{}，时间蹉：{}", articleInformation.getLikeTimes()
-                    , articleInformation.getCommentTimes(), articleInformation.getCollectionTimes(), articleInformation.getNumberTimes()
-                    , AlgorithmUtils.directionExport(day));
             articleInformation.setHeatWeight(heatWeight);
             return articleInformation;
         }).collect(Collectors.toList());
@@ -124,7 +121,6 @@ public class ArticleTask {
     public void ArticleCalculateWeight() {
         Long aLong = articleInformationMapper.selectCount(new LambdaQueryWrapper<ArticleInformation>()
                 .eq(ArticleInformation::getState, 0).eq(ArticleInformation::getAuditState, 2));
-        log.info("计算文章权重任务开始,文章总条数：{}", aLong);
         Boolean state = true;
         //当前最大文章id
         Long pageId = 0L;
@@ -154,7 +150,6 @@ public class ArticleTask {
                 state = false;
             }
         }
-        log.info("计算文章权重任务结束,最后一次文章ID：{}", pageId);
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.CALCULATING_ARTICLE_WEIGHTS.getCode());
     }
 
@@ -165,7 +160,6 @@ public class ArticleTask {
     @Scheduled(cron = "0 0 0 ? * SUN")
     public void syncFabulous() {
         try {
-            log.info("文章点赞开始同步");
 //         用户点赞的文章列表
             Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
 //         文章点赞人列表
@@ -179,7 +173,6 @@ public class ArticleTask {
                 RedisUtils.deleteObject(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
                 RedisUtils.deleteObject(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
             }
-            log.info("文章点赞同步结束");
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_ARTICLE_CLICK_LIKE.getCode());
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,7 +202,6 @@ public class ArticleTask {
                     }
 //                        同步点赞表
                     fabulousRecordMapper.insertBatch(list);
-                    log.info("点赞表同步成功" + DateUtils.getTime());
                 });
                 //                        同步文章点赞数
                 List<ArticleInformation> articleInformation = new ArrayList<>();
