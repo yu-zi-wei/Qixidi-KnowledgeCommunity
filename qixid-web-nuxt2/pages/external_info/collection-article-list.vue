@@ -8,7 +8,7 @@
             <div class="font-s-14 flex-left align-items-center">
               <el-avatar v-if="userinfo.avatar" class="fl-left" :src="userinfo.avatar" :size="50"></el-avatar>
               <el-avatar v-else src="/img/tx.jpg" :size="50"></el-avatar>
-              <div class="ml-6 font-s-18" v-text="userinfo.nickname"></div>
+              <h2 class="ml-6 font-s-18" v-text="userinfo.nickname"></h2>
             </div>
             <div class="mt-15 font-s-16 mb-10">
               <span>暂无关注</span>
@@ -33,10 +33,12 @@
                       <span class="color-grey">|</span>
                       <span class="color-grey" v-text="$utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')"></span>
                     </div>
-                    <nuxt-link class="title-class text-underline-hover"
-                               :to="`/article-details/`+$base64.encode(item.id)" target="_blank">
-                      {{ item.articleTitle }}
-                    </nuxt-link>
+                    <h2 class="font-s-17 line-height-28 cursor-pointer">
+                      <nuxt-link class="title-class text-underline-hover"
+                                 :to="`/article-details/`+$base64.encode(item.id)" target="_blank">
+                        {{ item.articleTitle }}
+                      </nuxt-link>
+                    </h2>
                     <div class="abstract-class mt-5 font-s-16 line-height-28" v-text="item.articleAbstract"></div>
                     <div class="font-s-14 color-grey bo-list-loc flex-left">
                       <div class="mr-6" title="浏览">

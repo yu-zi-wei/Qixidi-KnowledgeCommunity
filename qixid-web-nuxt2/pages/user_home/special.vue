@@ -14,7 +14,7 @@
           <div class="overflow-hidden">
             <div class="fl-left left-details-cl">
               <div @click="specialIndex(item)">
-                <h1 class="font-s-18 font-bold-s text-underline-hover mb-8">{{ item.specialName }}</h1>
+                <h2 class="font-s-18 text-underline-hover mb-8">{{ item.specialName }}</h2>
                 <p class="font-s-16 mb-12 color-grey">{{ item.specialIntroduce }}</p>
               </div>
               <div class="font-s-14 color-grey">

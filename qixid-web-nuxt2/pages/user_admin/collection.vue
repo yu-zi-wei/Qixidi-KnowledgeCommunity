@@ -13,9 +13,10 @@
         <el-skeleton class="mt-10 ml-10" v-if="loading" :rows="4" animated/>
         <div v-if="collectionUserLoading" class="mt-20 ml-10">
           <ul v-show="!loading">
-            <li v-for="(item,index) in collectionUserList" class="contentItem" :key="index" :ref="`userAdminCollectionItem${index}`">
+            <li v-for="(item,index) in collectionUserList" class="contentItem" :key="index"
+                :ref="`userAdminCollectionItem${index}`">
               <div class="flex-space-between">
-                <div class="font-s-18 font-bold-s text-underline-hover cursor-pointer" @click="specialIndex(item)">
+                <h2 class="font-s-18 font-bold-s text-underline-hover cursor-pointer" @click="specialIndex(item)">
                   <svg t="1736501888880" class="icon-theme-1 svg-translateY-6 mr-10" viewBox="0 0 1024 1024"
                        version="1.1"
                        xmlns="http://www.w3.org/2000/svg" p-id="6429" width="26" height="26">
@@ -26,8 +27,8 @@
                       d="M201.3 842.6h791v27.8h-791v-27.8z m-92.9 0h30.3v30.3h-30.3v-30.3z m258-260L346.1 693.8c-1.9 10.7 2.3 21.3 11 27.8 8.8 6.5 20.1 7.4 29.8 2.5l98.7-51.6 99.5 53.6c4.3 2.3 8.9 3.4 13.5 3.4 5.7 0 11.5-1.8 16.4-5.3 8.8-6.3 13.3-16.8 11.6-27.6L608.1 586.8l81.8-78c7.8-7.5 10.7-18.6 7.5-29-3.3-10.4-12-17.8-22.7-19.5L564.5 444l-49-101.9c-4.7-9.8-14.4-15.9-25.2-16.1-9.7-0.5-20.7 5.8-25.6 15.5L415.1 441.1l-112 15.1c-10.7 1.5-19.6 8.8-23.1 19.1s-0.8 21.4 6.9 29.1l79.5 78.2z m52.8-111.3c9.2-1.2 17.2-6.9 21.5-15.3l49.2-97.2 47.2 98.3c4.1 8.4 12 14.3 21.2 15.7L666.1 489.6l-78.8 75.2c-6.7 6.4-9.9 15.7-8.4 25l18.5 108.3-97.3-52.3c-4.2-2.3-8.8-3.4-13.4-3.4-4.4 0-8.9 1-13 3.1l-97 49.7 19.6-107.3c1.7-9.2-1.3-18.6-7.9-25.1l-77.3-77 108.1-14.5z m0 0"
                       p-id="6431"></path>
                   </svg>
-                  <span> {{ item.collectionName }}</span>
-                </div>
+                   {{ item.collectionName }}
+                </h2>
                 <div>
                   <el-dropdown trigger="click">
                     <span class="left-loc-cl" title="更多"><i class="el-icon-more"></i></span>
@@ -93,6 +94,7 @@
 
 <script>
 import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   name: "userAdminCollection",
   data() {

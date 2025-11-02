@@ -14,9 +14,9 @@
                   <el-avatar v-else src="/img/tx.jpg"></el-avatar>
                 </div>
                 <div class="ml-10">
-                  <p class="cursor-pointer font-bold-s font-s-18 line-height-28 overflow-nowrap overflow-nowrap-1"
+                  <h2 class="cursor-pointer  font-s-18 line-height-28 overflow-nowrap overflow-nowrap-1"
                      v-text="userInfo.nickname"
-                     :title="userInfo.nickname"></p>
+                     :title="userInfo.nickname"></h2>
                   <p class="color-grey font-s-14 line-height-18"
                      v-text="userInfo.occupation==null?'职业-~-':userInfo.occupation"></p>
                 </div>
@@ -35,13 +35,13 @@
                       <el-menu-item v-if="item.isList==0" :index="item.route">
                         <template slot="title">
                           <i v-if="item.sidebarIcon!=null" v-html="item.sidebarIcon"></i>
-                          <span class="font-s-15 font-bold-s" v-text="item.sidebarName"></span>
+                          <span class="font-s-15 font-bold" v-text="item.sidebarName"></span>
                         </template>
                       </el-menu-item>
                       <el-submenu v-else :index="item.route">
                         <template slot="title">
                           <i v-if="item.sidebarIcon!=null" v-html="item.sidebarIcon"></i>
-                          <span class="font-s-15 font-bold-s" v-text="item.sidebarName"></span>
+                          <span class="font-s-15 font-bold" v-text="item.sidebarName"></span>
                         </template>
                         <el-menu-item-group>
                           <el-menu-item class="font-s-15" v-for="(levelItem,index) in item.levelList"

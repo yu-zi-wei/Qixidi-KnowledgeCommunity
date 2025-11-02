@@ -30,7 +30,7 @@
                 </div>
               </div>
               <h1 class="mb-10">
-                <nuxt-link class="text-underline-hover font-s-18 line-height-28 font-bold-s"
+                <nuxt-link class="text-underline-hover font-s-18 line-height-28 "
                            :to="`/article-details/`+$base64.encode(item.id)"
                            rel="noopener" target="_blank">
                   {{ item.articleTitle }}

@@ -3,7 +3,7 @@
     <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="5" animated v-if="loading"/>
     <div v-if="moodNotesList!=null && !loading" v-for="(item, index) in moodNotesList" :key="index"
          style="margin-bottom: 60px" class="_module_explicit-padding-lf-20">
-      <h1 class="mb-10 font-s-26">{{ item.recordTime }}
+      <h1 class="mb-10 font-s-24">{{ item.recordTime }}
         <span class="font-s-16 color-grey" title="小记总数">「{{ item.list.length }}条」</span>
       </h1>
       <div v-for="(items,indexs) in item.list" :key="indexs" :ref="`timeNotesItem${index}_${indexs}`">
@@ -141,7 +141,7 @@
           </nuxt-link>
         </div>
         <div class="mood-notes-title">
-          <p class="font-s-24">{{ moodNotes.title }}</p>
+          <h1 class="font-s-24">{{ moodNotes.title }}</h1>
           <div class="flex-space-between mt-10">
             <div class="font-s-14">
               <svg t="1750064730469" class="icon icon-size-16 svg-translateY-3" viewBox="0 0 1024 1024"

@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <div>
         <div class="flex-space-between mb-20">
-          <div class="font-s-18 font-bold-s">数据概括</div>
+          <h2 class="font-s-18 ">数据概括</h2>
           <div>
             <div class="color-grey mr-10 font-s-16" v-if="!userDateLoading">
               统计时间：{{ $utils.parseTime(countUseInfo.updateTime, '{y}-{m}-{d}') }}

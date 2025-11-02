@@ -21,9 +21,8 @@
                   </div>
                   <div class="mb-15">
                     <nuxt-link :to="`/article-details/`+$base64.encode(item.id)" target="_blank" rel="noopener">
-                      <h1 class="font-s-18 font-bold-s mb-8 line-height-28 text-underline-hover">{{
-                          item.articleTitle
-                        }}</h1>
+                      <h1 class="font-s-18 mb-8 line-height-28 text-underline-hover">
+                        {{ item.articleTitle}}</h1>
                     </nuxt-link>
                   </div>
                 </div>

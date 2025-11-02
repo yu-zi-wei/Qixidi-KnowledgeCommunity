@@ -4,14 +4,14 @@
     <ul ref="dialogContent" @scroll="divScroll($event)" v-if="latelyList.length!=0">
       <li v-for="(item,index) in latelyList" :ref="`userHomeLatelyItem${index}`">
         <div class="browsing-list">
-          <div class="font-s-16">
-            <span class="mt-10 color-grey" :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
+          <div class="font-s-16 flex-left">
+            <div class="color-grey" :title="$utils.parseTime(item.updateTime, '{y}-{m}-{d} {h}:{i}')">
               「{{ $utils.reckonTime(item.updateTime) }}」
-            </span>
-            <span class="color-grey">浏览了「{{ item.targetType == 1 ? '文章' : '帖子' }}」：</span>
-            <nuxt-link class="font-bold-s cursor-pointer text-underline hover-cl"
+            </div>
+            <div class="color-grey">浏览了「{{ item.targetType == 1 ? '文章' : '帖子' }}」：</div>
+            <nuxt-link class="cursor-pointer text-underline hover-cl"
                        :to="`/article-details/`+$base64.encode(item.targetId)" target="_blank" rel="noopener">
-              {{ item.targetTitle }}
+              <h2 class="font-s-16">{{ item.targetTitle }}</h2>
             </nuxt-link>
           </div>
         </div>

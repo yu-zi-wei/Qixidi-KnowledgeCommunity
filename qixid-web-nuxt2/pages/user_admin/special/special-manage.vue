@@ -26,9 +26,9 @@
                 </div>
                 <div class="ml-10">
                   <div @click="specialIndex(item)">
-                    <p class="font-s-18 font-bold-s mb-12 text-underline-hover cursor-pointer">{{
+                    <h2 class="font-s-18 mb-12 text-underline-hover cursor-pointer">{{
                         item.specialName
-                      }}</p>
+                      }}</h2>
                     <p class="font-s-16 mb-12 overflow-nowrap-1">
                       {{ item.specialIntroduce ? item.specialIntroduce : '--' }}
                     </p>

@@ -32,9 +32,8 @@
                   </svg>
                 </div>
               </div>
-              <div class="tool-toolName text-underline-hover font-s-18 font-bold-s" v-text="item.toolName"></div>
+              <h2 class="tool-toolName text-underline-hover font-s-18 ml-4 " v-text="item.toolName"></h2>
             </div>
-            <!--            <hr class="hr-item mt-4 mb-8 "/>-->
           </a>
           <div class="overflow-nowrap-2 color-grey font-s-16 line-height-24 mt-6">
             {{ item.describe }}

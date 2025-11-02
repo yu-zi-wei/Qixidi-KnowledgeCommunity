@@ -2,11 +2,11 @@
   <div>
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <ul v-if="!loading">
-      <li v-if="articleList.length>0" v-for="(item,index) in articleList" class="article-cli" :key="index" :ref="`articleAdminArticle${index}`">
-        <nuxt-link class="font-s-16 line-height-28 font-bold-s text-underline-hover"
-                   :to="`/article-details/`+$base64.encode(item.id)"
+      <li v-if="articleList.length>0" v-for="(item,index) in articleList" class="article-cli" :key="index"
+          :ref="`articleAdminArticle${index}`">
+        <nuxt-link :to="`/article-details/`+$base64.encode(item.id)"
                    target="_blank">
-          {{ item.articleTitle }}
+          <h2 class="font-s-16 line-height-28 text-underline-hover">{{ item.articleTitle }}</h2>
         </nuxt-link>
         <div class="fl-right cursor-pointer">
           <el-dropdown size="medium" trigger="click">
@@ -129,6 +129,7 @@
 
 <script>
 import {createAnimator} from '~/plugins/animationUtils'
+
 export default {
   name: "articleIndex",
   props: {

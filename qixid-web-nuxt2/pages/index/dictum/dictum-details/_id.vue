@@ -386,7 +386,7 @@ export default {
 }
 </script>
 <style>
-@import url("components/css/pc/dictum-comment.css");
+@import url("../../../../components/css/pc/dictum-comment.css");
 
 .dictum-re-name-cl {
   padding-left: 6px;

@@ -27,7 +27,7 @@
             </div>
             <div>
               <nuxt-link :to="`/article-details/`+$base64.encode(item.id)" rel="noopener" target="_blank">
-                <h1 class="font-s-18 mb-10 line-height-28 cursor-pointer text-underline-hover font-bold-s"
+                <h1 class="font-s-18 mb-10 line-height-28 cursor-pointer text-underline-hover"
                     v-text="item.articleTitle"></h1>
               </nuxt-link>
               <p class="overflow-nowrap-2 font-s-16 line-height-28 color-grey mb-10">

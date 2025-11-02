@@ -26,18 +26,20 @@
                               src="/img/shu.jpg" fit="cover"></el-image>
                   </div>
 
-                  <div class="mr-2 ml-10" style="height: 70px">
-                    <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
-                      <div class="cursor-pointer overflow-nowrap-1">
-                        <span class="text-underline font-bold-s font-s-16">{{ item.name }}</span>
-                        <span class="font-s-14 line-height-24 color-grey ml-10">
+                  <div class="mr-2 ml-10 " style="height: 70px">
+                    <div class="flex-left">
+                      <nuxt-link :to="`/external_info/album-info?data=`+item.id" target="_blank" rel="noopener">
+                        <h2 class="cursor-pointer overflow-nowrap-1 text-underline font-s-16">
+                          {{ item.name }}
+                        </h2>
+                      </nuxt-link>
+                      <div class="font-s-14 line-height-24 color-grey ml-10">
                         创建时间：{{ $utils.parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}') }}
-                        </span>
                       </div>
-                      <p class="font-s-14 line-height-24 color-grey mt-10 overflow-nowrap-2">
-                        {{ item.briefIntroduction ? item.briefIntroduction : '--' }}
-                      </p>
-                    </nuxt-link>
+                    </div>
+                    <div class="font-s-14 line-height-24 color-grey mt-10 overflow-nowrap-2">
+                      {{ item.briefIntroduction ? item.briefIntroduction : '--' }}
+                    </div>
                   </div>
                 </div>
               </div>

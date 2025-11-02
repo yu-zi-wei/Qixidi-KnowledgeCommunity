@@ -9,7 +9,7 @@
         <li v-for="(item,index) in collectionUserList" :key="index" class="contentItem"
             :ref="`userHomeCollectionItem${index}`">
           <div class="flex-space-between">
-            <div class="font-s-18 font-bold-s text-underline-hover cursor-pointer" @click="specialIndex(item)">
+            <h2 class="font-s-18 text-underline-hover cursor-pointer" @click="specialIndex(item)">
               <svg t="1736501888880" class="icon-theme-1 svg-translateY-6 mr-10" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg" p-id="6429" width="26" height="26">
                 <path
@@ -20,7 +20,7 @@
                   p-id="6431"></path>
               </svg>
               {{ item.collectionName }}
-            </div>
+            </h2>
             <div v-if="currentUser">
               <el-dropdown trigger="click">
                 <span class="left-loc-cl" title="更多"><i class="el-icon-more"></i></span>

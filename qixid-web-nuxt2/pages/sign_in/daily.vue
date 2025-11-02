@@ -3,7 +3,7 @@
     <el-skeleton v-if="skeletonLoading" :rows="10" class="mt-20 mb-20" animated/>
     <div v-show="!skeletonLoading" :gutter="20" class="mt-20" v-loading="loading">
       <div class="flex-space-between mt-20">
-        <div class="font-bold-s font-s-18">签到中心</div>
+        <h2 class="font-s-18">签到中心</h2>
         <div class="color-grey font-s-14">
           <i class="el-icon-warning-outline"></i>
           签到规则
