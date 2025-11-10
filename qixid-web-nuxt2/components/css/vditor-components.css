@@ -4,6 +4,7 @@
   letter-spacing: 1.3px !important;
   color: var(--default-color);
 }
+
 .vditor-reset::-webkit-scrollbar {
   width: 4px;
   height: 4px;

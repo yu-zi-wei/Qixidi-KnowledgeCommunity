@@ -387,8 +387,8 @@ export default {
   border-radius: 4px;
   overflow: hidden;
   display: flex;
-  margin: 15px 0;
-  height: 80%;
+  margin: 15px auto;
+  max-width: 80%;
 }
 
 /* 图片加载动画样式 */
