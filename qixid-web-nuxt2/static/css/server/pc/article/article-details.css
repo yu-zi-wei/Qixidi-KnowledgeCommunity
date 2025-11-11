@@ -1,8 +1,8 @@
 .article-content {
   background-color: #FFFFFF;
-  padding: 40px 0 40px 20px;
+  padding: 20px 0 40px 20px;
   z-index: 10;
-  width: 960px;
+  width: 850px;
 }
 
 /*关于作者*/
@@ -87,7 +87,7 @@
 }
 
 .right-content-width {
-  width: 250px;
+  width: 280px;
   position: relative;
   max-height: 100vh;
   overflow: scroll;

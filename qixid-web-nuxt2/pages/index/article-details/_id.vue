@@ -77,7 +77,7 @@
             </div>
           </div>
           <!--          中间-->
-          <el-skeleton class="mt-10" :rows="8" animated v-if="loading"/>
+          <el-skeleton class="mt-10" :rows="6" animated v-if="loading"/>
           <div>
             <div class="article-content" v-if="!loading">
               <div class="mb-10">

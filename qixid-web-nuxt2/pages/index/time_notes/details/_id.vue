@@ -96,7 +96,7 @@ export default {
 
 <style>
 .time-notes-details {
-  width: 940px;
+  width: 850px;
   margin: auto
 }
 

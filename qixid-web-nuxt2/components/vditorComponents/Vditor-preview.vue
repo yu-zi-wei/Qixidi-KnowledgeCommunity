@@ -388,7 +388,7 @@ export default {
   overflow: hidden;
   display: flex;
   margin: 15px auto;
-  max-width: 80%;
+  max-width:100%;
 }
 
 /* 图片加载动画样式 */
