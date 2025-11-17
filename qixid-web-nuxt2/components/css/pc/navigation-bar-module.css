@@ -118,7 +118,7 @@
   position: relative;
   background-color: #ff4757;
   border-radius: 20px;
-  font-size: 10px;
+  font-size: 12px;
   height: 20px;
   width: 20px;
   margin-left: -10px;
@@ -130,7 +130,8 @@
 }
 
 .sum-span-div-admin {
-  font-size: 10px;
+  font-size: 12px;
+  margin-left: 1px;
   letter-spacing: 0px;
   color: #FFFFFF;
 }

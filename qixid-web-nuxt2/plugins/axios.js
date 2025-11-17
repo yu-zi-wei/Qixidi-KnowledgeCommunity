@@ -15,7 +15,7 @@ export default ({$axios, store}) => {
   //请求之后
   $axios.onResponse((response) => {
     const {data} = response;
-    if (data && data.code != 200) {
+    if (data && data.code != null && (data.code != 200 && data.code != 0)) {
       Message.error(data.msg)
       return;
     }
