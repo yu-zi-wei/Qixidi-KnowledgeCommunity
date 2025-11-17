@@ -47,17 +47,19 @@
 
     <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="用户名" align="center" prop="username"/>
-      <el-table-column label="用户昵称" align="center" prop="nickname"/>
       <el-table-column label="用户头像" align="center" prop="avatar">
         <template slot-scope="scope">
           <el-avatar :src="scope.row.avatar"></el-avatar>
         </template>
       </el-table-column>
-      <el-table-column label="性别" align="center" prop="gender">
+      <el-table-column label="用户名" align="center" prop="username"/>
+      <el-table-column label="用户昵称" align="center" prop="nickname"/>
+      <el-table-column label="用户角色" align="center" prop="roleId">
         <template slot-scope="scope">
+          {{ scope.row.roleId === 1 ? '普通用户' : (scope.row.roleId === 2 ? '创作者' : '管理员') }}
         </template>
       </el-table-column>
+      <el-table-column label="邮箱" align="center" prop="email"/>
       <el-table-column label="职业" align="center" prop="occupation"/>
       <el-table-column label="用户备注" align="center" prop="remark"/>
       <el-table-column label="用户来源" align="center" prop="source"/>
@@ -66,8 +68,11 @@
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}:{h}:{i}') }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
-<!--      </el-table-column>-->
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -78,23 +83,25 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改【请填写功能名称】对话框 -->
+    <!-- 添加或修改【用户】对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="请输入用户名"/>
+        <el-form-item label="用户名">
+          <el-input disabled v-model="form.username" placeholder="请输入用户名"/>
         </el-form-item>
-        <el-form-item label="用户昵称" prop="nickname">
-          <el-input v-model="form.nickname" placeholder="请输入用户昵称"/>
+        <el-form-item label="用户昵称">
+          <el-input disabled v-model="form.nickname" placeholder="请输入用户昵称"/>
         </el-form-item>
-        <el-form-item label="所在公司" prop="company">
-          <el-input v-model="form.company" placeholder="请输入所在公司"/>
-        </el-form-item>
-        <el-form-item label="用户邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入用户邮箱"/>
-        </el-form-item>
-        <el-form-item label="用户备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+        <el-form-item label="用户角色" prop="roleId">
+          <el-select v-model="form.roleId" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -106,12 +113,22 @@
 </template>
 
 <script>
-import {listUser, getUser, delUser, addUser, updateUser} from "@/api/system/userMain";
+import { addUser, delUser, getUser, listUser, updateUser } from '@/api/system/userMain'
 
 export default {
-  name: "User",
+  name: 'User',
   data() {
     return {
+      options: [{
+        value: 1,
+        label: '普通用户'
+      }, {
+        value: 2,
+        label: '创作者'
+      }, {
+        value: 3,
+        label: '管理员'
+      }],
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -126,10 +143,10 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 【请填写功能名称】表格数据
+      // 【用户】表格数据
       userList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -149,45 +166,31 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        uuid: [
-          {required: true, message: "用户第三方系统的唯一id不能为空", trigger: "blur"}
-        ],
-        username: [
-          {required: true, message: "用户名不能为空", trigger: "blur"}
-        ],
-        nickname: [
-          {required: true, message: "用户昵称不能为空", trigger: "blur"}
-        ],
-        company: [
-          {required: true, message: "所在公司不能为空", trigger: "blur"}
-        ],
-        email: [
-          {required: true, message: "用户邮箱不能为空", trigger: "blur"}
-        ],
-        remark: [
-          {required: true, message: "用户备注不能为空", trigger: "blur"}
-        ],
+        roleId: [
+          { required: true, message: '用户角色不能为空', trigger: 'blur' }
+        ]
+
       },
-      list: [],
-    };
+      list: []
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
-    /** 查询【请填写功能名称】列表 */
+    /** 查询【用户】列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listUser(this.queryParams).then(response => {
-        this.userList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.userList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -203,18 +206,18 @@ export default {
         gender: undefined,
         remark: undefined,
         source: undefined
-      };
-      this.resetForm("form");
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -224,60 +227,63 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加【请填写功能名称】";
+      this.reset()
+      this.open = true
+      this.title = '添加【用户】'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.loading = true;
-      this.reset();
+      this.loading = true
+      this.reset()
       const uuid = row.uuid || this.ids
       getUser(uuid).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改【请填写功能名称】";
-      });
+        this.loading = false
+        this.form = response.data
+        this.open = true
+        this.title = '修改【用户】'
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
-          this.buttonLoading = true;
+          this.buttonLoading = true
           if (this.form.uuid != null) {
-            updateUser(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
+            updateUser({
+              uuid: this.form.uuid,
+              roleId: this.form.roleId
+            }).then(response => {
+              this.$modal.msgSuccess('修改成功')
+              this.open = false
+              this.getList()
             }).finally(() => {
-              this.buttonLoading = false;
-            });
+              this.buttonLoading = false
+            })
           } else {
             addUser(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
+              this.$modal.msgSuccess('新增成功')
+              this.open = false
+              this.getList()
             }).finally(() => {
-              this.buttonLoading = false;
-            });
+              this.buttonLoading = false
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const uuids = row.uuid || this.ids;
-      this.$modal.confirm('是否确认删除【请填写功能名称】编号为"' + uuids + '"的数据项？').then(() => {
-        this.loading = true;
-        return delUser(uuids);
+      const uuids = row.uuid || this.ids
+      this.$modal.confirm('是否确认删除【用户】编号为"' + uuids + '"的数据项？').then(() => {
+        this.loading = true
+        return delUser(uuids)
       }).then(() => {
-        this.loading = false;
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
+        this.loading = false
+        this.getList()
+        this.$modal.msgSuccess('删除成功')
       }).finally(() => {
-        this.loading = false;
-      });
+        this.loading = false
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -286,5 +292,5 @@ export default {
       }, `user_${new Date().getTime()}.xlsx`)
     }
   }
-};
+}
 </script>
