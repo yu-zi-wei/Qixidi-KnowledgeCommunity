@@ -8,6 +8,7 @@ import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
+import com.qixidi.business.domain.bo.user.CreatorApplicationBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
@@ -113,5 +114,7 @@ public interface ITripartiteUserService {
     AuthRequest getAuthRequest(String source);
 
     List<TripartiteUserVo> fdUserAllList();
+
+    void creatorApplication(CreatorApplicationBo bo);
 
 }

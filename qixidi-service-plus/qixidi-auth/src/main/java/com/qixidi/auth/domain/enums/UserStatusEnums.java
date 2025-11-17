@@ -9,9 +9,7 @@ public enum UserStatusEnums {
     OK("0", "正常"),
     DISABLE("1", "停用"),
     DELETED("2", "删除"),
-    GENERAL_USER("1", "普通用户"),
-    VIP_USER("2", "vip用户");
-
+    ;
     private final String code;
     private final String info;
 

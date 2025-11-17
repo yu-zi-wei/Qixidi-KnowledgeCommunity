@@ -7,7 +7,11 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.enums.MsgEnums;
 import com.light.core.utils.StringUtils;
+import com.light.exception.ServiceException;
+import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
@@ -133,6 +137,10 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean insertByBo(DictumInfoBo bo) {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
         DictumInfo add = BeanUtil.toBean(bo, DictumInfo.class);
         add.setUid(LoginHelper.getTripartiteUuid());
         add.setCreateTime(new Date());
@@ -156,6 +164,10 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
      */
     @Override
     public Boolean updateByBo(DictumInfoBo bo) {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
         DictumInfo update = BeanUtil.toBean(bo, DictumInfo.class);
         update.setUpdateTime(new Date());
         return baseMapper.updateById(update) > 0;

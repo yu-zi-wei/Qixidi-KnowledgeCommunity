@@ -1,12 +1,8 @@
 package com.qixidi.business.domain.bo.user;
 
 import com.light.core.core.domain.BaseEntity;
-import com.light.core.core.validate.AddGroup;
-import com.light.core.core.validate.EditGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import jakarta.validation.constraints.NotBlank;
 
 /**
  * 平台用户业务对象 tripartite_user
@@ -32,19 +28,16 @@ public class TripartiteUserBo extends BaseEntity {
     /**
      * 用户昵称
      */
-    @NotBlank(message = "用户昵称不能为空", groups = {AddGroup.class, EditGroup.class})
     private String nickname;
 
     /**
      * 手机号
      */
-    @NotBlank(message = "手机号不能为空", groups = {AddGroup.class, EditGroup.class})
     private String phone;
 
     /**
      * 密码
      */
-    @NotBlank(message = "密码不能为空", groups = {AddGroup.class, EditGroup.class})
     private String password;
 
     /**
@@ -95,13 +88,11 @@ public class TripartiteUserBo extends BaseEntity {
     /**
      * 用户来源
      */
-    @NotBlank(message = "用户来源不能为空", groups = {AddGroup.class, EditGroup.class})
     private String source;
 
     /**
      * 用户类型
      */
-    @NotBlank(message = "用户类型不能为空", groups = {AddGroup.class, EditGroup.class})
     private String userType;
 
     /**
@@ -115,7 +106,9 @@ public class TripartiteUserBo extends BaseEntity {
     private String loginIp;
 
     /**
-     * 角色（1，普通用户，2，vip用户）
+     * 角色
+     *
+     * @see com.qixidi.auth.domain.enums.UserRoleEnums
      */
     private Long roleId;
 }

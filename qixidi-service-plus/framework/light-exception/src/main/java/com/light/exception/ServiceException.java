@@ -1,5 +1,7 @@
 package com.light.exception;
 
+import com.light.core.enums.MsgEnums;
+
 /**
  * 业务异常
  *
@@ -31,6 +33,11 @@ public final class ServiceException extends RuntimeException {
 
     public ServiceException(String message) {
         this.message = message;
+    }
+
+    public ServiceException(MsgEnums msgEnums) {
+        this.code = msgEnums.getCode();
+        this.message = msgEnums.getValue();
     }
 
     public ServiceException(String message, Integer code) {

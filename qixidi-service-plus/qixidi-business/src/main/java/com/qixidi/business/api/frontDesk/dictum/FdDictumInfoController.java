@@ -1,12 +1,6 @@
 package com.qixidi.business.api.frontDesk.dictum;
 
 
-import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
-import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
-import com.qixidi.business.service.dictum.IDictumInfoService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
@@ -14,7 +8,13 @@ import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.api.BaseController;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
+import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
+import com.qixidi.business.service.dictum.IDictumInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

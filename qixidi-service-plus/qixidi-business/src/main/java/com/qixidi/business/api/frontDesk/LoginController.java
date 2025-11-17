@@ -3,7 +3,6 @@ package com.qixidi.business.api.frontDesk;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import com.light.core.config.justAuth.JustAuthConfig;
 import com.light.core.constant.Constants;
 import com.light.core.core.domain.R;
@@ -11,7 +10,6 @@ import com.light.redission.annotation.RepeatSubmit;
 import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.api.BaseController;
 import com.qixidi.auth.domain.entity.TripartiteUser;
-import com.qixidi.auth.domain.enums.UserStatusEnums;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
@@ -32,7 +30,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 【前台】登录验证管理
@@ -204,9 +205,7 @@ public class LoginController extends BaseController {
             return R.fail(500, "授权失败");
         }
         TripartiteUser tripartiteUser = new TripartiteUser(authResponse);
-        tripartiteUser.setUpdateTime(new Date())
-                .setRoleId(UserStatusEnums.GENERAL_USER.getLogCode())
-                .setUserType(justAuthConfig.getTripartiteUserType());
+        tripartiteUser.setUserType(justAuthConfig.getTripartiteUserType());
         iTripartiteUserService.oauthLogin(tripartiteUser);
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
         //跳转到前端登录中转页，并提供token

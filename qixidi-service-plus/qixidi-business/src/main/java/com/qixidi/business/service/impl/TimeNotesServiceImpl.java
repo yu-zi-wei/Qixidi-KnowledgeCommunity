@@ -9,6 +9,10 @@ import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.enums.MsgEnums;
+import com.light.exception.ServiceException;
+import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
@@ -44,14 +48,22 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(TimeNotesBo bo) {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
-        timeNotes.setUid(LoginHelper.getTripartiteUuid());
+        timeNotes.setUid(tripartiteUser.getUuid());
         timeNotesMapper.insert(timeNotes);
-        countUserWebsiteMapper.updateAdd(LoginHelper.getTripartiteUuid(), CountUserTypeEnums.B_TIME_NOTES.getCode());
+        countUserWebsiteMapper.updateAdd(tripartiteUser.getUuid(), CountUserTypeEnums.B_TIME_NOTES.getCode());
     }
 
     @Override
     public void update(TimeNotesBo bo) {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
         timeNotesMapper.updateById(timeNotes);
     }

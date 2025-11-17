@@ -19,15 +19,19 @@ import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.enums.MsgEnums;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.ip.AddressUtils;
 import com.light.core.utils.word.WordFilter;
+import com.light.exception.ServiceException;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
+import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
@@ -100,7 +104,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final NewsSystemInfoMapper newsSystemInfoMapper;
     private final SpecialInformationMapper specialInformationMapper;
     private final DeepSeekService deepSeekService;
-    private final IArticleCommentService iArticleCommentService;
 
     /**
      * 查询文章信息
@@ -152,7 +155,11 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public ArticleInformationVo insertByBo(ArticleInformationBo bo) {
         ArticleInformation add = BeanUtil.toBean(bo, ArticleInformation.class);
-        String uuid = LoginHelper.getTripartiteUuid();
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        String uuid = tripartiteUser.getUuid();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
         ArticleInformationVo vo = new ArticleInformationVo();
         add.setUserId(uuid);
         add.setCreateTime(new Date());
@@ -284,7 +291,11 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public ArticleInformationVo updateByBo(ArticleInformationBo bo) {
         Integer integer = judgmentPlusOne(bo);
         ArticleInformation update = BeanUtil.toBean(bo, ArticleInformation.class);
-        String uuid = LoginHelper.getTripartiteUuid();
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        String uuid = tripartiteUser.getUuid();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
         update.setUpdateId(uuid);
         update.setUpdateTime(new Date());
         if (integer > 0) {

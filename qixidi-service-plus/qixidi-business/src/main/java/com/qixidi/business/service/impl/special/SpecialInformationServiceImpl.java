@@ -14,6 +14,7 @@ import com.light.core.core.domain.R;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
+import com.light.exception.ServiceException;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
@@ -207,11 +208,11 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     public R remove(Long id, boolean b) throws Exception {
         String uuid = LoginHelper.getTripartiteUuid();
         List<ArticleInformationVo> list = articleInformationMapper.selectSpecial(id, uuid);
-        if (CollectionUtils.isNotEmpty(list)) throw new Exception(MsgEnums.SPECIAL_CONDITION_ERROR.getValue());
+        if (CollectionUtils.isNotEmpty(list)) throw new ServiceException(MsgEnums.SPECIAL_CONDITION_ERROR);
         //        同步用户数据
         countUserWebsiteMapper.updateDelete(uuid, CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
         boolean bs = baseMapper.deleteById(id) > 0;
-        if (!bs) throw new Exception(MsgEnums.DELETE_ERROR.getValue());
+        if (!bs) throw new ServiceException(MsgEnums.DELETE_ERROR);
         return R.ok();
     }
 

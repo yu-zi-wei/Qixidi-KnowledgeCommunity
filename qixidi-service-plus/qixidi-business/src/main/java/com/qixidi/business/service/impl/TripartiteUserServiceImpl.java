@@ -3,8 +3,10 @@ package com.qixidi.business.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -32,18 +34,24 @@ import com.light.exception.ServiceException;
 import com.light.mybatisPlus.domain.dto.UserInfoIdNameDto;
 import com.light.mybatisPlus.interfaces.UserInfoInterface;
 import com.light.redission.utils.RedisUtils;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
 import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.domain.enums.UserStatusEnums;
+import com.qixidi.auth.domain.enums.UserTypeEnums;
 import com.qixidi.auth.domain.model.LoginUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.user.CreatorApplicationBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
 import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
+import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.entity.user.UserInformation;
 import com.qixidi.business.domain.enums.OutCodeTypeEnums;
@@ -56,6 +64,7 @@ import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
+import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
 import com.qixidi.business.service.ITripartiteUserService;
@@ -68,10 +77,10 @@ import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.exception.AuthException;
 import me.zhyd.oauth.request.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -95,16 +104,12 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     private final UserFollowMapper userFollowMapper;
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
-    @Autowired
-    private SmsSendingConfig smsSendingConfig;
-    @Autowired
-    private GiteePlatformConfig giteePlatformConfig;
-    @Autowired
-    private BaiDuPlatformConfig baiDuPlatformConfig;
-    @Autowired
-    private WeiBoPlatformConfig weiBoPlatformConfig;
-    @Autowired
-    private ZhiFuBaoPlatformConfig zhiFuBaoPlatformConfig;
+    private final SmsSendingConfig smsSendingConfig;
+    private final GiteePlatformConfig giteePlatformConfig;
+    private final BaiDuPlatformConfig baiDuPlatformConfig;
+    private final WeiBoPlatformConfig weiBoPlatformConfig;
+    private final ZhiFuBaoPlatformConfig zhiFuBaoPlatformConfig;
+    private final NewsSystemInfoMapper newsSystemInfoMapper;
 
     /**
      * 查询平台用户
@@ -185,9 +190,43 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
      */
     @Override
     public Boolean updateByBo(TripartiteUserBo bo) {
+        TripartiteUser tripartiteUser = baseMapper.selectById(bo.getUuid());
+        if (tripartiteUser == null) throw new ServiceException("用户不存在");
         TripartiteUser update = BeanUtil.toBean(bo, TripartiteUser.class);
-        validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        boolean b = baseMapper.updateById(update) > 0;
+
+        if (b) {
+            if (!update.getRoleId().equals(tripartiteUser.getRoleId())) {
+                String uuid = tripartiteUser.getUuid();
+                if (StrUtil.isNotBlank(tripartiteUser.getEmail())) {
+                    StringBuffer mags = new StringBuffer();
+                    mags.append("<div style=\"text-align: left\">");
+                    mags.append("<p>您的角色权限已发生变更！</p>");
+                    mags.append("<p>原角色：【" + UserRoleEnums.getRoleInfo(tripartiteUser.getRoleId()) + "】</p>");
+                    mags.append("<p>当前角色：【" + UserRoleEnums.getRoleInfo(bo.getRoleId()) + "】</p>");
+                    mags.append("<p>变更时间：" + DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss") + "</p>");
+                    mags.append("</div>");
+                    MailUtils.sendHtml(tripartiteUser.getEmail(), "栖息地-角色变更",
+                            mags.toString());
+                }
+                //        发送消息
+                NewsSystemInfo newsSystemInfo = new NewsSystemInfo()
+                        .setNewsTitle("你的角色已发生变更，当前角色权限为：【" + UserRoleEnums.getRoleInfo(bo.getRoleId()) + "】")
+                        .setNewsContent("你的角色已发生变更，当前角色权限为【" + UserRoleEnums.getRoleInfo(bo.getRoleId()) + "】")
+                        .setIsDetails(1L)
+                        .setType(2L)
+                        .setIsMassAir(2L)
+                        .setUid(uuid)
+                        .setCreateTime(new Date());
+                newsSystemInfoMapper.insert(newsSystemInfo);
+                //WebSocket推送消息
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
+                //下线用户
+                StpUtil.kickout(UserTypeEnums.SYS_USER.getUserType() + ":" + uuid);
+                StpUtil.kickout(UserTypeEnums.TRIPARTITE_USER.getUserType() + ":" + uuid);
+            }
+        }
+        return b;
     }
 
     /**
@@ -218,6 +257,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         TripartiteUser uuidInfo = baseMapper.selectOne(new LambdaQueryWrapper<TripartiteUser>()
                 .eq(TripartiteUser::getUuid, tripartiteUser.getUuid()));
         if (uuidInfo == null) {
+            tripartiteUser.setUpdateTime(new Date())
+                    .setRoleId(UserRoleEnums.GENERAL_USER.getCode());
             tripartiteUser.setCreateTime(new Date());
             baseMapper.insert(tripartiteUser);
             CountUserWebsiteEntity countUserWebsiteEntity = new CountUserWebsiteEntity();
@@ -239,14 +280,11 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                     MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "【栖息地】新用户注册", mags.toString());
                 });
             }
+            //记录用户信息，登录
+            LoginHelper.tripartiteLoginByDevice(tripartiteUser, DeviceType.PC);
+        } else {
+            LoginHelper.tripartiteLoginByDevice(uuidInfo, DeviceType.PC);
         }
-//        更新用户数据
-        baseMapper.update(new LambdaUpdateWrapper<TripartiteUser>()
-                .set(TripartiteUser::getUsername, tripartiteUser.getUsername())
-                .set(TripartiteUser::getAvatar, tripartiteUser.getAvatar())
-                .eq(TripartiteUser::getUuid, tripartiteUser.getUuid()));
-        //记录用户信息，登录
-        LoginHelper.tripartiteLoginByDevice(tripartiteUser, DeviceType.PC);
     }
 
     @Override
@@ -303,7 +341,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 .setCreateTime(new Date())
                 .setPassword(SecureUtils.digesters(tripartiteUser.getPassword()))
                 .setState(UserStatusEnums.OK.getIntegerCode())
-                .setRoleId(UserStatusEnums.GENERAL_USER.getLogCode())
+                .setRoleId(UserRoleEnums.GENERAL_USER.getCode())
                 .setSource("平台注册");
         int insert = baseMapper.insert(tripartiteUser);
         CountUserWebsiteEntity countUserWebsiteEntity = new CountUserWebsiteEntity()
@@ -526,7 +564,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         if (phoneLimit == null) phoneLimit = 0L;
         if (ipLimit == null) ipLimit = 0L;
         if (phoneLimit >= 10 || ipLimit >= 10) {
-            throw new ServiceException(MsgEnums.VERIFICATION_CODE_UNDERCOUNT.getValue());
+            throw new ServiceException(MsgEnums.VERIFICATION_CODE_UNDERCOUNT);
         }
         String mailCaptchaKey = String.format(RedisBusinessKeyEnums.PHONE_CAPTCHA.getKey(), phone);
         if (RedisUtils.hasKey(mailCaptchaKey)) throw new ServiceException(MsgEnums.CAPTCHA_ALREADY_EXISTS.getValue());
@@ -563,9 +601,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     public void codeVerification(String key, String code) {
         String cacheSet = RedisUtils.getCacheObject(key);
         if (ObjectUtils.isEmpty(cacheSet))
-            throw new ServiceException(MsgEnums.VERIFICATION_CODE_EXPIRED.getValue());
+            throw new ServiceException(MsgEnums.VERIFICATION_CODE_EXPIRED);
         if (!code.equals(cacheSet))
-            throw new ServiceException(MsgEnums.VERIFICATION_CODE_ERROR.getValue());
+            throw new ServiceException(MsgEnums.VERIFICATION_CODE_ERROR);
     }
 
     @Override
@@ -707,6 +745,21 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             voList.add(tripartiteUserVo);
         });
         return voList;
+    }
+
+    @Override
+    public void creatorApplication(CreatorApplicationBo bo) {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        StringBuffer mags = new StringBuffer();
+        mags.append("<div style=\"text-align: left\">");
+        mags.append("<p>申请内容：<br/>" + bo.getApplicationContent() + "</p>");
+        mags.append("<p>申请人：" + tripartiteUser.getNickname() +
+                "<br/>用户邮箱：" + tripartiteUser.getEmail() +
+                "<br/>注册时间：" + DateUtil.format(tripartiteUser.getCreateTime(), "yyyy-MM-dd HH:mm:ss") +
+                "<br/>申请用户id：" + tripartiteUser.getUuid() + "</p>");
+        mags.append("</div>");
+        MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "栖息地-创作者申请",
+                mags.toString());
     }
 
     @Override

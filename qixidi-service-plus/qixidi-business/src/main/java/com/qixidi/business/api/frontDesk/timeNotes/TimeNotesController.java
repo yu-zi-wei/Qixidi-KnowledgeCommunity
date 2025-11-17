@@ -78,7 +78,7 @@ public class TimeNotesController {
     @PostMapping("/list")
     public TableDataInfo<TimeNotes> queryList(@RequestBody TimeNotesSearchBo bo) {
         PageQuery pageQuery = bo;
-        return timeNotesService.queryList(bo,pageQuery.build());
+        return timeNotesService.queryList(bo, pageQuery.build());
     }
 
 }

@@ -1,9 +1,9 @@
 package com.qixidi.auth.domain.entity;
 
 
-import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.qixidi.auth.helper.LoginHelper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -94,7 +94,9 @@ public class TripartiteUser {
      */
     private String loginIp;
     /**
-     * 角色（1，普通用户，2，vip用户）
+     * 角色（1，普通用户，2，创作者，3，管理员）
+     *
+     * @see com.qixidi.auth.domain.enums.UserRoleEnums
      */
     private Long roleId;
 

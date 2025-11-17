@@ -26,6 +26,8 @@ public enum MsgEnums {
     VERIFICATION_CODE_ERROR(5002, "验证码错误"),
     VERIFICATION_CODE_EXPIRED(5003, "验证码已过期"),
     VERIFICATION_CODE_UNDERCOUNT(5004, "今日验证码次数已达上限"),
+
+    NOT_CREATOR(5005, "权限不足 您不是创作者，可前往首页申请权限"),
     ;
     private Integer code;
     private String value;

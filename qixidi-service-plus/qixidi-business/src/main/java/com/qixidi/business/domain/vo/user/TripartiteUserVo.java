@@ -135,10 +135,9 @@ public class TripartiteUserVo extends CountUserWebsiteEntity {
     private String loginIp;
 
     /**
-     * 角色（1，普通用户，2，vip用户）
+     * 角色
      */
     @ExcelProperty(value = "角色", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "1=，普通用户，2，vip用户")
     private Long roleId;
 
     @ExcelProperty(value = "职业")
