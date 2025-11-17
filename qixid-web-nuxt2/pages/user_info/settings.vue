@@ -60,7 +60,7 @@ export default {
   methods: {
     uploadInfos() {
       this.buttonLoading = true;
-      this.$API("/update/user/info", "put", null, this.form).then(res => {
+      this.$API("/front-desk/user/update/info", "put", null, this.form).then(res => {
         if (res.code === 200) {
           this.$modal.msgSuccess("保存成功")
           this.frontDeskUsers();

@@ -17,7 +17,7 @@
                      :width="300"
                      :height="200"
                      :headers="headers"
-                     url="/api/update/user/avatar"
+                     url="/api/front-desk/user/update/avatar"
                      :noRotate="false"
                      :withCredentials="true"
                      :preview="'图形展示'"

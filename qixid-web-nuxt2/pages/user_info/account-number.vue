@@ -233,7 +233,7 @@ export default {
       this.$refs['userBindBo'].validate((valid) => {
         if (valid) {
           this.buttonLoading = true;
-          this.$API("/update/user/email", "put", null, this.userBindBo).then(res => {
+          this.$API("/front-desk/user/update/email", "put", null, this.userBindBo).then(res => {
             if (res.code == 200) {
               this.$modal.notifySuccess("绑定成功！");
               this.emailLoading = false;

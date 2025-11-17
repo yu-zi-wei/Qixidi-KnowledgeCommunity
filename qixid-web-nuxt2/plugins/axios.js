@@ -15,15 +15,12 @@ export default ({$axios, store}) => {
   //请求之后
   $axios.onResponse((response) => {
     const {data} = response;
-    if (data && data.code === 500) {
-      // console.error("errorMsg:", data)
-      // Message.error("服务器异常：" + data.code)
+    if (data && data.code != 200) {
       Message.error(data.msg)
       return;
     }
     if (data && data.code === 404) {
-      console.log("404:", data)
-      Message.error("服务器异常：" + data.code)
+      // Message.error("服务器异常：" + data.code)
       return;
     }
     return data;

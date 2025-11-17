@@ -44,7 +44,7 @@
               <div class="">用户来源：
                 <el-tag size="mini" type="danger">{{ item.source }}</el-tag>
               </div>
-              <div class="">用户类型：{{ item.roleId == 2 ? '管理员' : '普通用户' }}</div>
+              <div class="">用户类型：{{ item.roleId == 1 ? '普通用户' : item.roleId == 2 ? '创作者' : '管理员' }}</div>
               <div class="">个人简介：{{ item.introduce ? item.introduce : '--' }}</div>
               <div class="">备注：{{ item.remark ? item.remark : '--' }}</div>
 
@@ -110,7 +110,7 @@ export default {
   methods: {
     fdUserLists() {
       this.$API("/white/userAllList", "get").then(res => {
-        this.userList = res;
+        this.userList = res.rows;
         this.initialLoading = false;
         this.animator.triggerAllItemsAnimation(this.userList, 'allUserItem');
       })
