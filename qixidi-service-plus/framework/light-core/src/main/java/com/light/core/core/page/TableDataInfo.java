@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,12 +28,12 @@ public class TableDataInfo<T> implements Serializable {
     /**
      * 列表数据
      */
-    private List<T> rows;
+    private List<T> rows = new ArrayList<T>();
 
     /**
      * 消息状态码
      */
-    private int code;
+    private int code = HttpStatus.HTTP_OK;
 
     /**
      * 消息内容

@@ -24,10 +24,12 @@ public class R<T> implements Serializable {
      * 失败
      */
     public static final int FAIL = 500;
+
     /**
      * 消息状态码
      */
     private int code;
+
     /**
      * 消息内容
      */
