@@ -76,7 +76,7 @@
           </ul>
           <div v-if="followArrList.length==0 && !loginLoading"
                style="text-align: center;margin-top: 10px">
-            <svg t="1666708559980" class="icon-theme" viewBox="0 0 1024 1024" version="1.1"
+            <svg t="1666708559980" class="icon-theme-2" viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg"
                  p-id="2698" width="40" height="50">
               <path

@@ -49,7 +49,7 @@
             </div>
           </div>
         </div>
-        <div v-if="articleList==null">
+        <div v-if="articleList==null || articleList.length==0 && !loading">
           <div style="text-align: center">
             <div>
               <svg t="1667825747332" class="icon" viewBox="0 0 1239 1024" version="1.1"

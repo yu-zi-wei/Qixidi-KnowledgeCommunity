@@ -506,7 +506,7 @@ export default {
 
 .el-menu-item {
   height: 42px !important;
-  line-height: 42px !important;
+  line-height: 38px !important;
 }
 
 .el-button--medium {

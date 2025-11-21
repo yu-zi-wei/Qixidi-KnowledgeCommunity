@@ -1,6 +1,6 @@
 const defaultConfig = {
   //默认主题颜色
-  THEME_COLOR: '#68b1de',
+  THEME_COLOR: '#5f83ba',
 }
 
 const config = {
@@ -16,7 +16,7 @@ const config = {
   },
   //测试环境
   test: {
-      NODE_ENV: 'test',
+    NODE_ENV: 'test',
       // 代理的后端请求服务器地址
     SERVER_URL: '127.0.0.1:9001',
     SERVICE_PROTOCOL: 'http://',
@@ -28,8 +28,8 @@ const config = {
     NODE_ENV: 'prod',
     // 代理的后端请求服务器地址
     SERVER_URL: '127.0.0.1:9001',
-    SERVICE_PROTOCOL: 'http://',
-    WEBSOCKET_PROTOCOL: 'ws://',
+    SERVICE_PROTOCOL: 'https://',
+    WEBSOCKET_PROTOCOL: 'wss://',
     THEME_COLOR: defaultConfig.THEME_COLOR,
   },
 }
