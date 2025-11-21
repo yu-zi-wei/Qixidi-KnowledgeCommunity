@@ -750,11 +750,11 @@ export default {
 .el-menu--horizontal > .el-menu-item {
   height: 58px;
   line-height: 58px;
-  font-size: 16px;
 }
 
 .el-menu--horizontal > .el-submenu .el-submenu__title {
-  font-size: 16px;
+  height: 58px;
+  line-height: 58px;
 }
 
 .nav-right-ul li {
