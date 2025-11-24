@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="5" animated v-if="loading"/>
+    <el-skeleton class="mt-10 _module_explicit-padding-lf-15" :rows="5" animated v-if="loading"/>
     <div v-if="moodNotesList==null || moodNotesList.length==0 && !loading" class="mt-10 text-center">
       <svg t="1666708559980" class="icon-theme-2" viewBox="0 0 1024 1024" version="1.1"
            xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@
       <div class="font-s-14 color-grey-2">暂无小记</div>
     </div>
     <div v-if="moodNotesList!=null && !loading" v-for="(item, index) in moodNotesList" :key="index"
-         style="margin-bottom: 60px" class="_module_explicit-padding-lf-20">
+         style="margin-bottom: 60px" class="_module_explicit-padding-lf-15">
       <h1 class="mb-10 font-s-24">{{ item.recordTime }}
         <span class="font-s-16 color-grey" title="小记总数">「{{ item.list.length }}条」</span>
       </h1>

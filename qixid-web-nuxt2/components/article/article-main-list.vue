@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1">
     <div class="flex-grow-1">
-      <el-skeleton class="mt-10 _module_explicit-padding-lf-20" style="width: 100%" :rows="8" animated
+      <el-skeleton class="mt-10 _module_explicit-padding-lf-15" style="width: 100%" :rows="8" animated
                    v-show="initLoading"/>
       <div>
         <div v-for="(item, index) of listInformationList" :key="item.id"

@@ -5,7 +5,7 @@
         <el-button slot="append" icon="el-icon-search" @click="labelSearch"></el-button>
       </el-input>
     </div>
-    <el-skeleton :rows="8" class="mt-20 _module_explicit-padding-lf-20" animated v-if="loading"/>
+    <el-skeleton :rows="8" class="mt-20 _module_explicit-padding-lf-15" animated v-if="loading"/>
     <div v-if="!loading" class="flex-space-around flex-wrap-wrap">
       <div v-for="(item,index) in dateList" :key="index" class="label-item" :ref="`labelItem${index}`">
         <div class="flex-left">

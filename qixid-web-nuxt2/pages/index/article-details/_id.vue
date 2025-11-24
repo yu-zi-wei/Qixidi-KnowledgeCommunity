@@ -167,7 +167,7 @@
               <hr class="hr-item mb-30 mt-20 mr-20"/>
               <!--   ============================= 评论开始  =============================   -->
               <div class="article-content-introduce">
-                <div class="mt-20 _module_explicit-padding-lf-20" id="comment">
+                <div class="mt-20 _module_explicit-padding-lf-10" id="comment">
                   <p class="font-s-18 font-bold mb-20">
                     评论<span class="ml-6" v-text="commentTotal"></span>
                   </p>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="6" animated v-if="loading"/>
+    <el-skeleton class="mt-10 _module_explicit-padding-lf-15" :rows="6" animated v-if="loading"/>
     <div v-if="!loading && typography==2">
       <div v-if="dictumInfoListArr!=null && dictumInfoListArr.length>0" class="dictum-info-ul">
         <div v-for="(item,index) in dictumInfoListArr" :key="index" :ref="`dictumListItem${index}`"
@@ -779,21 +779,6 @@ export default {
   flex-wrap: wrap;
   flex-direction: column;
 }
-
-/* 自定义文本显示样式 - 替代textarea */
-.dictum-text-content {
-  width: 100%;
-  font-size: 18px;
-  line-height: 36px;
-  color: var(--default-color);
-  word-wrap: break-word;
-  white-space: pre-wrap; /* 保持换行和空格 */
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-}
-
 
 .el-button--small {
   padding: 9px 15px;

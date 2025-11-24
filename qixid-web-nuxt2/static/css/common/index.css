@@ -17,6 +17,14 @@
   padding: 0;
 }
 
+._module_explicit-padding-lf-15 {
+  padding: 0;
+}
+
+._module_explicit-padding-lf-10 {
+  padding: 0;
+}
+
 @media (max-width: 510px) {
   ._module_hiding {
     display: none;
@@ -28,6 +36,14 @@
 
   ._module_explicit-padding-lf-20 {
     padding: 0 20px;
+  }
+
+  ._module_explicit-padding-lf-15 {
+    padding: 15px;
+  }
+
+  ._module_explicit-padding-lf-10 {
+    padding: 10px;
   }
 }
 

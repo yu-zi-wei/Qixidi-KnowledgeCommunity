@@ -89,3 +89,18 @@ textarea:focus {
   height: 1px;
   background: #e9eef5;
 }
+
+
+/* 自定义文本显示样式 - 替代textarea */
+.dictum-text-content {
+  width: 100%;
+  font-size: 18px;
+  line-height: 36px;
+  color: var(--default-color);
+  word-wrap: break-word;
+  white-space: pre-wrap; /* 保持换行和空格 */
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}

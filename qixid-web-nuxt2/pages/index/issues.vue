@@ -143,7 +143,7 @@
               </el-tag>
             </div>
           </div>
-          <div v-if="userInfo && userInfo.roleId==0">
+          <div v-if="userInfo && userInfo.roleId==3">
             <el-select v-model="feedbackInfo.status" placeholder="请选择状态" size="medium">
               <el-option
                 v-for="item in statusOptions"
@@ -170,8 +170,8 @@
         <div class="mt-10">
           <vditor-md :vditor-id="'issues-editing'"
                      :outline="false"
-                     :content="addFeedbackInfo.feedbackContent"
-                     :mdContent.sync="addFeedbackInfo.feedbackContent"></vditor-md>
+                     :content="feedbackInfo.feedbackContent"
+                     :mdContent.sync="feedbackInfo.feedbackContent"></vditor-md>
         </div>
         <div slot="footer">
           <el-button size="medium" type="primary" @click="updateFeedbackInfo()">更 新</el-button>

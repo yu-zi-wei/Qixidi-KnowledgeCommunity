@@ -1,7 +1,7 @@
 <template>
   <div class="mt-30">
     <div class="article-archive-model">
-      <div class="_module_explicit-padding-lf-20">
+      <div class="_module_explicit-padding-lf-15">
         <div class="mood-title flex-space-between">
           <div class="font-s-16">
             <svg t="1750124650705" class="icon icon-size-16 svg-translateY-2" viewBox="0 0 1024 1024"
@@ -35,7 +35,7 @@
             <span class="font-s-16 color-grey" title="文章总数">「{{ item.list.length }}篇」</span></h1>
           <div v-for="(items,indexs) in item.list" :key="indexs" :ref="`articleArchiveItem${index}_${indexs}`">
             <div class="article-archive-list-item">
-              <div>
+              <div class="line-height-26">
               <span class="color-grey font-s-16 mr-8">
                 {{ $utils.parseTime(items.createTime, '{m}-{d}') }}</span>
                 <span class="article-archive-item-title cursor-pointer">
@@ -169,7 +169,7 @@ export default {
 .article-archive-list-item {
   margin: 15px 0px;
   width: auto;
-  padding: 10px 8px;
+  padding: 8px 8px;
   border-radius: 4px;
   transition: .2s;
 }

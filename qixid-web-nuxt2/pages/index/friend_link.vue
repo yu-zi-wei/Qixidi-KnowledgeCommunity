@@ -31,9 +31,9 @@
             </ul>
           </div>
         </div>
-        <el-skeleton class="mt-10 _module_explicit-padding-lf-20" :rows="8" animated v-if="loading"/>
+        <el-skeleton class="mt-10 _module_explicit-padding-lf-15" :rows="8" animated v-if="loading"/>
         <div class="article-content-introduce">
-          <div class="_module_explicit-padding-lf-20">
+          <div class="_module_explicit-padding-lf-15">
             <div class="mb-20 flex-space-between">
               <h3 class="article-title color-theme">
                 <svg t="1726580146454" class="icon icon-size-26 svg-translateY-4 icon-theme" viewBox="0 0 1024 1024"
@@ -76,7 +76,7 @@
           </div>
           <!--   ============================= 评论开始  =============================   -->
           <div class="article-content-introduce">
-            <div class="mt-20 _module_explicit-padding-lf-20" id="comment">
+            <div class="mt-20 _module_explicit-padding-lf-10" id="comment">
               <p class="font-s-18 font-bold mb-20">
                 评论<span class="ml-6" v-text="commentTotal"></span>
               </p>
