@@ -68,11 +68,6 @@
 
         <dependency>
             <groupId>com.light</groupId>
-            <artifactId>qixidi-love</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.light</groupId>
             <artifactId>light-web</artifactId>
         </dependency>
 
