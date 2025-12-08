@@ -49,8 +49,6 @@ qixidi/
     │
     ├── qixidi-business # 核心业务
     │
-    ├── qixidi-love # 爱情小站业务
-    │
     ├── qixidi-system # 基础业务（原ruoyi项目业务逻辑）
     │
     ├── sql  # sql文件（暂不提供，需要可加微信（有偿：169元/包售后）：zsh2978824265）
