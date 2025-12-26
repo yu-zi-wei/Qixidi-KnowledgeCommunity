@@ -174,8 +174,8 @@
                 <el-form-item label="收录专辑：" prop="albumId">
                   <el-select v-model="dictumInfo.albumId" filterable placeholder="请选择">
                     <el-option
-                      v-for="item in dictumAlbumListArr"
-                      :key="item.id"
+                      v-for="(item,index) in dictumAlbumListArr"
+                      :key="index"
                       :label="item.name"
                       :value="item.id">
                     </el-option>

@@ -4,7 +4,7 @@
       <el-skeleton class="mt-10 _module_explicit-padding-lf-15" style="width: 100%" :rows="8" animated
                    v-show="initLoading"/>
       <div>
-        <div v-for="(item, index) of listInformationList" :key="item.id"
+        <div v-for="(item, index) in listInformationList" :key="index"
              class="article-item"
              :ref="`articleItem${index}`">
           <div class="flex-space-between align-items-center">

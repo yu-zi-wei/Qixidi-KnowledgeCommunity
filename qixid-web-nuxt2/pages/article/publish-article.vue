@@ -109,8 +109,8 @@
               <el-select style="width:100%" v-model="article.labelLongList" placeholder="关键字搜索" filterable multiple
                          :multiple-limit=3>
                 <el-option
-                  v-for="item in labelList"
-                  :key="item.id"
+                  v-for="(item,index) in labelList"
+                  :key="index"
                   :label="item.labelName"
                   :value="item.id">
                 </el-option>
@@ -121,8 +121,8 @@
             <el-form-item label="收录专栏：">
               <el-select v-model="article.specialId" filterable placeholder="关键字搜索">
                 <el-option
-                  v-for="item in specialList"
-                  :key="item.id"
+                  v-for="(item,index) in specialList"
+                  :key="index"
                   :label="item.specialName"
                   :value="item.id">
                 </el-option>

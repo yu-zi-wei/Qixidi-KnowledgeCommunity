@@ -14,7 +14,7 @@
             :active-text-color="themeColor"
             class="el-menu-demo">
             <el-menu-item v-for="(item,index) in sidebarList" :index="item.route" :title="item.sidebarName"
-                          :key="index">
+                          :key="item.route">
               <nuxt-link :to="item.route">
                 <span class="font-s-16">{{ item.sidebarName }}</span>
               </nuxt-link>
@@ -257,7 +257,7 @@
             .
             <span>反馈邮箱：{{ siteInfo.mailbox }}</span>
             .
-            <soan>开源地址：</soan>
+            <span>开源地址：</span>
             <a href="https://gitee.com/yu-zi-wei/qixidi" target="_blank"
                class="text-underline-hover color-grey"><span style="color: #ee5a24">gitee.com</span></a>
             .

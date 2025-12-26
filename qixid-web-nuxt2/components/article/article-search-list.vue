@@ -3,7 +3,7 @@
     <el-skeleton style="padding: 20px 10px" :rows="6" animated v-if="initLoading"/>
     <div v-show="!initLoading">
       <ul>
-        <li v-for="(item, index) of listInformationList" :key="item.id"
+        <li v-for="(item, index) in listInformationList" :key="index"
             class="search-data-li"
             :ref="`articleSearchItem${index}`">
           <!--          用户信息-->
