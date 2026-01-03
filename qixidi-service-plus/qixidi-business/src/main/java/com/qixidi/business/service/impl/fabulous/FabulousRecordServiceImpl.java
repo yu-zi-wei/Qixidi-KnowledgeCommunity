@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
@@ -146,7 +145,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
 
 
     @Override
-    public R spotFabulous(FabulousRecordBo bo) {
+    public void spotFabulous(FabulousRecordBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
         log.info("点赞数据存入redis开始，articleId:{}，uid:{}，FabulousSum:{}", bo.getType(), bo.getUid(), bo.getFabulousSum());
         synchronized (this) {
@@ -178,7 +177,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
             //记录文章亲密度
             articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), 2D);
         }
-        if (bo.getUid().equals(bo.getTargetUid())) return R.ok();
+        if (bo.getUid().equals(bo.getTargetUid())) return;
 //        发送消息
         executorService.execute(new Runnable() {
             @Override
@@ -195,7 +194,6 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
                 WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
             }
         });
-        return R.ok();
     }
 
     @Override

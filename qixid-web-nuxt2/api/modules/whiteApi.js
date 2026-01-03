@@ -131,6 +131,11 @@ export default ($axios) => ({
   getPopularLabel() {
     return $axios.get('/white/dictum/popular/label')
   },
+  // 工具列表
+  getToolList() {
+    return $axios.get('/white/configure/tool/list')
+  },
+
   // 工具子列表
   getToolChildList(params) {
     return $axios.get('/white/configure/tool/child/list', { params })
@@ -178,10 +183,6 @@ export default ($axios) => ({
   // 用户搜索列表
   getUserList(params) {
     return $axios.get('/white/user/list', { params })
-  },
-  // 工具列表
-  getToolList() {
-    return $axios.get('/white/configure/tool/list')
   },
   // 语录专辑列表
   getDictumAlbumList(params) {

@@ -245,10 +245,10 @@ export default {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
           this.$api.whiteApi.getCollectionArticleList(this.queryParams).then(res => {
-            res.data.records.forEach(item => {
+            res.rows.forEach(item => {
               this.articleList.push(item)
             })
-            this.total = res.data.total;
+            this.total = res.total;
           }).finally(() => this.scrollLoading = true)
         }
       }
@@ -257,8 +257,8 @@ export default {
       this.loading = true;
       this.queryParams.pageNum = 1;
       this.$api.whiteApi.getCollectionArticleList(this.queryParams).then(res => {
-        this.articleList = res.data.records;
-        this.total = res.data.total;
+        this.articleList = res.rows;
+        this.total = res.total;
         this.loading = false;
       })
     }

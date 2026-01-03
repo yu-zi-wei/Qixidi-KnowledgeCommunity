@@ -33,7 +33,7 @@ import java.util.Map;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/front-desk/user")
+@RequestMapping("/frontDesk/user")
 public class FdUserInfoController extends BaseController {
 
     private final ITripartiteUserService iTripartiteUserService;

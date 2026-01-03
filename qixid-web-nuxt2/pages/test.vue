@@ -173,7 +173,7 @@ export default {
       });
 
       const response = axios.get('/api/white/article/recommend/list').then(res => {
-        return res;
+        return res.rows;
       })
       console.log("articles:" + JSON.stringify(response))
       // const articles = response.rows; // 假设数据在 response.data.data 中
@@ -244,8 +244,6 @@ export default {
         "name": "参数"
       };
       // let newVar = this.$axios.post('/api/list');
-      this.$api.whiteApi.getToolList().then(tes => {
-      })
     },
     dynamicRouting() {
       this.$router.push({

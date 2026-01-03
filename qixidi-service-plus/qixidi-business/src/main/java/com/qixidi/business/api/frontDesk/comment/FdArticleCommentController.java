@@ -10,11 +10,14 @@ import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.api.BaseController;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
+import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.qixidi.business.service.comment.IArticleCommentService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 【前台】文章评论管理
@@ -31,7 +34,7 @@ public class FdArticleCommentController extends BaseController {
      * 查询文章评论列表
      */
     @GetMapping("/white/article/comment/list")
-    public R list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
+    public R<List<ArticleCommentVo>> list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
         return R.ok(iArticleCommentService.ArticleList(bo, pageQuery));
     }
 

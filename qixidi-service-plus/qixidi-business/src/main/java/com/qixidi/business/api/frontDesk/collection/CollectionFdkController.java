@@ -1,7 +1,9 @@
 package com.qixidi.business.api.frontDesk.collection;
 
+import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
 import com.qixidi.business.service.collection.ICollectionInformationService;
 import com.qixidi.auth.annotation.Log;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 /**
  * 【前台】收藏夹信息管理
  */
@@ -32,7 +36,7 @@ public class CollectionFdkController extends BaseController {
      * 查询收藏夹信息列表
      */
     @GetMapping("/white/collection/list/{uuid}")
-    public R listUid(@NotNull(message = "用户id不能为空") @PathVariable("uuid") String uuid) {
+    public R<List<CollectionInformationVo>> listUid(@NotNull(message = "用户id不能为空") @PathVariable("uuid") String uuid) {
         return R.ok(iCollectionInformationService.listUid(uuid));
     }
 
@@ -40,7 +44,7 @@ public class CollectionFdkController extends BaseController {
      * 查询收藏夹信息列表
      */
     @GetMapping("/frontDesk/collection/list")
-    public R frontDeskListUid() {
+    public R<List<CollectionInformationVo>> frontDeskListUid() {
         String tripartiteUuid = LoginHelper.getTripartiteUuid();
         if (tripartiteUuid == null) throw new RuntimeException("用户未登录");
         return R.ok(iCollectionInformationService.listUid(tripartiteUuid));
@@ -52,7 +56,7 @@ public class CollectionFdkController extends BaseController {
      * @return
      */
     @GetMapping("/white/aut/collection/list")
-    public R list() {
+    public R<List<CollectionInformationVo>> list() {
         return R.ok(iCollectionInformationService.list());
     }
 
@@ -64,8 +68,8 @@ public class CollectionFdkController extends BaseController {
      * @return
      */
     @GetMapping("/white/collection/article/list")
-    public R articleList(CollectionRecordBo bo, PageQuery pageQuery) {
-        return R.ok(iCollectionInformationService.articleList(bo, pageQuery));
+    public TableDataInfo<ArticleInformationVo> articleList(CollectionRecordBo bo, PageQuery pageQuery) {
+        return TableDataInfo.build(iCollectionInformationService.articleList(bo, pageQuery));
     }
 
     /**

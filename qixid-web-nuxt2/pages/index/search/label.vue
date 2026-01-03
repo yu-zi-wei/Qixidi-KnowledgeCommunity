@@ -109,7 +109,7 @@ export default {
     },
     fdLabelLists() {
       this.$api.whiteApi.getLabelList(this.queryParams).then(res => {
-        this.labelList = res;
+        this.labelList = res.data;
         this.initialLoading = false;
         this.animator.triggerAllItemsAnimation(this.labelList, 'searchLabelItem');
       })

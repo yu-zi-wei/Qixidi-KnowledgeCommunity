@@ -80,7 +80,7 @@ public interface IArticleInformationService {
 
     List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery);
 
-    ArticleInformationVo getArtticle(Long valueOf);
+    ArticleInformationVo getArticle(Long valueOf);
 
     ArticleInformationVo basicInfo(Long valueOf);
 

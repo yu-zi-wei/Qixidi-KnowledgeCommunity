@@ -57,8 +57,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/related/list")
-    public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return iArticleInformationService.relatedList(bo, pageQuery);
+    public R<List<ArticleInformationVo>> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
+        return R.ok(iArticleInformationService.relatedList(bo, pageQuery));
     }
 
     /**
@@ -125,7 +125,7 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/title/list")
-    public R getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
+    public R<List<ArticleInformationVo>> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
         return R.ok(iArticleInformationService.getArticleInfoList(bo, pageQuery));
     }
 
@@ -137,8 +137,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/follow/list")
-    public R FollowArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
-        return R.ok(iArticleInformationService.FollowArticleInfoList(bo, pageQuery));
+    public TableDataInfo<ArticleInformationVo> FollowArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
+        return TableDataInfo.build(iArticleInformationService.FollowArticleInfoList(bo, pageQuery));
     }
 
     /**
@@ -149,8 +149,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/label/list")
-    public R LabelGArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
-        return R.ok(iArticleInformationService.LabelGArticleInfoList(bo, pageQuery));
+    public TableDataInfo<ArticleInformationVo> LabelGArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
+        return TableDataInfo.build(iArticleInformationService.LabelGArticleInfoList(bo, pageQuery));
     }
 
     /**
@@ -162,9 +162,9 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/add/browse-count/{id}/{label}")
-    public R addArticleBrowse(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id,
-                              @PathVariable("label") String label,
-                              HttpServletRequest request) {
+    public R<Void> addArticleBrowse(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id,
+                                    @PathVariable("label") String label,
+                                    HttpServletRequest request) {
         return toAjax(iArticleInformationService.addArticleBrowse(id, label, request));
     }
 

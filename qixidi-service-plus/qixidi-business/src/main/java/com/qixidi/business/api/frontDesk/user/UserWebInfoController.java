@@ -49,8 +49,8 @@ public class UserWebInfoController extends BaseController {
      * @return
      */
     @GetMapping("/white/user/follow/list/{uid}/{type}")
-    public R followList(@NotBlank(message = "uid不能为空") @PathVariable("uid") String uid,
-                        @NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
+    public R<Object> followList(@NotBlank(message = "uid不能为空") @PathVariable("uid") String uid,
+                                @NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
         return R.ok(iUserFollowService.followList(uid, type));
     }
 
@@ -61,8 +61,8 @@ public class UserWebInfoController extends BaseController {
      * @return
      */
     @GetMapping("/white/user/list")
-    public List<TripartiteUserVo> fdUserList(UserInfoBo bo) {
-        return iTripartiteUserService.fdUserList(bo);
+    public R<List<TripartiteUserVo>> fdUserList(UserInfoBo bo) {
+        return R.ok(iTripartiteUserService.fdUserList(bo));
     }
 
     /**

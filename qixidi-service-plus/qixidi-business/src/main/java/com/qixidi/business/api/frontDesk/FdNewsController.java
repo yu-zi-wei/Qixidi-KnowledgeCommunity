@@ -9,12 +9,14 @@ import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.api.BaseController;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 【前台】用户消息管理
@@ -31,12 +33,12 @@ public class FdNewsController extends BaseController {
      * 查询用户消息汇总
      */
     @GetMapping("/list/sum")
-    public R listSum() {
+    public R<List<NewsUserSumVo>> listSum() {
         return R.ok(iNewsUserInfoService.listSum());
     }
 
     @GetMapping("/list/info")
-    public R listInfo() {
+    public R<List<NewsUserSumVo>> listInfo() {
         return R.ok(iNewsUserInfoService.listInfo());
     }
 
@@ -44,7 +46,7 @@ public class FdNewsController extends BaseController {
      * 查询用户消息列表
      */
     @GetMapping("/list")
-    public R userList(NewsUserInfoBo bo, PageQuery pageQuery) {
+    public R<Object> userList(NewsUserInfoBo bo, PageQuery pageQuery) {
         return R.ok(iNewsUserInfoService.userList(bo, pageQuery));
     }
 

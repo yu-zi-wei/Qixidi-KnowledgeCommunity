@@ -57,7 +57,7 @@ public class UserFollowController extends BaseController {
      * @return
      */
     @GetMapping("/list/{type}")
-    public R followRoleList(@NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
+    public R<Object> followRoleList(@NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
         return R.ok(iUserFollowService.followRoleList(type));
     }
 }

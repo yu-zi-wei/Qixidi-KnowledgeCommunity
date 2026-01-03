@@ -92,7 +92,7 @@ public class WhDictumInfoController {
      * 推荐专辑
      */
     @GetMapping("/recommended/album")
-    public R recommendedAlbum() {
+    public R<List<DictumAlbumVo>> recommendedAlbum() {
         return R.ok(iDictumAlbumService.recommendedAlbum());
     }
 
@@ -100,7 +100,7 @@ public class WhDictumInfoController {
      * 热门作者
      */
     @GetMapping("/popular/authors")
-    public R<Set> popularAuthors() {
+    public R<Set<Object>> popularAuthors() {
         Boolean aBoolean = RedisUtils.hasKey(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
         if (!aBoolean) R.ok(null);
         Set<Object> cacheSet = RedisUtils.getCacheSet(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
@@ -111,7 +111,7 @@ public class WhDictumInfoController {
      * 名言 热门标签
      */
     @GetMapping("/popular/label")
-    public R<Set> popularLabel() {
+    public R<Set<String>> popularLabel() {
         Boolean aBoolean = RedisUtils.hasKey(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
         if (!aBoolean) R.ok(null);
         Set<String> cacheSet = RedisUtils.getCacheSet(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
@@ -122,7 +122,7 @@ public class WhDictumInfoController {
      * 系统标签
      */
     @GetMapping("/system/label")
-    public R systemLabel(String label) {
+    public R<List<LabelInfoVo>> systemLabel(String label) {
         List<LabelInfoVo> list = iLabelInfoService.systemLabel(label);
         return R.ok(list);
     }

@@ -581,7 +581,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
 
     @Override
-    public ArticleInformationVo getArtticle(Long id) {
+    public ArticleInformationVo getArticle(Long id) {
         ArticleInformationVo articleInformationVo = baseMapper.selectVoByIds(id);
         if (StringUtils.isNotBlank(articleInformationVo.getLabelId())) {
             List<LabelInfo> labelInfos = labelInfoMapper.selectList();

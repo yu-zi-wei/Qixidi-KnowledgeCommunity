@@ -81,7 +81,7 @@ public interface ITripartiteUserService {
 
     void frontDeskLogin(LoginUserMain loginUserMain);
 
-    R register(RegisterUserMain registerUserMain);
+    Integer register(RegisterUserMain registerUserMain);
 
     TripartiteUserVo websiteInfo();
 
@@ -93,19 +93,19 @@ public interface ITripartiteUserService {
 
     TripartiteUserVo BasicsUser();
 
-    R sendOutCode(String email, Integer type);
+    void sendOutCode(String email, Integer type);
 
     List<TripartiteUserVo> fdUserList(UserInfoBo bo);
 
     CountUserWebsiteEntity fdUserData(String uuid);
 
-    R resetPassword(RegisterUserMain registerUserMain);
+    Integer resetPassword(RegisterUserMain registerUserMain);
 
     UserSimpleInfoVo isOnline(String userid);
 
     boolean accountCancellation(String uuid);
 
-    R sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception;
+    void sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception;
 
     Boolean phoneNumberBinding(PhoneBinding phoneBinding);
 

@@ -29,8 +29,9 @@ public class FdFabulousRecordController extends BaseController {
      */
     @Log(title = "点赞", businessType = BusinessType.INSERT)
     @PostMapping("/spot")
-    public R spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
-        return iFabulousRecordService.spotFabulous(bo);
+    public R<Void> spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
+        iFabulousRecordService.spotFabulous(bo);
+        return R.ok();
     }
 
     /**
@@ -38,7 +39,7 @@ public class FdFabulousRecordController extends BaseController {
      */
     @Log(title = "取消点赞", businessType = BusinessType.INSERT)
     @PostMapping("/cancel")
-    public R cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
+    public R<Void> cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
         iFabulousRecordService.cancelFabulous(bo);
         return R.ok();
     }
@@ -47,7 +48,7 @@ public class FdFabulousRecordController extends BaseController {
      * 用户点赞列表
      */
     @GetMapping("/fabulous/list")
-    public R fabulousList(@Validated(AddGroup.class) UserHomeBo bo, PageQuery pageQuery) {
+    public R<Object> fabulousList(@Validated(AddGroup.class) UserHomeBo bo, PageQuery pageQuery) {
         return R.ok(iFabulousRecordService.fabulousList(bo, pageQuery));
     }
 

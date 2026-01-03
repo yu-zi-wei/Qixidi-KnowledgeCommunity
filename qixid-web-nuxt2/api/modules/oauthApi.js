@@ -29,11 +29,11 @@ export default ($axios) => ({
   },
   // 前端注册
   register(data) {
-    return $axios.post('/oauth/front-desk/register', data)
+    return $axios.post('/oauth/frontDesk/register', data)
   },
   // 前端登录
   login(data) {
-    return $axios.post('/oauth/front-desk/login', data)
+    return $axios.post('/oauth/frontDesk/login', data)
   },
   // 第三方登录类型
   renderAuth(type) {

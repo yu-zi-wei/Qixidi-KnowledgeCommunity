@@ -110,7 +110,7 @@ export default {
     },
     fdUserLists() {
       this.$api.whiteApi.getUserList(this.queryParams).then(res => {
-        this.userList = res;
+        this.userList = res.data;
         this.initialLoading = false;
         this.animator.triggerAllItemsAnimation(this.userList, 'searchUserItem');
       })

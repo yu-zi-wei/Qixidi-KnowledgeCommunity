@@ -1,22 +1,22 @@
 package com.qixidi.business.api.frontDesk.privateUser;
 
-import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
-import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
-import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.api.BaseController;
+import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
+import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
+import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.constraints.NotEmpty;
 import java.util.Arrays;
 
 /**
@@ -54,8 +54,9 @@ public class FdPrivateNewsInfoController extends BaseController {
      * 私信已读
      */
     @GetMapping("/been/read/{targetUid}")
-    public void beenRead(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
+    public R<Void> beenRead(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
         iPrivateNewsInfoService.beenRead(targetUid);
+        return R.ok();
     }
 
     /**

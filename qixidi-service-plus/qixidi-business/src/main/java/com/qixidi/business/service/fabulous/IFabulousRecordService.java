@@ -67,7 +67,7 @@ public interface IFabulousRecordService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
-    R spotFabulous(FabulousRecordBo bo);
+    void spotFabulous(FabulousRecordBo bo);
 
     void cancelFabulous(FabulousRecordBo bo);
 

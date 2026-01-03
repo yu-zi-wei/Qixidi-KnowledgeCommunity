@@ -20,7 +20,6 @@ import com.light.core.config.justAuth.WeiBoPlatformConfig;
 import com.light.core.config.justAuth.ZhiFuBaoPlatformConfig;
 import com.light.core.constant.SystemConstant;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.DeviceType;
 import com.light.core.enums.MsgEnums;
@@ -324,7 +323,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public R register(RegisterUserMain registerUserMain) {
+    public Integer register(RegisterUserMain registerUserMain) {
         registerUserMain
                 .setPassword(Base64.decodeStr(registerUserMain.getPassword()))
                 .setEmail(Base64.decodeStr(registerUserMain.getEmail()))
@@ -362,7 +361,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "【栖息地】新用户注册", mags.toString());
             });
         }
-        return insert > 0 ? R.ok("注册成功！") : R.fail("注册异常！");
+        return insert;
     }
 
     private boolean registerDataCheck(RegisterUserMain registerUserMain) {
@@ -436,7 +435,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     @Override
-    public R sendOutCode(String email, Integer type) {
+    public void sendOutCode(String email, Integer type) {
         String mag = OutCodeTypeEnums.acquireTypeMessage(type);
         phoneMatches(email, 2);
         TripartiteUser tripartiteUser = baseMapper.selectEmail(email);
@@ -463,7 +462,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         }
 //        存入redis有效期60秒
         RedisUtils.setCacheObject(mailCaptchaKey, code, 60, TimeUnit.SECONDS);
-        return R.ok();
     }
 
     @Override
@@ -497,7 +495,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     @Override
-    public R resetPassword(RegisterUserMain registerUserMain) {
+    public Integer resetPassword(RegisterUserMain registerUserMain) {
         registerUserMain
                 .setPassword(Base64.decodeStr(registerUserMain.getPassword()))
                 .setEmail(Base64.decodeStr(registerUserMain.getEmail()))
@@ -524,7 +522,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 }
             });
         }
-        return update > 0 ? R.ok() : R.fail();
+        return update;
     }
 
     @Override
@@ -548,7 +546,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     @Override
-    public R sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception {
+    public void sendPhoneCode(String phone, Integer type, HttpServletRequest request) throws Exception {
         TripartiteUser tripartiteUser = baseMapper.selectPhone(phone);
         if (type.equals(OutCodeTypeEnums.RESET_PASSWORD.getCode())) {
             if (tripartiteUser == null) throw new ServiceException("该手机号未注册，请前往个人信息进行绑定");
@@ -577,7 +575,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             //        存入redis有效期60秒
             RedisUtils.setCacheObject(mailCaptchaKey, code, 180, TimeUnit.SECONDS);
         }
-        return R.ok();
     }
 
     public void phoneMatches(String data, Integer type) {

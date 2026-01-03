@@ -78,7 +78,7 @@ export default {
       let id = this.$route.query.data
       let type = this.$route.query.type
       this.$api.whiteApi.getLabelInfo(id, type).then(res => {
-        this.labelInfo = res;
+        this.labelInfo = res.data;
         this.initialLoading = false;
       })
     },

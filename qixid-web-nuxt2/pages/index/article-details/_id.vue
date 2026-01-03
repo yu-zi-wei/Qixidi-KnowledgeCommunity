@@ -914,7 +914,7 @@ export default {
       this.$api.whiteApi.addBrowseCount(this.articleInfo.id, this.articleInfo.labelId);
       //获取相关文章
       this.$api.whiteApi.getRelatedArticleList(this.queryParams).then(res => {
-        this.listInformationList = res;
+        this.listInformationList = res.data;
         //  记录用户浏览历史
         this.$api.browsingApi.addBrowsingHistory({
           targetId: this.articleInfo.id,

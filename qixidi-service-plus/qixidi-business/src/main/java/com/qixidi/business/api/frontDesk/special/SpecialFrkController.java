@@ -1,16 +1,17 @@
 package com.qixidi.business.api.frontDesk.special;
 
-import com.qixidi.business.domain.bo.special.SpecialInformationBo;
-import com.qixidi.business.domain.vo.special.SpecialInformationVo;
-import com.qixidi.business.service.special.ISpecialInformationService;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
+import com.qixidi.auth.api.BaseController;
+import com.qixidi.business.domain.bo.special.SpecialInformationBo;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.domain.vo.special.SpecialInformationVo;
+import com.qixidi.business.service.special.ISpecialInformationService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class SpecialFrkController extends BaseController {
      * 查询专栏信息列表
      */
     @GetMapping("/special/list")
-    public R specialListUid(SpecialInformationBo bo) {
+    public R<List<SpecialInformationVo>> specialListUid(SpecialInformationBo bo) {
         return R.ok(iSpecialInformationService.specialListUid(bo));
     }
 
@@ -38,7 +39,7 @@ public class SpecialFrkController extends BaseController {
      * @return
      */
     @GetMapping("/aut/special/list")
-    public R specialList() {
+    public R<List<SpecialInformationVo>> specialList() {
         return R.ok(iSpecialInformationService.specialList());
     }
 
@@ -50,7 +51,7 @@ public class SpecialFrkController extends BaseController {
      * @return
      */
     @GetMapping("/select/special")
-    public R selectSpecial(SpecialInformationBo bo, PageQuery pageQuery) {
+    public R<List<ArticleInformationVo>> selectSpecial(SpecialInformationBo bo, PageQuery pageQuery) {
         return R.ok(iSpecialInformationService.selectSpecial(bo, pageQuery));
     }
 
@@ -63,7 +64,7 @@ public class SpecialFrkController extends BaseController {
      * @return
      */
     @PostMapping("/update/special/{id}/{uid}")
-    public R updateSpecial(@RequestBody List<String> ids,
+    public R<Void> updateSpecial(@RequestBody List<String> ids,
                            @NotNull(message = "专栏id不能为空") @PathVariable("id") Long id,
                            @NotNull(message = "用户id不能为空") @PathVariable("uid") String uid) {
         return toAjax(iSpecialInformationService.updateSpecial(id, uid, ids));
@@ -81,7 +82,7 @@ public class SpecialFrkController extends BaseController {
      * 删除专栏信息
      */
     @DeleteMapping("/delete/special/{id}")
-    public R<Void> remove( @PathVariable Long id) throws Exception {
+    public R<Void> remove(@PathVariable Long id) throws Exception {
         return iSpecialInformationService.remove(id, true);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/frontDesk/dictum/comment")
 public class DictumCommentController {
+
     @Autowired
     private DictumCommentService dictumCommentService;
 

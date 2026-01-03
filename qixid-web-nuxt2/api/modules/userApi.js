@@ -1,23 +1,23 @@
 export default ($axios) => ({
   // 用户基础信息
   getUserBasics() {
-    return $axios.get('/front-desk/user/basics')
+    return $axios.get('/frontDesk/user/basics')
   },
   // 用户信息
   getUserInfo() {
-    return $axios.get('/front-desk/user/info')
+    return $axios.get('/frontDesk/user/info')
   },
   // 创作者申请
   applyCreator(data) {
-    return $axios.post('/front-desk/user/creator/application', data)
+    return $axios.post('/frontDesk/user/creator/application', data)
   },
   // 更新邮箱
   updateEmail(data) {
-    return $axios.put('/front-desk/user/update/email', data)
+    return $axios.put('/frontDesk/user/update/email', data)
   },
   // 更新用户信息
   updateUserInfo(data) {
-    return $axios.put('/front-desk/user/update/info', data)
+    return $axios.put('/frontDesk/user/update/info', data)
   },
   // 删除文章
   deleteArticle(id) {

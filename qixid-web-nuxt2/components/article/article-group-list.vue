@@ -150,23 +150,23 @@ export default {
           case 1:
             const startIndex1 = this.articleList.length;
             this.$api.whiteApi.getFollowArticleList(this.queryParams).then(res => {
-              res.data.records.forEach(item => {
+              res.rows.forEach(item => {
                 this.articleList.push(item)
               })
-              this.total = res.data.total;
+              this.total = res.total;
               // 为新增的项目触发动画
-              this.triggerNewGroupItemAnimations(startIndex1, res.data.records.length);
+              this.triggerNewGroupItemAnimations(startIndex1, res.rows.length);
             }).finally(() => this.scrollLoading = true);
             break
           case 2:
             const startIndex2 = this.articleList.length;
             this.$api.whiteApi.getArticleLabelList(this.queryParams).then(res => {
-              res.data.records.forEach(item => {
+              res.rows.forEach(item => {
                 this.articleList.push(item)
               })
-              this.total = res.data.total;
+              this.total = res.total;
               // 为新增的项目触发动画
-              this.triggerNewGroupItemAnimations(startIndex2, res.data.records.length);
+              this.triggerNewGroupItemAnimations(startIndex2, res.rows.length);
             }).finally(() => this.scrollLoading = true);
             break
           case 3:
@@ -207,8 +207,8 @@ export default {
       switch (this.type) {
         case 1:
           this.$api.whiteApi.getFollowArticleList(this.queryParams).then(res => {
-            this.articleList = res.data.records;
-            this.total = res.data.total;
+            this.articleList = res.rows;
+            this.total = res.total;
           }).finally(() => {
             this.loading = false;
             // 确保loading完成后再触发动画
@@ -219,8 +219,8 @@ export default {
           break
         case 2:
           this.$api.whiteApi.getArticleLabelList(this.queryParams).then(res => {
-            this.articleList = res.data.records;
-            this.total = res.data.total;
+            this.articleList = res.rows;
+            this.total = res.total;
           }).finally(() => {
             this.loading = false;
             // 确保loading完成后再触发动画

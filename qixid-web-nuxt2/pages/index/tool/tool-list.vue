@@ -98,7 +98,7 @@ export default {
       this.loading = true;
       this.debounceTimer = setTimeout(() => {
         this.$api.whiteApi.getToolChildList({toolName: this.toolName, isParent: 2}).then(res => {
-          this.toolArray = res;
+          this.toolArray = res.data;
           this.loading = false;
         })
       }, this.debounceTime);
@@ -106,7 +106,7 @@ export default {
     toolChildLists() {
       this.loading = true;
       this.$api.whiteApi.getToolChildList({id: this.id, isParent: 2}).then(res => {
-        this.toolArray = res;
+        this.toolArray = res.data;
         this.loading = false;
         this.animator.triggerAllItemsAnimation(this.toolArray, 'toolItem');
       })

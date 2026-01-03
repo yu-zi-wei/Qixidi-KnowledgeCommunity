@@ -15,6 +15,7 @@ import com.qixidi.auth.domain.model.PhoneBinding;
 import com.qixidi.auth.domain.model.RegisterUserMain;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
+import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.system.service.SysLoginService;
@@ -56,7 +57,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @RepeatSubmit()
-    @PostMapping("/oauth/front-desk/login")
+    @PostMapping("/oauth/frontDesk/login")
     public R<Map<String, Object>> frontDeskLogin(@Validated @RequestBody LoginUserMain loginUserMain) {
         boolean login = StpUtil.isLogin();
         if (login) {
@@ -79,10 +80,10 @@ public class LoginController extends BaseController {
      * @return
      */
     @RepeatSubmit()
-    @PostMapping("/oauth/front-desk/register")
-    public R register(@Validated @RequestBody RegisterUserMain registerUserMain) {
+    @PostMapping("/oauth/frontDesk/register")
+    public R<Void> register(@Validated @RequestBody RegisterUserMain registerUserMain) {
         registerUserMain.setUserType(justAuthConfig.getTripartiteUserType());
-        return iTripartiteUserService.register(registerUserMain);
+        return toAjax(iTripartiteUserService.register(registerUserMain));
     }
 
     /**
@@ -92,7 +93,7 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/oauth/account/cancellation")
-    public R accountCancellation() {
+    public R<Void> accountCancellation() {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) {
             return R.fail("注销失败！");
@@ -109,8 +110,9 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/oauth/email/code/{email}/{type}")
-    public R sendOutCode(@PathVariable("email") String email, @PathVariable("type") Integer type) {
-        return iTripartiteUserService.sendOutCode(email, type);
+    public R<Void> sendOutCode(@PathVariable("email") String email, @PathVariable("type") Integer type) {
+        iTripartiteUserService.sendOutCode(email, type);
+        return R.ok();
     }
 
     /**
@@ -124,8 +126,9 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/oauth/phone/code/{phone}/{type}")
-    public R sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("type") Integer type, HttpServletRequest request) throws Exception {
-        return iTripartiteUserService.sendPhoneCode(phone, type, request);
+    public R<Void> sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("type") Integer type, HttpServletRequest request) throws Exception {
+        iTripartiteUserService.sendPhoneCode(phone, type, request);
+        return R.ok();
     }
 
     /**
@@ -248,8 +251,8 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/reset/password")
-    public R resetPassword(@Validated @RequestBody RegisterUserMain registerUserMain) {
-        return iTripartiteUserService.resetPassword(registerUserMain);
+    public R<Void> resetPassword(@Validated @RequestBody RegisterUserMain registerUserMain) {
+        return toAjax(iTripartiteUserService.resetPassword(registerUserMain));
     }
 
     /**
@@ -259,7 +262,7 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/phone/binding")
-    public R phoneNumberBinding(@Validated @RequestBody PhoneBinding phoneBinding) {
+    public R<Void> phoneNumberBinding(@Validated @RequestBody PhoneBinding phoneBinding) {
         return toAjax(iTripartiteUserService.phoneNumberBinding(phoneBinding) ? 1 : 0);
     }
 
@@ -269,7 +272,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/oauth/isLogin")
-    public R isLogin() {
+    public R<UserLoginStatusVo> isLogin() {
         return R.ok(iTripartiteUserService.isLogin());
     }
 

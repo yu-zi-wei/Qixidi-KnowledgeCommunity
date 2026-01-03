@@ -3,9 +3,11 @@ package com.qixidi.business.api.frontDesk.article;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
+import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.enums.BusinessType;
+import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.api.BaseController;
@@ -18,6 +20,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 【前台】文章信息接口
@@ -77,11 +81,11 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/article/list")
-    public R getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
+    public TableDataInfo<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        if (uuid == null) return R.fail("登录已过期");
+        if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
-        return R.ok(iArticleInformationService.getArticleInfo(bo, pageQuery));
+        return TableDataInfo.build(iArticleInformationService.getArticleInfo(bo, pageQuery));
     }
 
     /**
@@ -92,9 +96,9 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/article/title/list")
-    public R getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
+    public R<List<ArticleInformationVo>> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        if (uuid == null) return R.fail("登录已过期");
+        if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
         return R.ok(iArticleInformationService.getArticleInfoList(bo, pageQuery));
     }
@@ -106,8 +110,8 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/get/article/{id}")
-    public R getArticle(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
-        return R.ok(iArticleInformationService.getArtticle(Long.valueOf(id)));
+    public R<ArticleInformationVo> getArticle(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
+        return R.ok(iArticleInformationService.getArticle(Long.valueOf(id)));
     }
 
     /**
@@ -117,7 +121,7 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @DeleteMapping("/delete/article/{id}")
-    public R delete(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id) {
+    public R<Void> delete(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id) {
         return toAjax(iArticleInformationService.delete(id));
     }
 
@@ -129,9 +133,9 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/lately/article/list")
-    public R latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+    public R<List<ArticleInformationVo>> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        if (uuid == null) return R.fail("登录已过期");
+        if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
         return R.ok(iArticleInformationService.latelyArticleList(bo, pageQuery));
     }

@@ -22,6 +22,10 @@ export default ($axios) => ({
   // 更新收藏数据
   updateCollectionData(data) {
     return $axios.put('/frontDesk/update/collection/data', data)
+  },
+  // 查询收藏夹信息列表
+  getCollectionList() {
+    return $axios.get('/frontDesk/collection/list')
   }
 })
 

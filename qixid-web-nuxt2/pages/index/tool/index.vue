@@ -107,7 +107,7 @@ export default {
     },
     toolLists() {
       this.$api.whiteApi.getToolList().then(res => {
-        this.toolArray = res;
+        this.toolArray = res.data;
         this.$router.push({
           path: '/tool',
           query: {tool: this.id}
