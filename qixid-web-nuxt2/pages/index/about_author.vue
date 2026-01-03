@@ -395,7 +395,7 @@ export default {
     },
     deleteComment(item) {
       this.$modal.confirm('确定要删除当前评论吗？').then(() => {
-        this.$API('/article/comment', 'delete', {
+        this.$api.articleApi.deleteComment({
           id: item.id,
           articleId: item.articleId,
           uid: item.uid,
@@ -425,7 +425,7 @@ export default {
         this.buttonLoading = false;
         return;
       }
-      this.$API('/article/comment/insert', this.$post(), null, this.comment).then(res => {
+      this.$api.articleApi.insertComment(this.comment).then(res => {
         if (res.code === 200) {
           // this.commentTextLoading = false;
           this.$modal.msg("感谢你的评论！");
@@ -475,11 +475,11 @@ export default {
       if (this.isFabulous) {
         this.isFabulous = false;
         this.articleInfo.likeTimes = this.articleInfo.likeTimes - 1;
-        this.$API('/frontDesk/fabulous/cancel', this.$post(), null, data);
+        this.$api.fabulousApi.cancelFabulous(data);
       } else {
         this.isFabulous = true;
         this.articleInfo.likeTimes = this.articleInfo.likeTimes + 1;
-        this.$API('/frontDesk/fabulous/spot', this.$post(), null, data);
+        this.$api.fabulousApi.spotFabulous(data);
       }
     },
 
@@ -507,7 +507,7 @@ export default {
       let query = {
         articleId: this.articleInfo.id
       }
-      this.$API('/white/article/comment/list', this.$get(), query).then(res => {
+      this.$api.whiteApi.getArticleCommentList(query).then(res => {
         this.articleComment = res.data;
         if (this.articleComment.length > 0) {
           this.commentTotal = this.articleComment[0].commentTotal;
@@ -516,7 +516,7 @@ export default {
       })
     },
     getBasicsUsers() {
-      this.$API('/front-desk/user/basics', this.$get(), null, null).then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
           if (res.data != null && res.data.uuid === this.articleInfo.userId) {

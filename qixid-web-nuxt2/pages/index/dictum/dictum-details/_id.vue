@@ -307,7 +307,7 @@ export default {
         cancelButtonText: '取 消',
         type: 'warning'
       }).then(() => {
-        this.$API(`/frontDesk/dictum/comment/delete/${id}`, "delete").then(res => {
+        this.$api.dictumApi.deleteDictumComment(id).then(res => {
           if (res.code == 200) {
             this.$modal.msgSuccess("删除成功");
             this.getCommentList();
@@ -319,7 +319,7 @@ export default {
       this.loginDialog = val;
     },
     getCommentList() {
-      this.$API(`/white/dictum/comment/list/${this.dictumInfo.id}`, "get").then(res => {
+      this.$api.whiteApi.getDictumCommentList(this.dictumInfo.id).then(res => {
         this.commentList = [];
         if (res.code == 200) {
           this.commentList = res.rows;
@@ -353,7 +353,7 @@ export default {
       this.buttonLoading = true;
       this.buttonLoading2 = true;
       this.buttonLoading3 = true;
-      this.$API("/frontDesk/dictum/comment/add", "post", null, dictumComment).then(res => {
+      this.$api.dictumApi.addDictumComment(dictumComment).then(res => {
         if (res.code == 200) {
           this.$modal.msgSuccess("评论成功");
           this.getCommentList();
@@ -372,7 +372,7 @@ export default {
       window.open(path, '_blank');
     },
     getBasicsUsers() {
-      this.$API('/front-desk/user/basics', this.$get()).then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }

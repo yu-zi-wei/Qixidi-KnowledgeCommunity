@@ -58,11 +58,13 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/frontDesk/browsing/history/list", "get", this.queryParams).then(res => {
-            res.data.records.forEach(item => {
+          const startIndex = this.latelyList.length; // 记录新增前的索引
+          this.$api.browsingApi.getBrowsingHistoryList(this.queryParams).then(res => {
+            res.rows.forEach(item => {
               this.latelyList.push(item)
             })
-            this.total = res.data.total;
+            this.total = res.total;
+            this.animator.triggerNewItemsAnimation(startIndex, res.rows.length, 'userHomeArticleItem');
           }).finally(() => this.scrollLoading = true)
         }
       }
@@ -70,10 +72,10 @@ export default {
     browsingHistoryLists() {
       let uuid = this.$base64.decode(this.$route.query.uuid);
       this.queryParams.uid = uuid;
-      this.$API("/frontDesk/browsing/history/list", "get", this.queryParams).then(res => {
+      this.$api.browsingApi.getBrowsingHistoryList(this.queryParams).then(res => {
         if (res.code == 200) {
           this.latelyList = res.rows;
-          this.total = res.data.total;
+          this.total = res.total;
         }
       }).finally(() => {
         this.loading = false;
@@ -82,7 +84,7 @@ export default {
     }
   },
   mounted() {
-    this.animator = createAnimator(this, 'commonList')
+    this.animator = createAnimator(this, 'userHomeLately')
     this.browsingHistoryLists();
   }
 }

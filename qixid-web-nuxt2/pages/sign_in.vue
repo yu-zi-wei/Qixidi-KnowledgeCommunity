@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }

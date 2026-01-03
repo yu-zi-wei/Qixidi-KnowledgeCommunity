@@ -398,7 +398,7 @@ export default {
         cancelButtonText: '取 消',
         type: 'warning'
       }).then(() => {
-        this.$API("/frontDesk/order/delete/" + item.id, "delete").then(res => {
+        this.$api.orderApi.deleteOrder(item.id).then(res => {
           if (res.code == 200) {
             this.$modal.msgSuccess("删除成功!");
             this.queryParams.pageNum = 1;
@@ -418,13 +418,13 @@ export default {
       window.open(routeInfo.href, '_blank');
     },
     recharge() {
-      this.$API("/frontDesk/rechargeInfo/list", "get").then(res => {
+      this.$api.rechargeInfoApi.getRechargeInfoList().then(res => {
         this.rechargeListArr = res.rows;
         this.rechargeVisible = true;
       });
     },
     rechargeCentreMethod() {
-      this.$API("/frontDesk/order/list", "get", this.queryParams).then(res => {
+      this.$api.orderApi.getOrderList(this.queryParams).then(res => {
         this.gridData = res.rows;
         this.total = res.total;
         this.orderListLoading = false;
@@ -437,7 +437,7 @@ export default {
         return;
       }
       //添加私信记录
-      this.$API("/frontDesk/private/user/add/" + uuid, "get").then(res => {
+      this.$api.privateApi.addPrivateUser(uuid).then(res => {
         this.$router.push({
           path: "/news/private-letter?code=" + this.$base64.encode(uuid),
         });
@@ -456,7 +456,7 @@ export default {
       item.buttonLoading = true;
       if (item.isFollow) {
         item.isFollow = false;
-        this.$API("/user/follow/cancel", "post", null, {targetId: item.uuid, type: 1,})
+        this.$api.userApi.cancelFollow({targetId: item.uuid, type: 1,})
           .finally(() => {
             this.getWebsiteInfos()
             this.fdUserDatas()
@@ -464,7 +464,7 @@ export default {
           });
       } else {
         item.isFollow = true;
-        this.$API("/user/follow/add", "post", null, {targetId: item.uuid, type: 1,}).finally(() => {
+        this.$api.userApi.addFollow({targetId: item.uuid, type: 1,}).finally(() => {
           this.getWebsiteInfos()
           this.fdUserDatas()
           item.buttonLoading = false;
@@ -474,7 +474,7 @@ export default {
     ,
     fdUserDatas() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/white/user/data/" + uuid, "get").then(res => {
+      this.$api.whiteApi.getUserData(uuid).then(res => {
         if (res.code == 200) {
           this.userData = res.data;
         }
@@ -489,7 +489,7 @@ export default {
     ,
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
           return;
@@ -507,13 +507,13 @@ export default {
     },
     getWebsiteInfos() {
       this.uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/white/user/info/" + this.uuid, "get").then(res => {
+      this.$api.whiteApi.getUserInfo(this.uuid).then(res => {
         this.userInfo = res.data;
       })
     },
     listNavigations() {
       let data = {type: 2, status: 0}
-      this.$API("/white/configure/navigation/list", "get", data).then(res => {
+      this.$api.whiteApi.getNavigationList(data).then(res => {
         this.userListNavigation = res.rows;
       })
     }

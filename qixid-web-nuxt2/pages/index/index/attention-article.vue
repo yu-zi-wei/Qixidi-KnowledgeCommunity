@@ -58,7 +58,7 @@ export default {
   methods: {
     getBasicsUsers() {
       //  获取用户关注列表
-      this.$API("/user/follow/list/" + 1, "get").then(res => {
+      this.$api.userApi.getFollowList(1).then(res => {
         this.followRoleArr = res.data;
       }).finally(() => this.loading = false);
     },

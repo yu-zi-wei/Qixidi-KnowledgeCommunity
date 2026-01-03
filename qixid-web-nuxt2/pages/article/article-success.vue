@@ -45,7 +45,7 @@ export default {
     },
     basics() {
       let id = this.$base64.decode(this.$route.query.id)
-      this.$API("/white/article/basic/" + id, this.$get()).then(res => {
+      this.$api.whiteApi.getArticleBasic(id).then(res => {
         this.article = res.data;
         this.state = true;
       })

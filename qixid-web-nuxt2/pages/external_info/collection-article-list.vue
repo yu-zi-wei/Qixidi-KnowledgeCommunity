@@ -179,7 +179,7 @@ export default {
       this.collectionParams.collectionId = collectionId;
       this.collectionParams.targetId = id;
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/white/collection/list/" + uuid, "get").then(res => {
+      this.$api.whiteApi.getCollectionList(uuid).then(res => {
         this.collectionList = res.data;
       });
       this.collectionLoading = true;
@@ -187,7 +187,7 @@ export default {
     transferCollection() {
       this.buttonCoLoading = true;
       this.collectionParams.type = 1;
-      this.$API("/frontDesk/update/collection/data", "put", null, this.collectionParams).then(res => {
+      this.$api.collectionApi.updateCollectionData(this.collectionParams).then(res => {
         if (res.code == 200) {
           this.$modal.notifySuccess("转移成功！");
         } else {
@@ -202,7 +202,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要把《' + item.articleTitle + '》移除收藏夹吗？').then(() => {
         this.loading = true;
-        return this.$API("/frontDesk/delete/collection/data/" + item.collectionRecordId, "get");
+        return this.$api.collectionApi.deleteCollectionDataById(item.collectionRecordId);
       }).then(() => {
         this.colArticleLists();
         this.$modal.msgSuccess("删除成功");
@@ -210,13 +210,13 @@ export default {
     },
     getInfos() {
       let id = this.$base64.decode(this.$route.query.id)
-      this.$API("/white/collection/" + id, "get").then(res => {
+      this.$api.whiteApi.getCollectionInfo(id).then(res => {
         this.collectionInfo = res.data;
       })
     },
     getWebsiteInfos() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/white/user/info/" + uuid, "get").then(res => {
+      this.$api.whiteApi.getUserInfo(uuid).then(res => {
         this.userinfo = res.data;
         this.isCurrentUser();
       })
@@ -224,7 +224,7 @@ export default {
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
       let collectionId = this.$base64.decode(this.$route.query.id)
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
         } else if (res.data.uuid == uuid) {
@@ -244,7 +244,7 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/white/collection/article/list", "get", this.queryParams).then(res => {
+          this.$api.whiteApi.getCollectionArticleList(this.queryParams).then(res => {
             res.data.records.forEach(item => {
               this.articleList.push(item)
             })
@@ -256,7 +256,7 @@ export default {
     colArticleLists() {
       this.loading = true;
       this.queryParams.pageNum = 1;
-      this.$API("/white/collection/article/list", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getCollectionArticleList(this.queryParams).then(res => {
         this.articleList = res.data.records;
         this.total = res.data.total;
         this.loading = false;

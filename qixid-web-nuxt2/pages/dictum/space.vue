@@ -234,7 +234,7 @@ export default {
           if (this.albumValue.length > 0) {
             this.albumInfo.cover = this.albumValue[0].url;
           }
-          this.$API("/frontDesk/dictum/album", "post", null, this.albumInfo).then(res => {
+          this.$api.dictumApi.addDictumAlbum(this.albumInfo).then(res => {
             if (res.code == 200) {
               this.$modal.msgSuccess("添加成功!");
               this.dictumAlbumLists();
@@ -247,7 +247,7 @@ export default {
       });
     },
     dictumAlbumLists() {
-      this.$API("/white/dictum/album/list", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getDictumAlbumList(this.queryParams).then(res => {
         this.dictumAlbumListArr = res.rows;
       }).finally(() => {
         this.loading = false;

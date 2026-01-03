@@ -138,7 +138,7 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/frontDesk/fabulous/fabulous/list", "get", this.queryParams).then(res => {
+          this.$api.fabulousApi.getFabulousList(this.queryParams).then(res => {
             res.data.records.forEach(item => {
               this.fabulousArr.push(item)
             })
@@ -163,7 +163,7 @@ export default {
     fabulousLists() {
       this.loginLoading = true;
       this.queryParams.uid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/frontDesk/fabulous/fabulous/list", "get", this.queryParams).then(res => {
+      this.$api.fabulousApi.getFabulousList(this.queryParams).then(res => {
         if (res.data != null) {
           this.fabulousArr = res.data.records;
           this.total = res.data.total;

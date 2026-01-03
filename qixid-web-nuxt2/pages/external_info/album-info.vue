@@ -66,7 +66,7 @@ export default {
         return;
       }
       this.loading = true;
-      this.$API("/white/dictum/album/" + this.id, "get").then(res => {
+      this.$api.whiteApi.getDictumAlbumInfo(this.id).then(res => {
         this.info = res.data;
       }).finally(() => this.loading = false)
     }

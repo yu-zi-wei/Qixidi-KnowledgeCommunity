@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     LabelGroupingInfos() {
-      this.$API("/white/label/grouping/info/" + this.queryParams.groupingId, "get").then(res => {
+      this.$api.whiteApi.getLabelGroupingInfo(this.queryParams.groupingId).then(res => {
         this.labelGroupInfo = res.data;
         this.initialLoading = false;
       })

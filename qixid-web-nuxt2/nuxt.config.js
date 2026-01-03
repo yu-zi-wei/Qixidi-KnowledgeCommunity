@@ -59,7 +59,6 @@ export default {
 
     //---------element-ui配置--------
     '~/static/css/element-ui/index.css',//主题配置
-
     // "element-ui/lib/theme-chalk/index.css", //默认配置
     //---------全局css配置---------
     '~/static/css/common/index.css',
@@ -81,8 +80,7 @@ export default {
     '~/plugins/init.js',//全局配置
     // '~/plugins/mavon-editor.js',//富文本编辑器
     //=================api==================
-    '~/api/API.js', // axios 请求封装
-    '~/api/requestType.js', // axios 请求类型封装
+    '~/api/repository.js', // 注入新的 API 仓库
     '~/plugins/baiduGa.js',//百度统计
     {src: '~/plugins/cropper.js', mode: 'client'},//只在客户端渲染
   ],
@@ -159,6 +157,7 @@ export default {
 
   axios: {
     proxy: true,
+    prefix: '/api',
   },
   proxy: { // axios 配置
     '/api': {
@@ -185,7 +184,14 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extractCSS: {allChunks: true},// 将内嵌的样式提取到外部，解决查看网页源代码是出现css问题
+    babel: {
+      compact: false,
+      cacheDirectory: true // 可选：添加缓存提升构建速度
+    },
+    extractCSS: {
+      allChunks: true,// 将内嵌的样式提取到外部，解决查看网页源代码是出现css问题
+      ignoreOrder: true // 忽略 CSS 顺序警告
+    },
     purgeCSS: true,
     extend(config, {isDev, isClient}) {
       config.module.rules.push({
@@ -224,5 +230,6 @@ export default {
         }
       },
     },
+
   }
 }

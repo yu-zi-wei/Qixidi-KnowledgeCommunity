@@ -693,7 +693,7 @@ export default {
         return;
       }
       //添加私信记录
-      this.$API("/frontDesk/private/user/add/" + uuid, "get");
+      this.$api.privateApi.addPrivateUser(uuid);
       let routeInfo = this.$router.resolve({
         path: "/news/private-letter",
         query: {code: this.$base64.encode(uuid),}
@@ -708,7 +708,7 @@ export default {
     },
     deleteComment(item) {
       this.$modal.confirm('确定要删除当前评论吗？').then(() => {
-        this.$API('/article/comment', 'delete', {
+        this.$api.articleApi.deleteComment({
           id: item.id,
           articleId: item.articleId,
           uid: item.uid,
@@ -738,7 +738,7 @@ export default {
         this.buttonLoading = false;
         return;
       }
-      this.$API('/article/comment/insert', this.$post(), null, this.comment).then(res => {
+      this.$api.articleApi.insertComment(this.comment).then(res => {
         if (res.code === 200) {
           // this.commentTextLoading = false;
           this.$modal.msg("评论成功！");
@@ -779,7 +779,7 @@ export default {
       this.collectionParams.targetId = this.articleInfo.id;
       this.collectionParams.type = 1;
       this.collectionParams.labelId = this.articleInfo.labelId;
-      this.$API('/frontDesk/add/collection/data', this.$post(), null, this.collectionParams).then(res => {
+      this.$api.collectionApi.addCollectionData(this.collectionParams).then(res => {
         if (res.code == 200) {
           this.$modal.notifySuccess("收藏成功！");
           this.articleInfo.isCollection = true;
@@ -796,9 +796,9 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          this.$API('/frontDesk/add/collection', this.$post(), null, this.form).then(() => {
+          this.$api.collectionApi.addCollection(this.form).then(() => {
             this.$modal.msgSuccess("创建成功");
-            this.$API(`/white/collection/list/${this.userInfo.uuid}`, this.$get()).then(res => {
+            this.$api.whiteApi.getCollectionList(this.userInfo.uuid).then(res => {
               this.collectionList = res.data;
             })
           }).finally(() => {
@@ -814,7 +814,7 @@ export default {
         return;
       }
       if (this.articleInfo.isCollection) {
-        this.$API(`/frontDesk/delete/collection/data/${this.articleInfo.collectionRId}/${this.articleInfo.labelId}`, this.$get()).then(res => {
+        this.$api.collectionApi.deleteCollectionData(this.articleInfo.collectionRId, this.articleInfo.labelId).then(res => {
           if (res.code == 200) {
             this.articleInfo.isCollection = false;
             this.$modal.notifySuccess("已取消收藏！");
@@ -822,7 +822,7 @@ export default {
         })
         return;
       }
-      this.$API(`/white/collection/list/${this.userInfo.uuid}`, this.$get()).then(res => {
+      this.$api.whiteApi.getCollectionList(this.userInfo.uuid).then(res => {
         this.collectionList = res.data;
         this.collectionLoading = true;
       })
@@ -846,11 +846,11 @@ export default {
       if (this.isFabulous) {
         this.isFabulous = false;
         this.articleInfo.likeTimes = this.articleInfo.likeTimes - 1;
-        this.$API('/frontDesk/fabulous/cancel', this.$post(), null, data);
+        this.$api.fabulousApi.cancelFabulous(data);
       } else {
         this.isFabulous = true;
         this.articleInfo.likeTimes = this.articleInfo.likeTimes + 1;
-        this.$API('/frontDesk/fabulous/spot', this.$post(), null, data);
+        this.$api.fabulousApi.spotFabulous(data);
       }
     },
 
@@ -865,14 +865,14 @@ export default {
       item.buttonLoading = true;
       if (item.isFollow) {
         item.isFollow = false;
-        this.$API('/user/follow/cancel', this.$post(), null, {targetId: item.userId, type: 1,})
+        this.$api.userApi.cancelFollow({targetId: item.userId, type: 1,})
           .finally(() => {
             this.getBasicsUsers()
             item.buttonLoading = false;
           });
       } else {
         item.isFollow = true;
-        this.$API('/user/follow/add', this.$post(), null, {targetId: item.userId, type: 1,})
+        this.$api.userApi.addFollow({targetId: item.userId, type: 1,})
           .finally(() => {
             this.getBasicsUsers()
             item.buttonLoading = false;
@@ -898,7 +898,7 @@ export default {
     },
     articleDetailsInfoTwo() {
       this.id = this.$base64.decode(this.$route.params.id);
-      this.$API('/white/article/details/' + this.id, this.$get()).then(res => {
+      this.$api.whiteApi.getArticleDetails(this.id).then(res => {
         this.articleInfo = res.data;
         this.queryParams.articleTitle = this.articleInfo.articleTitle;
         this.queryParams.id = this.articleInfo.id;
@@ -911,12 +911,12 @@ export default {
       this.getBasicsUsers();
       this.loading = false;
       // this.generateDirectory();
-      this.$API(`/white/article/add/browse-count/${this.articleInfo.id}/${this.articleInfo.labelId}`);
+      this.$api.whiteApi.addBrowseCount(this.articleInfo.id, this.articleInfo.labelId);
       //获取相关文章
-      this.$API('/white/article/related/list', this.$get(), this.queryParams).then(res => {
+      this.$api.whiteApi.getRelatedArticleList(this.queryParams).then(res => {
         this.listInformationList = res;
         //  记录用户浏览历史
-        this.$API('/frontDesk/browsing/history', this.$post(), null, {
+        this.$api.browsingApi.addBrowsingHistory({
           targetId: this.articleInfo.id,
           targetUid: this.articleInfo.userId,
           targetTitle: this.articleInfo.articleTitle,
@@ -929,7 +929,7 @@ export default {
       let query = {
         articleId: this.articleInfo.id
       }
-      this.$API('/white/article/comment/list', this.$get(), query).then(res => {
+      this.$api.whiteApi.getArticleCommentList(query).then(res => {
         this.articleComment = res.data;
         if (this.articleComment.length > 0) {
           this.commentTotal = this.articleComment[0].commentTotal;
@@ -937,7 +937,7 @@ export default {
       })
     },
     getBasicsUsers() {
-      this.$API('/front-desk/user/basics', this.$get(), null, null).then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
           if (res.data != null && res.data.uuid === this.articleInfo.userId) {

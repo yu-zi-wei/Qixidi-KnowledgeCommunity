@@ -331,7 +331,7 @@ export default {
           if (this.albumValue.length > 0) {
             this.albumInfo.cover = this.albumValue[0].url;
           }
-          this.$API("/frontDesk/dictum/album", "post", null, this.albumInfo).then(res => {
+          this.$api.dictumApi.addDictumAlbum(this.albumInfo).then(res => {
             if (res.code == 200) {
               this.$modal.msgSuccess("添加成功!");
               this.dictumAlbumLists();
@@ -353,7 +353,7 @@ export default {
           if (this.update.type != 1) {//非编辑模式下，清空id
             this.dictumInfo.id = null;
           }
-          this.$API("/frontDesk/dictum/info", "post", null, this.dictumInfo).then(res => {
+          this.$api.dictumApi.addDictumInfo(this.dictumInfo).then(res => {
             if (res.code == 200) {
               this.$router.push({
                 path: '/dictum/space/content-list',
@@ -392,17 +392,17 @@ export default {
     },
 
     dictumAlbumLists() {
-      this.$API("/frontDesk/dictum/album/role/list", "get").then(res => {
+      this.$api.dictumApi.getDictumAlbumRoleList().then(res => {
         this.dictumAlbumListArr = res.rows;
       }).finally(() => this.loading = false);
     },
     dictumGroupLists() {
-      this.$API("/white/dictum/group/list", "get").then(res => {
+      this.$api.whiteApi.getDictumGroupList().then(res => {
         this.dictumGroupListArr = res.rows;
       })
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null) {
           return;
         }
@@ -417,7 +417,7 @@ export default {
         this.update.buttonTitle = "更新随笔";
         this.update.pageTitle = "随笔更新";
       }
-      this.$API("/frontDesk/dictum/info/" + this.update.id, "get").then(res => {
+      this.$api.dictumApi.getDictumDetails(this.update.id).then(res => {
         this.dictumInfo = res.data;
         if (this.dictumInfo.label != null) {
           this.dynamicTags = this.dictumInfo.label.split(",");

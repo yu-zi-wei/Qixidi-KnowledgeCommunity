@@ -149,10 +149,12 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.specialName + '》专栏吗？').then(() => {
         this.loading = true;
-        return this.$API("/white/delete/special/" + item.id, "delete");
-      }).then(() => {
-        this.specialListUids();
-        this.$modal.msgSuccess("删除成功");
+        this.$api.whiteApi.deleteSpecial(item.id).then(res => {
+          if (res.code == 200) {
+            this.specialListUids();
+            this.$modal.msgSuccess("删除成功");
+          }
+        })
       }).finally(() => this.loading = false)
     },
     add() {
@@ -179,7 +181,7 @@ export default {
             this.form.cover = this.value[0].url;
           }
           if (this.tips.isAdd) {
-            this.$API("/special/information", "post", null, this.form).then(response => {
+            this.$api.specialApi.addSpecial(this.form).then(response => {
               if (response.code == 200) {
                 this.$modal.msg("添加成功");
                 this.specialListUids();
@@ -189,7 +191,7 @@ export default {
               this.dialogVisible = false;
             });
           } else {
-            this.$API("/special/information", "put", null, this.form).then(response => {
+            this.$api.specialApi.updateSpecial(this.form).then(response => {
               if (response.code == 200) {
                 this.$modal.msg("更新成功");
                 this.specialListUids();
@@ -217,7 +219,7 @@ export default {
       this.value = []
     },
     isCurrentUser() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null) {
           this.$router.push('/');
           return;
@@ -234,7 +236,7 @@ export default {
       }, this.debounceTime);
     },
     specialListUids() {
-      this.$API("/white/special/list", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getSpecialList(this.queryParams).then(res => {
         this.specialUserList = res.data;
         this.loading = false;
         this.animator.triggerAllItemsAnimation(this.specialUserList, 'userAdminSpecialItem');

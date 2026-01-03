@@ -120,7 +120,7 @@ export default {
   methods: {
     addReports(data) {
       this.loading = true;
-      this.$API("/frontDesk/user/report", "post", null, {
+      this.$api.userApi.report({
           acurrency: this.addAcurrency,
           reportTime: data,
         }
@@ -132,7 +132,7 @@ export default {
       })
     },
     reportLists() {
-      this.$API("/frontDesk/user/report/list", "get").then(res => {
+      this.$api.userApi.getUserReportList().then(res => {
         this.reportList = res.data.list;
         this.ctnFatalism = res.data.ctnFatalism;
         this.sumFatalism = res.data.sumFatalism;
@@ -143,7 +143,7 @@ export default {
       })
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }

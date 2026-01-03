@@ -205,7 +205,7 @@ export default {
             code: this.registerFrom.code == null ? null : this.$base64.encode(this.registerFrom.code),
             registerType: 2
           }
-          this.$API("/oauth/reset/password", "post", null, fromData).then(res => {
+          this.$api.oauthApi.resetPassword(fromData).then(res => {
             if (res.code === 200) {
               this.$modal.notifySuccess("密码重置成功！");
               this.backToLogin();
@@ -234,8 +234,8 @@ export default {
           }
           this.registerLoading = true;
           this.getCode = "发送中";
-          // this.$API(`/oauth/phone/code/${this.registerFrom.phone}/${mag}`, "get").then().finally(() => this.registerLoading = false)
-          this.$API(`/oauth/email/code/${this.registerFrom.email}/${type}`, "get").then().finally(() => this.registerLoading = false)
+          // this.$api.oauthApi.getPhoneCode(this.registerFrom.phone, mag).then().finally(() => this.registerLoading = false)
+          this.$api.oauthApi.getEmailCode(this.registerFrom.email, type).then().finally(() => this.registerLoading = false)
           let countDown = setInterval(() => {
             this.registerLoading = false;
             if (this.count < 1) {
@@ -263,14 +263,14 @@ export default {
             code: this.registerFrom.code == null ? null : this.$base64.encode(this.registerFrom.code),
             registerType: 1
           }
-          this.$API('/oauth/front-desk/register', this.$post(), null, fromData).then(res => {
+          this.$api.oauthApi.register(fromData).then(res => {
             if (res.code === 200) {
               this.$modal.notifySuccess("注册成功，欢迎加入这个大家庭！");
               let fromData = {
                 username: this.$base64.encode(this.registerFrom.email),
                 password: this.$base64.encode(this.registerFrom.password),
               }
-              this.$API("/oauth/front-desk/login", this.$post(), null, fromData).then(res => {
+              this.$api.oauthApi.login(fromData).then(res => {
                 if (res.code == 200) {
                   this.urlSplicing();
                   this.$router.push(process.env.LOGIN_TRANSFER + "?key=" + res.data.uuid + "&token=" + res.data.token);
@@ -308,7 +308,7 @@ export default {
         this.$modal.notify("待开发！");
         return
       }
-      this.$API(`/oauth/render/${type}`, this.$post()).then(res => {
+      this.$api.oauthApi.renderAuth(type).then(res => {
         if (res.code == 200) {
           window.location.href = res.data.url;
         } else {
@@ -318,7 +318,7 @@ export default {
     },
     // 退出
     notRefreshLogOut() {
-      this.$API("/oauth/logout", this.$post()).then(res => {
+      this.$api.oauthApi.logout().then(res => {
         this.$store.commit('removeToken')//删除 token
       })
     },
@@ -331,7 +331,7 @@ export default {
             username: this.form.username == null ? null : this.$base64.encode(this.form.username),
             password: this.form.password == null ? null : this.$base64.encode(this.form.password),
           }
-          this.$API("/oauth/front-desk/login", this.$post(), null, fromData).then(res => {
+          this.$api.oauthApi.login(fromData).then(res => {
             if (res.code == 200) {
               this.urlSplicing();
               this.$router.push(process.env.LOGIN_TRANSFER + "?key=" + res.data.uuid + "&token=" + res.data.token);

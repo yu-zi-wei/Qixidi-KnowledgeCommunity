@@ -58,14 +58,14 @@ export default {
       this.followLoading = true;
       if (item.isFollow) {
         item.isFollow = false;
-        this.$API('/user/follow/cancel', 'post', null, {targetId: item.id, type: 2,})
+        this.$api.userApi.cancelFollow({targetId: item.id, type: 2,})
           .finally(() => {
             this.fdLabelInfos(this.$route.query.data, this.$route.query.type);
             this.followLoading = false;
           });
       } else {
         item.isFollow = true;
-        this.$API('/user/follow/add', 'post', null, {targetId: item.id, type: 2,}).finally(() => {
+        this.$api.userApi.addFollow({targetId: item.id, type: 2,}).finally(() => {
           this.fdLabelInfos(this.$route.query.data, this.$route.query.type);
           this.followLoading = false;
         });
@@ -77,13 +77,13 @@ export default {
     fdLabelInfos() {
       let id = this.$route.query.data
       let type = this.$route.query.type
-      this.$API(`/white/label/info/${id}/${type}`, 'get').then(res => {
+      this.$api.whiteApi.getLabelInfo(id, type).then(res => {
         this.labelInfo = res;
         this.initialLoading = false;
       })
     },
     getBasicsUsers() {
-      this.$API('/front-desk/user/basics', 'get').then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }

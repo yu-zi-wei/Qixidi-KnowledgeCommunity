@@ -164,7 +164,7 @@ export default {
     },
     tesTtoolList() {
       // console.log("this.toolList:", JSON.stringify(this.toolList))
-      this.$API("/user/census/submission", "get").then(res => {
+      this.$api.userApi.getCensusSubmission().then(res => {
         this.submissionObj = res.data.reduce((acc, item) => {
           acc[item.dateTimes] = item.censusSum;
           return acc;
@@ -244,8 +244,7 @@ export default {
         "name": "参数"
       };
       // let newVar = this.$axios.post('/api/list');
-      this.$API("/white/configure/tool/list", this.$get(), null).then(tes => {
-        console.log("requestType:", this.$get())
+      this.$api.whiteApi.getToolList().then(tes => {
       })
     },
     dynamicRouting() {

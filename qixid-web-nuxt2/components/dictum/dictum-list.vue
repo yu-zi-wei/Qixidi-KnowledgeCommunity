@@ -591,7 +591,7 @@ export default {
         cancelButtonText: '取 消',
         type: 'warning'
       }).then(() => {
-        this.$API(`/frontDesk/dictum/comment/delete/${id}`, "delete").then(res => {
+        this.$api.dictumApi.deleteDictumComment(id).then(res => {
           if (res.code == 200) {
             this.$modal.msgSuccess("删除成功");
             this.getCommentList();
@@ -625,7 +625,7 @@ export default {
       this.buttonLoading = true;
       this.buttonLoading2 = true;
       this.buttonLoading3 = true;
-      this.$API("/frontDesk/dictum/comment/add", "post", null, dictumComment).then(res => {
+      this.$api.dictumApi.addDictumComment(dictumComment).then(res => {
         if (res.code == 200) {
           this.$modal.msgSuccess("评论成功");
           this.getCommentList();
@@ -646,7 +646,7 @@ export default {
       this.getCommentList();
     },
     getCommentList() {
-      this.$API(`/white/dictum/comment/list/${this.dictumInfo.id}`, "get").then(res => {
+      this.$api.whiteApi.getDictumCommentList(this.dictumInfo.id).then(res => {
         this.commentList = [];
         if (res.code == 200) {
           this.commentList = res.rows;
@@ -669,7 +669,7 @@ export default {
     deleteInfo(item) {
       this.$modal.confirm('确认要删除该随笔吗？').then(() => {
         this.loading = true;
-        return this.$API(`/frontDesk/dictum/info/${item.id}/${item.groupId}`, "delete");
+        return this.$api.dictumApi.deleteDictumInfo(item.id, item.groupId);
       }).then(res => {
         this.dictumInfoLists();
         this.$modal.msgSuccess("删除成功!");
@@ -690,7 +690,7 @@ export default {
       this.queryParams.uid = this.uid;
       this.queryParams.type = this.type;
       this.dictumInfoListArr = [];
-      this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getDictumInfoList(this.queryParams).then(res => {
         this.dictumInfoListArr = res.rows;
         this.total = res.total;
       }).finally(() => {
@@ -700,7 +700,7 @@ export default {
       this.getBasicsUsers();
     },
     getBasicsUsers() {
-      this.$API('/front-desk/user/basics', this.$get()).then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }
@@ -721,7 +721,7 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
         const startIndex = this.dictumInfoListArr.length; // 记录新增前的索引
-        this.$API("/white/dictum/info/list", "get", this.queryParams).then(res => {
+        this.$api.whiteApi.getDictumInfoList(this.queryParams).then(res => {
           if (this.typography === 1 && this.$refs.waterfallLayout) {
             this.$refs.waterfallLayout.addItems(res.rows);
           } else {

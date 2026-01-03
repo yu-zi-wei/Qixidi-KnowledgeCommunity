@@ -152,7 +152,7 @@ export default {
   methods: {
     followClick(item, id, type) {
       item.buttonLoading = true;
-      this.$API("/user/follow/cancel", "post", null, {targetId: id, type: type,}).finally(() => {
+      this.$api.userApi.cancelFollow({targetId: id, type: type,}).finally(() => {
         this.followLists();
         item.buttonLoading = false;
       });
@@ -191,7 +191,7 @@ export default {
     followLists() {
       this.loginLoading = true;
       this.queryParams.uid = this.$base64.decode(this.$route.query.uuid)
-      this.$API(`/white/user/follow/list/${this.queryParams.uid}/${this.queryParams.type}`, "get").then(res => {
+      this.$api.whiteApi.getFollowList(this.queryParams.uid, this.queryParams.type).then(res => {
         this.followArrList = res.data;
       }).finally(() => {
         this.loginLoading = false

@@ -172,7 +172,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.articleTitle + '》文章吗？').then(() => {
         this.loading = true;
-        this.$API('/user/delete/article/' + item.id, "DELETE");
+        this.$api.userApi.deleteArticle(item.id);
         return;
       }).then(() => {
         this.getArticleInfos();
@@ -188,7 +188,7 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/user/article/list", this.$get(), this.queryParams).then(res => {
+          this.$api.userApi.getArticleList(this.queryParams).then(res => {
             res.data.records.forEach(item => {
               this.articleList.push(item)
             })
@@ -208,7 +208,7 @@ export default {
       this.queryParams.pageNum = 1;
       this.queryParams.auditState = this.state;
       this.queryParams.articleTitle = this.keyword;
-      this.$API("/user/article/list", this.$get(), this.queryParams).then(res => {
+      this.$api.userApi.getArticleList(this.queryParams).then(res => {
         this.articleList = res.data.records;
         this.total = res.data.total;
         this.loading = false;

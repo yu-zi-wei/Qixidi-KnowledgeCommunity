@@ -137,7 +137,7 @@ export default {
         this.scrollLoading = false;
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         const startIndex = this.listInformationList.length; // 记录新增前的索引
-        this.$API("/white/article/recommend/list", this.$get(), this.queryParams).then(res => {
+        this.$api.whiteApi.getRecommendArticleList(this.queryParams).then(res => {
           res.rows.forEach(item => {
             this.listInformationList.push(item)
           })
@@ -148,7 +148,7 @@ export default {
       }
     },
     listInformation() {
-      this.$API("/white/article/recommend/list", this.$get(), this.queryParams).then(res => {
+      this.$api.whiteApi.getRecommendArticleList(this.queryParams).then(res => {
         this.listInformationList = res.rows
         this.total = res.total;
         // 数据加载完成后触发动画

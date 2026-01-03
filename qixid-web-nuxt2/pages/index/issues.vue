@@ -258,7 +258,7 @@ export default {
         this.loginDialog = true;
       } else {
         this.$modal.confirm('确认要删除该Issues吗？').then(() => {
-          this.$API("/frontDesk/feedback/delete/" + id, "delete").then(res => {
+          this.$api.feedbackApi.deleteFeedback(id).then(res => {
             if (res.code == 200) {
               this.$message.success("删除成功");
               this.getList();
@@ -274,7 +274,7 @@ export default {
         this.$message.warning("标题不能为空");
         return;
       }
-      this.$API("/frontDesk/feedback/add", this.$post(), null, this.addFeedbackInfo).then(res => {
+      this.$api.feedbackApi.addFeedback(this.addFeedbackInfo).then(res => {
         if (res.code == 200) {
           this.$message.success("新建成功");
           this.addDialogVisible = false;
@@ -295,7 +295,7 @@ export default {
       this.loginDialog = val;
     },
     updateFeedbackInfoStatus() {
-      this.$API(`/frontDesk/feedback/update/status/${this.feedbackInfo.id}/${this.feedbackInfo.status}`, this.$get()).then(res => {
+      this.$api.feedbackApi.updateFeedbackStatus(this.feedbackInfo.id, this.feedbackInfo.status).then(res => {
         if (res.code == 200) {
           this.$message.success("更新成功");
           this.getList();
@@ -306,7 +306,7 @@ export default {
       })
     },
     updateFeedbackInfo() {
-      this.$API("/frontDesk/feedback/update", this.$post(), null, this.feedbackInfo).then(res => {
+      this.$api.feedbackApi.updateFeedback(this.feedbackInfo).then(res => {
         if (res.code == 200) {
           this.$message.success("更新成功");
           this.editingDialogVisible = false;
@@ -318,14 +318,14 @@ export default {
       if (this.userInfo == null) {
         this.loginDialog = true;
       } else {
-        this.$API("/white/feedback/byId/" + item.id, "get").then(res => {
+        this.$api.whiteApi.getFeedbackById(item.id).then(res => {
           this.feedbackInfo = res.data;
           this.editingDialogVisible = true;
         })
       }
     },
     viewInfo(item) {
-      this.$API("/white/feedback/byId/" + item.id, "get").then(res => {
+      this.$api.whiteApi.getFeedbackById(item.id).then(res => {
         this.feedbackInfo = res.data;
         this.dialogVisible = true;
       })
@@ -359,18 +359,18 @@ export default {
 
     getList() {
       this.loading = true;
-      this.$API("/white/feedback/list", this.$get(), this.queryParams).then(res => {
+      this.$api.whiteApi.getFeedbackList(this.queryParams).then(res => {
         this.feedbackList = res.rows;
         this.total = res.total;
         this.loading = false;
       })
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }
-        this.$API("/white/feedback/status/sum", "get").then(res => {
+        this.$api.whiteApi.getFeedbackStatusSum().then(res => {
           this.feedbackStatusSumVo = res.data;
         }).finally(() => {
           this.issuesLoading = true;

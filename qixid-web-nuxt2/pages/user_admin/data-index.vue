@@ -191,9 +191,9 @@ export default {
       window.open(routeInfo.href, '_blank');
     },
     CountUserCensusInfo() {
-      this.$API("/user/census/count/user", this.$get(), this.query).then(res => {
+      this.$api.userApi.getCensusUserCount(this.query).then(res => {
         this.countUseInfo = res.data;
-        this.$API("/user/census/submission", "get").then(res => {
+        this.$api.userApi.getCensusSubmission().then(res => {
           this.submissionObj = res.data.reduce((acc, item) => {
             acc[item.dateTimes] = item.censusSum;
             return acc;
@@ -206,7 +206,7 @@ export default {
     CensusList() {
       //收藏夹统计
       import('@antv/g2plot').then(({Pie}) => {
-        this.$API("/user/census/collection", "get", this.query).then(res => {
+        this.$api.userApi.getCensusCollection(this.query).then(res => {
           if (res.data.length != 0) {
             const piePlot = new Pie('timeCollectionCensus', {
               appendPadding: 10,
@@ -248,7 +248,7 @@ export default {
             piePlot.render();
           }
           //专栏统计
-          this.$API("/user/census/special", "get", this.query).then(res => {
+          this.$api.userApi.getCensusSpecial(this.query).then(res => {
             if (res.data.length == 0) {
               return;
             }

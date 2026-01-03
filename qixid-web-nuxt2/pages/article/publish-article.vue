@@ -284,7 +284,7 @@ export default {
           this.buttonLoading = true;
           this.article.labelId = this.article.labelLongList.toString();
           this.article.auditState = 2;
-          this.$API("/user/insert/article", this.$post(), null, this.article).then(res => {
+          this.$api.userApi.insertArticle(this.article).then(res => {
             if (res.code === 200) {
               this.$modal.notifySuccess("发布成功");
               this.articlePopupDialog = false;
@@ -311,7 +311,7 @@ export default {
       if (this.value.length > 0) {
         this.article.articleCover = this.value[0].url;
       }
-      this.$API("/user/save/draft", this.$put(), null, this.article).then(res => {
+      this.$api.userApi.saveDraft(this.article).then(res => {
         if (res.code === 200) {
           this.article.id = res.data.id;
           this.$modal.notifySuccess("保存成功");
@@ -335,14 +335,14 @@ export default {
       this.articlePopupDialog = true;
     },
     getLatelyArticleList() {
-      this.$API("/user/lately/article/list", this.$get(), this.latelyArticleQueryParams).then(response => {
+      this.$api.userApi.getLatelyArticleList(this.latelyArticleQueryParams).then(response => {
         this.latelyArticleList = response.data;
       });
     },
     loadArticleInfo(id) {
       this.isClient = false;
       if (id != null && id != "") {
-        this.$API("/user/get/article/" + this.$base64.decode(id), this.$get()).then(res => {
+        this.$api.userApi.getArticle(this.$base64.decode(id)).then(res => {
           this.article = res.data;
           this.value = this.article.articleCover == null ? [] : [{url: this.article.articleCover,}];
           this.isClient = true;
@@ -356,16 +356,16 @@ export default {
     loadBasicData() {
       let id = this.$route.query.id;
       this.loadArticleInfo(id);
-      this.$API("/front-desk/user/basics", this.$get()).then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         this.userInfo = res.data;
       })
-      this.$API("/business/groupingInfo/list", this.$get()).then(response => {
+      this.$api.businessApi.getGroupingInfoList().then(response => {
         this.labelGroupList = response.rows;
       });
-      this.$API("/business/label-info/list", this.$get()).then(response => {
+      this.$api.businessApi.getLabelInfoList().then(response => {
         this.labelList = response.rows;
       });
-      this.$API("/white/aut/special/list", this.$get()).then(response => {
+      this.$api.whiteApi.getSpecialList().then(response => {
         this.specialList = response.data;
       });
       this.getLatelyArticleList();

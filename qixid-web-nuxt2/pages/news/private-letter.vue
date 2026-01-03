@@ -173,11 +173,11 @@ export default {
         cancelButtonText: '取 消',
         type: 'warning'
       }).then(() => {
-        this.$API("/frontDesk/private/user/all", "delete").then(res => {
+        this.$api.privateApi.deleteAllPrivateUser().then(res => {
           this.$modal.msgSuccess("已清空!");
           this.$router.push("/user/news/private-letter");
           //获取 私信用户
-          this.$API("/frontDesk/private/user/list", "get", {uid: this.userInfo.uuid}).then(res => {
+          this.$api.privateApi.getPrivateUserList({uid: this.userInfo.uuid}).then(res => {
             this.privateUserList = res.rows;
           })
         });
@@ -189,12 +189,12 @@ export default {
         cancelButtonText: '取 消',
         type: 'warning'
       }).then(() => {
-        this.$API("/frontDesk/private/user/" + item.targetUid, "delete").then(res => {
+        this.$api.privateApi.deletePrivateUser(item.targetUid).then(res => {
           if (res.code == 200) {
             this.$modal.msgSuccess("删除成功!");
             this.$router.push("/news/private-letter");
             //获取 私信用户
-            this.$API("/frontDesk/private/user/list", "get", {uid: this.userInfo.uuid}).then(res => {
+            this.$api.privateApi.getPrivateUserList({uid: this.userInfo.uuid}).then(res => {
               this.privateUserList = res.rows;
             })
           }
@@ -271,14 +271,14 @@ export default {
       //建立用户链接
       this.webSocketUserLink(this.userInfo.uuid + ":" + this.replyNews.replyTargetUid);
       //消息已读
-      this.$API("/frontDesk/private/newsInfo/been/read/" + this.replyNews.replyTargetUid, "get").finally(() => {
+      this.$api.privateApi.readPrivateNews(this.replyNews.replyTargetUid).finally(() => {
         //  刷新用户列表
-        // this.$API("/frontDesk/private/user/list", "get", {uid: this.userInfo.uuid}).then(res => {
+        // this.$api.privateApi.getPrivateUserList({uid: this.userInfo.uuid}).then(res => {
         //   this.privateUserList = res.rows;
         // })
       });
       //获取聊天数据
-      this.$API("/frontDesk/private/newsInfo/list", "get", this.replyNews).then(res => {
+      this.$api.privateApi.getPrivateNewsList(this.replyNews).then(res => {
         this.newsList = res.rows;
         // console.log("成功")
         //滚动条在底部
@@ -290,7 +290,7 @@ export default {
         this.newsLoading = false
       });
       //是否在线
-      this.$API("/websocket/is-online/" + this.replyNews.replyTargetUid, "get").then(res => {
+      this.$api.commonApi.checkUserOnline(this.replyNews.replyTargetUid).then(res => {
         this.positionUserInfo = res.data;
       })
     },
@@ -306,7 +306,7 @@ export default {
       }
       this.buttonLoading = true;
       this.replyNews.replyTargetUid = this.$base64.decode(decode);
-      this.$API("/frontDesk/private/newsInfo", "post", null, this.replyNews).then(res => {
+      this.$api.privateApi.sendPrivateNews(this.replyNews).then(res => {
         this.newsList.push({
           uid: this.userInfo.uuid,
           nickname: this.userInfo.nickname,
@@ -324,13 +324,13 @@ export default {
       })
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
           if (this.userInfo != null || this.userInfo.userType == "tripartite_user") {
             this.isLogin = true;
             //获取 私信用户
-            this.$API("/frontDesk/private/user/list", "get", {uid: this.userInfo.uuid}).then(res => {
+            this.$api.privateApi.getPrivateUserList({uid: this.userInfo.uuid}).then(res => {
               this.privateUserList = res.rows;
             })
             //获取私信信息

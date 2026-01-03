@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     fdUserLists() {
-      this.$API("/white/userAllList", "get").then(res => {
+      this.$api.whiteApi.getUserAllList().then(res => {
         this.userList = res.rows;
         this.initialLoading = false;
         this.animator.triggerAllItemsAnimation(this.userList, 'allUserItem');

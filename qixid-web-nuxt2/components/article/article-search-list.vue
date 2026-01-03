@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     articleWhiteList() {
-      this.$API('/white/article/list', 'get', this.queryParams).then(res => {
+      this.$api.whiteApi.getArticleList(this.queryParams).then(res => {
         this.listInformationList = res.rows;
         this.total = res.total;
         this.initLoading = false;
@@ -170,7 +170,7 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.loading = true;
         const startIndex = this.listInformationList.length; // 记录新增前的索引
-        this.$API('/white/article/list', 'get', this.queryParams).then(res => {
+        this.$api.whiteApi.getArticleList(this.queryParams).then(res => {
           res.rows.forEach(item => {
             this.listInformationList.push(item)
           })

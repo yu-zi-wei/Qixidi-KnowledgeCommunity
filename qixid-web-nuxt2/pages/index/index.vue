@@ -372,7 +372,7 @@ export default {
         return;
       }
       this.becomeCreatorLoading = true;
-      this.$API("/front-desk/user/creator/application", "post", null, {
+      this.$api.userApi.applyCreator({
         applicationContent: this.becomeCreatorContent
       }).then(res => {
         if (res.code == 200) {
@@ -394,13 +394,13 @@ export default {
     },
     gitUserInfo() {
       this.userInfoLoading = false
-      this.$API("/front-desk/user/info", this.$get()).then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         this.userInfo = res.data;
       }).finally(() => this.userInfoLoading = false);
     },
     selectedArticleListApi() {
       this.selectedArticleLoading = true;
-      this.$API("/white/article/selected", this.$get()).then(res => {
+      this.$api.whiteApi.getSelectedArticles().then(res => {
         this.selectedArticleList = res.data;
       }).finally(() => {
         this.selectedArticleLoading = false
@@ -411,11 +411,11 @@ export default {
     },
     getSiteInfo() {
       this.siteInfoLoading = true;
-      this.$API("/white/site/info", this.$get()).then(res => {
+      this.$api.whiteApi.getSiteInfo().then(res => {
         this.siteInfo = res.data;
         this.siteOperationTime = this.timeDifference(this.siteInfo.createTime);
       }).finally(() => this.siteInfoLoading = false);
-      this.$API("/white/site/total-data", this.$get()).then(res => {
+      this.$api.whiteApi.getSiteTotalData().then(res => {
         this.statDataInfoVo = res.data;
       }).finally(() => this.statDataInfoLoading = true);
     },
@@ -442,16 +442,16 @@ export default {
 
     listSidebar() {
       let sidebarList = localStorage.getItem('sidebarList');
-      if (sidebarList != null) {
+      if (sidebarList != null && sidebarList != 'undefined') {
         this.sidebarList = JSON.parse(sidebarList);
         this.sidebarDialog = false
       }
       let labelGroupingList = localStorage.getItem('labelGroupingList');
-      if (sidebarList != null) {
+      if (sidebarList != null && sidebarList != 'undefined') {
         this.labelGroupingList = JSON.parse(labelGroupingList);
         this.labelGroupingDialog = false
       }
-      this.$API("/frontDesk/user/report/list", this.$get()).then(res => {
+      this.$api.userApi.getUserReportList().then(res => {
         if (res.data != null) {
           this.ctnFatalism = res.data.ctnFatalism;
           this.isReport = res.data.isReport;
@@ -461,12 +461,12 @@ export default {
 
       this.selectedArticleListApi();
       this.getSiteInfo();
-      this.$API("/white/label/grouping/list", this.$get(), {pageNum: 0, pageSize: 12,}).then(res => {
+      this.$api.whiteApi.getLabelGroupingList({pageNum: 0, pageSize: 12,}).then(res => {
         this.labelGroupingList = res.rows;
         localStorage.setItem("labelGroupingList", JSON.stringify(this.labelGroupingList));
       }).finally(() => this.labelGroupingDialog = false);
 
-      this.$API("/white/configure/sidebar/list", this.$get(), {type: 1, status: 0}).then(res => {
+      this.$api.whiteApi.getSidebarList({type: 1, status: 0}).then(res => {
         this.sidebarList = res.data;
         localStorage.setItem("sidebarList", JSON.stringify(this.sidebarList));
       }).finally(() => this.sidebarDialog = false);

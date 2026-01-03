@@ -83,14 +83,14 @@ export default {
       item.buttonLoading = true;
       if (item.isFollow) {
         item.isFollow = false;
-        this.$API("/user/follow/cancel", "post", null, {targetId: item.id, type: 2,})
+        this.$api.userApi.cancelFollow({targetId: item.id, type: 2,})
           .finally(() => {
             this.fdLabelLists()
             item.buttonLoading = false;
           });
       } else {
         item.isFollow = true;
-        this.$API("/user/follow/add", "post", null, {targetId: item.id, type: 2,})
+        this.$api.userApi.addFollow({targetId: item.id, type: 2,})
           .finally(() => {
             this.fdLabelLists()
             item.buttonLoading = false;
@@ -98,7 +98,7 @@ export default {
       }
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }
@@ -108,7 +108,7 @@ export default {
       this.loginDialog = val;
     },
     fdLabelLists() {
-      this.$API("/white/label/list", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getLabelList(this.queryParams).then(res => {
         this.labelList = res;
         this.initialLoading = false;
         this.animator.triggerAllItemsAnimation(this.labelList, 'searchLabelItem');

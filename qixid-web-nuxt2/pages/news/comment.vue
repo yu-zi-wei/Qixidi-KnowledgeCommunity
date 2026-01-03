@@ -136,11 +136,11 @@ export default {
       window.open(routeInfo.href, '_blank');
     },
     userNewsReads() {
-      this.$API("/frontDesk/news/news-read", "get", {type: 1, beenRead: 1,});
+      this.$api.newsApi.readNews({type: 1, beenRead: 1,});
     },
     replyComment(id) {
       this.commentState = true;
-      this.$API("/get/comment/" + id, "get").then(res => {
+      this.$api.commonApi.getCommentById(id).then(res => {
         if (res.data == null) {
           this.commentState = false;
           this.$modal.notifyError("评论已删除!");
@@ -160,7 +160,7 @@ export default {
       this.comment.targetId = item.id;
       this.comment.targetUid = item.commentUid;
       this.comment.type = 2;
-      this.$API("/article/comment/insert", "post", null, this.comment).then(res => {
+      this.$api.articleApi.insertComment(this.comment).then(res => {
         if (res.code === 200) {
           this.$modal.msg("回复成功！");
           this.comment.content = null;
@@ -168,7 +168,7 @@ export default {
       }).finally(() => this.buttonLoading = false)
     },
     userNewsLists() {
-      this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
+      this.$api.newsApi.getNewsList(this.queryParams).then(res => {
         this.newsList = res.data.records;
         this.total = res.data.records.total;
         this.loading = false;
@@ -190,7 +190,7 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
         const startIndex = this.newsList.length; // 记录新增前的索引
-        this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
+        this.$api.newsApi.getNewsList(this.queryParams).then(res => {
           res.records.forEach(item => {
             this.newsList.push(item)
           })

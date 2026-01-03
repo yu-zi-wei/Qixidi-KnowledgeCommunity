@@ -116,7 +116,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.specialName + '》专栏吗？').then(() => {
         this.loading = true;
-        return this.$APi("/white/delete/special/" + item.id, "get");
+        return this.$api.whiteApi.deleteSpecial(item.id);
       }).then(() => {
         this.specialListUids();
         this.$modal.msgSuccess("删除成功");
@@ -135,7 +135,7 @@ export default {
           if (this.value.length > 0) {
             this.form.cover = this.value[0].url;
           }
-          this.$API("/special/information", "put", null, this.form).then(response => {
+          this.$api.specialApi.updateSpecial(this.form).then(response => {
             this.$modal.msg("更新成功");
             this.specialListUids();
           }).finally(() => {
@@ -161,7 +161,7 @@ export default {
     },
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
           return;
@@ -177,7 +177,7 @@ export default {
         uid: this.uuid,
         specialName: this.keyword,
       }
-      this.$API("/white/special/list", "get", queryParams).then(res => {
+      this.$api.whiteApi.getSpecialList(queryParams).then(res => {
         this.specialUserList = res.data;
         this.loading = false;
         this.animator.triggerAllItemsAnimation(this.specialUserList, 'userHomeSpecial');

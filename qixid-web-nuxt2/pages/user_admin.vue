@@ -94,7 +94,7 @@ export default {
     listSidebar() {
       this.loading = true;
       let data = {type: 2, status: 0}
-      this.$API("/white/configure/sidebar/list", this.$get(), data).then(res => {
+      this.$api.whiteApi.getSidebarList(data).then(res => {
         this.toUserSidebar = res.data;
         this.toUserSidebar.forEach(item => {
           this.openeds.push(item.route);

@@ -170,7 +170,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.articleTitle + '》文章吗？').then(() => {
         this.loading = true;
-        return this.$API("/user/delete/article/" + item.id, "delete");
+        return this.$api.userApi.deleteArticle(item.id);
       }).then(() => {
         this.getArticleInfos();
         this.$modal.msgSuccess("删除成功");
@@ -178,20 +178,20 @@ export default {
     },
     getInfos() {
       let specialId = this.$base64.decode(this.$route.query.id)
-      this.$API("/white/special/" + specialId, "get").then(res => {
+      this.$api.whiteApi.getSpecialInfo(specialId).then(res => {
         this.specialInfo = res.data;
       })
     },
     getWebsiteInfos() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/white/user/info/" + uuid, "get").then(res => {
+      this.$api.whiteApi.getUserInfo(uuid).then(res => {
         this.userinfo = res.data;
       })
     },
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
       let specialId = this.$base64.decode(this.$route.query.id)
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
           return;
@@ -213,11 +213,11 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/white/article/user/list", "get", this.queryParams).then(res => {
-            res.data.records.forEach(item => {
+          this.$api.whiteApi.getUserArticleList(this.queryParams).then(res => {
+            res.rows.forEach(item => {
               this.articleList.push(item)
             })
-            this.total = res.data.total;
+            this.total = res.total;
           }).finally(() => this.scrollLoading = true)
         }
       }
@@ -225,9 +225,9 @@ export default {
     getArticleInfos() {
       this.loading = true;
       this.queryParams.pageNum = 1;
-      this.$API("/white/article/user/list", "get", this.queryParams).then(res => {
-        this.articleList = res.data.records;
-        this.total = res.data.total;
+      this.$api.whiteApi.getUserArticleList(this.queryParams).then(res => {
+        this.articleList = res.rows;
+        this.total = res.total;
         this.loading = false;
       })
     }

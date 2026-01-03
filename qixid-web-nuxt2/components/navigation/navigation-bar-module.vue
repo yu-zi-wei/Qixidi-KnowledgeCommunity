@@ -581,7 +581,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        this.$API("/oauth/logout", this.$post()).then(res => {
+        this.$api.oauthApi.logout().then(res => {
           this.pathname = this.$route.fullPath;
           //保存当前url
           sessionStorage.setItem('url', this.pathname);
@@ -628,15 +628,17 @@ export default {
       if (navigationList != null) {
         this.navigationList = JSON.parse(navigationList);
       }
-      this.$API("/white/configure/navigation/list", this.$get(), {type: 1, status: 0}).then(res => {
+      this.$api.whiteApi.getNavigationList({type: 1, status: 0}).then(res => {
         this.navigationList = res.rows;
         localStorage.setItem("navigationList", JSON.stringify(this.navigationList));
       })
     },
     gitUserInfo() {
-      this.$API("/oauth/getInfo", this.$get()).then(res => {
-        this.userInfo = res.data.user;
-        this.isLogin = res.data.isLogin;
+      this.$api.oauthApi.getInfo().then(res => {
+        if (res.data != null) {
+          this.userInfo = res.data.user;
+          this.isLogin = res.data.isLogin;
+        }
       }).finally(() => {
         if (!this.isLogin) {
           this.$store.commit('removeToken');
@@ -645,14 +647,14 @@ export default {
         if (this.userInfo != null) {
           this.connectWebSocket(this.userInfo.uuid)
           this.queryParams.uid = this.userInfo.uuid;
-          this.$API("/frontDesk/search/records/list", "get", this.queryParams).then(res => {
+          this.$api.searchApi.getSearchRecordsList(this.queryParams).then(res => {
             this.restaurants = res.rows;
           })
         }
       });
     },
     getLoginStatus() {
-      this.$API("/oauth/isLogin", this.$get()).then(res => {
+      this.$api.oauthApi.isLogin().then(res => {
         console.log(res.data)
       })
     },

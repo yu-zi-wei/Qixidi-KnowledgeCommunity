@@ -77,10 +77,10 @@ export default {
   },
   methods: {
     userNewsReads() {
-      this.$API("/frontDesk/news/news-read", "get", {type: 2, beenRead: 1,});
+      this.$api.newsApi.readNews({type: 2, beenRead: 1,});
     },
     userNewsFaLists() {
-      this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
+      this.$api.newsApi.getNewsList(this.queryParams).then(res => {
         this.newsList = res.data.records;
         this.total = res.data.records.total;
         this.loading = false;
@@ -102,7 +102,7 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
         const startIndex = this.newsList.length; // 记录新增前的索引
-        this.$API("/frontDesk/news/list", "get", this.queryParams).then(res => {
+        this.$api.newsApi.getNewsList(this.queryParams).then(res => {
           res.records.forEach(item => {
             this.newsList.push(item)
           })

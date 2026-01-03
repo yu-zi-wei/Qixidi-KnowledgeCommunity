@@ -140,7 +140,7 @@ export default {
         if (valid) {
           this.buttonLoading = true
           if (this.tips.isAdd) {
-            this.$API("/frontDesk/add/collection", "post", null, this.form).then(response => {
+            this.$api.collectionApi.addCollection(this.form).then(response => {
               this.$modal.msg("添加成功");
               this.collectionListUids();
             }).finally(() => {
@@ -149,7 +149,7 @@ export default {
               this.collectionUserLoading = true;
             });
           } else {
-            this.$API("/business/collection/information", "put", null, this.form).then(response => {
+            this.$api.businessApi.updateCollectionInformation(this.form).then(response => {
               this.$modal.msg("更新成功");
               this.collectionListUids();
             }).finally(() => {
@@ -164,7 +164,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.collectionName + '》收藏夹吗？').then(() => {
         this.loading = true;
-        return this.$API("/frontDesk/delete/collection/" + item.id, "delete");
+        return this.$api.collectionApi.deleteCollection(item.id);
       }).then(() => {
         this.collectionListUids();
         this.$modal.msgSuccess("删除成功");
@@ -190,7 +190,7 @@ export default {
     },
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
           return;
@@ -202,7 +202,7 @@ export default {
     },
     collectionListUids() {
       this.uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/white/collection/list/" + this.uuid, "get").then(res => {
+      this.$api.whiteApi.getCollectionList(this.uuid).then(res => {
         this.collectionUserList = res.data;
         this.loading = false;
         if (this.collectionUserList.length == 0) {

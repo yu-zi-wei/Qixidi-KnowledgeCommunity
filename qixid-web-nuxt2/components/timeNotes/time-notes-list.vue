@@ -251,7 +251,7 @@ export default {
     getList() {
       this.loading = true;
       this.infoDrawer = false;
-      this.$API("/white/time/notes/list", "post", null, this.queryParams).then(res => {
+      this.$api.whiteApi.getTimeNotesList(this.queryParams).then(res => {
         this.moodNotesList = res.rows;
         this.total = res.total;
       }).finally(() => {
@@ -271,7 +271,7 @@ export default {
         if (this.total > (this.queryParams.pageNum) * this.queryParams.pageSize) {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
-          this.$API("/white/time/notes/list", "post", null, this.queryParams).then(res => {
+          this.$api.whiteApi.getTimeNotesList(this.queryParams).then(res => {
             // 记录更新前的状态，用于计算新增的项目
             const originalData = JSON.parse(JSON.stringify(this.moodNotesList));
 
@@ -295,7 +295,7 @@ export default {
       }
     },
     getInfo(id) {
-      this.$API("/white/time/notes/getInfo/" + id, "get").then(res => {
+      this.$api.whiteApi.getTimeNotesInfo(id).then(res => {
         this.moodNotes = res.data;
         this.infoDrawer = true;
       })

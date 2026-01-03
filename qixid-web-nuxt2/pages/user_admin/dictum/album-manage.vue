@@ -189,7 +189,7 @@ export default {
       if (this.albumValue.length != 0) {
         this.albumInfo.cover = this.albumValue[0].url;
       }
-      this.$API("/frontDesk/dictum/album", "put", null, this.albumInfo).then(res => {
+      this.$api.dictumApi.updateDictumAlbum(this.albumInfo).then(res => {
         if (res.cone = 200) {
           this.$modal.msgSuccess("更新成功!");
           this.dictumAlbumRoleLists();
@@ -211,7 +211,7 @@ export default {
     deleteAlbum(item) {
       this.$modal.confirm('确认要删除《' + item.name + '》专辑吗？').then(() => {
         this.loading = true;
-        return this.$API("/frontDesk/dictum/album/" + item.id, "delete");
+        return this.$api.dictumApi.deleteDictumAlbum(item.id);
       }).then(res => {
         this.dictumAlbumRoleLists();
         this.$modal.msgSuccess("删除成功!");
@@ -219,7 +219,7 @@ export default {
     },
     dictumAlbumRoleLists() {
       this.loading = true;
-      this.$API("/frontDesk/dictum/album/role/list", "get", this.queryParams).then(res => {
+      this.$api.dictumApi.getDictumAlbumRoleList(this.queryParams).then(res => {
         this.dictumAlbumListArr = res.rows;
       }).finally(() => {
         this.loading = false;

@@ -3,7 +3,7 @@
     <el-skeleton class="mt-10" v-if="loading" :rows="4" animated/>
     <div v-if="loading" style="width: 100%;"></div>
     <ul class="content" v-if="collectionUserLoading" ref="dialogContent" @scroll="divScroll($event)">
-      <li v-for="(item,index) in articleList" class="contentItem" :key="index" :ref="`userHomeArticle${index}`">
+      <li v-for="(item,index) in articleList" class="contentItem" :key="index" :ref="`userHomeArticleItem${index}`">
         <div class="font-s-14 color-grey mb-20">
           <span v-text="item.nickname"></span>
           <span>|</span>
@@ -119,7 +119,7 @@ export default {
     deletes(item) {
       this.$modal.confirm('确认要删除《' + item.articleTitle + '》文章吗？').then(() => {
         this.loading = true;
-        return this.$API("/user/delete/article/" + item.id, "delete");
+        return this.$api.userApi.deleteArticle(item.id);
       }).then(() => {
         this.getArticleInfos();
         this.$modal.msgSuccess("删除成功");
@@ -127,7 +127,7 @@ export default {
     },
     isCurrentUser() {
       let uuid = this.$base64.decode(this.$route.query.uuid)
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.currentUser = false;
           return;
@@ -147,13 +147,13 @@ export default {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
           const startIndex = this.articleList.length; // 记录新增前的索引
-          this.$API("/white/article/user/list", "get", this.queryParams).then(res => {
-            res.data.records.forEach(item => {
+          this.$api.whiteApi.getUserArticleList(this.queryParams).then(res => {
+            res.rows.forEach(item => {
               this.articleList.push(item)
             })
-            this.total = res.data.total;
+            this.total = res.total;
             // 为新增的项目触发动画
-            this.animator.triggerNewItemsAnimation(startIndex, res.data.records.length, 'userHomeArticle');
+            this.animator.triggerNewItemsAnimation(startIndex, res.rows.length, 'userHomeArticleItem');
           }).finally(() => this.scrollLoading = true)
         }
       }
@@ -161,14 +161,14 @@ export default {
     getArticleInfos() {
       this.uuid = this.$base64.decode(this.$route.query.uuid)
       this.queryParams.userId = this.uuid;
-      this.$API("/white/article/user/list", "get", this.queryParams).then(res => {
-        this.articleList = res.data.records;
-        this.total = res.data.total;
+      this.$api.whiteApi.getUserArticleList(this.queryParams).then(res => {
+        this.articleList = res.rows;
+        this.total = res.total;
         this.loading = false;
         if (this.articleList.length == 0) {
           this.collectionUserLoading = false;
         }
-        this.animator.triggerAllItemsAnimation(this.articleList, 'userHomeArticle');
+        this.animator.triggerAllItemsAnimation(this.articleList, 'userHomeArticleItem');
       })
     }
   },
@@ -179,7 +179,7 @@ export default {
     }
   },
   mounted() {
-    this.animator = createAnimator(this, 'commonList')
+    this.animator = createAnimator(this, 'userHomeArticle')
     this.isCurrentUser();
   }
 }

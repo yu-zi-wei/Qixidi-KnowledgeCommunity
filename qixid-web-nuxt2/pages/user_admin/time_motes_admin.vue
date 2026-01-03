@@ -204,7 +204,7 @@ export default {
         cancelButtonText: '取 消',
         type: 'warning'
       }).then(() => {
-        this.$API(`/frontDesk/time/notes/delete/${id}`, "get").then(res => {
+        this.$api.timeApi.deleteTimeNotes(id).then(res => {
           if (res.code == 200) {
             this.$modal.msgSuccess("删除成功");
             this.getList();
@@ -213,7 +213,7 @@ export default {
       });
     },
     getInfo(id) {
-      this.$API("/white/time/notes/getInfo/" + id, "get").then(res => {
+      this.$api.whiteApi.getTimeNotesInfo(id).then(res => {
         this.moodNotes = res.data;
         this.infoDrawer = true;
       })
@@ -230,7 +230,7 @@ export default {
     getList() {
       this.loading = true;
       this.infoDrawer = false;
-      this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
+      this.$api.timeApi.getTimeNotesList(this.queryParams).then(res => {
         this.moodNotesList = res.rows;
         this.total = res.total;
         this.loading = false;
@@ -247,7 +247,7 @@ export default {
           this.scrollLoading = false;
           this.queryParams.pageNum = this.queryParams.pageNum + 1;
           const startIndex = this.moodNotesList.length; // 记录新增前的索引
-          this.$API("/frontDesk/time/notes/list", "post", null, this.queryParams).then(res => {
+          this.$api.timeApi.getTimeNotesList(this.queryParams).then(res => {
             res.rows.forEach(item => {
               this.moodNotesList.push(item)
             })

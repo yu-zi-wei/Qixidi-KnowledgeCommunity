@@ -163,7 +163,10 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     @Override
     public List<CollectionInformationVo> listUid(String uid) {
         List<CollectionInformationVo> list1 = baseMapper.selectVoList(new LambdaQueryWrapper<CollectionInformation>()
-                .eq(CollectionInformation::getUid, uid).eq(CollectionInformation::getState, 0));
+                .eq(CollectionInformation::getUid, uid)
+                .eq(CollectionInformation::getState, 0)
+                .orderByDesc(CollectionInformation::getId)
+        );
         List<CollectionInformationVo> list = collectionRecordMapper.selectGroupOn(uid);
         if (CollectionUtils.isNotEmpty(list) && CollectionUtils.isNotEmpty(list)) {
             Map<Long, Integer> collect = list.stream().collect(Collectors.toMap(CollectionInformationVo::getId, CollectionInformationVo::getIncludedCount));

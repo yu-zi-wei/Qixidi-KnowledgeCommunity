@@ -81,7 +81,7 @@ export default {
     },
     jottingsPublish() {
       if (this.timeNotes.id != null) {
-        this.$API("/frontDesk/time/notes/update", this.$post(), null, this.timeNotes).then(res => {
+        this.$api.timeApi.updateTimeNotes(this.timeNotes).then(res => {
           if (res.code === 200) {
             this.$modal.notifySuccess("更新成功");
             this.jottingsDialogVisible = false
@@ -92,7 +92,7 @@ export default {
           }
         });
       } else {
-        this.$API("/frontDesk/time/notes/add", this.$post(), null, this.timeNotes).then(res => {
+        this.$api.timeApi.addTimeNotes(this.timeNotes).then(res => {
           if (res.code === 200) {
             this.$modal.notifySuccess("发布成功");
             this.jottingsDialogVisible = false

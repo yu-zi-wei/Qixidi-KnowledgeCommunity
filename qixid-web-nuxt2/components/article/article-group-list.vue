@@ -149,7 +149,7 @@ export default {
         switch (this.type) {
           case 1:
             const startIndex1 = this.articleList.length;
-            this.$API("/white/article/follow/list", this.$get(), this.queryParams).then(res => {
+            this.$api.whiteApi.getFollowArticleList(this.queryParams).then(res => {
               res.data.records.forEach(item => {
                 this.articleList.push(item)
               })
@@ -160,7 +160,7 @@ export default {
             break
           case 2:
             const startIndex2 = this.articleList.length;
-            this.$API("/white/article/label/list", this.$get(), this.queryParams).then(res => {
+            this.$api.whiteApi.getArticleLabelList(this.queryParams).then(res => {
               res.data.records.forEach(item => {
                 this.articleList.push(item)
               })
@@ -172,7 +172,7 @@ export default {
           case 3:
             const startIndex3 = this.articleList.length;
             this.queryParams.createTime = 1;
-            this.$API("/white/article/sort", this.$get(), this.queryParams).then(res => {
+            this.$api.whiteApi.getArticleSort(this.queryParams).then(res => {
               res.rows.forEach(item => {
                 this.articleList.push(item)
               })
@@ -206,7 +206,7 @@ export default {
       this.queryParams.pageNum = 1;
       switch (this.type) {
         case 1:
-          this.$API("/white/article/follow/list", this.$get(), this.queryParams).then(res => {
+          this.$api.whiteApi.getFollowArticleList(this.queryParams).then(res => {
             this.articleList = res.data.records;
             this.total = res.data.total;
           }).finally(() => {
@@ -218,7 +218,7 @@ export default {
           });
           break
         case 2:
-          this.$API("/white/article/label/list", this.$get(), this.queryParams).then(res => {
+          this.$api.whiteApi.getArticleLabelList(this.queryParams).then(res => {
             this.articleList = res.data.records;
             this.total = res.data.total;
           }).finally(() => {
@@ -231,7 +231,7 @@ export default {
           break
         case 3:
           this.queryParams.createTime = 1;
-          this.$API("/white/article/sort", this.$get(), this.queryParams).then(res => {
+          this.$api.whiteApi.getArticleSort(this.queryParams).then(res => {
             this.articleList = res.rows;
             this.total = res.total;
           }).finally(() => {

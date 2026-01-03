@@ -220,19 +220,19 @@ export default {
       return item;
     },
     recommendedAlbums() {
-      this.$API("/white/dictum/recommended/album", "get").then(res => {
+      this.$api.whiteApi.getRecommendedDictumAlbum().then(res => {
         this.recommendedAlbumArr = res.data;
       }).finally(() => this.albumLoading = false);
 
-      this.$API("/white/dictum/popular/authors", "get").then(res => {
+      this.$api.whiteApi.getPopularAuthors().then(res => {
         this.popularAuthorsArr = res.data;
-        this.$API("/white/dictum/popular/label", "get").then(res => {
+        this.$api.whiteApi.getPopularLabel().then(res => {
           this.popularLabelArr = res.data;
         })
       }).finally(() => this.authorLoading = false);
     },
     dictumGroupLists() {
-      this.$API("/white/dictum/group/list", "get").then(res => {
+      this.$api.whiteApi.getDictumGroupList().then(res => {
         this.dictumSpecial = res.rows;
       }).finally(() => {
         this.loading = false;

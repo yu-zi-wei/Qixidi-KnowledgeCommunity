@@ -233,7 +233,7 @@ export default {
       this.$refs['userBindBo'].validate((valid) => {
         if (valid) {
           this.buttonLoading = true;
-          this.$API("/front-desk/user/update/email", "put", null, this.userBindBo).then(res => {
+          this.$api.userApi.updateEmail(this.userBindBo).then(res => {
             if (res.code == 200) {
               this.$modal.notifySuccess("绑定成功！");
               this.emailLoading = false;
@@ -252,7 +252,7 @@ export default {
         cancelButtonText: '取 消',
         type: 'error'
       }).then(() => {
-        this.$API("/oauth/account/cancellation", "get").then(res => {
+        this.$api.oauthApi.cancelAccount().then(res => {
           if (res.code == 200) {
             this.$modal.notifySuccess("账号已注销！");
             this.notRefreshLogOut();
@@ -263,7 +263,7 @@ export default {
     },
     // 退出
     notRefreshLogOut() {
-      this.$API("/oauth/logout", "post").then(res => {
+      this.$api.oauthApi.logout().then(res => {
         this.pathname = this.$route.fullPath;
         //保存当前url
         sessionStorage.setItem('url', this.pathname);
@@ -281,7 +281,7 @@ export default {
             code: this.registerFrom.code == null ? null : this.$base64.encode(this.registerFrom.code),
             registerType: 2
           }
-          this.$API("/oauth/reset/password", "post", null, fromData).then(res => {
+          this.$api.oauthApi.resetPassword(fromData).then(res => {
             if (res.code === 200) {
               this.$modal.notifySuccess("密码重置成功，重新登录生效！");
             }
@@ -310,7 +310,7 @@ export default {
       }
       this.registerLoading = true;
       this.getCode = "发送中";
-      this.$API(`/oauth/phone/code/${phone}/${mag}`, "get").then().finally(() => this.registerLoading = false)
+      this.$api.oauthApi.getPhoneCode(phone, mag).then().finally(() => this.registerLoading = false)
       let countDown = setInterval(() => {
         this.registerLoading = false;
         if (this.count < 1) {
@@ -327,7 +327,7 @@ export default {
     sendEmailCode(phone, type) {
       this.registerLoading = true;
       this.getCode = "发送中";
-      this.$API(`/oauth/email/code/${phone}/${type}`, "get").then().finally(() => this.registerLoading = false)
+      this.$api.oauthApi.getEmailCode(phone, type).then().finally(() => this.registerLoading = false)
       let countDown = setInterval(() => {
         this.registerLoading = false;
         if (this.count < 1) {
@@ -346,7 +346,7 @@ export default {
         if (valid) {
           this.registerLoading = true;
           this.getCode = "发送中";
-          this.$API(`/oauth/email/code/${email}/${type}`, "get").then().finally(() => this.registerLoading = false)
+          this.$api.oauthApi.getEmailCode(email, type).then().finally(() => this.registerLoading = false)
           let countDown = setInterval(() => {
             this.registerLoading = false;
             if (this.count < 1) {
@@ -364,7 +364,7 @@ export default {
     },
     getBasicsUsers() {
       this.loading = true;
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }

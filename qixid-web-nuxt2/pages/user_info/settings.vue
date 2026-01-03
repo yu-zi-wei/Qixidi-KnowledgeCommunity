@@ -60,7 +60,7 @@ export default {
   methods: {
     uploadInfos() {
       this.buttonLoading = true;
-      this.$API("/front-desk/user/update/info", "put", null, this.form).then(res => {
+      this.$api.userApi.updateUserInfo(this.form).then(res => {
         if (res.code === 200) {
           this.$modal.msgSuccess("保存成功")
           this.frontDeskUsers();
@@ -69,7 +69,7 @@ export default {
     },
     frontDeskUsers() {
       this.loading = true;
-      this.$API("/front-desk/user/info", "get").then(res => {
+      this.$api.userApi.getUserInfo().then(res => {
         this.form = res.data;
       }).finally(() => this.loading = false)
     }

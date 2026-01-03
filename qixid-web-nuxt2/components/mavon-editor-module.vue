@@ -221,7 +221,7 @@
 <!--      let formData = new FormData();-->
 <!--      formData.append('file', $file)-->
 <!--      // this.img_file[pos] = $file;-->
-<!--      this.$API('/system/oss/upload', this.$post(), null, formData).then(item => {-->
+<!--      this.$api.commonApi.uploadOss(formData).then(item => {-->
 <!--        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)-->
 <!--        this.$refs.md.$img2Url(pos, item.data.url)-->
 <!--      })-->

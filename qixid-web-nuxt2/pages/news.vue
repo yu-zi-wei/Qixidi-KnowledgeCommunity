@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     userNewsListSums() {
-      this.$API("/frontDesk/news/list/info", "get").then(res => {
+      this.$api.newsApi.getNewsListInfo().then(res => {
         this.userNewsList = res.data;
         this.loading = false;
       })

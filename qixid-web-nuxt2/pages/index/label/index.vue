@@ -83,14 +83,14 @@ export default {
       item.buttonLoading = true;
       if (item.isFollow) {
         item.isFollow = false;
-        this.$API("/user/follow/cancel", "post", null, {targetId: item.id, type: 2,})
+        this.$api.userApi.cancelFollow({targetId: item.id, type: 2,})
           .finally(() => {
             item.buttonLoading = false;
             this.getDate(); // 重新获取数据，会触发动画
           });
       } else {
         item.isFollow = true;
-        this.$API("/user/follow/add", "post", null, {targetId: item.id, type: 2,})
+        this.$api.userApi.addFollow({targetId: item.id, type: 2,})
           .finally(() => {
             item.buttonLoading = false;
             this.getDate(); // 重新获取数据，会触发动画
@@ -101,14 +101,14 @@ export default {
       this.loginDialog = val;
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }
       });
     },
     getDate() {
-      this.$API("/white/dictum/system/label", this.$get(), {"label": this.labelName}).then(res => {
+      this.$api.whiteApi.getSystemLabel({"label": this.labelName}).then(res => {
         this.dateList = res.data;
       }).finally(() => {
         this.loading = false;

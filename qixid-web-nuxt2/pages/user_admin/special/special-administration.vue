@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     isCurrentUser() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res == null || res.data == null) {
           this.$router.push('/');
           return;
@@ -64,7 +64,7 @@ export default {
         id: id,
         uid: this.queryParams.userId,
       }
-      this.$API("/white/select/special", "get", qurey).then(res => {
+      this.$api.whiteApi.getSpecialSelect(qurey).then(res => {
         if (res.data.length > 0) {
           res.data.forEach(item => {
             this.value.push(item.id);
@@ -73,14 +73,14 @@ export default {
       })
     },
     getArticleInfoLists() {
-      this.$API("/white/article/user/list", "get", this.queryParams).then(res => {
-        this.data = res.data.records;
+      this.$api.whiteApi.getUserArticleList(this.queryParams).then(res => {
+        this.data = res.rows;
       })
     },
     updateSpecial() {
       this.buttonLoading = true;
       console.log("value：", this.value)
-      this.$API("/white/update/special/" + this.specialId + "/" + this.queryParams.userId, "post", null, this.value).then(res => {
+      this.$api.whiteApi.updateSpecial(this.specialId, this.queryParams.userId, this.value).then(res => {
         if (res.code == 200) {
           this.$modal.msgSuccess("保存成功");
         }

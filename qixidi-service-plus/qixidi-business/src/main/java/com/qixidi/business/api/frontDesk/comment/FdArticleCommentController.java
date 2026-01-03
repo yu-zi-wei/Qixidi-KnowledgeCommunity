@@ -1,21 +1,20 @@
 package com.qixidi.business.api.frontDesk.comment;
 
 
-import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
-import com.qixidi.business.service.comment.IArticleCommentService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.api.BaseController;
+import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
+import com.qixidi.business.service.comment.IArticleCommentService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * 【前台】文章评论管理
@@ -50,8 +49,8 @@ public class FdArticleCommentController extends BaseController {
      * 删除文章评论
      */
     @Log(title = "文章评论", businessType = BusinessType.DELETE)
-    @DeleteMapping("/article/comment")
-    public R<Void> remove(ArticleCommentBo bo) {
+    @PostMapping("/article/delete/comment")
+    public R<Void> remove(@RequestBody ArticleCommentBo bo) {
         return toAjax(iArticleCommentService.deleteWithValidById(bo) ? 1 : 0);
     }
 

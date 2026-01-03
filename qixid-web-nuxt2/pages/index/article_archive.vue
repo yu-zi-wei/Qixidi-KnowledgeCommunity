@@ -142,7 +142,7 @@ export default {
     },
     getList() {
       this.loading = true;
-      this.$API("/white/article/archive", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getArticleArchive(this.queryParams).then(res => {
         this.articleList = res.rows;
         this.total = res.total;
         this.loading = false;

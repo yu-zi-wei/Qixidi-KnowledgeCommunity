@@ -11,7 +11,11 @@ export const state = {
 export const mutations = {
   setToken(state, token) {
     this.state.token = token;
-    this.$cookies.set(tokenName, token);
+    // 有效期，path: '/' 确保全站路径下都能读到
+    this.$cookies.set(tokenName, token, {
+      maxAge: 60 * 60 * 24 * 365,
+      path: '/'
+    });
   },
   getToken() {
     this.state.token = this.$cookies.get(tokenName)

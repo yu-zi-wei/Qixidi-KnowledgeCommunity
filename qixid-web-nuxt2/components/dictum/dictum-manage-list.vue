@@ -177,10 +177,10 @@ export default {
     deleteInfo(item) {
       this.$modal.confirm('确认要删除该随笔吗？').then(() => {
         this.loading = true;
-        return this.$API(`/frontDesk/dictum/info/${item.id}/${item.groupId}`, "delete");
-      }).then(res => {
-        this.dictumInfoRoleLists();
-        this.$modal.msgSuccess("删除成功!");
+        this.$api.dictumApi.deleteDictumInfo(item.id, item.groupId).then(res => {
+          this.dictumInfoRoleLists();
+          this.$modal.msgSuccess("删除成功!");
+        })
       }).finally(() => this.loading = false)
     },
     dictumInfoRoleListsDebounceTimer() {
@@ -195,7 +195,7 @@ export default {
       this.queryParams.dictumState = this.state;
       this.queryParams.content = this.keyword;
       this.loading = true;
-      this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
+      this.$api.dictumApi.getDictumInfoRoleList(this.queryParams).then(res => {
         this.dictumList = res.rows;
         this.total = res.total;
       }).finally(() => {
@@ -219,7 +219,7 @@ export default {
         this.queryParams.pageNum = this.queryParams.pageNum + 1;
         this.moreLoading = true;
         const startIndex = this.dictumList.length; // 记录新增前的索引
-        this.$API("/frontDesk/dictum/info/role/list", "get", this.queryParams).then(res => {
+        this.$api.dictumApi.getDictumInfoRoleList(this.queryParams).then(res => {
           res.rows.forEach(item => {
             this.dictumList.push(item)
           })

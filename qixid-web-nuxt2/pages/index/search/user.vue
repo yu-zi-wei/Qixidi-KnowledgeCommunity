@@ -87,14 +87,14 @@ export default {
       item.buttonLoading = true;
       if (item.isFollow) {
         item.isFollow = false;
-        this.$API("/user/follow/cancel", "post", null, {targetId: item.uuid, type: 1,})
+        this.$api.userApi.cancelFollow({targetId: item.uuid, type: 1,})
           .finally(() => {
             this.fdUserLists()
             item.buttonLoading = false;
           });
       } else {
         item.isFollow = true;
-        this.$API("/user/follow/add", "post", null, {targetId: item.uuid, type: 1,})
+        this.$api.userApi.addFollow({targetId: item.uuid, type: 1,})
           .finally(() => {
             this.fdUserLists()
             item.buttonLoading = false;
@@ -102,14 +102,14 @@ export default {
       }
     },
     getBasicsUsers() {
-      this.$API("/front-desk/user/basics", "get").then(res => {
+      this.$api.userApi.getUserBasics().then(res => {
         if (res != null) {
           this.userInfo = res.data;
         }
       });
     },
     fdUserLists() {
-      this.$API("/white/user/list", "get", this.queryParams).then(res => {
+      this.$api.whiteApi.getUserList(this.queryParams).then(res => {
         this.userList = res;
         this.initialLoading = false;
         this.animator.triggerAllItemsAnimation(this.userList, 'searchUserItem');

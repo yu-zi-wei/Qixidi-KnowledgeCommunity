@@ -113,8 +113,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/user/list")
-    public R getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
-        return R.ok(iArticleInformationService.getArticleInfo(bo, pageQuery));
+    public TableDataInfo<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
+        return TableDataInfo.build(iArticleInformationService.getArticleInfo(bo, pageQuery));
     }
 
     /**
