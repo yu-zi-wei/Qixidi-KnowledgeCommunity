@@ -17,7 +17,7 @@ public class SysOssVo {
     /**
      * 对象存储主键
      */
-    private Long ossId;
+    private String ossId;
 
     /**
      * 文件名
