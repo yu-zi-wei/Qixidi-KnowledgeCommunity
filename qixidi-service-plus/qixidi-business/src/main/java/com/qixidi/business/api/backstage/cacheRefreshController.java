@@ -4,7 +4,6 @@ import com.qixidi.business.service.configure.IToNavigationService;
 import com.qixidi.business.service.configure.IToSidebarService;
 import com.qixidi.business.service.shield.IToShieldWordService;
 import com.light.redission.annotation.RepeatSubmit;
-import com.light.core.core.domain.R;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +32,9 @@ public class cacheRefreshController {
      */
     @GetMapping("/navigation")
     @RepeatSubmit()
-    public R cacheNavigation() {
+    public void cacheNavigation() {
         iToNavigationService.queryPageList();
         log.info("刷新导航栏配置成功");
-        return R.ok();
     }
 
     /**
@@ -46,10 +44,9 @@ public class cacheRefreshController {
      */
     @GetMapping("/sidebar")
     @RepeatSubmit()
-    public R cacheSidebar() {
+    public void cacheSidebar() {
         iToSidebarService.sidebarList();
         log.info("刷新侧边栏配置成功");
-        return R.ok();
     }
 
     /**
@@ -59,10 +56,9 @@ public class cacheRefreshController {
      */
     @GetMapping("/blocking-words")
     @RepeatSubmit()
-    public R cacheBlockingWords() {
+    public void cacheBlockingWords() {
         iToShieldWordService.ShieldWordRefresh();
         log.info("刷新屏蔽词缓存成功");
-        return R.ok();
     }
 
     /**
@@ -73,10 +69,10 @@ public class cacheRefreshController {
      */
     @GetMapping("/blocking-words/text/{text}")
     @RepeatSubmit()
-    public R cacheBlockingWordsText(@PathVariable String text) {
+    public Map<String, Object> cacheBlockingWordsText(@PathVariable String text) {
         Map<String, Object> detection = iToShieldWordService.detection(text);
         log.info("测试屏蔽词");
-        return R.ok(detection);
+        return detection;
     }
 
 

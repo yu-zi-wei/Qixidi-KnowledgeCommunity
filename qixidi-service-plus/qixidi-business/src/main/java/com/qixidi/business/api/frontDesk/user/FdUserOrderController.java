@@ -3,9 +3,8 @@ package com.qixidi.business.api.frontDesk.user;
 import com.qixidi.business.domain.bo.user.UserOrderBo;
 import com.qixidi.business.domain.vo.user.UserOrderVo;
 import com.qixidi.business.service.user.IUserOrderService;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
 import com.qixidi.auth.helper.LoginHelper;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/order")
-public class FdUserOrderController extends BaseController {
+public class FdUserOrderController {
     private final IUserOrderService iUserOrderService;
 
     /**
@@ -40,16 +39,16 @@ public class FdUserOrderController extends BaseController {
      * @return
      */
     @GetMapping("/info/{id}")
-    public R<UserOrderVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iUserOrderService.queryById(id));
+    public UserOrderVo getInfo(@PathVariable("id") Long id) {
+        return iUserOrderService.queryById(id);
     }
 
     /**
      * 删除用户订单
      */
     @DeleteMapping("/delete/{id}")
-    public R<Void> deleteOrder(@PathVariable("id") Long id) {
-        return toAjax(iUserOrderService.deleteOrder(id) ? 1 : 0);
+    public Integer deleteOrder(@PathVariable("id") Long id) {
+        return iUserOrderService.deleteOrder(id) ? 1 : 0;
     }
 
 }

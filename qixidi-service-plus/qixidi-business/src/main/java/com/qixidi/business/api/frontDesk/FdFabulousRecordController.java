@@ -1,11 +1,10 @@
 package com.qixidi.business.api.frontDesk;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/fabulous")
-public class FdFabulousRecordController extends BaseController {
+public class FdFabulousRecordController {
 
     private final IFabulousRecordService iFabulousRecordService;
 
@@ -29,9 +28,9 @@ public class FdFabulousRecordController extends BaseController {
      */
     @Log(title = "点赞", businessType = BusinessType.INSERT)
     @PostMapping("/spot")
-    public R<Void> spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
+    public Integer spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
         iFabulousRecordService.spotFabulous(bo);
-        return R.ok();
+        return 1;
     }
 
     /**
@@ -39,17 +38,17 @@ public class FdFabulousRecordController extends BaseController {
      */
     @Log(title = "取消点赞", businessType = BusinessType.INSERT)
     @PostMapping("/cancel")
-    public R<Void> cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
+    public Integer cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
         iFabulousRecordService.cancelFabulous(bo);
-        return R.ok();
+        return 1;
     }
 
     /**
      * 用户点赞列表
      */
     @GetMapping("/fabulous/list")
-    public R<Object> fabulousList(@Validated(AddGroup.class) UserHomeBo bo, PageQuery pageQuery) {
-        return R.ok(iFabulousRecordService.fabulousList(bo, pageQuery));
+    public Object fabulousList(@Validated(AddGroup.class) UserHomeBo bo, PageQuery pageQuery) {
+        return iFabulousRecordService.fabulousList(bo, pageQuery);
     }
 
 }

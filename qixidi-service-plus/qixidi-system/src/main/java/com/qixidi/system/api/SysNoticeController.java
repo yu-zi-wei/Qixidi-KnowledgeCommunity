@@ -1,12 +1,11 @@
 package com.qixidi.system.api;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.qixidi.auth.annotation.Log;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
-import com.qixidi.auth.api.BaseController;
+import com.qixidi.auth.annotation.Log;
+
 import com.qixidi.system.domain.entity.SysNotice;
 import com.qixidi.system.service.ISysNoticeService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/notice")
-public class SysNoticeController extends BaseController {
+public class SysNoticeController {
 
     private final ISysNoticeService noticeService;
 
@@ -40,8 +39,8 @@ public class SysNoticeController extends BaseController {
      */
     @SaCheckPermission("system:notice:query")
     @GetMapping(value = "/{noticeId}")
-    public R<SysNotice> getInfo(@PathVariable Long noticeId) {
-        return R.ok(noticeService.selectNoticeById(noticeId));
+    public SysNotice getInfo(@PathVariable Long noticeId) {
+        return noticeService.selectNoticeById(noticeId);
     }
 
     /**
@@ -50,8 +49,8 @@ public class SysNoticeController extends BaseController {
     @SaCheckPermission("system:notice:add")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
-    public R<Void> add(@Validated @RequestBody SysNotice notice) {
-        return toAjax(noticeService.insertNotice(notice));
+    public void add(@Validated @RequestBody SysNotice notice) {
+        noticeService.insertNotice(notice);
     }
 
     /**
@@ -60,8 +59,8 @@ public class SysNoticeController extends BaseController {
     @SaCheckPermission("system:notice:edit")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
-    public R<Void> edit(@Validated @RequestBody SysNotice notice) {
-        return toAjax(noticeService.updateNotice(notice));
+    public void edit(@Validated @RequestBody SysNotice notice) {
+        noticeService.updateNotice(notice);
     }
 
     /**
@@ -70,7 +69,7 @@ public class SysNoticeController extends BaseController {
     @SaCheckPermission("system:notice:remove")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
-    public R<Void> remove(@PathVariable Long[] noticeIds) {
-        return toAjax(noticeService.deleteNoticeByIds(noticeIds));
+    public void remove(@PathVariable Long[] noticeIds) {
+        noticeService.deleteNoticeByIds(noticeIds);
     }
 }

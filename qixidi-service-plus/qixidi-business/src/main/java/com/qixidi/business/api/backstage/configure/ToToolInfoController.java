@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.configure.ToToolInfoVo;
 import com.qixidi.business.service.configure.IToToolInfoService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
@@ -32,7 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/toolInfo")
-public class ToToolInfoController extends BaseController {
+public class ToToolInfoController {
 
     private final IToToolInfoService iToToolInfoService;
 
@@ -41,8 +40,8 @@ public class ToToolInfoController extends BaseController {
      */
     @SaCheckPermission("business:toolInfo:list")
     @GetMapping("/list")
-    public R list(@Validated(QueryGroup.class) ToToolInfoBo bo, PageQuery pageQuery) {
-        return R.ok(iToToolInfoService.queryPageList(bo, pageQuery));
+    public Object list(@Validated(QueryGroup.class) ToToolInfoBo bo, PageQuery pageQuery) {
+        return iToToolInfoService.queryPageList(bo, pageQuery);
     }
 
     /**
@@ -61,8 +60,8 @@ public class ToToolInfoController extends BaseController {
      */
     @SaCheckPermission("business:toolInfo:query")
     @GetMapping("/{id}")
-    public R<ToToolInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iToToolInfoService.queryById(id));
+    public ToToolInfoVo getInfo(@PathVariable("id") Long id) {
+        return iToToolInfoService.queryById(id);
     }
 
     /**
@@ -72,8 +71,8 @@ public class ToToolInfoController extends BaseController {
     @Log(title = "工具信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ToToolInfoBo bo) {
-        return toAjax(iToToolInfoService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ToToolInfoBo bo) {
+        iToToolInfoService.insertByBo(bo);
     }
 
     /**
@@ -83,8 +82,8 @@ public class ToToolInfoController extends BaseController {
     @Log(title = "工具信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ToToolInfoBo bo) {
-        return toAjax(iToToolInfoService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody ToToolInfoBo bo) {
+        iToToolInfoService.updateByBo(bo);
     }
 
     /**
@@ -93,7 +92,7 @@ public class ToToolInfoController extends BaseController {
     @SaCheckPermission("business:toolInfo:remove")
     @Log(title = "工具信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iToToolInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iToToolInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

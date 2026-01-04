@@ -1,7 +1,6 @@
 package com.qixidi.business.api.frontDesk.user;
 
 import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.R;
 import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.service.article.IArticleInformationService;
@@ -33,8 +32,8 @@ public class UserAdminController {
      * @param bo
      */
     @GetMapping("/time/article")
-    public R<List<CensusVo>> timeArticleCensus(CensusEntity bo) {
-        return R.ok(iArticleInformationService.timeArticleCensus(bo));
+    public List<CensusVo> timeArticleCensus(CensusEntity bo) {
+        return iArticleInformationService.timeArticleCensus(bo);
     }
 
     /**
@@ -43,8 +42,8 @@ public class UserAdminController {
      * @param bo
      */
     @GetMapping("/collection")
-    public R<List<CensusVo>> timeCollectionCensus(CensusEntity bo) {
-        return R.ok(iCollectionInformationService.timeCollectionCensus(bo));
+    public List<CensusVo> timeCollectionCensus(CensusEntity bo) {
+        return iCollectionInformationService.timeCollectionCensus(bo);
     }
 
     /**
@@ -53,8 +52,8 @@ public class UserAdminController {
      * @param bo
      */
     @GetMapping("/special")
-    public R<List<CensusVo>> timeSpecialCensus(CensusEntity bo) {
-        return R.ok(iSpecialInformationService.timeSpecialCensus(bo));
+    public List<CensusVo> timeSpecialCensus(CensusEntity bo) {
+        return iSpecialInformationService.timeSpecialCensus(bo);
     }
 
     /**
@@ -63,8 +62,8 @@ public class UserAdminController {
      * @return
      */
     @GetMapping("/submission")
-    public R<List<CensusVo>> submissionCensus() {
-        return R.ok(iSpecialInformationService.submissionCensus());
+    public List<CensusVo> submissionCensus() {
+        return iSpecialInformationService.submissionCensus();
     }
 
     /**
@@ -74,8 +73,8 @@ public class UserAdminController {
      * @return
      */
     @GetMapping("/count/user")
-    public R<CountUserWebsiteVo> CountUserCensus(CensusEntity bo) {
-        return R.ok(iSpecialInformationService.CountUserCensus(bo));
+    public CountUserWebsiteVo CountUserCensus(CensusEntity bo) {
+        return iSpecialInformationService.CountUserCensus(bo);
     }
 
 }

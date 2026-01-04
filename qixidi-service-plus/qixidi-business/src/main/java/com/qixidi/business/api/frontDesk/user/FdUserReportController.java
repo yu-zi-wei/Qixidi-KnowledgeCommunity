@@ -1,11 +1,10 @@
 package com.qixidi.business.api.frontDesk.user;
 
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.user.UserReportBo;
 import com.qixidi.business.service.user.IUserReportService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/user/report")
-public class FdUserReportController extends BaseController {
+public class FdUserReportController {
 
     private final IUserReportService iUserReportService;
 
@@ -29,8 +28,8 @@ public class FdUserReportController extends BaseController {
      * 查询用户签到列表
      */
     @GetMapping("/list")
-    public R<Map<String, Object>> list() {
-        return R.ok(iUserReportService.List());
+    public Map<String, Object> list() {
+        return iUserReportService.List();
     }
 
     /**
@@ -39,7 +38,7 @@ public class FdUserReportController extends BaseController {
     @Log(title = "用户签到", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody UserReportBo bo) throws Exception {
-        return toAjax(iUserReportService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody UserReportBo bo) throws Exception {
+        iUserReportService.insertByBo(bo);
     }
 }

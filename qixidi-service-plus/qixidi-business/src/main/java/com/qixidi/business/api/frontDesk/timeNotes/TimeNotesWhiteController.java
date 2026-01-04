@@ -1,7 +1,6 @@
 package com.qixidi.business.api.frontDesk.timeNotes;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
@@ -30,8 +29,8 @@ public class TimeNotesWhiteController {
      * @return
      */
     @GetMapping("/getInfo/{id}")
-    public R<TimeNotesInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(timeNotesService.getInfo(id));
+    public TimeNotesInfoVo getInfo(@PathVariable("id") Long id) {
+        return timeNotesService.getInfo(id);
     }
 
 

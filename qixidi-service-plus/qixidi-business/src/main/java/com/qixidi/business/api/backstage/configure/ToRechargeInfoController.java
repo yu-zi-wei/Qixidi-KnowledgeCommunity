@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.configure.ToRechargeInfoVo;
 import com.qixidi.business.service.configure.IToRechargeInfoService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/rechargeInfo")
-public class ToRechargeInfoController extends BaseController {
+public class ToRechargeInfoController {
 
     private final IToRechargeInfoService iToRechargeInfoService;
 
@@ -62,8 +61,8 @@ public class ToRechargeInfoController extends BaseController {
      */
     @SaCheckPermission("business:rechargeInfo:query")
     @GetMapping("/{id}")
-    public R<ToRechargeInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iToRechargeInfoService.queryById(id));
+    public ToRechargeInfoVo getInfo(@PathVariable("id") Long id) {
+        return iToRechargeInfoService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class ToRechargeInfoController extends BaseController {
     @Log(title = "充值信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ToRechargeInfoBo bo) {
-        return toAjax(iToRechargeInfoService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ToRechargeInfoBo bo) {
+        iToRechargeInfoService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class ToRechargeInfoController extends BaseController {
     @Log(title = "充值信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ToRechargeInfoBo bo) {
-        return toAjax(iToRechargeInfoService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody ToRechargeInfoBo bo) {
+        iToRechargeInfoService.updateByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class ToRechargeInfoController extends BaseController {
     @SaCheckPermission("business:rechargeInfo:remove")
     @Log(title = "充值信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iToRechargeInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iToRechargeInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

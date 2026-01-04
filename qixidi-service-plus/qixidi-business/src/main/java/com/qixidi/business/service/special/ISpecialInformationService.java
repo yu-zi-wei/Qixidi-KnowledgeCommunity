@@ -1,16 +1,15 @@
 package com.qixidi.business.service.special;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.CensusEntity;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.vo.CensusVo;
+import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
-import com.light.core.core.domain.CensusEntity;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
-import com.light.core.core.domain.vo.CensusVo;
-import com.light.core.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.Collection;
 import java.util.List;
@@ -80,7 +79,7 @@ public interface ISpecialInformationService {
 
     int updateSpecial(Long id, String uid, List<String> ids);
 
-    R remove(Long id, boolean b) throws Exception;
+    void remove(Long id, boolean b) throws Exception;
 
     List<CensusVo> timeSpecialCensus(CensusEntity bo);
 

@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.qixidi.business.service.comment.IArticleCommentService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/article/comment")
-public class ArticleCommentController extends BaseController {
+public class ArticleCommentController {
 
     private final IArticleCommentService iArticleCommentService;
 
@@ -65,8 +64,8 @@ public class ArticleCommentController extends BaseController {
      */
     @SaCheckPermission("article:comment:query")
     @GetMapping("/{id}")
-    public R<ArticleCommentVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iArticleCommentService.queryById(id));
+    public ArticleCommentVo getInfo(@PathVariable("id") Long id) {
+        return iArticleCommentService.queryById(id);
     }
 
     /**
@@ -80,8 +79,8 @@ public class ArticleCommentController extends BaseController {
     @Log(title = "文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
-        return toAjax(iArticleCommentService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
+        iArticleCommentService.insertByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class ArticleCommentController extends BaseController {
     @Log(title = "文章评论", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ArticleCommentBo bo) {
-        return toAjax(iArticleCommentService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody ArticleCommentBo bo) {
+        iArticleCommentService.updateByBo(bo);
     }
 
     /**
@@ -106,8 +105,8 @@ public class ArticleCommentController extends BaseController {
      */
     @Log(title = "文章评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iArticleCommentService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iArticleCommentService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

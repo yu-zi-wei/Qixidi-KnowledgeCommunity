@@ -2,7 +2,6 @@ package com.qixidi.business.service;
 
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
@@ -21,7 +20,6 @@ import me.zhyd.oauth.request.AuthRequest;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 平台用户Service接口

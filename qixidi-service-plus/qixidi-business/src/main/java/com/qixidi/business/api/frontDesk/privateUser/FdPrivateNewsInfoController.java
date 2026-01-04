@@ -1,14 +1,13 @@
 package com.qixidi.business.api.frontDesk.privateUser;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
@@ -26,7 +25,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/private/newsInfo")
-public class FdPrivateNewsInfoController extends BaseController {
+public class FdPrivateNewsInfoController {
 
 
     private final IPrivateNewsInfoService iPrivateNewsInfoService;
@@ -45,8 +44,8 @@ public class FdPrivateNewsInfoController extends BaseController {
     @Log(title = "私信记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
-        return toAjax(iPrivateNewsInfoService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
+        iPrivateNewsInfoService.insertByBo(bo);
     }
 
 
@@ -54,9 +53,9 @@ public class FdPrivateNewsInfoController extends BaseController {
      * 私信已读
      */
     @GetMapping("/been/read/{targetUid}")
-    public R<Void> beenRead(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
+    public Integer beenRead(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
         iPrivateNewsInfoService.beenRead(targetUid);
-        return R.ok();
+        return 1;
     }
 
     /**
@@ -64,7 +63,7 @@ public class FdPrivateNewsInfoController extends BaseController {
      */
     @Log(title = "私信记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

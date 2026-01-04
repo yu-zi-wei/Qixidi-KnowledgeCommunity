@@ -1,6 +1,5 @@
 package com.qixidi.system.api;
 
-import com.light.core.core.domain.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +19,7 @@ public class UpdateConfigController {
      * @return
      */
     @GetMapping("/black-list")
-    public R list() {
+    public void list() {
 //        SysBlackListManager.inst().loadData();
-        return R.ok();
     }
 }

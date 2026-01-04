@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.user.UserReportVo;
 import com.qixidi.business.service.user.IUserReportService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/user/report")
-public class UserReportController extends BaseController {
+public class UserReportController {
 
     private final IUserReportService iUserReportService;
 
@@ -62,8 +61,8 @@ public class UserReportController extends BaseController {
      */
     @SaCheckPermission("business:user:report:query")
     @GetMapping("/{id}")
-    public R<UserReportVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iUserReportService.queryById(id));
+    public UserReportVo getInfo(@PathVariable("id") Long id) {
+        return iUserReportService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class UserReportController extends BaseController {
     @Log(title = "用户签到", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody UserReportBo bo) throws Exception {
-        return toAjax(iUserReportService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody UserReportBo bo) throws Exception {
+        iUserReportService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class UserReportController extends BaseController {
     @Log(title = "用户签到", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody UserReportBo bo) {
-        return toAjax(iUserReportService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody UserReportBo bo) {
+        iUserReportService.updateByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class UserReportController extends BaseController {
     @SaCheckPermission("business:user:report:remove")
     @Log(title = "用户签到", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iUserReportService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iUserReportService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

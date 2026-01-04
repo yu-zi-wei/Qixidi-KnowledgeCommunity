@@ -1,14 +1,14 @@
 package com.qixidi.system.api;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.qixidi.auth.annotation.Log;
 import com.light.core.constant.UserConstants;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
-import com.qixidi.auth.api.BaseController;
+import com.light.exception.ServiceException;
+import com.qixidi.auth.annotation.Log;
+
 import com.qixidi.system.domain.entity.SysConfig;
 import com.qixidi.system.service.ISysConfigService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/config")
-public class SysConfigController extends BaseController {
+public class SysConfigController {
 
     private final ISysConfigService configService;
 
@@ -59,16 +59,16 @@ public class SysConfigController extends BaseController {
      */
     @SaCheckPermission("system:config:query")
     @GetMapping(value = "/{configId}")
-    public R<SysConfig> getInfo(@PathVariable Long configId) {
-        return R.ok(configService.selectConfigById(configId));
+    public SysConfig getInfo(@PathVariable Long configId) {
+        return configService.selectConfigById(configId);
     }
 
     /**
      * 根据参数键名查询参数值
      */
     @GetMapping(value = "/configKey/{configKey}")
-    public R<Void> getConfigKey(@PathVariable String configKey) {
-        return R.ok(configService.selectConfigByKey(configKey));
+    public String getConfigKey(@PathVariable String configKey) {
+        return configService.selectConfigByKey(configKey);
     }
 
     /**
@@ -77,11 +77,11 @@ public class SysConfigController extends BaseController {
     @SaCheckPermission("system:config:add")
     @Log(title = "参数管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public R<Void> add(@Validated @RequestBody SysConfig config) {
+    public void add(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
-            return R.fail("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
+            throw new ServiceException("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
-        return toAjax(configService.insertConfig(config));
+        configService.insertConfig(config);
     }
 
     /**
@@ -90,11 +90,11 @@ public class SysConfigController extends BaseController {
     @SaCheckPermission("system:config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public R<Void> edit(@Validated @RequestBody SysConfig config) {
+    public void edit(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
-            return R.fail("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
+            throw new ServiceException("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
-        return toAjax(configService.updateConfig(config));
+        configService.updateConfig(config);
     }
 
     /**
@@ -103,8 +103,8 @@ public class SysConfigController extends BaseController {
     @SaCheckPermission("system:config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping("/updateByKey")
-    public R<Void> updateByKey(@RequestBody SysConfig config) {
-        return toAjax(configService.updateConfig(config));
+    public void updateByKey(@RequestBody SysConfig config) {
+        configService.updateConfig(config);
     }
 
     /**
@@ -113,9 +113,8 @@ public class SysConfigController extends BaseController {
     @SaCheckPermission("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
-    public R<Void> remove(@PathVariable Long[] configIds) {
+    public void remove(@PathVariable Long[] configIds) {
         configService.deleteConfigByIds(configIds);
-        return R.ok();
     }
 
     /**
@@ -124,8 +123,7 @@ public class SysConfigController extends BaseController {
     @SaCheckPermission("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
-    public R<Void> refreshCache() {
+    public void refreshCache() {
         configService.resetConfigCache();
-        return R.ok();
     }
 }

@@ -1,19 +1,17 @@
 package com.qixidi.business.api.frontDesk.privateUser;
 
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.light.core.core.validate.QueryGroup;
+import com.light.redission.annotation.RepeatSubmit;
+
 import com.qixidi.business.domain.bo.privateUser.PrivateUserBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
 import com.qixidi.business.service.privateUser.IPrivateUserService;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
-import com.light.core.core.page.TableDataInfo;
-import com.light.core.core.validate.QueryGroup;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 【前台】私信用户管理
@@ -22,7 +20,7 @@ import jakarta.validation.constraints.NotEmpty;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/private/user")
-public class FdPrivateUserController extends BaseController {
+public class FdPrivateUserController {
 
     private final IPrivateUserService iPrivateUserService;
 
@@ -39,24 +37,24 @@ public class FdPrivateUserController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("add/{targetUid}")
-    public R<Void> add(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
-        return toAjax(iPrivateUserService.addPrivateUser(targetUid) ? 1 : 0);
+    public void add(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
+        iPrivateUserService.addPrivateUser(targetUid);
     }
 
     /**
      * 删除私信用户
      */
     @DeleteMapping("/{id}")
-    public R<Void> remove(@PathVariable String id) {
-        return toAjax(iPrivateUserService.deleteById(id) ? 1 : 0);
+    public void remove(@PathVariable String id) {
+        iPrivateUserService.deleteById(id);
     }
 
     /**
      * 删除所有私信用户
      */
     @DeleteMapping("/all")
-    public R<Void> remove() {
-        return toAjax(iPrivateUserService.deleteAll() ? 1 : 0);
+    public void remove() {
+        iPrivateUserService.deleteAll();
     }
 
 }

@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.user.BrowsingHistoryVo;
 import com.qixidi.business.service.IBrowsingHistoryService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/browsing/history")
-public class BrowsingHistoryController extends BaseController {
+public class BrowsingHistoryController {
 
     private final IBrowsingHistoryService iBrowsingHistoryService;
 
@@ -62,8 +61,8 @@ public class BrowsingHistoryController extends BaseController {
      */
     @SaCheckPermission("browsing:history:query")
     @GetMapping("/{id}")
-    public R<BrowsingHistoryVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iBrowsingHistoryService.queryById(id));
+    public BrowsingHistoryVo getInfo(@PathVariable("id") Long id) {
+        return iBrowsingHistoryService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class BrowsingHistoryController extends BaseController {
     @Log(title = "用户浏览历史", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody BrowsingHistoryBo bo) {
-        return toAjax(iBrowsingHistoryService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody BrowsingHistoryBo bo) {
+        iBrowsingHistoryService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class BrowsingHistoryController extends BaseController {
     @Log(title = "用户浏览历史", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody BrowsingHistoryBo bo) {
-        return toAjax(iBrowsingHistoryService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody BrowsingHistoryBo bo) {
+        iBrowsingHistoryService.updateByBo(bo);
     }
 
     /**
@@ -94,7 +93,7 @@ public class BrowsingHistoryController extends BaseController {
     @SaCheckPermission("browsing:history:remove")
     @Log(title = "用户浏览历史", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iBrowsingHistoryService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iBrowsingHistoryService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

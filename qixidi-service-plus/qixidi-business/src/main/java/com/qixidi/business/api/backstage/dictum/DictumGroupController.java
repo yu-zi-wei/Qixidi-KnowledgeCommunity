@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.dictum.DictumGroupVo;
 import com.qixidi.business.service.dictum.IDictumGroupService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/dictum/group")
-public class DictumGroupController extends BaseController {
+public class DictumGroupController {
 
     private final IDictumGroupService iDictumGroupService;
 
@@ -62,8 +61,8 @@ public class DictumGroupController extends BaseController {
      */
     @SaCheckPermission("business:dictum:group:query")
     @GetMapping("/{id}")
-    public R<DictumGroupVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iDictumGroupService.queryById(id));
+    public DictumGroupVo getInfo(@PathVariable("id") Long id) {
+        return iDictumGroupService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class DictumGroupController extends BaseController {
     @Log(title = "名言分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
-        return toAjax(iDictumGroupService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
+        iDictumGroupService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class DictumGroupController extends BaseController {
     @Log(title = "名言分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
-        return toAjax(iDictumGroupService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
+        iDictumGroupService.updateByBo(bo);
     }
 
     /**
@@ -94,7 +93,7 @@ public class DictumGroupController extends BaseController {
     @SaCheckPermission("business:dictum:group:remove")
     @Log(title = "名言分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

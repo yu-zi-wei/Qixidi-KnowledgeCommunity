@@ -7,9 +7,8 @@ import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -34,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/fabulous/record")
-public class FabulousRecordController extends BaseController {
+public class FabulousRecordController {
 
     private final IFabulousRecordService iFabulousRecordService;
 
@@ -63,8 +62,8 @@ public class FabulousRecordController extends BaseController {
      */
     @SaCheckPermission("fabulous:record:query")
     @GetMapping("/{id}")
-    public R<FabulousRecordVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iFabulousRecordService.queryById(id));
+    public FabulousRecordVo getInfo(@PathVariable("id") Long id) {
+        return iFabulousRecordService.queryById(id);
     }
 
     /**
@@ -74,8 +73,8 @@ public class FabulousRecordController extends BaseController {
     @Log(title = "点赞", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
-        return toAjax(iFabulousRecordService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
+        iFabulousRecordService.insertByBo(bo);
     }
 
     /**
@@ -85,8 +84,8 @@ public class FabulousRecordController extends BaseController {
     @Log(title = "点赞", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody FabulousRecordBo bo) {
-        return toAjax(iFabulousRecordService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody FabulousRecordBo bo) {
+        iFabulousRecordService.updateByBo(bo);
     }
 
     /**
@@ -95,7 +94,7 @@ public class FabulousRecordController extends BaseController {
     @SaCheckPermission("fabulous:record:remove")
     @Log(title = "点赞", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iFabulousRecordService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iFabulousRecordService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

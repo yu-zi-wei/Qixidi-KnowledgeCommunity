@@ -1,7 +1,6 @@
 package com.qixidi.system.api.monitor;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.light.core.core.domain.R;
 import com.light.core.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.RedisServerCommands;
@@ -35,7 +34,7 @@ public class CacheController {
      */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping()
-    public R<Map<String, Object>> getInfo() throws Exception {
+    public Map<String, Object> getInfo() throws Exception {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);
         Properties commandStats = (Properties) redisTemplate.execute(
                 (RedisCallback<Object>) connection -> connection.info("commandstats"));
@@ -54,6 +53,6 @@ public class CacheController {
             });
         }
         result.put("commandStats", pieList);
-        return R.ok(result);
+        return result;
     }
 }

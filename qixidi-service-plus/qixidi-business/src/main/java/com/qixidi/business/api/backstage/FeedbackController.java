@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.FeedbackVo;
 import com.qixidi.business.service.IFeedbackService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/Feedback")
-public class FeedbackController extends BaseController {
+public class FeedbackController {
 
     private final IFeedbackService IFeedbackService;
 
@@ -62,8 +61,8 @@ public class FeedbackController extends BaseController {
      */
     @SaCheckPermission("business:Feedback:query")
     @GetMapping("/{id}")
-    public R<FeedbackVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(IFeedbackService.queryById(id));
+    public FeedbackVo getInfo(@PathVariable("id") Long id) {
+        return IFeedbackService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class FeedbackController extends BaseController {
     @Log(title = "用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
-        return toAjax(IFeedbackService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
+        IFeedbackService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class FeedbackController extends BaseController {
     @Log(title = "用户反馈", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
-        return toAjax(IFeedbackService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
+        IFeedbackService.updateByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class FeedbackController extends BaseController {
     @SaCheckPermission("business:Feedback:remove")
     @Log(title = "用户反馈", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

@@ -3,7 +3,6 @@ package com.qixidi.business.api.backstage;
 import com.qixidi.business.domain.vo.SystemTaskConfigVo;
 import com.qixidi.business.service.SystemTaskConfigService;
 import com.qixidi.business.task.*;
-import com.light.core.core.domain.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +35,8 @@ public class SystemTaskController {
      * @return
      */
     @GetMapping("/list")
-    public R<List<SystemTaskConfigVo>> systemTaskList() {
-        return R.ok(systemTaskConfigService.list());
+    public List<SystemTaskConfigVo> systemTaskList() {
+        return systemTaskConfigService.list();
     }
 
     /**

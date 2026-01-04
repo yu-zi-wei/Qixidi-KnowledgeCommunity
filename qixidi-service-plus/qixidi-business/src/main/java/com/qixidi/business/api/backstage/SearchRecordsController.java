@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.SearchRecordsVo;
 import com.qixidi.business.service.ISearchRecordsService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/search/records")
-public class SearchRecordsController extends BaseController {
+public class SearchRecordsController {
 
     private final ISearchRecordsService iSearchRecordsService;
 
@@ -62,8 +61,8 @@ public class SearchRecordsController extends BaseController {
      */
     @SaCheckPermission("business:search:records:query")
     @GetMapping("/{id}")
-    public R<SearchRecordsVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iSearchRecordsService.queryById(id));
+    public SearchRecordsVo getInfo(@PathVariable("id") Long id) {
+        return iSearchRecordsService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class SearchRecordsController extends BaseController {
     @Log(title = "搜索记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody SearchRecordsBo bo) {
-        return toAjax(iSearchRecordsService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody SearchRecordsBo bo) {
+        iSearchRecordsService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class SearchRecordsController extends BaseController {
     @Log(title = "搜索记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody SearchRecordsBo bo) {
-        return toAjax(iSearchRecordsService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody SearchRecordsBo bo) {
+        iSearchRecordsService.updateByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class SearchRecordsController extends BaseController {
     @SaCheckPermission("business:search:records:remove")
     @Log(title = "搜索记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iSearchRecordsService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iSearchRecordsService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

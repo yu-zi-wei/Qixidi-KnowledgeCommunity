@@ -1,7 +1,6 @@
 package com.qixidi.business.api.frontDesk.dictumWhite;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
 import com.light.redission.utils.RedisUtils;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -60,8 +60,8 @@ public class WhDictumInfoController {
      * @return
      */
     @GetMapping("/info/{id}")
-    public R<DictumInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iDictumInfoService.queryById(id));
+    public DictumInfoVo getInfo(@PathVariable("id") Long id) {
+        return iDictumInfoService.queryById(id);
     }
 
     /**
@@ -84,47 +84,47 @@ public class WhDictumInfoController {
      * 获取名言专辑详细信息
      */
     @GetMapping("/album/{id}")
-    public R<DictumAlbumVo> getAlbumInfo(@PathVariable("id") Long id) {
-        return R.ok(iDictumAlbumService.queryById(id));
+    public DictumAlbumVo getAlbumInfo(@PathVariable("id") Long id) {
+        return iDictumAlbumService.queryById(id);
     }
 
     /**
      * 推荐专辑
      */
     @GetMapping("/recommended/album")
-    public R<List<DictumAlbumVo>> recommendedAlbum() {
-        return R.ok(iDictumAlbumService.recommendedAlbum());
+    public List<DictumAlbumVo> recommendedAlbum() {
+        return iDictumAlbumService.recommendedAlbum();
     }
 
     /**
      * 热门作者
      */
     @GetMapping("/popular/authors")
-    public R<Set<Object>> popularAuthors() {
+    public Set<Object> popularAuthors() {
         Boolean aBoolean = RedisUtils.hasKey(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
-        if (!aBoolean) R.ok(null);
+        if (!aBoolean) return new HashSet<>();
         Set<Object> cacheSet = RedisUtils.getCacheSet(RedisBusinessKeyEnums.POPULAR_AUTHORS.getKey());
-        return R.ok(cacheSet);
+        return cacheSet;
     }
 
     /**
      * 名言 热门标签
      */
     @GetMapping("/popular/label")
-    public R<Set<String>> popularLabel() {
+    public Set<String> popularLabel() {
         Boolean aBoolean = RedisUtils.hasKey(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
-        if (!aBoolean) R.ok(null);
+        if (!aBoolean) return new HashSet<>();
         Set<String> cacheSet = RedisUtils.getCacheSet(RedisBusinessKeyEnums.POPULAR_LABEL.getKey());
-        return R.ok(cacheSet);
+        return cacheSet;
     }
 
     /**
      * 系统标签
      */
     @GetMapping("/system/label")
-    public R<List<LabelInfoVo>> systemLabel(String label) {
+    public List<LabelInfoVo> systemLabel(String label) {
         List<LabelInfoVo> list = iLabelInfoService.systemLabel(label);
-        return R.ok(list);
+        return list;
     }
 
     /**

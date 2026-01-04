@@ -2,7 +2,6 @@ package com.qixidi.business.api.frontDesk.dictum;
 
 import com.qixidi.business.domain.bo.dictum.DictumCommentBo;
 import com.qixidi.business.service.dictum.DictumCommentService;
-import com.light.core.core.domain.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,9 +26,8 @@ public class DictumCommentController {
      * @return
      */
     @PostMapping("/add")
-    public R<Void> add(@Validated @RequestBody DictumCommentBo bo) {
+    public void add(@Validated @RequestBody DictumCommentBo bo) {
         dictumCommentService.add(bo);
-        return R.ok();
     }
 
     /**
@@ -39,8 +37,7 @@ public class DictumCommentController {
      * @return
      */
     @DeleteMapping("delete/{id}")
-    public R<Void> delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         dictumCommentService.delete(id);
-        return R.ok();
     }
 }

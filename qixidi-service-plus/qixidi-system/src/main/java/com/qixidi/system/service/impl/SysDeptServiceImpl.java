@@ -193,7 +193,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
             throw new ServiceException("部门停用，不允许新增");
         }
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
-        return baseMapper.insert(dept);
+        int rows = baseMapper.insert(dept);
+        if (rows <= 0) {
+            throw new ServiceException("新增部门失败");
+        }
+        return rows;
     }
 
     /**
@@ -212,13 +216,16 @@ public class SysDeptServiceImpl implements ISysDeptService {
             dept.setAncestors(newAncestors);
             updateDeptChildren(dept.getDeptId(), newAncestors, oldAncestors);
         }
-        int result = baseMapper.updateById(dept);
+        int rows = baseMapper.updateById(dept);
+        if (rows <= 0) {
+            throw new ServiceException("修改部门失败");
+        }
         if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()) && StringUtils.isNotEmpty(dept.getAncestors())
             && !StringUtils.equals(UserConstants.DEPT_NORMAL, dept.getAncestors())) {
             // 如果该部门是启用状态，则启用该部门的所有上级部门
             updateParentDeptStatusNormal(dept);
         }
-        return result;
+        return rows;
     }
 
     /**
@@ -263,7 +270,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public int deleteDeptById(Long deptId) {
-        return baseMapper.deleteById(deptId);
+        int rows = baseMapper.deleteById(deptId);
+        if (rows <= 0) {
+            throw new ServiceException("删除部门失败");
+        }
+        return rows;
     }
 
 }

@@ -7,9 +7,8 @@ import com.qixidi.business.domain.vo.FeedbackVo;
 import com.qixidi.business.service.IFeedbackService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -31,7 +30,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
-public class FdFeedbackController extends BaseController {
+public class FdFeedbackController {
 
     private final IFeedbackService IFeedbackService;
 
@@ -41,8 +40,8 @@ public class FdFeedbackController extends BaseController {
      * @return
      */
     @GetMapping("/white/feedback/status/sum")
-    public R<FeedbackStatusSumVo> statusSum() {
-        return R.ok(IFeedbackService.statusSum());
+    public FeedbackStatusSumVo statusSum() {
+        return IFeedbackService.statusSum();
     }
 
     /**
@@ -57,8 +56,8 @@ public class FdFeedbackController extends BaseController {
      * 获取反馈详情-白名单
      */
     @GetMapping("/white/feedback/byId/{id}")
-    public R<FeedbackVo> queryById(@PathVariable("id") Long id) {
-        return R.ok(IFeedbackService.queryById(id));
+    public FeedbackVo queryById(@PathVariable("id") Long id) {
+        return IFeedbackService.queryById(id);
     }
 
     /**
@@ -67,8 +66,8 @@ public class FdFeedbackController extends BaseController {
     @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/add")
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
-        return toAjax(IFeedbackService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
+        IFeedbackService.insertByBo(bo);
     }
 
     /**
@@ -77,8 +76,8 @@ public class FdFeedbackController extends BaseController {
     @Log(title = "更新用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/update")
-    public R<Void> update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
-        return toAjax(IFeedbackService.updateByBo(bo) ? 1 : 0);
+    public void update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
+        IFeedbackService.updateByBo(bo);
     }
 
     /**
@@ -86,8 +85,8 @@ public class FdFeedbackController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/frontDesk/feedback/update/status/{id}/{status}")
-    public R<Void> updateStatus(@PathVariable Long id, @PathVariable Integer status) {
-        return toAjax(IFeedbackService.updateStatus(id, status) ? 1 : 0);
+    public void updateStatus(@PathVariable Long id, @PathVariable Integer status) {
+        IFeedbackService.updateStatus(id, status);
     }
 
     /**
@@ -95,7 +94,7 @@ public class FdFeedbackController extends BaseController {
      */
     @RepeatSubmit()
     @DeleteMapping("/frontDesk/feedback/delete/{ids}")
-    public R<Void> delete(@PathVariable Long[] ids) {
-        return toAjax(IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void delete(@PathVariable Long[] ids) {
+        IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

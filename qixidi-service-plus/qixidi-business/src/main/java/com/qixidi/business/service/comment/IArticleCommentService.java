@@ -1,7 +1,6 @@
 package com.qixidi.business.service.comment;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
@@ -70,7 +69,7 @@ public interface IArticleCommentService {
 
     boolean deleteWithValidById(ArticleCommentBo bo);
 
-    R getComment(Long id);
+    Object getComment(Long id);
 
     Long fillArticleGetCount(Long id);
 }

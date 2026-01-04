@@ -1,14 +1,13 @@
 package com.qixidi.system.api.monitor;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
+import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.system.domain.entity.SysOperLog;
 import com.qixidi.system.service.ISysOperLogService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/operlog")
-public class SysOperlogController extends BaseController {
+public class SysOperlogController {
 
     private final ISysOperLogService operLogService;
 
@@ -67,8 +66,10 @@ public class SysOperlogController extends BaseController {
     @Log(title = "操作日志", businessType = BusinessType.DELETE)
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/{operIds}")
-    public R<Void> remove(@PathVariable Long[] operIds) {
-        return toAjax(operLogService.deleteOperLogByIds(operIds));
+    public void remove(@PathVariable Long[] operIds) {
+        if (operLogService.deleteOperLogByIds(operIds) <= 0) {
+            throw new ServiceException("操作失败");
+        }
     }
 
     /**
@@ -79,8 +80,7 @@ public class SysOperlogController extends BaseController {
     @Log(title = "操作日志", businessType = BusinessType.CLEAN)
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/clean")
-    public R<Void> clean() {
+    public void clean() {
         operLogService.cleanOperLog();
-        return R.ok();
     }
 }

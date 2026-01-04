@@ -3,12 +3,12 @@ package com.qixidi.system.api;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ArrayUtil;
-import com.qixidi.auth.annotation.Log;
 import com.light.core.constant.UserConstants;
-import com.light.core.core.domain.R;
 import com.light.core.enums.BusinessType;
 import com.light.core.utils.StringUtils;
-import com.qixidi.auth.api.BaseController;
+import com.light.exception.ServiceException;
+import com.qixidi.auth.annotation.Log;
+
 import com.qixidi.auth.domain.entity.SysDept;
 import com.qixidi.system.service.ISysDeptService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dept")
-public class SysDeptController extends BaseController {
+public class SysDeptController {
 
     private final ISysDeptService deptService;
 
@@ -37,9 +37,8 @@ public class SysDeptController extends BaseController {
      */
     @SaCheckPermission("system:dept:list")
     @GetMapping("/list")
-    public R<List<SysDept>> list(SysDept dept) {
-        List<SysDept> depts = deptService.selectDeptList(dept);
-        return R.ok(depts);
+    public List<SysDept> list(SysDept dept) {
+        return deptService.selectDeptList(dept);
     }
 
     /**
@@ -47,11 +46,11 @@ public class SysDeptController extends BaseController {
      */
     @SaCheckPermission("system:dept:list")
     @GetMapping("/list/exclude/{deptId}")
-    public R<List<SysDept>> excludeChild(@PathVariable(value = "deptId", required = false) Long deptId) {
+    public List<SysDept> excludeChild(@PathVariable(value = "deptId", required = false) Long deptId) {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
         depts.removeIf(d -> d.getDeptId().equals(deptId)
                 || ArrayUtil.contains(StringUtils.split(d.getAncestors(), ","), deptId + ""));
-        return R.ok(depts);
+        return depts;
     }
 
     /**
@@ -59,30 +58,30 @@ public class SysDeptController extends BaseController {
      */
     @SaCheckPermission("system:dept:query")
     @GetMapping(value = "/{deptId}")
-    public R<SysDept> getInfo(@PathVariable Long deptId) {
+    public SysDept getInfo(@PathVariable Long deptId) {
         deptService.checkDeptDataScope(deptId);
-        return R.ok(deptService.selectDeptById(deptId));
+        return deptService.selectDeptById(deptId);
     }
 
     /**
      * 获取部门下拉树列表
      */
     @GetMapping("/treeselect")
-    public R<List<Tree<Long>>> treeselect(SysDept dept) {
+    public List<Tree<Long>> treeselect(SysDept dept) {
         List<SysDept> depts = deptService.selectDeptList(dept);
-        return R.ok(deptService.buildDeptTreeSelect(depts));
+        return deptService.buildDeptTreeSelect(depts);
     }
 
     /**
      * 加载对应角色部门列表树
      */
     @GetMapping(value = "/roleDeptTreeselect/{roleId}")
-    public R<Map<String, Object>> roleDeptTreeselect(@PathVariable("roleId") Long roleId) {
+    public Map<String, Object> roleDeptTreeselect(@PathVariable("roleId") Long roleId) {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
         Map<String, Object> ajax = new HashMap<>();
         ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
         ajax.put("depts", deptService.buildDeptTreeSelect(depts));
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -91,11 +90,11 @@ public class SysDeptController extends BaseController {
     @SaCheckPermission("system:dept:add")
     @Log(title = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public R<Void> add(@Validated @RequestBody SysDept dept) {
+    public void add(@Validated @RequestBody SysDept dept) {
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
-            return R.fail("新增部门'" + dept.getDeptName() + "'失败，部门名称已存在");
+            throw new ServiceException("新增部门'" + dept.getDeptName() + "'失败，部门名称已存在");
         }
-        return toAjax(deptService.insertDept(dept));
+        deptService.insertDept(dept);
     }
 
     /**
@@ -104,18 +103,18 @@ public class SysDeptController extends BaseController {
     @SaCheckPermission("system:dept:edit")
     @Log(title = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public R<Void> edit(@Validated @RequestBody SysDept dept) {
+    public void edit(@Validated @RequestBody SysDept dept) {
         Long deptId = dept.getDeptId();
         deptService.checkDeptDataScope(deptId);
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
-            return R.fail("修改部门'" + dept.getDeptName() + "'失败，部门名称已存在");
+            throw new ServiceException("修改部门'" + dept.getDeptName() + "'失败，部门名称已存在");
         } else if (dept.getParentId().equals(deptId)) {
-            return R.fail("修改部门'" + dept.getDeptName() + "'失败，上级部门不能是自己");
+            throw new ServiceException("修改部门'" + dept.getDeptName() + "'失败，上级部门不能是自己");
         } else if (StringUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus())
                 && deptService.selectNormalChildrenDeptById(deptId) > 0) {
-            return R.fail("该部门包含未停用的子部门！");
+            throw new ServiceException("该部门包含未停用的子部门！");
         }
-        return toAjax(deptService.updateDept(dept));
+        deptService.updateDept(dept);
     }
 
     /**
@@ -124,14 +123,14 @@ public class SysDeptController extends BaseController {
     @SaCheckPermission("system:dept:remove")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")
-    public R<Void> remove(@PathVariable Long deptId) {
+    public void remove(@PathVariable Long deptId) {
         if (deptService.hasChildByDeptId(deptId)) {
-            return R.fail("存在下级部门,不允许删除");
+            throw new ServiceException("存在下级部门,不允许删除");
         }
         if (deptService.checkDeptExistUser(deptId)) {
-            return R.fail("部门存在用户,不允许删除");
+            throw new ServiceException("部门存在用户,不允许删除");
         }
         deptService.checkDeptDataScope(deptId);
-        return toAjax(deptService.deleteDeptById(deptId));
+        deptService.deleteDeptById(deptId);
     }
 }

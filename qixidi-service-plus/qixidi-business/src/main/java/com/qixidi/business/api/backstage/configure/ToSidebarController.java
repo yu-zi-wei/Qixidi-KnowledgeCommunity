@@ -1,25 +1,24 @@
 package com.qixidi.business.api.backstage.configure;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.qixidi.business.domain.bo.configure.ToSidebarBo;
-import com.qixidi.business.domain.vo.configure.ToSidebarVo;
-import com.qixidi.business.service.configure.IToSidebarService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+
+import com.qixidi.business.domain.bo.configure.ToSidebarBo;
+import com.qixidi.business.domain.vo.configure.ToSidebarVo;
+import com.qixidi.business.service.configure.IToSidebarService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/configure/sidebar")
-public class ToSidebarController extends BaseController {
+public class ToSidebarController {
 
     private final IToSidebarService iToSidebarService;
 
@@ -61,8 +60,8 @@ public class ToSidebarController extends BaseController {
      */
     @SaCheckPermission("business:sidebar:query")
     @GetMapping("/{id}")
-    public R<ToSidebarVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iToSidebarService.queryById(id));
+    public ToSidebarVo getInfo(@PathVariable("id") Long id) {
+        return iToSidebarService.queryById(id);
     }
 
     /**
@@ -72,8 +71,8 @@ public class ToSidebarController extends BaseController {
     @Log(title = "侧边栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ToSidebarBo bo) {
-        return toAjax(iToSidebarService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ToSidebarBo bo) {
+        iToSidebarService.insertByBo(bo);
     }
 
     /**
@@ -83,8 +82,8 @@ public class ToSidebarController extends BaseController {
     @Log(title = "侧边栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ToSidebarBo bo) {
-        return toAjax(iToSidebarService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody ToSidebarBo bo) {
+        iToSidebarService.updateByBo(bo);
     }
 
     /**
@@ -93,8 +92,8 @@ public class ToSidebarController extends BaseController {
     @SaCheckPermission("business:sidebar:remove")
     @Log(title = "侧边栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iToSidebarService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iToSidebarService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/news")
-public class NewsUserInfoController extends BaseController {
+public class NewsUserInfoController {
 
     private final INewsUserInfoService iNewsUserInfoService;
 
@@ -62,8 +61,8 @@ public class NewsUserInfoController extends BaseController {
      */
     @SaCheckPermission("news:userInfo:query")
     @GetMapping("/{id}")
-    public R<NewsUserInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iNewsUserInfoService.queryById(id));
+    public NewsUserInfoVo getInfo(@PathVariable("id") Long id) {
+        return iNewsUserInfoService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class NewsUserInfoController extends BaseController {
     @Log(title = "用户消息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody NewsUserInfoBo bo) {
-        return toAjax(iNewsUserInfoService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody NewsUserInfoBo bo) {
+        iNewsUserInfoService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class NewsUserInfoController extends BaseController {
     @Log(title = "用户消息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody NewsUserInfoBo bo) {
-        return toAjax(iNewsUserInfoService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody NewsUserInfoBo bo) {
+        iNewsUserInfoService.updateByBo(bo);
     }
 
     /**
@@ -94,7 +93,7 @@ public class NewsUserInfoController extends BaseController {
     @SaCheckPermission("news:userInfo:remove")
     @Log(title = "用户消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iNewsUserInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iNewsUserInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

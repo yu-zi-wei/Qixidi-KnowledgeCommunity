@@ -1,11 +1,10 @@
 package com.qixidi.business.api.frontDesk.user;
 
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.user.UserFollowBo;
 import com.qixidi.business.service.user.IUserFollowService;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user/follow")
-public class UserFollowController extends BaseController {
+public class UserFollowController {
 
     private final IUserFollowService iUserFollowService;
 
@@ -33,8 +32,8 @@ public class UserFollowController extends BaseController {
     @Log(title = "新增关注", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/add")
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody UserFollowBo bo) {
-        return toAjax(iUserFollowService.insertByBo(bo) ? 1 : 0);
+    public Integer add(@Validated(AddGroup.class) @RequestBody UserFollowBo bo) {
+        return iUserFollowService.insertByBo(bo) ? 1 : 0;
     }
 
     /**
@@ -46,8 +45,8 @@ public class UserFollowController extends BaseController {
     @Log(title = "取消关注", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/cancel")
-    public R<Void> cancelFollow(@Validated(AddGroup.class) @RequestBody UserFollowBo bo) {
-        return toAjax(iUserFollowService.cancelFollow(bo) ? 1 : 0);
+    public Integer cancelFollow(@Validated(AddGroup.class) @RequestBody UserFollowBo bo) {
+        return iUserFollowService.cancelFollow(bo) ? 1 : 0;
     }
 
     /**
@@ -57,7 +56,7 @@ public class UserFollowController extends BaseController {
      * @return
      */
     @GetMapping("/list/{type}")
-    public R<Object> followRoleList(@NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
-        return R.ok(iUserFollowService.followRoleList(type));
+    public Object followRoleList(@NotNull(message = "类型不能为空") @PathVariable("type") Integer type) {
+        return iUserFollowService.followRoleList(type);
     }
 }

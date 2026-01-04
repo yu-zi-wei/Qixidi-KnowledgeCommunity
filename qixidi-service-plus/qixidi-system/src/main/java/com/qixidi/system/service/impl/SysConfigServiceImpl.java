@@ -125,9 +125,10 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
     @Override
     public int insertConfig(SysConfig config) {
         int row = baseMapper.insert(config);
-        if (row > 0) {
-            RedisUtils.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
+        if (row <= 0) {
+            throw new ServiceException("新增参数失败");
         }
+        RedisUtils.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
         return row;
     }
 
@@ -146,9 +147,10 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
             row = baseMapper.update(config, new LambdaQueryWrapper<SysConfig>()
                 .eq(SysConfig::getConfigKey, config.getConfigKey()));
         }
-        if (row > 0) {
-            RedisUtils.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
+        if (row <= 0) {
+            throw new ServiceException("修改参数失败");
         }
+        RedisUtils.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
         return row;
     }
 
@@ -166,7 +168,10 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
             }
             RedisUtils.deleteObject(getCacheKey(config.getConfigKey()));
         }
-        baseMapper.deleteBatchIds(Arrays.asList(configIds));
+        int rows = baseMapper.deleteBatchIds(Arrays.asList(configIds));
+        if (rows <= 0) {
+            throw new ServiceException("删除参数失败");
+        }
     }
 
     /**

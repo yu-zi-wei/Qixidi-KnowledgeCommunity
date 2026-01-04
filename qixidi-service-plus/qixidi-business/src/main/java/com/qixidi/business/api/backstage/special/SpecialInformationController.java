@@ -7,9 +7,8 @@ import com.qixidi.business.domain.vo.special.SpecialInformationVo;
 import com.qixidi.business.service.special.ISpecialInformationService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -34,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/special/information")
-public class SpecialInformationController extends BaseController {
+public class SpecialInformationController {
 
     private final ISpecialInformationService iSpecialInformationService;
 
@@ -46,8 +45,8 @@ public class SpecialInformationController extends BaseController {
      * @return
      */
     @GetMapping("/article/list")
-    public R getArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return R.ok(iSpecialInformationService.getArticleList(bo, pageQuery));
+    public Object getArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+        return iSpecialInformationService.getArticleList(bo, pageQuery);
     }
 
     /**
@@ -74,8 +73,8 @@ public class SpecialInformationController extends BaseController {
      */
     @SaCheckPermission("special:information:query")
     @GetMapping("/{id}")
-    public R<SpecialInformationVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iSpecialInformationService.queryById(id));
+    public SpecialInformationVo getInfo(@PathVariable("id") Long id) {
+        return iSpecialInformationService.queryById(id);
     }
 
     /**
@@ -84,8 +83,8 @@ public class SpecialInformationController extends BaseController {
     @Log(title = "专栏信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody SpecialInformationBo bo) {
-        return toAjax(iSpecialInformationService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody SpecialInformationBo bo) {
+        iSpecialInformationService.insertByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class SpecialInformationController extends BaseController {
     @Log(title = "专栏信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody SpecialInformationBo bo) {
-        return toAjax(iSpecialInformationService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody SpecialInformationBo bo) {
+        iSpecialInformationService.updateByBo(bo);
     }
 
     /**
@@ -103,7 +102,7 @@ public class SpecialInformationController extends BaseController {
      */
     @Log(title = "专栏信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iSpecialInformationService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iSpecialInformationService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

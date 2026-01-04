@@ -5,9 +5,8 @@ import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -32,7 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/private/newsInfo")
-public class PrivateNewsInfoController extends BaseController {
+public class PrivateNewsInfoController {
 
     private final IPrivateNewsInfoService iPrivateNewsInfoService;
 
@@ -58,8 +57,8 @@ public class PrivateNewsInfoController extends BaseController {
      * 获取私信记录详细信息
      */
     @GetMapping("/{id}")
-    public R<PrivateNewsInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iPrivateNewsInfoService.queryById(id));
+    public PrivateNewsInfoVo getInfo(@PathVariable("id") Long id) {
+        return iPrivateNewsInfoService.queryById(id);
     }
 
     /**
@@ -68,8 +67,8 @@ public class PrivateNewsInfoController extends BaseController {
     @Log(title = "私信记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
-        return toAjax(iPrivateNewsInfoService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
+        iPrivateNewsInfoService.insertByBo(bo);
     }
 
     /**
@@ -78,8 +77,8 @@ public class PrivateNewsInfoController extends BaseController {
     @Log(title = "私信记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody PrivateNewsInfoBo bo) {
-        return toAjax(iPrivateNewsInfoService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody PrivateNewsInfoBo bo) {
+        iPrivateNewsInfoService.updateByBo(bo);
     }
 
     /**
@@ -87,7 +86,7 @@ public class PrivateNewsInfoController extends BaseController {
      */
     @Log(title = "私信记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

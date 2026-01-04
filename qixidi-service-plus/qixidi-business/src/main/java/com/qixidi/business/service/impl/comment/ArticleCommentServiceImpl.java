@@ -9,12 +9,12 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.word.WordFilter;
+import com.light.exception.ServiceException;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
@@ -302,12 +302,10 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     }
 
     @Override
-    public R getComment(Long id) {
+    public Object getComment(Long id) {
         NewsUserRecord newsUserRecord = newsUserRecordMapper.selectById(id);
-        if (ObjectUtils.isEmpty(newsUserRecord)) {
-            return R.ok(MsgEnums.COMMENT_DELETED.getValue());
-        }
-        return R.ok(newsUserRecord);
+        if (ObjectUtils.isEmpty(newsUserRecord)) throw new ServiceException(MsgEnums.COMMENT_DELETED);
+        return newsUserRecord;
     }
 
     @Override

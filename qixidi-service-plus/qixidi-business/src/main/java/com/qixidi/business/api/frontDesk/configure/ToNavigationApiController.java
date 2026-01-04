@@ -1,10 +1,9 @@
 package com.qixidi.business.api.frontDesk.configure;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.configure.ToNavigationBo;
 import com.qixidi.business.domain.vo.configure.ToNavigationVo;
 import com.qixidi.business.domain.vo.configure.ToSidebarVo;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/white/configure")
-public class ToNavigationApiController extends BaseController {
+public class ToNavigationApiController {
 
     private final IToNavigationService iToNavigationService;
 
@@ -46,8 +45,8 @@ public class ToNavigationApiController extends BaseController {
      * 查询侧边栏配置列表
      */
     @GetMapping("/sidebar/list")
-    public R<List<ToSidebarVo>> sidebarList(@Validated(QueryGroup.class) ToNavigationBo bo) {
-        return R.ok(iToSidebarService.sidebarList(bo));
+    public List<ToSidebarVo> sidebarList(@Validated(QueryGroup.class) ToNavigationBo bo) {
+        return iToSidebarService.sidebarList(bo);
     }
 }
 

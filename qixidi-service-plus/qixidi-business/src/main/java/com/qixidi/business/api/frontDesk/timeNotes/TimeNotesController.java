@@ -1,7 +1,6 @@
 package com.qixidi.business.api.frontDesk.timeNotes;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
@@ -31,9 +30,9 @@ public class TimeNotesController {
      * @param bo
      */
     @PostMapping("/add")
-    public R<Void> add(@RequestBody @Validated TimeNotesBo bo) {
+    public Integer add(@RequestBody @Validated TimeNotesBo bo) {
         timeNotesService.add(bo);
-        return R.ok();
+        return 1;
     }
 
     /**
@@ -42,9 +41,9 @@ public class TimeNotesController {
      * @param bo
      */
     @PostMapping("/update")
-    public R<Void> update(@RequestBody @Validated TimeNotesBo bo) {
+    public Integer update(@RequestBody @Validated TimeNotesBo bo) {
         timeNotesService.update(bo);
-        return R.ok();
+        return 1;
     }
 
     /**
@@ -53,9 +52,9 @@ public class TimeNotesController {
      * @param id
      */
     @GetMapping("/delete/{id}")
-    public R<Void> delete(@PathVariable("id") Long id) {
+    public Integer delete(@PathVariable("id") Long id) {
         timeNotesService.delete(id);
-        return R.ok();
+        return 1;
     }
 
     /**
@@ -65,8 +64,8 @@ public class TimeNotesController {
      * @return
      */
     @GetMapping("/getInfo/{id}")
-    public R<TimeNotesInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(timeNotesService.getInfo(id));
+    public TimeNotesInfoVo getInfo(@PathVariable("id") Long id) {
+        return timeNotesService.getInfo(id);
     }
 
 

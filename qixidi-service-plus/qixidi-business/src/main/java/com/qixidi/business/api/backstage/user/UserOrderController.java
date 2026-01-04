@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.user.UserOrderVo;
 import com.qixidi.business.service.user.IUserOrderService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/order")
-public class UserOrderController extends BaseController {
+public class UserOrderController {
 
     private final IUserOrderService iUserOrderService;
 
@@ -62,8 +61,8 @@ public class UserOrderController extends BaseController {
      */
     @SaCheckPermission("business:order:query")
     @GetMapping("/{id}")
-    public R<UserOrderVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iUserOrderService.queryById(id));
+    public UserOrderVo getInfo(@PathVariable("id") Long id) {
+        return iUserOrderService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class UserOrderController extends BaseController {
     @Log(title = "用户订单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody UserOrderBo bo) {
-        return toAjax(iUserOrderService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody UserOrderBo bo) {
+        iUserOrderService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class UserOrderController extends BaseController {
     @Log(title = "用户订单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody UserOrderBo bo) {
-        return toAjax(iUserOrderService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody UserOrderBo bo) {
+        iUserOrderService.updateByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class UserOrderController extends BaseController {
     @SaCheckPermission("business:order:remove")
     @Log(title = "用户订单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iUserOrderService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iUserOrderService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

@@ -1,24 +1,22 @@
 package com.qixidi.business.api.frontDesk.collection;
 
+import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.core.validate.AddGroup;
+import com.light.core.enums.BusinessType;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
 import com.qixidi.business.service.collection.ICollectionInformationService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
-import com.light.core.core.validate.AddGroup;
-import com.light.core.enums.BusinessType;
-import com.qixidi.auth.helper.LoginHelper;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -28,7 +26,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-public class CollectionFdkController extends BaseController {
+public class CollectionFdkController {
     private final ICollectionInformationService iCollectionInformationService;
 
 
@@ -36,18 +34,18 @@ public class CollectionFdkController extends BaseController {
      * 查询收藏夹信息列表
      */
     @GetMapping("/white/collection/list/{uuid}")
-    public R<List<CollectionInformationVo>> listUid(@NotNull(message = "用户id不能为空") @PathVariable("uuid") String uuid) {
-        return R.ok(iCollectionInformationService.listUid(uuid));
+    public List<CollectionInformationVo> listUid(@NotNull(message = "用户id不能为空") @PathVariable("uuid") String uuid) {
+        return iCollectionInformationService.listUid(uuid);
     }
 
     /**
      * 查询收藏夹信息列表
      */
     @GetMapping("/frontDesk/collection/list")
-    public R<List<CollectionInformationVo>> frontDeskListUid() {
+    public List<CollectionInformationVo> frontDeskListUid() {
         String tripartiteUuid = LoginHelper.getTripartiteUuid();
         if (tripartiteUuid == null) throw new RuntimeException("用户未登录");
-        return R.ok(iCollectionInformationService.listUid(tripartiteUuid));
+        return iCollectionInformationService.listUid(tripartiteUuid);
     }
 
     /**
@@ -56,8 +54,8 @@ public class CollectionFdkController extends BaseController {
      * @return
      */
     @GetMapping("/white/aut/collection/list")
-    public R<List<CollectionInformationVo>> list() {
-        return R.ok(iCollectionInformationService.list());
+    public List<CollectionInformationVo> list() {
+        return iCollectionInformationService.list();
     }
 
     /**
@@ -79,8 +77,8 @@ public class CollectionFdkController extends BaseController {
      * @return
      */
     @GetMapping("/white/collection/{id}")
-    public R<CollectionInformationVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iCollectionInformationService.queryById(id));
+    public CollectionInformationVo getInfo(@PathVariable("id") Long id) {
+        return iCollectionInformationService.queryById(id);
     }
 
     /**
@@ -89,8 +87,8 @@ public class CollectionFdkController extends BaseController {
     @Log(title = "收藏夹信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/add/collection")
-    public R<Void> addCollection(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
-        return toAjax(iCollectionInformationService.addCollection(bo) ? 1 : 0);
+    public void addCollection(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
+        iCollectionInformationService.addCollection(bo);
     }
 
     /**
@@ -98,8 +96,8 @@ public class CollectionFdkController extends BaseController {
      */
     @Log(title = "收藏夹信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/frontDesk/delete/collection/{id}")
-    public R<Void> removeCollection(@PathVariable Long id) {
-        return toAjax(iCollectionInformationService.removeCollection(id));
+    public void removeCollection(@PathVariable Long id) {
+        iCollectionInformationService.removeCollection(id);
     }
 
     /**
@@ -111,8 +109,8 @@ public class CollectionFdkController extends BaseController {
     @Log(title = "添加收藏夹文章", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/add/collection/data")
-    public R<Void> collectionArticle(@Validated(AddGroup.class) @RequestBody CollectionRecordBo bo) {
-        return toAjax(iCollectionInformationService.collectionArticle(bo) ? 1 : 0);
+    public void collectionArticle(@Validated(AddGroup.class) @RequestBody CollectionRecordBo bo) {
+        iCollectionInformationService.collectionArticle(bo);
     }
 
     /**
@@ -124,8 +122,8 @@ public class CollectionFdkController extends BaseController {
     @Log(title = "转移收藏夹文章", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PutMapping("/frontDesk/update/collection/data")
-    public R<Void> collectionUpdate(@RequestBody CollectionRecordBo bo) {
-        return toAjax(iCollectionInformationService.collectionUpdate(bo) ? 1 : 0);
+    public void collectionUpdate(@RequestBody CollectionRecordBo bo) {
+        iCollectionInformationService.collectionUpdate(bo);
     }
 
     /**
@@ -137,8 +135,8 @@ public class CollectionFdkController extends BaseController {
      */
     @Log(title = "删除收藏夹文章", businessType = BusinessType.INSERT)
     @GetMapping("/frontDesk/delete/collection/data/{id}/{labelId}")
-    public R<Void> deleteCollectionArticle(@PathVariable("id") Long id, @PathVariable("labelId") String labelId) {
-        return toAjax(iCollectionInformationService.deleteCollectionArticle(id, labelId) ? 1 : 0);
+    public void deleteCollectionArticle(@PathVariable("id") Long id, @PathVariable("labelId") String labelId) {
+        iCollectionInformationService.deleteCollectionArticle(id, labelId);
     }
 
 }

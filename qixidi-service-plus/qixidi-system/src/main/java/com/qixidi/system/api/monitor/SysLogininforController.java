@@ -1,14 +1,12 @@
 package com.qixidi.system.api.monitor;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.system.domain.entity.SysLogininfor;
 import com.qixidi.system.service.ISysLogininforService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,9 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-//limport com.qixidi.auth.controller.BaseController;
-;
 
 /**
  * 系统访问记录管理
@@ -30,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/logininfor")
-public class SysLogininforController extends BaseController {
+public class SysLogininforController {
 
     private final ISysLogininforService logininforService;
 
@@ -70,8 +65,8 @@ public class SysLogininforController extends BaseController {
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
-    public R<Void> remove(@PathVariable Long[] infoIds) {
-        return toAjax(logininforService.deleteLogininforByIds(infoIds));
+    public void remove(@PathVariable Long[] infoIds) {
+        logininforService.deleteLogininforByIds(infoIds);
     }
 
     /**
@@ -81,8 +76,7 @@ public class SysLogininforController extends BaseController {
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
-    public R<Void> clean() {
+    public void clean() {
         logininforService.cleanLogininfor();
-        return R.ok();
     }
 }

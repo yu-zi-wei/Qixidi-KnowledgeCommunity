@@ -2,7 +2,6 @@ package com.qixidi.business.api.backstage.stat;
 
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.service.stat.IStatDataInfoService;
-import com.light.core.core.domain.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,23 +23,23 @@ public class StatDataInfoController {
      * 查询网站日数据
      */
     @GetMapping("/info")
-    public R<StatDataInfoVo> list(StatDataInfoVo bo) {
-        return R.ok(iStatDataInfoService.queryPageList(bo));
+    public StatDataInfoVo list(StatDataInfoVo bo) {
+        return iStatDataInfoService.queryPageList(bo);
     }
 
     /**
      * 查询网站月统计数据
      */
     @GetMapping("/the/info")
-    public R theList(StatDataInfoVo bo) {
-        return R.ok(iStatDataInfoService.theList(bo));
+    public Object theList(StatDataInfoVo bo) {
+        return iStatDataInfoService.theList(bo);
     }
 
     /**
      * 查询网站标签/分类统计
      */
     @GetMapping("/label/data")
-    public R labelDate(StatDataInfoVo bo) {
-        return R.ok(iStatDataInfoService.labelDate(bo));
+    public Object labelDate(StatDataInfoVo bo) {
+        return iStatDataInfoService.labelDate(bo);
     }
 }

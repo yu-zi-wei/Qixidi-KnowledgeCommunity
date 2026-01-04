@@ -2,13 +2,12 @@ package com.qixidi.business.api.frontDesk.comment;
 
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.qixidi.business.service.comment.IArticleCommentService;
@@ -26,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping()
-public class FdArticleCommentController extends BaseController {
+public class FdArticleCommentController {
 
     private final IArticleCommentService iArticleCommentService;
 
@@ -34,8 +33,8 @@ public class FdArticleCommentController extends BaseController {
      * 查询文章评论列表
      */
     @GetMapping("/white/article/comment/list")
-    public R<List<ArticleCommentVo>> list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
-        return R.ok(iArticleCommentService.ArticleList(bo, pageQuery));
+    public List<ArticleCommentVo> list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
+        return iArticleCommentService.ArticleList(bo, pageQuery);
     }
 
     /**
@@ -44,8 +43,8 @@ public class FdArticleCommentController extends BaseController {
     @Log(title = "文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/article/comment/insert")
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
-        return toAjax(iArticleCommentService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
+        iArticleCommentService.insertByBo(bo);
     }
 
     /**
@@ -53,15 +52,15 @@ public class FdArticleCommentController extends BaseController {
      */
     @Log(title = "文章评论", businessType = BusinessType.DELETE)
     @PostMapping("/article/delete/comment")
-    public R<Void> remove(@RequestBody ArticleCommentBo bo) {
-        return toAjax(iArticleCommentService.deleteWithValidById(bo) ? 1 : 0);
+    public void remove(@RequestBody ArticleCommentBo bo) {
+        iArticleCommentService.deleteWithValidById(bo);
     }
 
     /**
      * 查看文章评论
      */
     @GetMapping("/get/comment/{id}")
-    public R<Void> getComment(@NotNull(message = "id不能为空") @PathVariable Long id) {
+    public Object getComment(@NotNull(message = "id不能为空") @PathVariable Long id) {
         return iArticleCommentService.getComment(id);
     }
 }

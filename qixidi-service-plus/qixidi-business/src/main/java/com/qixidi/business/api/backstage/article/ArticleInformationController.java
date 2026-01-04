@@ -2,7 +2,6 @@ package com.qixidi.business.api.backstage.article;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
@@ -10,7 +9,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
@@ -32,7 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/article/information")
-public class ArticleInformationController extends BaseController {
+public class ArticleInformationController {
 
     private final IArticleInformationService iArticleInformationService;
 
@@ -60,8 +59,8 @@ public class ArticleInformationController extends BaseController {
      */
     @SaCheckPermission("article:information:query")
     @GetMapping("/{id}")
-    public R<ArticleInformationVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iArticleInformationService.queryById(id));
+    public ArticleInformationVo getInfo(@PathVariable("id") Long id) {
+        return iArticleInformationService.queryById(id);
     }
 
     /**
@@ -71,9 +70,8 @@ public class ArticleInformationController extends BaseController {
     @Log(title = "文章信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<ArticleInformationVo> edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
-        ArticleInformationVo vo = iArticleInformationService.updateByBo(bo);
-        return vo.getId() > 0 ? R.ok(vo) : R.fail();
+    public void edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
+        iArticleInformationService.updateByBo(bo);
     }
 
     /**
@@ -82,8 +80,8 @@ public class ArticleInformationController extends BaseController {
     @SaCheckPermission("article:information:remove")
     @Log(title = "文章信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iArticleInformationService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iArticleInformationService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

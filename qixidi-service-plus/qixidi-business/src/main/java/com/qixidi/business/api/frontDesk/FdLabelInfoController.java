@@ -1,7 +1,6 @@
 package com.qixidi.business.api.frontDesk;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
 import com.qixidi.business.domain.bo.label.LabelGroupingInfoBo;
@@ -37,8 +36,8 @@ public class FdLabelInfoController {
      * 查询标签信息列表
      */
     @GetMapping("/list")
-    public R<List<LabelInfoVo>> fdLabelList(LabelInfoBo bo) {
-        return R.ok(iLabelInfoService.fdLabelList(bo));
+    public List<LabelInfoVo> fdLabelList(LabelInfoBo bo) {
+        return iLabelInfoService.fdLabelList(bo);
     }
 
 
@@ -46,16 +45,16 @@ public class FdLabelInfoController {
      * 查询标签详情
      */
     @GetMapping("/info/{id}/{type}")
-    public R<LabelInfoVo> fdLabelInfo(@PathVariable("id") Long id, @PathVariable("type") Long type) {
-        return R.ok(iLabelInfoService.fdLabelInfo(id, type));
+    public LabelInfoVo fdLabelInfo(@PathVariable("id") Long id, @PathVariable("type") Long type) {
+        return iLabelInfoService.fdLabelInfo(id, type);
     }
 
     /**
      * 查询标签分组详情
      */
     @GetMapping("/grouping/info/{id}")
-    public R<LabelGroupingInfoVo> LabelGroupingInfo(@NotNull(message = "id不能为空") @PathVariable("id") Long id) {
-        return R.ok(iLabelInfoService.LabelGroupingInfo(id));
+    public LabelGroupingInfoVo LabelGroupingInfo(@NotNull(message = "id不能为空") @PathVariable("id") Long id) {
+        return iLabelInfoService.LabelGroupingInfo(id);
     }
 
 

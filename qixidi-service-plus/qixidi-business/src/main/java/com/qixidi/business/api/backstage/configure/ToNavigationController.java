@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.configure.ToNavigationVo;
 import com.qixidi.business.service.configure.IToNavigationService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/configure/navigation")
-public class ToNavigationController extends BaseController {
+public class ToNavigationController {
 
     private final IToNavigationService iToNavigationService;
 
@@ -61,8 +60,8 @@ public class ToNavigationController extends BaseController {
      */
     @SaCheckPermission("business:navigation:query")
     @GetMapping("/{id}")
-    public R<ToNavigationVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iToNavigationService.queryById(id));
+    public ToNavigationVo getInfo(@PathVariable("id") Long id) {
+        return iToNavigationService.queryById(id);
     }
 
     /**
@@ -72,8 +71,8 @@ public class ToNavigationController extends BaseController {
     @Log(title = "导航栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ToNavigationBo bo) {
-        return toAjax(iToNavigationService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ToNavigationBo bo) {
+        iToNavigationService.insertByBo(bo);
     }
 
     /**
@@ -83,8 +82,8 @@ public class ToNavigationController extends BaseController {
     @Log(title = "导航栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ToNavigationBo bo) {
-        return toAjax(iToNavigationService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody ToNavigationBo bo) {
+        iToNavigationService.updateByBo(bo);
     }
 
     /**
@@ -93,8 +92,8 @@ public class ToNavigationController extends BaseController {
     @SaCheckPermission("business:navigation:remove")
     @Log(title = "导航栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iToNavigationService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iToNavigationService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

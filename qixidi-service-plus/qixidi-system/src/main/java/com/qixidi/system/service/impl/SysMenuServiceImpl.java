@@ -13,6 +13,7 @@ import com.light.core.constant.Constants;
 import com.light.core.constant.UserConstants;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.TreeBuildUtils;
+import com.light.exception.ServiceException;
 import com.qixidi.system.domain.entity.SysRoleMenu;
 import com.qixidi.system.domain.vo.MetaVo;
 import com.qixidi.system.domain.vo.RouterVo;
@@ -240,7 +241,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public int insertMenu(SysMenu menu) {
-        return baseMapper.insert(menu);
+        int rows = baseMapper.insert(menu);
+        if (rows <= 0) {
+            throw new ServiceException("新增菜单失败");
+        }
+        return rows;
     }
 
     /**
@@ -251,7 +256,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public int updateMenu(SysMenu menu) {
-        return baseMapper.updateById(menu);
+        int rows = baseMapper.updateById(menu);
+        if (rows <= 0) {
+            throw new ServiceException("修改菜单失败");
+        }
+        return rows;
     }
 
     /**
@@ -262,7 +271,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public int deleteMenuById(Long menuId) {
-        return baseMapper.deleteById(menuId);
+        int rows = baseMapper.deleteById(menuId);
+        if (rows <= 0) {
+            throw new ServiceException("删除菜单失败");
+        }
+        return rows;
     }
 
     /**

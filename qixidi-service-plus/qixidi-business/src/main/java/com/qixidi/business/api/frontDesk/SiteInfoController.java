@@ -1,6 +1,5 @@
 package com.qixidi.business.api.frontDesk;
 
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.entity.ToSiteInfo;
 import com.qixidi.business.domain.vo.FriendLinkVo;
@@ -32,8 +31,8 @@ public class SiteInfoController {
      * @return
      */
     @GetMapping("/info")
-    public R<ToSiteInfo> info() {
-        return R.ok(siteInfoService.info());
+    public ToSiteInfo info() {
+        return siteInfoService.info();
     }
 
     /**
@@ -52,7 +51,7 @@ public class SiteInfoController {
      * @return
      */
     @GetMapping("/total-data")
-    public R<StatDataInfoVo> totalData() {
-        return R.ok(siteInfoService.totalData());
+    public StatDataInfoVo totalData() {
+        return siteInfoService.totalData();
     }
 }

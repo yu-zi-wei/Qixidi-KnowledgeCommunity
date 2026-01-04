@@ -7,14 +7,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpUtil;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.core.utils.file.FileUtils;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.system.domain.bo.SysOssBo;
 import com.qixidi.system.domain.entity.SysOss;
 import com.qixidi.system.domain.vo.SysOssVo;
@@ -40,7 +39,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/oss")
-public class SysOssController extends BaseController {
+public class SysOssController {
 
     private final ISysOssService iSysOssService;
 
@@ -113,8 +112,10 @@ public class SysOssController extends BaseController {
     @SaCheckPermission("system:oss:remove")
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")
-    public R<Void> remove(@PathVariable Long[] ossIds) {
-        return toAjax(iSysOssService.deleteWithValidByIds(Arrays.asList(ossIds), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ossIds) {
+        if (!iSysOssService.deleteWithValidByIds(Arrays.asList(ossIds), true)) {
+            throw new ServiceException("删除失败");
+        }
     }
 
 }

@@ -2,8 +2,7 @@ package com.qixidi.business.api.backstage.tool;
 
 import com.qixidi.business.service.tool.MysqlToolService;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
-import com.light.core.core.domain.R;
+
 import com.light.core.enums.BusinessType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/tool/mysql")
-public class MysqlToolController extends BaseController {
+public class MysqlToolController {
 
     @Autowired
     private MysqlToolService mysqlToolService;
@@ -31,7 +30,7 @@ public class MysqlToolController extends BaseController {
      */
     @Log(title = "清空业务表数据", businessType = BusinessType.UPDATE)
     @GetMapping("/emptyData")
-    public R emptyData() {
-        return toAjax(mysqlToolService.emptyData() ? 1 : 0);
+    public void emptyData() {
+        mysqlToolService.emptyData();
     }
 }

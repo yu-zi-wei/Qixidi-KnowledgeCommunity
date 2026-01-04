@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
 import com.qixidi.business.service.privateUser.IPrivateUserService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/private/user")
-public class PrivateUserController extends BaseController {
+public class PrivateUserController {
 
     private final IPrivateUserService iPrivateUserService;
 
@@ -59,8 +58,8 @@ public class PrivateUserController extends BaseController {
      * 获取私信记录详细信息
      */
     @GetMapping("/{id}")
-    public R<PrivateUserVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iPrivateUserService.queryById(id));
+    public PrivateUserVo getInfo(@PathVariable("id") Long id) {
+        return iPrivateUserService.queryById(id);
     }
 
     /**
@@ -69,8 +68,8 @@ public class PrivateUserController extends BaseController {
     @Log(title = "私信记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody PrivateUserBo bo) {
-        return toAjax(iPrivateUserService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody PrivateUserBo bo) {
+        iPrivateUserService.insertByBo(bo);
     }
 
     /**
@@ -79,8 +78,8 @@ public class PrivateUserController extends BaseController {
     @Log(title = "私信记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody PrivateUserBo bo) {
-        return toAjax(iPrivateUserService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody PrivateUserBo bo) {
+        iPrivateUserService.updateByBo(bo);
     }
 
     /**
@@ -89,8 +88,8 @@ public class PrivateUserController extends BaseController {
     @SaCheckPermission("private:user:remove")
     @Log(title = "私信记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iPrivateUserService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iPrivateUserService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

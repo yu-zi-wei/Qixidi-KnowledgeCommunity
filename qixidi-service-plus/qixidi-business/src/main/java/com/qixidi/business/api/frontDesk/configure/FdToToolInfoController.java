@@ -1,6 +1,5 @@
 package com.qixidi.business.api.frontDesk.configure;
 
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.QueryGroup;
 import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
 import com.qixidi.business.domain.vo.configure.ToToolInfoVo;
@@ -29,16 +28,16 @@ public class FdToToolInfoController {
      * 查询父级工具信息列表
      */
     @GetMapping("/list")
-    public R<List<ToToolInfoVo>> fdList() {
-        return R.ok(iToToolInfoService.fdList());
+    public List<ToToolInfoVo> fdList() {
+        return iToToolInfoService.fdList();
     }
 
     /**
      * 查询子级工具信息列表
      */
     @GetMapping("/child/list")
-    public R<List<ToToolInfoVo>> childList(@Validated(QueryGroup.class) ToToolInfoBo bo) {
-        return R.ok(iToToolInfoService.childList(bo));
+    public List<ToToolInfoVo> childList(@Validated(QueryGroup.class) ToToolInfoBo bo) {
+        return iToToolInfoService.childList(bo);
     }
 
 }

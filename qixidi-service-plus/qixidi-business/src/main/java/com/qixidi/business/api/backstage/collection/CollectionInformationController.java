@@ -7,9 +7,8 @@ import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
 import com.qixidi.business.service.collection.ICollectionInformationService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -34,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/collection/information")
-public class CollectionInformationController extends BaseController {
+public class CollectionInformationController {
 
     private final ICollectionInformationService iCollectionInformationService;
 
@@ -63,8 +62,8 @@ public class CollectionInformationController extends BaseController {
      */
     @SaCheckPermission("collection:information:query")
     @GetMapping("/{id}")
-    public R<CollectionInformationVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iCollectionInformationService.queryById(id));
+    public CollectionInformationVo getInfo(@PathVariable("id") Long id) {
+        return iCollectionInformationService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class CollectionInformationController extends BaseController {
     @Log(title = "收藏夹信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
-        return toAjax(iCollectionInformationService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
+        iCollectionInformationService.insertByBo(bo);
     }
 
     /**
@@ -86,8 +85,8 @@ public class CollectionInformationController extends BaseController {
     @Log(title = "收藏夹信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody CollectionInformationBo bo) {
-        return toAjax(iCollectionInformationService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody CollectionInformationBo bo) {
+        iCollectionInformationService.updateByBo(bo);
     }
 
     /**
@@ -98,8 +97,8 @@ public class CollectionInformationController extends BaseController {
      */
     @Log(title = "收藏夹信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iCollectionInformationService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iCollectionInformationService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

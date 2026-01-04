@@ -2,6 +2,7 @@ package com.qixidi.system.service.impl;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.exception.ServiceException;
 import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -70,7 +71,11 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public int insertNotice(SysNotice notice) {
-        return baseMapper.insert(notice);
+        int rows = baseMapper.insert(notice);
+        if (rows <= 0) {
+            throw new ServiceException("新增公告失败");
+        }
+        return rows;
     }
 
     /**
@@ -81,7 +86,11 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public int updateNotice(SysNotice notice) {
-        return baseMapper.updateById(notice);
+        int rows = baseMapper.updateById(notice);
+        if (rows <= 0) {
+            throw new ServiceException("修改公告失败");
+        }
+        return rows;
     }
 
     /**
@@ -92,7 +101,11 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public int deleteNoticeById(Long noticeId) {
-        return baseMapper.deleteById(noticeId);
+        int rows = baseMapper.deleteById(noticeId);
+        if (rows <= 0) {
+            throw new ServiceException("删除公告失败");
+        }
+        return rows;
     }
 
     /**
@@ -103,6 +116,10 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public int deleteNoticeByIds(Long[] noticeIds) {
-        return baseMapper.deleteBatchIds(Arrays.asList(noticeIds));
+        int rows = baseMapper.deleteBatchIds(Arrays.asList(noticeIds));
+        if (rows <= 0) {
+            throw new ServiceException("删除公告失败");
+        }
+        return rows;
     }
 }

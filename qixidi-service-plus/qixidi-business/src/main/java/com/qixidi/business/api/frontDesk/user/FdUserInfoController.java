@@ -1,11 +1,11 @@
 package com.qixidi.business.api.frontDesk.user;
 
-import com.light.core.core.domain.R;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.enums.BusinessType;
+import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.CreatorApplicationBo;
 import com.qixidi.business.domain.bo.user.UserBindBo;
@@ -34,7 +34,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/user")
-public class FdUserInfoController extends BaseController {
+public class FdUserInfoController {
 
     private final ITripartiteUserService iTripartiteUserService;
     private final ISysOssService iSysOssService;
@@ -45,8 +45,8 @@ public class FdUserInfoController extends BaseController {
      * @return
      */
     @GetMapping("/info")
-    public R<TripartiteUserVo> websiteInfo() {
-        return R.ok(iTripartiteUserService.websiteInfo());
+    public TripartiteUserVo websiteInfo() {
+        return iTripartiteUserService.websiteInfo();
     }
 
     /**
@@ -55,8 +55,8 @@ public class FdUserInfoController extends BaseController {
      * @return
      */
     @GetMapping("/basics")
-    public R<TripartiteUserVo> getBasicsUser() {
-        return R.ok(iTripartiteUserService.BasicsUser());
+    public TripartiteUserVo getBasicsUser() {
+        return iTripartiteUserService.BasicsUser();
     }
 
 
@@ -69,22 +69,22 @@ public class FdUserInfoController extends BaseController {
      */
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping("/update/avatar")
-    public R<Map<String, Object>> avatar(MultipartHttpServletRequest multipartHttpServletRequest, HttpServletRequest req) {
+    public Map<String, Object> avatar(MultipartHttpServletRequest multipartHttpServletRequest, HttpServletRequest req) {
         Map<String, Object> ajax = new HashMap<>();
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
         //得到头像文件
         String uuid = LoginHelper.getTripartiteUuid();
-        if (uuid == null) return R.fail("头像修改失败，可到反馈专区留言！");
+        if (uuid == null) throw new ServiceException("头像修改失败，可到反馈专区留言！");
         MultipartFile file = files.get("img");
-        if (!file.isEmpty()) {
-            SysOss oss = iSysOssService.upload(file);
-            String avatar = oss.getUrl();
-            if (iTripartiteUserService.updateUserAvatar(uuid, avatar)) {
-                ajax.put("imgUrl", avatar);
-                return R.ok(ajax);
-            }
+        if (file.isEmpty()) {
+            throw new ServiceException("头像修改失败，可到反馈专区留言！");
         }
-        return R.fail("头像修改失败，可到反馈专区留言！");
+        SysOss oss = iSysOssService.upload(file);
+        String avatar = oss.getUrl();
+        if (iTripartiteUserService.updateUserAvatar(uuid, avatar)) {
+            ajax.put("imgUrl", avatar);
+        }
+        return ajax;
     }
 
     /**
@@ -93,8 +93,8 @@ public class FdUserInfoController extends BaseController {
     @Log(title = "用户信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/info")
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody UserInfoBo bo) {
-        return toAjax(iTripartiteUserService.updateUserInfo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody UserInfoBo bo) {
+        iTripartiteUserService.updateUserInfo(bo);
     }
 
     /**
@@ -106,9 +106,9 @@ public class FdUserInfoController extends BaseController {
     @Log(title = "修改邮箱手机号", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/email")
-    public R<Void> bindEmail(@Validated(EditGroup.class) @RequestBody UserBindBo bo) {
+    public void bindEmail(@Validated(EditGroup.class) @RequestBody UserBindBo bo) {
         bo.setUuid(LoginHelper.getTripartiteUuid());
-        return toAjax(iTripartiteUserService.bindEmail(bo) ? 1 : 0);
+        iTripartiteUserService.bindEmail(bo);
     }
 
     /**
@@ -120,9 +120,8 @@ public class FdUserInfoController extends BaseController {
     @Log(title = "创作者申请", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/creator/application")
-    public R<Void> creatorApplication(@Validated @RequestBody CreatorApplicationBo bo) {
+    public void creatorApplication(@Validated @RequestBody CreatorApplicationBo bo) {
         iTripartiteUserService.creatorApplication(bo);
-        return R.ok();
     }
 
 }

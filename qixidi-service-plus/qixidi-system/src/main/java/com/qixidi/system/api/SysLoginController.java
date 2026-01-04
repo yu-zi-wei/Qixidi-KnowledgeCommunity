@@ -2,10 +2,9 @@ package com.qixidi.system.api;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
-import com.light.redission.annotation.RepeatSubmit;
 import com.light.core.constant.Constants;
-import com.light.core.core.domain.R;
-import com.qixidi.auth.api.BaseController;
+import com.light.redission.annotation.RepeatSubmit;
+
 import com.qixidi.auth.domain.entity.SysMenu;
 import com.qixidi.auth.domain.entity.SysUser;
 import com.qixidi.auth.domain.model.LoginBody;
@@ -38,7 +37,7 @@ import java.util.Set;
 @Validated
 @RequiredArgsConstructor
 @RestController
-public class SysLoginController extends BaseController {
+public class SysLoginController {
     private final SysLoginService loginService;
     private final ISysMenuService menuService;
     private final ISysUserService userService;
@@ -51,13 +50,13 @@ public class SysLoginController extends BaseController {
      * @return 结果
      */
     @PostMapping("/login")
-    public R<Map<String, Object>> login(@Validated @RequestBody LoginBody loginBody) {
+    public Map<String, Object> login(@Validated @RequestBody LoginBody loginBody) {
         Map<String, Object> ajax = new HashMap<>();
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
         ajax.put(Constants.TOKEN, token);
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -67,12 +66,12 @@ public class SysLoginController extends BaseController {
      * @return 结果
      */
     @PostMapping("/smsLogin")
-    public R<Map<String, Object>> smsLogin(@Validated @RequestBody SmsLoginBody smsLoginBody) {
+    public Map<String, Object> smsLogin(@Validated @RequestBody SmsLoginBody smsLoginBody) {
         Map<String, Object> ajax = new HashMap<>();
         // 生成令牌
         String token = loginService.smsLogin(smsLoginBody.getPhonenumber(), smsLoginBody.getSmsCode());
         ajax.put(Constants.TOKEN, token);
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -81,7 +80,7 @@ public class SysLoginController extends BaseController {
      * @return 用户信息
      */
     @GetMapping("getInfo")
-    public R<Map<String, Object>> getInfo() {
+    public Map<String, Object> getInfo() {
         if (!StpUtil.isLogin()) return null;
         String uuidString = StpUtil.getLoginIdAsString();
         if (uuidString == null) return null;
@@ -94,7 +93,7 @@ public class SysLoginController extends BaseController {
         ajax.put("user", user);
         ajax.put("roles", roles);
         ajax.put("permissions", permissions);
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -104,12 +103,12 @@ public class SysLoginController extends BaseController {
      * @return 结果
      */
     @PostMapping("/xcxLogin")
-    public R<Map<String, Object>> xcxLogin(@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
+    public Map<String, Object> xcxLogin(@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
         Map<String, Object> ajax = new HashMap<>();
         // 生成令牌
         String token = loginService.xcxLogin(xcxCode);
         ajax.put(Constants.TOKEN, token);
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -119,13 +118,12 @@ public class SysLoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/logout")
-    public R<Void> logout() {
+    public void logout() {
         try {
             StpUtil.logout();
             loginService.logout(LoginHelper.getUsername());
         } catch (NotLoginException e) {
         }
-        return R.ok("退出成功");
     }
 
     /**
@@ -134,10 +132,10 @@ public class SysLoginController extends BaseController {
      * @return 路由信息
      */
     @GetMapping("getRouters")
-    public R<List<RouterVo>> getRouters() {
+    public List<RouterVo> getRouters() {
         Long userId = LoginHelper.getUserId();
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
-        return R.ok(menuService.buildMenus(menus));
+        return menuService.buildMenus(menus);
     }
 
 }

@@ -2,7 +2,6 @@ package com.qixidi.business.api.frontDesk.article;
 
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -10,7 +9,7 @@ import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
@@ -30,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
-public class UserArticleController extends BaseController {
+public class UserArticleController {
 
     private final IArticleInformationService iArticleInformationService;
 
@@ -40,15 +39,16 @@ public class UserArticleController extends BaseController {
     @Log(title = "文章信息（新增文章信息）", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/insert/article")
-    public R<ArticleInformationVo> add(@Validated(AddGroup.class) @RequestBody ArticleInformationBo bo) {
+    public ArticleInformationVo add(@Validated(AddGroup.class) @RequestBody ArticleInformationBo bo) {
         if (bo.getId() != null) {
             ArticleInformationVo vo = iArticleInformationService.updateByBo(bo);
-            if (vo.getId() < -10) return R.ok(vo);
-            return vo.getId() > 0 ? R.ok(vo) : R.fail();
+            if (vo.getId() < -10) return vo;
+            if (vo.getId() <= 0) throw new ServiceException("文章创建失败");
+            return vo;
         }
         bo.setAuditState(1);
         ArticleInformationVo vo = iArticleInformationService.insertByBo(bo);
-        return R.ok(vo);
+        return vo;
     }
 
     /**
@@ -57,9 +57,9 @@ public class UserArticleController extends BaseController {
     @Log(title = "文章信息（更新文章信息）", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/article")
-    public R<ArticleInformationVo> edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
+    public ArticleInformationVo edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
         ArticleInformationVo vo = iArticleInformationService.updateByBo(bo);
-        return R.ok(vo);
+        return vo;
     }
 
     /**
@@ -68,9 +68,9 @@ public class UserArticleController extends BaseController {
     @Log(title = "文章信息（保存草稿）", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/save/draft")
-    public R<ArticleInformationVo> saveDraft(@Validated(EditGroup.class) @RequestBody ArticleInformationTwoBo bo) {
+    public ArticleInformationVo saveDraft(@Validated(EditGroup.class) @RequestBody ArticleInformationTwoBo bo) {
         ArticleInformationVo vo = iArticleInformationService.saveDraft(bo);
-        return vo.getId() > 0 ? R.ok(vo) : R.fail();
+        return vo;
     }
 
     /**
@@ -96,11 +96,11 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/article/title/list")
-    public R<List<ArticleInformationVo>> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
+    public List<ArticleInformationVo> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
-        return R.ok(iArticleInformationService.getArticleInfoList(bo, pageQuery));
+        return iArticleInformationService.getArticleInfoList(bo, pageQuery);
     }
 
     /**
@@ -110,8 +110,8 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/get/article/{id}")
-    public R<ArticleInformationVo> getArticle(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
-        return R.ok(iArticleInformationService.getArticle(Long.valueOf(id)));
+    public ArticleInformationVo getArticle(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
+        return iArticleInformationService.getArticle(Long.valueOf(id));
     }
 
     /**
@@ -121,8 +121,8 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @DeleteMapping("/delete/article/{id}")
-    public R<Void> delete(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id) {
-        return toAjax(iArticleInformationService.delete(id));
+    public void delete(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id) {
+        iArticleInformationService.delete(id);
     }
 
     /**
@@ -133,11 +133,11 @@ public class UserArticleController extends BaseController {
      * @return
      */
     @GetMapping("/lately/article/list")
-    public R<List<ArticleInformationVo>> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+    public List<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
-        return R.ok(iArticleInformationService.latelyArticleList(bo, pageQuery));
+        return iArticleInformationService.latelyArticleList(bo, pageQuery);
     }
 
 }

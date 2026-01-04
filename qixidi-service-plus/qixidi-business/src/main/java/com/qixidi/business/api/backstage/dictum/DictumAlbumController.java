@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.qixidi.business.service.dictum.IDictumAlbumService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/dictum/album")
-public class DictumAlbumController extends BaseController {
+public class DictumAlbumController {
 
     private final IDictumAlbumService iDictumAlbumService;
 
@@ -62,8 +61,8 @@ public class DictumAlbumController extends BaseController {
      */
     @SaCheckPermission("business:dictum:album:query")
     @GetMapping("/{id}")
-    public R<DictumAlbumVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iDictumAlbumService.queryById(id));
+    public DictumAlbumVo getInfo(@PathVariable("id") Long id) {
+        return iDictumAlbumService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class DictumAlbumController extends BaseController {
     @Log(title = "名言专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
-        return toAjax(iDictumAlbumService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
+        iDictumAlbumService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class DictumAlbumController extends BaseController {
     @Log(title = "名言专辑", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DictumAlbumBo bo) {
-        return toAjax(iDictumAlbumService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody DictumAlbumBo bo) {
+        iDictumAlbumService.updateByBo(bo);
     }
 
     /**
@@ -94,7 +93,7 @@ public class DictumAlbumController extends BaseController {
     @SaCheckPermission("business:dictum:album:remove")
     @Log(title = "名言专辑", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iDictumAlbumService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iDictumAlbumService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }

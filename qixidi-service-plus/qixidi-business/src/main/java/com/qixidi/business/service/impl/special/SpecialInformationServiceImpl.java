@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
@@ -205,7 +204,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public R remove(Long id, boolean b) throws Exception {
+    public void remove(Long id, boolean b) throws Exception {
         String uuid = LoginHelper.getTripartiteUuid();
         List<ArticleInformationVo> list = articleInformationMapper.selectSpecial(id, uuid);
         if (CollectionUtils.isNotEmpty(list)) throw new ServiceException(MsgEnums.SPECIAL_CONDITION_ERROR);
@@ -213,7 +212,6 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         countUserWebsiteMapper.updateDelete(uuid, CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
         boolean bs = baseMapper.deleteById(id) > 0;
         if (!bs) throw new ServiceException(MsgEnums.DELETE_ERROR);
-        return R.ok();
     }
 
     @Override

@@ -5,10 +5,10 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.light.core.config.justAuth.JustAuthConfig;
 import com.light.core.constant.Constants;
-import com.light.core.core.domain.R;
+import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.light.webSocket.utils.WebSocketUtils;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
@@ -45,7 +45,7 @@ import java.util.Set;
 @Validated
 @RequiredArgsConstructor
 @RestController
-public class LoginController extends BaseController {
+public class LoginController {
     private final JustAuthConfig justAuthConfig;
     private final SysLoginService loginService;
     private final ITripartiteUserService iTripartiteUserService;
@@ -58,11 +58,9 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/frontDesk/login")
-    public R<Map<String, Object>> frontDeskLogin(@Validated @RequestBody LoginUserMain loginUserMain) {
+    public Map<String, Object> frontDeskLogin(@Validated @RequestBody LoginUserMain loginUserMain) {
         boolean login = StpUtil.isLogin();
-        if (login) {
-            return R.fail("请勿重复登录！");
-        }
+        if (login) throw new ServiceException("请勿重复登录");
         Map<String, Object> ajax = new HashMap<>();
         // 登录
         iTripartiteUserService.frontDeskLogin(loginUserMain);
@@ -70,7 +68,7 @@ public class LoginController extends BaseController {
         //返回token
         ajax.put(Constants.TOKEN, StpUtil.getTokenValue());
         ajax.put("uuid", uuid);
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -81,9 +79,9 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/frontDesk/register")
-    public R<Void> register(@Validated @RequestBody RegisterUserMain registerUserMain) {
+    public void register(@Validated @RequestBody RegisterUserMain registerUserMain) {
         registerUserMain.setUserType(justAuthConfig.getTripartiteUserType());
-        return toAjax(iTripartiteUserService.register(registerUserMain));
+        iTripartiteUserService.register(registerUserMain);
     }
 
     /**
@@ -93,12 +91,10 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/oauth/account/cancellation")
-    public R<Void> accountCancellation() {
+    public void accountCancellation() {
         String uuid = LoginHelper.getTripartiteUuid();
-        if (uuid == null) {
-            return R.fail("注销失败！");
-        }
-        return toAjax(iTripartiteUserService.accountCancellation(uuid) ? 1 : 0);
+        if (uuid == null) throw new ServiceException("注销失败");
+        iTripartiteUserService.accountCancellation(uuid);
     }
 
     /**
@@ -110,9 +106,8 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/oauth/email/code/{email}/{type}")
-    public R<Void> sendOutCode(@PathVariable("email") String email, @PathVariable("type") Integer type) {
+    public void sendOutCode(@PathVariable("email") String email, @PathVariable("type") Integer type) {
         iTripartiteUserService.sendOutCode(email, type);
-        return R.ok();
     }
 
     /**
@@ -126,9 +121,8 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @GetMapping("/oauth/phone/code/{phone}/{type}")
-    public R<Void> sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("type") Integer type, HttpServletRequest request) throws Exception {
+    public void sendPhoneCode(@PathVariable("phone") String phone, @PathVariable("type") Integer type, HttpServletRequest request) throws Exception {
         iTripartiteUserService.sendPhoneCode(phone, type, request);
-        return R.ok();
     }
 
     /**
@@ -138,7 +132,7 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/logout")
-    public R<Void> oauthLogout() {
+    public void oauthLogout() {
         try {
             String tripartiteUuid = LoginHelper.getTripartiteUuid();
             if (tripartiteUuid != null) {
@@ -151,7 +145,6 @@ public class LoginController extends BaseController {
             }
         } catch (NotLoginException e) {
         }
-        return R.ok("退出成功");
     }
 
     /**
@@ -161,18 +154,16 @@ public class LoginController extends BaseController {
      * @throws IOException
      */
     @RequestMapping("/oauth/render/{source}")
-    public R renderAuth(@PathVariable("source") String source, HttpServletResponse response) throws IOException {
+    public Map<String, String> renderAuth(@PathVariable("source") String source, HttpServletResponse response) throws IOException {
         boolean login = StpUtil.isLogin();
-        if (login) {
-            return R.fail("请勿重复登录！");
-        }
+        if (login) throw new ServiceException("请勿重复登录");
         AuthRequest authRequest = iTripartiteUserService.getAuthRequest(source);
         //生成授权url
         String authorizeUrl = authRequest.authorize(AuthStateUtils.createState());
         //将这个url返回给前端Vue,由Vue去执行 授权页
         Map<String, String> map = new HashMap<>();
         map.put("url", authorizeUrl);
-        return R.ok(map);
+        return map;
     }
 
 
@@ -204,9 +195,7 @@ public class LoginController extends BaseController {
         if (source == null) return null;
         AuthRequest authRequest = iTripartiteUserService.getAuthRequest(source);
         AuthResponse<AuthUser> authResponse = authRequest.login(callback);
-        if (authResponse == null) {
-            return R.fail(500, "授权失败");
-        }
+        if (authResponse == null) throw new ServiceException("授权失败");
         TripartiteUser tripartiteUser = new TripartiteUser(authResponse);
         tripartiteUser.setUserType(justAuthConfig.getTripartiteUserType());
         iTripartiteUserService.oauthLogin(tripartiteUser);
@@ -223,16 +212,16 @@ public class LoginController extends BaseController {
      * @return 用户信息
      */
     @GetMapping("/oauth/getInfo")
-    public R<Map<String, Object>> getInfo() {
+    public Map<String, Object> getInfo() {
         Map<String, Object> ajax = new HashMap<>();
         if (!StpUtil.isLogin()) {
             ajax.put("isLogin", false);
-            return R.ok(ajax);
+            return ajax;
         }
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) {
             ajax.put("isLogin", false);
-            return R.ok(ajax);
+            return ajax;
         }
         TripartiteUserVo tripartiteUser = iTripartiteUserService.queryById(uuid);
         tripartiteUser.setUuid(uuid);
@@ -241,7 +230,7 @@ public class LoginController extends BaseController {
         ajax.put("roles", roles);
         ajax.put("permissions", roles);
         ajax.put("isLogin", true);
-        return R.ok(ajax);
+        return ajax;
     }
 
     /**
@@ -251,8 +240,8 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/reset/password")
-    public R<Void> resetPassword(@Validated @RequestBody RegisterUserMain registerUserMain) {
-        return toAjax(iTripartiteUserService.resetPassword(registerUserMain));
+    public void resetPassword(@Validated @RequestBody RegisterUserMain registerUserMain) {
+        iTripartiteUserService.resetPassword(registerUserMain);
     }
 
     /**
@@ -262,8 +251,8 @@ public class LoginController extends BaseController {
      */
     @RepeatSubmit()
     @PostMapping("/oauth/phone/binding")
-    public R<Void> phoneNumberBinding(@Validated @RequestBody PhoneBinding phoneBinding) {
-        return toAjax(iTripartiteUserService.phoneNumberBinding(phoneBinding) ? 1 : 0);
+    public void phoneNumberBinding(@Validated @RequestBody PhoneBinding phoneBinding) {
+        iTripartiteUserService.phoneNumberBinding(phoneBinding);
     }
 
     /**
@@ -272,8 +261,8 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/oauth/isLogin")
-    public R<UserLoginStatusVo> isLogin() {
-        return R.ok(iTripartiteUserService.isLogin());
+    public UserLoginStatusVo isLogin() {
+        return iTripartiteUserService.isLogin();
     }
 
 
@@ -284,9 +273,8 @@ public class LoginController extends BaseController {
      * @return
      */
     @GetMapping("/websocket/is-online/{userid}")
-    public R<UserSimpleInfoVo> isOnline(@PathVariable(name = "userid") String userid) {
-        UserSimpleInfoVo userInformation = iTripartiteUserService.isOnline(userid);
-        return R.ok(userInformation);
+    public UserSimpleInfoVo isOnline(@PathVariable(name = "userid") String userid) {
+        return iTripartiteUserService.isOnline(userid);
     }
 
 }

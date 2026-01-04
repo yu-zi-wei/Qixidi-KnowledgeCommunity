@@ -233,7 +233,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public int insertRole(SysRole role) {
         // 新增角色信息
-        baseMapper.insert(role);
+        int rows = baseMapper.insert(role);
+        if (rows <= 0) {
+            throw new ServiceException("新增角色失败");
+        }
         return insertRoleMenu(role);
     }
 
@@ -250,7 +253,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
         baseMapper.updateById(role);
         // 删除角色与菜单关联
         roleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, role.getRoleId()));
-        return insertRoleMenu(role);
+        int rows = insertRoleMenu(role);
+        if (rows <= 0) {
+            throw new ServiceException("修改角色失败");
+        }
+        return rows;
     }
 
     /**
@@ -261,7 +268,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public int updateRoleStatus(SysRole role) {
-        return baseMapper.updateById(role);
+        int rows = baseMapper.updateById(role);
+        if (rows <= 0) {
+            throw new ServiceException("修改角色状态失败");
+        }
+        return rows;
     }
 
     /**
@@ -278,7 +289,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
         // 删除角色与部门关联
         roleDeptMapper.delete(new LambdaQueryWrapper<SysRoleDept>().eq(SysRoleDept::getRoleId, role.getRoleId()));
         // 新增角色和部门信息（数据权限）
-        return insertRoleDept(role);
+        int rows = insertRoleDept(role);
+        if (rows <= 0) {
+            throw new ServiceException("修改数据权限失败");
+        }
+        return rows;
     }
 
     /**
@@ -336,7 +351,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
         roleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
         // 删除角色与部门关联
         roleDeptMapper.delete(new LambdaQueryWrapper<SysRoleDept>().eq(SysRoleDept::getRoleId, roleId));
-        return baseMapper.deleteById(roleId);
+        int rows = baseMapper.deleteById(roleId);
+        if (rows <= 0) {
+            throw new ServiceException("删除角色失败");
+        }
+        return rows;
     }
 
     /**
@@ -361,7 +380,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
         roleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().in(SysRoleMenu::getRoleId, ids));
         // 删除角色与部门关联
         roleDeptMapper.delete(new LambdaQueryWrapper<SysRoleDept>().in(SysRoleDept::getRoleId, ids));
-        return baseMapper.deleteBatchIds(ids);
+        int rows = baseMapper.deleteBatchIds(ids);
+        if (rows <= 0) {
+            throw new ServiceException("删除角色失败");
+        }
+        return rows;
     }
 
     /**
@@ -372,9 +395,13 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public int deleteAuthUser(SysUserRole userRole) {
-        return userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+        int rows = userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
             .eq(SysUserRole::getRoleId, userRole.getRoleId())
             .eq(SysUserRole::getUserId, userRole.getUserId()));
+        if (rows <= 0) {
+            throw new ServiceException("取消授权失败");
+        }
+        return rows;
     }
 
     /**
@@ -386,9 +413,13 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public int deleteAuthUsers(Long roleId, Long[] userIds) {
-        return userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+        int rows = userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
             .eq(SysUserRole::getRoleId, roleId)
             .in(SysUserRole::getUserId, Arrays.asList(userIds)));
+        if (rows <= 0) {
+            throw new ServiceException("取消授权失败");
+        }
+        return rows;
     }
 
     /**
@@ -411,6 +442,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         if (list.size() > 0) {
             rows = userRoleMapper.insertBatch(list) ? list.size() : 0;
+        }
+        if (rows <= 0) {
+            throw new ServiceException("授权用户失败");
         }
         return rows;
     }

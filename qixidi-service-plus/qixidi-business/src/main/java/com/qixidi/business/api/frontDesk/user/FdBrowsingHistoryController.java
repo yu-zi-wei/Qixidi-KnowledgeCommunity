@@ -4,9 +4,8 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.qixidi.business.domain.bo.user.BrowsingHistoryBo;
 import com.qixidi.business.domain.vo.user.BrowsingHistoryVo;
 import com.qixidi.business.service.IBrowsingHistoryService;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
@@ -22,7 +21,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/browsing/history")
-public class FdBrowsingHistoryController extends BaseController {
+public class FdBrowsingHistoryController {
 
     private final IBrowsingHistoryService iBrowsingHistoryService;
 
@@ -38,16 +37,16 @@ public class FdBrowsingHistoryController extends BaseController {
      * 获取用户浏览历史详细信息
      */
     @GetMapping("/{id}")
-    public R<BrowsingHistoryVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iBrowsingHistoryService.queryById(id));
+    public BrowsingHistoryVo getInfo(@PathVariable("id") Long id) {
+        return iBrowsingHistoryService.queryById(id);
     }
 
     /**
      * 新增用户浏览历史
      */
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody BrowsingHistoryBo bo) {
-        return toAjax(iBrowsingHistoryService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody BrowsingHistoryBo bo) {
+        iBrowsingHistoryService.insertByBo(bo);
     }
 
     /**
@@ -55,8 +54,8 @@ public class FdBrowsingHistoryController extends BaseController {
      */
     @SaCheckPermission("browsing:history:remove")
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iBrowsingHistoryService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iBrowsingHistoryService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 
 }

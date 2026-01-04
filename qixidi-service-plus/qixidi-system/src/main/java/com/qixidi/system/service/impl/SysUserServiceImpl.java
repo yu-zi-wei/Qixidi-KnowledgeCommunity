@@ -281,6 +281,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public int insertUser(SysUser user) {
         // 新增用户信息
         int rows = baseMapper.insert(user);
+        if (rows <= 0) {
+            throw new ServiceException("新增用户失败");
+        }
         // 新增用户岗位关联
         insertUserPost(user);
         // 新增用户与角色管理
@@ -298,7 +301,11 @@ public class SysUserServiceImpl implements ISysUserService {
     public boolean registerUser(SysUser user) {
         user.setCreateBy(user.getUserName());
         user.setUpdateBy(user.getUserName());
-        return baseMapper.insert(user) > 0;
+        boolean success = baseMapper.insert(user) > 0;
+        if (!success) {
+            throw new ServiceException("注册用户失败");
+        }
+        return success;
     }
 
     /**
@@ -319,7 +326,11 @@ public class SysUserServiceImpl implements ISysUserService {
         userPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId, userId));
         // 新增用户与岗位管理
         insertUserPost(user);
-        return baseMapper.updateById(user);
+        int rows = baseMapper.updateById(user);
+        if (rows <= 0) {
+            throw new ServiceException("修改用户失败");
+        }
+        return rows;
     }
 
     /**
@@ -344,7 +355,11 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public int updateUserStatus(SysUser user) {
-        return baseMapper.updateById(user);
+        int rows = baseMapper.updateById(user);
+        if (rows <= 0) {
+            throw new ServiceException("修改用户状态失败");
+        }
+        return rows;
     }
 
     /**
@@ -355,7 +370,11 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public int updateUserProfile(SysUser user) {
-        return baseMapper.updateById(user);
+        int rows = baseMapper.updateById(user);
+        if (rows <= 0) {
+            throw new ServiceException("修改用户基本信息失败");
+        }
+        return rows;
     }
 
     /**
@@ -367,10 +386,14 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public boolean updateUserAvatar(String userName, String avatar) {
-        return baseMapper.update(null,
+        boolean success = baseMapper.update(null,
                 new LambdaUpdateWrapper<SysUser>()
                         .set(SysUser::getAvatar, avatar)
                         .eq(SysUser::getUserName, userName)) > 0;
+        if (!success) {
+            throw new ServiceException("修改用户头像失败");
+        }
+        return success;
     }
 
     /**
@@ -381,7 +404,11 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public int resetPwd(SysUser user) {
-        return baseMapper.updateById(user);
+        int rows = baseMapper.updateById(user);
+        if (rows <= 0) {
+            throw new ServiceException("重置用户密码失败");
+        }
+        return rows;
     }
 
     /**
@@ -393,10 +420,14 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public int resetUserPwd(String userName, String password) {
-        return baseMapper.update(null,
+        int rows = baseMapper.update(null,
                 new LambdaUpdateWrapper<SysUser>()
                         .set(SysUser::getPassword, password)
                         .eq(SysUser::getUserName, userName));
+        if (rows <= 0) {
+            throw new ServiceException("重置用户密码失败");
+        }
+        return rows;
     }
 
     /**
@@ -478,7 +509,11 @@ public class SysUserServiceImpl implements ISysUserService {
         userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
         // 删除用户与岗位表
         userPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId, userId));
-        return baseMapper.deleteById(userId);
+        int rows = baseMapper.deleteById(userId);
+        if (rows <= 0) {
+            throw new ServiceException("删除用户失败");
+        }
+        return rows;
     }
 
     /**
@@ -499,7 +534,11 @@ public class SysUserServiceImpl implements ISysUserService {
         userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, ids));
         // 删除用户与岗位表
         userPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().in(SysUserPost::getUserId, ids));
-        return baseMapper.deleteBatchIds(ids);
+        int rows = baseMapper.deleteBatchIds(ids);
+        if (rows <= 0) {
+            throw new ServiceException("删除用户失败");
+        }
+        return rows;
     }
 
 }

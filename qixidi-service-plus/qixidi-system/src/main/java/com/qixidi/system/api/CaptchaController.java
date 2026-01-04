@@ -6,7 +6,6 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import com.light.core.config.properties.CaptchaProperties;
 import com.light.core.constant.Constants;
-import com.light.core.core.domain.R;
 import com.light.core.enums.CaptchaType;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.reflect.ReflectUtils;
@@ -37,12 +36,12 @@ public class CaptchaController {
      * 生成验证码
      */
     @GetMapping("/captchaImage")
-    public R<Map<String, Object>> getCode() {
+    public Map<String, Object> getCode() {
         Map<String, Object> ajax = new HashMap<>();
         boolean captchaOnOff = configService.selectCaptchaOnOff();
         ajax.put("captchaOnOff", captchaOnOff);
         if (!captchaOnOff) {
-            return R.ok(ajax);
+            return ajax;
         }
         // 保存验证码信息
         String uuid = IdUtil.simpleUUID();
@@ -60,7 +59,7 @@ public class CaptchaController {
         RedisUtils.setCacheObject(verifyKey, code, Constants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
         ajax.put("uuid", uuid);
         ajax.put("img", captcha.getImageBase64());
-        return R.ok(ajax);
+        return ajax;
     }
 
     private String getCodeResult(String capStr) {

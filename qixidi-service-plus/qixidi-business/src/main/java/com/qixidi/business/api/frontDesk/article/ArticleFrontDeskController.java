@@ -2,10 +2,9 @@ package com.qixidi.business.api.frontDesk.article;
 
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
 import com.qixidi.business.domain.vo.article.ArticleArchiveVo;
@@ -29,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/white")
-public class ArticleFrontDeskController extends BaseController {
+public class ArticleFrontDeskController {
 
     private final IArticleInformationService iArticleInformationService;
 
@@ -57,8 +56,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/related/list")
-    public R<List<ArticleInformationVo>> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return R.ok(iArticleInformationService.relatedList(bo, pageQuery));
+    public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
+        return iArticleInformationService.relatedList(bo, pageQuery);
     }
 
     /**
@@ -79,8 +78,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/selected")
-    public R<List<ArticleInformationVo>> selected() {
-        return R.ok(iArticleInformationService.selected());
+    public List<ArticleInformationVo> selected() {
+        return iArticleInformationService.selected();
     }
 
     /**
@@ -90,8 +89,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/details/{id}")
-    public R<ArticleInformationVo> details(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
-        return R.ok(iArticleInformationService.details(Long.valueOf(id)));
+    public ArticleInformationVo details(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
+        return iArticleInformationService.details(Long.valueOf(id));
     }
 
     /**
@@ -101,8 +100,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/basic/{id}")
-    public R<ArticleInformationVo> basicInfo(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
-        return R.ok(iArticleInformationService.basicInfo(Long.valueOf(id)));
+    public ArticleInformationVo basicInfo(@NotNull(message = "id不能为空") @PathVariable("id") String id) {
+        return iArticleInformationService.basicInfo(Long.valueOf(id));
     }
 
     /**
@@ -125,8 +124,8 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/title/list")
-    public R<List<ArticleInformationVo>> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return R.ok(iArticleInformationService.getArticleInfoList(bo, pageQuery));
+    public List<ArticleInformationVo> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
+        return iArticleInformationService.getArticleInfoList(bo, pageQuery);
     }
 
     /**
@@ -162,10 +161,10 @@ public class ArticleFrontDeskController extends BaseController {
      * @return
      */
     @GetMapping("/article/add/browse-count/{id}/{label}")
-    public R<Void> addArticleBrowse(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id,
-                                    @PathVariable("label") String label,
-                                    HttpServletRequest request) {
-        return toAjax(iArticleInformationService.addArticleBrowse(id, label, request));
+    public void addArticleBrowse(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id,
+                                 @PathVariable("label") String label,
+                                 HttpServletRequest request) {
+        iArticleInformationService.addArticleBrowse(id, label, request);
     }
 
     /**

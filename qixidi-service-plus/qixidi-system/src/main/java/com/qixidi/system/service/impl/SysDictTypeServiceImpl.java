@@ -138,7 +138,10 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
             }
             RedisUtils.deleteObject(getCacheKey(dictType.getDictType()));
         }
-        baseMapper.deleteBatchIds(Arrays.asList(dictIds));
+        int rows = baseMapper.deleteBatchIds(Arrays.asList(dictIds));
+        if (rows <= 0) {
+            throw new ServiceException("删除字典类型失败");
+        }
     }
 
     /**
@@ -185,9 +188,10 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     @Override
     public int insertDictType(SysDictType dict) {
         int row = baseMapper.insert(dict);
-        if (row > 0) {
-            RedisUtils.setCacheObject(getCacheKey(dict.getDictType()), null);
+        if (row <= 0) {
+            throw new ServiceException("新增字典类型失败");
         }
+        RedisUtils.setCacheObject(getCacheKey(dict.getDictType()), null);
         return row;
     }
 
@@ -205,10 +209,11 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
             .set(SysDictData::getDictType, dict.getDictType())
             .eq(SysDictData::getDictType, oldDict.getDictType()));
         int row = baseMapper.updateById(dict);
-        if (row > 0) {
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dict.getDictType());
-            RedisUtils.setCacheObject(getCacheKey(dict.getDictType()), dictDatas);
+        if (row <= 0) {
+            throw new ServiceException("修改字典类型失败");
         }
+        List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dict.getDictType());
+        RedisUtils.setCacheObject(getCacheKey(dict.getDictType()), dictDatas);
         return row;
     }
 

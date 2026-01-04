@@ -2,7 +2,6 @@ package com.qixidi.business.api.frontDesk.dictum;
 
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -10,7 +9,7 @@ import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/info")
-public class FdDictumInfoController extends BaseController {
+public class FdDictumInfoController {
 
     private final IDictumInfoService iDictumInfoService;
 
@@ -43,8 +42,8 @@ public class FdDictumInfoController extends BaseController {
      * 获取名言信息详细信息
      */
     @GetMapping("/{id}")
-    public R<DictumInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iDictumInfoService.queryById(id));
+    public DictumInfoVo getInfo(@PathVariable("id") Long id) {
+        return iDictumInfoService.queryById(id);
     }
 
     /**
@@ -53,11 +52,11 @@ public class FdDictumInfoController extends BaseController {
     @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
+    public void add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
         if (bo.getId() != null) {
-            return toAjax(iDictumInfoService.updateByBo(bo) ? 1 : 0);
+            iDictumInfoService.updateByBo(bo);
         } else {
-            return toAjax(iDictumInfoService.insertByBo(bo) ? 1 : 0);
+            iDictumInfoService.insertByBo(bo);
         }
     }
 
@@ -67,8 +66,8 @@ public class FdDictumInfoController extends BaseController {
     @Log(title = "更新名言信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
-        return toAjax(iDictumInfoService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
+        iDictumInfoService.updateByBo(bo);
     }
 
     /**
@@ -76,7 +75,7 @@ public class FdDictumInfoController extends BaseController {
      */
     @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}/{groupId}")
-    public R<Void> remove(@PathVariable Long id, @PathVariable Long groupId) {
-        return toAjax(iDictumInfoService.deleteWithValidById(id, groupId) ? 1 : 0);
+    public void remove(@PathVariable Long id, @PathVariable Long groupId) {
+        iDictumInfoService.deleteWithValidById(id, groupId);
     }
 }

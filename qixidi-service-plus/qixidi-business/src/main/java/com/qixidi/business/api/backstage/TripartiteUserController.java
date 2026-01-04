@@ -3,7 +3,6 @@ package com.qixidi.business.api.backstage;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
@@ -11,7 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
-import com.qixidi.auth.api.BaseController;
+
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.service.ITripartiteUserService;
@@ -32,7 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/tripartite/user")
-public class TripartiteUserController extends BaseController {
+public class TripartiteUserController {
 
     private final ITripartiteUserService iTripartiteUserService;
 
@@ -61,8 +60,8 @@ public class TripartiteUserController extends BaseController {
      */
     @SaCheckPermission("system:main:query")
     @GetMapping("/{uuid}")
-    public R<TripartiteUserVo> getInfo(@PathVariable("uuid") String uuid) {
-        return R.ok(iTripartiteUserService.queryById(uuid));
+    public TripartiteUserVo getInfo(@PathVariable("uuid") String uuid) {
+        return iTripartiteUserService.queryById(uuid);
     }
 
     /**
@@ -72,8 +71,8 @@ public class TripartiteUserController extends BaseController {
     @Log(title = "更新平台用户", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody TripartiteUserBo bo) {
-        return toAjax(iTripartiteUserService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody TripartiteUserBo bo) {
+        iTripartiteUserService.updateByBo(bo);
     }
 
 }

@@ -1,25 +1,23 @@
 package com.qixidi.business.api.backstage.label;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.qixidi.business.domain.bo.label.LabelInfoBo;
-import com.qixidi.business.domain.vo.label.LabelInfoVo;
-import com.qixidi.business.service.label.ILabelInfoService;
-import com.qixidi.auth.annotation.Log;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.business.domain.bo.label.LabelInfoBo;
+import com.qixidi.business.domain.vo.label.LabelInfoVo;
+import com.qixidi.business.service.label.ILabelInfoService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/business/label-info")
-public class LabelInfoController extends BaseController {
+public class LabelInfoController {
 
     private final ILabelInfoService iLabelInfoService;
 
@@ -61,8 +59,8 @@ public class LabelInfoController extends BaseController {
      */
     @SaCheckPermission("business:label-info:query")
     @GetMapping("/{id}")
-    public R<LabelInfoVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iLabelInfoService.queryById(id));
+    public LabelInfoVo getInfo(@PathVariable("id") Long id) {
+        return iLabelInfoService.queryById(id);
     }
 
     /**
@@ -72,8 +70,8 @@ public class LabelInfoController extends BaseController {
     @Log(title = "标签信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody LabelInfoBo bo) {
-        return toAjax(iLabelInfoService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody LabelInfoBo bo) {
+        iLabelInfoService.insertByBo(bo);
     }
 
     /**
@@ -83,8 +81,8 @@ public class LabelInfoController extends BaseController {
     @Log(title = "标签信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody LabelInfoBo bo) {
-        return toAjax(iLabelInfoService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody LabelInfoBo bo) {
+        iLabelInfoService.updateByBo(bo);
     }
 
     /**
@@ -93,8 +91,8 @@ public class LabelInfoController extends BaseController {
     @SaCheckPermission("system:info:remove")
     @Log(title = "标签信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iLabelInfoService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iLabelInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 

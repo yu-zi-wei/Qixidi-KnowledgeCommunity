@@ -4,6 +4,7 @@ import com.qixidi.auth.domain.entity.SysDictData;
 import com.light.core.constant.Constants;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.exception.ServiceException;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -89,7 +90,10 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     public void deleteDictDataByIds(Long[] dictCodes) {
         for (Long dictCode : dictCodes) {
             SysDictData data = selectDictDataById(dictCode);
-            baseMapper.deleteById(dictCode);
+            int rows = baseMapper.deleteById(dictCode);
+            if (rows <= 0) {
+                throw new ServiceException("删除字典数据失败");
+            }
             List<SysDictData> dictDatas = baseMapper.selectDictDataByType(data.getDictType());
             RedisUtils.setCacheObject(getCacheKey(data.getDictType()), dictDatas);
         }
@@ -104,10 +108,11 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     @Override
     public int insertDictData(SysDictData data) {
         int row = baseMapper.insert(data);
-        if (row > 0) {
-            List<SysDictData> dictDatas = baseMapper.selectDictDataByType(data.getDictType());
-            RedisUtils.setCacheObject(getCacheKey(data.getDictType()), dictDatas);
+        if (row <= 0) {
+            throw new ServiceException("新增字典数据失败");
         }
+        List<SysDictData> dictDatas = baseMapper.selectDictDataByType(data.getDictType());
+        RedisUtils.setCacheObject(getCacheKey(data.getDictType()), dictDatas);
         return row;
     }
 
@@ -120,10 +125,11 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     @Override
     public int updateDictData(SysDictData data) {
         int row = baseMapper.updateById(data);
-        if (row > 0) {
-            List<SysDictData> dictDatas = baseMapper.selectDictDataByType(data.getDictType());
-            RedisUtils.setCacheObject(getCacheKey(data.getDictType()), dictDatas);
+        if (row <= 0) {
+            throw new ServiceException("修改字典数据失败");
         }
+        List<SysDictData> dictDatas = baseMapper.selectDictDataByType(data.getDictType());
+        RedisUtils.setCacheObject(getCacheKey(data.getDictType()), dictDatas);
         return row;
     }
 

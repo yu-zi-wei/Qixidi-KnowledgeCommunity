@@ -6,9 +6,8 @@ import com.qixidi.business.domain.vo.configure.ToSiteFileVo;
 import com.qixidi.business.service.configure.IToSiteFileService;
 import com.qixidi.auth.annotation.Log;
 import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.api.BaseController;
+
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/site/file")
-public class ToSiteFileController extends BaseController {
+public class ToSiteFileController {
 
     private final IToSiteFileService iToSiteFileService;
 
@@ -62,8 +61,8 @@ public class ToSiteFileController extends BaseController {
      */
     @SaCheckPermission("site:siteFile:query")
     @GetMapping("/{id}")
-    public R<ToSiteFileVo> getInfo(@PathVariable("id") Long id) {
-        return R.ok(iToSiteFileService.queryById(id));
+    public ToSiteFileVo getInfo(@PathVariable("id") Long id) {
+        return iToSiteFileService.queryById(id);
     }
 
     /**
@@ -73,8 +72,8 @@ public class ToSiteFileController extends BaseController {
     @Log(title = "网站文档", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody ToSiteFileBo bo) {
-        return toAjax(iToSiteFileService.insertByBo(bo) ? 1 : 0);
+    public void add(@Validated(AddGroup.class) @RequestBody ToSiteFileBo bo) {
+        iToSiteFileService.insertByBo(bo);
     }
 
     /**
@@ -84,8 +83,8 @@ public class ToSiteFileController extends BaseController {
     @Log(title = "网站文档", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ToSiteFileBo bo) {
-        return toAjax(iToSiteFileService.updateByBo(bo) ? 1 : 0);
+    public void edit(@Validated(EditGroup.class) @RequestBody ToSiteFileBo bo) {
+        iToSiteFileService.updateByBo(bo);
     }
 
     /**
@@ -94,8 +93,8 @@ public class ToSiteFileController extends BaseController {
     @SaCheckPermission("site:siteFile:remove")
     @Log(title = "网站文档", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public R<Void> remove(@PathVariable Long[] ids) {
-        return toAjax(iToSiteFileService.deleteWithValidByIds(Arrays.asList(ids), true) ? 1 : 0);
+    public void remove(@PathVariable Long[] ids) {
+        iToSiteFileService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
 }
 
