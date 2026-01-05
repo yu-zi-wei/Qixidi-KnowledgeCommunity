@@ -57,13 +57,11 @@ public class SysOssController {
      */
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping("/upload")
-    public Map<String, Object> upload(@RequestPart("file") MultipartFile file) {
+    public Map<String, String> upload(@RequestPart("file") MultipartFile file) {
         if (ObjectUtil.isNull(file)) {
             throw new ServiceException("上传文件不能为空");
         }
         SysOss oss = iSysOssService.upload(file);
-        Map<String, Object> mapObj = new HashMap<>();
-        mapObj.put("errorCode", 0);
         Map<String, String> map = new HashMap<>();
         map.put("url", oss.getUrl());
         map.put("src", oss.getUrl());
@@ -72,8 +70,7 @@ public class SysOssController {
         map.put("alt", oss.getOriginalName());
         map.put("ossId", oss.getOssId().toString());
         //封装最终返回参数
-        mapObj.put("data", map);
-        return mapObj;
+        return map;
     }
 
     /**
