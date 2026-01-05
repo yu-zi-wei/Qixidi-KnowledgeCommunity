@@ -37,22 +37,6 @@
     <!--    <VditorMd :height="500"></VditorMd>-->
     <div>
       <!--      <div style="height: 400px;border: 1px solid #5C86FF;overflow: auto;margin-bottom: 20px">-->
-      <mavon-editor v-if="loading"
-                    class="markdown"
-                    id="detailDirectory"
-                    style="padding-left: 10px"
-                    :value="this.aiContent"
-                    :subfield="false"
-                    :defaultOpen="prop.defaultOpen"
-                    :boxShadow="prop.boxShadow"
-                    :toolbarsFlag="prop.toolbarsFlag"
-                    :editable="prop.editable"
-                    fontSize="18px"
-                    previewBackground="#FFFFFF"
-                    :scrollStyle="prop.scrollStyle"
-                    :navigation="false"
-                    ref="markdown"
-      />
     </div>
 
     <el-form ref="form" :model="form" label-width="80px">

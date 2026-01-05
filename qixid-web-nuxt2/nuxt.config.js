@@ -78,7 +78,6 @@ export default {
     '~/plugins/base64.js',  //base64加解密
     '~/plugins/utils.js',
     '~/plugins/init.js',//全局配置
-    // '~/plugins/mavon-editor.js',//富文本编辑器
     //=================api==================
     '~/api/repository.js', // 注入新的 API 仓库
     '~/plugins/baiduGa.js',//百度统计
