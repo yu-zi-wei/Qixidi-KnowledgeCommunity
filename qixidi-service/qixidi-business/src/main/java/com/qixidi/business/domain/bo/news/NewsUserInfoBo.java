@@ -1,0 +1,89 @@
+package com.qixidi.business.domain.bo.news;
+
+import com.light.core.core.domain.BaseEntity;
+import com.light.core.core.validate.AddGroup;
+import com.light.core.core.validate.EditGroup;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+
+/**
+ * 用户消息业务对象 b_news_user_info
+ *
+ * @author aurora
+ * @date 2022-11-03
+ */
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class NewsUserInfoBo extends BaseEntity {
+
+    /**
+     * id
+     */
+    private Long id;
+
+    /**
+     * 消息内容
+     */
+    @NotBlank(message = "消息内容不能为空", groups = {AddGroup.class, EditGroup.class})
+    private String newsContent;
+
+    /**
+     * 消息类型（1：点赞消息，2：评论消息，3：关注消息）
+     */
+    @NotNull(message = "消息类型 不能为空", groups = {AddGroup.class, EditGroup.class})
+    private Integer type;
+    /**
+     * 生产消息的目标者id
+     */
+    private Long prnNewsWorksId;
+    /**
+     * 消息目标id不能为空
+     */
+    @NotNull(message = "消息目标id不能为空", groups = {AddGroup.class, EditGroup.class})
+    private Long worksId;
+    /**
+     * 目标消息父级id
+     */
+    private Long worksParentId;
+    /**
+     * 目标消息父级Uid
+     */
+    private String worksParentUid;
+    /**
+     * 消息目标类型（1：文章，2：评论，3：圈子，4：活动）
+     */
+    @NotNull(message = "目标消息类型不能为空", groups = {AddGroup.class, EditGroup.class})
+    private Integer worksType;
+    /**
+     * 消息目标内容
+     */
+    private String worksContent;
+    /**
+     * 状态（0：正常，1：已删除）
+     */
+    private Integer state;
+
+    /**
+     * 是否已读（0：未读，1：已读）
+     */
+    private Integer beenRead;
+
+    /**
+     * 发送者id
+     */
+    @NotNull(message = "发送者id不能为空", groups = {AddGroup.class, EditGroup.class})
+    private String senderId;
+
+    /**
+     * 接收者id
+     */
+    @NotNull(message = "接收者id不能为空", groups = {AddGroup.class, EditGroup.class})
+    private String recipientId;
+
+
+}

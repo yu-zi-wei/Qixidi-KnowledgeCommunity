@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.business.mapper.dictum.DictumAlbumMapper">
+    <resultMap type="com.qixidi.business.domain.entity.dictum.DictumAlbum" id="DictumAlbumResult">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="name" column="name"/>
+        <result property="cover" column="cover"/>
+        <result property="briefIntroduction" column="brief_introduction"/>
+        <result property="albumState" column="album_state"/>
+        <result property="helpSum" column="help_sum"/>
+        <result property="followSum" column="follow_sum"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectVoPageXml" resultType="com.qixidi.business.domain.vo.dictum.DictumAlbumVo">
+        select da.id,
+        da.uid,
+        da.name,
+        da.cover,
+        da.brief_introduction,
+        da.album_state,
+        da.create_time,
+        da.update_time,
+        um.nickname,
+        um.avatar,
+        um.occupation,
+        um.location,
+        um.role_id
+        from b_dictum_album as da
+        left join b_user_main as um
+        on da.uid = um.uuid
+        <where>
+            da.state=0
+            and um.state=0
+            <if test="bo.albumState !=null and bo.albumState!=''">
+                and da.album_state=#{bo.albumState}
+            </if>
+            <if test="bo.uid !=null and bo.uid!=''">
+                and da.uid=#{bo.uid}
+            </if>
+            order by da.update_time desc
+        </where>
+    </select>
+
+    <update id="updateList">
+        <foreach collection="list" item="item" separator=";">
+            update b_dictum_album
+            set`employ_sum` = #{item.sum}
+            where `id` = #{item.albumId}
+        </foreach>
+    </update>
+
+    <select id="selectAlbumTask" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT uid as uuid, count(uid) as albumCount
+        FROM `b_dictum_album`
+        where state = 0
+        GROUP BY uid
+    </select>
+</mapper>

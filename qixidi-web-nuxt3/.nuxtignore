@@ -1,0 +1,6 @@
+# Nuxt 忽略文件
+node_modules
+.nuxt
+.output
+dist
+

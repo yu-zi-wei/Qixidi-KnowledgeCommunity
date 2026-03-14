@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.business.mapper.privateUser.PrivateUserMapper">
+    <select id="selectListXml" resultType="com.qixidi.business.domain.vo.privateUser.PrivateUserVo">
+        SELECT pu.target_uid,
+               pu.create_time,
+               pu.update_time,
+               pu.last_news,
+               um.nickname   as targetName,
+               um.avatar     as targetAvatar,
+               um.occupation as targetOccupation
+        FROM b_private_user AS pu
+                 LEFT JOIN b_user_main AS um ON pu.target_uid = um.uuid
+        where pu.uid = #{bo.uid}
+    </select>
+</mapper>
