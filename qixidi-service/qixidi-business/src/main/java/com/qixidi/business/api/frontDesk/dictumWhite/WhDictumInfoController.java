@@ -7,6 +7,7 @@ import com.light.redission.utils.RedisUtils;
 import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
 import com.qixidi.business.domain.bo.dictum.DictumGroupBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
+import com.qixidi.business.domain.bo.dictum.DictumInfoSearchBo;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.qixidi.business.domain.vo.dictum.DictumCommentVo;
@@ -21,10 +22,7 @@ import com.qixidi.business.service.label.ILabelInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,12 +54,12 @@ public class WhDictumInfoController {
     /**
      * 获取名言详情(公开)
      *
-     * @param id
+     * @param id 字符串类型的 ID，避免前端 JavaScript 精度丢失
      * @return
      */
     @GetMapping("/info/{id}")
-    public DictumInfoVo getInfo(@PathVariable("id") Long id) {
-        return iDictumInfoService.queryById(id);
+    public DictumInfoVo getInfo(@PathVariable("id") String id) {
+        return iDictumInfoService.queryById(Long.valueOf(id));
     }
 
     /**
@@ -89,11 +87,11 @@ public class WhDictumInfoController {
     }
 
     /**
-     * 推荐专辑
+     * 专辑列表
      */
-    @GetMapping("/recommended/album")
-    public List<DictumAlbumVo> recommendedAlbum() {
-        return iDictumAlbumService.recommendedAlbum();
+    @PostMapping("/recommended/album")
+    public TableDataInfo<DictumAlbumVo> recommendedAlbum(@RequestBody DictumInfoSearchBo bo) {
+        return iDictumAlbumService.recommendedAlbum(bo, new PageQuery(bo.getPageNum(), bo.getPageSize()));
     }
 
     /**
@@ -130,13 +128,13 @@ public class WhDictumInfoController {
     /**
      * 获取名言评论
      *
-     * @param id
+     * @param id        字符串类型的 ID，避免前端 JavaScript 精度丢失
      * @param pageQuery
      * @return
      */
     @GetMapping("comment/list/{id}")
-    public TableDataInfo<DictumCommentVo> commentList(@PathVariable("id") Long id, PageQuery pageQuery) {
-        return dictumCommentService.commentList(id, pageQuery);
+    public TableDataInfo<DictumCommentVo> commentList(@PathVariable("id") String id, PageQuery pageQuery) {
+        return dictumCommentService.commentList(Long.valueOf(id), pageQuery);
     }
 
 }

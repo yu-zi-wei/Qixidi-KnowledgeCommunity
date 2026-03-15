@@ -129,14 +129,13 @@ public class CollectionFdkController {
     /**
      * 删除收藏夹文章
      *
-     * @param id
-     * @param labelId
+     * @param articleId
      * @return
      */
     @Log(title = "删除收藏夹文章", businessType = BusinessType.INSERT)
-    @GetMapping("/frontDesk/delete/collection/data/{id}/{labelId}")
-    public void deleteCollectionArticle(@PathVariable("id") Long id, @PathVariable("labelId") String labelId) {
-        iCollectionInformationService.deleteCollectionArticle(id, labelId);
+    @GetMapping("/frontDesk/delete/collection/data/{articleId}")
+    public void deleteCollectionArticle(@PathVariable("articleId") Long articleId) {
+        iCollectionInformationService.deleteCollectionArticle(articleId);
     }
 
 }

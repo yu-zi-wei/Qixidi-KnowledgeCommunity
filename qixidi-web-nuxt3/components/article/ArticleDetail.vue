@@ -3,18 +3,23 @@
     <!-- 左侧：固定操作栏（脱离文档流） -->
     <aside class="article-actions-sidebar">
       <button class="action-btn-vertical" :class="{ active: article.isCollection }" @click="$emit('collect')" title="收藏">
-        <Bookmark class="icon" :class="{ filled: article.isCollection }" />
+        <Heart class="icon" :class="{ filled: article.isCollection }" />
         <span class="count">{{ article.collectionTimes || 0 }}</span>
       </button>
 
       <button class="action-btn-vertical" :class="{ active: isLiked }" @click="$emit('like')" title="点赞">
-        <Heart class="icon" />
+        <ThumbUp class="icon" />
         <span class="count">{{ article.likeTimes || 0 }}</span>
       </button>
 
       <button class="action-btn-vertical" @click="$emit('comment')" title="评论">
         <MessageCircle class="icon" />
         <span class="count">{{ article.commentTimes || 0 }}</span>
+      </button>
+
+      <!-- 编辑按钮：只有文章作者可见 -->
+      <button v-if="isAuthor" class="action-btn-vertical action-btn-edit" @click="$emit('edit')" title="编辑">
+        <Edit class="icon" />
       </button>
     </aside>
 
@@ -51,26 +56,37 @@
         {{ article.articleAbstract }}
       </p>
 
+      <!-- 文章内容 -->
+      <MarkdownRenderer :content="article.articleContent" class="article-content" />
+
       <!-- 文章标签 -->
-      <div v-if="article.labelNameList && article.labelNameList.length > 0" class="article-tags">
+      <div v-if="labelNames.length > 0" class="article-tags">
         <NuxtLink
-          v-for="label in article.labelNameList"
+          v-for="label in labelNames"
           :key="label"
           :to="`/label/${label}`"
-          class="tag"
+          class="tag tag-small"
         >
           # {{ label }}
         </NuxtLink>
       </div>
-
-      <!-- 文章内容 -->
-      <MarkdownRenderer :content="article.articleContent" class="article-content" />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Eye, Bookmark, Heart, MessageCircle } from '@vicons/tabler'
+import { Eye, Heart, ThumbUp, MessageCircle, Edit } from '@vicons/tabler'
+
+interface LabelInfo {
+  id: number
+  labelName: string
+  labelDescribe?: string
+  labelCover?: string
+  followNumber?: number
+  articleNumber?: number
+  state?: number
+  labelGroupingId?: number
+}
 
 interface Article {
   id: number
@@ -88,6 +104,7 @@ interface Article {
   updateTime?: string
   groupingId?: number
   groupingName?: string
+  labelList?: LabelInfo[]  // 后端返回的是对象数组
   labelNameList?: string[]
   numberTimes: number
   collectionTimes: number
@@ -116,6 +133,7 @@ defineEmits<{
   collect: []
   like: []
   comment: []
+  edit: []
 }>()
 
 // 是否已点赞
@@ -134,6 +152,25 @@ const isLiked = computed(() => {
     return userSet.some(id => String(id) === String(userId))
   }
   return false
+})
+
+// 是否是文章作者
+const isAuthor = computed(() => {
+  const authStore = useAuthStore()
+  return authStore.isLoggedIn && authStore.user?.uuid === props.article.userId
+})
+
+// 从 labelList 提取标签名列表
+const labelNames = computed(() => {
+  // 优先使用 labelNameList（字符串数组）
+  if (props.article.labelNameList && props.article.labelNameList.length > 0) {
+    return props.article.labelNameList
+  }
+  // 其次使用 labelList（对象数组）
+  if (props.article.labelList && props.article.labelList.length > 0) {
+    return props.article.labelList.map(item => item.labelName)
+  }
+  return []
 })
 
 // 格式化时间
@@ -312,7 +349,9 @@ const formatTime = (time: string) => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-light);
 }
 
 .tag {
@@ -331,10 +370,15 @@ const formatTime = (time: string) => {
   color: #fff;
 }
 
+/* 小尺寸标签（文章底部） */
+.tag-small {
+  padding: 3px 10px;
+  font-size: 12px;
+}
+
 /* 文章内容容器 */
 .article-content {
   /* Markdown 样式已在 main.css 中全局定义 */
-  margin-top: 24px;
 }
 
 /* 响应式 */

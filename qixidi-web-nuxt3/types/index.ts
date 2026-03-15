@@ -285,6 +285,7 @@ export interface CollectionFolder {
   id: number
   collectionName: string
   collectionIntroduce?: string
+  includedCount?: number  // 收录数
 }
 
 // 创建收藏夹请求
@@ -299,4 +300,82 @@ export interface AddCollectionBo {
   targetId: number        // 目标 id（文章 id）
   type: number            // 类型：1=文章
   labelId?: string        // 标签 id（文章标签）
+}
+
+// ==================== 随笔相关 ====================
+
+// 随笔信息
+export interface ReadingEssaysInfo {
+  id: number
+  uid: string              // 用户 id
+  content: string          // 内容
+  contentMd?: string       // Markdown 内容
+  groupId: number          // 分类 id
+  groupName?: string       // 分类名称
+  albumId?: number         // 专辑 id
+  albumName?: string       // 专辑名称
+  author?: string          // 作者
+  worksName?: string       // 作品名称
+  label?: string           // 标签（逗号分隔）
+  labelList?: string[]     // 标签列表
+  picture?: string         // 图片（逗号分隔）
+  pictureList?: string[]   // 图片列表
+  dictumState?: number     // 状态：1=公开，2=私有，3=关注可看
+  state?: number           // 状态：0=正常，2=已删除
+  createTime: string
+  updateTime?: string
+  nickname?: string        // 用户名称
+  avatar?: string          // 头像
+  occupation?: string      // 职业
+  roleId?: string          // 角色
+  location?: string        // 位置
+  helpSum?: number         // 点赞总数
+  commentSum?: number      // 评论总数
+  tripartiteUser?: unknown // 用户详情信息
+}
+
+// 热门作者（后端返回的 Map 结构）
+export interface ReadingEssaysAuthor {
+  author: string           // 作者名称
+  count: string            // 随笔数量（字符串格式）
+}
+
+// 热门标签（后端返回的 Map 结构）
+export interface ReadingEssaysLabel {
+  label: string            // 标签名称
+  count: string            // 使用次数（字符串格式）
+}
+
+// 随笔分类
+export interface ReadingEssaysGroup {
+  id: number
+  employSum: number        // 收录数
+  name: string             // 分组名称
+  cover?: string           // 封面
+  briefIntroduction?: string // 简介
+  state?: number           // 状态：0=正常，1=已删除
+  createTime: string
+  updateTime?: string
+  nickname?: string        // 用户名称
+  avatar?: string          // 头像
+  occupation?: string      // 职业
+  roleId?: string          // 角色
+  location?: string        // 位置
+}
+
+// 随笔专辑
+export interface ReadingEssaysAlbum {
+  id: number
+  uid: string              // 用户 id
+  name: string             // 专辑名称
+  cover?: string           // 封面
+  briefIntroduction?: string // 简介
+  albumState?: number      // 专辑状态：1=公开，2=私有，3=关注可看
+  employSum?: number       // 收录总数
+  recommendRate?: number   // 推荐率
+  helpSum?: number         // 点赞总数
+  followSum?: number       // 关注总数
+  state?: number           // 状态：0=正常，1=已删除
+  createTime: string
+  updateTime?: string
 }

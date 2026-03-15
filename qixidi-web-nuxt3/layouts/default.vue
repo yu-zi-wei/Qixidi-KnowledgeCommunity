@@ -63,6 +63,7 @@ const pageMeta = computed(() => {
 const sidebarComponents = {
   home: defineAsyncComponent(() => import('~/components/HomeSidebar.vue')),
   article: defineAsyncComponent(() => import('~/components/ArticleSidebar.vue')),
+  readingEssays: defineAsyncComponent(() => import('~/components/readingEssays/ReadingEssaysSidebar.vue')),
   // 新增侧边栏类型只需在这里添加一行
   // 例如: user: defineAsyncComponent(() => import('~/components/UserSidebar.vue'))
 }

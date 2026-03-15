@@ -82,7 +82,7 @@ const activeGroupingId = computed(() => {
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-2);
-  padding: 16px 0;
+  padding: 10px 16px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -90,6 +90,8 @@ const activeGroupingId = computed(() => {
   /* 添加背景色，与页面背景协调 */
   background: var(--color-surface-warm);
   border-bottom: 1px solid var(--color-border-light);
+  margin-left: -16px;
+  margin-right: -16px;
 }
 
 .tab-bar::-webkit-scrollbar {

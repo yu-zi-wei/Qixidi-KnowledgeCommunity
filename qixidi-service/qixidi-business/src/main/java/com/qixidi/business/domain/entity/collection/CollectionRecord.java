@@ -1,6 +1,7 @@
 package com.qixidi.business.domain.entity.collection;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.qixidi.business.domain.enums.CollectionTypeEnums;
 import lombok.Data;
 
 import java.util.Date;
@@ -35,6 +36,8 @@ public class CollectionRecord {
 
     /**
      * 收藏类型
+     *
+     * @see CollectionTypeEnums
      */
     private Integer type;
 

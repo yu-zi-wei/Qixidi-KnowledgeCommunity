@@ -3,10 +3,9 @@ package com.qixidi.business.domain.bo.collection;
 import com.light.core.core.domain.BaseEntity;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import jakarta.validation.constraints.NotNull;
 
 
 /**
@@ -41,6 +40,7 @@ public class CollectionRecordBo extends BaseEntity {
      */
     @NotNull(message = "收藏夹id不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long collectionId;
+    
     /**
      * 转移前收藏夹id
      */

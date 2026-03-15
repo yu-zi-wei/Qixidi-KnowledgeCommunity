@@ -12,7 +12,7 @@
             {{ item.nickname }}
           </NuxtLink>
           <span class="meta-sep">&middot;</span>
-          <span class="meta-date">{{ formatDate(item.createTime) }}</span>
+          <span class="meta-date" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</span>
           <span v-if="item.groupingName" class="meta-tag">{{ item.groupingName }}</span>
         </div>
         <h3 class="article-title">
@@ -56,6 +56,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { Eye, Heart, MessageCircle } from '@vicons/tabler'
 import type { ArticleInfo } from '~/types'
+import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 const props = defineProps<{
   articles: ArticleInfo[]
@@ -85,27 +86,6 @@ onMounted(() => {
   observer.observe(loadTrigger.value)
   onUnmounted(() => observer.disconnect())
 })
-
-const formatDate = (dateStr: string) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffMin = Math.floor(diffMs / 60000)
-  const diffHour = Math.floor(diffMs / 3600000)
-  const diffDay = Math.floor(diffMs / 86400000)
-
-  if (diffMin < 1) return '刚刚'
-  if (diffMin < 60) return `${diffMin}分钟前`
-  if (diffHour < 24) return `${diffHour}小时前`
-  if (diffDay < 30) return `${diffDay}天前`
-  if (diffDay < 365) return `${Math.floor(diffDay / 30)}个月前`
-
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
 </script>
 
 <style scoped>
@@ -118,17 +98,18 @@ const formatDate = (dateStr: string) => {
 .article-card {
   display: flex;
   gap: var(--space-5);
-  padding: var(--space-6) 0;
+  padding: var(--space-4) 16px;
   border-bottom: 1px solid var(--color-border);
   background: transparent;
   transition: all var(--transition-base);
+  margin-left: -16px;
+  margin-right: -16px;
 }
 
 .article-card:hover {
-  padding: var(--space-6) 4px;
-  margin: 0 -4px;
+  padding: var(--space-4) 16px;
+  margin: 0 -16px;
   background: var(--color-surface-dim);
-  border-radius: var(--radius-md);
 }
 
 .article-card:last-child {
@@ -195,6 +176,8 @@ const formatDate = (dateStr: string) => {
   font-weight: 600;
   line-height: var(--leading-tight);
   margin-bottom: var(--space-3);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .article-title a {
@@ -223,6 +206,8 @@ const formatDate = (dateStr: string) => {
   overflow: hidden;
   margin-bottom: var(--space-4);
   flex: 1;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* 互动数据 - 提高对比度 */
@@ -288,12 +273,14 @@ const formatDate = (dateStr: string) => {
   .article-card {
     flex-direction: column;
     gap: var(--space-4);
-    padding: var(--space-5) 0;
+    padding: var(--space-4) 16px;
+    margin-left: -16px;
+    margin-right: -16px;
   }
 
   .article-card:hover {
-    padding: var(--space-5) 0;
-    margin: 0;
+    padding: var(--space-4) 16px;
+    margin: 0 -16px;
   }
 
   .article-cover {

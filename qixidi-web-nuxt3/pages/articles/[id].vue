@@ -17,6 +17,7 @@
         @collect="handleCollect"
         @like="handleLike"
         @comment="scrollToComments"
+        @edit="handleEdit"
       />
 
       <!-- 收藏夹弹窗 -->
@@ -46,6 +47,7 @@ const fabulousApi = useFabulousApi()
 const collectionApi = useCollectionApi()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
+const message = useMessage()
 
 // 使用独立的 state 存储侧边栏数据，避免与 pageMeta 冲突
 const sidebarData = useState('article-sidebar-data', () => ({
@@ -117,16 +119,16 @@ const handleCollect = async () => {
   if (!article.value) return
 
   // 已收藏状态：取消收藏
-  if (article.value.isCollection && article.value.collectionRecordId) {
+  if (article.value.isCollection) {
     try {
-      await collectionApi.removeArticleFromCollection(
-        article.value.collectionRecordId,
-        article.value.labelNameList?.join(',') || ''
-      )
+      await collectionApi.removeArticleFromCollection(article.value.id)
       // 取消成功，更新状态
       article.value.isCollection = false
       article.value.collectionRecordId = undefined
       article.value.collectionTimes = (article.value.collectionTimes || 0) - 1
+
+      // 提示用户
+      message.success('已取消收藏')
     } catch (err) {
       console.error('取消收藏失败:', err)
     }
@@ -205,6 +207,12 @@ const handleLike = async () => {
     console.error('点赞操作失败:', err)
     // 失败不需要回滚，因为还没更新 UI
   }
+}
+
+// 编辑文章
+const handleEdit = () => {
+  if (!article.value) return
+  navigateTo(`/write/${article.value.id}`)
 }
 
 // SEO 设置

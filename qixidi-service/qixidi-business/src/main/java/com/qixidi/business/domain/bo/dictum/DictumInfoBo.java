@@ -56,7 +56,7 @@ public class DictumInfoBo extends BaseEntity {
     private String albumName;
 
     /**
-     * 标签（多个以逗号隔开）
+     * 标签（新增编辑时：多个以逗号隔开，搜索时传递一个）
      */
     private String label;
 

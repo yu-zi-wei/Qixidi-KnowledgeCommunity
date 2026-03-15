@@ -32,12 +32,11 @@ export const useCollectionApi = () => {
 
   /**
    * 取消收藏文章
-   * 接口：/frontDesk/delete/collection/data/{collectionId}/{labelId}
-   * @param collectionId - 收藏记录 id
-   * @param labelId - 标签 id
+   * 接口：/frontDesk/delete/collection/data/{articleId}（GET 请求）
+   * @param articleId - 文章 id
    */
-  const removeArticleFromCollection = async (collectionId: number, labelId: string): Promise<void> => {
-    await api.post(`/frontDesk/delete/collection/data/${collectionId}/${labelId}`)
+  const removeArticleFromCollection = async (articleId: number): Promise<void> => {
+    await api.get(`/frontDesk/delete/collection/data/${articleId}`)
   }
 
   return {

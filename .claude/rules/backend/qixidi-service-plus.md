@@ -1,11 +1,22 @@
 ---
-description: 仅在开发 qixidi-service-plus 项目时遵循
-globs: qixidi-service-plus/**, qixidi-service-plus\**
+description: 仅在开发 qixidi-service 项目时遵循（qixidi-service-plus 已弃用）
+globs: qixidi-service/**, qixidi-service\**
 ---
 
-# qixidi-service-plus 开发规范
+# qixidi-service 开发规范
 
-栖息地博客服务端开发规范。
+栖息地博客服务端开发规范（qixidi-service-plus 已弃用，所有后端代码已迁移至 qixidi-service）。
+
+---
+
+## ⚠️ 重要变更
+
+| 项目 | 状态 | 说明 |
+|------|------|------|
+| **qixidi-service-plus** | ❌ 已弃用 | 旧版后端代码，已停止维护 |
+| **qixidi-service** | ✅ 当前使用 | 所有后端代码已迁移至此 |
+
+**查找接口**：使用 `grep` 在 `qixidi-service` 文件夹中搜索接口路径
 
 ---
 
@@ -31,8 +42,10 @@ globs: qixidi-service-plus/**, qixidi-service-plus\**
 
 ### 目录结构
 
+**⚠️ 路径变更**：所有后端代码位于 `qixidi-service` 文件夹
+
 ```
-qixidi-business/
+qixidi-service/qixidi-business/
 ├── api/
 │   ├── backstage/    # 后台接口
 │   └── frontDesk/    # 前台接口
@@ -201,7 +214,9 @@ public class DataBo {
 
 ## 接口对接规范（重要）
 
-**前端开发时**：当用户提到服务端接口路径时，必须先去 `qixidi-service-plus` 项目查看接口定义，确保：
+**⚠️ 后端代码位置变更**：后端代码已迁移至 `qixidi-service` 文件夹，`qixidi-service-plus` 已弃用。
+
+**前端开发时**：当用户提到服务端接口路径时，必须先去 `qixidi-service` 项目查看接口定义，确保：
 
 1. **查看 Controller 层**：确认参数格式、返回格式
 2. **参数接收方式**：
@@ -220,7 +235,7 @@ public class DataBo {
 
 **查找接口命令**：
 ```bash
-# 在 qixidi-service-plus 根目录执行
+# 在 qixidi-service 根目录执行
 grep -r "@PostMapping.*接口路径" --include="*.java"
 ```
 

@@ -11,7 +11,10 @@
           @click="selectFolder(folder.id)"
         >
           <div class="folder-info">
-            <div class="folder-name">{{ folder.collectionName }}</div>
+            <div class="folder-header">
+              <div class="folder-name">{{ folder.collectionName }}</div>
+              <div class="folder-count">{{ folder.includedCount || 0 }}篇</div>
+            </div>
             <div v-if="folder.collectionIntroduce" class="folder-introduce">{{ folder.collectionIntroduce }}</div>
           </div>
           <n-checkbox v-if="showCheckbox" :checked="selectedFolderId === folder.id" @update:checked="() => selectFolder(folder.id)" />
@@ -225,13 +228,16 @@ const handleCollect = async () => {
 .folder-list {
   max-height: 300px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 .folder-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -253,11 +259,23 @@ const handleCollect = async () => {
   min-width: 0;
 }
 
+.folder-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
 .folder-name {
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-ink);
-  margin-bottom: var(--space-1);
+}
+
+.folder-count {
+  font-size: var(--text-xs);
+  color: var(--color-ink-muted);
 }
 
 .folder-introduce {
