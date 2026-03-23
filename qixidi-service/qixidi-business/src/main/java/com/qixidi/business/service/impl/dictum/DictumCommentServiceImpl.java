@@ -116,4 +116,17 @@ public class DictumCommentServiceImpl implements DictumCommentService {
         }
         return TableDataInfo.build(records);
     }
+
+    /**
+     * 获取评论列表（接收字符串 ID，避免前端 JavaScript 精度丢失）
+     *
+     * @param id 名言 ID（字符串格式）
+     * @param pageQuery 分页参数
+     * @return 评论列表
+     */
+    @Override
+    public TableDataInfo<DictumCommentVo> commentListStr(String id, PageQuery pageQuery) {
+        // 将字符串转换为 Long，调用原有的 commentList 方法
+        return commentList(Long.parseLong(id), pageQuery);
+    }
 }

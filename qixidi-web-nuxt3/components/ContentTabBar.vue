@@ -1,4 +1,5 @@
 <template>
+  <!-- 二级导航栏 -->
   <nav class="tab-bar">
     <!-- 固定导航：最新 / 精选 / 关注 -->
     <div class="tab-group">
@@ -50,30 +51,29 @@ const fixedTabs = [
 const currentPath = computed(() => route.path)
 
 const activeFixed = computed(() => {
-  // 标签分类页面不高亮固定菜单
   if (route.path.startsWith('/category/')) return ''
-
   if (route.query.groupingId) return ''
   const path = route.path
   if (path === '/featured') return 'recommend'
   if (path === '/follow') return 'follow'
-  return 'latest' // 根路径显示"最新"
+  return 'latest'
 })
 
 const activeGroupingId = computed(() => {
-  // 从路由参数中获取分类 ID
   if (route.path.startsWith('/category/')) {
     return Number(route.params.id)
   }
-
-  // 兼容旧的 query 参数方式
   const gid = route.query.groupingId
   return gid ? Number(gid) : null
 })
 </script>
 
 <style scoped>
-/* 分类标签栏 */
+/* ==================== 分类标签栏 ==================== */
+/*
+ * PC端：使用 sticky，在容器内固定（top: 70px 是导航栏高度）
+ * 移动端：使用 fixed，全屏固定
+ */
 .tab-bar {
   position: sticky;
   top: 70px;
@@ -87,11 +87,25 @@ const activeGroupingId = computed(() => {
   overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  /* 添加背景色，与页面背景协调 */
   background: var(--color-surface-warm);
   border-bottom: 1px solid var(--color-border-light);
   margin-left: -16px;
   margin-right: -16px;
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) {
+  .tab-bar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .tab-bar::-webkit-scrollbar {
@@ -139,5 +153,16 @@ const activeGroupingId = computed(() => {
   background: var(--color-border);
   flex-shrink: 0;
   margin: 0 var(--space-1);
+}
+
+/* ==================== 移动端适配 ==================== */
+@media (max-width: 768px) {
+  .tab-item {
+    white-space: normal;
+  }
+
+  .tab-group {
+    flex-wrap: wrap;
+  }
 }
 </style>

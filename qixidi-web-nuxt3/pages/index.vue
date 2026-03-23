@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-page">
     <ArticleList
       :articles="articles"
       :loading="loadingMore"
@@ -29,3 +29,7 @@ const { articles, loadingMore, noMore, loadMore } = useInfiniteScroll({
   storeKey: 'index' // 首页使用 'index' 作为 key
 })
 </script>
+
+<style scoped>
+/* 首页使用默认的 260px，无需覆盖 */
+</style>

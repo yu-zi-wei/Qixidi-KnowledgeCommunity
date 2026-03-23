@@ -1,5 +1,15 @@
 <template>
+  <!-- 导航栏 -->
   <header class="home-nav-bar">
+    <!-- 移动端：汉堡菜单 -->
+    <button class="mobile-menu-btn" @click="emit('toggle-mobile-menu')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
     <!-- 左侧：Logo -->
     <div class="nav-left">
       <NuxtLink to="/" class="nav-logo">
@@ -186,6 +196,10 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const emit = defineEmits<{
+  'toggle-mobile-menu': []
+}>()
+
 const route = useRoute()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
@@ -341,13 +355,16 @@ const handleUserMenu = async (key: string) => {
 </script>
 
 <style scoped>
-/* ==================== 导航栏容器：CSS Grid 三列布局 ==================== */
+/* ==================== 导航栏 ==================== */
+/*
+ * PC端：使用 sticky，在容器内固定
+ * 移动端：使用 fixed，全屏固定
+ */
 .home-nav-bar {
   position: sticky;
   top: 0;
   z-index: 50;
   display: grid;
-  /* 左侧固定 | 中间自适应 | 右侧固定 */
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 24px;
@@ -356,6 +373,20 @@ const handleUserMenu = async (key: string) => {
   backdrop-filter: blur(8px) saturate(180%);
   -webkit-backdrop-filter: blur(8px) saturate(180%);
   height: 70px;
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) {
+  .home-nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    padding: 12px 16px;
+    z-index: 9999;
+  }
 }
 
 /* ==================== 左侧：Logo 区域 ==================== */
@@ -719,5 +750,134 @@ const handleUserMenu = async (key: string) => {
   background: var(--color-primary);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+}
+
+/* ==================== 移动端适配 ==================== */
+/* 移动端菜单按钮 */
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  background: transparent;
+  color: var(--color-ink-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.mobile-menu-btn:hover {
+  background: var(--color-surface-dim);
+  color: var(--color-ink);
+}
+
+.mobile-menu-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+}
+
+/* ==================== 移动端适配 ==================== */
+@media (max-width: 768px) {
+  /* 导航栏单行布局：汉堡菜单 | Logo | 搜索框（居中） | 用户 */
+  .home-nav-bar {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  /* 显示汉堡菜单 */
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* Logo */
+  .nav-left {
+    /* 使用默认位置 */
+  }
+
+  /* 搜索框在中间，居中显示 */
+  .nav-center {
+    justify-self: center;
+    max-width: 180px;
+  }
+
+  /* 隐藏导航菜单，只显示搜索框 */
+  .nav-menu {
+    display: none;
+  }
+
+  /* 搜索框样式调整 */
+  .search-wrapper {
+    width: 100%;
+    max-width: 180px;
+    min-width: 100px;
+  }
+
+  .search-input-wrapper {
+    padding: 5px 10px;
+  }
+
+  .search-input {
+    font-size: 13px;
+  }
+
+  /* Logo 缩小 */
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  /* 右侧功能区 */
+  .nav-right {
+    gap: 4px;
+  }
+
+  /* 隐藏主题切换和创作按钮 */
+  .theme-toggle,
+  .icon-btn:not(.user-avatar):not([title="通知"]) {
+    display: none;
+  }
+
+  /* 通知按钮样式调整 */
+  .icon-btn[title="通知"] {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* 用户头像缩小 */
+  .user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  /* 登录按钮缩小 */
+  .login-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+    min-width: 60px;
+  }
+}
+
+/* 小屏手机优化 */
+@media (max-width: 480px) {
+  .home-nav-bar--mobile {
+    padding: 10px 12px;
+  }
+
+  .logo-text {
+    display: none;
+  }
 }
 </style>

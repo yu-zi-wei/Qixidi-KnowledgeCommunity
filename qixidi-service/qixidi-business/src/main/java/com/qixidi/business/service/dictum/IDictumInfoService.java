@@ -25,6 +25,14 @@ public interface IDictumInfoService {
     DictumInfoVo queryById(Long id);
 
     /**
+     * 查询名言信息（接收字符串 ID，避免前端 JavaScript 精度丢失）
+     *
+     * @param id 名言信息主键（字符串格式）
+     * @return 名言信息
+     */
+    DictumInfoVo queryByIdStr(String id);
+
+    /**
      * 查询名言信息列表
      *
      * @param bo 名言信息
