@@ -1,15 +1,14 @@
 <template>
-  <n-config-provider :theme="naiveTheme">
-    <n-modal
-      v-model:show="showModal"
-      preset="card"
-      :style="{ width: '700px', maxWidth: '90vw' }"
-      title="选择专辑"
-      :bordered="false"
-      :segmented="{ content: 'soft' }"
-      to="body"
-      @update:show="handleClose"
-    >
+  <n-modal
+    v-model:show="showModal"
+    preset="card"
+    :style="{ width: '700px', maxWidth: '90vw' }"
+    title="选择专辑"
+    :bordered="false"
+    :segmented="{ content: 'soft' }"
+    to="body"
+    @update:show="handleClose"
+  >
       <!-- 搜索框 -->
       <div class="search-section">
         <n-input
@@ -68,12 +67,11 @@
         />
       </div>
     </n-modal>
-  </n-config-provider>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { NModal, NInput, NIcon, NSpin, NPagination, NConfigProvider, darkTheme } from 'naive-ui'
+import { NModal, NInput, NIcon, NSpin, NPagination } from 'naive-ui'
 import { Search, Folder } from '@vicons/tabler'
 import type { ReadingEssaysAlbum } from '~/types'
 
@@ -88,9 +86,6 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
-
-const colorMode = useColorMode()
-const naiveTheme = computed(() => colorMode.value === 'dark' ? darkTheme : null)
 
 const readingEssaysApi = useReadingEssaysApi()
 

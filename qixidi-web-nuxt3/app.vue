@@ -1,5 +1,5 @@
 <template>
-  <NaiveConfig :theme="naiveTheme" :theme-config="themeOverrides">
+  <n-config-provider :theme="naiveTheme" :theme-overrides="themeOverrides">
     <n-message-provider>
       <n-dialog-provider>
         <n-notification-provider>
@@ -12,11 +12,11 @@
 
     <!-- 全局登录对话框 -->
     <AuthDialog />
-  </NaiveConfig>
+  </n-config-provider>
 </template>
 
 <script setup lang="ts">
-import { darkTheme } from 'naive-ui'
+import { darkTheme, type GlobalThemeOverrides } from 'naive-ui'
 
 const colorMode = useColorMode()
 
@@ -24,7 +24,8 @@ const naiveTheme = computed(() =>
   colorMode.value === 'dark' ? darkTheme : null
 )
 
-const themeOverrides = computed(() => ({
+// 使用官方推荐的方式配置主题变量
+const themeOverrides = computed<GlobalThemeOverrides>(() => ({
   common: {
     primaryColor: colorMode.value === 'dark' ? '#5D8AA8' : '#3D5A80',
     primaryColorHover: colorMode.value === 'dark' ? '#7BA3C1' : '#4A6B94',
