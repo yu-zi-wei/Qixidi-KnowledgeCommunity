@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+/* ============================================
+   主题背景控制（覆盖 Naive UI 内联样式）
+   使用 main.css 中定义的 CSS 变量
+   ============================================ */
+
+@layer base {
+  /* html 元素背景 - 带网格效果 */
+  html {
+    background-color: var(--color-surface-warm) !important;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+  }
+
+  /* body 元素透明，让 html 背景显示 */
+  body {
+    background-color: transparent !important;
+  }
+}

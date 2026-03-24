@@ -1,7 +1,7 @@
 <template>
   <aside v-if="isReady" class="reading-essays-sidebar">
     <!-- 专辑（带封面） -->
-    <section v-if="displayedAlbums.length > 0" class="sidebar-card sidebar-section">
+    <section v-if="displayedAlbums.length > 0" class="sidebar-card gray-card sidebar-section">
       <div class="section-title">
         <Folder class="section-icon" />
         <span>推荐专辑</span>
@@ -32,7 +32,7 @@
     </section>
 
     <!-- 热门作者（可展开） -->
-    <section v-if="popularAuthors.length > 0" class="sidebar-card sidebar-section">
+    <section v-if="popularAuthors.length > 0" class="sidebar-card gradient-card sidebar-section">
       <div class="section-title section-title-clickable" @click="toggleAuthorsExpand">
         <User class="section-icon" />
         <span>热门作者</span>
@@ -52,7 +52,7 @@
     </section>
 
     <!-- 热门标签（可展开） -->
-    <section v-if="popularLabels.length > 0" class="sidebar-card sidebar-section">
+    <section v-if="popularLabels.length > 0" class="sidebar-card gradient-card sidebar-section">
       <div class="section-title section-title-clickable" @click="toggleLabelsExpand">
         <Hash class="section-icon" />
         <span>热门标签</span>
@@ -205,6 +205,7 @@ const navigateToUpdateQuery = () => {
 </script>
 
 <style scoped>
+/* 滚动容器 */
 .reading-essays-sidebar {
   display: flex;
   flex-direction: column;
@@ -213,33 +214,89 @@ const navigateToUpdateQuery = () => {
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  /* 隐藏滚动条 */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-right: 4px;
 }
 
 .reading-essays-sidebar::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
 }
 
-/* 卡片样式 */
+/* 卡片通用样式 */
 .sidebar-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  border: 1px solid var(--color-border-light);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* 灰色背景卡片 - 也使用半透明白色 */
+.sidebar-card.gray-card {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar-card.gray-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.dark .sidebar-card.gray-card {
+  background: rgba(40, 42, 45, 0.7);
+}
+
+.dark .sidebar-card.gray-card:hover {
+  background: rgba(50, 52, 55, 0.8);
+}
+
+/* 渐变背景卡片 */
+.sidebar-card.gradient-card {
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.06) 0%, rgba(93, 138, 168, 0.02) 100%);
+  border-color: rgba(61, 90, 128, 0.08);
+}
+
+.sidebar-card.gradient-card:hover {
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.1) 0%, rgba(93, 138, 168, 0.04) 100%);
+}
+
+.dark .sidebar-card.gradient-card {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.08) 0%, rgba(61, 90, 128, 0.03) 100%);
+  border-color: rgba(93, 138, 168, 0.1);
+}
+
+.dark .sidebar-card.gradient-card:hover {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.12) 0%, rgba(61, 90, 128, 0.05) 100%);
+}
+
+/* 暗色主题 */
+.dark .sidebar-card {
+  background: rgba(40, 42, 45, 0.75);
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+.dark .sidebar-card:hover {
+  background: rgba(50, 52, 55, 0.85);
 }
 
 /* 占位状态 */
 .reading-essays-sidebar.placeholder {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .skeleton {
-  min-height: 120px;
-  background: linear-gradient(90deg, var(--color-surface-dim) 25%, var(--color-border-light) 50%, var(--color-surface-dim) 75%);
+  min-height: 140px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 25%, rgba(0, 0, 0, 0.06) 50%, rgba(0, 0, 0, 0.04) 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 16px;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.04) 75%);
 }
 
 @keyframes skeleton-loading {
@@ -258,13 +315,21 @@ const navigateToUpdateQuery = () => {
   gap: 12px;
 }
 
+/* 分区标题 */
 .section-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--text-sm);
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-ink);
+  margin-bottom: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .section-title {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
 }
 
 .section-title-clickable {
@@ -273,17 +338,17 @@ const navigateToUpdateQuery = () => {
 }
 
 .section-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: var(--color-primary);
   flex-shrink: 0;
 }
 
 .chevron-icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   margin-left: auto;
-  transition: transform var(--transition-fast);
+  transition: transform 0.2s ease;
   color: var(--color-ink-muted);
 }
 
@@ -295,24 +360,23 @@ const navigateToUpdateQuery = () => {
 .album-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .album-card {
   display: flex;
-  gap: 8px;
-  padding: 8px;
+  gap: 10px;
+  padding: 10px;
   border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  background: var(--color-surface);
+  transition: all 0.2s ease;
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .album-card:hover {
-  background: var(--color-surface);
-  border-color: var(--color-border-light);
-  box-shadow: var(--shadow-sm);
+  background: rgba(61, 90, 128, 0.1);
+  border-color: rgba(61, 90, 128, 0.2);
 }
 
 .album-card.active {
@@ -320,12 +384,22 @@ const navigateToUpdateQuery = () => {
   border-color: var(--color-primary);
 }
 
+.dark .album-card {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dark .album-card:hover {
+  background: rgba(61, 90, 128, 0.15);
+  border-color: rgba(61, 90, 128, 0.3);
+}
+
 .album-cover {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-sm);
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
+  background: var(--color-surface-dim);
 }
 
 .album-cover img {
@@ -339,27 +413,26 @@ const navigateToUpdateQuery = () => {
   align-items: center;
   justify-content: center;
   background: var(--color-surface-dim);
-  border: 1px solid var(--color-border-light);
   color: var(--color-ink-muted);
 }
 
 .placeholder-icon {
   width: 20px;
   height: 20px;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .album-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2px;
+  gap: 3px;
   flex: 1;
   min-width: 0;
 }
 
 .album-name {
-  font-size: var(--text-xs);
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-ink);
   overflow: hidden;
@@ -371,7 +444,7 @@ const navigateToUpdateQuery = () => {
 }
 
 .album-count {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--color-ink-muted);
 }
 
@@ -386,21 +459,27 @@ const navigateToUpdateQuery = () => {
 /* 查看全部按钮 */
 .btn-view-all {
   width: 100%;
-  padding: 8px 12px;
-  margin-top: 8px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: var(--text-xs);
+  padding: 10px 14px;
+  margin-top: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--color-ink-light);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .btn-view-all:hover {
+  background: var(--color-primary-light);
   border-color: var(--color-primary);
   color: var(--color-primary);
-  background: var(--color-primary-light);
+}
+
+.dark .btn-view-all {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 /* 标签云 */
@@ -411,25 +490,35 @@ const navigateToUpdateQuery = () => {
 }
 
 .tag-cloud-item {
-  font-size: var(--text-xs);
+  font-size: 12px;
   color: var(--color-ink-light);
-  background: var(--color-surface);
-  padding: 5px 11px;
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.08) 0%, rgba(93, 138, 168, 0.04) 100%);
+  padding: 6px 12px;
+  border: 1px solid rgba(61, 90, 128, 0.12);
+  border-radius: 20px;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .tag-cloud-item:hover {
-  background: var(--color-primary-light);
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.15) 0%, rgba(93, 138, 168, 0.1) 100%);
+  border-color: rgba(61, 90, 128, 0.25);
   color: var(--color-primary);
-  border-color: var(--color-primary);
 }
 
 .tag-cloud-item.active {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #5a7fa8 100%);
   color: #fff;
   border-color: var(--color-primary);
+}
+
+.dark .tag-cloud-item {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.12) 0%, rgba(61, 90, 128, 0.06) 100%);
+  border-color: rgba(93, 138, 168, 0.2);
+}
+
+.dark .tag-cloud-item:hover {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.2) 0%, rgba(61, 90, 128, 0.12) 100%);
+  border-color: rgba(93, 138, 168, 0.35);
 }
 </style>

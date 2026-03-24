@@ -33,6 +33,11 @@ export default defineNuxtConfig({
         storageKey: 'qixidi-color-mode'
     },
 
+    naiveui: {
+        // 主题背景色由 CSS 控制（main.css）
+        // 在 html 元素设置背景，body 透明，绕过内联样式
+    },
+
     vite: {
         plugins: [tailwindcss()],
         build: {

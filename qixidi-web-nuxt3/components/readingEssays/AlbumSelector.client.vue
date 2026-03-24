@@ -1,77 +1,79 @@
 <template>
-  <n-modal
-    v-model:show="showModal"
-    preset="card"
-    :style="{ width: '540px' }"
-    title="选择专辑"
-    :bordered="false"
-    :segmented="{ content: 'soft' }"
-    to="body"
-    @update:show="handleClose"
-  >
-    <!-- 搜索框 -->
-    <div class="search-section">
-      <n-input
-        v-model:value="searchKeyword"
-        placeholder="搜索专辑名称..."
-        clearable
-        @input="handleSearch"
-      >
-        <template #prefix>
-          <n-icon :component="Search" />
-        </template>
-      </n-input>
-    </div>
+  <n-config-provider :theme="naiveTheme">
+    <n-modal
+      v-model:show="showModal"
+      preset="card"
+      :style="{ width: '700px', maxWidth: '90vw' }"
+      title="选择专辑"
+      :bordered="false"
+      :segmented="{ content: 'soft' }"
+      to="body"
+      @update:show="handleClose"
+    >
+      <!-- 搜索框 -->
+      <div class="search-section">
+        <n-input
+          v-model:value="searchKeyword"
+          placeholder="搜索专辑名称..."
+          clearable
+          @input="handleSearch"
+        >
+          <template #prefix>
+            <n-icon :component="Search" />
+          </template>
+        </n-input>
+      </div>
 
-    <!-- 专辑列表 -->
-    <div v-if="loading && albums.length === 0" class="loading-state">
-      <n-spin size="medium" />
-    </div>
+      <!-- 专辑列表 -->
+      <div v-if="loading && albums.length === 0" class="loading-state">
+        <n-spin size="medium" />
+      </div>
 
-    <div v-else-if="albums.length === 0" class="empty-state">
-      <p>没有找到专辑</p>
-    </div>
+      <div v-else-if="albums.length === 0" class="empty-state">
+        <p>没有找到专辑</p>
+      </div>
 
-    <div v-else class="album-grid">
-      <div
-        v-for="album in albums"
-        :key="album.id"
-        class="album-grid-item"
-        :class="{ selected: selectedAlbumId === album.id }"
-        @click="handleSelect(album)"
-      >
-        <div v-if="album.cover" class="album-cover">
-          <img :src="album.cover" :alt="album.name" loading="lazy" />
-        </div>
-        <div v-else class="album-cover album-cover-placeholder">
-          <Folder class="placeholder-icon" />
-        </div>
-        <div class="album-info">
-          <div class="album-name">{{ album.name }}</div>
-          <div v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</div>
-          <div v-if="album.briefIntroduction" class="album-intro" :title="album.briefIntroduction">
-            {{ album.briefIntroduction }}
+      <div v-else class="album-grid">
+        <div
+          v-for="album in albums"
+          :key="album.id"
+          class="album-grid-item"
+          :class="{ selected: selectedAlbumId === album.id }"
+          @click="handleSelect(album)"
+        >
+          <div v-if="album.cover" class="album-cover">
+            <img :src="album.cover" :alt="album.name" loading="lazy" />
+          </div>
+          <div v-else class="album-cover album-cover-placeholder">
+            <Folder class="placeholder-icon" />
+          </div>
+          <div class="album-info">
+            <div class="album-name">{{ album.name }}</div>
+            <div v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</div>
+            <div v-if="album.briefIntroduction" class="album-intro" :title="album.briefIntroduction">
+              {{ album.briefIntroduction }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 分页 -->
-    <div v-if="total > pageSize" class="pagination-section">
-      <n-pagination
-        v-model:page="pageNum"
-        :page-count="Math.ceil(total / pageSize)"
-        :page-size="pageSize"
-        show-quick-jumper
-        @update:page="handlePageChange"
-      />
-    </div>
-  </n-modal>
+      <!-- 分页 -->
+      <div v-if="total > pageSize" class="pagination-section">
+        <n-pagination
+          v-model:page="pageNum"
+          :page-count="Math.ceil(total / pageSize)"
+          :page-size="pageSize"
+          show-quick-jumper
+          @update:page="handlePageChange"
+        />
+      </div>
+    </n-modal>
+  </n-config-provider>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { NModal, NInput, NIcon, NSpin, NPagination } from 'naive-ui'
+import { NModal, NInput, NIcon, NSpin, NPagination, NConfigProvider, darkTheme } from 'naive-ui'
 import { Search, Folder } from '@vicons/tabler'
 import type { ReadingEssaysAlbum } from '~/types'
 
@@ -86,6 +88,9 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const colorMode = useColorMode()
+const naiveTheme = computed(() => colorMode.value === 'dark' ? darkTheme : null)
 
 const readingEssaysApi = useReadingEssaysApi()
 
@@ -182,16 +187,16 @@ watch(() => props.show, (newVal) => {
 .album-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 20px;
-  max-height: 400px;
+  max-height: 450px;
   overflow-y: auto;
   padding-right: 4px;
 }
 
 /* 滚动条样式 */
 .album-grid::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 
 .album-grid::-webkit-scrollbar-track {
@@ -200,70 +205,80 @@ watch(() => props.show, (newVal) => {
 
 .album-grid::-webkit-scrollbar-thumb {
   background: var(--color-border);
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .album-grid-item {
   display: flex;
   flex-direction: row;
-  gap: 8px;
-  padding: 6px;
-  border: 2px solid transparent;
-  border-radius: var(--radius-sm);
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid rgba(61, 90, 128, 0.12);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  background: var(--color-surface-dim);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.06) 0%, rgba(93, 138, 168, 0.02) 100%);
   align-items: flex-start;
 }
 
 .album-grid-item:hover {
-  border-color: var(--color-primary-light);
-  background: var(--color-surface);
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.12) 0%, rgba(93, 138, 168, 0.06) 100%);
+  border-color: rgba(61, 90, 128, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(61, 90, 128, 0.15);
 }
 
 .album-grid-item.selected {
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.18) 0%, rgba(93, 138, 168, 0.1) 100%);
   border-color: var(--color-primary);
-  background: var(--color-primary-light);
+  box-shadow: 0 4px 16px rgba(61, 90, 128, 0.2);
 }
 
 .album-grid-item .album-cover {
-  width: 110px;
+  width: 80px;
   height: 80px;
   flex-shrink: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
 .album-grid-item .album-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.album-grid-item:hover .album-cover img {
+  transform: scale(1.08);
 }
 
 .album-grid-item .album-cover-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface);
-  color: var(--color-ink-muted);
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.15) 0%, rgba(93, 138, 168, 0.08) 100%);
+  color: var(--color-primary);
 }
 
 .album-grid-item .placeholder-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
+  opacity: 0.7;
 }
 
 .album-grid-item .album-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   flex: 1;
   min-width: 0;
 }
 
 .album-grid-item .album-name {
-  font-size: var(--text-xs);
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--color-ink);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -271,14 +286,17 @@ watch(() => props.show, (newVal) => {
 }
 
 .album-grid-item .album-count {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--color-ink-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .album-grid-item .album-intro {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--color-ink-light);
-  line-height: 1.3;
+  line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -296,7 +314,26 @@ watch(() => props.show, (newVal) => {
 }
 
 .album-grid-item.selected .album-intro {
-  color: var(--color-primary);
+  color: rgba(61, 90, 128, 0.8);
+}
+
+/* 暗色主题 */
+:global(.dark) .album-grid-item {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.1) 0%, rgba(61, 90, 128, 0.04) 100%);
+  border-color: rgba(93, 138, 168, 0.2);
+}
+
+:global(.dark) .album-grid-item:hover {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.18) 0%, rgba(61, 90, 128, 0.1) 100%);
+  border-color: rgba(93, 138, 168, 0.35);
+}
+
+:global(.dark) .album-grid-item.selected {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.25) 0%, rgba(61, 90, 128, 0.15) 100%);
+}
+
+:global(.dark) .album-grid-item .album-cover-placeholder {
+  background: linear-gradient(135deg, rgba(93, 138, 168, 0.2) 0%, rgba(61, 90, 128, 0.1) 100%);
 }
 
 /* 分页 */

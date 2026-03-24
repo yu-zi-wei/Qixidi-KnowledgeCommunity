@@ -1,29 +1,48 @@
 /* ============================================
    栖息地 — 设计系统
-   美学方向：温暖文学编辑风 + 自然栖居感
+   主题：墨韵书香（冷灰调 - 高级中性）
+   美学方向：传统水墨画 + 现代杂志感
    ============================================ */
 
 /* === 浅色主题（默认） === */
 :root {
-  --color-ink: #1a1a1a;
-  --color-ink-light: #4a4a4a;
-  --color-ink-muted: #8c8c8c;
-  --color-ink-faint: #b8b8b8;
-  --color-surface: #ffffff;
-  --color-surface-warm: #faf8f5;
-  --color-surface-dim: #f3f0eb;
-  --color-border: #e8e4de;
-  --color-border-light: #f0ede8;
-  --color-primary: #2d6a4f;
-  --color-primary-dark: #1b4332;
-  --color-primary-hover: #1b4332;
-  --color-primary-light: #d8f3dc;
-  --color-accent: #d4a373;
-  --color-accent-hover: #c08b5c;
-  --color-danger: #c0392b;
+  /* 文字色阶 */
+  --color-ink: #1a1a2e;
+  --color-ink-light: #4a4a5c;
+  --color-ink-muted: #7a7a8c;
+  --color-ink-faint: #b8b8c4;
 
-  --color-header-bg: rgba(255, 255, 255, 0.72);
-  --color-code-bg: #f5f2ed;
+  /* 背景色阶 */
+  --color-surface: #ffffff;
+  --color-surface-warm: #f8f8f8;
+  --color-surface-dim: #ebe9e5;
+
+  /* 网格效果 */
+  --grid-color: rgba(0, 0, 0, 0.03);
+  --grid-size: 40px;
+
+  /* 卡片背景 */
+  --card-bg: rgba(255, 255, 255, 0.4);
+
+  /* 边框色 */
+  --color-border: #d8d5d0;
+  --color-border-light: #e8e5e0;
+
+  /* 主色：深墨蓝 */
+  --color-primary: #3d5a80;
+  --color-primary-dark: #293d54;
+  --color-primary-hover: #293d54;
+  --color-primary-light: #e8eef4;
+
+  /* 强调色：暗金 */
+  --color-accent: #b08968;
+  --color-accent-hover: #9a7558;
+
+  /* 功能色 */
+  --color-danger: #c44536;
+
+  --color-header-bg: rgba(255, 255, 255, 0.85);
+  --color-code-bg: #f5f6f8;
   /* Markdown 代码块样式 */
   --md-code-bg: #f6f8fa;
   --md-code-border: #e8e4de;
@@ -86,25 +105,42 @@
 
 /* === 深色主题 === */
 .dark {
-  --color-ink: #e8e6e3;
-  --color-ink-light: #b8b5b0;
-  --color-ink-muted: #8a8680;
-  --color-ink-faint: #5c5955;
-  --color-surface: #1a1a1a;
-  --color-surface-warm: #141414;
-  --color-surface-dim: #242424;
-  --color-border: #333330;
-  --color-border-light: #2a2a28;
-  --color-primary: #40916c;
-  --color-primary-dark: #2d6a4f;
-  --color-primary-hover: #52b788;
-  --color-primary-light: #1b3a2a;
-  --color-accent: #d4a373;
-  --color-accent-hover: #e0b68a;
-  --color-danger: #e74c3c;
+  /* 文字色阶 */
+  --color-ink: #e8eaed;
+  --color-ink-light: #b8bac0;
+  --color-ink-muted: #8a8c92;
+  --color-ink-faint: #5c5e64;
 
-  --color-header-bg: rgba(26, 26, 26, 0.72);
-  --color-code-bg: #2a2a28;
+  /* 背景色阶 */
+  --color-surface: #121416;
+  --color-surface-warm: #0d0f11;
+  --color-surface-dim: #1a1d20;
+
+  /* 网格效果 - 暗色主题 */
+  --grid-color: rgba(255, 255, 255, 0.03);
+
+  /* 卡片背景 - 暗色主题 */
+  --card-bg: rgba(18, 20, 22, 0.4);
+
+  /* 边框色 */
+  --color-border: #2a2d32;
+  --color-border-light: #1f2126;
+
+  /* 主色：深墨蓝 - 深色模式调亮 */
+  --color-primary: #5d8aa8;
+  --color-primary-dark: #4a7090;
+  --color-primary-hover: #7aa3bf;
+  --color-primary-light: #1a2a38;
+
+  /* 强调色：暗金 - 深色模式 */
+  --color-accent: #c9a27a;
+  --color-accent-hover: #dbb68e;
+
+  /* 功能色 */
+  --color-danger: #e05545;
+
+  --color-header-bg: rgba(12, 14, 16, 0.85);
+  --color-code-bg: #1a1d20;
   /* Markdown 代码块样式 */
   --md-code-bg: #161b22;
   --md-code-border: #30363d;
@@ -122,35 +158,35 @@
   color-scheme: dark;
 }
 
+/* 深色主题下的 body 背景会自动使用 .dark 中的变量 */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ============================================
+   基础样式
+   背景色控制在 tailwind.css 的 @layer base 中
+   ============================================ */
+
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 
 body {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.7;
-  color: var(--color-ink);
-  background: var(--color-surface);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 减少字体加载导致的布局跳动 */
   text-rendering: optimizeLegibility;
   font-synthesis: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* 滚动条 - 固定宽度，避免内容偏移 */
-html {
-  overflow-y: scroll;
-}
-
 ::-webkit-scrollbar { width: 16px; height: 16px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-ink-faint); border-radius: 8px; border: 4px solid transparent; background-clip: padding-box; }
@@ -178,11 +214,11 @@ a:hover {
    布局骨架（全局，确保 SSR 不闪烁）
    ============================================ */
 
-.layout-default {
+.layout-default,
+.layout-home {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-surface-warm);
 }
 
 .layout-main {
@@ -339,7 +375,6 @@ a:hover {
   background: var(--color-surface);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-4);
-  border: 1px solid var(--color-border-light);
 }
 
 .tab-item {
@@ -374,6 +409,11 @@ a:hover {
   flex-shrink: 0;
   margin: 0 var(--space-1);
   align-self: center;
+}
+
+/* 深色主题标签导航 */
+.dark .tab-bar {
+  background: var(--color-surface);
 }
 
 /* ============================================

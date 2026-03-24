@@ -1,6 +1,6 @@
 <template>
   <!-- 二级导航栏 -->
-  <nav class="tab-bar">
+  <nav ref="tabBarRef" class="tab-bar" :class="{ 'is-sticky': isSticky }">
     <!-- 固定导航：最新 / 精选 / 关注 -->
     <div class="tab-group">
       <NuxtLink
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import type { LabelGrouping } from '~/types'
 
 defineProps<{
@@ -41,14 +41,14 @@ defineProps<{
 }>()
 
 const route = useRoute()
+const tabBarRef = ref<HTMLElement | null>(null)
+const isSticky = ref(false)
 
 const fixedTabs = [
   { key: 'latest', label: '最新', to: '/' },
   { key: 'recommend', label: '精选', to: '/featured' },
   { key: 'follow', label: '关注', to: '/follow' }
 ]
-
-const currentPath = computed(() => route.path)
 
 const activeFixed = computed(() => {
   if (route.path.startsWith('/category/')) return ''
@@ -66,31 +66,64 @@ const activeGroupingId = computed(() => {
   const gid = route.query.groupingId
   return gid ? Number(gid) : null
 })
+
+// 监听吸顶状态
+onMounted(() => {
+  const checkSticky = () => {
+    if (!tabBarRef.value) return
+    // 获取元素相对于视口的位置
+    const rect = tabBarRef.value.getBoundingClientRect()
+    // 当元素顶部到达或超过吸顶位置（66px）时，认为已吸顶
+    isSticky.value = rect.top <= 66
+  }
+
+  // 初始检查
+  checkSticky()
+
+  // 监听滚动
+  window.addEventListener('scroll', checkSticky, { passive: true })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', checkSticky)
+  })
+})
 </script>
 
 <style scoped>
 /* ==================== 分类标签栏 ==================== */
-/*
- * PC端：使用 sticky，在容器内固定（top: 70px 是导航栏高度）
- * 移动端：使用 fixed，全屏固定
- */
 .tab-bar {
   position: sticky;
-  top: 70px;
+  top: 66px;
   z-index: 40;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-2);
   padding: 10px 16px;
+  margin-top: 12px;
+  margin-bottom: 16px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: var(--color-surface-warm);
-  border-bottom: 1px solid var(--color-border-light);
-  margin-left: -16px;
-  margin-right: -16px;
+  /* 默认透明 */
+  background: transparent;
+  border-radius: 2px 2px 10px 10px;
+  transition: all 0.3s ease;
+}
+
+/* 吸顶状态 - 磨玻璃效果 */
+.tab-bar.is-sticky {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 暗色主题吸顶 */
+:root.dark .tab-bar.is-sticky {
+  background: rgba(13, 15, 17, 0.7);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* 移动端样式 */
@@ -103,8 +136,16 @@ const activeGroupingId = computed(() => {
     z-index: 90;
     flex-wrap: wrap;
     padding: 10px 16px;
-    margin-left: 0;
-    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    /* 移动端默认就显示背景（因为始终 fixed） */
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  :root.dark .tab-bar {
+    background: rgba(13, 15, 17, 0.7);
   }
 }
 

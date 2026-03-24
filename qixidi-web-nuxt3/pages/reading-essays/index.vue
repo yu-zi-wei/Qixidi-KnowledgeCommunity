@@ -1,7 +1,7 @@
 <template>
   <div class="reading-essays-page">
-    <!-- 分类导航栏 - 直接 sticky -->
-    <nav class="category-nav">
+    <!-- 分类导航栏 - sticky + 滚动显示背景 -->
+    <nav ref="navRef" class="category-nav" :class="{ 'is-sticky': isNavSticky }">
       <NuxtLink
         to="/reading-essays"
         class="nav-item"
@@ -60,8 +60,11 @@ const authDialogStore = useAuthDialogStore()
 const message = useMessage()
 const route = useRoute()
 
+// 导航栏吸顶状态
+const navRef = ref<HTMLElement | null>(null)
+const isNavSticky = ref(false)
+
 // 侧边栏数据（与 ReadingEssaysSidebar 共享）
-// groups 用于顶部导航，albums/popularAuthors/popularLabels 用于侧边栏
 const sidebarData = useState('reading-essays-sidebar-data', () => ({
   groups: [],
   albums: [],
@@ -81,7 +84,7 @@ const total = ref(0)
 const loading = ref(false)
 const hasMore = computed(() => readingEssays.value.length < total.value)
 
-// 分类数据（用于顶部导航）
+// 分类数据
 const groups = computed(() => sidebarData.value.groups)
 const selectedGroupId = computed(() => route.query.groupId ? Number(route.query.groupId) : null)
 
@@ -93,7 +96,6 @@ const selectedGroupName = computed(() => {
 })
 
 const selectedAlbumName = computed(() => sidebarData.value.selectedAlbumName || '')
-
 const selectedLabel = computed(() => sidebarData.value.selectedLabel)
 const selectedAuthor = computed(() => sidebarData.value.selectedAuthor)
 
@@ -117,9 +119,7 @@ const loadSidebarData = async () => {
       readingEssaysApi.getPopularLabels()
     ])
 
-    // 分类数据用于顶部导航
     sidebarData.value.groups = groupsData.rows || []
-    // 侧边栏数据
     sidebarData.value.albums = albumsData.rows || []
     sidebarData.value.totalAlbums = albumsData.total || 0
     sidebarData.value.popularAuthors = authorsData || []
@@ -147,10 +147,10 @@ const loadReadingEssays = async (reset = false) => {
 
     if (reset) {
       readingEssays.value = result.rows || []
-      pageNum.value = 2  // 下次加载第 2 页
+      pageNum.value = 2
     } else {
       readingEssays.value = [...readingEssays.value, ...(result.rows || [])]
-      pageNum.value++  // 加载后递增
+      pageNum.value++
     }
     total.value = result.total || 0
   } catch (error) {
@@ -161,11 +161,10 @@ const loadReadingEssays = async (reset = false) => {
   }
 }
 
-// 清除筛选（保留分类，通过导航栏切换）
+// 清除筛选
 const clearFilters = () => {
   sidebarData.value.selectedAlbumId = null
   sidebarData.value.selectedLabel = null
-  // 清除作者筛选，保留 groupId
   const query = { ...route.query }
   delete query.albumId
   delete query.label
@@ -182,26 +181,34 @@ const handleCollect = (id: number) => {
   message.info('收藏功能开发中')
 }
 
-// 监听 query 参数变化（来自导航栏或侧边栏的操作）
-watch(() => route.query, async (newQuery) => {
-  console.log('route.query changed:', newQuery)
+// 监听导航栏吸顶状态
+onMounted(() => {
+  const checkSticky = () => {
+    if (!navRef.value) return
+    const rect = navRef.value.getBoundingClientRect()
+    isNavSticky.value = rect.top <= 66
+  }
 
-  // 从 query 更新侧边栏状态
+  checkSticky()
+  window.addEventListener('scroll', checkSticky, { passive: true })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', checkSticky)
+  })
+})
+
+// 监听 query 参数变化
+watch(() => route.query, async (newQuery) => {
   const newAlbumId = newQuery.albumId ? Number(newQuery.albumId) : null
-  console.log('newAlbumId:', newAlbumId, 'oldAlbumId:', sidebarData.value.selectedAlbumId)
 
   sidebarData.value.selectedAlbumId = newAlbumId
   sidebarData.value.selectedLabel = (newQuery.label as string) || null
   sidebarData.value.selectedAuthor = (newQuery.author as string) || null
 
-  // 如果有专辑ID，调用接口获取专辑名称
   if (newAlbumId) {
-    console.log('Fetching album detail for id:', newAlbumId)
     try {
       const albumDetail = await readingEssaysApi.getAlbumDetail(newAlbumId)
-      console.log('Album detail response:', albumDetail)
       sidebarData.value.selectedAlbumName = albumDetail.name || ''
-      console.log('Updated selectedAlbumName:', sidebarData.value.selectedAlbumName)
     } catch (error) {
       console.error('获取专辑详情失败:', error)
       sidebarData.value.selectedAlbumName = ''
@@ -210,50 +217,30 @@ watch(() => route.query, async (newQuery) => {
     sidebarData.value.selectedAlbumName = ''
   }
 
-  // 重新加载随笔
   loadReadingEssays(true)
 }, { deep: true })
 
-// 监听侧边栏数据变化（仅在初始化时，确保数据已加载）
-watch(() => sidebarData.value.groups, (newGroups) => {
-  console.log('侧边栏数据已加载，groups 数量:', newGroups.length)
-}, { immediate: false })
-
 // 初始化
 onMounted(async () => {
-  console.log('=== onMounted 开始 ===')
-
-  // 先读取 query 参数
   const queryAlbumId = route.query.albumId ? Number(route.query.albumId) : null
   const queryLabel = route.query.label as string || null
   const queryAuthor = route.query.author as string || null
-
-  console.log('初始化 query 参数:', { queryAlbumId, queryLabel, queryAuthor })
 
   if (queryAlbumId) sidebarData.value.selectedAlbumId = queryAlbumId
   if (queryLabel) sidebarData.value.selectedLabel = queryLabel
   if (queryAuthor) sidebarData.value.selectedAuthor = queryAuthor
 
-  // 如果有专辑ID，先获取专辑名称，再加载侧边栏数据（避免被覆盖）
   if (queryAlbumId) {
     try {
-      console.log('初始化：获取专辑详情，ID:', queryAlbumId)
       const albumDetail = await readingEssaysApi.getAlbumDetail(queryAlbumId)
-      console.log('专辑详情返回:', albumDetail)
       sidebarData.value.selectedAlbumName = albumDetail.name || ''
-      console.log('设置专辑名称:', sidebarData.value.selectedAlbumName)
     } catch (error) {
       console.error('获取专辑详情失败:', error)
       sidebarData.value.selectedAlbumName = ''
     }
   }
 
-  // 加载侧边栏数据
-  console.log('开始加载侧边栏数据')
   loadSidebarData()
-
-  // 加载随笔列表
-  console.log('开始加载随笔列表')
   loadReadingEssays(true)
 
   // 无限滚动
@@ -272,8 +259,6 @@ onMounted(async () => {
   onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
   })
-
-  console.log('=== onMounted 完成 ===')
 })
 </script>
 
@@ -284,48 +269,41 @@ onMounted(async () => {
   gap: 16px;
 }
 
-/* ==================== 移动端布局 ==================== */
-/* 覆盖样式在非 scoped 的 <style> 块中 */
-
 /* ==================== 分类导航栏 ==================== */
-/*
- * PC端：使用 sticky，在容器内固定
- * 移动端：使用 fixed，全屏固定
- */
 .category-nav {
   position: sticky;
-  top: 70px;
+  top: 66px;
   z-index: 40;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   padding: 10px 16px;
+  margin-top: 12px;
+  margin-bottom: 16px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
-  background: var(--color-surface-warm);
-  border-bottom: 1px solid var(--color-border-light);
-  margin-left: -16px;
-  margin-right: -16px;
+  -ms-overflow-style: none;
+  background: transparent;
+  border-radius: 2px 2px 10px 10px;
+  transition: all 0.3s ease;
+}
+
+.category-nav.is-sticky {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.dark .category-nav.is-sticky {
+  background: rgba(13, 15, 17, 0.7);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .category-nav::-webkit-scrollbar {
   display: none;
-}
-
-/* 移动端样式 */
-@media (max-width: 768px) {
-  .category-nav {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    right: 0;
-    z-index: 90;
-    flex-wrap: wrap;
-    overflow-x: visible;
-    margin-left: 0;
-    margin-right: 0;
-  }
 }
 
 .nav-item {
@@ -353,15 +331,45 @@ onMounted(async () => {
   font-weight: 500;
 }
 
+/* 移动端样式 */
+@media (max-width: 768px) {
+  .category-nav {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    margin-top: 0;
+    margin-bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .dark .category-nav {
+    background: rgba(13, 15, 17, 0.7);
+  }
+}
+
 /* 筛选状态 */
 .filter-status {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: var(--color-surface-dim);
-  border-radius: var(--radius-sm);
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
   font-size: 13px;
+}
+
+.dark .filter-status {
+  background: rgba(30, 32, 35, 0.7);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .filter-label {
@@ -369,31 +377,38 @@ onMounted(async () => {
 }
 
 .filter-tag {
-  padding: 4px 10px;
+  padding: 5px 12px;
   background: var(--color-primary-light);
   color: var(--color-primary);
-  border-radius: var(--radius-sm);
-  font-size: var(--text-xs);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .btn-clear {
-  padding: 4px 10px;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: var(--text-xs);
+  padding: 5px 12px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  font-size: 12px;
   color: var(--color-ink-muted);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .btn-clear:hover {
+  background: var(--color-primary-light);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
+
+.dark .btn-clear {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
 </style>
 
-<!-- 非 scoped 样式：仅对随笔页面覆盖布局的默认 padding-top -->
+<!-- 非 scoped 样式 -->
 <style>
 @media (max-width: 768px) {
   body.page-reading-essays .home-main {

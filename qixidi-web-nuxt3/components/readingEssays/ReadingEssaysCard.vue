@@ -64,16 +64,34 @@ const handleClick = () => {
 
 <style scoped>
 .reading-essays-card {
-  background: var(--color-surface-dim);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
   padding: 20px;
-  border: 1px solid var(--color-border-light);
-  transition: all var(--transition-base);
-  break-inside: avoid; /* 防止瀑布流切断 */
+  transition: all 0.25s ease;
+  break-inside: avoid;
   margin-bottom: 20px;
-  display: inline-block; /* 瀑布流需要 */
+  display: inline-block;
   width: 100%;
   box-sizing: border-box;
+}
+
+.reading-essays-card:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dark .reading-essays-card {
+  background: rgba(30, 32, 35, 0.75);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark .reading-essays-card:hover {
+  background: rgba(40, 42, 45, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 /* 随笔内容 */
@@ -128,10 +146,14 @@ const handleClick = () => {
 
 .meta-badge {
   font-size: var(--text-xs);
-  padding: 3px 8px;
-  background: var(--color-surface-dim);
-  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
   color: var(--color-ink-light);
+}
+
+.dark .meta-badge {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .meta-labels {
@@ -141,11 +163,11 @@ const handleClick = () => {
 }
 
 .label-tag {
-  font-size: var(--text-xs);
+  font-size: 12px;
   color: var(--color-primary);
   background: var(--color-primary-light);
-  padding: 3px 8px;
-  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  border-radius: 12px;
 }
 
 /* 底部栏 */
@@ -154,7 +176,11 @@ const handleClick = () => {
   align-items: center;
   justify-content: space-between;
   padding-top: 12px;
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .reading-essays-footer {
+  border-top-color: rgba(255, 255, 255, 0.06);
 }
 
 .footer-left {

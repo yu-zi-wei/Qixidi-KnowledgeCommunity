@@ -368,11 +368,12 @@ const handleUserMenu = async (key: string) => {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 24px;
-  padding: 16px 0;
-  background: var(--color-surface-warm);
-  backdrop-filter: blur(8px) saturate(180%);
-  -webkit-backdrop-filter: blur(8px) saturate(180%);
-  height: 70px;
+  padding: 14px 24px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+  height: 66px; /* 固定高度，避免布局偏移 */
+  border-radius: 6px;
 }
 
 /* 移动端样式 */
@@ -386,6 +387,7 @@ const handleUserMenu = async (key: string) => {
     gap: 12px;
     padding: 12px 16px;
     z-index: 9999;
+    height: 56px; /* 移动端固定高度 */
   }
 }
 
@@ -401,6 +403,7 @@ const handleUserMenu = async (key: string) => {
   align-items: center;
   gap: 10px;
   text-decoration: none;
+  height: 38px; /* 固定高度 */
 }
 
 .logo-icon {
@@ -424,6 +427,7 @@ const handleUserMenu = async (key: string) => {
   font-weight: 700;
   color: var(--color-ink);
   letter-spacing: 2px;
+  line-height: 38px; /* 与 logo-icon 高度一致 */
 }
 
 /* ==================== 中间：搜索框 + 导航菜单（整体居中） ==================== */
@@ -671,7 +675,7 @@ const handleUserMenu = async (key: string) => {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: max-content; /* 根据内容自适应，不被压缩 */
+  min-width: 130px; /* 固定宽度，避免登录状态切换导致布局偏移 */
   justify-content: flex-end;
 }
 
