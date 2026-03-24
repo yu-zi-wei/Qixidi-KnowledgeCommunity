@@ -62,6 +62,10 @@ export const useApi = () => {
     return request<{ total: number; rows: T[] }>(url, { method: 'GET', query: params })
   }
 
+  const postPage = <T = any>(url: string, data?: Record<string, any>) => {
+    return request<{ total: number; rows: T[] }>(url, { method: 'POST', body: data })
+  }
+
   const post = async <T = any>(url: string, data?: any) => {
     const res = await request<R<T>>(url, {
       method: 'POST',
@@ -83,5 +87,5 @@ export const useApi = () => {
     return res.data
   }
 
-  return { request, get, getPage, post, put, delete: del }
+  return { request, get, getPage, postPage, post, put, delete: del }
 }

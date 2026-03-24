@@ -379,3 +379,47 @@ export interface ReadingEssaysAlbum {
   createTime: string
   updateTime?: string
 }
+
+// ==================== 时光小记相关 ====================
+
+// 时光小记信息
+export interface TimeNotes {
+  id: number
+  title: string            // 标题
+  content: string          // 内容
+  uid: string             // 用户 id
+  recordTime: string      // 记录时间 (yyyy-MM-dd)
+  isContent?: boolean     // 是否有详情内容
+  createBy?: string       // 创建人
+  createTime?: string     // 创建时间
+  updateTime?: string     // 更新时间
+}
+
+// 时光小记列表项（按日期分组）
+export interface TimeNotesVo {
+  recordTime: string       // 记录时间
+  list: TimeNotes[]        // 该日期下的小记列表
+}
+
+// 时光小记详情（继承 TimeNotes）
+export interface TimeNotesInfo extends TimeNotes {
+  isAuthor?: number         // 是否为作者（0=是，1=不是）
+  createBy?: string         // 创建人名称
+}
+
+// 时光小记搜索请求
+export interface TimeNotesSearchBo {
+  pageNum?: number
+  pageSize?: number
+  startTime?: string       // 开始时间
+  endTime?: string         // 结束时间
+  keyword?: string         // 关键词搜索
+}
+
+// 时光小记增删改请求
+export interface TimeNotesBo {
+  id?: number            // 编辑模式存在
+  title: string           // 标题
+  content: string         // 内容
+  recordTime?: string     // 记录时间
+}

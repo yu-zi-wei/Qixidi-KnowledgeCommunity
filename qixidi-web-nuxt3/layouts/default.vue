@@ -1,6 +1,6 @@
 <template>
   <div class="layout-default">
-    <div class="home-container">
+    <div class="home-container" :class="{ 'no-sidebar': !showSidebar }">
       <!-- 左侧内容区 -->
       <div class="home-main">
         <!-- 导航栏 - 直接 sticky -->
@@ -16,7 +16,7 @@
       </div>
 
       <!-- 右侧侧边栏 - 移动端隐藏 -->
-      <div class="home-sidebar" v-show="!isMobile">
+      <div class="home-sidebar" v-if="showSidebar" v-show="!isMobile">
         <component :is="sidebarComponent" />
       </div>
     </div>
@@ -96,13 +96,20 @@ if (labelData.value && labelData.value.length > 0) {
   labelStore.loaded = true
 }
 
+// 在 setup 顶层获取 route，确保响应式
+const route = useRoute()
+
 // 获取当前页面的 page meta 配置
 const pageMeta = computed(() => {
-  const route = useRoute()
   return {
-    showTabBar: route.meta.showTabBar || false,
-    sidebar: route.meta.sidebar || 'home'
+    showTabBar: route.meta.showTabBar ?? false,
+    sidebar: route.meta.sidebar ?? 'home'
   }
+})
+
+// 是否显示侧边栏
+const showSidebar = computed(() => {
+  return pageMeta.value.sidebar !== false
 })
 
 // 侧边栏组件映射表
@@ -114,8 +121,9 @@ const sidebarComponents = {
 
 // 动态侧边栏组件
 const sidebarComponent = computed(() => {
-  const sidebarType = pageMeta.value.sidebar || 'home'
-  return sidebarComponents[sidebarType] || sidebarComponents.home
+  const sidebarType = pageMeta.value.sidebar
+  if (sidebarType === false) return null
+  return sidebarComponents[sidebarType as keyof typeof sidebarComponents] || sidebarComponents.home
 })
 
 // 移动端相关
@@ -189,6 +197,18 @@ onUnmounted(() => {
 
 .page-content {
   flex: 1;
+  min-height: 0;
+  /* 移除 overflow: hidden，让详情页可以撑开触发浏览器滚动 */
+}
+
+/* 无侧边栏时，主内容区占满 */
+.home-container.no-sidebar {
+  gap: 0;
+}
+
+.home-container.no-sidebar .home-main {
+  flex: 1;
+  max-width: 100%;
 }
 
 /* ==================== 移动端布局 ==================== */
