@@ -14,7 +14,7 @@
     <template v-else>
       <!-- 标题区域 -->
       <div class="detail-header">
-        <!-- 第一行：时间 + 作者 -->
+        <!-- 第一行：时间 + 作者 + 编辑按钮 -->
         <div class="detail-meta">
           <div class="detail-date">
             <span class="date-day">{{ formatDay(detail.recordTime) }}</span>
@@ -25,6 +25,23 @@
             <span class="divider">·</span>
             <span class="create-by">{{ detail.createBy }}</span>
           </template>
+
+          <!-- 编辑按钮（仅作者可见） -->
+          <n-button
+            v-if="detail.isAuthor === 0"
+            text
+            size="small"
+            class="edit-btn"
+            @click="handleEdit"
+          >
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </template>
+            编辑
+          </n-button>
         </div>
         <!-- 第二行：标题 -->
         <h1 class="detail-title" v-if="detail.title">{{ detail.title }}</h1>
@@ -48,7 +65,18 @@ interface Props {
   loading: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const emit = defineEmits<{
+  edit: [id: number]
+}>()
+
+// 编辑
+const handleEdit = () => {
+  if (props.detail?.id) {
+    emit('edit', props.detail.id)
+  }
+}
 
 // 格式化日期 - 日
 const formatDay = (dateStr: string) => {
@@ -145,6 +173,23 @@ const formatYear = (dateStr: string) => {
   font-size: 14px;
   color: var(--color-ink-muted);
   line-height: 24px;
+}
+
+/* 编辑按钮 */
+.edit-btn {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--color-ink-muted);
+  transition: color 0.2s ease;
+}
+
+.edit-btn:hover {
+  color: var(--color-primary);
+}
+
+.edit-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* 第二行：标题 */

@@ -1,14 +1,14 @@
 <template>
   <!-- 导航栏 -->
-  <header class="home-nav-bar">
+  <header class="home-nav-bar" :class="{ 'is-sticky': isSticky }">
     <!-- 移动端：汉堡菜单 -->
-    <button class="mobile-menu-btn" @click="emit('toggle-mobile-menu')">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+    <button class="mobile-menu-btn" @click="showMobileMenu = true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
 
     <!-- 左侧：Logo -->
     <div class="nav-left">
@@ -18,7 +18,7 @@
       </NuxtLink>
     </div>
 
-    <!-- 中间：搜索框 + 导航菜单（整体居中） -->
+    <!-- 中间：搜索框 + 导航菜单 -->
     <div class="nav-center">
       <!-- 搜索框 -->
       <div class="search-wrapper" ref="searchWrapperRef">
@@ -27,7 +27,7 @@
           :class="{ focused: showDropdown }"
           @click="handleSearchClick"
         >
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.35-4.35"></path>
           </svg>
@@ -35,20 +35,14 @@
             ref="searchInputRef"
             v-model="searchKeyword"
             type="text"
-            placeholder="搜索文章、标签、用户..."
+            placeholder="搜索..."
             class="search-input"
             @focus="handleSearchFocus"
             @keydown.enter="handleSearch"
           />
-          <button v-if="searchKeyword" class="clear-btn" @click.stop="searchKeyword = ''">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
         </div>
 
-        <!-- 下拉内容：横向排列的历史记录 -->
+        <!-- 搜索下拉 -->
         <Transition name="dropdown">
           <div v-if="showDropdown" class="search-dropdown" v-click-outside="() => showDropdown = false">
             <div class="search-dropdown-content">
@@ -66,10 +60,6 @@
                 </div>
               </div>
               <div v-else class="search-history-empty">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
-                </svg>
                 <span>暂无搜索历史</span>
               </div>
             </div>
@@ -77,14 +67,10 @@
         </Transition>
       </div>
 
-      <!-- 导航菜单 -->
+      <!-- 导航菜单（PC端） -->
       <nav class="nav-menu">
         <template v-for="item in plainMenus" :key="item.id">
-          <NuxtLink
-            :to="item.route"
-            class="nav-link"
-            :class="{ active: isActive(item.route) }"
-          >
+          <NuxtLink :to="item.route" class="nav-link" :class="{ active: isActive(item.route) }">
             {{ item.navigationName }}
           </NuxtLink>
         </template>
@@ -93,7 +79,7 @@
           <n-dropdown :options="buildDropdownOptions(item)" @select="handleDropdownSelect">
             <span class="nav-link" :class="{ active: isDropdownActive(item) }">
               {{ item.navigationName }}
-              <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M6 9l6 6 6-6"></path>
               </svg>
             </span>
@@ -106,10 +92,10 @@
     <div class="nav-right">
       <!-- 主题切换 -->
       <button class="icon-btn theme-toggle" :title="themeTitle" @click="toggleTheme">
-        <svg v-show="colorMode.value === 'dark'" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg v-show="colorMode.value === 'dark'" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
-        <svg v-show="colorMode.value !== 'dark'" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg v-show="colorMode.value !== 'dark'" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
           <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -125,7 +111,7 @@
       <template v-if="authStore.isLoggedIn">
         <n-dropdown :options="publishOptions" @select="handlePublish">
           <button class="icon-btn" title="创作">
-            <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
             </svg>
@@ -133,28 +119,69 @@
         </n-dropdown>
 
         <button class="icon-btn" title="通知" @click="navigateTo('/notifications')">
-          <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
           </svg>
         </button>
 
         <n-dropdown :options="userMenuOptions" @select="handleUserMenu">
-          <n-avatar
-            round :size="32"
-            :src="authStore.user?.avatar"
-            fallback-src="/img/tx.jpg"
-            class="user-avatar"
-          />
+          <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="user-avatar" />
         </n-dropdown>
       </template>
 
       <template v-else>
-        <button class="login-btn" @click="handleShowLogin">
-          登录
-        </button>
+        <button class="login-btn" @click="handleShowLogin">登录</button>
       </template>
     </div>
+
+    <!-- 移动端菜单抽屉（内嵌） -->
+    <ClientOnly>
+      <Teleport to="body">
+        <Transition name="slide">
+          <div v-if="showMobileMenu" class="mobile-menu-overlay" @click="showMobileMenu = false">
+            <div class="mobile-menu-drawer" @click.stop>
+              <div class="mobile-menu-header">
+                <span class="menu-title">菜单</span>
+                <button class="close-btn" @click="showMobileMenu = false">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+              <nav class="mobile-nav-list">
+                <template v-for="item in plainMenus" :key="item.id">
+                  <div class="mobile-nav-item" @click="handleMobileNavClick(item.route)">
+                    {{ item.navigationName }}
+                  </div>
+                </template>
+                <template v-for="item in dropdownMenus" :key="item.id">
+                  <div class="mobile-nav-dropdown">
+                    <div class="mobile-nav-item mobile-nav-dropdown-header" @click="toggleMobileDropdown(item.id)">
+                      <span>{{ item.navigationName }}</span>
+                      <svg class="dropdown-arrow" :class="{ expanded: expandedMobileDropdowns.has(item.id) }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                    <div v-show="expandedMobileDropdowns.has(item.id)" class="mobile-nav-sublist">
+                      <div
+                        v-for="sub in item.levelList"
+                        :key="sub.route"
+                        class="mobile-nav-subitem"
+                        @click="handleMobileNavClick(sub.route)"
+                      >
+                        {{ sub.navigationName }}
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </nav>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
+    </ClientOnly>
 
     <n-modal v-model:show="showLogoutConfirm" preset="dialog" type="warning"
       title="退出登录" content="确定要离开吗？"
@@ -165,30 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
-// 不再需要导入 Tabler 图标，使用内联 SVG
 import type { Navigation } from '~/types'
-
-// v-click-outside 指令
-const vClickOutside = {
-  mounted(el: HTMLElement, binding: any) {
-    const clickOutside = (e: Event) => {
-      if (!(e.target instanceof Node) || el.contains(e.target)) return
-      if (typeof binding.value === 'function') {
-        binding.value(e)
-      }
-    }
-    // 使用 mousedown 而不是 click，避免与内部点击冲突
-    document.addEventListener('mousedown', clickOutside)
-    ;(el as any)._clickOutside = clickOutside
-  },
-  unmounted(el: HTMLElement) {
-    const clickOutside = (el as any)._clickOutside
-    if (clickOutside) {
-      document.removeEventListener('mousedown', clickOutside)
-    }
-  }
-}
 
 interface Props {
   navigationList: Navigation[]
@@ -196,28 +200,39 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const emit = defineEmits<{
-  'toggle-mobile-menu': []
-}>()
-
 const route = useRoute()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
 const colorMode = useColorMode()
 
+// 移动端菜单状态（内聚）
+const showMobileMenu = ref(false)
+const expandedMobileDropdowns = ref<Set<number>>(new Set())
+
+const toggleMobileDropdown = (id: number) => {
+  if (expandedMobileDropdowns.value.has(id)) {
+    expandedMobileDropdowns.value.delete(id)
+  } else {
+    expandedMobileDropdowns.value.add(id)
+  }
+}
+
+const handleMobileNavClick = (path: string) => {
+  showMobileMenu.value = false
+  expandedMobileDropdowns.value.clear()
+  navigateTo(path)
+}
+
+// 主题
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
+const themeTitle = computed(() => colorMode.value === 'dark' ? '切换浅色模式' : '切换深色模式')
 
-const themeTitle = computed(() =>
-  colorMode.value === 'dark' ? '切换浅色模式' : '切换深色模式'
-)
+// 登录
+const handleShowLogin = () => authDialogStore.showLoginDialog()
 
-const handleShowLogin = () => {
-  authDialogStore.showLoginDialog()
-}
-
-// 搜索功能
+// 搜索
 const searchApi = useSearchApi()
 const searchWrapperRef = ref<HTMLElement>()
 const searchInputRef = ref<HTMLInputElement>()
@@ -226,85 +241,51 @@ const searchHistory = ref<{ content: string }[]>([])
 const searchHistoryLoaded = ref(false)
 const showDropdown = ref(false)
 
-// 加载搜索历史
 const loadSearchHistory = async () => {
-  if (!authStore.isLoggedIn || searchHistoryLoaded.value) {
-    return
-  }
-
+  if (!authStore.isLoggedIn || searchHistoryLoaded.value) return
   try {
-    const result = await searchApi.getSearchHistory({
-      pageNum: 1,
-      pageSize: 10,
-      uid: authStore.user?.uuid
-    })
+    const result = await searchApi.getSearchHistory({ pageNum: 1, pageSize: 10, uid: authStore.user?.uuid })
     searchHistory.value = result.rows || []
     searchHistoryLoaded.value = true
-  } catch (error) {
-    console.error('加载搜索历史失败:', error)
+  } catch (e) {
+    console.error('加载搜索历史失败:', e)
   }
 }
 
-// 点击搜索框
 const handleSearchClick = () => {
   loadSearchHistory()
   showDropdown.value = true
   searchInputRef.value?.focus()
 }
 
-// 搜索框聚焦时加载历史记录
 const handleSearchFocus = () => {
   loadSearchHistory()
   showDropdown.value = true
 }
 
-// 关闭下拉
-const closeDropdown = () => {
-  showDropdown.value = false
-}
-
-// 点击历史标签
 const handleSearchKeyword = (keyword: string) => {
   searchKeyword.value = keyword
   showDropdown.value = false
   navigateTo({ path: '/search', query: { q: keyword } })
 }
 
-// 回车搜索
 const handleSearch = () => {
   if (!searchKeyword.value.trim()) return
-  const keyword = searchKeyword.value.trim()
   showDropdown.value = false
-  navigateTo({ path: '/search', query: { q: keyword } })
+  navigateTo({ path: '/search', query: { q: searchKeyword.value.trim() } })
 }
 
-const plainMenus = computed(() =>
-  props.navigationList.filter(item => item.isList === 0)
-)
-
-const dropdownMenus = computed(() =>
-  props.navigationList.filter(item => item.isList === 1)
-)
+// 导航菜单
+const plainMenus = computed(() => props.navigationList.filter(item => item.isList === 0))
+const dropdownMenus = computed(() => props.navigationList.filter(item => item.isList === 1))
 
 const isActive = (path: string) => route.path === path
+const isDropdownActive = (item: Navigation) => item.levelList?.some(sub => route.path === sub.route)
 
-const isDropdownActive = (item: Navigation) => {
-  if (!item.levelList) return false
-  return item.levelList.some(sub => route.path === sub.route)
-}
+const buildDropdownOptions = (item: Navigation) => item.levelList?.map(sub => ({ label: sub.navigationName, key: sub.route })) || []
+const handleDropdownSelect = (key: string) => navigateTo(key)
 
-const buildDropdownOptions = (item: Navigation) => {
-  if (!item.levelList) return []
-  return item.levelList.map(sub => ({
-    label: sub.navigationName,
-    key: sub.route
-  }))
-}
-
-const handleDropdownSelect = (key: string) => {
-  navigateTo(key)
-}
-
+// 发布
 const publishOptions = [
   { label: '写文章', key: 'article' },
   { label: '记随笔', key: 'essay' },
@@ -312,14 +293,11 @@ const publishOptions = [
 ]
 
 const handlePublish = (key: string) => {
-  const routes: Record<string, string> = {
-    article: '/write',
-    essay: '/admin/essays/edit',
-    note: '/admin/notes'
-  }
+  const routes: Record<string, string> = { article: '/write/article', essay: '/admin/essays/edit', note: '/write/note' }
   navigateTo(routes[key])
 }
 
+// 用户菜单
 const userMenuOptions = computed(() => [
   { label: '创作中心', key: 'admin' },
   { label: '我的主页', key: 'profile' },
@@ -338,28 +316,28 @@ const doLogout = async () => {
   navigateTo('/')
 }
 
-const handleUserMenu = async (key: string) => {
-  if (key === 'logout') {
-    showLogoutConfirm.value = true
-    return
-  }
-  const routes: Record<string, string> = {
-    admin: '/admin',
-    profile: `/user/${authStore.user?.uuid}`,
-    settings: '/admin/settings'
-  }
-  if (routes[key]) {
-    navigateTo(routes[key])
-  }
+const handleUserMenu = (key: string) => {
+  if (key === 'logout') { showLogoutConfirm.value = true; return }
+  const routes: Record<string, string> = { admin: '/admin', profile: `/user/${authStore.user?.uuid}`, settings: '/admin/settings' }
+  if (routes[key]) navigateTo(routes[key])
 }
+
+// 吸顶状态
+const isSticky = ref(false)
+
+onMounted(() => {
+  const checkSticky = () => {
+    const nav = document.querySelector('.home-nav-bar')
+    if (nav) isSticky.value = nav.getBoundingClientRect().top <= 0
+  }
+  checkSticky()
+  window.addEventListener('scroll', checkSticky, { passive: true })
+  onUnmounted(() => window.removeEventListener('scroll', checkSticky))
+})
 </script>
 
 <style scoped>
-/* ==================== 导航栏 ==================== */
-/*
- * PC端：使用 sticky，在容器内固定
- * 移动端：使用 fixed，全屏固定
- */
+/* 导航栏 */
 .home-nav-bar {
   position: sticky;
   top: 0;
@@ -372,516 +350,130 @@ const handleUserMenu = async (key: string) => {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border-light);
   box-shadow: var(--shadow-sm);
-  height: 66px; /* 固定高度，避免布局偏移 */
-  border-radius: 6px;
+  height: 66px;
+  border-radius: 32px;
+  transition: border-radius 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 移动端样式 */
+.home-nav-bar.is-sticky {
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Logo */
+.nav-left { display: flex; align-items: center; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; height: 38px; }
+.logo-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: var(--color-primary); color: #fff; font-family: var(--font-display); font-size: 18px; font-weight: 700; border-radius: var(--radius-md); }
+.logo-text { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--color-ink); letter-spacing: 2px; line-height: 38px; }
+
+/* 中间区域 */
+.nav-center { display: flex; align-items: center; gap: 24px; max-width: max-content; }
+
+/* 搜索框 */
+.search-wrapper { position: relative; min-width: 180px; max-width: 240px; }
+.search-input-wrapper { display: flex; align-items: center; gap: 8px; background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--radius-full); padding: 6px 14px; cursor: text; transition: all 0.2s ease; }
+.search-input-wrapper:hover { border-color: var(--color-primary); background: var(--color-surface-dim); }
+.search-input-wrapper.focused { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+.search-icon { width: 16px; height: 16px; color: var(--color-ink-muted); stroke-width: 2; }
+.search-input { flex: 1; border: none; background: transparent; outline: none; font-size: 14px; color: var(--color-ink); min-width: 0; }
+.search-input::placeholder { color: var(--color-ink-faint); }
+
+/* 搜索下拉 */
+.search-dropdown { position: absolute; top: calc(100% + 8px); left: 0; z-index: 100; min-width: 280px; }
+.search-dropdown-content { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 30px rgba(0,0,0,0.08); padding: 16px; }
+.dark .search-dropdown-content { background: rgba(24,24,28,0.85); border-color: rgba(255,255,255,0.08); }
+.search-history-section { display: flex; flex-direction: column; gap: 12px; }
+.search-history-title { font-size: 13px; font-weight: 600; color: var(--color-ink-muted); }
+.search-history-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.history-tag { padding: 6px 12px; font-size: 13px; color: var(--color-ink-light); background: var(--color-surface-dim); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); cursor: pointer; }
+.history-tag:hover { color: var(--color-primary); background: var(--color-primary-light); border-color: var(--color-primary); }
+.search-history-empty { padding: 24px; text-align: center; color: var(--color-ink-muted); font-size: 13px; }
+
+/* 导航菜单 */
+.nav-menu { display: flex; align-items: center; gap: 4px; }
+.nav-link { padding: 8px 16px; font-size: 15px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
+.nav-link:hover { color: var(--color-ink); background: var(--color-surface-dim); }
+.nav-link.active { color: var(--color-primary); font-weight: 600; }
+.dropdown-icon { width: 14px; height: 14px; color: var(--color-ink-muted); }
+
+/* 右侧功能区 */
+.nav-right { display: flex; align-items: center; gap: 10px; min-width: 130px; justify-content: flex-end; }
+.theme-toggle { color: var(--color-ink-light); transition: all 0.3s ease; }
+.theme-toggle:hover { color: var(--color-accent); background: var(--color-surface-dim); }
+.theme-icon { width: 20px; height: 20px; stroke-width: 1.5; }
+.icon-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: var(--color-ink-muted); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; }
+.icon-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
+.action-icon { width: 20px; height: 20px; stroke-width: 1.5; }
+.user-avatar { cursor: pointer; transition: transform 0.2s ease; }
+.user-avatar:hover { transform: scale(1.08); }
+.login-btn { padding: 8px 24px; font-size: 14px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; min-width: 80px; }
+.login-btn:hover { background: var(--color-primary); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+/* 汉堡菜单按钮 */
+.mobile-menu-btn { display: none; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: var(--color-ink-light); border-radius: var(--radius-sm); cursor: pointer; }
+.mobile-menu-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
+.mobile-menu-btn svg { width: 22px; height: 22px; stroke-width: 2; }
+
+/* ==================== 移动端菜单抽屉 ==================== */
+.mobile-menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150; background: rgba(0,0,0,0.5); }
+.mobile-menu-drawer { position: absolute; top: 0; left: 0; bottom: 0; width: 220px; max-width: 70vw; background: var(--color-surface); display: flex; flex-direction: column; box-shadow: var(--shadow-float); }
+.mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--color-border-light); }
+.menu-title { font-size: 18px; font-weight: 600; color: var(--color-ink); }
+.close-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: none; background: transparent; color: var(--color-ink-light); border-radius: var(--radius-md); cursor: pointer; }
+.close-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
+.close-btn svg { width: 20px; height: 20px; }
+.mobile-nav-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+.mobile-nav-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; font-size: 15px; color: var(--color-ink); cursor: pointer; }
+.mobile-nav-item:hover { background: var(--color-surface-dim); }
+.mobile-nav-dropdown-header { color: var(--color-ink-light); }
+.dropdown-arrow { width: 16px; height: 16px; color: var(--color-ink-muted); transition: transform 0.2s ease; }
+.dropdown-arrow.expanded { transform: rotate(180deg); }
+.mobile-nav-sublist { padding-left: 20px; background: var(--color-surface-dim); }
+.mobile-nav-subitem { padding: 12px 20px 12px 24px; font-size: 14px; color: var(--color-ink-light); cursor: pointer; }
+.mobile-nav-subitem:hover { background: var(--color-surface); color: var(--color-ink); }
+
+/* 抽屉动画 */
+.slide-enter-active, .slide-leave-active { transition: all 0.3s ease; }
+.slide-enter-from, .slide-leave-to { opacity: 0; }
+.slide-enter-from .mobile-menu-drawer, .slide-leave-to .mobile-menu-drawer { transform: translateX(-100%); }
+
+/* 搜索下拉动画 */
+.dropdown-enter-active, .dropdown-leave-active { transition: all 0.2s ease; transform-origin: top center; }
+.dropdown-enter-from, .dropdown-leave-to { opacity: 0; transform: translateY(-8px) scale(0.95); }
+
+/* ==================== 移动端适配 ==================== */
 @media (max-width: 768px) {
   .home-nav-bar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    grid-template-columns: auto 1fr auto;
-    gap: 12px;
-    padding: 12px 16px;
-    z-index: 9999;
-    height: 56px; /* 移动端固定高度 */
-  }
-}
-
-/* ==================== 左侧：Logo 区域 ==================== */
-.nav-left {
-  display: flex;
-  align-items: center;
-  min-width: max-content; /* 防止内容被压缩 */
-}
-
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  height: 38px; /* 固定高度 */
-}
-
-.logo-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: var(--color-primary);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: var(--radius-md);
-  flex-shrink: 0;
-}
-
-.logo-text {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-ink);
-  letter-spacing: 2px;
-  line-height: 38px; /* 与 logo-icon 高度一致 */
-}
-
-/* ==================== 中间：搜索框 + 导航菜单（整体居中） ==================== */
-.nav-center {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  justify-self: center; /* 在 Grid 列中居中 */
-  max-width: max-content; /* 根据内容自适应，不扩展 */
-}
-
-/* 搜索框容器 */
-.search-wrapper {
-  position: relative;
-  min-width: 180px;
-  max-width: 240px;
-}
-
-/* 搜索输入框包装器 */
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-full);
-  padding: 6px 14px;
-  transition: all 0.2s ease;
-  cursor: text;
-}
-
-.search-input-wrapper:hover {
-  border-color: var(--color-primary);
-  background: var(--color-surface-dim);
-}
-
-.search-input-wrapper.focused {
-  border-color: var(--color-primary);
-  background: var(--color-surface-dim);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 59, 130, 246), 0.1);
-}
-
-/* 搜索图标 */
-.search-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--color-ink-muted);
-  flex-shrink: 0;
-  stroke-width: 2;
-}
-
-/* 搜索输入框 */
-.search-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 14px;
-  font-family: var(--font-body);
-  color: var(--color-ink);
-  min-width: 0;
-}
-
-.search-input::placeholder {
-  color: var(--color-ink-faint);
-}
-
-/* 清除按钮 */
-.clear-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border: none;
-  background: transparent;
-  color: var(--color-ink-muted);
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  padding: 0;
-}
-
-.clear-btn:hover {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-}
-
-.clear-btn svg {
-  width: 12px;
-  height: 12px;
-  stroke-width: 2;
-}
-
-/* ==================== 搜索下拉内容 ==================== */
-.search-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 100;
-  min-width: 280px;
-  max-width: 400px;
-}
-
-.search-dropdown-content {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-  padding: 16px;
-}
-
-/* 暗色模式 */
-.dark .search-dropdown-content {
-  background: rgba(24, 24, 28, 0.85);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-/* 下拉动画 */
-.dropdown-enter-active,
-.dropdown-leave-active {
-  transition: all 0.2s ease;
-  transform-origin: top center;
-}
-
-.dropdown-enter-from,
-.dropdown-leave-to {
-  opacity: 0;
-  transform: translateY(-8px) scale(0.95);
-}
-
-.dropdown-enter-to,
-.dropdown-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* 搜索历史区域 */
-.search-history-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.search-history-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-ink-muted);
-}
-
-/* 历史标签 - 横向排列自动换行 */
-.search-history-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.history-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: var(--color-ink-light);
-  background: var(--color-surface-dim);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.history-tag:hover {
-  color: var(--color-primary);
-  background: var(--color-primary-light);
-  border-color: var(--color-primary);
-  transform: translateY(-1px);
-}
-
-/* 空状态 */
-.search-history-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 24px 16px;
-  color: var(--color-ink-faint);
-}
-
-.search-history-empty svg {
-  width: 48px;
-  height: 48px;
-  stroke-width: 1.5;
-}
-
-.search-history-empty span {
-  font-size: 13px;
-}
-
-/* 导航菜单 */
-.nav-menu {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.nav-link {
-  position: relative;
-  padding: 8px 16px;
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--color-ink-light);
-  text-decoration: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.25s ease, background 0.25s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  letter-spacing: 0.5px;
-}
-
-.nav-link:hover {
-  color: var(--color-ink);
-  background: var(--color-surface-dim);
-}
-
-.nav-link.active {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.dropdown-icon {
-  width: 14px;
-  height: 14px;
-  color: var(--color-ink-muted);
-  stroke-width: 1.5;
-}
-
-/* ==================== 右侧：功能区 ==================== */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 130px; /* 固定宽度，避免登录状态切换导致布局偏移 */
-  justify-content: flex-end;
-}
-
-/* 主题切换按钮 */
-.theme-toggle {
-  color: var(--color-ink-light);
-  transition: all 0.3s ease;
-}
-
-.theme-toggle:hover {
-  color: var(--color-accent);
-  background: var(--color-surface-dim);
-}
-
-.theme-icon {
-  width: 20px;
-  height: 20px;
-  stroke-width: 1.5;
-}
-
-.icon-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: none;
-  background: transparent;
-  color: var(--color-ink-muted);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.icon-btn:hover {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-}
-
-.action-icon {
-  width: 20px;
-  height: 20px;
-  stroke-width: 1.5;
-}
-
-.user-avatar {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-
-.user-avatar:hover {
-  transform: scale(1.08);
-}
-
-.login-btn {
-  padding: 8px 24px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-surface);
-  background: var(--color-ink);
-  border: none;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: var(--font-body);
-  letter-spacing: 1px;
-  white-space: nowrap;
-  /* 固定最小宽度，避免字体加载导致的偏移 */
-  min-width: 80px;
-  text-align: center;
-}
-
-.login-btn:hover {
-  background: var(--color-primary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ==================== 移动端适配 ==================== */
-/* 移动端菜单按钮 */
-.mobile-menu-btn {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: none;
-  background: transparent;
-  color: var(--color-ink-light);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
-  padding: 0;
-}
-
-.mobile-menu-btn:hover {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-}
-
-.mobile-menu-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke-width: 2;
-}
-
-/* ==================== 移动端适配 ==================== */
-@media (max-width: 768px) {
-  /* 导航栏单行布局：汉堡菜单 | Logo | 搜索框（居中） | 用户 */
-  .home-nav-bar {
-    display: grid;
-    grid-template-columns: auto auto 1fr auto;
-    align-items: center;
-    padding: 12px 16px;
-    gap: 10px;
-  }
-
-  /* 显示汉堡菜单 */
-  .mobile-menu-btn {
-    display: flex;
-  }
-
-  /* Logo */
-  .nav-left {
-    /* 使用默认位置 */
-  }
-
-  /* 搜索框在中间，居中显示 */
-  .nav-center {
-    justify-self: center;
-    max-width: 180px;
-  }
-
-  /* 隐藏导航菜单，只显示搜索框 */
-  .nav-menu {
-    display: none;
-  }
-
-  /* 搜索框样式调整 */
-  .search-wrapper {
     width: 100%;
-    max-width: 180px;
-    min-width: 100px;
+    grid-template-columns: auto auto 1fr auto;
+    gap: 8px;
+    padding: 12px 12px 12px 16px;
+    padding-right: max(12px, env(safe-area-inset-right));
+    z-index: 9999;
+    height: 56px;
+    border-radius: 0 !important;
+    box-sizing: border-box;
   }
 
-  .search-input-wrapper {
-    padding: 5px 10px;
-  }
-
-  .search-input {
-    font-size: 13px;
-  }
-
-  /* Logo 缩小 */
-  .logo-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-  }
-
-  .logo-text {
-    font-size: 16px;
-  }
-
-  /* 右侧功能区 */
-  .nav-right {
-    gap: 4px;
-  }
-
-  /* 隐藏主题切换和创作按钮 */
-  .theme-toggle,
-  .icon-btn:not(.user-avatar):not([title="通知"]) {
-    display: none;
-  }
-
-  /* 通知按钮样式调整 */
-  .icon-btn[title="通知"] {
-    width: 38px;
-    height: 38px;
-  }
-
-  /* 用户头像缩小 */
-  .user-avatar {
-    width: 32px !important;
-    height: 32px !important;
-  }
-
-  /* 登录按钮缩小 */
-  .login-btn {
-    padding: 6px 16px;
-    font-size: 13px;
-    min-width: 60px;
-  }
+  .mobile-menu-btn { display: flex !important; }
+  .nav-left { flex-shrink: 0; }
+  .nav-center { justify-self: start; min-width: 0; flex-shrink: 1; }
+  .nav-menu { display: none !important; }
+  .search-wrapper { max-width: 200px !important; min-width: 160px !important; }
+  .nav-right { display: flex; align-items: center; gap: 4px; min-width: 68px; flex-shrink: 0; justify-content: flex-end; }
+  .theme-toggle, .icon-btn:not(.user-avatar):not([title="通知"]) { display: none; }
+  .icon-btn[title="通知"] { width: 36px; height: 36px; }
+  .user-avatar { width: 32px !important; height: 32px !important; flex-shrink: 0; }
+  .logo-icon { width: 32px; height: 32px; font-size: 16px; }
+  .logo-text { font-size: 16px; }
 }
 
-/* 小屏手机优化 */
 @media (max-width: 480px) {
-  .home-nav-bar--mobile {
-    padding: 10px 12px;
-  }
-
-  .logo-text {
-    display: none;
-  }
+  .home-nav-bar { padding: 10px 12px; }
+  .logo-text { display: none; }
 }
 </style>

@@ -19,6 +19,7 @@
         <TimeNotesDetail
           :detail="selectedDetail"
           :loading="detailLoading"
+          @edit="handleEdit"
         />
       </div>
     </div>
@@ -185,6 +186,11 @@ const loadMore = () => {
   if (hasMore.value && !loading.value) {
     loadTimeNotes(false)
   }
+}
+
+// 编辑时光小记
+const handleEdit = (id: number) => {
+  navigateTo(`/write/note/${id}`)
 }
 
 // 初始化

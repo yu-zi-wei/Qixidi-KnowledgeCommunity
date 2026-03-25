@@ -51,14 +51,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
-defineEmits<{
+const emit = defineEmits<{
   collect: []
+  showDetail: []
 }>()
 
-const router = useRouter()
-
 const handleClick = () => {
-  router.push(`/reading-essays/${props.readingEssay.id}`)
+  emit('showDetail')
 }
 </script>
 
@@ -100,10 +99,10 @@ const handleClick = () => {
   line-height: var(--leading-relaxed);
   color: var(--color-ink);
   margin-bottom: 16px;
-  max-height: 200px;
+  max-height: 448px;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 16;
   -webkit-box-orient: vertical;
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -239,12 +238,6 @@ const handleClick = () => {
     break-inside: auto;
     margin-bottom: 16px;
     padding: 16px;
-  }
-
-  /* 内容区域减少行数 */
-  .reading-essays-content {
-    max-height: 150px;
-    -webkit-line-clamp: 3;
   }
 
   /* 底部栏调整 */

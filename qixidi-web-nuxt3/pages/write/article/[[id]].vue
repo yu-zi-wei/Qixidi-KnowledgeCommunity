@@ -1,5 +1,6 @@
 <template>
   <ArticleWritePageContent
+    :article-id="articleId"
     :groupings="groupings"
     :labels="labels"
     :specials="specials"
@@ -12,9 +13,16 @@ definePageMeta({
   middleware: 'auth'
 })
 
+const route = useRoute()
 const groupingApi = useGroupingApi()
 const labelApi = useLabelApi()
 const specialApi = useSpecialApi()
+
+// 获取文章 ID（不存在则为新增模式）
+const articleId = computed(() => {
+  const id = route.params.id
+  return id && id !== 'new' ? (id as string) : undefined
+})
 
 // 加载选项数据
 const { data: groupingsData } = await useAsyncData('groupings', () =>

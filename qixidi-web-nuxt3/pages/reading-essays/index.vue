@@ -35,11 +35,37 @@
       :loading="loading"
       :has-more="hasMore"
       @collect="handleCollect"
+      @show-detail="handleShowDetail"
     />
+
+    <!-- 详情抽屉 -->
+    <n-drawer v-model:show="drawerVisible" :width="800" placement="right">
+      <n-drawer-content title="随笔详情" closable :native-scrollbar="false">
+        <template #header>
+          <div class="drawer-header">
+            <span class="drawer-title">随笔详情</span>
+            <div class="drawer-actions">
+              <n-button quaternary size="small" @click="openInNewTab" title="新标签打开">
+                <template #icon>
+                  <n-icon><ExternalLink /></n-icon>
+                </template>
+              </n-button>
+              <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
+                <template #icon>
+                  <n-icon><Share /></n-icon>
+                </template>
+              </n-button>
+            </div>
+          </div>
+        </template>
+        <ReadingEssaysDetailContent v-if="selectedEssay" :essay="selectedEssay" />
+      </n-drawer-content>
+    </n-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ExternalLink, Share } from '@vicons/tabler'
 import type { ReadingEssaysInfo, ReadingEssaysLabel } from '~/types'
 
 definePageMeta({
@@ -181,6 +207,35 @@ const handleCollect = (id: number) => {
   message.info('收藏功能开发中')
 }
 
+// 抽屉状态
+const drawerVisible = ref(false)
+const selectedEssay = ref<ReadingEssaysInfo | null>(null)
+
+// 显示详情抽屉
+const handleShowDetail = (item: ReadingEssaysInfo) => {
+  selectedEssay.value = item
+  drawerVisible.value = true
+}
+
+// 新标签打开详情页
+const openInNewTab = () => {
+  if (!selectedEssay.value) return
+  const url = `/reading-essays/${selectedEssay.value.id}`
+  window.open(url, '_blank')
+}
+
+// 复制分享链接
+const copyShareLink = async () => {
+  if (!selectedEssay.value) return
+  const url = `${window.location.origin}/reading-essays/${selectedEssay.value.id}`
+  try {
+    await navigator.clipboard.writeText(url)
+    message.success('链接已复制')
+  } catch {
+    message.error('复制失败')
+  }
+}
+
 // 监听导航栏吸顶状态
 onMounted(() => {
   const checkSticky = () => {
@@ -286,7 +341,7 @@ onMounted(async () => {
   scrollbar-width: none;
   -ms-overflow-style: none;
   background: transparent;
-  border-radius: 2px 2px 10px 10px;
+  border-radius: 32px;
   transition: all 0.3s ease;
 }
 
@@ -295,6 +350,7 @@ onMounted(async () => {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
 }
 
 .dark .category-nav.is-sticky {
@@ -405,6 +461,113 @@ onMounted(async () => {
 .dark .btn-clear {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ==================== 抽屉样式 ==================== */
+.drawer-content {
+  padding: 24px 32px;
+}
+
+.essay-content {
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--color-ink);
+  margin-bottom: 28px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.essay-source {
+  font-size: var(--text-base);
+  color: var(--color-ink-muted);
+  font-style: italic;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.essay-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.meta-badge {
+  font-size: var(--text-sm);
+  padding: 5px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-light);
+}
+
+:global(.dark) .meta-badge {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.meta-time {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+}
+
+.essay-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.label-tag {
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.essay-stats {
+  display: flex;
+  gap: 24px;
+  padding-top: 8px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-base);
+  color: var(--color-ink-muted);
+}
+
+.stat-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* 抽屉操作按钮 */
+.drawer-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 32px;
+}
+
+.drawer-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-ink);
 }
 </style>
 

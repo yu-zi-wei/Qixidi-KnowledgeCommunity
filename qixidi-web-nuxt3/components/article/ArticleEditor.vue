@@ -13,11 +13,12 @@
         borderless
       />
 
-      <!-- Markdown 编辑器 -->
+      <!-- Markdown 编辑器（支持视频上传） -->
       <ClientOnly>
-        <MdEditor
+        <CommonMdEditorWithVideo
+          ref="editorRef"
           v-model="form.articleContent"
-          :toolbars="toolbars"
+          :toolbars="fullToolbars"
           class="markdown-editor"
           placeholder="开始撰写你的文章..."
         />
@@ -30,9 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { MdEditor } from 'md-editor-v3'
-import 'md-editor-v3/lib/style.css'
+import { ref, computed, watch } from 'vue'
 import type { ArticleForm, GroupingInfo, LabelInfo, SpecialInfo } from '~/types'
 
 interface Props {
@@ -102,8 +101,8 @@ watch(() => props.initialData, (newData, oldData) => {
   }
 }, { deep: true })
 
-// Markdown 编辑器工具栏配置
-const toolbars = [
+// 完整工具栏配置（文章编辑使用）
+const fullToolbars = [
   'bold',
   'underline',
   'italic',
@@ -125,7 +124,6 @@ const toolbars = [
   '-',
   'revoke',
   'next',
-  'save',
   '=',
   'pageFullscreen',
   'fullscreen',
@@ -133,6 +131,9 @@ const toolbars = [
   'htmlPreview',
   'catalog'
 ]
+
+// 编辑器引用
+const editorRef = ref<InstanceType<typeof CommonMdEditorWithVideo>>()
 
 // 暴露表单数据（用于父组件访问）
 defineExpose({

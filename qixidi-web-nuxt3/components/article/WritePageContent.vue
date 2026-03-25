@@ -511,6 +511,7 @@ const handleBack = () => {
   display: flex;
   flex-direction: column;
   background: var(--color-surface);
+  overflow: hidden;
 }
 
 /* 主内容区：分栏布局 */
@@ -518,6 +519,7 @@ const handleBack = () => {
   flex: 1;
   display: flex;
   overflow: hidden;
+  min-height: 0;
 }
 
 /* 左侧编辑器 */
@@ -537,6 +539,7 @@ const handleBack = () => {
   display: flex;
   flex-direction: column;
   background: #fafafa;
+  overflow: hidden;
 }
 
 .config-content {

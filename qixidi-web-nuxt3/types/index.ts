@@ -418,8 +418,9 @@ export interface TimeNotesSearchBo {
 
 // 时光小记增删改请求
 export interface TimeNotesBo {
-  id?: number            // 编辑模式存在
-  title: string           // 标题
-  content: string         // 内容
-  recordTime?: string     // 记录时间
+  id?: number              // 编辑模式存在
+  title: string            // 标题（必填）
+  content?: string         // 内容
+  uid?: string             // 用户id
+  recordTime: string       // 记录时间（必填，yyyy-MM-dd）
 }

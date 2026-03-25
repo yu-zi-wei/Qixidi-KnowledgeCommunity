@@ -228,4 +228,40 @@ import { Eye, Heart } from '@vicons/tabler'
 
 ---
 
+## Markdown 安全配置
+
+**问题场景**：rehype-slug 插件生成的标题 `id` 被 rehype-sanitize 过滤掉，导致目录无法工作。
+
+**根本原因**：`rehype-sanitize` 的 schema 需要明确允许哪些属性，否则会被过滤。通配符 `'*'` 必须包含所有安全的全局属性。
+
+**强制规则**：使用 `rehype-sanitize` 时，必须在 `'*'` 通配符中包含所有安全的全局属性。
+
+```typescript
+// ❌ 错误：缺少 id
+const sanitizeSchema = {
+  attributes: {
+    '*': ['className', 'class']  // id 会被过滤掉！
+  }
+}
+
+// ✅ 正确：包含所有安全全局属性
+const sanitizeSchema = {
+  attributes: {
+    '*': ['id', 'className', 'class', 'style', 'data-*']  // id 必须包含
+  }
+}
+```
+
+**安全全局属性列表**：
+- `id` - 元素唯一标识（目录、锚点必需）
+- `className` / `class` - CSS 类名
+- `style` - 内联样式
+- `data-*` - 自定义数据属性
+
+**注意事项**：
+- 事件属性（如 `onclick`、`onload`）永远不应在通配符中允许
+- 如需特定元素的特殊属性，在该元素的属性列表中单独添加
+
+---
+
 **核心原则**：所有新代码必须支持双主题，禁止硬编码颜色。

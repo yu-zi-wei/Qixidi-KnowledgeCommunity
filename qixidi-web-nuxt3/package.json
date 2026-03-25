@@ -17,7 +17,7 @@
     "@vueuse/core": "^14.2.1",
     "@vueuse/nuxt": "^14.2.1",
     "date-fns": "^4.1.0",
-    "md-editor-v3": "^5.5.1",
+    "md-editor-v3": "^6.4.1",
     "naive-ui": "^2.43.2",
     "nuxt": "^3.17.7",
     "pinia": "^3.0.4",
@@ -31,6 +31,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.0.0",
     "unified": "^11.0.0",
+    "unist-util-visit": "^5.0.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {

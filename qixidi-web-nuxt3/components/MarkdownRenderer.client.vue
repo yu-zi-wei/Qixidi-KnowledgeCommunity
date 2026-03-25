@@ -27,7 +27,7 @@ const previewVisible = ref(false)
 const previewImage = ref('')
 const previewAlt = ref('')
 
-// 用于存储图片点击事件处理器，避免重复绑定
+// 用于存储事件处理器
 const imageClickHandlers = new WeakMap<HTMLImageElement, () => void>()
 
 const render = async () => {
@@ -40,10 +40,9 @@ await render()
 
 watch(() => props.content, async () => {
   await render()
-  // 内容更新后重新绑定事件并通知外部
   nextTick(() => {
     bindImageClickEvents()
-    // 触发自定义事件，通知 ArticleToc 更新
+    hydrateVideoEmbeds()
     window.dispatchEvent(new CustomEvent('markdown-rendered'))
   })
 })
@@ -54,43 +53,109 @@ const bindImageClickEvents = () => {
 
   const images = contentRef.value.querySelectorAll('img')
   images.forEach((img) => {
-    // 如果已经绑定过事件，跳过
     if (imageClickHandlers.has(img)) return
-
     img.style.cursor = 'zoom-in'
 
-    const handler = () => {
-      openPreview(img.src, img.alt)
-    }
-
+    const handler = () => openPreview(img.src, img.alt)
     img.addEventListener('click', handler)
     imageClickHandlers.set(img, handler)
   })
 }
 
-// 初始渲染后绑定事件并通知
+/**
+ * 将视频占位符替换为真实播放器
+ */
+const hydrateVideoEmbeds = () => {
+  if (!contentRef.value) return
+
+  const videoEmbeds = contentRef.value.querySelectorAll('.video-embed')
+  videoEmbeds.forEach((embed) => {
+    const el = embed as HTMLElement
+    const type = el.dataset.videoType
+    const url = el.dataset.videoUrl
+    const videoId = el.dataset.videoId
+    const title = el.dataset.videoTitle || ''
+    const poster = el.dataset.videoPoster || ''
+
+    // 避免重复处理
+    if (el.querySelector('video, iframe')) return
+
+    let playerHtml = ''
+
+    switch (type) {
+      case 'local':
+        playerHtml = `
+          <video
+            src="${url}"
+            poster="${poster}"
+            controls
+            preload="metadata"
+            playsinline
+            webkit-playsinline
+            style="max-width: 100%; border-radius: 8px;"
+          >
+            您的浏览器不支持视频播放，<a href="${url}" target="_blank">点击下载</a>
+          </video>
+        `
+        break
+
+      case 'bilibili':
+        playerHtml = `
+          <iframe
+            src="https://player.bilibili.com/player.html?bvid=${videoId}&high_quality=1&autoplay=0"
+            title="${title || 'B站视频'}"
+            scrolling="no"
+            border="0"
+            frameborder="no"
+            framespacing="0"
+            allowfullscreen="true"
+            style="width: 100%; aspect-ratio: 16/9; border-radius: 8px;"
+          ></iframe>
+        `
+        break
+
+      case 'youtube':
+        playerHtml = `
+          <iframe
+            src="https://www.youtube.com/embed/${videoId}"
+            title="${title || 'YouTube视频'}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="width: 100%; aspect-ratio: 16/9; border-radius: 8px;"
+          ></iframe>
+        `
+        break
+
+      default:
+        return
+    }
+
+    el.innerHTML = playerHtml
+  })
+}
+
+// 初始渲染后绑定事件
 onMounted(() => {
   bindImageClickEvents()
+  hydrateVideoEmbeds()
   nextTick(() => {
     window.dispatchEvent(new CustomEvent('markdown-rendered'))
   })
 })
 
-// 打开预览
 const openPreview = (src: string, alt: string) => {
   previewImage.value = src
   previewAlt.value = alt
   previewVisible.value = true
 }
 
-// 关闭预览
 const closePreview = () => {
   previewVisible.value = false
 }
 </script>
 
 <style scoped>
-/* Markdown 样式已在 main.css 中全局定义，支持双主题 */
 .markdown-body {
   font-size: 16px;
 }
@@ -102,5 +167,24 @@ const closePreview = () => {
 
 .markdown-body img:hover {
   opacity: 0.9;
+}
+
+/* 视频容器样式 */
+.markdown-body :deep(.video-embed) {
+  margin: 16px 0;
+  max-width: 100%;
+}
+
+.markdown-body :deep(.video-embed video) {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  background: #000;
+}
+
+.markdown-body :deep(.video-embed iframe) {
+  width: 100%;
+  border-radius: 12px;
+  background: #000;
 }
 </style>
