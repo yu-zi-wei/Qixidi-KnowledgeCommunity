@@ -6,12 +6,14 @@
           <NuxtLayout>
             <NuxtPage />
           </NuxtLayout>
+
+          <!-- 全局登录对话框 -->
+          <AuthDialog />
+          <!-- 全局随笔抽屉 -->
+          <ReadingEssaysEssayDrawerGlobal />
         </n-notification-provider>
       </n-dialog-provider>
     </n-message-provider>
-
-    <!-- 全局登录对话框 -->
-    <AuthDialog />
   </n-config-provider>
 </template>
 

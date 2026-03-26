@@ -157,7 +157,6 @@ public class DictumInfoVo {
     @ExcelProperty(value = "评论总数")
     private Long commentSum;
 
-
     /**
      * 用户详情信息
      */

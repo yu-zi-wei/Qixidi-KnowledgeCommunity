@@ -518,16 +518,72 @@ a:hover {
   text-decoration: underline;
 }
 
-/* 列表 */
-.markdown-body ul,
+/* 列表 - 覆盖 Tailwind 默认的 list-style: none */
+.markdown-body ul {
+  list-style: disc !important;
+  list-style-type: disc !important;
+  padding-left: 2em !important;
+}
+
 .markdown-body ol {
-  padding-left: 2em;
-  margin-bottom: 16px;
+  list-style: decimal !important;
+  list-style-type: decimal !important;
+  padding-left: 2em !important;
 }
 
 .markdown-body li {
+  list-style: inherit !important;
+  display: list-item !important;
   margin-bottom: 4px;
   color: var(--color-ink);
+}
+
+.markdown-body ul > li {
+  list-style-type: disc !important;
+}
+
+.markdown-body ol > li {
+  list-style-type: decimal !important;
+}
+
+/* md-editor 预览区域列表样式 */
+.md-editor-preview ul,
+.md-editor-preview ol {
+  list-style: initial !important;
+  padding-left: 2em !important;
+}
+
+.md-editor-preview ul {
+  list-style-type: disc !important;
+}
+
+.md-editor-preview ol {
+  list-style-type: decimal !important;
+}
+
+.md-editor-preview li {
+  list-style: initial !important;
+  display: list-item !important;
+}
+
+/* 普通文章内容区域列表样式 */
+.article-content ul,
+.article-content ol {
+  list-style: initial !important;
+  padding-left: 2em !important;
+}
+
+.article-content ul {
+  list-style-type: disc !important;
+}
+
+.article-content ol {
+  list-style-type: decimal !important;
+}
+
+.article-content li {
+  list-style: initial !important;
+  display: list-item !important;
 }
 
 .markdown-body li > * {

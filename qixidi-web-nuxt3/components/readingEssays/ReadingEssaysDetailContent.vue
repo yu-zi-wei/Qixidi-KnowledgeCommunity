@@ -12,18 +12,35 @@
       <span v-if="essay.worksName" class="work-name">《{{ essay.worksName }}》</span>
     </div>
 
-    <!-- 分类信息 -->
-    <div class="essay-meta">
-      <span v-if="essay.groupName" class="meta-badge">{{ essay.groupName }}</span>
-      <span v-if="essay.albumName" class="meta-badge">{{ essay.albumName }}</span>
-      <span class="meta-time">{{ getFullDateCN(essay.createTime) }}</span>
-    </div>
+    <!-- 分割线 -->
+    <div class="divider"></div>
 
-    <!-- 标签 -->
-    <div v-if="essay.labelList && essay.labelList.length > 0" class="essay-labels">
-      <span v-for="label in essay.labelList" :key="label" class="label-tag">
-        # {{ label }}
-      </span>
+    <!-- 元信息区 -->
+    <div class="essay-meta-section">
+      <!-- 左侧：分类和专辑 -->
+      <div class="meta-left">
+        <div v-if="essay.groupName" class="meta-row">
+          <span class="meta-label">分类</span>
+          <span class="meta-value">{{ essay.groupName }}</span>
+        </div>
+        <div v-if="essay.albumName" class="meta-row">
+          <span class="meta-label">专辑</span>
+          <span class="meta-value">{{ essay.albumName }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">时间</span>
+          <span class="meta-value meta-time">{{ getFullDateCN(essay.createTime) }}</span>
+        </div>
+      </div>
+
+      <!-- 右侧：标签 -->
+      <div v-if="essay.labelList && essay.labelList.length > 0" class="meta-right">
+        <div class="label-list">
+          <span v-for="label in essay.labelList" :key="label" class="label-tag">
+            # {{ label }}
+          </span>
+        </div>
+      </div>
     </div>
 
     <!-- 统计信息 -->
@@ -90,64 +107,106 @@ defineProps<Props>()
   color: var(--color-ink-muted);
 }
 
-.essay-meta {
+.divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin-bottom: 20px;
+}
+
+/* 元信息区 */
+.essay-meta-section {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
   margin-bottom: 24px;
 }
 
-.meta-badge {
-  font-size: var(--text-sm);
-  padding: 5px 12px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: var(--radius-sm);
-  color: var(--color-ink-light);
+.meta-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-:global(.dark) .meta-badge {
-  background: rgba(255, 255, 255, 0.08);
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meta-label {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.meta-value {
+  font-size: var(--text-sm);
+  color: var(--color-ink);
 }
 
 .meta-time {
-  font-size: var(--text-sm);
-  color: var(--color-ink-muted);
+  color: var(--color-ink-light);
 }
 
-.essay-labels {
+.meta-right {
+  flex-shrink: 0;
+}
+
+.label-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 28px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--color-border-light);
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .label-tag {
   font-size: var(--text-sm);
   color: var(--color-primary);
   background: var(--color-primary-light);
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
 }
 
+/* 统计信息 */
 .essay-stats {
   display: flex;
   gap: 24px;
-  padding-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border-light);
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: var(--text-base);
+  gap: 6px;
+  font-size: var(--text-sm);
   color: var(--color-ink-muted);
 }
 
 .stat-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .essay-detail-content {
+    padding: 20px 16px;
+  }
+
+  .essay-meta-section {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .meta-right {
+    width: 100%;
+  }
+
+  .label-list {
+    justify-content: flex-start;
+  }
 }
 </style>

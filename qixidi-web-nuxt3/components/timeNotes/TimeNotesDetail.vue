@@ -12,57 +12,50 @@
 
     <!-- 详情内容 -->
     <template v-else>
-      <!-- 标题区域 -->
-      <div class="detail-header">
-        <!-- 第一行：时间 + 作者 + 编辑按钮 -->
-        <div class="detail-meta">
-          <div class="detail-date">
-            <span class="date-day">{{ formatDay(detail.recordTime) }}</span>
-            <span class="date-month">{{ formatMonth(detail.recordTime) }}</span>
-            <span class="date-year">{{ formatYear(detail.recordTime) }}</span>
-          </div>
-          <template v-if="detail.createBy">
-            <span class="divider">·</span>
-            <span class="create-by">{{ detail.createBy }}</span>
-          </template>
-
+      <!-- 头部操作栏 -->
+      <div class="detail-actions">
+        <div class="actions-left">
+          <!-- 左侧暂时留空 -->
+        </div>
+        <div class="actions-right">
           <!-- 编辑按钮（仅作者可见） -->
           <n-button
             v-if="detail.isAuthor === 0"
-            text
+            quaternary
             size="small"
-            class="edit-btn"
+            class="btn-secondary"
             @click="handleEdit"
           >
             <template #icon>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
+              <n-icon><Edit /></n-icon>
             </template>
-            编辑
+          </n-button>
+          <n-button quaternary size="small" class="btn-secondary" @click="openInNewTab">
+            <template #icon>
+              <n-icon><ExternalLink /></n-icon>
+            </template>
+          </n-button>
+          <n-button quaternary size="small" class="btn-secondary" @click="copyShareLink">
+            <template #icon>
+              <n-icon><Share /></n-icon>
+            </template>
           </n-button>
         </div>
-        <!-- 第二行：标题 -->
-        <h1 class="detail-title" v-if="detail.title">{{ detail.title }}</h1>
       </div>
 
-      <!-- 内容 - Markdown 渲染 -->
-      <div class="detail-content">
-        <ClientOnly>
-          <MarkdownRenderer :content="detail.content || ''" />
-        </ClientOnly>
-      </div>
+      <!-- 内容区域（使用独立组件） -->
+      <TimeNotesDetailContent :note="detail" />
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Edit, ExternalLink, Share } from '@vicons/tabler'
 import type { TimeNotesInfo } from '~/types'
 
 interface Props {
   detail: TimeNotesInfo | null
-  loading: boolean
+  loading?: boolean
 }
 
 const props = defineProps<Props>()
@@ -71,138 +64,86 @@ const emit = defineEmits<{
   edit: [id: number]
 }>()
 
+const message = useMessage()
+
 // 编辑
 const handleEdit = () => {
-  if (props.detail?.id) {
-    emit('edit', props.detail.id)
+  if (!props.detail) return
+  emit('edit', props.detail.id)
+}
+
+// 新标签页打开
+const openInNewTab = () => {
+  if (!props.detail) return
+  const url = `/time_notes/${props.detail.id}`
+  window.open(url, '_blank')
+}
+
+// 复制分享链接
+const copyShareLink = async () => {
+  if (!props.detail) return
+  const url = `${window.location.origin}/time_notes/${props.detail.id}`
+  try {
+    await navigator.clipboard.writeText(url)
+    message.success('链接已复制')
+  } catch {
+    message.error('复制失败')
   }
-}
-
-// 格式化日期 - 日
-const formatDay = (dateStr: string) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  return date.getDate().toString().padStart(2, '0')
-}
-
-// 格式化日期 - 月
-const formatMonth = (dateStr: string) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-  return months[date.getMonth()]
-}
-
-// 格式化日期 - 年
-const formatYear = (dateStr: string) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  return date.getFullYear() + '年'
 }
 </script>
 
 <style scoped>
 .time-notes-detail {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
 }
 
-/* 加载和空状态 */
 .loading-state,
 .empty-state {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
-  min-height: 300px;
+  height: 100%;
   color: var(--color-ink-muted);
 }
 
-/* 标题区域 */
-.detail-header {
-  padding: 24px 32px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+/* 头部操作栏 */
+.detail-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
-.dark .detail-header {
-  border-bottom-color: rgba(255, 255, 255, 0.05);
-}
-
-/* 第一行：时间 + 作者 */
-.detail-meta {
+.actions-left,
+.actions-right {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 4px;
 }
 
-.detail-date {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* 次要按钮调淡 */
+.btn-secondary {
+  color: var(--color-ink-muted) !important;
 }
 
-.date-day {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-primary);
-  line-height: 1;
+.btn-secondary:hover {
+  color: var(--color-ink) !important;
 }
 
-.date-month {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-ink);
-  line-height: 24px;
+/* 响应式 */
+@media (max-width: 768px) {
+  .detail-actions {
+    padding: 10px 12px;
+  }
 }
+</style>
 
-.date-year {
-  font-size: 13px;
-  color: var(--color-ink-muted);
-  line-height: 24px;
-}
-
-.divider {
-  color: var(--color-ink-muted);
-  line-height: 24px;
-}
-
-.create-by {
-  font-size: 14px;
-  color: var(--color-ink-muted);
-  line-height: 24px;
-}
-
-/* 编辑按钮 */
-.edit-btn {
-  margin-left: auto;
-  font-size: 13px;
-  color: var(--color-ink-muted);
-  transition: color 0.2s ease;
-}
-
-.edit-btn:hover {
-  color: var(--color-primary);
-}
-
-.edit-btn svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* 第二行：标题 */
-.detail-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-ink);
-  margin: 0;
-  line-height: 1.4;
-}
-
-/* 内容区域 */
-.detail-content {
-  padding: 24px 32px;
+<!-- 非 scoped 样式：修复按钮 focus 状态 -->
+<style>
+.detail-actions .n-button:not(:hover):not(:active):not(:focus-visible) {
+  background-color: transparent !important;
 }
 </style>

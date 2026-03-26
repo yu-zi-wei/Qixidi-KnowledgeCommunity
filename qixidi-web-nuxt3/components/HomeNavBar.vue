@@ -193,6 +193,7 @@
 
 <script setup lang="ts">
 import type { Navigation } from '~/types'
+import { useEssayDrawerStore } from '~/stores/essayDrawer'
 
 interface Props {
   navigationList: Navigation[]
@@ -293,8 +294,13 @@ const publishOptions = [
 ]
 
 const handlePublish = (key: string) => {
-  const routes: Record<string, string> = { article: '/write/article', essay: '/admin/essays/edit', note: '/write/note' }
-  navigateTo(routes[key])
+  if (key === 'essay') {
+    const essayDrawerStore = useEssayDrawerStore()
+    essayDrawerStore.open()
+  } else {
+    const routes: Record<string, string> = { article: '/write/article', note: '/write/note' }
+    navigateTo(routes[key])
+  }
 }
 
 // 用户菜单

@@ -1,5 +1,5 @@
 <template>
-  <div class="reading-essays-detail-page">
+  <div class="time-notes-detail-page">
     <!-- 顶部操作栏 -->
     <header class="detail-header">
       <n-button quaternary @click="goBack">
@@ -32,12 +32,12 @@
       <!-- 错误状态 -->
       <div v-else-if="error" class="error-state">
         <p>加载失败</p>
-        <n-button @click="refresh">重试</n-button>
+        <n-button @click="handleRefresh">重试</n-button>
       </div>
 
-      <!-- 随笔详情 -->
-      <article v-else-if="essay" class="detail-card">
-        <ReadingEssaysDetailContent :essay="essay" />
+      <!-- 时光小记详情 -->
+      <article v-else-if="note" class="detail-card">
+        <TimeNotesDetailContent :note="note" />
       </article>
     </main>
   </div>
@@ -45,8 +45,7 @@
 
 <script setup lang="ts">
 import { ArrowLeft, Share, Edit } from '@vicons/tabler'
-import type { ReadingEssaysInfo } from '~/types'
-import { useEssayDrawerStore } from '~/stores/essayDrawer'
+import type { TimeNotesInfo } from '~/types'
 
 definePageMeta({
   layout: false,
@@ -55,40 +54,39 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const readingEssaysApi = useReadingEssaysApi()
+const timeNotesApi = useTimeNotesApi()
 const authStore = useAuthStore()
-const essayDrawerStore = useEssayDrawerStore()
 const message = useMessage()
 
 // 使用 computed 获取路由参数
-const essayId = computed(() => route.params.id as string)
+const noteId = computed(() => route.params.id as string)
 
-// 是否是当前用户的随笔
+// 是否是当前用户的时光小记
 const isOwner = computed(() => {
-  if (!essay.value || !authStore.user?.uuid) return false
-  return essay.value.uid === authStore.user.uuid
+  if (!note.value || !authStore.user?.uuid) return false
+  return note.value.uid === authStore.user.uuid
 })
 
-// 获取随笔详情
-const { data: essay, pending, error, refresh } = await useAsyncData(
-  () => `reading-essays-detail-${essayId.value}`,
-  () => readingEssaysApi.getReadingEssaysDetail(essayId.value)
+// 获取时光小记详情
+const { data: note, pending, error, refresh } = await useAsyncData(
+  () => `time-notes-detail-${noteId.value}`,
+  () => timeNotesApi.getTimeNotesDetail(Number(noteId.value))
 )
 
 // SEO
 useHead({
-  title: () => essay.value?.content?.substring(0, 50) || '随笔详情'
+  title: () => note.value?.title || note.value?.content?.substring(0, 50) || '时光小记详情'
 })
 
 // 返回列表页
 const goBack = () => {
-  router.push('/reading-essays')
+  router.push('/time_notes')
 }
 
 // 复制分享链接
 const copyShareLink = async () => {
-  if (!essay.value) return
-  const url = `${window.location.origin}/reading-essays/${essay.value.id}`
+  if (!note.value) return
+  const url = `${window.location.origin}/time_notes/${note.value.id}`
   try {
     await navigator.clipboard.writeText(url)
     message.success('链接已复制')
@@ -97,11 +95,16 @@ const copyShareLink = async () => {
   }
 }
 
-// 编辑随笔
+// 编辑时光小记
 const handleEdit = () => {
-  if (!essay.value) return
-  // 打开编辑抽屉（不跳转页面）
-  essayDrawerStore.openEdit(essay.value.id)
+  if (!note.value) return
+  // 跳转到编辑页面
+  router.push(`/write/note/${note.value.id}`)
+}
+
+// 重试加载
+const handleRefresh = () => {
+  refresh()
 }
 
 // 监听路由参数变化
@@ -114,7 +117,7 @@ watch(() => route.params.id, async (newId, oldId) => {
 </script>
 
 <style scoped>
-.reading-essays-detail-page {
+.time-notes-detail-page {
   min-height: 100vh;
   background: var(--color-surface);
 }

@@ -55,3 +55,30 @@ export const getFullDateCN = (dateStr: string): string => {
   const date = new Date(dateStr)
   return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
 }
+
+/**
+ * 格式化日期 - 日（如：14）
+ */
+export const formatDay = (dateStr: string): string => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  return String(date.getDate())
+}
+
+/**
+ * 格式化日期 - 月（如：MAR）
+ */
+export const formatMonth = (dateStr: string): string => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
+}
+
+/**
+ * 格式化日期 - 年（如：2024）
+ */
+export const formatYear = (dateStr: string): string => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  return String(date.getFullYear())
+}

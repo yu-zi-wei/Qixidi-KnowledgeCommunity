@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { ReadingEssaysInfo } from '~/types'
 
 interface Props {
@@ -76,16 +76,7 @@ const column1 = ref<ReadingEssaysInfo[]>([])
 const column2 = ref<ReadingEssaysInfo[]>([])
 const column3 = ref<ReadingEssaysInfo[]>([])
 
-// 用于跟踪已经分配过的项（通过 id）
-const allocatedIds = ref<Set<number>>(new Set())
-
-// 计算每个列的近似高度
-const getApproximateHeight = (items: ReadingEssaysInfo[]) => {
-  return items.reduce((total, item) => {
-    return total + estimateHeight(item)
-  }, 0)
-}
-
+// 估算卡片高度
 const estimateHeight = (item: ReadingEssaysInfo) => {
   const baseHeight = 220
   const contentLength = item.summary?.length || item.content?.length || 0
@@ -93,65 +84,52 @@ const estimateHeight = (item: ReadingEssaysInfo) => {
   return baseHeight + Math.min(contentLength / 50, 120) + imageCount * 100
 }
 
-// 总项目数
-const totalItems = computed(() => column1.value.length + column2.value.length + column3.value.length)
-
-// 移动端使用原始数据顺序
-const allItems = computed(() => props.readingEssays)
-
-// 分配新数据到最短列
-const distributeNewItems = (newItems: ReadingEssaysInfo[]) => {
-  newItems.forEach(item => {
-    if (allocatedIds.value.has(item.id)) return
-
-    allocatedIds.value.add(item.id)
-
-    // 找出最短的列
-    const h1 = getApproximateHeight(column1.value)
-    const h2 = getApproximateHeight(column2.value)
-    const h3 = getApproximateHeight(column3.value)
-
-    if (h1 <= h2 && h1 <= h3) {
-      column1.value.push(item)
-    } else if (h2 <= h3) {
-      column2.value.push(item)
-    } else {
-      column3.value.push(item)
-    }
-  })
+// 计算列高度
+const getColumnHeight = (items: ReadingEssaysInfo[]) => {
+  return items.reduce((total, item) => total + estimateHeight(item), 0)
 }
 
-// 监听数据变化，只添加新元素
+// 分配数据到三列（瀑布流算法）
+const distributeToColumns = (items: ReadingEssaysInfo[]) => {
+  const col1: ReadingEssaysInfo[] = []
+  const col2: ReadingEssaysInfo[] = []
+  const col3: ReadingEssaysInfo[] = []
+
+  items.forEach(item => {
+    const h1 = getColumnHeight(col1)
+    const h2 = getColumnHeight(col2)
+    const h3 = getColumnHeight(col3)
+
+    if (h1 <= h2 && h1 <= h3) {
+      col1.push(item)
+    } else if (h2 <= h3) {
+      col2.push(item)
+    } else {
+      col3.push(item)
+    }
+  })
+
+  column1.value = col1
+  column2.value = col2
+  column3.value = col3
+}
+
+// 监听数据变化，直接重新分配
 watch(
   () => props.readingEssays,
-  (newData, oldData) => {
-    if (!newData || newData.length === 0) return
-
-    // 找出新增的项（id 不在已分配集合中的）
-    const newItems = newData.filter(item => !allocatedIds.value.has(item.id))
-
-    if (newItems.length > 0) {
-      distributeNewItems(newItems)
-    }
+  (newData) => {
+    distributeToColumns(newData || [])
   },
-  { deep: true }
+  { immediate: true }
 )
 
-// 清空重置（当筛选条件变化时，父组件可以通过设置空数组来触发）
-watch(
-  () => props.readingEssays.length,
-  (newLength, oldLength) => {
-    // 当数据减少时（筛选变化），重置所有列
-    if (newLength < oldLength) {
-      allocatedIds.value.clear()
-      column1.value = []
-      column2.value = []
-      column3.value = []
-      distributeNewItems(props.readingEssays)
-    }
-  }
-)
+// 总项目数
+const totalItems = computed(() => props.readingEssays.length)
 
+// 移动端使用原始数据
+const allItems = computed(() => props.readingEssays)
+
+// 无限滚动观察器
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
@@ -160,8 +138,7 @@ onMounted(() => {
   observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
-        // 触发加载更多
-        // 这里我们使用 emit 让父组件处理
+        // 触发加载更多（由父组件处理滚动逻辑）
       }
     },
     { threshold: 0.1 }

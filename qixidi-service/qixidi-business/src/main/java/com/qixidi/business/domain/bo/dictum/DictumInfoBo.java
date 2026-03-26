@@ -37,8 +37,6 @@ public class DictumInfoBo extends BaseEntity {
     @NotBlank(message = "名言不能为空", groups = {AddGroup.class, EditGroup.class})
     private String content;
 
-    private String contentMd;
-
     /**
      * 分类id
      */
@@ -84,7 +82,6 @@ public class DictumInfoBo extends BaseEntity {
      * 作品名称
      */
     private String worksName;
-
 
     /**
      * 名言状态（1：公开，1：私有，3：关注可看）

@@ -45,12 +45,17 @@
           <div class="drawer-header">
             <span class="drawer-title">随笔详情</span>
             <div class="drawer-actions">
-              <n-button quaternary size="small" @click="openInNewTab" title="新标签打开">
+              <n-button v-if="isOwner" quaternary size="small" class="btn-edit" @click="handleEdit">
+                <template #icon>
+                  <n-icon><Edit /></n-icon>
+                </template>
+              </n-button>
+              <n-button quaternary size="small" class="btn-secondary" @click="openInNewTab">
                 <template #icon>
                   <n-icon><ExternalLink /></n-icon>
                 </template>
               </n-button>
-              <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
+              <n-button quaternary size="small" class="btn-secondary" @click="copyShareLink">
                 <template #icon>
                   <n-icon><Share /></n-icon>
                 </template>
@@ -65,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { ExternalLink, Share } from '@vicons/tabler'
+import { ExternalLink, Share, Edit } from '@vicons/tabler'
 import type { ReadingEssaysInfo, ReadingEssaysLabel } from '~/types'
 
 definePageMeta({
@@ -83,6 +88,7 @@ useHead({
 const readingEssaysApi = useReadingEssaysApi()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
+const essayDrawerStore = useEssayDrawerStore()
 const message = useMessage()
 const route = useRoute()
 
@@ -211,6 +217,12 @@ const handleCollect = (id: number) => {
 const drawerVisible = ref(false)
 const selectedEssay = ref<ReadingEssaysInfo | null>(null)
 
+// 是否是当前用户的随笔
+const isOwner = computed(() => {
+  if (!selectedEssay.value || !authStore.user?.uuid) return false
+  return selectedEssay.value.uid === authStore.user.uuid
+})
+
 // 显示详情抽屉
 const handleShowDetail = (item: ReadingEssaysInfo) => {
   selectedEssay.value = item
@@ -234,6 +246,13 @@ const copyShareLink = async () => {
   } catch {
     message.error('复制失败')
   }
+}
+
+// 编辑随笔
+const handleEdit = () => {
+  if (!selectedEssay.value) return
+  drawerVisible.value = false  // 关闭详情抽屉
+  essayDrawerStore.openEdit(selectedEssay.value.id)  // 打开编辑抽屉
 }
 
 // 监听导航栏吸顶状态
@@ -561,7 +580,6 @@ onMounted(async () => {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding-right: 32px;
 }
 
 .drawer-title {
@@ -569,13 +587,32 @@ onMounted(async () => {
   font-weight: 600;
   color: var(--color-ink);
 }
+
+.drawer-actions {
+  display: flex;
+  gap: 4px;
+}
 </style>
 
-<!-- 非 scoped 样式 -->
+<!-- 非 scoped 样式：用于覆盖 Naive UI 组件样式 -->
 <style>
 @media (max-width: 768px) {
   body.page-reading-essays .home-main {
     padding-top: 170px !important;
   }
+}
+
+/* 抽屉所有按钮 focus 状态修复 - 移除默认 focus 背景色 */
+.drawer-actions .n-button:not(:hover):not(:active):not(:focus-visible) {
+  background-color: transparent !important;
+}
+
+/* 次要按钮颜色调淡 */
+.drawer-actions .btn-secondary {
+  color: var(--color-ink-muted) !important;
+}
+
+.drawer-actions .btn-secondary:hover {
+  color: var(--color-ink) !important;
 }
 </style>
