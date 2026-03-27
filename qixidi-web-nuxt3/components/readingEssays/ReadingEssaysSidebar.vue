@@ -1,7 +1,7 @@
 <template>
   <aside v-if="isReady" class="reading-essays-sidebar">
     <!-- 专辑（带封面） -->
-    <section v-if="displayedAlbums.length > 0" class="sidebar-card gray-card sidebar-section">
+    <section v-if="displayedAlbums.length > 0" class="sidebar-card gray-card sidebar-section" style="--delay: 0">
       <div class="section-title">
         <Folder class="section-icon" />
         <span>推荐专辑</span>
@@ -32,7 +32,7 @@
     </section>
 
     <!-- 热门作者（可展开） -->
-    <section v-if="popularAuthors.length > 0" class="sidebar-card gradient-card sidebar-section">
+    <section v-if="popularAuthors.length > 0" class="sidebar-card gradient-card sidebar-section" style="--delay: 1">
       <div class="section-title section-title-clickable" @click="toggleAuthorsExpand">
         <User class="section-icon" />
         <span>热门作者</span>
@@ -52,7 +52,7 @@
     </section>
 
     <!-- 热门标签（可展开） -->
-    <section v-if="popularLabels.length > 0" class="sidebar-card gradient-card sidebar-section">
+    <section v-if="popularLabels.length > 0" class="sidebar-card gradient-card sidebar-section" style="--delay: 2">
       <div class="section-title section-title-clickable" @click="toggleLabelsExpand">
         <Hash class="section-icon" />
         <span>热门标签</span>
@@ -205,6 +205,18 @@ const navigateToUpdateQuery = () => {
 </script>
 
 <style scoped>
+/* 卡片入场动画 */
+@keyframes sidebar-card-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* 滚动容器 */
 .reading-essays-sidebar {
   display: flex;
@@ -223,63 +235,124 @@ const navigateToUpdateQuery = () => {
   display: none;
 }
 
-/* 卡片通用样式 */
+/* 卡片通用样式 - 渐变色背景 */
 .sidebar-card {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.78) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 16px;
   padding: 20px;
   transition: all 0.3s ease;
+  /* 入场动画 */
+  animation: sidebar-card-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.08s) forwards;
+  opacity: 0;
 }
 
 .sidebar-card:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.88) 100%
+  );
 }
 
-/* 灰色背景卡片 - 也使用半透明白色 */
+/* 灰色背景卡片 - 使用白色背景（与普通卡片一致） */
 .sidebar-card.gray-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.78) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .sidebar-card.gray-card:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.88) 100%
+  );
 }
 
 .dark .sidebar-card.gray-card {
-  background: rgba(40, 42, 45, 0.7);
+  background: linear-gradient(
+    135deg,
+    rgba(40, 42, 45, 0.92) 0%,
+    rgba(40, 42, 45, 0.78) 100%
+  );
 }
 
 .dark .sidebar-card.gray-card:hover {
-  background: rgba(50, 52, 55, 0.8);
+  background: linear-gradient(
+    135deg,
+    rgba(50, 52, 55, 0.95) 0%,
+    rgba(50, 52, 55, 0.85) 100%
+  );
 }
 
-/* 渐变背景卡片 */
+/* 渐变背景卡片 - 带品牌色渐变 */
 .sidebar-card.gradient-card {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.06) 0%, rgba(93, 138, 168, 0.02) 100%);
-  border-color: rgba(61, 90, 128, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(61, 90, 128, 0.12) 0%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(176, 137, 104, 0.09) 100%
+  );
+  border-color: rgba(61, 90, 128, 0.12);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .sidebar-card.gradient-card:hover {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.1) 0%, rgba(93, 138, 168, 0.04) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(61, 90, 128, 0.18) 0%,
+    rgba(0, 0, 0, 0.09) 50%,
+    rgba(176, 137, 104, 0.14) 100%
+  );
 }
 
 .dark .sidebar-card.gradient-card {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.08) 0%, rgba(61, 90, 128, 0.03) 100%);
-  border-color: rgba(93, 138, 168, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(93, 138, 168, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(201, 162, 122, 0.12) 100%
+  );
+  border-color: rgba(93, 138, 168, 0.15);
 }
 
 .dark .sidebar-card.gradient-card:hover {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.12) 0%, rgba(61, 90, 128, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(93, 138, 168, 0.22) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(201, 162, 122, 0.18) 100%
+  );
 }
 
 /* 暗色主题 */
 .dark .sidebar-card {
-  background: rgba(40, 42, 45, 0.75);
-  border-color: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(
+    135deg,
+    rgba(40, 42, 45, 0.92) 0%,
+    rgba(40, 42, 45, 0.78) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .dark .sidebar-card:hover {
-  background: rgba(50, 52, 55, 0.85);
+  background: linear-gradient(
+    135deg,
+    rgba(50, 52, 55, 0.95) 0%,
+    rgba(50, 52, 55, 0.85) 100%
+  );
 }
 
 /* 占位状态 */

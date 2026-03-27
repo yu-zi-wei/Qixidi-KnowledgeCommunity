@@ -165,27 +165,44 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* 目录 - 精致竖线 + 圆点指示器 */
 .article-toc {
-  padding: 16px;
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-light);
+  position: relative;
+  padding: 0 0 0 28px;
+  margin-left: 8px;
+  background: transparent;
+}
+
+/* 竖线 - 稍微粗一点 */
+.article-toc::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.08) 8%,
+    rgba(0, 0, 0, 0.08) 92%,
+    transparent 100%
+  );
+  border-radius: 1px;
+}
+
+.dark .article-toc::before {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 8%,
+    rgba(255, 255, 255, 0.08) 92%,
+    transparent 100%
+  );
 }
 
 .toc-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-ink);
-}
-
-.toc-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--color-primary);
+  display: none;
 }
 
 .toc-list {
@@ -195,23 +212,59 @@ onUnmounted(() => {
 }
 
 .toc-item {
-  margin-bottom: 4px;
+  position: relative;
+  margin-bottom: 0;
+}
+
+/* 圆点指示器 - 对齐竖线中心，完全不透明避免颜色叠加 */
+.toc-item::before {
+  content: '';
+  position: absolute;
+  left: -30.5px; /* 微调：-31px + 0.5px */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d1d5db;
+  border: none;
+  box-shadow: 0 0 0 3px #fff;
+  z-index: 1;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .toc-item::before {
+  background: #4b5563;
+  box-shadow: 0 0 0 3px #1a1a1a;
+}
+
+/* 激活状态 - 品牌色 + 微光晕 */
+.toc-item.active::before {
+  background: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(61, 90, 128, 0.15);
+}
+
+/* 悬停状态 */
+.toc-item:hover::before {
+  background: rgba(61, 90, 128, 0.25);
+}
+
+.toc-item.active:hover::before {
+  background: var(--color-primary);
 }
 
 .toc-link {
   display: block;
-  padding: 6px 12px;
+  padding: 6px 0;
   font-size: 13px;
-  color: var(--color-ink-light);
+  color: var(--color-ink-muted);
   text-decoration: none;
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
+  transition: color 0.2s ease;
   line-height: 1.5;
 }
 
 .toc-link:hover {
   color: var(--color-primary);
-  background: var(--color-surface-dim);
 }
 
 /* 层级缩进 */
@@ -227,10 +280,9 @@ onUnmounted(() => {
   padding-left: 32px;
 }
 
-/* 激活状态 */
+/* 激活状态文字 */
 .toc-item.active .toc-link {
-  color: var(--color-primary);
-  background: var(--color-primary-light);
+  color: var(--color-ink);
   font-weight: 500;
 }
 </style>

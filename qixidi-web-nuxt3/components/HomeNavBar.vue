@@ -21,7 +21,7 @@
     <!-- 中间：搜索框 + 导航菜单 -->
     <div class="nav-center">
       <!-- 搜索框 -->
-      <div class="search-wrapper" ref="searchWrapperRef">
+      <div class="search-wrapper" ref="searchWrapperRef" v-click-outside="() => showDropdown = false">
         <div
           class="search-input-wrapper"
           :class="{ focused: showDropdown }"
@@ -44,7 +44,7 @@
 
         <!-- 搜索下拉 -->
         <Transition name="dropdown">
-          <div v-if="showDropdown" class="search-dropdown" v-click-outside="() => showDropdown = false">
+          <div v-if="showDropdown" class="search-dropdown">
             <div class="search-dropdown-content">
               <div v-if="searchHistory.length > 0" class="search-history-section">
                 <div class="search-history-title">搜索历史</div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="reading-essays-card">
+  <div ref="cardRef" class="reading-essays-card" :class="{ 'is-visible': isVisible }" :style="{ '--delay': Math.min(delay, 8) }">
     <!-- 随笔内容 -->
     <div class="reading-essays-content">
       {{ readingEssay.content }}
@@ -41,27 +41,65 @@
 </template>
 
 <script setup lang="ts">
-import { MessageCircle, ThumbUp, Bookmark } from '@vicons/tabler'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { MessageCircle } from '@vicons/tabler'
 import type { ReadingEssaysInfo } from '~/types'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 interface Props {
   readingEssay: ReadingEssaysInfo
+  delay?: number
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  delay: 0
+})
 
 const emit = defineEmits<{
   collect: []
   showDetail: []
 }>()
 
+const cardRef = ref<HTMLElement | null>(null)
+const isVisible = ref(false)
+
 const handleClick = () => {
   emit('showDetail')
 }
+
+// 使用 IntersectionObserver 监听卡片进入视口
+onMounted(() => {
+  if (!cardRef.value) return
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        isVisible.value = true
+        observer.disconnect()
+      }
+    },
+    { rootMargin: '50px', threshold: 0.1 }
+  )
+
+  observer.observe(cardRef.value)
+
+  onUnmounted(() => observer.disconnect())
+})
 </script>
 
 <style scoped>
+/* 卡片入场动画 */
+@keyframes essay-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .reading-essays-card {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(8px);
@@ -75,6 +113,14 @@ const handleClick = () => {
   display: inline-block;
   width: 100%;
   box-sizing: border-box;
+  /* 初始状态：不可见 */
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+/* 可见状态：触发动画 */
+.reading-essays-card.is-visible {
+  animation: essay-card-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.05s) forwards;
 }
 
 .reading-essays-card:hover {
@@ -107,6 +153,10 @@ const handleClick = () => {
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--color-border);
 }
 
 /* 作者和作品 */

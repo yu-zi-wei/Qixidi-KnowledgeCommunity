@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar-scrollable">
     <!-- 签到卡片 -->
-    <div class="sidebar-card sign-card">
+    <div class="sidebar-card sign-card" style="--delay: 0">
       <div class="sign-info">
         <span class="sign-label">连续签到</span>
         <span class="sign-days">1 <small>天</small></span>
@@ -11,7 +11,7 @@
     </div>
 
     <!-- 站点数据 -->
-    <div v-if="siteStatsData" class="sidebar-card gray-card">
+    <div v-if="siteStatsData" class="sidebar-card gray-card" style="--delay: 1">
       <div class="card-header">
         <svg class="fixed-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -49,7 +49,7 @@
     </div>
 
     <!-- 精选文章 -->
-    <div class="sidebar-card gray-card">
+    <div class="sidebar-card gray-card" style="--delay: 2">
       <div class="card-header">
         <svg class="fixed-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -75,7 +75,7 @@
     </div>
 
     <!-- 站点信息 -->
-    <div class="sidebar-card site-info-card">
+    <div class="sidebar-card site-info-card" style="--delay: 3">
       <!-- 品牌和运行天数 -->
       <div class="site-header">
         <div class="brand-info">
@@ -156,6 +156,18 @@ const runningDays = computed(() => {
 </script>
 
 <style scoped>
+/* 卡片入场动画 - 与文章列表协调 */
+@keyframes sidebar-card-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* 滚动容器 */
 .sidebar-scrollable {
   display: flex;
@@ -174,49 +186,89 @@ const runningDays = computed(() => {
   display: none;
 }
 
-/* 卡片通用样式 - 毛玻璃效果 */
+/* 卡片通用样式 - 渐变色背景 */
 .sidebar-card {
-  background: var(--card-bg);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.78) 100%
+  );
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 16px;
   padding: 20px;
   transition: all 0.3s ease;
+  /* 入场动画 - 与文章列表统一 */
+  animation: sidebar-card-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.06s) forwards;
+  opacity: 0;
 }
 
 .sidebar-card:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.88) 100%
+  );
 }
 
-/* 灰色背景卡片 */
+/* 灰色背景卡片 - 带品牌色渐变 */
 .sidebar-card.gray-card {
-  background: rgba(0, 0, 0, 0.04);
+  background: linear-gradient(
+    135deg,
+    rgba(61, 90, 128, 0.08) 0%,
+    rgba(0, 0, 0, 0.04) 50%,
+    rgba(176, 137, 104, 0.06) 100%
+  );
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 .sidebar-card.gray-card:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: linear-gradient(
+    135deg,
+    rgba(61, 90, 128, 0.12) 0%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(176, 137, 104, 0.09) 100%
+  );
   transform: none;
   box-shadow: none;
 }
 
 .dark .sidebar-card.gray-card {
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(
+    135deg,
+    rgba(93, 138, 168, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(201, 162, 122, 0.08) 100%
+  );
 }
 
 .dark .sidebar-card.gray-card:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: linear-gradient(
+    135deg,
+    rgba(93, 138, 168, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(201, 162, 122, 0.12) 100%
+  );
 }
 
 /* 暗色主题 */
 .dark .sidebar-card {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 32, 35, 0.7) 0%,
+    rgba(30, 32, 35, 0.4) 100%
+  );
   border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark .sidebar-card:hover {
-  background: rgba(18, 20, 22, 0.6);
+  background: linear-gradient(
+    135deg,
+    rgba(40, 42, 45, 0.8) 0%,
+    rgba(40, 42, 45, 0.5) 100%
+  );
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 

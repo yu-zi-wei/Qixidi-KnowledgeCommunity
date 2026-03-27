@@ -1,21 +1,57 @@
 <template>
   <Teleport to="body">
     <Transition name="preview">
-      <div v-if="visible" class="image-preview-overlay" @click.self="close">
+      <div
+        v-if="visible"
+        class="image-preview-overlay"
+        @click.self="close"
+        @touchmove.prevent
+      >
+        <!-- 关闭按钮 -->
         <button class="close-btn" @click="close">
           <X class="close-icon" />
         </button>
 
-        <div class="image-container">
-          <img :src="imageSrc" :alt="alt" class="preview-image" @click.self="close" />
+        <!-- 图片容器 -->
+        <div
+          class="image-container"
+          @wheel="handleWheel"
+          @mousedown="startDrag"
+          @dblclick="reset"
+        >
+          <img
+            ref="imgRef"
+            :src="imageSrc"
+            :alt="alt"
+            class="preview-image"
+            :style="imageStyle"
+            draggable="false"
+          />
         </div>
+
+        <!-- 控制按钮 -->
+        <div class="control-btns">
+          <button class="control-btn" @click="zoomOut" :disabled="scale <= 0.5">
+            <Minus class="control-icon" />
+          </button>
+          <span class="scale-text">{{ Math.round(scale * 100) }}%</span>
+          <button class="control-btn" @click="zoomIn" :disabled="scale >= 3">
+            <Plus class="control-icon" />
+          </button>
+          <button class="control-btn" @click="reset">
+            <Refresh class="control-icon" />
+          </button>
+        </div>
+
+        <!-- 提示 -->
+        <div class="hint">滚轮缩放 · 拖拽移动 · 双击重置</div>
       </div>
     </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { X } from '@vicons/tabler'
+import { X, Plus, Minus, Refresh } from '@vicons/tabler'
 
 interface Props {
   visible: boolean
@@ -29,7 +65,96 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const imgRef = ref<HTMLImageElement | null>(null)
+
+// 缩放和平移状态
+const scale = ref(1)
+const translateX = ref(0)
+const translateY = ref(0)
+
+// 拖拽状态
+const isDragging = ref(false)
+const dragStartX = ref(0)
+const dragStartY = ref(0)
+const dragStartTranslateX = ref(0)
+const dragStartTranslateY = ref(0)
+
+// 计算图片样式
+const imageStyle = computed(() => ({
+  transform: `translate(${translateX.value}px, ${translateY.value}px) scale(${scale.value})`,
+  cursor: scale.value > 1 ? (isDragging.value ? 'grabbing' : 'grab') : 'default'
+}))
+
+// 缩放
+const zoomIn = () => {
+  if (scale.value < 3) {
+    scale.value = Math.min(3, scale.value + 0.25)
+  }
+}
+
+const zoomOut = () => {
+  if (scale.value > 0.5) {
+    scale.value = Math.max(0.5, scale.value - 0.25)
+    // 缩小后如果图片超出边界，重置位置
+    if (scale.value <= 1) {
+      translateX.value = 0
+      translateY.value = 0
+    }
+  }
+}
+
+// 重置
+const reset = () => {
+  scale.value = 1
+  translateX.value = 0
+  translateY.value = 0
+}
+
+// 滚轮缩放
+const handleWheel = (e: WheelEvent) => {
+  e.preventDefault()
+  if (e.deltaY < 0) {
+    zoomIn()
+  } else {
+    zoomOut()
+  }
+}
+
+// 开始拖拽
+const startDrag = (e: MouseEvent) => {
+  if (scale.value <= 1) return
+
+  isDragging.value = true
+  dragStartX.value = e.clientX
+  dragStartY.value = e.clientY
+  dragStartTranslateX.value = translateX.value
+  dragStartTranslateY.value = translateY.value
+
+  document.addEventListener('mousemove', onDrag)
+  document.addEventListener('mouseup', stopDrag)
+}
+
+// 拖拽中
+const onDrag = (e: MouseEvent) => {
+  if (!isDragging.value) return
+
+  const deltaX = e.clientX - dragStartX.value
+  const deltaY = e.clientY - dragStartY.value
+
+  translateX.value = dragStartTranslateX.value + deltaX
+  translateY.value = dragStartTranslateY.value + deltaY
+}
+
+// 停止拖拽
+const stopDrag = () => {
+  isDragging.value = false
+  document.removeEventListener('mousemove', onDrag)
+  document.removeEventListener('mouseup', stopDrag)
+}
+
+// 关闭
 const close = () => {
+  reset()
   emit('close')
 }
 
@@ -40,21 +165,19 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
+// 监听 visible 变化，重置状态
+watch(() => props.visible, (val) => {
+  if (val) {
+    reset()
+  }
+})
+
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
-})
-
-// 禁止背景滚动
-watch(() => props.visible, (visible) => {
-  if (visible) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
 })
 </script>
 
@@ -69,27 +192,11 @@ watch(() => props.visible, (visible) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
-  cursor: zoom-out;
+  background: rgba(0, 0, 0, 0.75);
+  user-select: none;
 }
 
-.image-container {
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.preview-image {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  cursor: default;
-  border-radius: var(--radius-md);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
+/* 关闭按钮 */
 .close-btn {
   position: absolute;
   top: 20px;
@@ -105,6 +212,7 @@ watch(() => props.visible, (visible) => {
   cursor: pointer;
   transition: all var(--transition-fast);
   color: #fff;
+  z-index: 20;
 }
 
 .close-btn:hover {
@@ -114,6 +222,89 @@ watch(() => props.visible, (visible) => {
 .close-icon {
   width: 24px;
   height: 24px;
+}
+
+/* 图片容器 */
+.image-container {
+  max-width: 90vw;
+  max-height: calc(90vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.preview-image {
+  max-width: 90vw;
+  max-height: calc(90vh - 100px);
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s ease-out;
+}
+
+/* 控制按钮 */
+.control-btns {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
+  z-index: 20;
+}
+
+.control-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: #fff;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.control-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.control-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.scale-text {
+  min-width: 50px;
+  text-align: center;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 提示 */
+.hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  z-index: 20;
 }
 
 /* 过渡动画 */

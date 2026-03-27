@@ -566,6 +566,15 @@ a:hover {
   display: list-item !important;
 }
 
+/* 移除 md-editor 预览区域的虚线下划线 */
+.md-editor-preview a {
+  text-decoration: none !important;
+}
+
+.md-editor-preview a:hover {
+  text-decoration: underline !important;
+}
+
 /* 普通文章内容区域列表样式 */
 .article-content ul,
 .article-content ol {

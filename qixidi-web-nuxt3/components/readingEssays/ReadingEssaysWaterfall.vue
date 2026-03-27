@@ -6,6 +6,7 @@
         v-for="item in column1"
         :key="item.id"
         :reading-essay="item"
+        :delay="item.__index"
         @collect="$emit('collect', item.id)"
         @show-detail="$emit('showDetail', item)"
       />
@@ -15,6 +16,7 @@
         v-for="item in column2"
         :key="item.id"
         :reading-essay="item"
+        :delay="item.__index"
         @collect="$emit('collect', item.id)"
         @show-detail="$emit('showDetail', item)"
       />
@@ -24,6 +26,7 @@
         v-for="item in column3"
         :key="item.id"
         :reading-essay="item"
+        :delay="item.__index"
         @collect="$emit('collect', item.id)"
         @show-detail="$emit('showDetail', item)"
       />
@@ -32,9 +35,10 @@
     <!-- 移动端单列布局 -->
     <div class="mobile-list">
       <ReadingEssaysCard
-        v-for="item in allItems"
+        v-for="(item, index) in allItems"
         :key="item.id"
         :reading-essay="item"
+        :delay="index"
         @collect="$emit('collect', item.id)"
         @show-detail="$emit('showDetail', item)"
       />
@@ -71,10 +75,15 @@ defineEmits<{
 
 const loadTrigger = ref<HTMLElement | null>(null)
 
-// 三列数据
-const column1 = ref<ReadingEssaysInfo[]>([])
-const column2 = ref<ReadingEssaysInfo[]>([])
-const column3 = ref<ReadingEssaysInfo[]>([])
+// 计算动画延迟（三列错开）
+const getDelay = (rowIndex: number, columnIndex: number) => {
+  return rowIndex * 3 + columnIndex
+}
+
+// 三列数据（带原始索引）
+const column1 = ref<(ReadingEssaysInfo & { __index: number })[]>([])
+const column2 = ref<(ReadingEssaysInfo & { __index: number })[]>([])
+const column3 = ref<(ReadingEssaysInfo & { __index: number })[]>([])
 
 // 估算卡片高度
 const estimateHeight = (item: ReadingEssaysInfo) => {
@@ -89,23 +98,24 @@ const getColumnHeight = (items: ReadingEssaysInfo[]) => {
   return items.reduce((total, item) => total + estimateHeight(item), 0)
 }
 
-// 分配数据到三列（瀑布流算法）
+// 分配数据到三列（瀑布流算法，保存原始索引）
 const distributeToColumns = (items: ReadingEssaysInfo[]) => {
-  const col1: ReadingEssaysInfo[] = []
-  const col2: ReadingEssaysInfo[] = []
-  const col3: ReadingEssaysInfo[] = []
+  const col1: (ReadingEssaysInfo & { __index: number })[] = []
+  const col2: (ReadingEssaysInfo & { __index: number })[] = []
+  const col3: (ReadingEssaysInfo & { __index: number })[] = []
 
-  items.forEach(item => {
+  items.forEach((item, index) => {
+    const itemWithIndex = { ...item, __index: index }
     const h1 = getColumnHeight(col1)
     const h2 = getColumnHeight(col2)
     const h3 = getColumnHeight(col3)
 
     if (h1 <= h2 && h1 <= h3) {
-      col1.push(item)
+      col1.push(itemWithIndex)
     } else if (h2 <= h3) {
-      col2.push(item)
+      col2.push(itemWithIndex)
     } else {
-      col3.push(item)
+      col3.push(itemWithIndex)
     }
   })
 

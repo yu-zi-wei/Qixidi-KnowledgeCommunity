@@ -82,6 +82,10 @@ defineProps<Props>()
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--color-border);
 }
 
 .essay-source {

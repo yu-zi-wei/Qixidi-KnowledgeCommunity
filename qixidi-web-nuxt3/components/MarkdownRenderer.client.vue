@@ -137,9 +137,9 @@ const hydrateVideoEmbeds = () => {
 
 // 初始渲染后绑定事件
 onMounted(() => {
-  bindImageClickEvents()
-  hydrateVideoEmbeds()
   nextTick(() => {
+    bindImageClickEvents()
+    hydrateVideoEmbeds()
     window.dispatchEvent(new CustomEvent('markdown-rendered'))
   })
 })

@@ -48,10 +48,8 @@ const menuOptions = [
     key: 'content',
     icon: () => h(resolveComponent('Icon'), { name: 'mdi:file-document-outline', size: 20 }),
     children: [
-      { label: '文章管理', key: '/admin/articles' },
       { label: '专栏管理', key: '/admin/columns' },
-      { label: '收藏夹管理', key: '/admin/favorites' },
-      { label: '时光小记', key: '/admin/notes' }
+      { label: '收藏夹管理', key: '/admin/favorites' }
     ]
   },
   {
