@@ -39,7 +39,7 @@ Nuxt.js 对前台进行了重构，并赋予它新的名字——**栖息地**�
 ```text
 qixidi/
 │
-└── qixidi-service-plus  # 项目后端plus版本【持续更新中...】（基于SpringBoot-v3 + jdk17 完成）
+└── qixidi-service-plus  # 项目后端plus版本（基于SpringBoot-v3 + jdk17 完成）【后续不在继续更新，bug除外】
     │
     ├── qixidi-startup # 后台启动模块
     │
@@ -53,9 +53,15 @@ qixidi/
     │
     ├── sql  # sql文件（暂不提供，需要可加微信（有偿：169元/包售后）：zsh2978824265）
     │
-├── qixid-web-nuxt2  # 项目前台（Nuxt.js）
+├── qixid-web-nuxt2  # 项目前台（Nuxt.js）【后续不在继续更新，bug除外】
 │
 └── qixidi-web-admin  # 项目后台（Vue.js）
+│
+├──——————————————————————————————————————————————————————————————————————————————————————————————
+│
+└── qixidi-service #项目后端2.0（持续开开发中）
+│
+└── qixidi-web-nuxt3 #项目前台2.0（基于 nuxt3+naive-ui重构，持续开发中）【ui交互设计全面重构，也是一个纯ai参与开发项目】
 
 ```
 
