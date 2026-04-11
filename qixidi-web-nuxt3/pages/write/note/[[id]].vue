@@ -119,7 +119,7 @@ const handlePublish = async () => {
     if (success) {
       message.success(noteId.value ? '保存成功' : '发布成功')
       setTimeout(() => {
-        navigateTo('/time_notes')
+        navigateTo('/time-notes')
       }, 500)
     }
   } finally {
@@ -129,7 +129,7 @@ const handlePublish = async () => {
 
 // 保存成功回调
 const handleSave = () => {
-  navigateTo('/time_notes')
+  navigateTo('/time-notes')
 }
 
 // 返回

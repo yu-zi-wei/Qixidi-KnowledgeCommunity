@@ -1,5 +1,18 @@
 import type { LabelGrouping } from '~/types'
 
+interface LabelDetailVo {
+  id: number
+  uid?: string
+  labelName: string
+  labelDescribe?: string
+  labelCover?: string
+  followNumber?: number
+  articleNumber?: number
+  isFollow?: boolean
+  createTime?: string
+  groupingName?: string
+}
+
 export const useLabelApi = () => {
   const api = useApi()
 
@@ -21,5 +34,12 @@ export const useLabelApi = () => {
     return result.rows || []
   }
 
-  return { getGroupingList, getList }
+  /**
+   * 标签详情
+   */
+  const getLabelInfo = (id: number) => {
+    return api.get<LabelDetailVo>(`/white/label/info/${id}`)
+  }
+
+  return { getGroupingList, getList, getLabelInfo }
 }

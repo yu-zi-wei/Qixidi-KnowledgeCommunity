@@ -606,6 +606,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public Page<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
+        bo.setAuditState(ArticleAuditStateEnums.APPROV.getCode());
         Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, pageQuery.build());
         return articleInfo;
     }

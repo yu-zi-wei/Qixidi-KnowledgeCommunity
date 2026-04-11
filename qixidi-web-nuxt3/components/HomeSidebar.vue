@@ -5,7 +5,7 @@
       <div class="sign-info">
         <span class="sign-label">连续签到</span>
         <span class="sign-days">1 <small>天</small></span>
-        <p class="sign-tip">点亮在栖息地的每一天</p>
+        <p class="sign-tip">点亮在四叶集的每一天</p>
       </div>
       <button class="sign-btn">签到</button>
     </div>
@@ -79,7 +79,7 @@
       <!-- 品牌和运行天数 -->
       <div class="site-header">
         <div class="brand-info">
-          <span class="brand-name">栖息地</span>
+          <span class="brand-name">四叶集</span>
           <span class="brand-slogan">在文字里，找到栖身之所</span>
         </div>
         <div v-if="runningDays > 0" class="running-badge">
@@ -112,7 +112,7 @@
 
       <!-- 版权信息 -->
       <div class="footer-meta">
-        © {{ year }} 栖息地
+        © {{ year }} 四叶集
       </div>
     </div>
   </aside>
@@ -212,16 +212,16 @@ const runningDays = computed(() => {
   );
 }
 
-/* 灰色背景卡片 - 带品牌色渐变 */
+/* 灰色背景卡片 - 带品牌色渐变 + 毛玻璃效果 */
 .sidebar-card.gray-card {
   background: linear-gradient(
     135deg,
     rgba(61, 90, 128, 0.08) 0%,
     rgba(0, 0, 0, 0.04) 50%,
-    rgba(176, 137, 104, 0.06) 100%
+    rgba(90, 127, 168, 0.06) 100%
   );
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .sidebar-card.gray-card:hover {
@@ -229,7 +229,7 @@ const runningDays = computed(() => {
     135deg,
     rgba(61, 90, 128, 0.12) 0%,
     rgba(0, 0, 0, 0.06) 50%,
-    rgba(176, 137, 104, 0.09) 100%
+    rgba(90, 127, 168, 0.09) 100%
   );
   transform: none;
   box-shadow: none;
@@ -238,18 +238,18 @@ const runningDays = computed(() => {
 .dark .sidebar-card.gray-card {
   background: linear-gradient(
     135deg,
-    rgba(93, 138, 168, 0.1) 0%,
+    rgba(122, 176, 228, 0.1) 0%,
     rgba(255, 255, 255, 0.05) 50%,
-    rgba(201, 162, 122, 0.08) 100%
+    rgba(122, 176, 228, 0.08) 100%
   );
 }
 
 .dark .sidebar-card.gray-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(93, 138, 168, 0.15) 0%,
+    rgba(122, 176, 228, 0.15) 0%,
     rgba(255, 255, 255, 0.08) 50%,
-    rgba(201, 162, 122, 0.12) 100%
+    rgba(122, 176, 228, 0.12) 100%
   );
 }
 
@@ -257,8 +257,8 @@ const runningDays = computed(() => {
 .dark .sidebar-card {
   background: linear-gradient(
     135deg,
-    rgba(30, 32, 35, 0.7) 0%,
-    rgba(30, 32, 35, 0.4) 100%
+    rgba(26, 29, 33, 0.7) 0%,
+    rgba(26, 29, 33, 0.4) 100%
   );
   border-color: rgba(255, 255, 255, 0.08);
 }
@@ -266,8 +266,8 @@ const runningDays = computed(() => {
 .dark .sidebar-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(40, 42, 45, 0.8) 0%,
-    rgba(40, 42, 45, 0.5) 100%
+    rgba(36, 40, 44, 0.8) 0%,
+    rgba(36, 40, 44, 0.5) 100%
   );
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
@@ -329,8 +329,8 @@ const runningDays = computed(() => {
 }
 
 .dark .sign-card {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.15) 0%, rgba(18, 20, 22, 0.4) 100%);
-  border-color: rgba(93, 138, 168, 0.2);
+  background: linear-gradient(135deg, rgba(122, 176, 228, 0.15) 0%, rgba(22, 26, 30, 0.4) 100%);
+  border-color: rgba(122, 176, 228, 0.2);
 }
 
 .sign-card:hover {

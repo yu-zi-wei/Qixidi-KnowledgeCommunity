@@ -220,11 +220,6 @@ if (urlId) {
   padding-top: 5px; /* 与导航栏保持 5px 间隙 */
 }
 
-.dark .time-notes-container {
-  background: rgba(30, 32, 35, 0.75);
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
 /* 左侧：时间线列表 - 固定高度，sticky 定位 */
 .time-list-section {
   flex: 2;
@@ -242,7 +237,7 @@ if (urlId) {
 }
 
 .dark .time-list-section {
-  background: rgba(30, 32, 35, 0.75);
+  background: rgba(54, 48, 44, 0.75);
   border-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -275,7 +270,7 @@ if (urlId) {
 }
 
 .dark .time-detail-section {
-  background: rgba(30, 32, 35, 0.75);
+  background: rgba(54, 48, 44, 0.75);
   border-color: rgba(255, 255, 255, 0.06);
 }
 

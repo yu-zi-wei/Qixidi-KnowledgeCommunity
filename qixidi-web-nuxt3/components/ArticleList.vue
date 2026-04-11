@@ -12,7 +12,7 @@
       <div class="card-accent"></div>
       <div class="article-body">
         <div class="article-meta">
-          <NuxtLink :to="`/user/${item.userId}`" class="meta-author">
+          <NuxtLink :to="`/user-home/article/${item.userId}`" target="_blank" class="meta-author">
             <img
               :src="item.avatar"
               :alt="item.nickname"
@@ -155,7 +155,7 @@ watch(() => props.articles.length, () => {
 .article-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 
 /* 卡片入场动画 */
@@ -170,40 +170,34 @@ watch(() => props.articles.length, () => {
   }
 }
 
-/* 卡片设计 - 渐变背景 + 左侧装饰条 */
+/* 卡片设计 - 浅色背景无边框 */
 .article-card {
   position: relative;
   display: flex;
-  gap: 24px;
-  padding: 24px;
-  padding-left: 28px;
-  border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.75) 100%
-  );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 16px;
+  padding: 16px;
+  padding-left: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  border-radius: 10px;
+  transition: all 0.2s ease;
   /* 初始状态：不可见 */
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(12px);
 }
 
 /* 可见状态：触发动画 */
 .article-card.is-visible {
-  animation: card-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.05s) forwards;
+  animation: card-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
 }
 
 /* 左侧装饰条 */
 .card-accent {
   position: absolute;
   left: 0;
-  top: 20px;
-  bottom: 20px;
-  width: 4px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
   background: linear-gradient(
     180deg,
     var(--color-primary) 0%,
@@ -215,13 +209,7 @@ watch(() => props.articles.length, () => {
 }
 
 .article-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.85) 100%
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .article-card:hover .card-accent {
@@ -229,21 +217,11 @@ watch(() => props.articles.length, () => {
 }
 
 :root.dark .article-card {
-  background: linear-gradient(
-    135deg,
-    rgba(40, 42, 45, 0.9) 0%,
-    rgba(40, 42, 45, 0.75) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 :root.dark .article-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(50, 52, 55, 0.95) 0%,
-    rgba(50, 52, 55, 0.85) 100%
-  );
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .article-body {
@@ -253,14 +231,14 @@ watch(() => props.articles.length, () => {
   flex-direction: column;
 }
 
-/* 元数据 - 更精致的布局 */
+/* 元数据 - 更紧凑 */
 .article-meta {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
+  gap: 8px;
+  font-size: 12px;
   color: var(--color-ink-muted);
-  margin-bottom: 14px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
@@ -279,17 +257,16 @@ watch(() => props.articles.length, () => {
 }
 
 .meta-avatar {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   object-fit: cover;
   background: var(--color-surface-dim);
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  transition: transform 0.2s ease;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
 }
 
 .meta-author:hover .meta-avatar {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .meta-sep {
@@ -297,76 +274,67 @@ watch(() => props.articles.length, () => {
 }
 
 .meta-tag {
-  padding: 4px 12px;
-  font-size: 12px;
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.1) 0%, rgba(176, 137, 104, 0.08) 100%);
+  padding: 3px 10px;
+  font-size: 11px;
+  background: var(--color-primary-light);
   color: var(--color-primary);
-  border-radius: 20px;
+  border-radius: 16px;
   font-weight: 500;
   margin-left: auto;
-  border: 1px solid rgba(61, 90, 128, 0.15);
 }
 
-/* 标题 - 更有层次感 */
+/* 标题 - 更紧凑 */
 .article-title {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 10px;
+  line-height: 1.35;
+  margin-bottom: 6px;
   overflow-wrap: break-word;
   word-break: break-word;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .article-title a {
   color: var(--color-ink);
   text-decoration: none;
-  transition: color var(--transition-base);
-  background: linear-gradient(90deg, transparent 0%, transparent 100%);
-  background-size: 0% 2px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
+  transition: color 0.2s ease;
 }
 
 .article-title a:hover {
   color: var(--color-primary);
-  background: linear-gradient(90deg, var(--color-primary-light) 0%, var(--color-primary-light) 100%);
-  background-size: 100% 2px;
 }
 
-/* 摘要 - 更舒适的阅读体验 */
+/* 摘要 - 更紧凑 */
 .article-excerpt {
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: 13px;
+  line-height: 1.6;
   color: var(--color-ink-light);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   flex: 1;
-  overflow-wrap: break-word;
-  word-break: break-word;
 }
 
 /* 互动数据 - 更紧凑 */
 .article-stats {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 10px;
+  border-top: 1px solid #eef0f2;
 }
 
 :root.dark .article-stats {
-  border-top-color: rgba(255, 255, 255, 0.06);
+  border-top-color: #363a3e;
 }
 
 .stat-item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 5px;
+  font-size: 12px;
   color: var(--color-ink-muted);
   transition: all 0.2s ease;
   padding: 4px 8px;
@@ -380,58 +348,61 @@ watch(() => props.articles.length, () => {
 }
 
 .stat-icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   stroke-width: 1.8;
   flex-shrink: 0;
 }
 
-/* 封面图片 - 更有质感 */
+/* 封面图片 - 更紧凑 */
 .article-cover {
-  width: 180px;
-  height: 140px;
+  width: 160px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 10px;
   flex-shrink: 0;
   background: var(--color-surface-dim);
-  transition: all 0.35s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease;
 }
 
 .article-card:hover .article-cover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
 }
 
 .load-more {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 16px;
-  min-height: 80px;
+  padding: 20px 16px;
+  min-height: 60px;
 }
 
 .load-more-text {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--color-ink-muted);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 /* 响应式 */
 @media (max-width: 1024px) {
   .article-cover {
-    width: 150px;
-    height: 110px;
+    width: 140px;
+    height: 105px;
   }
 }
 
 @media (max-width: 768px) {
+  .article-list {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
   .article-card {
     flex-direction: column;
-    gap: 16px;
-    padding: 20px;
-    padding-left: 20px;
-    border-radius: 14px;
+    gap: 12px;
+    padding: 14px;
+    padding-left: 14px;
+    border-radius: 8px;
   }
 
   .card-accent {
@@ -440,8 +411,8 @@ watch(() => props.articles.length, () => {
 
   .article-cover {
     width: 100%;
-    height: 160px;
-    border-radius: 10px;
+    height: 140px;
+    border-radius: 8px;
   }
 
   .meta-tag {
@@ -453,18 +424,26 @@ watch(() => props.articles.length, () => {
   }
 
   .article-stats {
-    padding-top: 10px;
-    gap: 16px;
+    padding-top: 8px;
+    gap: 12px;
   }
 }
 
 @media (max-width: 480px) {
+  .article-list {
+    padding: 8px;
+  }
+
   .article-card {
-    padding: 16px;
+    padding: 12px;
   }
 
   .article-title {
-    font-size: 17px;
+    font-size: 15px;
+  }
+
+  .article-cover {
+    height: 120px;
   }
 }
 </style>

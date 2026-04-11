@@ -50,11 +50,13 @@
                   <n-icon><Edit /></n-icon>
                 </template>
               </n-button>
-              <n-button quaternary size="small" class="btn-secondary" @click="openInNewTab">
-                <template #icon>
-                  <n-icon><ExternalLink /></n-icon>
-                </template>
-              </n-button>
+              <NuxtLink v-if="selectedEssay" :to="`/reading-essays/${selectedEssay.id}`" target="_blank" class="inline-flex">
+                <n-button quaternary size="small" class="btn-secondary">
+                  <template #icon>
+                    <n-icon><ExternalLink /></n-icon>
+                  </template>
+                </n-button>
+              </NuxtLink>
               <n-button quaternary size="small" class="btn-secondary" @click="copyShareLink">
                 <template #icon>
                   <n-icon><Share /></n-icon>
@@ -63,7 +65,11 @@
             </div>
           </div>
         </template>
-        <ReadingEssaysDetailContent v-if="selectedEssay" :essay="selectedEssay" />
+        <ReadingEssaysDetailContent
+          v-if="selectedEssay"
+          :essay="selectedEssay"
+          @comment-added="handleCommentAdded"
+        />
       </n-drawer-content>
     </n-drawer>
   </div>
@@ -185,9 +191,7 @@ const loadReadingEssays = async (reset = false) => {
       pageNum.value++
     }
     total.value = result.total || 0
-  } catch (error) {
-    console.error('加载随笔失败:', error)
-    message.error('加载失败，请重试')
+  } catch {
   } finally {
     loading.value = false
   }
@@ -229,13 +233,6 @@ const handleShowDetail = (item: ReadingEssaysInfo) => {
   drawerVisible.value = true
 }
 
-// 新标签打开详情页
-const openInNewTab = () => {
-  if (!selectedEssay.value) return
-  const url = `/reading-essays/${selectedEssay.value.id}`
-  window.open(url, '_blank')
-}
-
 // 复制分享链接
 const copyShareLink = async () => {
   if (!selectedEssay.value) return
@@ -253,6 +250,13 @@ const handleEdit = () => {
   if (!selectedEssay.value) return
   drawerVisible.value = false  // 关闭详情抽屉
   essayDrawerStore.openEdit(selectedEssay.value.id)  // 打开编辑抽屉
+}
+
+// 评论添加成功后更新评论数
+const handleCommentAdded = () => {
+  if (selectedEssay.value) {
+    selectedEssay.value.commentSum = (selectedEssay.value.commentSum || 0) + 1
+  }
 }
 
 // 监听导航栏吸顶状态
@@ -443,7 +447,7 @@ onMounted(async () => {
 }
 
 .dark .filter-status {
-  background: rgba(30, 32, 35, 0.7);
+  background: rgba(54, 48, 44, 0.7);
   border-color: rgba(255, 255, 255, 0.06);
 }
 

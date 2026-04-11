@@ -40,7 +40,7 @@ public class CollectionRecordBo extends BaseEntity {
      */
     @NotNull(message = "收藏夹id不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long collectionId;
-    
+
     /**
      * 转移前收藏夹id
      */
@@ -55,6 +55,11 @@ public class CollectionRecordBo extends BaseEntity {
      * 状态（0：正常，1：已删除）
      */
     private Integer state;
+
+    /**
+     * 文章标题
+     */
+    private String articleTitle;
 
     /**
      * 创建者id

@@ -54,7 +54,7 @@ defineProps<Props>()
 
 .detail-meta {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
   margin-bottom: 8px;
 }

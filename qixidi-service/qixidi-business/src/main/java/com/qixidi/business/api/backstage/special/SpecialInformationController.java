@@ -105,4 +105,5 @@ public class SpecialInformationController {
     public void remove(@PathVariable Long[] ids) {
         iSpecialInformationService.deleteWithValidByIds(Arrays.asList(ids), true);
     }
+
 }

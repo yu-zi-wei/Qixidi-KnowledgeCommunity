@@ -171,7 +171,8 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
 
     @Override
     public List<SpecialInformationVo> specialListUid(SpecialInformationBo bo) {
-        return baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>().eq(true, SpecialInformation::getUid, bo.getUid())
+        return baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>()
+                .eq(SpecialInformation::getUid, bo.getUid())
                 .like(StringUtils.isNotBlank(bo.getSpecialName()), SpecialInformation::getSpecialName, bo.getSpecialName())
                 .orderByDesc(SpecialInformation::getCreateTime));
     }

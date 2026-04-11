@@ -190,7 +190,6 @@ const handleCreateFolder = async () => {
     cancelCreateForm()
   } catch (error) {
     console.error('创建收藏夹失败:', error)
-    message.error('创建收藏夹失败')
   } finally {
     creating.value = false
   }
@@ -213,7 +212,6 @@ const handleCollect = async () => {
     visible.value = false
   } catch (error) {
     console.error('收藏失败:', error)
-    message.error('收藏失败')
   } finally {
     collecting.value = false
   }

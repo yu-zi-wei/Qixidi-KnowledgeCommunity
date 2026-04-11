@@ -241,12 +241,12 @@ onUnmounted(() => {
 /* 激活状态 - 品牌色 + 微光晕 */
 .toc-item.active::before {
   background: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(61, 90, 128, 0.15);
+  box-shadow: 0 0 0 3px rgba(154, 113, 88, 0.15);
 }
 
 /* 悬停状态 */
 .toc-item:hover::before {
-  background: rgba(61, 90, 128, 0.25);
+  background: rgba(154, 113, 88, 0.25);
 }
 
 .toc-item.active:hover::before {

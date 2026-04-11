@@ -208,25 +208,25 @@ watch(() => props.show, (newVal) => {
   flex-direction: row;
   gap: 14px;
   padding: 14px;
-  border: 1px solid rgba(61, 90, 128, 0.12);
+  border: 1px solid rgba(154, 113, 88, 0.12);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.25s ease;
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.06) 0%, rgba(93, 138, 168, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(154, 113, 88, 0.06) 0%, rgba(201, 160, 122, 0.02) 100%);
   align-items: flex-start;
 }
 
 .album-grid-item:hover {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.12) 0%, rgba(93, 138, 168, 0.06) 100%);
-  border-color: rgba(61, 90, 128, 0.25);
+  background: linear-gradient(135deg, rgba(154, 113, 88, 0.12) 0%, rgba(201, 160, 122, 0.06) 100%);
+  border-color: rgba(154, 113, 88, 0.25);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(61, 90, 128, 0.15);
+  box-shadow: 0 8px 24px rgba(154, 113, 88, 0.15);
 }
 
 .album-grid-item.selected {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.18) 0%, rgba(93, 138, 168, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(154, 113, 88, 0.18) 0%, rgba(201, 160, 122, 0.1) 100%);
   border-color: var(--color-primary);
-  box-shadow: 0 4px 16px rgba(61, 90, 128, 0.2);
+  box-shadow: 0 4px 16px rgba(154, 113, 88, 0.2);
 }
 
 .album-grid-item .album-cover {
@@ -253,7 +253,7 @@ watch(() => props.show, (newVal) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.15) 0%, rgba(93, 138, 168, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(154, 113, 88, 0.15) 0%, rgba(201, 160, 122, 0.08) 100%);
   color: var(--color-primary);
 }
 
@@ -309,26 +309,26 @@ watch(() => props.show, (newVal) => {
 }
 
 .album-grid-item.selected .album-intro {
-  color: rgba(61, 90, 128, 0.8);
+  color: rgba(154, 113, 88, 0.8);
 }
 
 /* 暗色主题 */
 :global(.dark) .album-grid-item {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.1) 0%, rgba(61, 90, 128, 0.04) 100%);
-  border-color: rgba(93, 138, 168, 0.2);
+  background: linear-gradient(135deg, rgba(201, 160, 122, 0.1) 0%, rgba(154, 113, 88, 0.04) 100%);
+  border-color: rgba(201, 160, 122, 0.2);
 }
 
 :global(.dark) .album-grid-item:hover {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.18) 0%, rgba(61, 90, 128, 0.1) 100%);
-  border-color: rgba(93, 138, 168, 0.35);
+  background: linear-gradient(135deg, rgba(201, 160, 122, 0.18) 0%, rgba(154, 113, 88, 0.1) 100%);
+  border-color: rgba(201, 160, 122, 0.35);
 }
 
 :global(.dark) .album-grid-item.selected {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.25) 0%, rgba(61, 90, 128, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(201, 160, 122, 0.25) 0%, rgba(154, 113, 88, 0.15) 100%);
 }
 
 :global(.dark) .album-grid-item .album-cover-placeholder {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.2) 0%, rgba(61, 90, 128, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(201, 160, 122, 0.2) 0%, rgba(154, 113, 88, 0.1) 100%);
 }
 
 /* 分页 */

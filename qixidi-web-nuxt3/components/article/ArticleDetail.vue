@@ -34,12 +34,12 @@
       <!-- 文章元数据 -->
       <div class="article-meta">
         <div class="meta-left">
-          <NuxtLink :to="`/user/${article.userId}`" class="author-link">
+          <NuxtLink :to="`/user-home/article/${article.userId}`" target="_blank" class="author-link">
             <img :src="article.avatar" :alt="article.nickname" class="author-avatar" />
             <span class="author-name">{{ article.nickname }}</span>
           </NuxtLink>
           <span class="meta-divider">·</span>
-          <time class="publish-time">{{ formatTime(article.createTime) }}</time>
+          <time class="publish-time" :title="getFullDateTime(article.createTime)">{{ formatTime(article.createTime) }}</time>
           <span v-if="article.groupingName" class="meta-divider">·</span>
           <NuxtLink v-if="article.groupingName" :to="`/category/${article.groupingId}`" class="category-link">
             {{ article.groupingName }}
@@ -68,19 +68,19 @@
       <MarkdownRenderer :content="article.articleContent" class="article-content" />
 
       <!-- 文章标签 -->
-      <div v-if="labelNames.length > 0" class="article-tags">
+      <div v-if="labelItems.length > 0" class="article-tags">
         <div class="tags-label">
           <Hash class="icon" />
           <span>相关标签</span>
         </div>
         <div class="tags-list">
           <NuxtLink
-            v-for="label in labelNames"
-            :key="label"
-            :to="`/label/${label}`"
+            v-for="label in labelItems"
+            :key="label.id"
+            :to="`/public/label/${label.id}`"
             class="tag"
           >
-            # {{ label }}
+            # {{ label.labelName }}
           </NuxtLink>
         </div>
       </div>
@@ -91,6 +91,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { Eye, Heart, ThumbUp, MessageCircle, Edit, Quote, Hash } from '@vicons/tabler'
+import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 interface LabelInfo {
   id: number
@@ -217,32 +218,13 @@ onMounted(() => {
   }
 })
 
-// 从 labelList 提取标签名列表
-const labelNames = computed(() => {
-  // 优先使用 labelNameList（字符串数组）
-  if (props.article.labelNameList && props.article.labelNameList.length > 0) {
-    return props.article.labelNameList
-  }
-  // 其次使用 labelList（对象数组）
+// 从 labelList 提取标签（带 id）
+const labelItems = computed(() => {
   if (props.article.labelList && props.article.labelList.length > 0) {
-    return props.article.labelList.map(item => item.labelName)
+    return props.article.labelList
   }
   return []
 })
-
-// 格式化时间
-const formatTime = (time: string) => {
-  const date = new Date(time)
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-  if (days === 0) return '今天'
-  if (days === 1) return '昨天'
-  if (days < 7) return `${days} 天前`
-
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
-}
 </script>
 
 <style scoped>
@@ -289,11 +271,11 @@ const formatTime = (time: string) => {
 }
 
 .dark .article-actions-sidebar {
-  background: rgba(40, 42, 45, 0.7);
+  background: rgba(54, 48, 44, 0.7);
 }
 
 .dark .article-actions-sidebar:hover {
-  background: rgba(50, 52, 55, 0.8);
+  background: rgba(64, 58, 54, 0.8);
 }
 
 .article-actions-sidebar.is-visible {
@@ -316,7 +298,7 @@ const formatTime = (time: string) => {
 
 .action-btn-vertical:hover {
   color: var(--color-primary);
-  background: rgba(61, 90, 128, 0.08);
+  background: rgba(154, 113, 88, 0.08);
 }
 
 .action-btn-vertical.active {
@@ -355,7 +337,7 @@ const formatTime = (time: string) => {
 }
 
 .dark .article-main-content {
-  background: rgba(30, 32, 35, 0.2);
+  background: rgba(54, 48, 44, 0.2);
 }
 
 .article-main-content.is-visible {
@@ -437,7 +419,7 @@ const formatTime = (time: string) => {
 }
 
 .author-link:hover {
-  background: rgba(61, 90, 128, 0.08);
+  background: rgba(154, 113, 88, 0.08);
 }
 
 .author-avatar {
@@ -499,7 +481,7 @@ const formatTime = (time: string) => {
 }
 
 .meta-item:hover {
-  background: rgba(61, 90, 128, 0.08);
+  background: rgba(154, 113, 88, 0.08);
   color: var(--color-primary);
 }
 
@@ -568,7 +550,7 @@ const formatTime = (time: string) => {
 .tag:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
-  background: rgba(61, 90, 128, 0.05);
+  background: rgba(154, 113, 88, 0.05);
 }
 
 .dark .tag {
@@ -576,7 +558,7 @@ const formatTime = (time: string) => {
 }
 
 .dark .tag:hover {
-  background: rgba(93, 138, 168, 0.1);
+  background: rgba(201, 160, 122, 0.1);
 }
 
 /* 文章内容容器 */
@@ -616,7 +598,7 @@ const formatTime = (time: string) => {
   }
 
   .dark .article-actions-sidebar {
-    background: rgba(40, 42, 45, 0.85);
+    background: rgba(64, 58, 54, 0.85);
   }
 
   .article-actions-sidebar.is-visible {

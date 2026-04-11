@@ -300,7 +300,6 @@ const handlePublish = async () => {
     emit('success')
     handleClose()
   } catch (error: any) {
-    message.error(error.message || '操作失败')
   } finally {
     isSubmitting.value = false
   }

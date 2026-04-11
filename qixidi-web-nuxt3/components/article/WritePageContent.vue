@@ -433,8 +433,7 @@ const handleQuickSaveDraft = async () => {
     }
 
     message.success('草稿保存成功')
-  } catch (error: any) {
-    message.error(error.message || '保存失败')
+  } catch {
   }
 }
 
@@ -490,8 +489,7 @@ const handlePublish = async () => {
             navigateTo('/')
           }
         }, 500)
-      } catch (error: any) {
-        message.error(error.message || (isEdit.value ? '更新失败' : '发布失败'))
+      } catch {
       } finally {
         isSubmitting.value = false
       }

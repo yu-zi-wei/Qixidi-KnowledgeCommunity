@@ -130,12 +130,12 @@ onMounted(() => {
 }
 
 .dark .reading-essays-card {
-  background: rgba(30, 32, 35, 0.75);
+  background: rgba(54, 48, 44, 0.75);
   border-color: rgba(255, 255, 255, 0.06);
 }
 
 .dark .reading-essays-card:hover {
-  background: rgba(40, 42, 45, 0.9);
+  background: rgba(64, 58, 54, 0.9);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 

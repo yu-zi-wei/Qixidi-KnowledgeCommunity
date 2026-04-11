@@ -142,6 +142,30 @@ export const useReadingEssaysApi = () => {
     return await api.get<ReadingEssaysInfo>(`/white/dictum/info/${id}`)
   }
 
+  /**
+   * 获取当前用户随笔列表（后台管理）
+   * 接口：GET /frontDesk/dictum/info/role/list
+   */
+  const getAdminList = async (params: {
+    pageNum?: number
+    pageSize?: number
+    dictumState?: number
+    content?: string
+  }) => {
+    return await api.getPage<ReadingEssaysInfo>(
+      '/frontDesk/dictum/info/role/list',
+      params
+    )
+  }
+
+  /**
+   * 删除随笔
+   * 接口：DELETE /frontDesk/dictum/info/{id}/{groupId}
+   */
+  const deleteDictum = async (id: number, groupId: number): Promise<void> => {
+    return await api.delete(`/frontDesk/dictum/info/${id}/${groupId}`)
+  }
+
   return {
     getReadingEssaysList,
     getReadingEssaysGroups,
@@ -155,7 +179,10 @@ export const useReadingEssaysApi = () => {
     getDictumGroups,
     getDictumAlbums,
     createDictum,
-    updateDictum
+    updateDictum,
+    // 后台管理
+    getAdminList,
+    deleteDictum
   }
 }
 

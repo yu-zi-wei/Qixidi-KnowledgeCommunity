@@ -205,6 +205,85 @@ watch(() => data.value, (newData) => {
 
 ---
 
+## 列表页状态持久化规范
+
+**场景**：分页列表页点击某条数据跳转详情页，返回时需要恢复分页和滚动位置。
+
+### 根据列表加载方式选择持久化策略
+
+| 列表加载方式 | 页码持久化 | 滚动位置持久化 |
+|-------------|-----------|--------------|
+| **分页组件**（n-pagination） | URL query 参数 `?page=N` | `history.replaceState` |
+| **自动触底加载**（infinite scroll） | `history.replaceState` | `history.replaceState` |
+
+### 为什么分页用 URL 参数
+
+- 任何刷新都存活（包括 Ctrl+F5 强刷）
+- 可分享、可收藏指定页
+- 浏览器前进后退天然支持
+- SSR 能读取页码
+
+### 为什么无限滚动用 history.state
+
+- 没有明确的"页码"概念，是累计加载
+- URL 频繁变化体验差
+- 只需在跳转前保存，返回时恢复
+
+### 分页组件模式（URL query）
+
+```typescript
+// 页码从 URL 读取
+const currentPage = computed(() => Number(route.query.page) || 1)
+
+// computed key 自动响应页码变化
+const cacheKey = computed(() => `articles-${id}-${currentPage.value}`)
+const { data } = await useAsyncData(cacheKey, () => fetchAPI(currentPage.value))
+
+// 切页时更新 URL
+const handlePageChange = (page: number) => {
+  navigateTo({ query: { ...route.query, page } })
+}
+
+// 跳转详情前保存滚动位置
+const handleSaveState = (scrollTop: number) => {
+  history.replaceState({ ...(window.history.state || {}), scrollKey: scrollTop }, '')
+}
+
+// 返回时恢复滚动
+onMounted(() => {
+  if (window.history.state?.scrollKey) {
+    nextTick(() => listRef.value?.restoreScroll(window.history.state.scrollKey))
+  }
+})
+```
+
+### 无限滚动模式（history.state）
+
+```typescript
+// 跳转前保存页码 + 滚动位置
+const handleSaveState = () => {
+  history.replaceState({
+    ...(window.history.state || {}),
+    listPage: pageNum.value,
+    listScroll: scrollEl.scrollTop
+  }, '')
+}
+
+// 返回时恢复
+if (import.meta.client) {
+  const saved = window.history.state?.listPage
+  if (saved) pageNum.value = saved
+}
+
+onMounted(() => {
+  if (window.history.state?.listScroll) {
+    nextTick(() => { scrollEl.scrollTop = window.history.state.listScroll })
+  }
+})
+```
+
+---
+
 ## 核心教训
 
 1. **框架能力优先**：优先使用 `useAsyncData` 的内置特性

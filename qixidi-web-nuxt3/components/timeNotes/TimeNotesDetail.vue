@@ -30,11 +30,13 @@
               <n-icon><Edit /></n-icon>
             </template>
           </n-button>
-          <n-button quaternary size="small" class="btn-secondary" @click="openInNewTab">
-            <template #icon>
-              <n-icon><ExternalLink /></n-icon>
-            </template>
-          </n-button>
+          <NuxtLink v-if="detail" :to="`/time-notes/${detail.id}`" target="_blank" class="inline-flex">
+            <n-button quaternary size="small" class="btn-secondary">
+              <template #icon>
+                <n-icon><ExternalLink /></n-icon>
+              </template>
+            </n-button>
+          </NuxtLink>
           <n-button quaternary size="small" class="btn-secondary" @click="copyShareLink">
             <template #icon>
               <n-icon><Share /></n-icon>
@@ -72,17 +74,10 @@ const handleEdit = () => {
   emit('edit', props.detail.id)
 }
 
-// 新标签页打开
-const openInNewTab = () => {
-  if (!props.detail) return
-  const url = `/time_notes/${props.detail.id}`
-  window.open(url, '_blank')
-}
-
 // 复制分享链接
 const copyShareLink = async () => {
   if (!props.detail) return
-  const url = `${window.location.origin}/time_notes/${props.detail.id}`
+  const url = `${window.location.origin}/time-notes/${props.detail.id}`
   try {
     await navigator.clipboard.writeText(url)
     message.success('链接已复制')

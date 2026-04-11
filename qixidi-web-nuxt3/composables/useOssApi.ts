@@ -39,7 +39,7 @@ export const useOssApi = () => {
       xhr.addEventListener('load', () => {
         if (xhr.status === 200) {
           try {
-            // 接口返回：{ code, msg, data: { url, src, ... } }
+            // 接口返回：{ code, msg, data: { url, src, href, fileName, alt, ossId } }
             const result = JSON.parse(xhr.responseText)
             if (result.code === 200 && result.data?.url) {
               resolve(result.data.url)

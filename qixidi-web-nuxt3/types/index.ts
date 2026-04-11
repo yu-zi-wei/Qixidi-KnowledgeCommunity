@@ -215,6 +215,17 @@ export interface SpecialInfo {
   coverImage?: string
 }
 
+// 后台专辑列表项
+export interface AdminSpecialItem {
+  id: number
+  specialName: string
+  specialIntroduce?: string
+  cover?: string
+  articleNumber?: number
+  includedCount?: number
+  createTime?: string
+}
+
 // 搜索记录
 export interface SearchRecordsVo {
   id: number
@@ -264,6 +275,47 @@ export interface ArticleCommentBo {
   state?: number           // 评论状态
 }
 
+// ==================== 随笔评论相关 ====================
+
+// 随笔评论
+export interface DictumCommentVo {
+  id: string | number            // 评论 id（大整数，保持字符串避免精度丢失）
+  dictumId: string | number    // 随笔 id（大整数）
+  uid: string                   // 随笔用户 id
+  parentId: string | number    // 父级评论 id（一级评论的 parentId = dictumId）
+  commentGrade: number          // 评论等级：1=一级，2=二级，3=三级及以下
+  targetId: string              // 目标 id（被回复的评论 id 或随笔 id）
+  targetUid: string             // 目标用户 id
+  commentUid: string            // 评论人 id
+  content: string               // 评论内容
+  type: number                  // 评论类型：1=名言，2=评论
+  status: number                // 评论状态：0=正常，1=已删除
+  createTime: string
+  updateTime?: string
+  username: string              // 评论用户名
+  nickname: string              // 评论用户昵称
+  avatar: string                // 评论用户头像
+  targetUsername?: string       // 目标评论用户名
+  targetNickname?: string       // 目标评论用户昵称
+  targetAvatar?: string         // 目标评论用户头像
+  dictumCommentVoList?: DictumCommentVo[]  // 次级评论集合
+}
+
+// 新增随笔评论请求
+export interface DictumCommentBo {
+  dictumId: string | number     // 随笔 id（大整数，保持字符串避免精度丢失）
+  worksContent?: string         // 目标内容
+  uid: string                   // 随笔用户 id
+  parentId: string | number     // 父级评论 id（大整数）
+  commentGrade: number          // 评论等级：1=一级，2=二级，3=三级及以下
+  targetId: string | number     // 目标 id（大整数）
+  targetUid: string             // 目标用户 id
+  commentUid?: string           // 评论人 id（后端自动填充）
+  content: string               // 评论内容
+  type: number                  // 评论类型：1=名言，2=评论
+  status?: number               // 评论状态
+}
+
 // ==================== 点赞相关 ====================
 
 // 点赞/取消点赞请求
@@ -286,6 +338,19 @@ export interface CollectionFolder {
   collectionName: string
   collectionIntroduce?: string
   includedCount?: number  // 收录数
+}
+
+// 收藏夹详情（后台管理用）
+export interface CollectionItem {
+  id: number
+  collectionName: string
+  collectionIntroduce: string
+  state: number
+  uid: string
+  username: string
+  updateId: string
+  createTime: string
+  includedCount: number
 }
 
 // 创建收藏夹请求
@@ -424,3 +489,54 @@ export interface TimeNotesBo {
   uid?: string             // 用户id
   recordTime: string       // 记录时间（必填，yyyy-MM-dd）
 }
+
+// ==================== 用户统计相关 ====================
+
+// 用户统计数据
+export interface UserCensusCount {
+  articleCount: number      // 文章总数
+  columnCount: number       // 专栏数
+  collectionCount: number   // 收藏夹数
+  followCount: number       // 关注数
+  commentCount: number      // 总获评论数
+  albumCount: number        // 专辑总数
+  essayCount: number        // 阅读随笔
+  timeNotesCount: number    // 时光小记数
+}
+
+// 用户投稿记录项（接口返回格式）
+export interface UserSubmissionItem {
+  dateTimes: string         // 日期
+  censusSum: number         // 投稿数量
+}
+
+// 用户投稿记录（日期 -> 数量映射，用于图表组件）
+export type UserSubmissionRecord = Record<string, number>
+
+// ==================== 后台文章管理相关 ====================
+
+// 后台文章列表项
+export interface AdminArticleItem {
+  id: number
+  articleTitle: string
+  articleCover: string
+  articleAbstract: string
+  groupingName: string
+  auditState: number       // 1=审核中, 2=已发布, 3=审核不通过, 4=草稿
+  state: number            // 0=正常, 1=已删除
+  isPublic: number         // 1=公开, 2=不公开
+  likeTimes: number
+  numberTimes: number
+  commentTimes: number
+  collectionTimes: number
+  createTime: string
+  updateTime: string
+}
+
+// 文章审核状态
+export const ArticleAuditState = {
+  REVIEWING: 1,    // 审核中
+  PUBLISHED: 2,    // 已发布
+  REJECTED: 3,     // 审核不通过
+  DRAFT: 4         // 草稿
+} as const

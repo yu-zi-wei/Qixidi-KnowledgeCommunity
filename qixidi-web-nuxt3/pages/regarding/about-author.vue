@@ -45,7 +45,8 @@ const authDialogStore = useAuthDialogStore()
 const sidebarData = useState('article-sidebar-data', () => ({
   author: null as any,
   articleContent: '',
-  showToc: true
+  showToc: true,
+  specialCard: null as any
 }))
 
 // 评论默认显示
@@ -65,13 +66,24 @@ const { data: article, pending, error } = await useAsyncData(
   }
 )
 
-// 设置侧边栏数据（不显示作者信息）
+// 设置侧边栏数据（显示作者社交卡片）
 watch(() => article.value, (newArticle) => {
   if (newArticle) {
     sidebarData.value = {
-      author: null, // 不显示作者信息
+      author: null,
       articleContent: newArticle.articleContent,
-      showToc: true
+      showToc: true,
+      specialCard: {
+        type: 'author-social',
+        data: {
+          nickname: newArticle.nickname,
+          avatar: newArticle.avatar,
+          motto: '他强任他强，清风拂山岗',
+          github: 'https://github.com/yu-zi-wei',
+          gitee: 'https://gitee.com/yu-zi-wei',
+          email: '2978824265@qq.com'
+        }
+      }
     }
   }
 }, { immediate: true })
@@ -146,7 +158,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: () => article.value?.articleAbstract || '了解栖息地博客作者'
+      content: () => article.value?.articleAbstract || '了解四叶集博客作者'
     }
   ]
 })

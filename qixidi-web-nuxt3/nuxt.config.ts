@@ -15,7 +15,7 @@ export default defineNuxtConfig({
 
     // 禁用原生绑定（Windows 兼容性）
     experimental: {
-        inlineSSRStyles: false
+        inlineSSRStyles: true
     },
 
     modules: [
@@ -71,13 +71,14 @@ export default defineNuxtConfig({
 
     app: {
         head: {
-            title: '栖息地 — 在文字里，找到栖身之所',
+            title: '四叶集 — 在文字里，找到栖身之所',
             meta: [
                 {charset: 'utf-8'},
                 {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-                {name: 'description', content: '栖息地 — 记录想法、分享灵感、沉淀时光的个人博客'}
+                {name: 'description', content: '四叶集 — 记录想法、分享灵感、沉淀时光的个人博客'}
             ],
             link: [
+                {rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg'},
                 {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
                 {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
                 {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
@@ -108,6 +109,8 @@ export default defineNuxtConfig({
         '/tags': {ssr: true},
         '/tags/**': {ssr: true},
         '/about': {ssr: true},
+        '/public/**': {ssr: true},           // 公开页面（专栏等）
+        '/user-home/**': {ssr: true},       // 个人主页（用户信息 SSR）
 
         // 写作页面 —— CSR（需要登录，客户端交互）
         '/write': {ssr: false},

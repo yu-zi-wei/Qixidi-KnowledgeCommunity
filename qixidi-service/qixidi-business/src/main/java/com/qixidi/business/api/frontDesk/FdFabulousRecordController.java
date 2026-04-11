@@ -1,12 +1,14 @@
 package com.qixidi.business.api.frontDesk;
 
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
 
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
+import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -44,10 +46,10 @@ public class FdFabulousRecordController {
     }
 
     /**
-     * 用户点赞列表
+     * 用户点赞文章列表
      */
-    @GetMapping("/fabulous/list")
-    public Object fabulousList(@Validated(AddGroup.class) UserHomeBo bo, PageQuery pageQuery) {
+    @GetMapping("/fabulous/articleList")
+    public TableDataInfo<ArticleInformationVo> fabulousArticleList(@Validated UserHomeBo bo, PageQuery pageQuery) {
         return iFabulousRecordService.fabulousList(bo, pageQuery);
     }
 

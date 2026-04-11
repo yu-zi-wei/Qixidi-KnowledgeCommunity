@@ -72,7 +72,7 @@
           <div class="comment-content-wrapper">
             <div class="comment-meta">
               <span class="comment-author">{{ comment.commentName }}</span>
-              <time class="comment-time">{{ formatTime(comment.createTime) }}</time>
+              <time class="comment-time" :title="getFullDateTime(comment.createTime)">{{ formatTime(comment.createTime) }}</time>
               <button v-if="canDelete(comment)" class="delete-btn" @click="handleDelete(comment)" title="删除评论">
                 <Trash class="delete-icon" />
               </button>
@@ -90,7 +90,7 @@
                     <span v-if="reply.commentGrade === 3 && reply.targetName" class="reply-to">
                       回复 <span class="reply-target">@{{ reply.targetName }}</span>
                     </span>
-                    <time class="reply-time">{{ formatTime(reply.createTime) }}</time>
+                    <time class="reply-time" :title="getFullDateTime(reply.createTime)">{{ formatTime(reply.createTime) }}</time>
                     <button v-if="canDelete(reply)" class="delete-btn delete-btn-small" @click="handleDelete(reply)" title="删除评论">
                       <Trash class="delete-icon" />
                     </button>
@@ -127,6 +127,7 @@
 <script setup lang="ts">
 import { MessageCircle, X, CornerDownLeft, Trash } from '@vicons/tabler'
 import type { ArticleCommentVo } from '~/types'
+import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 interface Props {
   articleId: number
@@ -186,23 +187,6 @@ const insertEmoji = (emoji: string) => {
     textarea.setSelectionRange(newPos, newPos)
     textarea.focus()
   })
-}
-
-// 格式化时间
-const formatTime = (time: string) => {
-  const date = new Date(time)
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const minutes = Math.floor(diff / (1000 * 60))
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-  if (minutes < 1) return '刚刚'
-  if (minutes < 60) return `${minutes} 分钟前`
-  if (hours < 24) return `${hours} 小时前`
-  if (days < 7) return `${days} 天前`
-
-  return date.toLocaleDateString('zh-CN')
 }
 
 // 加载评论列表

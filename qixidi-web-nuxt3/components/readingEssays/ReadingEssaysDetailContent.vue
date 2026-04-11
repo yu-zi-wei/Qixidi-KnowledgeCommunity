@@ -1,5 +1,10 @@
 <template>
   <div class="essay-detail-content">
+    <!-- 操作按钮插槽 -->
+    <div v-if="$slots.actions" class="essay-actions">
+      <slot name="actions" />
+    </div>
+
     <!-- 随笔内容 -->
     <div class="essay-content">
       {{ essay.content }}
@@ -54,6 +59,14 @@
         {{ essay.helpSum || 0 }} 赞
       </span>
     </div>
+
+    <!-- 评论区域 -->
+    <DictumCommentSection
+      :key="essay.id"
+      :dictum-id="essay.id"
+      :dictum-uid="essay.uid"
+      @comment-added="handleCommentAdded"
+    />
   </div>
 </template>
 
@@ -62,16 +75,35 @@ import { MessageCircle, ThumbUp } from '@vicons/tabler'
 import type { ReadingEssaysInfo } from '~/types'
 import { getFullDateCN } from '~/utils/formatTime'
 
+import DictumCommentSection from './DictumCommentSection.vue'
+
 interface Props {
   essay: ReadingEssaysInfo
 }
 
 defineProps<Props>()
+const emit = defineEmits<{
+  commentAdded: []
+}>()
+
+const handleCommentAdded = () => {
+  emit('commentAdded')
+}
 </script>
 
 <style scoped>
 .essay-detail-content {
   padding: 24px 32px;
+  position: relative;
+}
+
+.essay-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
 }
 
 .essay-content {
@@ -79,6 +111,7 @@ defineProps<Props>()
   line-height: 1.9;
   color: var(--color-ink);
   margin-bottom: 28px;
+  padding-top: 28px;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;

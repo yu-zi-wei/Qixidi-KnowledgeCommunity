@@ -1,7 +1,7 @@
 /* ============================================
-   栖息地 — 设计系统
-   主题：墨韵书香（冷灰调 - 高级中性）
-   美学方向：传统水墨画 + 现代杂志感
+   筑与四叶 — 设计系统
+   主题：暖木书香（温暖米灰调 - 文艺舒适）
+   美学方向：温暖纸质 + 现代简洁
    ============================================ */
 
 /* === 浅色主题（默认） === */
@@ -12,45 +12,45 @@
   --color-ink-muted: #7a7a8c;
   --color-ink-faint: #b8b8c4;
 
-  /* 背景色阶 */
-  --color-surface: #ffffff;
-  --color-surface-warm: #f8f8f8;
-  --color-surface-dim: #ebe9e5;
+  /* 背景色阶 - 冷灰调 */
+  --color-surface: #f8f9fa;
+  --color-surface-warm: #f4f5f7;
+  --color-surface-dim: #eef0f2;
 
-  /* 网格效果 */
-  --grid-color: rgba(0, 0, 0, 0.03);
+  /* 网格效果 - 冷色调 */
+  --grid-color: rgba(61, 90, 128, 0.06);
   --grid-size: 40px;
 
-  /* 卡片背景 */
-  --card-bg: rgba(255, 255, 255, 0.4);
+  /* 卡片背景 - 冷白 */
+  --card-bg: rgba(255, 255, 255, 0.6);
 
-  /* 边框色 */
-  --color-border: #d8d5d0;
-  --color-border-light: #e8e5e0;
+  /* 边框色 - 冷灰 */
+  --color-border: #e2e4e8;
+  --color-border-light: #eef0f2;
 
-  /* 主色：深墨蓝 */
+  /* 主色：冷蓝 */
   --color-primary: #3d5a80;
-  --color-primary-dark: #293d54;
-  --color-primary-hover: #293d54;
-  --color-primary-light: #e8eef4;
+  --color-primary-dark: #2d4a70;
+  --color-primary-hover: #4d6a90;
+  --color-primary-light: #e8f0f8;
 
-  /* 强调色：暗金 */
-  --color-accent: #b08968;
-  --color-accent-hover: #9a7558;
+  /* 强调色：深蓝 */
+  --color-accent: #5a7fa8;
+  --color-accent-hover: #4a6f98;
 
   /* 功能色 */
   --color-danger: #c44536;
 
-  --color-header-bg: rgba(255, 255, 255, 0.85);
-  --color-code-bg: #f5f6f8;
+  --color-header-bg: rgba(248, 249, 250, 0.92);
+  --color-code-bg: #eef0f2;
   /* Markdown 代码块样式 */
-  --md-code-bg: #f6f8fa;
-  --md-code-border: #e8e4de;
-  --md-inline-code-bg: rgba(175, 184, 193, 0.2);
-  --md-quote-border: #dfe2e5;
+  --md-code-bg: #eef0f2;
+  --md-code-border: #e2e4e8;
+  --md-inline-code-bg: rgba(61, 90, 128, 0.08);
+  --md-quote-border: #e2e4e8;
   --md-quote-text: #6a737d;
   --md-link-color: var(--color-primary);
-  --md-table-border: #dfe2e5;
+  --md-table-border: #e2e4e8;
 
   /* === 字体 === */
   --font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', Georgia, serif;
@@ -101,6 +101,13 @@
   --transition-fast: 0.15s ease;
   --transition-base: 0.2s ease;
   --transition-slow: 0.3s ease;
+
+  /* === 图表色阶（贡献图） === */
+  --chart-level-1: #ebedf0;
+  --chart-level-2: #c6e48b;
+  --chart-level-3: #7bc96f;
+  --chart-level-4: #239a3b;
+  --chart-level-5: #196127;
 }
 
 /* === 深色主题 === */
@@ -111,49 +118,56 @@
   --color-ink-muted: #8a8c92;
   --color-ink-faint: #5c5e64;
 
-  /* 背景色阶 */
-  --color-surface: #121416;
-  --color-surface-warm: #0d0f11;
-  --color-surface-dim: #1a1d20;
+  /* 背景色阶 - 深暖灰 */
+  --color-surface: #36302C;
+  --color-surface-warm: #2C2622;
+  --color-surface-dim: #403A36;
 
-  /* 网格效果 - 暗色主题 */
-  --grid-color: rgba(255, 255, 255, 0.03);
+  /* 网格效果 - 冷色 */
+  --grid-color: rgba(90, 127, 168, 0.08);
 
-  /* 卡片背景 - 暗色主题 */
-  --card-bg: rgba(18, 20, 22, 0.4);
+  /* 卡片背景 - 暖灰 */
+  --card-bg: rgba(44, 38, 34, 0.5);
 
-  /* 边框色 */
-  --color-border: #2a2d32;
-  --color-border-light: #1f2126;
+  /* 边框色 - 暖灰 */
+  --color-border: #4A4440;
+  --color-border-light: #3A3430;
 
-  /* 主色：深墨蓝 - 深色模式调亮 */
-  --color-primary: #5d8aa8;
-  --color-primary-dark: #4a7090;
-  --color-primary-hover: #7aa3bf;
-  --color-primary-light: #1a2a38;
+  /* 主色：冷蓝调亮 */
+  --color-primary: #6a9fd4;
+  --color-primary-dark: #5a8fc4;
+  --color-primary-hover: #7aafd4;
+  --color-primary-light: #2a3040;
 
-  /* 强调色：暗金 - 深色模式 */
-  --color-accent: #c9a27a;
-  --color-accent-hover: #dbb68e;
+  /* 强调色 */
+  --color-accent: #7ab0e4;
+  --color-accent-hover: #8ac0f4;
 
   /* 功能色 */
   --color-danger: #e05545;
 
-  --color-header-bg: rgba(12, 14, 16, 0.85);
-  --color-code-bg: #1a1d20;
+  --color-header-bg: rgba(54, 48, 44, 0.92);
+  --color-code-bg: #403A36;
   /* Markdown 代码块样式 */
-  --md-code-bg: #161b22;
-  --md-code-border: #30363d;
-  --md-inline-code-bg: rgba(110, 118, 129, 0.4);
-  --md-quote-border: #30363d;
-  --md-quote-text: #8b949e;
+  --md-code-bg: #2C2622;
+  --md-code-border: #4A4440;
+  --md-inline-code-bg: rgba(90, 127, 168, 0.2);
+  --md-quote-border: #363a3e;
+  --md-quote-text: #8a8c92;
   --md-link-color: var(--color-primary);
-  --md-table-border: #30363d;
+  --md-table-border: #363a3e;
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.35);
   --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.5);
+
+  /* 图表色阶（深色主题） */
+  --chart-level-1: #2d333b;
+  --chart-level-2: #0e4429;
+  --chart-level-3: #006d32;
+  --chart-level-4: #26a641;
+  --chart-level-5: #39d353;
 
   color-scheme: dark;
 }
@@ -269,14 +283,11 @@ a:hover {
 /* 文章卡片容器 */
 .article-card {
   padding: var(--space-5);
-  background: var(--color-surface);
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-light);
   transition: all var(--transition-base);
 }
 
 .article-card:hover {
-  border-color: var(--color-border);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }

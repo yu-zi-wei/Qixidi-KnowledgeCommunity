@@ -45,7 +45,8 @@ const authDialogStore = useAuthDialogStore()
 const sidebarData = useState('article-sidebar-data', () => ({
   author: null as any,
   articleContent: '',
-  showToc: true
+  showToc: true,
+  specialCard: null as any
 }))
 
 // 评论默认显示
@@ -65,13 +66,16 @@ const { data: article, pending, error } = await useAsyncData(
   }
 )
 
-// 设置侧边栏数据（不显示作者信息）
+// 设置侧边栏数据（显示平台介绍卡片）
 watch(() => article.value, (newArticle) => {
   if (newArticle) {
     sidebarData.value = {
-      author: null, // 不显示作者信息
+      author: null,
       articleContent: newArticle.articleContent,
-      showToc: true
+      showToc: true,
+      specialCard: {
+        type: 'platform'
+      }
     }
   }
 }, { immediate: true })
@@ -142,11 +146,11 @@ const handleEdit = () => {
 
 // SEO 设置
 useHead({
-  title: () => article.value?.articleTitle || '关于栖息地',
+  title: () => article.value?.articleTitle || '关于四叶集',
   meta: [
     {
       name: 'description',
-      content: () => article.value?.articleAbstract || '了解栖息地博客平台'
+      content: () => article.value?.articleAbstract || '了解四叶集博客平台'
     }
   ]
 })

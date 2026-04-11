@@ -24,7 +24,8 @@
           <NuxtLink
             v-for="user in followUsers"
             :key="user.userId"
-            :to="`/user/${user.userId}`"
+            :to="`/user-home/article/${user.userId}`"
+            target="_blank"
             class="follow-user-item"
           >
             <img :src="user.avatar" :alt="user.nickname" class="follow-avatar" />

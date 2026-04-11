@@ -109,7 +109,6 @@ const save = async () => {
     return true
   } catch (error) {
     console.error('保存失败:', error)
-    message.error('保存失败，请重试')
     return false
   }
 }

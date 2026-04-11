@@ -1,27 +1,5 @@
 <template>
   <div class="reading-essays-detail-page">
-    <!-- 顶部操作栏 -->
-    <header class="detail-header">
-      <n-button quaternary @click="goBack">
-        <template #icon>
-          <n-icon><ArrowLeft /></n-icon>
-        </template>
-        返回
-      </n-button>
-      <div class="header-actions">
-        <n-button v-if="isOwner" quaternary size="small" @click="handleEdit" title="编辑">
-          <template #icon>
-            <n-icon><Edit /></n-icon>
-          </template>
-        </n-button>
-        <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
-          <template #icon>
-            <n-icon><Share /></n-icon>
-          </template>
-        </n-button>
-      </div>
-    </header>
-
     <!-- 内容区域 -->
     <main class="detail-main">
       <!-- 加载状态 -->
@@ -37,14 +15,27 @@
 
       <!-- 随笔详情 -->
       <article v-else-if="essay" class="detail-card">
-        <ReadingEssaysDetailContent :essay="essay" />
+        <ReadingEssaysDetailContent :essay="essay">
+          <template #actions>
+            <n-button v-if="isOwner" quaternary size="small" @click="handleEdit" title="编辑">
+              <template #icon>
+                <n-icon><Edit /></n-icon>
+              </template>
+            </n-button>
+            <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
+              <template #icon>
+                <n-icon><Share /></n-icon>
+              </template>
+            </n-button>
+          </template>
+        </ReadingEssaysDetailContent>
       </article>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowLeft, Share, Edit } from '@vicons/tabler'
+import { Share, Edit } from '@vicons/tabler'
 import type { ReadingEssaysInfo } from '~/types'
 import { useEssayDrawerStore } from '~/stores/essayDrawer'
 
@@ -54,38 +45,27 @@ definePageMeta({
 })
 
 const route = useRoute()
-const router = useRouter()
 const readingEssaysApi = useReadingEssaysApi()
 const authStore = useAuthStore()
 const essayDrawerStore = useEssayDrawerStore()
 const message = useMessage()
 
-// 使用 computed 获取路由参数
 const essayId = computed(() => route.params.id as string)
 
-// 是否是当前用户的随笔
 const isOwner = computed(() => {
   if (!essay.value || !authStore.user?.uuid) return false
   return essay.value.uid === authStore.user.uuid
 })
 
-// 获取随笔详情
 const { data: essay, pending, error, refresh } = await useAsyncData(
   () => `reading-essays-detail-${essayId.value}`,
   () => readingEssaysApi.getReadingEssaysDetail(essayId.value)
 )
 
-// SEO
 useHead({
   title: () => essay.value?.content?.substring(0, 50) || '随笔详情'
 })
 
-// 返回列表页
-const goBack = () => {
-  router.push('/reading-essays')
-}
-
-// 复制分享链接
 const copyShareLink = async () => {
   if (!essay.value) return
   const url = `${window.location.origin}/reading-essays/${essay.value.id}`
@@ -97,14 +77,11 @@ const copyShareLink = async () => {
   }
 }
 
-// 编辑随笔
 const handleEdit = () => {
   if (!essay.value) return
-  // 打开编辑抽屉（不跳转页面）
   essayDrawerStore.openEdit(essay.value.id)
 }
 
-// 监听路由参数变化
 watch(() => route.params.id, async (newId, oldId) => {
   if (newId !== oldId) {
     await refresh()
@@ -116,38 +93,14 @@ watch(() => route.params.id, async (newId, oldId) => {
 <style scoped>
 .reading-essays-detail-page {
   min-height: 100vh;
-  background: var(--color-surface);
-}
-
-/* 顶部操作栏 */
-.detail-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border-light);
-}
-
-:global(.dark) .detail-header {
-  background: rgba(18, 18, 18, 0.9);
-}
-
-.header-actions {
-  display: flex;
-  gap: 8px;
+  background: var(--color-surface-warm);
 }
 
 /* 主内容区域 */
 .detail-main {
   display: flex;
   justify-content: center;
-  padding: 40px 24px;
+  padding: 32px 24px;
 }
 
 .detail-card {
@@ -173,12 +126,8 @@ watch(() => route.params.id, async (newId, oldId) => {
 
 /* 响应式 */
 @media (max-width: 768px) {
-  .detail-header {
-    padding: 12px 16px;
-  }
-
   .detail-main {
-    padding: 20px 16px;
+    padding: 16px;
   }
 }
 </style>

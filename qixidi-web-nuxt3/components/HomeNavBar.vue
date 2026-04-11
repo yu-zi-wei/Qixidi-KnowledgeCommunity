@@ -13,8 +13,10 @@
     <!-- 左侧：Logo -->
     <div class="nav-left">
       <NuxtLink to="/" class="nav-logo">
-        <span class="logo-icon">栖</span>
-        <span class="logo-text">栖息地</span>
+        <svg class="logo-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <path d="M844.288 514.56c-52.736-27.392-201.216-35.84-201.216-35.84s152.576-4.352 240.896-33.536c0 0 102.656-40.96 68.864-162.048 0 0-20.736-63.488-132.864-75.264 0 0 9.984-83.968-70.656-132.352 0 0-56.832-34.304-141.056 17.92-71.936 52.224-80.64 234.752-81.152 246.272 0.512-11.008 6.144-177.664-33.792-249.088 0 0-42.752-99.072-164.096-48.128 0 0-102.912 33.024-81.664 128 0 0-150.272-31.744-171.008 111.104 0 0-17.92 116.224 109.568 141.568 41.472 10.24 182.016 32.768 182.016 32.768S79.872 429.312 65.792 569.344c0 0-24.32 131.584 125.184 128.256 0 0-16.128 98.816 79.36 131.328 0.256-0.256 127.232 36.608 187.648-124.928 13.312-37.632 24.576-63.488 30.976-128.256 0 0 2.304 256.512-214.272 387.072l72.192 43.008s157.696-154.88 160-409.6c-0.256-13.568-0.256-21.76-0.256-21.76 0.256 7.424 0.256 14.592 0.256 21.76 1.024 50.176 8.704 173.056 52.992 219.392 0 0 63.232 87.04 172.544 41.984 0 0 65.28-23.808 65.792-109.824 0 0 100.864 15.104 122.88-88.832-0.512 0 29.184-91.648-76.8-144.384z m0 0" fill="#3d5a80"/>
+        </svg>
+        <span class="logo-text">四叶集</span>
       </NuxtLink>
     </div>
 
@@ -49,14 +51,15 @@
               <div v-if="searchHistory.length > 0" class="search-history-section">
                 <div class="search-history-title">搜索历史</div>
                 <div class="search-history-tags">
-                  <span
+                  <NuxtLink
                     v-for="item in searchHistory"
                     :key="item.content"
+                    :to="{ path: '/search', query: { q: item.content } }"
                     class="history-tag"
-                    @click="handleSearchKeyword(item.content)"
+                    @click="showDropdown = false"
                   >
                     {{ item.content }}
-                  </span>
+                  </NuxtLink>
                 </div>
               </div>
               <div v-else class="search-history-empty">
@@ -118,12 +121,12 @@
           </button>
         </n-dropdown>
 
-        <button class="icon-btn" title="通知" @click="navigateTo('/notifications')">
+        <NuxtLink to="/notifications" class="icon-btn" title="通知">
           <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
           </svg>
-        </button>
+        </NuxtLink>
 
         <n-dropdown :options="userMenuOptions" @select="handleUserMenu">
           <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="user-avatar" />
@@ -264,12 +267,6 @@ const handleSearchFocus = () => {
   showDropdown.value = true
 }
 
-const handleSearchKeyword = (keyword: string) => {
-  searchKeyword.value = keyword
-  showDropdown.value = false
-  navigateTo({ path: '/search', query: { q: keyword } })
-}
-
 const handleSearch = () => {
   if (!searchKeyword.value.trim()) return
   showDropdown.value = false
@@ -324,7 +321,7 @@ const doLogout = async () => {
 
 const handleUserMenu = (key: string) => {
   if (key === 'logout') { showLogoutConfirm.value = true; return }
-  const routes: Record<string, string> = { admin: '/admin', profile: `/user/${authStore.user?.uuid}`, settings: '/admin/settings' }
+  const routes: Record<string, string> = { admin: '/admin', profile: `/user-home/lately/${authStore.user?.uuid}`, settings: '/settings' }
   if (routes[key]) navigateTo(routes[key])
 }
 
@@ -367,9 +364,10 @@ onMounted(() => {
 }
 
 /* Logo */
-.nav-left { display: flex; align-items: center; }
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; height: 38px; }
-.logo-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: var(--color-primary); color: #fff; font-family: var(--font-display); font-size: 18px; font-weight: 700; border-radius: var(--radius-md); }
+.nav-left { display: flex; align-items: center; flex-shrink: 0; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; height: 38px; white-space: nowrap; }
+.logo-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; transition: all 0.2s ease; }
+.logo-icon svg { width: 32px; height: 32px; }
 .logo-text { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--color-ink); letter-spacing: 2px; line-height: 38px; }
 
 /* 中间区域 */
@@ -387,11 +385,11 @@ onMounted(() => {
 /* 搜索下拉 */
 .search-dropdown { position: absolute; top: calc(100% + 8px); left: 0; z-index: 100; min-width: 280px; }
 .search-dropdown-content { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 30px rgba(0,0,0,0.08); padding: 16px; }
-.dark .search-dropdown-content { background: rgba(24,24,28,0.85); border-color: rgba(255,255,255,0.08); }
+.dark .search-dropdown-content { background: rgba(54,48,44,0.85); border-color: rgba(255,255,255,0.08); }
 .search-history-section { display: flex; flex-direction: column; gap: 12px; }
 .search-history-title { font-size: 13px; font-weight: 600; color: var(--color-ink-muted); }
 .search-history-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.history-tag { padding: 6px 12px; font-size: 13px; color: var(--color-ink-light); background: var(--color-surface-dim); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); cursor: pointer; }
+.history-tag { padding: 6px 12px; font-size: 13px; color: var(--color-ink-light); background: var(--color-surface-dim); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; }
 .history-tag:hover { color: var(--color-primary); background: var(--color-primary-light); border-color: var(--color-primary); }
 .search-history-empty { padding: 24px; text-align: center; color: var(--color-ink-muted); font-size: 13px; }
 
@@ -407,7 +405,7 @@ onMounted(() => {
 .theme-toggle { color: var(--color-ink-light); transition: all 0.3s ease; }
 .theme-toggle:hover { color: var(--color-accent); background: var(--color-surface-dim); }
 .theme-icon { width: 20px; height: 20px; stroke-width: 1.5; }
-.icon-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: var(--color-ink-muted); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; }
+.icon-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: var(--color-ink-muted); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; transition: all 0.2s ease; }
 .icon-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
 .action-icon { width: 20px; height: 20px; stroke-width: 1.5; }
 .user-avatar { cursor: pointer; transition: transform 0.2s ease; }
@@ -474,7 +472,7 @@ onMounted(() => {
   .theme-toggle, .icon-btn:not(.user-avatar):not([title="通知"]) { display: none; }
   .icon-btn[title="通知"] { width: 36px; height: 36px; }
   .user-avatar { width: 32px !important; height: 32px !important; flex-shrink: 0; }
-  .logo-icon { width: 32px; height: 32px; font-size: 16px; }
+  .logo-icon svg { width: 28px; height: 28px; }
   .logo-text { font-size: 16px; }
 }
 

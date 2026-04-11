@@ -7,12 +7,13 @@
         <span>推荐专辑</span>
       </div>
       <div class="album-list">
-        <div
+        <NuxtLink
           v-for="album in displayedAlbums"
           :key="album.id"
+          :to="buildFilterLink({ albumId: selectedAlbumId === album.id ? null : album.id })"
           class="album-card"
           :class="{ active: selectedAlbumId === album.id }"
-          @click="handleSelectAlbum(album.id)"
+          @click="handleAlbumClick(album.id)"
         >
           <div v-if="album.cover" class="album-cover">
             <img :src="album.cover" :alt="album.name" loading="lazy" />
@@ -24,7 +25,7 @@
             <div class="album-name">{{ album.name }}</div>
             <div v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</div>
           </div>
-        </div>
+        </NuxtLink>
       </div>
       <button v-if="totalAlbums > 5" class="btn-view-all" @click="showAlbumSelector = true">
         查看全部 {{ totalAlbums }} 个专辑 →
@@ -39,15 +40,16 @@
         <ChevronDown class="chevron-icon" :class="{ expanded: authorsExpanded }" />
       </div>
       <div v-show="authorsExpanded" class="tag-cloud">
-        <span
+        <NuxtLink
           v-for="authorItem in displayedAuthors"
           :key="authorItem.author"
+          :to="buildFilterLink({ author: selectedAuthor === authorItem.author ? null : authorItem.author })"
           class="tag-cloud-item"
           :class="{ active: selectedAuthor === authorItem.author }"
-          @click="handleSelectAuthor(authorItem.author)"
+          @click="handleAuthorClick(authorItem.author)"
         >
           {{ authorItem.author }} +{{ authorItem.count }}
-        </span>
+        </NuxtLink>
       </div>
     </section>
 
@@ -59,15 +61,16 @@
         <ChevronDown class="chevron-icon" :class="{ expanded: labelsExpanded }" />
       </div>
       <div v-show="labelsExpanded" class="tag-cloud">
-        <span
+        <NuxtLink
           v-for="labelItem in popularLabels"
           :key="labelItem.label"
+          :to="buildFilterLink({ label: selectedLabel === labelItem.label ? null : labelItem.label })"
           class="tag-cloud-item"
           :class="{ active: selectedLabel === labelItem.label }"
-          @click="handleSelectLabel(labelItem.label)"
+          @click="handleLabelClick(labelItem.label)"
         >
           # {{ labelItem.label }} +{{ labelItem.count }}
-        </span>
+        </NuxtLink>
       </div>
     </section>
   </aside>
@@ -147,60 +150,42 @@ const isDetailPage = () => {
   return route.params.id !== undefined
 }
 
-// 更新选择状态
-const handleSelectAlbum = (id: number) => {
+// 点击时仅更新 sidebarData 状态（路由由 NuxtLink :to 处理）
+const handleAlbumClick = (id: number) => {
   sidebarData.value.selectedAlbumId = sidebarData.value.selectedAlbumId === id ? null : id
-  navigateToUpdateQuery()
 }
 
-// 从弹窗选择专辑（始终设置为选中）
+// 从弹窗选择专辑（始终设置为选中，仍需手动跳转）
 const handleSelectAlbumFromModal = (id: number) => {
   sidebarData.value.selectedAlbumId = id
-  // 确保 DOM 更新后再更新路由
   nextTick(() => {
-    navigateToUpdateQuery()
+    navigateTo(buildFilterLink({ albumId: id }))
   })
 }
 
-const handleSelectLabel = (label: string) => {
+const handleLabelClick = (label: string) => {
   sidebarData.value.selectedLabel = sidebarData.value.selectedLabel === label ? null : label
-  navigateToUpdateQuery()
 }
 
-const handleSelectAuthor = (author: string) => {
+const handleAuthorClick = (author: string) => {
   sidebarData.value.selectedAuthor = sidebarData.value.selectedAuthor === author ? null : author
-  navigateToUpdateQuery()
 }
 
-// 通过路由 query 参数通知页面更新
-const navigateToUpdateQuery = () => {
-  const route = useRoute()
-  const query = { ...route.query }
+// 构建筛选链接
+const buildFilterLink = (overrides: { albumId?: number | null; label?: string | null; author?: string | null } = {}) => {
+  const albumId = overrides.albumId !== undefined ? overrides.albumId : sidebarData.value.selectedAlbumId
+  const label = overrides.label !== undefined ? overrides.label : sidebarData.value.selectedLabel
+  const author = overrides.author !== undefined ? overrides.author : sidebarData.value.selectedAuthor
 
-  if (sidebarData.value.selectedAlbumId) {
-    query.albumId = String(sidebarData.value.selectedAlbumId)
-  } else {
-    delete query.albumId
-  }
+  const query: Record<string, string> = {}
+  if (albumId) query.albumId = String(albumId)
+  if (label) query.label = label
+  if (author) query.author = author
 
-  if (sidebarData.value.selectedLabel) {
-    query.label = sidebarData.value.selectedLabel
-  } else {
-    delete query.label
-  }
-
-  if (sidebarData.value.selectedAuthor) {
-    query.author = sidebarData.value.selectedAuthor
-  } else {
-    delete query.author
-  }
-
-  // 如果在详情页，跳转到列表页并应用筛选
   if (isDetailPage()) {
-    navigateTo({ path: '/reading-essays', query })
-  } else {
-    navigateTo({ query }, { replace: true })
+    return { path: '/reading-essays', query }
   }
+  return { path: '/reading-essays', query }
 }
 </script>
 
@@ -235,16 +220,16 @@ const navigateToUpdateQuery = () => {
   display: none;
 }
 
-/* 卡片通用样式 - 渐变色背景 */
+/* 卡片通用样式 - 渐变毛玻璃 */
 .sidebar-card {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.92) 0%,
-    rgba(255, 255, 255, 0.78) 100%
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(240, 245, 250, 0.7) 100%
   );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 16px;
   padding: 20px;
   transition: all 0.3s ease;
@@ -256,103 +241,111 @@ const navigateToUpdateQuery = () => {
 .sidebar-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(255, 255, 255, 0.88) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(240, 245, 250, 0.85) 100%
   );
+  border-color: rgba(61, 90, 128, 0.15);
 }
 
-/* 灰色背景卡片 - 使用白色背景（与普通卡片一致） */
+/* 灰色背景卡片 - 浅灰渐变 */
 .sidebar-card.gray-card {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.92) 0%,
-    rgba(255, 255, 255, 0.78) 100%
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.04) 100%
   );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(0, 0, 0, 0.04);
 }
 
 .sidebar-card.gray-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(255, 255, 255, 0.88) 100%
+    rgba(61, 90, 128, 0.06) 0%,
+    rgba(0, 0, 0, 0.03) 100%
   );
+  border-color: rgba(61, 90, 128, 0.1);
 }
 
 .dark .sidebar-card.gray-card {
   background: linear-gradient(
     135deg,
-    rgba(40, 42, 45, 0.92) 0%,
-    rgba(40, 42, 45, 0.78) 100%
+    rgba(64, 58, 54, 0.6) 0%,
+    rgba(54, 48, 44, 0.4) 100%
   );
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
 .dark .sidebar-card.gray-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(50, 52, 55, 0.95) 0%,
-    rgba(50, 52, 55, 0.85) 100%
+    rgba(70, 64, 60, 0.7) 0%,
+    rgba(60, 54, 50, 0.5) 100%
   );
+  border-color: rgba(90, 127, 168, 0.15);
 }
 
 /* 渐变背景卡片 - 带品牌色渐变 */
 .sidebar-card.gradient-card {
   background: linear-gradient(
     135deg,
-    rgba(61, 90, 128, 0.12) 0%,
-    rgba(0, 0, 0, 0.06) 50%,
-    rgba(176, 137, 104, 0.09) 100%
+    rgba(61, 90, 128, 0.08) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(90, 127, 168, 0.05) 100%
   );
-  border-color: rgba(61, 90, 128, 0.12);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  border-color: rgba(61, 90, 128, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .sidebar-card.gradient-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(61, 90, 128, 0.18) 0%,
-    rgba(0, 0, 0, 0.09) 50%,
-    rgba(176, 137, 104, 0.14) 100%
+    rgba(61, 90, 128, 0.12) 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(90, 127, 168, 0.08) 100%
   );
+  border-color: rgba(61, 90, 128, 0.15);
 }
 
 .dark .sidebar-card.gradient-card {
   background: linear-gradient(
     135deg,
-    rgba(93, 138, 168, 0.15) 0%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(201, 162, 122, 0.12) 100%
+    rgba(90, 127, 168, 0.12) 0%,
+    rgba(54, 48, 44, 0.5) 50%,
+    rgba(122, 176, 228, 0.08) 100%
   );
-  border-color: rgba(93, 138, 168, 0.15);
+  border-color: rgba(90, 127, 168, 0.15);
 }
 
 .dark .sidebar-card.gradient-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(93, 138, 168, 0.22) 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(201, 162, 122, 0.18) 100%
+    rgba(90, 127, 168, 0.18) 0%,
+    rgba(54, 48, 44, 0.65) 50%,
+    rgba(122, 176, 228, 0.12) 100%
   );
+  border-color: rgba(90, 127, 168, 0.2);
 }
 
 /* 暗色主题 */
 .dark .sidebar-card {
   background: linear-gradient(
     135deg,
-    rgba(40, 42, 45, 0.92) 0%,
-    rgba(40, 42, 45, 0.78) 100%
+    rgba(54, 48, 44, 0.85) 0%,
+    rgba(64, 58, 54, 0.7) 100%
   );
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark .sidebar-card:hover {
   background: linear-gradient(
     135deg,
-    rgba(50, 52, 55, 0.95) 0%,
-    rgba(50, 52, 55, 0.85) 100%
+    rgba(60, 54, 50, 0.92) 0%,
+    rgba(70, 64, 60, 0.8) 100%
   );
+  border-color: rgba(90, 127, 168, 0.15);
 }
 
 /* 占位状态 */
@@ -443,6 +436,7 @@ const navigateToUpdateQuery = () => {
   border: 1px solid transparent;
   border-radius: 10px;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.2s ease;
   background: rgba(0, 0, 0, 0.06);
 }
@@ -462,8 +456,8 @@ const navigateToUpdateQuery = () => {
 }
 
 .dark .album-card:hover {
-  background: rgba(61, 90, 128, 0.15);
-  border-color: rgba(61, 90, 128, 0.3);
+  background: rgba(90, 127, 168, 0.15);
+  border-color: rgba(90, 127, 168, 0.3);
 }
 
 .album-cover {
@@ -565,16 +559,17 @@ const navigateToUpdateQuery = () => {
 .tag-cloud-item {
   font-size: 12px;
   color: var(--color-ink-light);
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.08) 0%, rgba(93, 138, 168, 0.04) 100%);
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.08) 0%, rgba(90, 127, 168, 0.04) 100%);
   padding: 6px 12px;
   border: 1px solid rgba(61, 90, 128, 0.12);
   border-radius: 20px;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .tag-cloud-item:hover {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.15) 0%, rgba(93, 138, 168, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(61, 90, 128, 0.15) 0%, rgba(90, 127, 168, 0.1) 100%);
   border-color: rgba(61, 90, 128, 0.25);
   color: var(--color-primary);
 }
@@ -586,12 +581,12 @@ const navigateToUpdateQuery = () => {
 }
 
 .dark .tag-cloud-item {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.12) 0%, rgba(61, 90, 128, 0.06) 100%);
-  border-color: rgba(93, 138, 168, 0.2);
+  background: linear-gradient(135deg, rgba(90, 127, 168, 0.12) 0%, rgba(61, 90, 128, 0.06) 100%);
+  border-color: rgba(90, 127, 168, 0.2);
 }
 
 .dark .tag-cloud-item:hover {
-  background: linear-gradient(135deg, rgba(93, 138, 168, 0.2) 0%, rgba(61, 90, 128, 0.12) 100%);
-  border-color: rgba(93, 138, 168, 0.35);
+  background: linear-gradient(135deg, rgba(90, 127, 168, 0.2) 0%, rgba(61, 90, 128, 0.12) 100%);
+  border-color: rgba(90, 127, 168, 0.35);
 }
 </style>

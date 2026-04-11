@@ -245,11 +245,11 @@ const formatNoteDate = (dateStr: string) => {
 }
 
 .dark .note-item:hover {
-  background: rgba(93, 138, 168, 0.08);
+  background: rgba(90, 127, 168, 0.08);
 }
 
 .dark .note-item.active {
-  background: rgba(93, 138, 168, 0.12);
+  background: rgba(90, 127, 168, 0.12);
 }
 
 .note-date {

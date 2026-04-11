@@ -1,4 +1,7 @@
 import type { R } from '~/types'
+import { createDiscreteApi } from 'naive-ui'
+
+const { message: discreteMessage } = createDiscreteApi(['message'])
 
 /**
  * API 请求封装
@@ -44,10 +47,14 @@ export const useApi = () => {
 
       return response
     } catch (error: any) {
+      // 客户端统一弹出后端错误信息
+      if (import.meta.client && error.statusMessage) {
+        discreteMessage.error(error.statusMessage)
+      }
       if (error.statusCode === 401) {
         const authStore = useAuthStore()
         authStore.logout()
-        navigateTo('/login')
+        navigateTo('/')
       }
       throw error
     }
