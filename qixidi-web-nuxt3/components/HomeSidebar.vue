@@ -1,15 +1,5 @@
 <template>
   <aside class="sidebar-scrollable">
-    <!-- 签到卡片 -->
-    <div class="sidebar-card sign-card" style="--delay: 0">
-      <div class="sign-info">
-        <span class="sign-label">连续签到</span>
-        <span class="sign-days">1 <small>天</small></span>
-        <p class="sign-tip">点亮在四叶集的每一天</p>
-      </div>
-      <button class="sign-btn">签到</button>
-    </div>
-
     <!-- 站点数据 -->
     <div v-if="siteStatsData" class="sidebar-card gray-card" style="--delay: 1">
       <div class="card-header">
@@ -317,74 +307,6 @@ const runningDays = computed(() => {
 .refresh-btn:hover {
   background: var(--color-primary-light);
   color: var(--color-primary);
-}
-
-/* 签到卡片 - 特殊渐变 */
-.sign-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.08) 0%, rgba(255, 255, 255, 0.4) 100%);
-  border: 1px solid rgba(61, 90, 128, 0.15);
-}
-
-.dark .sign-card {
-  background: linear-gradient(135deg, rgba(122, 176, 228, 0.15) 0%, rgba(22, 26, 30, 0.4) 100%);
-  border-color: rgba(122, 176, 228, 0.2);
-}
-
-.sign-card:hover {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.12) 0%, rgba(255, 255, 255, 0.6) 100%);
-  border-color: rgba(61, 90, 128, 0.25);
-}
-
-.sign-info {
-  flex: 1;
-}
-
-.sign-label {
-  font-size: 12px;
-  color: var(--color-ink-muted);
-  margin-bottom: 2px;
-}
-
-.sign-days {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--color-primary);
-  line-height: 1.2;
-}
-
-.sign-days small {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--color-ink-muted);
-}
-
-.sign-tip {
-  font-size: 11px;
-  color: var(--color-ink-faint);
-  margin-top: 4px;
-}
-
-.sign-btn {
-  padding: 10px 28px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #fff;
-  background: var(--color-primary);
-  border: none;
-  border-radius: 24px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: var(--font-body);
-  box-shadow: 0 2px 8px rgba(61, 90, 128, 0.3);
-}
-
-.sign-btn:hover {
-  background: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(61, 90, 128, 0.4);
 }
 
 /* 站点数据网格 */

@@ -14,8 +14,8 @@
         />
       </div>
 
-      <!-- 右侧：详情（不固定高度，浏览器滚动） -->
-      <div class="time-detail-section">
+      <!-- 右侧：详情（不固定高度，浏览器滚动） - 移动端隐藏 -->
+      <div class="time-detail-section" v-if="!isMobile">
         <TimeNotesDetail
           :detail="selectedDetail"
           :loading="detailLoading"
@@ -34,10 +34,19 @@ definePageMeta({
   showTabBar: false
 })
 
+useHead({
+  bodyAttrs: {
+    class: 'page-time-notes'
+  }
+})
+
 const route = useRoute()
 const router = useRouter()
 
 const { getTimeNotesList, getTimeNotesDetail: getTimeNotesDetailApi } = useTimeNotesApi()
+
+// 移动端检测
+const isMobile = ref(false)
 
 // 状态管理
 const timeNotesGroups = ref<TimeNotesVo[]>([])
@@ -101,6 +110,9 @@ onMounted(() => {
     window.addEventListener('scroll', handleScroll, { passive: true })
     // 初始化时计算一次
     handleScroll()
+    // 移动端检测
+    isMobile.value = window.innerWidth < 768
+    window.addEventListener('resize', () => { isMobile.value = window.innerWidth < 768 })
   }
 })
 
@@ -134,12 +146,11 @@ const loadTimeNotes = async (reset = false) => {
     total.value = result.total || 0
     pageNum.value++
 
-    // 如果没有选中项，默认选中第一条并加载详情
-    if (!selectedId.value && timeNotesGroups.value.length > 0) {
+    // 桌面端：默认选中第一条并加载详情
+    if (!selectedId.value && !isMobile.value && timeNotesGroups.value.length > 0) {
       const firstGroup = timeNotesGroups.value[0]
       if (firstGroup.list && firstGroup.list.length > 0) {
-        const firstNote = firstGroup.list[0]
-        handleSelect(firstNote.id)
+        handleSelect(firstGroup.list[0].id)
       }
     }
   } catch (error) {
@@ -172,6 +183,13 @@ const loadDetail = async (id: number) => {
 // 选择时光小记
 const handleSelect = (id: number) => {
   selectedId.value = id
+
+  // 移动端跳转详情页
+  if (isMobile.value) {
+    navigateTo(`/time-notes/${id}`)
+    return
+  }
+
   updateUrlParam(id)
   loadDetail(id)
 
@@ -274,19 +292,14 @@ if (urlId) {
   border-color: rgba(255, 255, 255, 0.06);
 }
 
-/* 移动端：上下布局 */
+/* 移动端：只展示列表 */
 @media (max-width: 768px) {
-  .time-notes-container {
-    flex-direction: column;
-  }
-
   .time-list-section {
     position: static;
     height: auto;
-    max-height: 50vh;
-    border-radius: 16px 16px 0 0;
+    max-height: none;
+    border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    border-bottom: none;
   }
 
   .dark .time-list-section {
@@ -294,23 +307,15 @@ if (urlId) {
   }
 
   .time-list-section::after {
-    right: 20px;
-    left: 20px;
-    top: auto;
-    bottom: 0;
-    width: auto;
-    height: 1px;
+    display: none;
   }
+}
+</style>
 
-  .time-detail-section {
-    flex: 1;
-    border-radius: 0 0 16px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-top: none;
-  }
-
-  .dark .time-detail-section {
-    border-color: rgba(255, 255, 255, 0.06);
+<style>
+@media (max-width: 768px) {
+  body.page-time-notes .home-main {
+    padding-top: 70px !important;
   }
 }
 </style>

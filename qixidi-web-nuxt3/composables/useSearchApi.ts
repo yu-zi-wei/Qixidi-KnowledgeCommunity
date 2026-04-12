@@ -1,15 +1,8 @@
-import type { SearchRecordsVo, TableDataInfo } from '~/types'
+import type { SearchRecordsVo, ArticleInfo, TimeNotesVo, TableDataInfo } from '~/types'
 
 export const useSearchApi = () => {
   const api = useApi()
 
-  /**
-   * 获取搜索历史记录列表
-   * 接口：/frontDesk/search/records/list
-   * @param pageNum - 页码，从 1 开始
-   * @param pageSize - 每页数量
-   * @param uid - 用户 ID（登录用户才有）
-   */
   const getSearchHistory = (params: {
     pageNum?: number
     pageSize?: number
@@ -18,7 +11,39 @@ export const useSearchApi = () => {
     return api.getPage<SearchRecordsVo>('/frontDesk/search/records/list', params)
   }
 
+  /** 搜索文章 */
+  const searchArticles = (params: {
+    pageNum?: number
+    pageSize?: number
+    articleTitle?: string
+  }) => {
+    return api.getPage<ArticleInfo>('/white/article/list', params)
+  }
+
+  /** 搜索小记 */
+  const searchTimeNotes = (params: {
+    pageNum?: number
+    pageSize?: number
+    title?: string
+  }) => {
+    return api.postPage<TimeNotesVo>('/white/time/notes/list', params)
+  }
+
+  /** 搜索标签 */
+  const searchLabels = (labelName: string) => {
+    return api.get<any[]>('/white/label/list', { labelName, type: 2 })
+  }
+
+  /** 搜索用户 */
+  const searchUsers = (nickname: string) => {
+    return api.get<any[]>('/white/user/list', { nickname, type: 1 })
+  }
+
   return {
-    getSearchHistory
+    getSearchHistory,
+    searchArticles,
+    searchTimeNotes,
+    searchLabels,
+    searchUsers
   }
 }

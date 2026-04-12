@@ -54,7 +54,7 @@
                   <NuxtLink
                     v-for="item in searchHistory"
                     :key="item.content"
-                    :to="{ path: '/search', query: { q: item.content } }"
+                    :to="searchTargetPath(item.content)"
                     class="history-tag"
                     @click="showDropdown = false"
                   >
@@ -270,8 +270,16 @@ const handleSearchFocus = () => {
 const handleSearch = () => {
   if (!searchKeyword.value.trim()) return
   showDropdown.value = false
-  navigateTo({ path: '/search', query: { q: searchKeyword.value.trim() } })
+  navigateTo(searchTargetRoute(searchKeyword.value.trim()))
 }
+
+const searchTargetRoute = (q: string) => {
+  const currentPath = route.path
+  const searchPath = currentPath.startsWith('/search/') ? currentPath : '/search/article'
+  return { path: searchPath, query: { q } }
+}
+
+const searchTargetPath = (q: string) => searchTargetRoute(q)
 
 // 导航菜单
 const plainMenus = computed(() => props.navigationList.filter(item => item.isList === 0))

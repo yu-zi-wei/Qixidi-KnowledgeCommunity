@@ -478,7 +478,7 @@ export interface TimeNotesSearchBo {
   pageSize?: number
   startTime?: string       // 开始时间
   endTime?: string         // 结束时间
-  keyword?: string         // 关键词搜索
+  title?: string           // 标题搜索
 }
 
 // 时光小记增删改请求

@@ -325,8 +325,7 @@ const labelItems = computed(() => {
 .article-main-content {
   margin-left: 92px; /* 60px 侧边栏 + 32px gap */
   margin-right: 6px;
-  margin-top: 24px; /* 距离顶部导航栏的外边距 */
-  padding: 28px 32px;
+  padding: 0 32px 28px;
   position: relative;
   /* 更透明的背景，能隐约看到背景格子 */
   background: rgba(255, 255, 255, 0.2);

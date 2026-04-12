@@ -223,7 +223,10 @@ useHead({
       name: 'description',
       content: () => article.value?.articleAbstract || ''
     }
-  ]
+  ],
+  bodyAttrs: {
+    class: 'page-article-detail'
+  }
 })
 
 // 页面挂载时立即滚动到顶部（避免从首页滚动的位置过渡）
@@ -237,6 +240,11 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-top: 24px;
+}
+
+.article-detail-page :deep(.article-main-content) {
+  padding-top: 28px;
 }
 
 .loading-state,
@@ -246,5 +254,13 @@ onMounted(() => {
   justify-content: center;
   min-height: 400px;
   color: var(--color-ink-muted);
+}
+</style>
+
+<style>
+@media (max-width: 768px) {
+  body.page-article-detail .home-main {
+    padding-top: 70px !important;
+  }
 }
 </style>

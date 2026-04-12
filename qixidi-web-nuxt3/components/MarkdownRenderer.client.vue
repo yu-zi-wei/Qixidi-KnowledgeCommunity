@@ -41,11 +41,24 @@ await render()
 watch(() => props.content, async () => {
   await render()
   nextTick(() => {
+    bindLinkTargets()
     bindImageClickEvents()
     hydrateVideoEmbeds()
     window.dispatchEvent(new CustomEvent('markdown-rendered'))
   })
 })
+
+// 给所有 <a> 标签添加新标签页打开
+const bindLinkTargets = () => {
+  if (!contentRef.value) return
+  const links = contentRef.value.querySelectorAll('a')
+  links.forEach((link) => {
+    if (!link.getAttribute('target')) {
+      link.setAttribute('target', '_blank')
+      link.setAttribute('rel', 'noopener noreferrer')
+    }
+  })
+}
 
 // 绑定图片点击事件
 const bindImageClickEvents = () => {
@@ -138,6 +151,7 @@ const hydrateVideoEmbeds = () => {
 // 初始渲染后绑定事件
 onMounted(() => {
   nextTick(() => {
+    bindLinkTargets()
     bindImageClickEvents()
     hydrateVideoEmbeds()
     window.dispatchEvent(new CustomEvent('markdown-rendered'))

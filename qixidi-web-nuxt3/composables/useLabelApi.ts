@@ -41,5 +41,10 @@ export const useLabelApi = () => {
     return api.get<LabelDetailVo>(`/white/label/info/${id}`)
   }
 
-  return { getGroupingList, getList, getLabelInfo }
+  /** 获取系统标签列表（前台展示） */
+  const getSystemLabels = (label?: string) => {
+    return api.get<LabelDetailVo[]>('/white/dictum/system/label', label ? { label } : undefined)
+  }
+
+  return { getGroupingList, getList, getLabelInfo, getSystemLabels }
 }

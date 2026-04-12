@@ -3,7 +3,7 @@ package com.qixidi.business.service.impl.user;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.light.exception.base.BaseException;
+import com.light.exception.ServiceException;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
@@ -52,7 +52,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
                 .eq(UserFollow::getType, bo.getType())
                 .eq(UserFollow::getState, 0));
         if (CollectionUtil.isNotEmpty(userFollows)) {
-            throw new BaseException("你已经关注了该对象");
+            throw new ServiceException("你已经关注了该对象");
         }
         if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) {//  用户关注
             countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());

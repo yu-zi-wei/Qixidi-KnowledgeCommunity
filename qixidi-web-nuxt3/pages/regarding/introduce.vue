@@ -152,7 +152,10 @@ useHead({
       name: 'description',
       content: () => article.value?.articleAbstract || '了解四叶集博客平台'
     }
-  ]
+  ],
+  bodyAttrs: {
+    class: 'page-regarding'
+  }
 })
 
 // 页面挂载时滚动到顶部
@@ -166,6 +169,11 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-top: 24px;
+}
+
+.article-detail-page :deep(.article-main-content) {
+  padding-top: 28px;
 }
 
 .loading-state,
@@ -175,5 +183,13 @@ onMounted(() => {
   justify-content: center;
   min-height: 400px;
   color: var(--color-ink-muted);
+}
+</style>
+
+<style>
+@media (max-width: 768px) {
+  body.page-regarding .home-main {
+    padding-top: 60px !important;
+  }
 }
 </style>

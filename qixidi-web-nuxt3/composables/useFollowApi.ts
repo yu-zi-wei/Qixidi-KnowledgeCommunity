@@ -33,5 +33,15 @@ export const useFollowApi = () => {
     return api.get<(FollowUserVo | FollowTagVo)[]>(`/white/user/follow/list/${uid}/${type}`)
   }
 
-  return { getFollowList }
+  /** 添加关注（type: 1=用户, 2=标签） */
+  const addFollow = (targetId: string | number, type: number) => {
+    return api.post('/user/follow/add', { targetId, type })
+  }
+
+  /** 取消关注（type: 1=用户, 2=标签） */
+  const cancelFollow = (targetId: string | number, type: number) => {
+    return api.post('/user/follow/cancel', { targetId, type })
+  }
+
+  return { getFollowList, addFollow, cancelFollow }
 }

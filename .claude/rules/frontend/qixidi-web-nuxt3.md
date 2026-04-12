@@ -370,4 +370,47 @@ const handleDelete = async () => {
 
 ---
 
+## 移动端页面间距覆盖规范（强制）
+
+**布局层默认移动端 `padding-top: 260px`**（为首页轮播图+tab栏预留），部分页面需要不同间距。
+
+### 覆盖方式：body class + CSS
+
+```typescript
+// 1. 用 useHead 给 body 加页面专属 class
+useHead({
+  bodyAttrs: {
+    class: 'page-xxx'
+  }
+})
+```
+
+```css
+/* 2. 非 scoped 样式中覆盖布局 padding */
+@media (max-width: 768px) {
+  body.page-xxx .home-main {
+    padding-top: 170px !important;
+  }
+}
+```
+
+### 已有页面间距
+
+| 页面 | body class | padding-top | 说明 |
+|------|-----------|-------------|------|
+| 首页 | 无（默认） | 260px | 有轮播图+tab栏 |
+| 阅读随笔 | `page-reading-essays` | 170px | 有分类导航栏 |
+| 工具 | `page-tool` | 160px | 有二级分类菜单 |
+| 文章归档 | `page-article-archive` | 70px | 无额外顶部元素 |
+| 友链 | `page-friend-link` | 70px | 无额外顶部元素 |
+| 标签 | `page-label` | 70px | 无额外顶部元素 |
+| 关于/关于作者 | `page-regarding` | 70px | 无额外顶部元素 |
+
+### 禁止
+
+- ❌ 用 JS 直接操作父布局 DOM（`document.querySelector('.home-main').style.paddingTop`）
+- ❌ 在 scoped 样式中尝试覆盖（无法选中父元素）
+
+---
+
 **核心原则**：所有新代码必须支持双主题，禁止硬编码颜色，禁止瞎编接口字段名。
