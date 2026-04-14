@@ -37,6 +37,7 @@ definePageMeta({
 const ABOUT_AUTHOR_ARTICLE_ID = '-13'
 
 const articleApi = useArticleApi()
+const { siteName } = useRuntimeConfig().public
 const fabulousApi = useFabulousApi()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
@@ -158,7 +159,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: () => article.value?.articleAbstract || '了解四叶集博客作者'
+      content: () => article.value?.articleAbstract || `了解${siteName}博客作者`
     }
   ],
   bodyAttrs: {
@@ -197,7 +198,7 @@ onMounted(() => {
 <style>
 @media (max-width: 768px) {
   body.page-regarding .home-main {
-    padding-top: 60px !important;
+    padding-top: 50px !important;
   }
 }
 </style>

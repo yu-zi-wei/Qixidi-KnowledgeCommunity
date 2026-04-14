@@ -67,6 +67,8 @@ definePageMeta({
   middleware: 'auth'
 })
 
+useHead({ bodyAttrs: { class: 'page-home' } })
+
 const route = useRoute()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
@@ -182,30 +184,33 @@ const handleTabChange = (value: string) => {
 
 /* === 关注用户列表 === */
 .follow-users-card {
-  background: transparent;
-  border-radius: 0;
-  padding: 0;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
   margin-bottom: var(--space-4);
   border: none;
+}
+
+:root.dark .follow-users-card {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .follow-header {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--color-ink-muted);
-  margin-bottom: var(--space-3);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: 8px;
 }
 
 .follow-users-scroll {
   display: flex;
   gap: var(--space-3);
   overflow-x: auto;
-  padding-bottom: var(--space-2);
   scrollbar-width: none;
 }
 
@@ -217,7 +222,7 @@ const handleTabChange = (value: string) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
   text-decoration: none;
   transition: all var(--transition-fast);
@@ -228,8 +233,8 @@ const handleTabChange = (value: string) => {
 }
 
 .follow-avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-full);
   object-fit: cover;
   background: var(--color-surface-dim);
@@ -250,7 +255,7 @@ const handleTabChange = (value: string) => {
   font-size: var(--text-sm);
   color: var(--color-ink-muted);
   text-align: center;
-  padding: var(--space-3) 0;
+  padding: var(--space-2) 0;
 }
 
 /* === 自定义 Tabs === */

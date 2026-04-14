@@ -2,14 +2,14 @@
   <div class="article-detail-container">
     <!-- 左侧：固定操作栏（脱离文档流） -->
     <aside ref="sidebarRef" class="article-actions-sidebar" :class="{ 'is-visible': sidebarVisible }">
-      <button v-if="showCollect" class="action-btn-vertical" :class="{ active: article.isCollection }" @click="$emit('collect')" title="收藏">
-        <Heart class="icon" :class="{ filled: article.isCollection }" />
-        <span class="count">{{ article.collectionTimes || 0 }}</span>
-      </button>
-
       <button class="action-btn-vertical" :class="{ active: isLiked }" @click="$emit('like')" title="点赞">
         <ThumbUp class="icon" />
         <span class="count">{{ article.likeTimes || 0 }}</span>
+      </button>
+
+      <button v-if="showCollect" class="action-btn-vertical" :class="{ active: article.isCollection }" @click="$emit('collect')" title="收藏">
+        <Heart class="icon" :class="{ filled: article.isCollection }" />
+        <span class="count">{{ article.collectionTimes || 0 }}</span>
       </button>
 
       <button class="action-btn-vertical" @click="$emit('comment')" title="评论">
@@ -247,7 +247,7 @@ const labelItems = computed(() => {
 /* 左侧固定操作栏 - 透明简洁 */
 .article-actions-sidebar {
   position: fixed;
-  left: max(24px, calc((100vw - 1600px) / 2 + 24px));
+  left: max(24px, calc((100vw - 1400px) / 2 + 24px));
   top: 50%;
   transform: translateY(-50%) translateX(-16px);
   display: flex;
@@ -255,10 +255,7 @@ const labelItems = computed(() => {
   gap: 8px;
   padding: 12px 6px;
   z-index: 10;
-  /* 轻微毛玻璃 - 稍微不那么透明 */
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: transparent;
   border: none;
   border-radius: 16px;
   /* 初始状态 */
@@ -267,15 +264,13 @@ const labelItems = computed(() => {
 }
 
 .article-actions-sidebar:hover {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.dark .article-actions-sidebar {
-  background: rgba(54, 48, 44, 0.7);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .dark .article-actions-sidebar:hover {
-  background: rgba(64, 58, 54, 0.8);
+  background: rgba(54, 48, 44, 0.6);
 }
 
 .article-actions-sidebar.is-visible {
@@ -323,9 +318,8 @@ const labelItems = computed(() => {
 
 /* 右侧内容区 - 透明透气设计 */
 .article-main-content {
-  margin-left: 92px; /* 60px 侧边栏 + 32px gap */
-  margin-right: 6px;
-  padding: 0 32px 28px;
+  margin-left: 62px; /* 60px 侧边栏 + 32px gap */
+  padding: 0 10px 28px 32px;
   position: relative;
   /* 更透明的背景，能隐约看到背景格子 */
   background: rgba(255, 255, 255, 0.2);

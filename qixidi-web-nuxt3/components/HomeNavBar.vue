@@ -16,7 +16,7 @@
         <svg class="logo-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
           <path d="M844.288 514.56c-52.736-27.392-201.216-35.84-201.216-35.84s152.576-4.352 240.896-33.536c0 0 102.656-40.96 68.864-162.048 0 0-20.736-63.488-132.864-75.264 0 0 9.984-83.968-70.656-132.352 0 0-56.832-34.304-141.056 17.92-71.936 52.224-80.64 234.752-81.152 246.272 0.512-11.008 6.144-177.664-33.792-249.088 0 0-42.752-99.072-164.096-48.128 0 0-102.912 33.024-81.664 128 0 0-150.272-31.744-171.008 111.104 0 0-17.92 116.224 109.568 141.568 41.472 10.24 182.016 32.768 182.016 32.768S79.872 429.312 65.792 569.344c0 0-24.32 131.584 125.184 128.256 0 0-16.128 98.816 79.36 131.328 0.256-0.256 127.232 36.608 187.648-124.928 13.312-37.632 24.576-63.488 30.976-128.256 0 0 2.304 256.512-214.272 387.072l72.192 43.008s157.696-154.88 160-409.6c-0.256-13.568-0.256-21.76-0.256-21.76 0.256 7.424 0.256 14.592 0.256 21.76 1.024 50.176 8.704 173.056 52.992 219.392 0 0 63.232 87.04 172.544 41.984 0 0 65.28-23.808 65.792-109.824 0 0 100.864 15.104 122.88-88.832-0.512 0 29.184-91.648-76.8-144.384z m0 0" fill="#3d5a80"/>
         </svg>
-        <span class="logo-text">四叶集</span>
+        <span class="logo-text">{{ siteName }}</span>
       </NuxtLink>
     </div>
 
@@ -198,6 +198,8 @@
 import type { Navigation } from '~/types'
 import { useEssayDrawerStore } from '~/stores/essayDrawer'
 
+const { siteName } = useRuntimeConfig().public
+
 interface Props {
   navigationList: Navigation[]
 }
@@ -376,14 +378,14 @@ onMounted(() => {
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; height: 38px; white-space: nowrap; }
 .logo-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; transition: all 0.2s ease; }
 .logo-icon svg { width: 32px; height: 32px; }
-.logo-text { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--color-ink); letter-spacing: 2px; line-height: 38px; }
+.logo-text { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--color-ink); letter-spacing: 2px; line-height: 38px; }
 
 /* 中间区域 */
 .nav-center { display: flex; align-items: center; gap: 24px; max-width: max-content; }
 
 /* 搜索框 */
 .search-wrapper { position: relative; min-width: 180px; max-width: 240px; }
-.search-input-wrapper { display: flex; align-items: center; gap: 8px; background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--radius-full); padding: 6px 14px; cursor: text; transition: all 0.2s ease; }
+.search-input-wrapper { display: flex; align-items: center; gap: 8px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 6px 14px; cursor: text; transition: all 0.2s ease; }
 .search-input-wrapper:hover { border-color: var(--color-primary); background: var(--color-surface-dim); }
 .search-input-wrapper.focused { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
 .search-icon { width: 16px; height: 16px; color: var(--color-ink-muted); stroke-width: 2; }
@@ -402,8 +404,8 @@ onMounted(() => {
 .search-history-empty { padding: 24px; text-align: center; color: var(--color-ink-muted); font-size: 13px; }
 
 /* 导航菜单 */
-.nav-menu { display: flex; align-items: center; gap: 4px; }
-.nav-link { padding: 8px 16px; font-size: 15px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
+.nav-menu { display: flex; align-items: center; gap: 2px; }
+.nav-link { padding: 7px 12px; font-size: 14px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
 .nav-link:hover { color: var(--color-ink); background: var(--color-surface-dim); }
 .nav-link.active { color: var(--color-primary); font-weight: 600; }
 .dropdown-icon { width: 14px; height: 14px; color: var(--color-ink-muted); }
@@ -418,7 +420,7 @@ onMounted(() => {
 .action-icon { width: 20px; height: 20px; stroke-width: 1.5; }
 .user-avatar { cursor: pointer; transition: transform 0.2s ease; }
 .user-avatar:hover { transform: scale(1.08); }
-.login-btn { padding: 8px 24px; font-size: 14px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; min-width: 80px; }
+.login-btn { padding: 7px 18px; font-size: 13px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; }
 .login-btn:hover { background: var(--color-primary); transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* 汉堡菜单按钮 */

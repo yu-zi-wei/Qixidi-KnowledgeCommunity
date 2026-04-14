@@ -11,6 +11,8 @@
       :articles="articleList"
       :loading="loadingMore"
       :no-more="noMore"
+      :hide-cover="true"
+      :excerpt-lines="1"
       @load-more="loadMore"
     />
   </div>

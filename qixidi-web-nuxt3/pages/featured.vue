@@ -4,6 +4,7 @@
       :articles="articles"
       :loading="loadingMore"
       :no-more="noMore"
+      :hide-cover="true"
       @load-more="loadMore"
     />
   </div>
@@ -14,6 +15,8 @@ definePageMeta({
   showTabBar: true,
   sidebar: 'home'
 })
+
+useHead({ bodyAttrs: { class: 'page-home' } })
 
 const route = useRoute()
 const articleApi = useArticleApi()

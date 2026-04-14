@@ -53,7 +53,7 @@ const collectionApi = useCollectionApi()
 
 const uid = computed(() => route.params.uid as string)
 
-const { data: collectionList, pending } = await useAsyncData(
+const { data: collectionList, pending } = useAsyncData(
   `user-collection-list-${uid.value}`,
   () => collectionApi.getCollectionFolders(uid.value)
 )

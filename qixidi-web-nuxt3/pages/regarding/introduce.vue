@@ -37,6 +37,7 @@ definePageMeta({
 const INTRODUCE_ARTICLE_ID = '-11'
 
 const articleApi = useArticleApi()
+const { siteName } = useRuntimeConfig().public
 const fabulousApi = useFabulousApi()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
@@ -146,11 +147,11 @@ const handleEdit = () => {
 
 // SEO 设置
 useHead({
-  title: () => article.value?.articleTitle || '关于四叶集',
+  title: () => article.value?.articleTitle || `关于${siteName}`,
   meta: [
     {
       name: 'description',
-      content: () => article.value?.articleAbstract || '了解四叶集博客平台'
+      content: () => article.value?.articleAbstract || `了解${siteName}博客平台`
     }
   ],
   bodyAttrs: {
@@ -189,7 +190,7 @@ onMounted(() => {
 <style>
 @media (max-width: 768px) {
   body.page-regarding .home-main {
-    padding-top: 60px !important;
+    padding-top: 50px !important;
   }
 }
 </style>

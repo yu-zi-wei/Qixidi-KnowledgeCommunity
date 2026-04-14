@@ -360,7 +360,7 @@ useHead({
 /* 覆盖布局移动端 padding-top */
 @media (max-width: 768px) {
   body.page-article-archive .home-main {
-    padding-top: 70px !important;
+    padding-top: 80px !important;
   }
 }
 </style>

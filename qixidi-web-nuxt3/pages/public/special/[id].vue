@@ -95,6 +95,8 @@ import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 definePageMeta({ layout: 'blank' })
 
+const { siteName } = useRuntimeConfig().public
+
 const route = useRoute()
 const specialId = computed(() => Number(route.params.id))
 const specialDetailApi = useSpecialDetailApi()
@@ -194,7 +196,7 @@ onMounted(() => {
 
 // SEO
 useHead(() => ({
-  title: specialData.value?.specialName ? `${specialData.value.specialName} - 栖息地` : '专栏 - 栖息地',
+  title: specialData.value?.specialName ? `${specialData.value.specialName} - ${siteName}` : `专栏 - ${siteName}`,
   meta: [
     { name: 'description', content: specialData.value?.specialIntroduce || specialData.value?.specialName || '' }
   ]

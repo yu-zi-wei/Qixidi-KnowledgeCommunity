@@ -18,6 +18,8 @@
 <script setup lang="ts">
 import { Home, ArrowLeft } from '@vicons/tabler'
 
+const { siteName } = useRuntimeConfig().public
+
 const props = defineProps<{
   error: {
     statusCode?: number
@@ -52,7 +54,7 @@ const handleGoBack = () => {
 }
 
 useHead({
-  title: `${props.error?.statusCode || 404} - 栖息地`
+  title: `${props.error?.statusCode || 404} - ${siteName}`
 })
 </script>
 

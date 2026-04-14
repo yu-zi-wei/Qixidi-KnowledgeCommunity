@@ -69,7 +69,7 @@
       <!-- 品牌和运行天数 -->
       <div class="site-header">
         <div class="brand-info">
-          <span class="brand-name">四叶集</span>
+          <span class="brand-name">{{ siteName }}</span>
           <span class="brand-slogan">在文字里，找到栖身之所</span>
         </div>
         <div v-if="runningDays > 0" class="running-badge">
@@ -102,7 +102,7 @@
 
       <!-- 版权信息 -->
       <div class="footer-meta">
-        © {{ year }} 四叶集
+        © {{ year }} {{ siteName }}
       </div>
     </div>
   </aside>
@@ -112,6 +112,7 @@
 import { ref, computed } from 'vue'
 
 const siteApi = useSiteApi()
+const { siteName } = useRuntimeConfig().public
 const articleApi = useArticleApi()
 
 const year = new Date().getFullYear()
@@ -125,15 +126,24 @@ const { data: siteInfoData } = await useAsyncData('home-sidebar-info', () =>
   siteApi.getInfo()
 )
 
+const MAX_REFRESH_PAGE = 3
 const recommendPage = ref(1)
+const recommendTotal = ref(0)
 const { data: recommendData, refresh: refreshRecommendData } = await useAsyncData(
   'home-sidebar-recommend',
   () => articleApi.getRecommendList(recommendPage.value, 10)
 )
 const recommendList = computed(() => recommendData.value?.rows || [])
 
-const refreshRecommend = () => {
-  recommendPage.value++
+// 记录总数，用于计算最大页数
+watch(() => recommendData.value, (data) => {
+  if (data?.total !== undefined) recommendTotal.value = data.total
+}, { immediate: true })
+
+const handleRefresh = () => {
+  const totalPages = Math.max(1, Math.ceil(recommendTotal.value / 10))
+  const maxPage = Math.min(MAX_REFRESH_PAGE, totalPages)
+  recommendPage.value = recommendPage.value >= maxPage ? 1 : recommendPage.value + 1
   refreshRecommendData()
 }
 

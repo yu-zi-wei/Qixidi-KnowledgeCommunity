@@ -37,7 +37,7 @@ const [{ data: navigationData }, { data: labelData }] = await Promise.all([
     return rows || []
   }),
   useAsyncData('layout-labels', async () => {
-    const result = await labelApi.getGroupingList(1, 12)
+    const result = await labelApi.getGroupingList(1, 10)
     return result.rows || []
   })
 ])
@@ -76,7 +76,7 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   gap: 40px;
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
   padding: 20px 24px 40px;

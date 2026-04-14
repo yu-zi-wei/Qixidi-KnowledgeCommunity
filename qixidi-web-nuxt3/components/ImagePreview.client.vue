@@ -38,8 +38,9 @@
           <button class="control-btn" @click="zoomIn" :disabled="scale >= 3">
             <Plus class="control-icon" />
           </button>
-          <button class="control-btn" @click="reset">
-            <Refresh class="control-icon" />
+          <div class="control-divider" />
+          <button class="control-btn" @click="rotateRight" title="旋转">
+            <RotateClockwise class="control-icon" />
           </button>
         </div>
 
@@ -51,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { X, Plus, Minus, Refresh } from '@vicons/tabler'
+import { X, Plus, Minus, RotateClockwise } from '@vicons/tabler'
 
 interface Props {
   visible: boolean
@@ -71,6 +72,7 @@ const imgRef = ref<HTMLImageElement | null>(null)
 const scale = ref(1)
 const translateX = ref(0)
 const translateY = ref(0)
+const rotation = ref(0)
 
 // 拖拽状态
 const isDragging = ref(false)
@@ -81,7 +83,7 @@ const dragStartTranslateY = ref(0)
 
 // 计算图片样式
 const imageStyle = computed(() => ({
-  transform: `translate(${translateX.value}px, ${translateY.value}px) scale(${scale.value})`,
+  transform: `translate(${translateX.value}px, ${translateY.value}px) scale(${scale.value}) rotate(${rotation.value}deg)`,
   cursor: scale.value > 1 ? (isDragging.value ? 'grabbing' : 'grab') : 'default'
 }))
 
@@ -108,6 +110,12 @@ const reset = () => {
   scale.value = 1
   translateX.value = 0
   translateY.value = 0
+  rotation.value = 0
+}
+
+// 旋转
+const rotateRight = () => {
+  rotation.value += 90
 }
 
 // 滚轮缩放
@@ -280,6 +288,13 @@ onUnmounted(() => {
 .control-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+.control-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 4px;
 }
 
 .control-icon {

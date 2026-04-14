@@ -17,7 +17,7 @@
       <article v-else-if="essay" class="detail-card">
         <ReadingEssaysDetailContent :essay="essay">
           <template #actions>
-            <n-button v-if="isOwner" quaternary size="small" @click="handleEdit" title="编辑">
+            <n-button v-if="isOwner && !isMobile" quaternary size="small" @click="handleEdit" title="编辑">
               <template #icon>
                 <n-icon><Edit /></n-icon>
               </template>
@@ -51,6 +51,11 @@ const essayDrawerStore = useEssayDrawerStore()
 const message = useMessage()
 
 const essayId = computed(() => route.params.id as string)
+
+const isMobile = ref(false)
+onMounted(() => {
+  isMobile.value = window.innerWidth < 768
+})
 
 const isOwner = computed(() => {
   if (!essay.value || !authStore.user?.uuid) return false

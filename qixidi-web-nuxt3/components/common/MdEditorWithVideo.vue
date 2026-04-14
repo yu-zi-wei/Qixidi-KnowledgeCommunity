@@ -33,6 +33,7 @@
       <MdEditor
         v-model="content"
         :toolbars="editorToolbars"
+        :theme="editorTheme"
         :placeholder="placeholder"
         class="markdown-editor"
         @onUploadImg="handleImageUpload"
@@ -86,6 +87,9 @@ import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 import { PlayerRecord, Link as LinkIcon } from '@vicons/tabler'
 import type { UploadSetCustomRequestOptions } from 'naive-ui'
+
+const colorMode = useColorMode()
+const editorTheme = computed(() => colorMode.value === 'dark' ? 'dark' : 'light')
 
 interface Props {
   modelValue: string

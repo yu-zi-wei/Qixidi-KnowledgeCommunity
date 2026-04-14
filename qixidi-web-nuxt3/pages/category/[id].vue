@@ -38,6 +38,8 @@ definePageMeta({
   sidebar: 'home'
 })
 
+useHead({ bodyAttrs: { class: 'page-home' } })
+
 const route = useRoute()
 const articleApi = useArticleApi()
 const labelStore = useLabelStore()

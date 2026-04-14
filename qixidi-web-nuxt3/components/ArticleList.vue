@@ -29,7 +29,7 @@
             {{ item.articleTitle }}
           </NuxtLink>
         </h3>
-        <p class="article-excerpt">{{ item.articleAbstract }}</p>
+        <p class="article-excerpt" :style="{ WebkitLineClamp: excerptLines }">{{ item.articleAbstract }}</p>
         <div class="article-stats">
           <span class="stat-item">
             <Eye class="stat-icon" />
@@ -67,12 +67,15 @@ import { Eye, Heart, MessageCircle } from '@vicons/tabler'
 import type { ArticleInfo } from '~/types'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   articles: ArticleInfo[]
   loading: boolean
   noMore: boolean
   hideCover?: boolean
-}>()
+  excerptLines?: number
+}>(), {
+  excerptLines: 2
+})
 
 const emit = defineEmits<{
   loadMore: []
@@ -317,6 +320,8 @@ watch(() => props.articles.length, () => {
   flex: 1;
 }
 
+/* 行内样式会覆盖 -webkit-line-clamp，此处保留默认值 */
+
 /* 互动数据 - 更紧凑 */
 .article-stats {
   display: flex;
@@ -417,10 +422,6 @@ watch(() => props.articles.length, () => {
 
   .meta-tag {
     margin-left: 0;
-  }
-
-  .article-excerpt {
-    display: none;
   }
 
   .article-stats {

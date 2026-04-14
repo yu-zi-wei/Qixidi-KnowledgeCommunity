@@ -72,7 +72,7 @@ const currentPage = computed(() => Number(route.query.page) || 1)
 
 const cacheKey = computed(() => `fabulous-articles-${uid.value}-${currentPage.value}`)
 
-const { data: articleData, pending } = await useAsyncData(
+const { data: articleData, pending } = useAsyncData(
   cacheKey,
   () => fabulousApi.getFabulousArticleList(uid.value, currentPage.value, pageSize)
 )

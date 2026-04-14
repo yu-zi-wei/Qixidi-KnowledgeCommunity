@@ -4,6 +4,7 @@
       :articles="articles"
       :loading="loadingMore"
       :no-more="noMore"
+      :hide-cover="true"
       @load-more="loadMore"
     />
   </div>
@@ -18,6 +19,12 @@ definePageMeta({
 const route = useRoute()
 const articleApi = useArticleApi()
 
+useHead({
+  bodyAttrs: {
+    class: 'page-home'
+  }
+})
+
 // 使用无限滚动 Hook
 const { articles, loadingMore, noMore, loadMore } = useInfiniteScroll({
   fetchFn: (page) => articleApi.getSortList({
@@ -31,5 +38,12 @@ const { articles, loadingMore, noMore, loadMore } = useInfiniteScroll({
 </script>
 
 <style scoped>
-/* 首页使用默认的 260px，无需覆盖 */
+</style>
+
+<style>
+@media (max-width: 768px) {
+  body.page-home .home-main {
+    padding-top: 210px !important;
+  }
+}
 </style>

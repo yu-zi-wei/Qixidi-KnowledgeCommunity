@@ -135,15 +135,17 @@ const tabs = [
   { value: 2, label: '关注标签', icon: Tag }
 ]
 
-const { data: userList } = await useAsyncData(
+const { data: userList, pending: pendingUsers } = useAsyncData(
   `follow-users-${uid.value}`,
   () => followApi.getFollowList(uid.value, 1) as Promise<FollowUserVo[]>
 )
 
-const { data: tagList } = await useAsyncData(
+const { data: tagList, pending: pendingTags } = useAsyncData(
   `follow-tags-${uid.value}`,
   () => followApi.getFollowList(uid.value, 2) as Promise<FollowTagVo[]>
 )
+
+const pending = computed(() => pendingUsers.value || pendingTags.value)
 </script>
 
 <style>

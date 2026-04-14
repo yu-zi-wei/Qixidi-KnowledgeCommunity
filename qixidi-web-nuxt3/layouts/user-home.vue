@@ -54,6 +54,34 @@
                 </n-button>
               </div>
             </div>
+            <!-- 统计数据 -->
+            <div class="user-stats-row" v-if="userInfo">
+              <div class="user-stat">
+                <span class="user-stat-val">{{ userInfo.articleCount || 0 }}</span>
+                <span class="user-stat-label">文章</span>
+              </div>
+              <div class="user-stat">
+                <span class="user-stat-val">{{ userInfo.dictumCount || 0 }}</span>
+                <span class="user-stat-label">随笔</span>
+              </div>
+              <div class="user-stat">
+                <span class="user-stat-val">{{ userInfo.timeNotesCount || 0 }}</span>
+                <span class="user-stat-label">小记</span>
+              </div>
+              <div class="user-stat">
+                <span class="user-stat-val">{{ userInfo.albumCount || 0 }}</span>
+                <span class="user-stat-label">专辑</span>
+              </div>
+              <div class="user-stat">
+                <span class="user-stat-val">{{ userInfo.specialColumnCount || 0 }}</span>
+                <span class="user-stat-label">专栏</span>
+              </div>
+              <div class="user-stat">
+                <span class="user-stat-val">{{ userInfo.fansFollowCount || 0 }}</span>
+                <span class="user-stat-label">关注者</span>
+              </div>
+            </div>
+
             <!-- 菜单合并进头部卡片 -->
             <div class="user-menu" v-if="menuList.length">
               <NuxtLink
@@ -413,6 +441,29 @@ const handleFollow = async () => {
   color: var(--color-ink-faint);
 }
 
+/* ======== 头部内嵌统计（移动端显示） ======== */
+.user-stats-row {
+  display: none;
+}
+
+.user-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.user-stat-val {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.user-stat-label {
+  font-size: 11px;
+  color: var(--color-ink-faint);
+}
+
 /* ======== 响应式 ======== */
 @media (max-width: 768px) {
   .user-home-page {
@@ -437,16 +488,24 @@ const handleFollow = async () => {
   }
 
   .user-home-right {
-    width: 100%;
+    display: none;
+  }
+
+  .user-stats-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .user-stat-val {
+    font-size: var(--text-base);
   }
 
   .user-content {
     overflow: visible;
     padding-right: 0;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>

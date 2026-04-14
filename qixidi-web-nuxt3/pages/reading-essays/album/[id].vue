@@ -117,6 +117,8 @@ import type { ReadingEssaysAlbum, ReadingEssaysInfo } from '~/types'
 
 definePageMeta({ layout: 'blank' })
 
+const { siteName } = useRuntimeConfig().public
+
 const route = useRoute()
 const albumId = computed(() => Number(route.params.id))
 const readingEssaysApi = useReadingEssaysApi()
@@ -172,7 +174,7 @@ watch(() => albumData.value?.id, (id) => {
 
 // SEO
 useHead(() => ({
-  title: albumData.value?.name ? `${albumData.value.name} - 栖息地` : '专辑 - 栖息地',
+  title: albumData.value?.name ? `${albumData.value.name} - ${siteName}` : `专辑 - ${siteName}`,
   meta: [
     { name: 'description', content: albumData.value?.briefIntroduction || albumData.value?.name || '' }
   ]

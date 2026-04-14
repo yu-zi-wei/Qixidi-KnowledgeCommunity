@@ -94,6 +94,8 @@ import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 definePageMeta({ layout: 'blank' })
 
+const { siteName } = useRuntimeConfig().public
+
 const route = useRoute()
 const api = useApi()
 const labelApi = useLabelApi()
@@ -170,7 +172,7 @@ onMounted(() => {
 
 // SEO
 useHead(() => ({
-  title: labelData.value?.labelName ? `${labelData.value.labelName} - 栖息地` : '标签 - 栖息地',
+  title: labelData.value?.labelName ? `${labelData.value.labelName} - ${siteName}` : `标签 - ${siteName}`,
   meta: [
     { name: 'description', content: labelData.value?.labelDescribe || labelData.value?.labelName || '' }
   ]

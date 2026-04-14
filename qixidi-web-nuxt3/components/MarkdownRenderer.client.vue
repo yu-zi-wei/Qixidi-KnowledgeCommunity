@@ -13,6 +13,8 @@
 </template>
 
 <script setup lang="ts">
+import 'highlight.js/styles/atom-one-dark.css'
+
 interface Props {
   content: string
 }
@@ -200,5 +202,34 @@ const closePreview = () => {
   width: 100%;
   border-radius: 12px;
   background: #000;
+}
+
+/* 代码块基础样式 */
+.markdown-body :deep(pre) {
+  margin: 16px 0;
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  line-height: 1.6;
+  background: #282c34 !important;
+  color: #abb2bf;
+}
+
+.markdown-body :deep(pre code) {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: none !important;
+  padding: 0 !important;
+  color: inherit;
+}
+
+/* 行内代码 */
+.markdown-body :deep(code:not(pre code)) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--color-surface-dim);
+  color: var(--color-ink);
 }
 </style>

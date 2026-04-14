@@ -63,7 +63,8 @@ export default defineNuxtConfig({
         public: {
             // 客户端环境变量（通过 devProxy 代理）
             apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
-            appName: 'qixidi-blog'
+            appName: 'qixidi-blog',
+            siteName: '四叶集'
         }
     },
 

@@ -187,7 +187,7 @@ watch(activeTab, (tab) => {
   gap: var(--space-2);
   padding-top: 16px;
   margin-bottom: 15px;
-  margin-left: 92px;
+  margin-left: 82px;
   border-bottom: 1px solid var(--color-border-light);
 }
 
@@ -316,7 +316,7 @@ watch(activeTab, (tab) => {
 
 @media (max-width: 768px) {
   body.page-friend-link .home-main {
-    padding-top: 70px !important;
+    padding-top: 60px !important;
   }
 }
 </style>

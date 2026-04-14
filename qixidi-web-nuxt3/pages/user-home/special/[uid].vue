@@ -56,7 +56,7 @@ const specialDetailApi = useSpecialDetailApi()
 
 const uid = computed(() => route.params.uid as string)
 
-const { data: specialList, pending } = await useAsyncData(
+const { data: specialList, pending } = useAsyncData(
   `user-special-list-${uid.value}`,
   () => specialDetailApi.getSpecialList(uid.value)
 )

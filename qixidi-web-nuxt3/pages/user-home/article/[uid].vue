@@ -6,7 +6,6 @@
         v-model:value="searchKeyword"
         placeholder="搜索文章标题"
         clearable
-        size="small"
       >
         <template #prefix>
           <n-icon><Search /></n-icon>
@@ -73,7 +72,7 @@ watch(searchKeyword, (val) => {
 
 const cacheKey = computed(() => `user-home-article-${uid.value}-${currentPage.value}-${apiKeyword.value}`)
 
-const { data: pageData, pending } = await useAsyncData(
+const { data: pageData, pending } = useAsyncData(
   cacheKey,
   () => api.getPage<any>('/white/article/user/list', {
     pageNum: currentPage.value,

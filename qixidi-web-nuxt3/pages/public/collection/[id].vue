@@ -85,6 +85,7 @@ import type { UserInfoVo } from '~/composables/useSpecialDetailApi'
 
 definePageMeta({ layout: 'blank' })
 
+const { siteName } = useRuntimeConfig().public
 const route = useRoute()
 const collectionId = computed(() => Number(route.params.id))
 const collectionApi = useCollectionApi()
@@ -176,7 +177,7 @@ onMounted(() => {
 
 // SEO
 useHead(() => ({
-  title: collectionData.value?.collectionName ? `${collectionData.value.collectionName} - 栖息地` : '收藏夹 - 栖息地',
+  title: collectionData.value?.collectionName ? `${collectionData.value.collectionName} - ${siteName}` : `收藏夹 - ${siteName}`,
   meta: [
     { name: 'description', content: collectionData.value?.collectionIntroduce || collectionData.value?.collectionName || '' }
   ]

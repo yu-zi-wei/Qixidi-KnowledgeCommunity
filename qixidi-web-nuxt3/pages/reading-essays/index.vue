@@ -227,8 +227,15 @@ const isOwner = computed(() => {
   return selectedEssay.value.uid === authStore.user.uuid
 })
 
-// 显示详情抽屉
+// 移动端检测
+const isMobile = ref(false)
+
+// 显示详情抽屉（PC）或跳转详情页（移动端）
 const handleShowDetail = (item: ReadingEssaysInfo) => {
+  if (isMobile.value) {
+    navigateTo(`/reading-essays/${item.id}`)
+    return
+  }
   selectedEssay.value = item
   drawerVisible.value = true
 }
@@ -261,6 +268,9 @@ const handleCommentAdded = () => {
 
 // 监听导航栏吸顶状态
 onMounted(() => {
+  isMobile.value = window.innerWidth < 768
+  window.addEventListener('resize', () => { isMobile.value = window.innerWidth < 768 })
+
   const checkSticky = () => {
     if (!navRef.value) return
     const rect = navRef.value.getBoundingClientRect()

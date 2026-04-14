@@ -240,7 +240,7 @@ if (urlId) {
 
 /* 左侧：时间线列表 - 固定高度，sticky 定位 */
 .time-list-section {
-  flex: 2;
+  flex: 1;
   min-width: 0;
   position: sticky;
   top: 71px; /* navHeight(66) + gap(5) */
@@ -276,7 +276,7 @@ if (urlId) {
 
 /* 右侧：详情 - 不固定高度，随内容增长 */
 .time-detail-section {
-  flex: 3;
+  flex: 2;
   min-width: 0;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(8px);

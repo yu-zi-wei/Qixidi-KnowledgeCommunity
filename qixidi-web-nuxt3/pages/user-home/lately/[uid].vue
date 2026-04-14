@@ -69,7 +69,7 @@ if (import.meta.client) {
 // computed key —— 页码变化时自动重新获取
 const cacheKey = computed(() => `user-home-lately-${uid.value}-${currentPage.value}`)
 
-const { data: pageData, pending } = await useAsyncData(
+const { data: pageData, pending } = useAsyncData(
   cacheKey,
   () => browsingHistoryApi.getList({
     pageNum: currentPage.value,

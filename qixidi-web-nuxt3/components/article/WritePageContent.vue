@@ -380,7 +380,7 @@ const formatDate = (timestamp: number) => {
 
 // 编辑文章（导航到编辑路由）
 const handleEditArticle = (id: number) => {
-  navigateTo(`/write/${id}`)
+  navigateTo(`/write/article/${id}`)
 }
 
 // 处理状态筛选
@@ -536,7 +536,7 @@ const handleBack = () => {
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  background: #fafafa;
+  background: var(--color-surface-warm);
   overflow: hidden;
 }
 
@@ -602,7 +602,7 @@ const handleBack = () => {
 }
 
 .required {
-  color: #e74c3c;
+  color: var(--color-danger);
   margin-left: 2px;
 }
 
@@ -649,7 +649,7 @@ const handleBack = () => {
 
 .recent-article-item {
   padding: 10px 12px;
-  background: white;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -733,7 +733,7 @@ const handleBack = () => {
 .category-card {
   padding: 12px 8px;
   text-align: center;
-  background: white;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -751,7 +751,7 @@ const handleBack = () => {
 .category-card.active {
   border-color: var(--color-primary);
   background: var(--color-primary);
-  color: white;
+  color: var(--color-surface);
   font-weight: 500;
 }
 
@@ -761,7 +761,7 @@ const handleBack = () => {
   gap: 12px;
   padding: 16px 24px;
   border-top: 1px solid var(--color-border-light);
-  background: white;
+  background: var(--color-surface);
   flex-shrink: 0;
 }
 
