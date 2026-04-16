@@ -33,11 +33,6 @@ public class TripartiteUserVo extends CountUserWebsiteEntity {
     private Boolean isFollow = false;
 
     /**
-     * 关注按钮状态
-     */
-    private Boolean buttonLoading = false;
-
-    /**
      * 用户昵称
      */
     @ExcelProperty(value = "用户昵称")

@@ -540,3 +540,93 @@ export const ArticleAuditState = {
   REJECTED: 3,     // 审核不通过
   DRAFT: 4         // 草稿
 } as const
+
+// ==================== 消息模块 ====================
+
+// 消息汇总
+export interface NewsUserSumVo {
+  type: number           // 消息类型
+  typeInfo: string       // 类型描述
+  route: string          // 路由路径
+  newsSum: number        // 未读数
+}
+
+// 通用消息（点赞 type=2、关注 type=3）
+export interface NewsUserInfoVo {
+  newsId: number
+  targetId: number
+  newsTitle: string
+  newsContent: string
+  type: number
+  beenRead: number
+  senderId: string
+  senderName: string
+  senderAvatar: string
+  recipientId: string
+  createTime: string
+}
+
+// 评论消息（type=1）
+export interface ArticleCommentNewsVo {
+  id: number
+  newsId: number
+  articleId: number
+  articleTitle: string
+  uid: string
+  parentId: number
+  commentGrade: number       // 评论等级（1：一级，2：二级，3：三级及以下）
+  targetId: string
+  targetUid: string
+  commentUid: string
+  commentName: string
+  commentAvatar: string
+  content: string
+  type: number
+  beenRead: number
+  createTime: string
+}
+
+// ==================== 私信模块 ====================
+
+// 私信用户列表项
+export interface PrivateUserVo {
+  id: number
+  uid: string                // 当前用户 id
+  targetUid: string          // 对方用户 id
+  lastNews: string           // 最后一条消息
+  unreadCount: number        // 未读消息条数
+  targetName: string         // 对方用户名称
+  targetAvatar: string       // 对方用户头像
+  targetOccupation: string   // 对方职业
+  createTime: string
+  updateTime: string
+}
+
+// 私信消息记录
+export interface PrivateNewsInfoVo {
+  id: number
+  uid: string                // 发送者 id
+  nickname: string           // 发送者名称
+  userAvatar: string         // 发送者头像
+  newsComment: string        // 消息内容
+  replyTargetUid: string     // 接收者 id
+  timeMark: number           // 0:与上一条间隔<20分钟, 1:>20分钟
+  beenRead: number           // 1:未读, 2:已读
+  createTime: string
+  updateTime: string
+}
+
+// 发送私信请求
+export interface PrivateNewsInfoBo {
+  newsComment: string        // 消息内容
+  replyTargetUid: string     // 目标用户 id
+}
+
+// 用户在线状态
+export interface UserSimpleInfoVo {
+  isOnline: boolean
+  username: string
+  nickname: string
+  avatar: string
+  occupation: string
+}

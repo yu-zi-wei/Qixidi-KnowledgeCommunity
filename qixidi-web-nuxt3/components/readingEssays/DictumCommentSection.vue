@@ -135,6 +135,7 @@
 import { MessageCircle, X, CornerDownLeft, Trash } from '@vicons/tabler'
 import type { DictumCommentVo, DictumCommentBo } from '~/types'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
+import { emojiCategories } from '~/utils/emoji'
 
 interface Props {
   dictumId: string | number      // 随笔 id
@@ -176,14 +177,7 @@ const canSubmit = computed(() => {
   return commentText.value.trim().length > 0
 })
 
-// 表情分类列表
-const emojiCategories = {
-  '常用': ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪'],
-  '手势': ['👍', '👎', '👏', '🙌', '👐', '🤝', '👆', '👇', '👈', '👉', '🤏', '💪', '🦵', '🦶', '👂', '👃', '🧠', '🫀', '🫁', '🦷', '🦴', '👀', '👁', '👅', '👄'],
-  '心情': ['😭', '😢', '😿', '😔', '😞', '😟', '😕', '🙁', '😣', '😖', '😫', '😩', '🥺', '😤', '😡', '😠', '🤬', '👿', '💀', '☠️'],
-  '庆祝': ['🎉', '🎊', '🎈', '🎁', '🏆', '🥇', '🥈', '🥉', '🏅', '🎖️', '🏵️', '🎗️', '🎫', '🎪', '🤡', '🎭', '🎨', '🎰', '🎲', '🧩', '🎹', '🎸'],
-  '其他': ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '⭐', '🌟', '✨', '💫', '🔥', '💯', '✅', '❌']
-}
+// 表情分类（公共数据）
 
 // 插入表情到光标位置
 const insertEmoji = (emoji: string) => {

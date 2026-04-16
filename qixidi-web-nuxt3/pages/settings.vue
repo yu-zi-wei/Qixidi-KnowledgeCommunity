@@ -27,6 +27,22 @@
           <!-- 个人信息 -->
           <template v-if="activeTab === 1">
             <div class="settings-section">
+              <!-- 移动端头像（在表单上方） -->
+              <div class="mobile-avatar-area">
+                <div class="avatar-card">
+                  <div class="avatar-preview" v-if="form.avatar" @click="triggerAvatarUpload">
+                    <img :src="form.avatar" alt="头像" />
+                    <div class="avatar-mask">
+                      <n-icon size="20" color="#fff"><Camera /></n-icon>
+                    </div>
+                  </div>
+                  <button v-else class="avatar-upload-btn" @click="triggerAvatarUpload">
+                    <n-icon size="28"><Camera /></n-icon>
+                    <span>上传头像</span>
+                  </button>
+                </div>
+              </div>
+
               <h2 class="settings-title">个人信息</h2>
 
               <div class="form-divider" />
@@ -166,7 +182,7 @@
     />
 
     <!-- 邮箱绑定/换绑弹窗 -->
-    <n-modal v-model:show="showEmailDialog" preset="dialog" :title="userInfo?.email ? '换绑邮箱' : '绑定邮箱'" :show-icon="false" style="width: 420px;">
+    <n-modal v-model:show="showEmailDialog" preset="dialog" :title="userInfo?.email ? '换绑邮箱' : '绑定邮箱'" :show-icon="false" style="width: min(420px, 90vw);">
       <div class="dialog-form">
         <n-input v-model:value="emailForm.email" placeholder="请输入邮箱地址" size="medium" />
         <div class="code-row">
@@ -183,7 +199,7 @@
     </n-modal>
 
     <!-- 重置密码弹窗 -->
-    <n-modal v-model:show="showPasswordDialog" preset="dialog" title="重置密码" :show-icon="false" style="width: 420px;">
+    <n-modal v-model:show="showPasswordDialog" preset="dialog" title="重置密码" :show-icon="false" style="width: min(420px, 90vw);">
       <div class="dialog-form">
         <n-input v-model:value="passwordForm.password" type="password" show-password-on="click" placeholder="请输入新密码" size="medium" />
         <div class="code-row">
@@ -308,6 +324,8 @@ const handleSaveInfo = async () => {
     })
     message.success('保存成功')
     await refreshInfo()
+    // 重新获取用户信息，更新 authStore 缓存（头像、昵称等所有字段）
+    await authStore.fetchUser()
   } catch {} finally {
     saving.value = false
   }
@@ -423,8 +441,8 @@ const handleCancelAccount = async () => {
 }
 
 .settings-container {
-  width: 840px;
-  max-width: 100%;
+  max-width: 840px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -665,8 +683,13 @@ const handleCancelAccount = async () => {
   flex: 1;
 }
 
+/* 移动端头像（默认隐藏） */
+.mobile-avatar-area {
+  display: none;
+}
+
 /* 响应式 */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .settings-page {
     padding: 16px 12px;
   }
@@ -674,6 +697,7 @@ const handleCancelAccount = async () => {
   .settings-layout {
     flex-direction: column;
     gap: 12px;
+    align-items: stretch;
   }
 
   .settings-sidebar {
@@ -687,11 +711,52 @@ const handleCancelAccount = async () => {
 
   .settings-menu {
     flex-direction: row;
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: 4px;
   }
 
-  .settings-avatar-side {
+  .settings-menu-item {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+    border-radius: var(--radius-sm);
+  }
+
+  .settings-menu-item.active {
+    border-bottom: 2px solid var(--color-primary);
+    border-radius: 0;
+  }
+
+  .settings-content {
     width: 100%;
-    position: static;
+    padding: 20px 16px;
+  }
+
+  /* 移动端显示头像区域 */
+  .mobile-avatar-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .mobile-avatar-area .avatar-preview,
+  .mobile-avatar-area .avatar-upload-btn {
+    width: 80px;
+    height: 80px;
+  }
+
+  .mobile-avatar-area .avatar-upload-btn {
+    font-size: 10px;
+  }
+
+  .mobile-avatar-area .avatar-upload-btn .n-icon {
+    font-size: 20px;
+  }
+
+  /* 桌面端头像侧栏隐藏 */
+  .settings-avatar-side {
+    display: none;
   }
 
   .form-row {
@@ -703,6 +768,10 @@ const handleCancelAccount = async () => {
     width: auto;
     text-align: left;
     line-height: 1.4;
+  }
+
+  .email-status {
+    flex-wrap: wrap;
   }
 }
 </style>

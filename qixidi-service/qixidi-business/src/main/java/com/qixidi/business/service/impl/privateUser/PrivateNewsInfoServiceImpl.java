@@ -10,7 +10,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.StringUtils;
-import com.light.webSocket.domain.constant.WebSocketConstant;
+
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.light.webSocket.utils.WebSocketUtils;
@@ -148,7 +148,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         //        webSocket推送系统消息
         WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(replyTargetUid);
         //        webSocket推送私信红点
-        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(replyTargetUid + WebSocketConstant.PERSONAL_RED_DOT);
+        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(replyTargetUid);
         log.info("webSocket消息推送:{}", replyTargetUid);
         return flag;
     }
@@ -209,7 +209,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
         //        webSocket站内消息推送
         WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
         //        webSocket站内私信红点消息推送
-        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(uuid + WebSocketConstant.PERSONAL_RED_DOT);
+        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(uuid);
 
     }
 }

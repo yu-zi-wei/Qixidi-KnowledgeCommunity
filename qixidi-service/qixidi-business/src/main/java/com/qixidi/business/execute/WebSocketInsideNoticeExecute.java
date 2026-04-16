@@ -28,6 +28,6 @@ public class WebSocketInsideNoticeExecute implements WebSocketInterface {
     @Override
     public void execute(String uuid) {
         List<NewsUserSumVo> list = newsUserInfoService.pushOne(uuid);
-        WebSocketUtils.sendMessage(uuid, list);
+        WebSocketUtils.sendMessage(uuid, WebSocketEnum.INSIDE_NOTICE.getCode(), list);
     }
 }

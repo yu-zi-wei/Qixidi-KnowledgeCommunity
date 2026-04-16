@@ -66,28 +66,33 @@
 
     <!-- 站点信息 -->
     <div class="sidebar-card site-info-card" style="--delay: 3">
-      <!-- 品牌和运行天数 -->
+      <!-- 品牌 -->
       <div class="site-header">
-        <div class="brand-info">
-          <span class="brand-name">{{ siteName }}</span>
-          <span class="brand-slogan">在文字里，找到栖身之所</span>
-        </div>
+        <span class="brand-slogan">在文字里，找到栖身之所</span>
         <div v-if="runningDays > 0" class="running-badge">
-          {{ runningDays }}天
+          已运行 {{ runningYears }}年{{ runningMonths }}月{{ runningRemainDays }}天
         </div>
       </div>
 
       <!-- 开源地址 -->
-      <a href="https://gitee.com/yu-zi-wei/qixidi" target="_blank" rel="noopener" class="opensource-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.327 0 .593-.265.593-.593v-1.481a.593.593 0 0 0-.593-.593h-3.556a.593.593 0 0 1-.593-.593V9.778c0-.327.266-.593.593-.593h5.926c.327 0 .593.266.593.593v6.815a2.37 2.37 0 0 1-2.37 2.37H6.518a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.444-4.445h7.705z"/>
+      <div class="opensource-row">
+        <span class="opensource-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+          开源项目
+        </span>
+        <a href="https://gitee.com/yu-zi-wei/qixidi" target="_blank" rel="noopener" class="ext-link">Gitee</a>
+        <a href="https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity" target="_blank" rel="noopener" class="ext-link">GitHub</a>
+      </div>
+
+      <!-- 反馈邮箱 -->
+      <a v-if="siteInfoData?.mailbox" :href="`mailto:${siteInfoData.mailbox}`" class="opensource-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M22 4L12 13 2 4"/>
         </svg>
-        <span>开源项目</span>
-        <svg class="external-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-          <polyline points="15 3 21 3 21 9"/>
-          <line x1="10" y1="14" x2="21" y2="3"/>
-        </svg>
+        <span>{{ siteInfoData.mailbox }}</span>
       </a>
 
       <!-- 备案信息 -->
@@ -102,7 +107,7 @@
 
       <!-- 版权信息 -->
       <div class="footer-meta">
-        © {{ year }} {{ siteName }}
+        © {{ year }} 栖息地
       </div>
     </div>
   </aside>
@@ -112,7 +117,6 @@
 import { ref, computed } from 'vue'
 
 const siteApi = useSiteApi()
-const { siteName } = useRuntimeConfig().public
 const articleApi = useArticleApi()
 
 const year = new Date().getFullYear()
@@ -152,6 +156,47 @@ const runningDays = computed(() => {
   const created = new Date(siteInfoData.value.createTime)
   const now = new Date()
   return Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
+})
+
+const runningYears = computed(() => {
+  if (!siteInfoData.value?.createTime) return 0
+  const created = new Date(siteInfoData.value.createTime)
+  const now = new Date()
+  let years = now.getFullYear() - created.getFullYear()
+  if (now.getMonth() < created.getMonth() || (now.getMonth() === created.getMonth() && now.getDate() < created.getDate())) {
+    years--
+  }
+  return Math.max(0, years)
+})
+
+const runningMonths = computed(() => {
+  if (!siteInfoData.value?.createTime) return 0
+  const created = new Date(siteInfoData.value.createTime)
+  const now = new Date()
+  let months = now.getMonth() - created.getMonth()
+  if (now.getDate() < created.getDate()) months--
+  if (months < 0) months += 12
+  return months
+})
+
+const runningRemainDays = computed(() => {
+  if (!siteInfoData.value?.createTime) return 0
+  const created = new Date(siteInfoData.value.createTime)
+  const now = new Date()
+  // 计算去掉年月后剩余的天数
+  let year = created.getFullYear()
+  let month = created.getMonth()
+  month += runningMonths.value
+  year += runningYears.value + Math.floor(month / 12)
+  month = month % 12
+  const afterYM = new Date(year, month, created.getDate())
+  if (afterYM > now) {
+    month -= 1
+    if (month < 0) { month += 12; year -= 1 }
+    afterYM.setFullYear(year, month, created.getDate())
+  }
+  const diff = Math.floor((now.getTime() - afterYM.getTime()) / (1000 * 60 * 60 * 24))
+  return Math.max(0, diff)
 })
 </script>
 
@@ -456,27 +501,14 @@ const runningDays = computed(() => {
 /* 品牌头部 */
 .site-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 }
 
-.brand-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.brand-name {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--color-ink);
-  letter-spacing: 1px;
-}
-
 .brand-slogan {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-muted);
+  font-style: italic;
 }
 
 .running-badge {
@@ -487,9 +519,45 @@ const runningDays = computed(() => {
   border-radius: 10px;
   font-weight: 500;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
-/* 开源链接 */
+/* 开源链接行 */
+.opensource-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.opensource-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-ink-light);
+  flex-shrink: 0;
+}
+
+.opensource-label svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+  color: var(--color-primary);
+}
+
+.ext-link {
+  font-size: 11px;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.ext-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* 开源链接（邮箱复用） */
 .opensource-link {
   display: inline-flex;
   align-items: center;

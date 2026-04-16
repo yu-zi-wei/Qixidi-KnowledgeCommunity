@@ -121,12 +121,33 @@
           </button>
         </n-dropdown>
 
-        <NuxtLink to="/notifications" class="icon-btn" title="通知">
-          <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-        </NuxtLink>
+        <div class="news-trigger" @mouseenter="handleNewsEnter" @mouseleave="handleNewsLeave" ref="newsTriggerRef">
+          <NuxtLink to="/news" class="icon-btn" title="通知" @click.native="handleNewsClick">
+            <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span v-if="totalUnread > 0" class="news-badge">{{ totalUnread > 99 ? '99+' : totalUnread }}</span>
+          </NuxtLink>
+          <Transition name="dropdown">
+            <div v-if="showNewsPanel" class="news-dropdown" @mouseenter="handleNewsPanelEnter" @mouseleave="handleNewsPanelLeave">
+              <div class="news-dropdown-content">
+                <NuxtLink
+                  v-for="tab in newsTabs"
+                  :key="tab.type"
+                  :to="tab.type === 1 ? '/news' : { path: '/news', query: { type: tab.type } }"
+                  class="news-dropdown-item"
+                  @click="showNewsPanel = false"
+                >
+                  <span class="news-dropdown-label">{{ tab.label }}</span>
+                  <span v-if="getNewsUnread(tab.type) > 0" class="news-dropdown-badge">
+                    {{ getNewsUnread(tab.type) > 99 ? '99+' : getNewsUnread(tab.type) }}
+                  </span>
+                </NuxtLink>
+              </div>
+            </div>
+          </Transition>
+        </div>
 
         <n-dropdown :options="userMenuOptions" @select="handleUserMenu">
           <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="user-avatar" />
@@ -335,6 +356,41 @@ const handleUserMenu = (key: string) => {
   if (routes[key]) navigateTo(routes[key])
 }
 
+// 消息通知下拉
+const { totalUnread, getUnread: getNewsUnread } = useWebSocket()
+const newsTriggerRef = ref<HTMLElement>()
+const showNewsPanel = ref(false)
+let newsLeaveTimer: ReturnType<typeof setTimeout> | null = null
+
+const newsTabs = [
+  { type: 1, label: '评论' },
+  { type: 2, label: '点赞' },
+  { type: 3, label: '关注' },
+  { type: 4, label: '私信' },
+  { type: 5, label: '系统' }
+]
+
+const handleNewsEnter = () => {
+  if (newsLeaveTimer) { clearTimeout(newsLeaveTimer); newsLeaveTimer = null }
+  showNewsPanel.value = true
+}
+
+const handleNewsLeave = () => {
+  newsLeaveTimer = setTimeout(() => { showNewsPanel.value = false }, 150)
+}
+
+const handleNewsPanelEnter = () => {
+  if (newsLeaveTimer) { clearTimeout(newsLeaveTimer); newsLeaveTimer = null }
+}
+
+const handleNewsPanelLeave = () => {
+  showNewsPanel.value = false
+}
+
+const handleNewsClick = () => {
+  showNewsPanel.value = false
+}
+
 // 吸顶状态
 const isSticky = ref(false)
 
@@ -452,6 +508,87 @@ onMounted(() => {
 .slide-enter-from .mobile-menu-drawer, .slide-leave-to .mobile-menu-drawer { transform: translateX(-100%); }
 
 /* 搜索下拉动画 */
+
+/* ==================== 消息通知下拉 ==================== */
+.news-trigger { position: relative; }
+
+.news-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: center;
+  color: #fff;
+  background: var(--color-danger);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.news-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -8px;
+  z-index: 100;
+  width: 100px;
+}
+
+.news-dropdown-content {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 6px;
+}
+
+:global(.dark) .news-dropdown-content {
+  background: rgba(54, 48, 44, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.news-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--color-ink-light);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.news-dropdown-item:hover {
+  background: var(--color-surface-dim);
+  color: var(--color-ink);
+}
+
+.news-dropdown-label {
+  flex: 1;
+  font-size: 13px;
+}
+
+.news-dropdown-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  background: var(--color-danger);
+  border-radius: 9px;
+}
+
+/* 搜索下拉动画 */
 .dropdown-enter-active, .dropdown-leave-active { transition: all 0.2s ease; transform-origin: top center; }
 .dropdown-enter-from, .dropdown-leave-to { opacity: 0; transform: translateY(-8px) scale(0.95); }
 
@@ -481,6 +618,8 @@ onMounted(() => {
   .nav-right { display: flex; align-items: center; gap: 4px; min-width: 68px; flex-shrink: 0; justify-content: flex-end; }
   .theme-toggle, .icon-btn:not(.user-avatar):not([title="通知"]) { display: none; }
   .icon-btn[title="通知"] { width: 36px; height: 36px; }
+  .news-dropdown { display: none; }
+  .news-badge { top: 0; right: 0; }
   .user-avatar { width: 32px !important; height: 32px !important; flex-shrink: 0; }
   .logo-icon svg { width: 28px; height: 28px; }
   .logo-text { font-size: 16px; }

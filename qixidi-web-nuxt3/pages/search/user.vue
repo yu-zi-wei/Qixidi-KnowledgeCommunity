@@ -32,7 +32,7 @@
         </div>
         <n-button
           size="small"
-          :type="user.isFollow ? 'default' : 'primary'"
+          :type="user.isFollow ? 'tertiary' : 'primary'"
           :loading="user._loading"
           @click="toggleFollow(user)"
         >

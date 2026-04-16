@@ -90,18 +90,6 @@ public class UserFollowServiceImpl implements IUserFollowService {
         if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注取消
             countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
             countUserWebsiteMapper.updateDelete(bo.getTargetId(), CountUserTypeEnums.FANS_FOLLOW_COUNT.getCode());
-            //发送消息
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
-                            .eq(NewsUserRecord::getTargetId, bo.getUid())
-                            .eq(NewsUserRecord::getUid, bo.getTargetId())
-                            .eq(NewsUserRecord::getType, NewsType.FOLLOW_NEWS.getCode()));
-                    //WebSocket推送消息
-                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
-                }
-            });
         } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注取消
             labelInfoMapper.updateDeleteFollow(bo.getTargetId());
         }

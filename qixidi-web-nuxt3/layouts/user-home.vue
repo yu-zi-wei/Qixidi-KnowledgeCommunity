@@ -42,16 +42,25 @@
                 >
                   个人信息设置
                 </n-button>
-                <n-button
-                  v-if="!isOwner"
-                  :type="userInfo.isFollow ? 'default' : 'primary'"
-                  size="small"
-                  round
-                  :loading="followLoading"
-                  @click="handleFollow"
-                >
-                  {{ userInfo.isFollow ? '已关注' : '+ 关注' }}
-                </n-button>
+                <template v-if="!isOwner">
+                  <n-button
+                    :type="userInfo.isFollow ? 'tertiary' : 'primary'"
+                    size="small"
+                    round
+                    :loading="followLoading"
+                    @click="handleFollow"
+                  >
+                    {{ userInfo.isFollow ? '已关注' : '+ 关注' }}
+                  </n-button>
+                  <n-button
+                    size="small"
+                    round
+                    :loading="pmLoading"
+                    @click="handlePrivateMsg"
+                  >
+                    私信
+                  </n-button>
+                </template>
               </div>
             </div>
             <!-- 统计数据 -->
@@ -166,8 +175,18 @@ const { data: menuData } = await useAsyncData('user-home-menu', async () => {
 })
 const menuList = computed(() => {
   const list = menuData.value || []
-  if (!authStore.isLoggedIn) return list.filter((m: any) => m.jurisdiction !== 1)
-  return list
+  return list.filter((m: any) => {
+    const j = m.jurisdiction || 0
+    // 0: 公开，所有人可见
+    if (j === 0) return true
+    // 1: 仅自己可见
+    if (j === 1) return isOwner.value
+    // 2: 登录用户可见
+    if (j === 2) return authStore.isLoggedIn
+    // 3: VIP 可见（暂按登录用户处理）
+    if (j === 3) return authStore.isLoggedIn
+    return true
+  })
 })
 
 const isMenuActive = (menuRoute: string) => {
@@ -175,6 +194,7 @@ const isMenuActive = (menuRoute: string) => {
 }
 
 // 关注
+const followApi = useFollowApi()
 const followLoading = ref(false)
 const handleFollow = async () => {
   if (!authStore.isLoggedIn) {
@@ -182,13 +202,40 @@ const handleFollow = async () => {
     authDialogStore.showLoginDialog(route.fullPath)
     return
   }
+  if (!userInfo.value) return
   followLoading.value = true
   try {
-    if (userInfo.value) {
-      userInfo.value.isFollow = !userInfo.value.isFollow
+    if (userInfo.value.isFollow) {
+      await followApi.cancelFollow(uid.value, 1)
+      userInfo.value.isFollow = false
+    } else {
+      await followApi.addFollow(uid.value, 1)
+      userInfo.value.isFollow = true
     }
+  } catch {
+    // useApi 统一处理错误
   } finally {
     followLoading.value = false
+  }
+}
+
+// 私信
+const privateApi = usePrivateMessageApi()
+const pmLoading = ref(false)
+const handlePrivateMsg = async () => {
+  if (!authStore.isLoggedIn) {
+    const authDialogStore = useAuthDialogStore()
+    authDialogStore.showLoginDialog(route.fullPath)
+    return
+  }
+  pmLoading.value = true
+  try {
+    await privateApi.addUser(uid.value)
+    navigateTo({ path: '/news', query: { type: 4, uid: uid.value } })
+  } catch {
+    // useApi 统一处理错误
+  } finally {
+    pmLoading.value = false
   }
 }
 </script>
@@ -241,13 +288,13 @@ const handleFollow = async () => {
 .user-header-body {
   display: flex;
   gap: 14px;
-  padding: 16px 20px;
+  padding: 32px 20px 22px;
   position: relative;
 }
 
 .back-home-link {
   position: absolute;
-  top: 12px;
+  top: 10px;
   right: 16px;
   display: flex;
   align-items: center;
@@ -349,8 +396,8 @@ const handleFollow = async () => {
 
 .user-header-actions {
   display: flex;
-  flex-direction: column;
   justify-content: flex-end;
+  align-items: flex-end;
   flex-shrink: 0;
   gap: 6px;
 }

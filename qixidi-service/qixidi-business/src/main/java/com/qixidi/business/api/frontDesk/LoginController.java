@@ -136,10 +136,8 @@ public class LoginController {
         try {
             String tripartiteUuid = LoginHelper.getTripartiteUuid();
             if (tripartiteUuid != null) {
-                //用户链接
+                //断开WebSocket连接
                 WebSocketUtils.removeLinks(tripartiteUuid);
-                //用户私信链接
-                WebSocketUtils.removeLinks(tripartiteUuid + ":sx");
                 StpUtil.logout();
                 loginService.logout(LoginHelper.getTripartiteUsername());
             }

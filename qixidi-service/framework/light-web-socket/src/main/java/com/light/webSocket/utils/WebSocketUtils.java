@@ -1,176 +1,156 @@
 package com.light.webSocket.utils;
 
 import com.light.core.utils.JsonUtils;
+import com.light.webSocket.domain.model.WebSocketMessage;
 import jakarta.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * WebSocket 工具类
+ * <p>
+ * 支持同一用户多个标签页同时在线（key → List<Session>）
  *
  * @author zi-wei
  * @create 2025/2/27 14:55
  */
 public class WebSocketUtils {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketUtils.class);
-    //存储已连接的客户端信息
-    private static ConcurrentHashMap<String, Session> websocketMap = new ConcurrentHashMap<>();
+    // 存储 key → 多个 Session（同一用户多标签页）
+    private static ConcurrentHashMap<String, CopyOnWriteArrayList<Session>> websocketMap = new ConcurrentHashMap<>();
 
     /**
      * 建立链接
-     *
-     * @param key
-     * @param session
      */
     public static void addLinks(String key, Session session) {
-        websocketMap.put(key, session);
-        logger.info("用户创建连接：{}，当前在线链接数:{}", key, websocketMap.size());
+        websocketMap.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()).add(session);
+        logger.info("用户创建连接：{}，sessionId:{}，当前该key连接数:{}，总连接数:{}", key, session.getId(), websocketMap.get(key).size(), websocketMap.size());
     }
 
     /**
      * 移除指定连接
-     *
-     * @param key
+     */
+    public static void removeLinks(String key, Session session) {
+        CopyOnWriteArrayList<Session> sessions = websocketMap.get(key);
+        if (sessions != null) {
+            sessions.remove(session);
+            if (sessions.isEmpty()) {
+                websocketMap.remove(key);
+            }
+            logger.info("用户关闭连接：{}，sessionId:{}，剩余连接数:{}", key, session.getId(), sessions.size());
+        }
+    }
+
+    /**
+     * 移除指定 key 的所有连接（兼容旧调用方式）
      */
     public static void removeLinks(String key) {
-        if (websocketMap.containsKey(key)) {
-            websocketMap.remove(key);
-            logger.info("用户关闭：{}，人数:{}", key, websocketMap.size());
+        CopyOnWriteArrayList<Session> removed = websocketMap.remove(key);
+        if (removed != null) {
+            logger.info("用户关闭所有连接：{}，连接数:{}", key, removed.size());
         }
     }
 
     /**
      * 获取所有客户端
-     *
-     * @return
      */
-    public static ConcurrentHashMap<String, Session> getAllSession() {
+    public static ConcurrentHashMap<String, CopyOnWriteArrayList<Session>> getAllSession() {
         return websocketMap;
     }
 
     /**
      * 判断客户端是否在线
-     *
-     * @param key
-     * @return
      */
     public static Boolean containsKey(String key) {
-        return websocketMap.containsKey(key);
+        CopyOnWriteArrayList<Session> sessions = websocketMap.get(key);
+        return sessions != null && !sessions.isEmpty();
     }
 
     /**
-     * 获取指定客户端 Session
-     *
-     * @param key
-     * @return
+     * 获取指定 key 的第一个 Session（兼容旧调用）
      */
     public static Session getSession(String key) {
-        return websocketMap.get(key);
+        CopyOnWriteArrayList<Session> sessions = websocketMap.get(key);
+        return (sessions != null && !sessions.isEmpty()) ? sessions.get(0) : null;
     }
 
     /**
-     * 向指定客户端发送消息
-     *
-     * @param session
-     * @param message Object
+     * 向指定 Session 发送消息
      */
     public static void sendMessage(Session session, Object message) {
         try {
-            if (session != null && message != null) {
-                // 向客户端发送消息
+            if (session != null && session.isOpen() && message != null) {
                 session.getAsyncRemote().sendText(JsonUtils.toJsonString(message));
-//                session.getAsyncRemote().sendObject(message);// TODO:客户端接收失败，待查
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            logger.error("WebSocket发送消息失败, sessionId:{}", session != null ? session.getId() : "null", e);
         }
     }
 
-
     /**
-     * 向指定客户端发送消息
-     *
-     * @param key
-     * @param message Object
+     * 向指定 key 的所有连接发送消息（Object）
      */
     public static void sendMessage(String key, Object message) {
-        Session session = websocketMap.get(key);
+        sendToAllSessions(key, JsonUtils.toJsonString(message));
+    }
+
+    /**
+     * 向指定 key 的所有连接发送带类型的消息
+     */
+    public static <T> void sendMessage(String key, int type, T data) {
         try {
-            if (session != null && message != null) {
-                // 向客户端发送消息
-                session.getAsyncRemote().sendText(JsonUtils.toJsonString(message));
-//                session.getAsyncRemote().sendObject(message);// TODO:客户端接收失败，待查
+            if (data != null) {
+                WebSocketMessage<T> msg = new WebSocketMessage<>(type, data);
+                sendToAllSessions(key, JsonUtils.toJsonString(msg));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            logger.error("WebSocket发送消息失败, key:{}, type:{}", key, type, e);
         }
     }
 
     /**
-     * 向指定客户端发送消息
-     *
-     * @param key
-     * @param message String
+     * 向指定 key 的所有连接发送消息（String）
      */
     public static void sendMessage(String key, String message) {
-        // 获取该 userId 对应的 SocketDomain 对象
-        Session session = websocketMap.get(key);
-        try {
-            if (session != null) {
-                // 向客户端发送消息
-                session.getAsyncRemote().sendText(message);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
+        sendToAllSessions(key, message);
     }
 
-
     /**
-     * 给除了当前客户端的其他客户端发消息
-     *
-     * @param message
-     * @param fromSession
+     * 向指定 key 的所有活跃 Session 发送文本消息
      */
-    private static void sendMessageToAllExpectSelf(String message, Session fromSession) {
-        for (Map.Entry<String, Session> client : websocketMap.entrySet()) {
-            Session toSeesion = client.getValue();
-            if (!toSeesion.getId().equals(fromSession.getId()) && toSeesion.isOpen()) {
-                toSeesion.getAsyncRemote().sendText(message);
-                logger.info("服务端发送消息给：{} 内容：{}", client.getKey(), message);
+    private static void sendToAllSessions(String key, String text) {
+        CopyOnWriteArrayList<Session> sessions = websocketMap.get(key);
+        if (sessions == null || text == null) return;
+        for (Session session : sessions) {
+            try {
+                if (session.isOpen()) {
+                    session.getAsyncRemote().sendText(text);
+                }
+            } catch (Exception e) {
+                logger.error("WebSocket发送消息失败, key:{}, sessionId:{}", key, session.getId(), e);
             }
         }
     }
 
     /**
      * 给包括当前客户端的全部客户端发送消息
-     *
-     * @param message
      */
-    private static void sendMessageToAll(String message) {
-        for (Map.Entry<String, Session> client : websocketMap.entrySet()) {
-            Session toSeesion = client.getValue();
-            if (toSeesion.isOpen()) {
-                toSeesion.getAsyncRemote().sendText(message);
-                logger.info("服务端发送消息给：{} 内容：{}", client.getKey(), message);
+    public static void sendAll(String message) {
+        for (Map.Entry<String, CopyOnWriteArrayList<Session>> entry : websocketMap.entrySet()) {
+            for (Session session : entry.getValue()) {
+                try {
+                    if (session.isOpen()) {
+                        session.getAsyncRemote().sendText(message);
+                    }
+                } catch (Exception e) {
+                    logger.error("WebSocket群发失败, key:{}, sessionId:{}", entry.getKey(), session.getId(), e);
+                }
             }
         }
     }
-
-    /**
-     * 给外部调用的方法接口（群发消息）
-     *
-     * @param Message
-     */
-    public static void sendAll(String Message) {
-        sendMessageToAll(Message);
-    }
-
-
 }

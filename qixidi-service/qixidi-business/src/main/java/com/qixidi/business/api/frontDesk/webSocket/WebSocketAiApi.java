@@ -24,6 +24,7 @@ public class WebSocketAiApi {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketAiApi.class);
     //当前客户端名称
     private String key = "";
+    private Session session;
 
     /**
      * 建立链接
@@ -34,6 +35,7 @@ public class WebSocketAiApi {
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
         this.key = userId;
+        this.session = session;
         //建立链接
         WebSocketUtils.addLinks(userId, session);
     }
@@ -43,7 +45,7 @@ public class WebSocketAiApi {
      */
     @OnClose
     public void onClose() {
-        WebSocketUtils.removeLinks(key);
+        WebSocketUtils.removeLinks(key, session);
     }
 
     /**

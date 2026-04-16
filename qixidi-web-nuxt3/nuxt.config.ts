@@ -63,6 +63,8 @@ export default defineNuxtConfig({
         public: {
             // 客户端环境变量（通过 devProxy 代理）
             apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
+            // WebSocket 直连后端（不走 HTTP 代理）
+            wsBase: process.env.NUXT_PUBLIC_WS_BASE || API_BASE_URL,
             appName: 'qixidi-blog',
             siteName: '四叶集'
         }
@@ -116,6 +118,10 @@ export default defineNuxtConfig({
         // 写作页面 —— CSR（需要登录，客户端交互）
         '/write': {ssr: false},
         '/write/**': {ssr: false},
+
+        // 需要登录的页面 —— CSR
+        '/news': {ssr: false},
+        '/news/**': {ssr: false},
 
         // 后台管理页面 —— CSR（纯客户端渲染，无需 SEO）
         '/login': {ssr: false},

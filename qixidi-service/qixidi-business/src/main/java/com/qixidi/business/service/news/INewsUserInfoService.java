@@ -1,7 +1,9 @@
 package com.qixidi.business.service.news;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.light.core.core.domain.PageQuery;
@@ -21,50 +23,31 @@ public interface INewsUserInfoService {
 
     /**
      * 查询用户消息
-     *
-     * @param id 用户消息主键
-     * @return 用户消息
      */
     NewsUserInfoVo queryById(Long id);
 
     /**
      * 查询用户消息列表
-     *
-     * @param bo 用户消息
-     * @return 用户消息集合
      */
     TableDataInfo<NewsUserInfoVo> queryPageList(NewsUserInfoBo bo, PageQuery pageQuery);
 
     /**
      * 查询用户消息列表
-     *
-     * @param bo 用户消息
-     * @return 用户消息集合
      */
     List<NewsUserInfoVo> queryList(NewsUserInfoBo bo);
 
     /**
-     * 修改用户消息
-     *
-     * @param bo 用户消息
-     * @return 结果
+     * 新增用户消息
      */
     Boolean insertByBo(NewsUserInfoBo bo);
 
     /**
      * 修改用户消息
-     *
-     * @param bo 用户消息
-     * @return 结果
      */
     Boolean updateByBo(NewsUserInfoBo bo);
 
     /**
      * 校验并批量删除用户消息信息
-     *
-     * @param ids     需要删除的用户消息主键集合
-     * @param isValid 是否校验,true-删除前校验,false-不校验
-     * @return 结果
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
@@ -72,7 +55,17 @@ public interface INewsUserInfoService {
 
     List<NewsUserSumVo> listSums(String uid);
 
-    Object userList(NewsUserInfoBo bo, PageQuery pageQuery);
+    /** 评论消息列表 */
+    TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery);
+
+    /** 点赞消息列表 */
+    TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery);
+
+    /** 关注消息列表 */
+    TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery);
+
+    /** 系统消息列表 */
+    TableDataInfo<NewsUserInfoVo> systemList(PageQuery pageQuery);
 
     List<NewsUserSumVo> pushOne(String userid);
 
