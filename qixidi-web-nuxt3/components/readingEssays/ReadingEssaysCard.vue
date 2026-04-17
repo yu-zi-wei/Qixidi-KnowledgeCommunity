@@ -101,10 +101,10 @@ onMounted(() => {
 }
 
 .reading-essays-card {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--color-block-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--color-border-light);
   border-radius: 14px;
   padding: 20px;
   transition: all 0.25s ease;
@@ -124,19 +124,9 @@ onMounted(() => {
 }
 
 .reading-essays-card:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--color-block-bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.dark .reading-essays-card {
-  background: rgba(54, 48, 44, 0.75);
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-.dark .reading-essays-card:hover {
-  background: rgba(64, 58, 54, 0.9);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-lg);
 }
 
 /* 随笔内容 */

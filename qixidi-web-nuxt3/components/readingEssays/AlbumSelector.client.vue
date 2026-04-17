@@ -2,7 +2,7 @@
   <n-modal
     v-model:show="showModal"
     preset="card"
-    :style="{ width: '700px', maxWidth: '90vw' }"
+    :style="{ width: '640px', maxWidth: '90vw' }"
     title="选择专辑"
     :bordered="false"
     :segmented="{ content: 'soft' }"
@@ -48,7 +48,9 @@
           </div>
           <div class="album-info">
             <div class="album-name">{{ album.name }}</div>
-            <div v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</div>
+            <div class="album-meta">
+              <span v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</span>
+            </div>
             <div v-if="album.briefIntroduction" class="album-intro" :title="album.briefIntroduction">
               {{ album.briefIntroduction }}
             </div>
@@ -62,7 +64,6 @@
           v-model:page="pageNum"
           :page-count="Math.ceil(total / pageSize)"
           :page-size="pageSize"
-          show-quick-jumper
           @update:page="handlePageChange"
         />
       </div>
@@ -166,7 +167,7 @@ watch(() => props.show, (newVal) => {
 
 <style scoped>
 .search-section {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .loading-state,
@@ -176,22 +177,22 @@ watch(() => props.show, (newVal) => {
   justify-content: center;
   min-height: 200px;
   color: var(--color-ink-muted);
+  font-size: 14px;
 }
 
 /* 专辑网格 */
 .album-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
-  max-height: 450px;
+  gap: 10px;
+  margin-bottom: 16px;
+  max-height: 420px;
   overflow-y: auto;
   padding-right: 4px;
 }
 
-/* 滚动条样式 */
 .album-grid::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 .album-grid::-webkit-scrollbar-track {
@@ -199,98 +200,90 @@ watch(() => props.show, (newVal) => {
 }
 
 .album-grid::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-ink-faint);
   border-radius: 4px;
 }
 
 .album-grid-item {
   display: flex;
-  flex-direction: row;
-  gap: 14px;
-  padding: 14px;
-  border: 1px solid rgba(154, 113, 88, 0.12);
-  border-radius: 12px;
+  gap: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.25s ease;
-  background: linear-gradient(135deg, rgba(154, 113, 88, 0.06) 0%, rgba(201, 160, 122, 0.02) 100%);
+  transition: background 0.2s ease;
+  background: rgba(0, 0, 0, 0.03);
   align-items: flex-start;
 }
 
 .album-grid-item:hover {
-  background: linear-gradient(135deg, rgba(154, 113, 88, 0.12) 0%, rgba(201, 160, 122, 0.06) 100%);
-  border-color: rgba(154, 113, 88, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(154, 113, 88, 0.15);
+  background: rgba(61, 90, 128, 0.06);
 }
 
 .album-grid-item.selected {
-  background: linear-gradient(135deg, rgba(154, 113, 88, 0.18) 0%, rgba(201, 160, 122, 0.1) 100%);
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 16px rgba(154, 113, 88, 0.2);
+  background: var(--color-primary-light);
 }
 
 .album-grid-item .album-cover {
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   flex-shrink: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
 .album-grid-item .album-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.album-grid-item:hover .album-cover img {
-  transform: scale(1.08);
 }
 
 .album-grid-item .album-cover-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(154, 113, 88, 0.15) 0%, rgba(201, 160, 122, 0.08) 100%);
-  color: var(--color-primary);
+  background: var(--color-surface-dim);
+  color: var(--color-ink-muted);
 }
 
 .album-grid-item .placeholder-icon {
-  width: 26px;
-  height: 26px;
-  opacity: 0.7;
+  width: 22px;
+  height: 22px;
+  opacity: 0.5;
 }
 
 .album-grid-item .album-info {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   flex: 1;
   min-width: 0;
 }
 
 .album-grid-item .album-name {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.4;
+}
+
+.album-grid-item .album-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .album-grid-item .album-count {
   font-size: 12px;
   color: var(--color-ink-muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .album-grid-item .album-intro {
   font-size: 12px;
-  color: var(--color-ink-light);
+  color: var(--color-ink-muted);
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -308,34 +301,23 @@ watch(() => props.show, (newVal) => {
   color: var(--color-primary);
 }
 
-.album-grid-item.selected .album-intro {
-  color: rgba(154, 113, 88, 0.8);
-}
-
 /* 暗色主题 */
 :global(.dark) .album-grid-item {
-  background: linear-gradient(135deg, rgba(201, 160, 122, 0.1) 0%, rgba(154, 113, 88, 0.04) 100%);
-  border-color: rgba(201, 160, 122, 0.2);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 :global(.dark) .album-grid-item:hover {
-  background: linear-gradient(135deg, rgba(201, 160, 122, 0.18) 0%, rgba(154, 113, 88, 0.1) 100%);
-  border-color: rgba(201, 160, 122, 0.35);
+  background: rgba(90, 127, 168, 0.1);
 }
 
 :global(.dark) .album-grid-item.selected {
-  background: linear-gradient(135deg, rgba(201, 160, 122, 0.25) 0%, rgba(154, 113, 88, 0.15) 100%);
-}
-
-:global(.dark) .album-grid-item .album-cover-placeholder {
-  background: linear-gradient(135deg, rgba(201, 160, 122, 0.2) 0%, rgba(154, 113, 88, 0.1) 100%);
+  background: rgba(90, 127, 168, 0.15);
 }
 
 /* 分页 */
 .pagination-section {
   display: flex;
   justify-content: center;
-  padding-top: 16px;
-  border-top: 1px solid var(--color-border-light);
+  padding-top: 12px;
 }
 </style>

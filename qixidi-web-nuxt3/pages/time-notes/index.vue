@@ -245,18 +245,13 @@ if (urlId) {
   position: sticky;
   top: 71px; /* navHeight(66) + gap(5) */
   height: calc(100vh - 91px);
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--color-block-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--color-border-light);
   border-right: none;
   border-radius: 16px 0 0 16px;
   overflow: hidden;
-}
-
-.dark .time-list-section {
-  background: rgba(54, 48, 44, 0.75);
-  border-color: rgba(255, 255, 255, 0.06);
 }
 
 /* 中间分隔线 */
@@ -278,18 +273,13 @@ if (urlId) {
 .time-detail-section {
   flex: 2;
   min-width: 0;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--color-block-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--color-border-light);
   border-left: none;
   border-radius: 0 16px 16px 0;
   overflow: visible;
-}
-
-.dark .time-detail-section {
-  background: rgba(54, 48, 44, 0.75);
-  border-color: rgba(255, 255, 255, 0.06);
 }
 
 /* 移动端：只展示列表 */

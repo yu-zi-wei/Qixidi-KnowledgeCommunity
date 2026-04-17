@@ -55,7 +55,7 @@
       </div>
 
       <!-- 文章摘要 -->
-      <div v-if="article.articleAbstract" class="article-abstract-wrapper">
+      <div v-if="showAbstract && article.articleAbstract" class="article-abstract-wrapper">
         <div class="abstract-icon">
           <Quote class="icon" />
         </div>
@@ -143,11 +143,13 @@ interface Props {
   article: Article
   showCollect?: boolean
   showEdit?: boolean
+  showAbstract?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   showCollect: true,
-  showEdit: true
+  showEdit: true,
+  showAbstract: true
 })
 
 defineEmits<{
@@ -264,13 +266,9 @@ const labelItems = computed(() => {
 }
 
 .article-actions-sidebar:hover {
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--color-block-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-}
-
-.dark .article-actions-sidebar:hover {
-  background: rgba(54, 48, 44, 0.6);
 }
 
 .article-actions-sidebar.is-visible {
@@ -322,15 +320,11 @@ const labelItems = computed(() => {
   padding: 0 10px 28px 32px;
   position: relative;
   /* 更透明的背景，能隐约看到背景格子 */
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-content-tint);
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
   border-radius: 20px;
   border: none;
-}
-
-.dark .article-main-content {
-  background: rgba(54, 48, 44, 0.2);
 }
 
 .article-main-content.is-visible {
@@ -586,12 +580,8 @@ const labelItems = computed(() => {
     width: auto;
     padding: 10px 14px;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--color-dropdown-bg);
     backdrop-filter: blur(12px);
-  }
-
-  .dark .article-actions-sidebar {
-    background: rgba(64, 58, 54, 0.85);
   }
 
   .article-actions-sidebar.is-visible {

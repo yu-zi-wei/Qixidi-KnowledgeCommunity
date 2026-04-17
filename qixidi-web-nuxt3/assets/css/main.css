@@ -43,6 +43,13 @@
 
   --color-header-bg: rgba(248, 249, 250, 0.92);
   --color-code-bg: #eef0f2;
+
+  /* 内容块背景（卡片、面板、下拉等，自动跟随主题） */
+  --color-block-bg: rgba(255, 255, 255, 0.75);
+  --color-block-bg-hover: rgba(255, 255, 255, 0.92);
+  --color-dropdown-bg: rgba(255, 255, 255, 0.85);
+  --color-content-tint: rgba(255, 255, 255, 0.2);
+
   /* Markdown 代码块样式 */
   --md-code-bg: #eef0f2;
   --md-code-border: #e2e4e8;
@@ -56,6 +63,7 @@
   --font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', Georgia, serif;
   --font-body: 'Noto Sans SC', 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --font-logo: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
 
   /* 字体大小层级 */
   --text-xs: 12px;
@@ -118,26 +126,26 @@
   --color-ink-muted: #8a8c92;
   --color-ink-faint: #5c5e64;
 
-  /* 背景色阶 - 深暖灰 */
-  --color-surface: #36302C;
-  --color-surface-warm: #2C2622;
-  --color-surface-dim: #403A36;
+  /* 背景色阶 - 冷灰 */
+  --color-surface: #1e1e22;
+  --color-surface-warm: #17171b;
+  --color-surface-dim: #28282e;
 
-  /* 网格效果 - 冷色 */
+  /* 网格效果 */
   --grid-color: rgba(90, 127, 168, 0.08);
 
-  /* 卡片背景 - 暖灰 */
-  --card-bg: rgba(44, 38, 34, 0.5);
+  /* 卡片背景 - 冷灰 */
+  --card-bg: rgba(23, 23, 27, 0.5);
 
-  /* 边框色 - 暖灰 */
-  --color-border: #4A4440;
-  --color-border-light: #3A3430;
+  /* 边框色 - 冷灰 */
+  --color-border: #38383e;
+  --color-border-light: #2a2a30;
 
   /* 主色：冷蓝调亮 */
   --color-primary: #6a9fd4;
   --color-primary-dark: #5a8fc4;
   --color-primary-hover: #7aafd4;
-  --color-primary-light: #2a3040;
+  --color-primary-light: #1e2430;
 
   /* 强调色 */
   --color-accent: #7ab0e4;
@@ -146,11 +154,18 @@
   /* 功能色 */
   --color-danger: #e05545;
 
-  --color-header-bg: rgba(54, 48, 44, 0.92);
-  --color-code-bg: #403A36;
+  --color-header-bg: rgba(30, 30, 34, 0.92);
+  --color-code-bg: #28282e;
+
+  /* 内容块背景 - 冷灰 */
+  --color-block-bg: rgba(30, 30, 34, 0.75);
+  --color-block-bg-hover: rgba(40, 40, 46, 0.9);
+  --color-dropdown-bg: rgba(30, 30, 34, 0.85);
+  --color-content-tint: rgba(30, 30, 34, 0.2);
+
   /* Markdown 代码块样式 */
-  --md-code-bg: #2C2622;
-  --md-code-border: #4A4440;
+  --md-code-bg: #17171b;
+  --md-code-border: #38383e;
   --md-inline-code-bg: rgba(90, 127, 168, 0.2);
   --md-quote-border: #363a3e;
   --md-quote-text: #8a8c92;

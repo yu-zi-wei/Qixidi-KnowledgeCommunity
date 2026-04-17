@@ -66,7 +66,7 @@ export default defineNuxtConfig({
             // WebSocket 直连后端（不走 HTTP 代理）
             wsBase: process.env.NUXT_PUBLIC_WS_BASE || API_BASE_URL,
             appName: 'qixidi-blog',
-            siteName: '四叶集'
+            siteName: '栖息地'
         }
     },
 
@@ -87,7 +87,7 @@ export default defineNuxtConfig({
                 {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
                 {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
                 {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
-                {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&display=optional'}
+                {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=optional'}
             ]
         }
     },

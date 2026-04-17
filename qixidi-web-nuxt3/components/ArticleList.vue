@@ -283,7 +283,6 @@ watch(() => props.articles.length, () => {
   color: var(--color-primary);
   border-radius: 16px;
   font-weight: 500;
-  margin-left: auto;
 }
 
 /* 标题 - 更紧凑 */
@@ -359,19 +358,20 @@ watch(() => props.articles.length, () => {
   flex-shrink: 0;
 }
 
-/* 封面图片 - 更紧凑 */
+/* 封面图片 - 紧凑轻量 */
 .article-cover {
-  width: 160px;
-  height: 120px;
+  width: 120px;
+  height: 90px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 6px;
   flex-shrink: 0;
   background: var(--color-surface-dim);
-  transition: transform 0.25s ease;
+  align-self: center;
+  transition: opacity 0.2s ease;
 }
 
 .article-card:hover .article-cover {
-  transform: scale(1.02);
+  opacity: 0.9;
 }
 
 .load-more {
@@ -391,8 +391,8 @@ watch(() => props.articles.length, () => {
 /* 响应式 */
 @media (max-width: 1024px) {
   .article-cover {
-    width: 140px;
-    height: 105px;
+    width: 100px;
+    height: 76px;
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <aside v-if="isReady" class="reading-essays-sidebar">
     <!-- 专辑（带封面） -->
-    <section v-if="displayedAlbums.length > 0" class="sidebar-card gray-card sidebar-section" style="--delay: 0">
+    <section v-if="displayedAlbums.length > 0" class="sidebar-card sidebar-section" style="--delay: 0">
       <div class="section-title">
         <Folder class="section-icon" />
         <span>推荐专辑</span>
@@ -28,12 +28,13 @@
         </NuxtLink>
       </div>
       <button v-if="totalAlbums > 5" class="btn-view-all" @click="showAlbumSelector = true">
-        查看全部 {{ totalAlbums }} 个专辑 →
+        查看全部 {{ totalAlbums }} 个专辑
+        <ChevronRight style="width: 14px; height: 14px;" />
       </button>
     </section>
 
     <!-- 热门作者（可展开） -->
-    <section v-if="popularAuthors.length > 0" class="sidebar-card gradient-card sidebar-section" style="--delay: 1">
+    <section v-if="popularAuthors.length > 0" class="sidebar-card sidebar-section" style="--delay: 1">
       <div class="section-title section-title-clickable" @click="toggleAuthorsExpand">
         <User class="section-icon" />
         <span>热门作者</span>
@@ -54,7 +55,7 @@
     </section>
 
     <!-- 热门标签（可展开） -->
-    <section v-if="popularLabels.length > 0" class="sidebar-card gradient-card sidebar-section" style="--delay: 2">
+    <section v-if="popularLabels.length > 0" class="sidebar-card sidebar-section" style="--delay: 2">
       <div class="section-title section-title-clickable" @click="toggleLabelsExpand">
         <Hash class="section-icon" />
         <span>热门标签</span>
@@ -87,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { Folder, Hash, User, ChevronDown } from '@vicons/tabler'
+import { Folder, Hash, User, ChevronDown, ChevronRight } from '@vicons/tabler'
 import type { ReadingEssaysAlbum, ReadingEssaysAuthor, ReadingEssaysLabel } from '~/types'
 import AlbumSelectorClient from './AlbumSelector.client.vue'
 
@@ -190,15 +191,15 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 </script>
 
 <style scoped>
-/* 卡片入场动画 */
+/* 卡片入场动画 - 与首页侧边栏统一 */
 @keyframes sidebar-card-in {
   from {
     opacity: 0;
-    transform: translateX(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
@@ -206,7 +207,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 .reading-essays-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
@@ -220,132 +221,28 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   display: none;
 }
 
-/* 卡片通用样式 - 渐变毛玻璃 */
+/* 卡片通用样式 - 轻透风格，与首页侧边栏统一 */
 .sidebar-card {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(240, 245, 250, 0.7) 100%
-  );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 16px;
-  padding: 20px;
-  transition: all 0.3s ease;
-  /* 入场动画 */
-  animation: sidebar-card-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.08s) forwards;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  border-radius: 10px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  animation: sidebar-card-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
   opacity: 0;
 }
 
 .sidebar-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(240, 245, 250, 0.85) 100%
-  );
-  border-color: rgba(61, 90, 128, 0.15);
-}
-
-/* 灰色背景卡片 - 浅灰渐变 */
-.sidebar-card.gray-card {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.04) 100%
-  );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-color: rgba(0, 0, 0, 0.04);
-}
-
-.sidebar-card.gray-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(61, 90, 128, 0.06) 0%,
-    rgba(0, 0, 0, 0.03) 100%
-  );
-  border-color: rgba(61, 90, 128, 0.1);
-}
-
-.dark .sidebar-card.gray-card {
-  background: linear-gradient(
-    135deg,
-    rgba(64, 58, 54, 0.6) 0%,
-    rgba(54, 48, 44, 0.4) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.04);
-}
-
-.dark .sidebar-card.gray-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(70, 64, 60, 0.7) 0%,
-    rgba(60, 54, 50, 0.5) 100%
-  );
-  border-color: rgba(90, 127, 168, 0.15);
-}
-
-/* 渐变背景卡片 - 带品牌色渐变 */
-.sidebar-card.gradient-card {
-  background: linear-gradient(
-    135deg,
-    rgba(61, 90, 128, 0.08) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(90, 127, 168, 0.05) 100%
-  );
-  border-color: rgba(61, 90, 128, 0.1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.sidebar-card.gradient-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(61, 90, 128, 0.12) 0%,
-    rgba(255, 255, 255, 0.65) 50%,
-    rgba(90, 127, 168, 0.08) 100%
-  );
-  border-color: rgba(61, 90, 128, 0.15);
-}
-
-.dark .sidebar-card.gradient-card {
-  background: linear-gradient(
-    135deg,
-    rgba(90, 127, 168, 0.12) 0%,
-    rgba(54, 48, 44, 0.5) 50%,
-    rgba(122, 176, 228, 0.08) 100%
-  );
-  border-color: rgba(90, 127, 168, 0.15);
-}
-
-.dark .sidebar-card.gradient-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(90, 127, 168, 0.18) 0%,
-    rgba(54, 48, 44, 0.65) 50%,
-    rgba(122, 176, 228, 0.12) 100%
-  );
-  border-color: rgba(90, 127, 168, 0.2);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* 暗色主题 */
-.dark .sidebar-card {
-  background: linear-gradient(
-    135deg,
-    rgba(54, 48, 44, 0.85) 0%,
-    rgba(64, 58, 54, 0.7) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.08);
+:root.dark .sidebar-card {
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.dark .sidebar-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(60, 54, 50, 0.92) 0%,
-    rgba(70, 64, 60, 0.8) 100%
-  );
-  border-color: rgba(90, 127, 168, 0.15);
+:root.dark .sidebar-card:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* 占位状态 */
@@ -358,10 +255,10 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 25%, rgba(0, 0, 0, 0.06) 50%, rgba(0, 0, 0, 0.04) 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
-  border-radius: 16px;
+  border-radius: 10px;
 }
 
-.dark .skeleton {
+:root.dark .skeleton {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.04) 75%);
 }
 
@@ -390,12 +287,6 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   font-weight: 600;
   color: var(--color-ink);
   margin-bottom: 4px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.dark .section-title {
-  border-bottom-color: rgba(255, 255, 255, 0.05);
 }
 
 .section-title-clickable {
@@ -426,44 +317,37 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 .album-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .album-card {
   display: flex;
   gap: 10px;
-  padding: 10px;
-  border: 1px solid transparent;
-  border-radius: 10px;
+  padding: 8px;
+  margin: 0 -8px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s ease;
-  background: rgba(0, 0, 0, 0.06);
 }
 
 .album-card:hover {
-  background: rgba(61, 90, 128, 0.1);
-  border-color: rgba(61, 90, 128, 0.2);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .album-card.active {
   background: var(--color-primary-light);
-  border-color: var(--color-primary);
 }
 
-.dark .album-card {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.dark .album-card:hover {
-  background: rgba(90, 127, 168, 0.15);
-  border-color: rgba(90, 127, 168, 0.3);
+:root.dark .album-card:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .album-cover {
-  width: 52px;
-  height: 52px;
-  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
   overflow: hidden;
   flex-shrink: 0;
   background: var(--color-surface-dim);
@@ -484,8 +368,8 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 }
 
 .placeholder-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   opacity: 0.5;
 }
 
@@ -493,7 +377,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   flex: 1;
   min-width: 0;
 }
@@ -502,12 +386,10 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   font-size: 13px;
   font-weight: 500;
   color: var(--color-ink);
+  line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .album-count {
@@ -525,43 +407,39 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 
 /* 查看全部按钮 */
 .btn-view-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   width: 100%;
-  padding: 10px 14px;
-  margin-top: 4px;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  padding: 7px 0;
+  margin-top: 2px;
+  background: none;
+  border: none;
   font-size: 12px;
   font-weight: 500;
-  color: var(--color-ink-light);
+  color: var(--color-ink-muted);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .btn-view-all:hover {
-  background: var(--color-primary-light);
-  border-color: var(--color-primary);
   color: var(--color-primary);
-}
-
-.dark .btn-view-all {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.06);
 }
 
 /* 标签云 */
 .tag-cloud {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .tag-cloud-item {
   font-size: 12px;
   color: var(--color-ink-light);
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.08) 0%, rgba(90, 127, 168, 0.04) 100%);
-  padding: 6px 12px;
-  border: 1px solid rgba(61, 90, 128, 0.12);
+  background: rgba(0, 0, 0, 0.03);
+  padding: 5px 10px;
+  border: none;
   border-radius: 20px;
   cursor: pointer;
   text-decoration: none;
@@ -569,24 +447,20 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 }
 
 .tag-cloud-item:hover {
-  background: linear-gradient(135deg, rgba(61, 90, 128, 0.15) 0%, rgba(90, 127, 168, 0.1) 100%);
-  border-color: rgba(61, 90, 128, 0.25);
+  background: rgba(61, 90, 128, 0.08);
   color: var(--color-primary);
 }
 
 .tag-cloud-item.active {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #5a7fa8 100%);
+  background: var(--color-primary);
   color: #fff;
-  border-color: var(--color-primary);
 }
 
-.dark .tag-cloud-item {
-  background: linear-gradient(135deg, rgba(90, 127, 168, 0.12) 0%, rgba(61, 90, 128, 0.06) 100%);
-  border-color: rgba(90, 127, 168, 0.2);
+:root.dark .tag-cloud-item {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.dark .tag-cloud-item:hover {
-  background: linear-gradient(135deg, rgba(90, 127, 168, 0.2) 0%, rgba(61, 90, 128, 0.12) 100%);
-  border-color: rgba(90, 127, 168, 0.35);
+:root.dark .tag-cloud-item:hover {
+  background: rgba(90, 127, 168, 0.15);
 }
 </style>

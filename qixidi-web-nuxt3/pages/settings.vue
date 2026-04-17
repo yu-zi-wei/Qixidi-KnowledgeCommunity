@@ -148,7 +148,7 @@
         </div>
 
         <!-- 右侧头像区域 -->
-        <div class="settings-avatar-side" v-if="activeTab === 1">
+        <div class="settings-avatar-side" :class="{ 'is-hidden': activeTab !== 1 }">
           <div class="avatar-card">
             <div class="avatar-preview" v-if="form.avatar" @click="triggerAvatarUpload">
               <img :src="form.avatar" alt="头像" />
@@ -513,8 +513,8 @@ const handleCancelAccount = async () => {
 
 /* 右侧内容 */
 .settings-content {
-  flex: 1;
-  min-width: 0;
+  width: 480px;
+  flex-shrink: 0;
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -540,6 +540,11 @@ const handleCancelAccount = async () => {
   flex-shrink: 0;
   position: sticky;
   top: 40px;
+}
+
+.settings-avatar-side.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .avatar-card {

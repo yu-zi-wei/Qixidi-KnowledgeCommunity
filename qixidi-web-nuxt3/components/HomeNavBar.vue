@@ -13,9 +13,7 @@
     <!-- 左侧：Logo -->
     <div class="nav-left">
       <NuxtLink to="/" class="nav-logo">
-        <svg class="logo-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-          <path d="M844.288 514.56c-52.736-27.392-201.216-35.84-201.216-35.84s152.576-4.352 240.896-33.536c0 0 102.656-40.96 68.864-162.048 0 0-20.736-63.488-132.864-75.264 0 0 9.984-83.968-70.656-132.352 0 0-56.832-34.304-141.056 17.92-71.936 52.224-80.64 234.752-81.152 246.272 0.512-11.008 6.144-177.664-33.792-249.088 0 0-42.752-99.072-164.096-48.128 0 0-102.912 33.024-81.664 128 0 0-150.272-31.744-171.008 111.104 0 0-17.92 116.224 109.568 141.568 41.472 10.24 182.016 32.768 182.016 32.768S79.872 429.312 65.792 569.344c0 0-24.32 131.584 125.184 128.256 0 0-16.128 98.816 79.36 131.328 0.256-0.256 127.232 36.608 187.648-124.928 13.312-37.632 24.576-63.488 30.976-128.256 0 0 2.304 256.512-214.272 387.072l72.192 43.008s157.696-154.88 160-409.6c-0.256-13.568-0.256-21.76-0.256-21.76 0.256 7.424 0.256 14.592 0.256 21.76 1.024 50.176 8.704 173.056 52.992 219.392 0 0 63.232 87.04 172.544 41.984 0 0 65.28-23.808 65.792-109.824 0 0 100.864 15.104 122.88-88.832-0.512 0 29.184-91.648-76.8-144.384z m0 0" fill="#3d5a80"/>
-        </svg>
+        <img src="/images/logo.svg" alt="栖息地" class="logo-icon" />
         <span class="logo-text">{{ siteName }}</span>
       </NuxtLink>
     </div>
@@ -121,33 +119,15 @@
           </button>
         </n-dropdown>
 
-        <div class="news-trigger" @mouseenter="handleNewsEnter" @mouseleave="handleNewsLeave" ref="newsTriggerRef">
-          <NuxtLink to="/news" class="icon-btn" title="通知" @click.native="handleNewsClick">
+        <n-dropdown :options="newsDropdownOptions" @select="handleNewsSelect" trigger="hover" :show-arrow="false" placement="bottom-end">
+          <NuxtLink to="/news" class="icon-btn news-trigger" title="通知" @click.native="handleNewsClick">
             <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
             <span v-if="totalUnread > 0" class="news-badge">{{ totalUnread > 99 ? '99+' : totalUnread }}</span>
           </NuxtLink>
-          <Transition name="dropdown">
-            <div v-if="showNewsPanel" class="news-dropdown" @mouseenter="handleNewsPanelEnter" @mouseleave="handleNewsPanelLeave">
-              <div class="news-dropdown-content">
-                <NuxtLink
-                  v-for="tab in newsTabs"
-                  :key="tab.type"
-                  :to="tab.type === 1 ? '/news' : { path: '/news', query: { type: tab.type } }"
-                  class="news-dropdown-item"
-                  @click="showNewsPanel = false"
-                >
-                  <span class="news-dropdown-label">{{ tab.label }}</span>
-                  <span v-if="getNewsUnread(tab.type) > 0" class="news-dropdown-badge">
-                    {{ getNewsUnread(tab.type) > 99 ? '99+' : getNewsUnread(tab.type) }}
-                  </span>
-                </NuxtLink>
-              </div>
-            </div>
-          </Transition>
-        </div>
+        </n-dropdown>
 
         <n-dropdown :options="userMenuOptions" @select="handleUserMenu">
           <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="user-avatar" />
@@ -358,37 +338,35 @@ const handleUserMenu = (key: string) => {
 
 // 消息通知下拉
 const { totalUnread, getUnread: getNewsUnread } = useWebSocket()
-const newsTriggerRef = ref<HTMLElement>()
-const showNewsPanel = ref(false)
-let newsLeaveTimer: ReturnType<typeof setTimeout> | null = null
 
-const newsTabs = [
-  { type: 1, label: '评论' },
-  { type: 2, label: '点赞' },
-  { type: 3, label: '关注' },
-  { type: 4, label: '私信' },
-  { type: 5, label: '系统' }
-]
-
-const handleNewsEnter = () => {
-  if (newsLeaveTimer) { clearTimeout(newsLeaveTimer); newsLeaveTimer = null }
-  showNewsPanel.value = true
+const renderNewsLabel = (text: string, count: number) => {
+  return () => h('div', { style: 'display: flex; align-items: center; justify-content: space-between; min-width: 100px;' }, [
+    h('span', text),
+    count > 0 ? h('span', {
+      style: 'margin-left: 12px; padding: 1px 6px; font-size: 11px; font-weight: 600; color: #fff; background: var(--color-danger); border-radius: 9px; line-height: 1.4;'
+    }, count > 99 ? '99+' : String(count)) : null
+  ])
 }
 
-const handleNewsLeave = () => {
-  newsLeaveTimer = setTimeout(() => { showNewsPanel.value = false }, 150)
-}
+const newsDropdownOptions = computed(() => [
+  { label: renderNewsLabel('评论', getNewsUnread(1)), key: '1' },
+  { label: renderNewsLabel('点赞', getNewsUnread(2)), key: '2' },
+  { label: renderNewsLabel('关注', getNewsUnread(3)), key: '3' },
+  { label: renderNewsLabel('私信', getNewsUnread(4)), key: '4' },
+  { label: renderNewsLabel('系统', getNewsUnread(5)), key: '5' }
+])
 
-const handleNewsPanelEnter = () => {
-  if (newsLeaveTimer) { clearTimeout(newsLeaveTimer); newsLeaveTimer = null }
-}
-
-const handleNewsPanelLeave = () => {
-  showNewsPanel.value = false
+const handleNewsSelect = (key: string) => {
+  const type = Number(key)
+  if (type === 1) {
+    navigateTo('/news')
+  } else {
+    navigateTo({ path: '/news', query: { type } })
+  }
 }
 
 const handleNewsClick = () => {
-  showNewsPanel.value = false
+  // 点击直接跳转 /news，由 NuxtLink 处理
 }
 
 // 吸顶状态
@@ -432,9 +410,8 @@ onMounted(() => {
 /* Logo */
 .nav-left { display: flex; align-items: center; flex-shrink: 0; }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; height: 38px; white-space: nowrap; }
-.logo-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; transition: all 0.2s ease; }
-.logo-icon svg { width: 32px; height: 32px; }
-.logo-text { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--color-ink); letter-spacing: 2px; line-height: 38px; }
+.logo-icon { width: 32px; height: 32px; flex-shrink: 0; object-fit: contain; transition: all 0.2s ease; }
+.logo-text { font-family: var(--font-logo); font-size: 20px; font-weight: 400; color: var(--color-ink); letter-spacing: 3px; line-height: 38px; }
 
 /* 中间区域 */
 .nav-center { display: flex; align-items: center; gap: 24px; max-width: max-content; }
@@ -450,8 +427,7 @@ onMounted(() => {
 
 /* 搜索下拉 */
 .search-dropdown { position: absolute; top: calc(100% + 8px); left: 0; z-index: 100; min-width: 280px; }
-.search-dropdown-content { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 30px rgba(0,0,0,0.08); padding: 16px; }
-.dark .search-dropdown-content { background: rgba(54,48,44,0.85); border-color: rgba(255,255,255,0.08); }
+.search-dropdown-content { background: var(--color-dropdown-bg); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid var(--color-border-light); box-shadow: var(--shadow-lg); padding: 16px; }
 .search-history-section { display: flex; flex-direction: column; gap: 12px; }
 .search-history-title { font-size: 13px; font-weight: 600; color: var(--color-ink-muted); }
 .search-history-tags { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -467,14 +443,14 @@ onMounted(() => {
 .dropdown-icon { width: 14px; height: 14px; color: var(--color-ink-muted); }
 
 /* 右侧功能区 */
-.nav-right { display: flex; align-items: center; gap: 10px; min-width: 130px; justify-content: flex-end; }
+.nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; justify-content: flex-end; }
 .theme-toggle { color: var(--color-ink-light); transition: all 0.3s ease; }
 .theme-toggle:hover { color: var(--color-accent); background: var(--color-surface-dim); }
 .theme-icon { width: 20px; height: 20px; stroke-width: 1.5; }
-.icon-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: var(--color-ink-muted); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; transition: all 0.2s ease; }
+.icon-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: none; background: transparent; color: var(--color-ink-muted); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; transition: all 0.2s ease; }
 .icon-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
 .action-icon { width: 20px; height: 20px; stroke-width: 1.5; }
-.user-avatar { cursor: pointer; transition: transform 0.2s ease; }
+.user-avatar { flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease; }
 .user-avatar:hover { transform: scale(1.08); }
 .login-btn { padding: 7px 18px; font-size: 13px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; }
 .login-btn:hover { background: var(--color-primary); transform: translateY(-1px); box-shadow: var(--shadow-md); }
@@ -509,7 +485,7 @@ onMounted(() => {
 
 /* 搜索下拉动画 */
 
-/* ==================== 消息通知下拉 ==================== */
+/* ==================== 消息通知 ==================== */
 .news-trigger { position: relative; }
 
 .news-badge {
@@ -527,65 +503,6 @@ onMounted(() => {
   background: var(--color-danger);
   border-radius: 8px;
   pointer-events: none;
-}
-
-.news-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: -8px;
-  z-index: 100;
-  width: 100px;
-}
-
-.news-dropdown-content {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-  padding: 6px;
-}
-
-:global(.dark) .news-dropdown-content {
-  background: rgba(54, 48, 44, 0.85);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.news-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: var(--color-ink-light);
-  text-decoration: none;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-}
-
-.news-dropdown-item:hover {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-}
-
-.news-dropdown-label {
-  flex: 1;
-  font-size: 13px;
-}
-
-.news-dropdown-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1;
-  color: #fff;
-  background: var(--color-danger);
-  border-radius: 9px;
 }
 
 /* 搜索下拉动画 */
@@ -618,10 +535,9 @@ onMounted(() => {
   .nav-right { display: flex; align-items: center; gap: 4px; min-width: 68px; flex-shrink: 0; justify-content: flex-end; }
   .theme-toggle, .icon-btn:not(.user-avatar):not([title="通知"]) { display: none; }
   .icon-btn[title="通知"] { width: 36px; height: 36px; }
-  .news-dropdown { display: none; }
   .news-badge { top: 0; right: 0; }
   .user-avatar { width: 32px !important; height: 32px !important; flex-shrink: 0; }
-  .logo-icon svg { width: 28px; height: 28px; }
+  .logo-icon { width: 28px; height: 28px; }
   .logo-text { font-size: 16px; }
 }
 

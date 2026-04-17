@@ -15,6 +15,7 @@
       <ArticleDetail
         :article="article"
         :show-collect="false"
+        :show-abstract="false"
         @like="handleLike"
         @comment="scrollToComments"
         @edit="handleEdit"

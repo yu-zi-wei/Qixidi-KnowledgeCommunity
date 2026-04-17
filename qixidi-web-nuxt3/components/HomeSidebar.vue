@@ -205,11 +205,11 @@ const runningRemainDays = computed(() => {
 @keyframes sidebar-card-in {
   from {
     opacity: 0;
-    transform: translateX(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
@@ -217,7 +217,7 @@ const runningRemainDays = computed(() => {
 .sidebar-scrollable {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
@@ -231,90 +231,28 @@ const runningRemainDays = computed(() => {
   display: none;
 }
 
-/* 卡片通用样式 - 渐变色背景 */
+/* 卡片通用样式 - 轻透风格，与文章卡片统一 */
 .sidebar-card {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.92) 0%,
-    rgba(255, 255, 255, 0.78) 100%
-  );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  padding: 20px;
-  transition: all 0.3s ease;
-  /* 入场动画 - 与文章列表统一 */
-  animation: sidebar-card-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.06s) forwards;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  border-radius: 10px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  animation: sidebar-card-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
   opacity: 0;
 }
 
 .sidebar-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(255, 255, 255, 0.88) 100%
-  );
-}
-
-/* 灰色背景卡片 - 带品牌色渐变 + 毛玻璃效果 */
-.sidebar-card.gray-card {
-  background: linear-gradient(
-    135deg,
-    rgba(61, 90, 128, 0.08) 0%,
-    rgba(0, 0, 0, 0.04) 50%,
-    rgba(90, 127, 168, 0.06) 100%
-  );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.sidebar-card.gray-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(61, 90, 128, 0.12) 0%,
-    rgba(0, 0, 0, 0.06) 50%,
-    rgba(90, 127, 168, 0.09) 100%
-  );
-  transform: none;
-  box-shadow: none;
-}
-
-.dark .sidebar-card.gray-card {
-  background: linear-gradient(
-    135deg,
-    rgba(122, 176, 228, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(122, 176, 228, 0.08) 100%
-  );
-}
-
-.dark .sidebar-card.gray-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(122, 176, 228, 0.15) 0%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(122, 176, 228, 0.12) 100%
-  );
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* 暗色主题 */
-.dark .sidebar-card {
-  background: linear-gradient(
-    135deg,
-    rgba(26, 29, 33, 0.7) 0%,
-    rgba(26, 29, 33, 0.4) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.08);
+:root.dark .sidebar-card {
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.dark .sidebar-card:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(36, 40, 44, 0.8) 0%,
-    rgba(36, 40, 44, 0.5) 100%
-  );
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+:root.dark .sidebar-card:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* 卡片标题 */
@@ -325,13 +263,7 @@ const runningRemainDays = computed(() => {
   font-size: 13px;
   font-weight: 600;
   color: var(--color-ink);
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.dark .card-header {
-  border-bottom-color: rgba(255, 255, 255, 0.05);
+  margin-bottom: 14px;
 }
 
 .fixed-icon {
@@ -342,20 +274,20 @@ const runningRemainDays = computed(() => {
 
 .refresh-btn {
   margin-left: auto;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   background: rgba(0, 0, 0, 0.03);
   color: var(--color-ink-muted);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.dark .refresh-btn {
+:root.dark .refresh-btn {
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -368,7 +300,7 @@ const runningRemainDays = computed(() => {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 .stat-cell {
@@ -376,14 +308,14 @@ const runningRemainDays = computed(() => {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 12px 8px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  transition: all 0.2s;
+  padding: 10px 6px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  transition: background 0.2s;
 }
 
-.dark .stat-cell {
-  background: rgba(255, 255, 255, 0.05);
+:root.dark .stat-cell {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .stat-cell:hover {
@@ -391,7 +323,7 @@ const runningRemainDays = computed(() => {
 }
 
 .stat-num {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--color-ink);
   letter-spacing: -0.02em;
@@ -407,15 +339,15 @@ const runningRemainDays = computed(() => {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .rank-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
-  margin: 0 -10px;
+  padding: 7px 8px;
+  margin: 0 -8px;
   border-radius: 8px;
   transition: all 0.2s;
 }
@@ -424,25 +356,25 @@ const runningRemainDays = computed(() => {
   background: rgba(0, 0, 0, 0.03);
 }
 
-.dark .rank-item:hover {
+:root.dark .rank-item:hover {
   background: rgba(255, 255, 255, 0.03);
 }
 
 .rank-num {
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 5px;
   background: rgba(0, 0, 0, 0.04);
   color: var(--color-ink-muted);
 }
 
-.dark .rank-num {
+:root.dark .rank-num {
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -475,27 +407,22 @@ const runningRemainDays = computed(() => {
   color: var(--color-primary);
 }
 
-/* 站点信息卡片 */
+/* 站点信息卡片 - 更轻 */
 .site-info-card {
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  padding: 16px;
-  gap: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 14px;
 }
 
-.dark .site-info-card {
+:root.dark .site-info-card {
   background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.04);
 }
 
 .site-info-card:hover {
-  background: rgba(0, 0, 0, 0.03);
-  transform: none;
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.25);
 }
 
-.dark .site-info-card:hover {
-  background: rgba(255, 255, 255, 0.03);
+:root.dark .site-info-card:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* 品牌头部 */
@@ -506,9 +433,9 @@ const runningRemainDays = computed(() => {
 }
 
 .brand-slogan {
-  font-size: 12px;
-  color: var(--color-ink-muted);
-  font-style: italic;
+  font-family: var(--font-logo);
+  font-size: 13px;
+  color: var(--color-ink-light);
 }
 
 .running-badge {
@@ -581,10 +508,6 @@ const runningRemainDays = computed(() => {
   opacity: 1;
 }
 
-.external-icon {
-  opacity: 0.4;
-}
-
 /* 备案信息 */
 .site-filings {
   display: flex;
@@ -607,12 +530,12 @@ const runningRemainDays = computed(() => {
 /* 版权信息 */
 .footer-meta {
   padding-top: 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   font-size: 10px;
   color: var(--color-ink-faint);
 }
 
-.dark .footer-meta {
-  border-top-color: rgba(255, 255, 255, 0.05);
+:root.dark .footer-meta {
+  border-top-color: rgba(255, 255, 255, 0.06);
 }
 </style>

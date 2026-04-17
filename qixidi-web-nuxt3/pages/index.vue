@@ -4,7 +4,6 @@
       :articles="articles"
       :loading="loadingMore"
       :no-more="noMore"
-      :hide-cover="true"
       @load-more="loadMore"
     />
   </div>

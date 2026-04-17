@@ -28,6 +28,7 @@
           :article="articleData"
           :show-edit="true"
           :show-collect="false"
+          :show-abstract="false"
           @comment="scrollToComments"
           @like="handleLike"
           @edit="handleEdit"

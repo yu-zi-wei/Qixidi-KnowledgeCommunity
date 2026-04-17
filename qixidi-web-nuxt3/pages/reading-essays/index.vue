@@ -448,17 +448,12 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--color-block-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--color-border-light);
   border-radius: 10px;
   font-size: 13px;
-}
-
-.dark .filter-status {
-  background: rgba(54, 48, 44, 0.7);
-  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .filter-label {
