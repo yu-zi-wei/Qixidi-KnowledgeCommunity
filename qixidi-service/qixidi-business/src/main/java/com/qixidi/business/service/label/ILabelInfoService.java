@@ -68,7 +68,7 @@ public interface ILabelInfoService {
 
     List<LabelInfoVo> fdLabelList(LabelInfoBo bo);
 
-    LabelInfoVo fdLabelInfo(Long id);
+    LabelInfoVo fdLabelInfo(Long id,Long type);
 
     LabelGroupingInfoVo LabelGroupingInfo(Long id);
 

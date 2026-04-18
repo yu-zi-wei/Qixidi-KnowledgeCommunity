@@ -3,7 +3,6 @@ package com.qixidi.business.service.impl.privateUser;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -11,13 +10,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
-import com.light.webSocket.domain.enums.WebSocketEnum;
-import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.privateUser.PrivateUserBo;
 import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
 import com.qixidi.business.domain.entity.privateUser.PrivateUser;
-import com.qixidi.business.domain.enums.PrivateNewsInfoEnums;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
@@ -141,20 +137,11 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteById(String id) {
         String uuid = LoginHelper.getTripartiteUuid();
-        //更新当前用户的信息为已读
-        privateNewsInfoMapper.update(new LambdaUpdateWrapper<PrivateNewsInfo>()
-                .set(PrivateNewsInfo::getBeenRead, PrivateNewsInfoEnums.READ.getCode())
-                .eq(PrivateNewsInfo::getReplyTargetUid, uuid)
-                .eq(PrivateNewsInfo::getUid, id)
-                .eq(PrivateNewsInfo::getBeenRead, PrivateNewsInfoEnums.UNREAD.getCode())
-        );
-        //        webSocket推送系统消息
-        WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
-        //        webSocket推送私信红点
-        WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(uuid);
-        return baseMapper.delete(new LambdaQueryWrapper<PrivateUser>()
-                .eq(PrivateUser::getUid, uuid)
-                .eq(PrivateUser::getTargetUid, id)) > 0;
+        privateNewsInfoMapper.delete(new QueryWrapper<PrivateNewsInfo>()
+                .eq("uid", uuid).eq("reply_target_uid", id));
+        return baseMapper.delete(new QueryWrapper<PrivateUser>()
+                .eq("uid", uuid)
+                .eq("target_uid", id)) > 0;
     }
 
     @Override

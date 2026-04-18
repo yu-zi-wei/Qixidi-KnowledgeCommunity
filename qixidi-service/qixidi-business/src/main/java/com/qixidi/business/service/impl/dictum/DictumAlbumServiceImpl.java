@@ -4,12 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
-import com.qixidi.business.domain.bo.dictum.DictumInfoSearchBo;
 import com.qixidi.business.domain.entity.dictum.DictumAlbum;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
@@ -140,12 +140,10 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
     }
 
     @Override
-    public TableDataInfo<DictumAlbumVo> recommendedAlbum(DictumInfoSearchBo bo, PageQuery pageQuery) {
-        IPage iPage = baseMapper.selectVoPage(pageQuery.build(),
-                new LambdaQueryWrapper<DictumAlbum>()
-                        .like(StringUtils.isNotBlank(bo.getAlbumName()), DictumAlbum::getName, bo.getAlbumName())
-                        .orderByDesc(DictumAlbum::getEmploySum));
-        return TableDataInfo.build(iPage);
+    public List<DictumAlbumVo> recommendedAlbum() {
+        IPage iPage = baseMapper.selectVoPage(new Page(0, 12),
+                new LambdaQueryWrapper<DictumAlbum>().orderByDesc(DictumAlbum::getEmploySum));
+        return iPage.getRecords();
     }
 
 }

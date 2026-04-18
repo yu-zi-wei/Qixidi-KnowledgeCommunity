@@ -1,9 +1,14 @@
 package com.qixidi.business.mapper;
 
-import com.light.mybatisPlus.mapper.BaseMapperPlus;
+import com.qixidi.business.domain.bo.SearchRecordsBo;
 import com.qixidi.business.domain.entity.SearchRecords;
 import com.qixidi.business.domain.vo.SearchRecordsVo;
+import com.light.mybatisPlus.mapper.BaseMapperPlus;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 搜索记录Mapper接口
@@ -14,5 +19,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SearchRecordsMapper extends BaseMapperPlus<SearchRecordsMapper, SearchRecords, SearchRecordsVo> {
 
+    @Select("select content from b_search_records where uid=#{bo.uid} order by create_time desc")
+    IPage<SearchRecordsVo> selectContent(@Param("bo") SearchRecordsBo bo, Page<SearchRecords> build);
 }
 

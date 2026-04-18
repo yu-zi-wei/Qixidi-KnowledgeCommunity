@@ -104,6 +104,16 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
     private Long specialId;
 
     /**
+     * 收藏夹id
+     */
+    @ExcelProperty(value = "收藏夹id")
+    private Long collectionId;
+    /**
+     * 收藏夹文章id
+     */
+    private Long collectionRecordId;
+
+    /**
      * 分类id
      */
     @ExcelProperty(value = "分类d")
@@ -152,15 +162,9 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
     private Boolean isCollection;
 
     /**
-     * 收藏夹id
+     * 收藏夹文章id
      */
-    @ExcelProperty(value = "收藏夹id")
-    private Long collectionId;
-
-    /**
-     * 收藏记录id
-     */
-    private Long collectionRecordId;
+    private Long collectionRId;
 
     /**
      * 评论次数
@@ -172,7 +176,7 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
      * 收藏次数
      */
     @ExcelProperty(value = "收藏次数")
-    private Integer collectionTimes = 0;
+    private Long collectionTimes = 0L;
 
     /**
      * 浏览次数

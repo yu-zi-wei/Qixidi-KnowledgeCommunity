@@ -16,7 +16,6 @@ import com.qixidi.business.domain.bo.label.LabelInfoBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.user.UserFollow;
-import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.qixidi.business.domain.vo.label.LabelGroupingInfoVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.user.UserFollowVo;
@@ -168,13 +167,13 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
     }
 
     @Override
-    public LabelInfoVo fdLabelInfo(Long id) {
+    public LabelInfoVo fdLabelInfo(Long id, Long type) {
         LabelInfoVo infoVo = baseMapper.selectVoById(id);
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return infoVo;
 
         List<UserFollowVo> userFollowVos = userFollowMapper.selectVoList(new LambdaQueryWrapper<UserFollow>()
-                .eq(UserFollow::getUid, uuid).eq(UserFollow::getType, UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
+                .eq(UserFollow::getUid, uuid).eq(UserFollow::getType, type));
         if (CollectionUtils.isEmpty(userFollowVos)) return infoVo;
 
         userFollowVos.forEach(item -> {

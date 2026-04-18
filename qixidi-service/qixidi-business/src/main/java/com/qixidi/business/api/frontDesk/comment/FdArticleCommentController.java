@@ -43,8 +43,8 @@ public class FdArticleCommentController {
     @Log(title = "文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/article/comment/insert")
-    public Long add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
-      return  iArticleCommentService.insertByBo(bo);
+    public void add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
+        iArticleCommentService.insertByBo(bo);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
-import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 
 import java.util.Collection;
@@ -71,6 +70,6 @@ public interface IFabulousRecordService {
 
     void cancelFabulous(FabulousRecordBo bo);
 
-    TableDataInfo<ArticleInformationVo> fabulousList(UserHomeBo bo, PageQuery pageQuery);
+    Object fabulousList(UserHomeBo bo, PageQuery pageQuery);
 
 }

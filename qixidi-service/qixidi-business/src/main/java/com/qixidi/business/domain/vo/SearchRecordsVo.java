@@ -36,7 +36,6 @@ public class SearchRecordsVo {
      */
     @ExcelProperty(value = "内容")
     private String content;
-
     /**
      * 创建时间
      */

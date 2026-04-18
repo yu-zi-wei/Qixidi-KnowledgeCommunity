@@ -64,7 +64,10 @@ public class SysOssController {
         SysOss oss = iSysOssService.upload(file);
         Map<String, String> map = new HashMap<>();
         map.put("url", oss.getUrl());
+        map.put("src", oss.getUrl());
+        map.put("href", oss.getUrl());
         map.put("fileName", oss.getOriginalName());
+        map.put("alt", oss.getOriginalName());
         map.put("ossId", oss.getOssId().toString());
         //封装最终返回参数
         return map;

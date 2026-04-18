@@ -1,7 +1,6 @@
 package com.qixidi.business.domain.entity.collection;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.qixidi.business.domain.enums.CollectionTypeEnums;
 import lombok.Data;
 
 import java.util.Date;
@@ -23,34 +22,26 @@ public class CollectionRecord {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
     /**
      * 目标id
      */
     private Long targetId;
-
     /**
      * 收藏夹id
      */
     private Long collectionId;
-
     /**
      * 收藏类型
-     *
-     * @see CollectionTypeEnums
      */
     private Integer type;
-
     /**
      * 状态（0：正常，1：已删除）
      */
     private Integer state;
-
     /**
      * 创建者id
      */
     private String uid;
-
     /**
      * 修改时间
      */

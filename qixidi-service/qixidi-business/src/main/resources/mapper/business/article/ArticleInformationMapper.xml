@@ -163,8 +163,7 @@
     <select id="getArticleInfo" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         <include refid="ArticleInformationVo"/>
         <where>
-            ai.state = 0
-            and ai.platform_type =1
+            ai.state = 0 and ai.platform_type =1
             <if test="bo.articleTitle !='' and bo.articleTitle !=null">
                 and ai.article_title like concat(#{bo.articleTitle},'%')
             </if>
@@ -441,7 +440,7 @@
             and `state`=0
             and `platform_type`=1
             and user_id=#{bo.userId}
-            <if test="bo.auditState!=null and bo.auditState!=''">
+            <if test="bo.auditState!=null and bo.auditState!=-1">
                 and `audit_state`= #{bo.auditState}
             </if>
         </where>

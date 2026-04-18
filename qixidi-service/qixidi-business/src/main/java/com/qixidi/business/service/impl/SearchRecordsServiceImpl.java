@@ -1,19 +1,19 @@
 package com.qixidi.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.light.core.utils.StringUtils;
-import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.SearchRecordsBo;
 import com.qixidi.business.domain.entity.SearchRecords;
 import com.qixidi.business.domain.vo.SearchRecordsVo;
 import com.qixidi.business.mapper.SearchRecordsMapper;
 import com.qixidi.business.service.ISearchRecordsService;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.qixidi.auth.helper.LoginHelper;
+import com.light.core.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -119,10 +119,8 @@ public class SearchRecordsServiceImpl implements ISearchRecordsService {
 
     @Override
     public TableDataInfo<SearchRecordsVo> frontDeskList(SearchRecordsBo bo, PageQuery pageQuery) {
-        IPage<SearchRecordsVo> searchRecordsVoIPage = baseMapper.selectVoPage(pageQuery.build(), new LambdaQueryWrapper<SearchRecords>()
-                .eq(SearchRecords::getUid, LoginHelper.getTripartiteUuid())
-                .orderByDesc(SearchRecords::getCreateTime));
-        return TableDataInfo.build(searchRecordsVoIPage);
+        IPage<SearchRecordsVo> iPage = baseMapper.selectContent(bo, pageQuery.build());
+        return TableDataInfo.build(iPage.getRecords());
     }
 }
 

@@ -1,6 +1,12 @@
 package com.qixidi.business.api.backstage.comment;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
+import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
+import com.qixidi.business.service.comment.IArticleCommentService;
+import com.qixidi.auth.annotation.Log;
+import com.light.redission.annotation.RepeatSubmit;
+
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
@@ -8,16 +14,11 @@ import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
-import com.light.redission.annotation.RepeatSubmit;
-import com.qixidi.auth.annotation.Log;
-import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
-import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
-import com.qixidi.business.service.comment.IArticleCommentService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,8 +79,8 @@ public class ArticleCommentController {
     @Log(title = "文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Long add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
-        return iArticleCommentService.insertByBo(bo);
+    public void add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
+        iArticleCommentService.insertByBo(bo);
     }
 
     /**

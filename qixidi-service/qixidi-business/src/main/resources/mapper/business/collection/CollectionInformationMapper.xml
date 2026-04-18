@@ -7,7 +7,6 @@
         SELECT ai.id,
         ai.user_id,
         ai.article_title,
-        ai.article_cover,
         ai.article_abstract,
         ai.theme,
         ai.`type`,
@@ -33,9 +32,6 @@
         <where>
             cr.state=0
             and ai.state=0
-            <if test="bo.articleTitle !='' and bo.articleTitle !=null">
-                and ai.article_title like concat('%',#{bo.articleTitle},'%')
-            </if>
             <if test="bo.collectionId !='' and bo.collectionId !=null">
                 and cr.collection_id=#{bo.collectionId}
             </if>

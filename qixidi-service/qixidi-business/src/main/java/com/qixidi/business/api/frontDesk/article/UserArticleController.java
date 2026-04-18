@@ -9,10 +9,10 @@ import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
-import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
 import jakarta.validation.constraints.NotNull;
@@ -40,13 +40,13 @@ public class UserArticleController {
     @RepeatSubmit()
     @PostMapping("/insert/article")
     public ArticleInformationVo add(@Validated(AddGroup.class) @RequestBody ArticleInformationBo bo) {
-        bo.setAuditState(ArticleAuditStateEnums.UNDER_REVIEW.getCode());
         if (bo.getId() != null) {
             ArticleInformationVo vo = iArticleInformationService.updateByBo(bo);
             if (vo.getId() < -10) return vo;
             if (vo.getId() <= 0) throw new ServiceException("文章创建失败");
             return vo;
         }
+        bo.setAuditState(1);
         ArticleInformationVo vo = iArticleInformationService.insertByBo(bo);
         return vo;
     }
@@ -133,7 +133,7 @@ public class UserArticleController {
      * @return
      */
     @GetMapping("/lately/article/list")
-    public TableDataInfo<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+    public List<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);

@@ -191,31 +191,30 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     }
 
     @Override
-    public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
+    public Object userList(NewsUserInfoBo bo, PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<ArticleCommentNewsVo> page = baseMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), pageQuery.build());
-        return TableDataInfo.build(page);
-    }
-
-    @Override
-    public TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery) {
-        String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = baseMapper.selectFabulousNews(uuid, NewsType.FABULOUS_NEWS.getCode(), pageQuery.build());
-        return TableDataInfo.build(page);
-    }
-
-    @Override
-    public TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery) {
-        String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = baseMapper.selectFollowNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery.build());
-        return TableDataInfo.build(page);
-    }
-
-    @Override
-    public TableDataInfo<NewsUserInfoVo> systemList(PageQuery pageQuery) {
-        String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = newsSystemInfoMapper.selectUid(uuid, pageQuery.build());
-        return TableDataInfo.build(page);
+        //系统消息
+        Page<Object> build = pageQuery.build();
+        if (bo.getType().equals(NewsType.SYSTEM_NEWS.getCode())) {
+            IPage<NewsUserInfoVo> newsUserInfoVoIPages = newsSystemInfoMapper.selectUid(uuid, pageQuery.build());
+            return newsUserInfoVoIPages;
+        }
+        // 评论消息
+        if (bo.getType().equals(NewsType.COMMENT_NEWS.getCode())) {
+            IPage<ArticleCommentNewsVo> news = baseMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), build);
+            return news;
+        }
+        //点赞消息
+        if (bo.getType().equals(NewsType.FABULOUS_NEWS.getCode())) {
+            IPage<NewsUserInfoVo> news = baseMapper.selectFabulousNews(uuid, NewsType.FABULOUS_NEWS.getCode(), build);
+            return news;
+        }
+        //关注消息
+        if (bo.getType().equals(NewsType.FOLLOW_NEWS.getCode())) {
+            IPage<NewsUserInfoVo> news = baseMapper.selectFollowNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery.build());
+            return news;
+        }
+        return null;
     }
 
     @Override

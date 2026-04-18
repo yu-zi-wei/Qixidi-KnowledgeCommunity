@@ -51,6 +51,7 @@ import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.enums.article.ArticleUpdateTypeEnums;
 import com.qixidi.business.domain.vo.article.ArticleArchiveVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.domain.vo.collection.CollectionRecordVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.mapper.SearchRecordsMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
@@ -63,6 +64,7 @@ import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.article.IArticleInformationService;
+import com.qixidi.business.service.comment.IArticleCommentService;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -165,7 +167,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         baseMapper.insert(add);
         Long id = add.getId();
         vo.setId(id);
-        if (bo.getAuditState().equals(ArticleAuditStateEnums.DRAFT.getCode())) return vo;
+        if (bo.getAuditState().equals(4)) return vo;
         ArticleInformationVo articleInformationVo = BeanUtil.toBean(add, ArticleInformationVo.class);
         List<ArticleInformationVo> list = new ArrayList();
         list.add(articleInformationVo);
@@ -473,8 +475,8 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     }
 
     @Override
-    public TableDataInfo<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(baseMapper.latelyArticleList(bo, pageQuery.build()));
+    public List<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+        return baseMapper.latelyArticleList(bo, pageQuery.build());
     }
 
     @Override
@@ -559,18 +561,15 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return details;
         //获取收藏数据
-        List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectList(new LambdaQueryWrapper<CollectionRecord>()
+        CollectionRecordVo collectionRecordVo = collectionRecordMapper.selectVoOne(new LambdaQueryWrapper<CollectionRecord>()
+                .eq(CollectionRecord::getUid, uuid)
                 .eq(CollectionRecord::getType, CollectionTypeEnums.ARTICLE_TYPE.getCode())
                 .eq(CollectionRecord::getTargetId, details.getId()));
-        Map<String, CollectionRecord> collectionRecordMap = collectionRecordList.stream().collect(Collectors.toMap(CollectionRecord::getUid, item -> item));
-        details.setCollectionTimes(collectionRecordMap.size());
-        CollectionRecord collectionRecord = collectionRecordMap.get(uuid);
-        if (collectionRecord == null) {
+        if (ObjectUtils.isEmpty(collectionRecordVo)) {
             details.setIsCollection(false);
         } else {
             details.setIsCollection(true);
-            details.setCollectionRecordId(collectionRecord.getId());
-            details.setCollectionId(collectionRecord.getCollectionId());
+            details.setCollectionRId(collectionRecordVo.getId());
         }
         return details;
     }
@@ -606,7 +605,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public Page<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
-        bo.setAuditState(ArticleAuditStateEnums.APPROV.getCode());
         Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, pageQuery.build());
         return articleInfo;
     }
@@ -624,11 +622,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ArticleInformationVo saveDraft(ArticleInformationTwoBo bo) {
-        //添加草稿
-        bo.setAuditState(ArticleAuditStateEnums.DRAFT.getCode());
         ArticleInformationBo articleInformationBo = BeanUtil.toBean(bo, ArticleInformationBo.class);
         ArticleInformation info = BeanUtil.toBean(bo, ArticleInformation.class);
         ArticleInformationVo vo = new ArticleInformationVo();
+        //添加草稿
         if (info.getId() == null) return this.insertByBo(articleInformationBo);
         Integer integer = judgmentPlusOne(articleInformationBo);
         String uuid = LoginHelper.getTripartiteUuid();

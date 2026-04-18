@@ -16,14 +16,11 @@ import com.light.core.core.page.TableDataInfo;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
-import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
-import com.qixidi.business.domain.enums.CollectionTypeEnums;
 import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
-import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionRecordMapper;
 import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
@@ -53,7 +50,6 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     private final CollectionRecordMapper collectionRecordMapper;
     private final CountUserWebsiteMapper countUserWebsiteMapper;
     private final ArticleInformationServiceImpl articleInformationService;
-    private final ArticleInformationMapper articleInformationMapper;
 
     /**
      * 查询收藏夹信息
@@ -205,14 +201,10 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     }
 
     @Override
-    public boolean deleteCollectionArticle(Long articleId) {
-        ArticleInformation articleInformation = articleInformationMapper.selectById(articleId);
-        int i = collectionRecordMapper.delete(new LambdaQueryWrapper<CollectionRecord>()
-                .eq(CollectionRecord::getTargetId, articleId)
-                .eq(CollectionRecord::getType, CollectionTypeEnums.ARTICLE_TYPE.getCode())
-                .eq(CollectionRecord::getUid, LoginHelper.getTripartiteUuid()));
+    public boolean deleteCollectionArticle(Long id, String labelId) {
+        int i = collectionRecordMapper.deleteById(id);
         if (i > 0) {
-            articleInformationService.recordArticleIntimacy(LoginHelper.getTripartiteUuid(), articleInformation.getLabelId(), -3D);
+            articleInformationService.recordArticleIntimacy(LoginHelper.getTripartiteUuid(), labelId, -3D);
         }
         return i > 0;
     }

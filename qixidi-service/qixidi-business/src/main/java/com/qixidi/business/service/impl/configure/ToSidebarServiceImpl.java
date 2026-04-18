@@ -126,15 +126,15 @@ public class ToSidebarServiceImpl implements IToSidebarService {
 
     @Override
     public List<ToSidebarVo> sidebarList(ToNavigationBo bo) {
-//        Object cacheObject = RedisUtils.getCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey());
-//        if (ObjectUtils.isNotEmpty(cacheObject)) {
-//            List<ToSidebarVo> toSidebarVos = JsonUtils.castList(cacheObject, ToSidebarVo.class);
-//            List<ToSidebarVo> collect = toSidebarVos.stream().filter(item -> item.getType()
-//                    .equals(bo.getType()) && item.getStatus().equals(bo.getStatus())).collect(Collectors.toList());
-//            return collect;
-//        }
-////        缓存数据
-//        sidebarList();
+        Object cacheObject = RedisUtils.getCacheObject(RedisBusinessKeyEnums.SIDEBAR_CONFIGURATION.getKey());
+        if (ObjectUtils.isNotEmpty(cacheObject)) {
+            List<ToSidebarVo> toSidebarVos = JsonUtils.castList(cacheObject, ToSidebarVo.class);
+            List<ToSidebarVo> collect = toSidebarVos.stream().filter(item -> item.getType()
+                    .equals(bo.getType()) && item.getStatus().equals(bo.getStatus())).collect(Collectors.toList());
+            return collect;
+        }
+//        缓存数据
+        sidebarList();
         LambdaQueryWrapper<ToSidebar> lqw = new LambdaQueryWrapper<ToSidebar>()
                 .eq(ToSidebar::getType, bo.getType())
                 .orderByAsc(ToSidebar::getOrder);

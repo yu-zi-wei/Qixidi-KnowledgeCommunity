@@ -53,8 +53,6 @@ public class PrivateNewsInfo {
 
     /**
      * 是否已读（1：未读，2：已读）
-     *
-     * @see com.qixidi.business.domain.enums.PrivateNewsInfoEnums
      */
     private Integer beenRead;
 

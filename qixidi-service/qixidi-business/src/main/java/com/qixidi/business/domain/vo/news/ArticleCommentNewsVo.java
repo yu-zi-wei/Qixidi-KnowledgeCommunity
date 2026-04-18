@@ -81,9 +81,5 @@ public class ArticleCommentNewsVo {
      * 是否已读
      */
     private int beenRead;
-
-    /**
-     * 创建时间
-     */
     private Date createTime;
 }

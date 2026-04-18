@@ -2,6 +2,7 @@ package com.qixidi.business.execute;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.webSocket.domain.constant.WebSocketConstant;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketInterface;
 import com.light.webSocket.utils.WebSocketUtils;
@@ -28,8 +29,8 @@ public class WebsocketPersonalRedDotExecute implements WebSocketInterface {
     @Override
     public void execute(String uuid) {
         PrivateUserBo bo = new PrivateUserBo();
-        bo.setUid(uuid);
+        bo.setUid(uuid.replace(WebSocketConstant.PERSONAL_RED_DOT, ""));
         TableDataInfo<PrivateUserVo> list = iPrivateUserService.queryPageList(bo, new PageQuery());
-        WebSocketUtils.sendMessage(uuid, WebSocketEnum.PERSONAL_RED_DOT.getCode(), list);
+        WebSocketUtils.sendMessage(uuid, list);
     }
 }

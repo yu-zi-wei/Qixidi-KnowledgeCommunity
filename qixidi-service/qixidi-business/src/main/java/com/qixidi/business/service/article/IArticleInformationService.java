@@ -104,7 +104,7 @@ public interface IArticleInformationService {
 
     IPage<ArticleInformationVo> articleRecommendList(ArticleInformationBo bo, PageQuery pageQuery);
 
-    TableDataInfo<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery);
+    List<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery);
 
     TableDataInfo<ArticleArchiveVo> articleArchive(PageQuery pageQuery);
 }

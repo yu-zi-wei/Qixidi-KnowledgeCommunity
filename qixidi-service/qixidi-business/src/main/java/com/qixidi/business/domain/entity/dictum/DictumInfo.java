@@ -24,17 +24,18 @@ public class DictumInfo {
      */
     @TableId(value = "id")
     private Long id;
-
     /**
      * 用户id
      */
     private String uid;
-
     /**
      * 内容
      */
     private String content;
-
+    /**
+     * 内容
+     */
+    private String contentMd;
     /**
      * 分类id
      */
@@ -50,14 +51,8 @@ public class DictumInfo {
      */
     private String label;
 
-    /**
-     * 作者
-     */
     private String author;
 
-    /**
-     * 作品名称
-     */
     private String worksName;
 
     /**

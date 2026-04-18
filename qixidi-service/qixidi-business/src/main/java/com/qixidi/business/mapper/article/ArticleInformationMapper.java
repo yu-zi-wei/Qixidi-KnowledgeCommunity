@@ -100,7 +100,7 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     List<CensusVo> submissionCensus(@Param("uuid") String uuid, @Param("time") String time);
 
-    Page<ArticleInformationVo> latelyArticleList(@Param("bo") ArticleInformationBo bo, @Param("page") Page<ArticleInformation> build);
+    List<ArticleInformationVo> latelyArticleList(@Param("bo") ArticleInformationBo bo, Page<ArticleInformation> build);
 }
 
 

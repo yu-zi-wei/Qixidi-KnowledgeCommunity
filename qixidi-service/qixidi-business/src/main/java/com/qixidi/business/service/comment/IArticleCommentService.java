@@ -46,7 +46,7 @@ public interface IArticleCommentService {
      * @param bo 文章评论
      * @return 结果
      */
-    Long insertByBo(ArticleCommentBo bo) throws Exception;
+    Boolean insertByBo(ArticleCommentBo bo) throws Exception;
 
     /**
      * 修改文章评论

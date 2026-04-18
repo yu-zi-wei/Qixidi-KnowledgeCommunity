@@ -19,7 +19,6 @@ import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
-import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
@@ -44,7 +43,6 @@ import java.util.stream.Collectors;
 public class DictumInfoServiceImpl implements IDictumInfoService {
 
     private final DictumInfoMapper baseMapper;
-    private final DictumAlbumMapper dictumAlbumMapper;
     private final DictumGroupMapper dictumGroupMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
     @Autowired
@@ -61,45 +59,7 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         DictumInfoVo dictumInfoVo = baseMapper.selectVoById(id);
         TripartiteUserVo tripartiteUserVo = tripartiteUserMapper.selectWebInfo(dictumInfoVo.getUid());
         dictumInfoVo.setTripartiteUser(tripartiteUserVo);
-
-        List<DictumComment> dictumComments = dictumCommentMapper.selectList(new LambdaQueryWrapper<DictumComment>()
-                .select(DictumComment::getId, DictumComment::getDictumId)
-                .eq(DictumComment::getDictumId, id)
-                .eq(DictumComment::getStatus, StatusEnums.NORMAL.getCode())
-        );
-        Map<Long, Long> sumMap = dictumComments.stream().collect(Collectors.groupingBy(DictumComment::getDictumId, Collectors.counting()));
-
-        if (dictumInfoVo.getAlbumId() != null) {
-            dictumInfoVo.setAlbumName(dictumAlbumMapper.selectById(dictumInfoVo.getAlbumId()).getName());
-        }
-        if (dictumInfoVo.getGroupId() != null) {
-            dictumInfoVo.setGroupName(dictumGroupMapper.selectById(dictumInfoVo.getGroupId()).getName());
-        }
-        if (StringUtils.isNotEmpty(dictumInfoVo.getLabel())) {
-            List<String> labelList = Arrays.asList(dictumInfoVo.getLabel().split(","));
-            dictumInfoVo.setLabelList(labelList);
-        }
-        if (StringUtils.isNotEmpty(dictumInfoVo.getPicture())) {
-            List<String> pictureList = Arrays.asList(dictumInfoVo.getPicture().split(","));
-            dictumInfoVo.setPictureList(pictureList);
-        }
-        Long sum = sumMap.get(dictumInfoVo.getId());
-        if (sum != null) {
-            dictumInfoVo.setCommentSum(sum);
-        }
         return dictumInfoVo;
-    }
-
-    /**
-     * 查询名言信息（接收字符串 ID，避免前端 JavaScript 精度丢失）
-     *
-     * @param id 名言信息主键（字符串格式）
-     * @return 名言信息
-     */
-    @Override
-    public DictumInfoVo queryByIdStr(String id) {
-        // 将字符串转换为 Long，调用原有的 queryById 方法
-        return queryById(Long.parseLong(id));
     }
 
     /**
@@ -156,10 +116,13 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     }
 
     private LambdaQueryWrapper<DictumInfo> buildQueryWrapper(DictumInfoBo bo) {
+        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<DictumInfo> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getUid()), DictumInfo::getUid, bo.getUid());
         lqw.eq(StringUtils.isNotBlank(bo.getContent()), DictumInfo::getContent, bo.getContent());
         lqw.eq(bo.getGroupId() != null, DictumInfo::getGroupId, bo.getGroupId());
+        lqw.eq(StringUtils.isNotBlank(bo.getLabel()), DictumInfo::getLabel, bo.getLabel());
+        lqw.eq(StringUtils.isNotBlank(bo.getPicture()), DictumInfo::getPicture, bo.getPicture());
         lqw.eq(bo.getDictumState() != null, DictumInfo::getDictumState, bo.getDictumState());
         lqw.eq(bo.getState() != null, DictumInfo::getState, bo.getState());
         return lqw;

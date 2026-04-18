@@ -62,7 +62,6 @@
                cuw.circle_count,
                cuw.album_count,
                cuw.dictum_count,
-               cuw.time_notes_count,
                ui.introduce,
                ui.homepage,
                ui.empirical,

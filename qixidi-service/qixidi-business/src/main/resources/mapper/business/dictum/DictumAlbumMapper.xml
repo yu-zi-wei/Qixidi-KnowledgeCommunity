@@ -26,7 +26,6 @@
         da.album_state,
         da.create_time,
         da.update_time,
-        da.employ_sum,
         um.nickname,
         um.avatar,
         um.occupation,
@@ -44,7 +43,7 @@
             <if test="bo.uid !=null and bo.uid!=''">
                 and da.uid=#{bo.uid}
             </if>
-            order by da.id desc
+            order by da.update_time desc
         </where>
     </select>
 

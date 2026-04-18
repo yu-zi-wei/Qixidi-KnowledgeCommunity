@@ -17,9 +17,9 @@ import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.enums.CommentTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
-import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
@@ -237,7 +237,10 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
     }
 
     @Override
-    public TableDataInfo<ArticleInformationVo> fabulousList(UserHomeBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(baseMapper.fabulousArticleList(bo, pageQuery.build()));
+    public Object fabulousList(UserHomeBo bo, PageQuery pageQuery) {
+        if (bo.getType().equals(CommentTypeEnums.ARTICLE_TYPE.getCode()))
+            return baseMapper.fabulousArticleList(bo, pageQuery.build());
+//        if (bo.getType().equals(CommentType.COMMENT_TYPE.getCode())) return baseMapper.fabulousCommentList(bo);
+        return null;
     }
 }

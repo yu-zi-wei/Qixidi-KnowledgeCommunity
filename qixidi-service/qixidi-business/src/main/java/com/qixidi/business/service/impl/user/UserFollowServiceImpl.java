@@ -3,7 +3,7 @@ package com.qixidi.business.service.impl.user;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.light.exception.ServiceException;
+import com.light.exception.base.BaseException;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
@@ -52,7 +52,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
                 .eq(UserFollow::getType, bo.getType())
                 .eq(UserFollow::getState, 0));
         if (CollectionUtil.isNotEmpty(userFollows)) {
-            throw new ServiceException("你已经关注了该对象");
+            throw new BaseException("你已经关注了该对象");
         }
         if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) {//  用户关注
             countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
@@ -90,6 +90,18 @@ public class UserFollowServiceImpl implements IUserFollowService {
         if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注取消
             countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
             countUserWebsiteMapper.updateDelete(bo.getTargetId(), CountUserTypeEnums.FANS_FOLLOW_COUNT.getCode());
+            //发送消息
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+                            .eq(NewsUserRecord::getTargetId, bo.getUid())
+                            .eq(NewsUserRecord::getUid, bo.getTargetId())
+                            .eq(NewsUserRecord::getType, NewsType.FOLLOW_NEWS.getCode()));
+                    //WebSocket推送消息
+                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetId());
+                }
+            });
         } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注取消
             labelInfoMapper.updateDeleteFollow(bo.getTargetId());
         }

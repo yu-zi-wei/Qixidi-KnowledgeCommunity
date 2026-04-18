@@ -1,7 +1,6 @@
 package com.qixidi.business.service.dictum;
 
 import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
-import com.qixidi.business.domain.bo.dictum.DictumInfoSearchBo;
 import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
@@ -68,7 +67,7 @@ public interface IDictumAlbumService {
 
     Boolean deleteWithValidById(Long id) throws Exception;
 
-    TableDataInfo<DictumAlbumVo> recommendedAlbum(DictumInfoSearchBo bo, PageQuery pageQuery);
+    List<DictumAlbumVo> recommendedAlbum();
 
 }
 

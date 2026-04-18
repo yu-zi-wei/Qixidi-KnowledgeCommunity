@@ -44,12 +44,12 @@ public class FdLabelInfoController {
     /**
      * 查询标签详情
      */
-    @GetMapping("/info/{id}")
-     public LabelInfoVo fdLabelInfo(@PathVariable("id") Long id) {
-     return iLabelInfoService.fdLabelInfo(id);
-     }
+    @GetMapping("/info/{id}/{type}")
+    public LabelInfoVo fdLabelInfo(@PathVariable("id") Long id, @PathVariable("type") Long type) {
+        return iLabelInfoService.fdLabelInfo(id, type);
+    }
 
-     /**
+    /**
      * 查询标签分组详情
      */
     @GetMapping("/grouping/info/{id}")

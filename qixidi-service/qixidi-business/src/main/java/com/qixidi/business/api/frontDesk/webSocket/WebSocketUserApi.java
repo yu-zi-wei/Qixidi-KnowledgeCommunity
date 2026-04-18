@@ -15,38 +15,36 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * 用户 WebSocket 端点（单连接，统一推送所有消息类型）
- *
  * @author ziwei
  * @date 2024年01月05日
  */
 @Component
-@ServerEndpoint(value = "/websocket/{userId}")
+@ServerEndpoint(value = "/websocket/{userId}/{type}")
 public class WebSocketUserApi {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketUserApi.class);
     //当前客户端名称
     private String key = "";
-    private Session session;
 
     /**
-     * 建立链接，连接后推送所有类型的初始数据
+     * 建立链接
      *
      * @param session
      * @param userId
+     * @param type
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("userId") String userId) {
+    public void onOpen(Session session, @PathParam("userId") String userId, @PathParam("type") Integer type) {
         this.key = userId;
-        this.session = session;
         //建立链接
         WebSocketUtils.addLinks(userId, session);
         try {
-            // 推送站内通知汇总
-            WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(userId);
-            // 推送私信红点
-            WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(userId);
+            if (type == 1) {
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(userId);
+            } else if (type == 4) {
+                WebSocketSelector.execute(WebSocketEnum.PERSONAL_RED_DOT).execute(userId);
+            }
         } catch (Exception e) {
-            logger.error("WebSocket初始推送失败, userId:{}", userId, e);
+            e.printStackTrace();
         }
     }
 
@@ -55,7 +53,7 @@ public class WebSocketUserApi {
      */
     @OnClose
     public void onClose() {
-        WebSocketUtils.removeLinks(key, session);
+        WebSocketUtils.removeLinks(key);
     }
 
     /**

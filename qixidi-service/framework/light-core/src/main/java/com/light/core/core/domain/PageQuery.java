@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.sql.SqlUtil;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,8 +14,8 @@ import java.io.Serializable;
  *
  * @author Lion Li
  */
+
 @Data
-@NoArgsConstructor
 public class PageQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,11 +49,6 @@ public class PageQuery implements Serializable {
      * 每页显示记录数 默认值 默认查全部
      */
     public static final int DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
-
-    public PageQuery(Integer pageNum, Integer pageSize) {
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
-    }
 
     public <T> Page<T> build() {
         Integer pageNum = ObjectUtil.defaultIfNull(getPageNum(), DEFAULT_PAGE_NUM);

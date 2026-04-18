@@ -78,7 +78,7 @@ public interface ICollectionInformationService {
 
     boolean collectionArticle(CollectionRecordBo bo);
 
-    boolean deleteCollectionArticle(Long articleId);
+    boolean deleteCollectionArticle(Long id, String labelId);
 
     boolean collectionUpdate(CollectionRecordBo bo);
 

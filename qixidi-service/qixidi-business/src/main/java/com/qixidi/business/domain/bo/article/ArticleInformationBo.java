@@ -69,7 +69,7 @@ public class ArticleInformationBo extends BaseEntity {
 
 
     /**
-     * 文章类型（1：原创，2：转载，3：翻译）
+     * 文章类型（1：原创，2：转载）
      */
     @NotNull(message = "请选择文章类型", groups = {AddGroup.class, EditGroup.class})
     private Integer type;
@@ -93,6 +93,7 @@ public class ArticleInformationBo extends BaseEntity {
      * 专栏id
      */
     private Long specialId;
+
 
     @NotNull(message = "请选择文章分类", groups = {AddGroup.class, EditGroup.class})
     private Long groupingId;

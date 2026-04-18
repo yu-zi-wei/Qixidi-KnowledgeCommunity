@@ -1,15 +1,13 @@
 package com.qixidi.business.api.frontDesk;
 
 import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
-import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
-import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import lombok.RequiredArgsConstructor;
@@ -44,35 +42,11 @@ public class FdNewsController {
     }
 
     /**
-     * 评论消息列表
+     * 查询用户消息列表
      */
-    @GetMapping("/comment/list")
-    public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
-        return iNewsUserInfoService.commentList(pageQuery);
-    }
-
-    /**
-     * 点赞消息列表
-     */
-    @GetMapping("/fabulous/list")
-    public TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery) {
-        return iNewsUserInfoService.fabulousList(pageQuery);
-    }
-
-    /**
-     * 关注消息列表
-     */
-    @GetMapping("/follow/list")
-    public TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery) {
-        return iNewsUserInfoService.followList(pageQuery);
-    }
-
-    /**
-     * 系统消息列表
-     */
-    @GetMapping("/system/list")
-    public TableDataInfo<NewsUserInfoVo> systemList(PageQuery pageQuery) {
-        return iNewsUserInfoService.systemList(pageQuery);
+    @GetMapping("/list")
+    public Object userList(NewsUserInfoBo bo, PageQuery pageQuery) {
+        return iNewsUserInfoService.userList(bo, pageQuery);
     }
 
     /**

@@ -39,12 +39,8 @@ public class AddressUtils {
         if (StringUtils.isBlank(ip)) {
             return address;
         }
-        // 先清理 HTML 标签（防止 XSS）
-        ip = HtmlUtil.cleanHtmlTag(ip);
-        // 统一将 IPv6 环回地址转为 IPv4 形式
-        if ("0:0:0:0:0:0:0:1".equals(ip) || "::1".equals(ip)) {
-            ip = "127.0.0.1";
-        }
+        // 内网不查询
+        ip = "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : HtmlUtil.cleanHtmlTag(ip);
         if (NetUtil.isInnerIP(ip)) {
             return "内网IP";
         }

@@ -125,7 +125,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Long insertByBo(ArticleCommentBo bo) throws Exception {
+    public Boolean insertByBo(ArticleCommentBo bo) throws Exception {
         bo.setCommentUid(LoginHelper.getTripartiteUuid());
         ArticleComment add = BeanUtil.toBean(bo, ArticleComment.class);
         add.setCreateTime(new Date()).setUpdateTime(new Date());
@@ -171,7 +171,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         if (flag) {
             bo.setId(add.getId());
         }
-        return add.getId();
+        return flag;
     }
 
     @Async
