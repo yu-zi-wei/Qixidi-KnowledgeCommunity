@@ -65,7 +65,7 @@ qixidi-web-nuxt3/
 ### 模块划分
 
 ```
-qixidi-service-plus/
+qixidi-service/
 ├── qixidi-startup    # 启动模块
 ├── framework         # 框架层
 ├── qixidi-system     # 系统模块

@@ -46,7 +46,7 @@
 
 ### 后端规则（rules/backend/）
 
-- **[qixidi-service-plus.md](rules/backend/qixidi-service-plus.md)** - Spring Boot 开发规范
+- **[qixidi-service.md](rules/backend/qixidi-service)** - Spring Boot 开发规范
 
 ---
 

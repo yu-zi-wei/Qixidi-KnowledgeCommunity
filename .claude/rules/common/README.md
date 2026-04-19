@@ -27,7 +27,7 @@
 
 | 规则 | 说明 |
 |------|------|
-| [qixidi-service-plus.md](../backend/qixidi-service-plus.md) | Spring Boot、MyBatis Plus、MVC 分层、事务管理 |
+| [qixidi-service.md](../backend/qixidi-service) | Spring Boot、MyBatis Plus、MVC 分层、事务管理 |
 
 ---
 

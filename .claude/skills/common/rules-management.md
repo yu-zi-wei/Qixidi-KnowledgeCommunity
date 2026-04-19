@@ -15,7 +15,7 @@ description: 【RULES管理指南】本文档说明如何编写、更新和维�
 │   ├── qixidi-web-nuxt3.md # Nuxt 3 开发规范
 │   └── global-component-management.md  # 全局组件状态管理
 └── backend/                # 后端规则
-    └── qixidi-service-plus.md  # Spring Boot 开发规范
+    └── qixidi-service.md  # Spring Boot 开发规范
 ```
 
 ## 各 Rule 文件职责
@@ -38,7 +38,7 @@ description: 【RULES管理指南】本文档说明如何编写、更新和维�
 
 | 文件 | 职责 | 适用对象 |
 |------|------|----------|
-| `rules/backend/qixidi-service-plus.md` | Spring Boot、MyBatis Plus、MVC 分层、事务管理、日志 | 后端开发 |
+| `rules/backend/qixidi-service.md` | Spring Boot、MyBatis Plus、MVC 分层、事务管理、日志 | 后端开发 |
 
 ## 编写原则
 

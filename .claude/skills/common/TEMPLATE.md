@@ -114,7 +114,7 @@ description: 【SKILL编写指南】在创建任何新业务模块的Skill之前
 - [ ] **是否混淆了 Entity 和 Vo？**（Repository 返回 Entity，Service 转换为 VO）
 - [ ] **实体类是否同时使用了 @Data 和 @NoArgsConstructor？**（必须）
 - [ ] **新增/更新/删除是否加了 @Log 注解？**（必须）
-- [ ] **是否违反了其他 Rules？**（architecture.md, code-basics.md, qixidi-service-plus.md）
+- [ ] **是否违反了其他 Rules？**（architecture.md, code-basics.md, qixidi-service.md）
 
 **前端开发**：
 - [ ] **是否在 SSR 代码中使用了客户端专用 API？**（如 useMessage、useDialog）
@@ -174,7 +174,7 @@ description: 【SKILL编写指南】在创建任何新业务模块的Skill之前
 
 ### 包路径
 ```
-后端：qixidi-service-plus/qixidi-business/src/main/java/com/qixidi/business/[模块]/
+后端：qixidi-serviceqixidi-business/src/main/java/com/qixidi/business/[模块]/
 前端：qixidi-web-nuxt3/components/[模块]/、pages/[模块]/
 ```
 

@@ -39,7 +39,7 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 
 | 模块 | 说明 | 技术栈 | 状态 |
 |------|------|--------|------|
-| **qixidi-service-plus** | 服务端 API | Spring Boot 3.3 + Java 17 | 活跃开发 |
+| **qixidi-service** | 服务端 API | Spring Boot 3.3 + Java 17 | 活跃开发 |
 | **qixidi-web-nuxt3** | 门户网站（SSR） | Nuxt 3 + Vue 3 + Naive UI | 活跃开发 |
 | **qixidi-web-nuxt2** | 旧版门户 | Nuxt 2 | 维护模式 |
 
@@ -69,7 +69,7 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 - 通用规范 → `rules/common/code-basics.md`
 - 架构规范 → `rules/common/architecture.md`
 - 前端规范 → `rules/frontend/qixidi-web-nuxt3.md`
-- 后端规范 → `rules/backend/qixidi-service-plus.md`
+- 后端规范 → `rules/backend/qixidi-service.md`
 - 前端特定 → `rules/frontend/*.md`
 - 后端特定 → `rules/backend/*.md`
 - 业务特定 → `skills/[frontend|backend]/[模块]/[模块].md`
@@ -98,10 +98,10 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 
 ### 🔴 强制规则：后端接口开发
 
-**涉及后端接口时，必须先去 qixidi-service-plus 查看接口定义！**
+**涉及后端接口时，必须先去 qixidi-service 查看接口定义！**
 
 **执行步骤**：
-1. 使用 Grep 工具在 `qixidi-service-plus` 项目中搜索接口路径
+1. 使用 Grep 工具在 `qixidi-service` 项目中搜索接口路径
    ```bash
    grep -r "@PostMapping.*接口路径" --include="*.java"
    ```
@@ -203,7 +203,7 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 
 | 规则文件 | 职责 |
 |---------|------|
-| `rules/backend/qixidi-service-plus.md` | Spring Boot 开发规范 |
+| `rules/backend/qixidi-service.md` | Spring Boot 开发规范 |
 
 **加载方式**：
 - `qixidi-web-nuxt3.md` 使用 glob 模式自动加载：`qixidi-web-nuxt3/**`
@@ -235,7 +235,7 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 ### 模块结构
 
 ```
-qixidi-service-plus/
+qixidi-service/
 ├── qixidi-startup        # 启动模块
 ├── framework            # 框架层
 ├── qixidi-system        # 系统模块
@@ -278,7 +278,7 @@ AI 开发时按以下优先级阅读：
 ├── rules/              # 全局规则
 │   ├── architecture.md
 │   ├── code-basics.md
-│   ├── qixidi-service-plus.md
+│   ├── qixidi-service.md
 │   └── qixidi-web-nuxt3.md
 ├── skills/             # 业务模块技能
 │   ├── INDEX.md

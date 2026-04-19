@@ -1,11 +1,9 @@
 ---
-description: 仅在开发 qixidi-service 项目时遵循（qixidi-service-plus 已弃用）
+description: 仅在开发 qixidi-service 项目时遵循
 globs: qixidi-service/**, qixidi-service\**
 ---
 
 # qixidi-service 开发规范
-
-栖息地博客服务端开发规范（qixidi-service-plus 已弃用，所有后端代码已迁移至 qixidi-service）。
 
 ---
 
@@ -13,7 +11,6 @@ globs: qixidi-service/**, qixidi-service\**
 
 | 项目 | 状态 | 说明 |
 |------|------|------|
-| **qixidi-service-plus** | ❌ 已弃用 | 旧版后端代码，已停止维护 |
 | **qixidi-service** | ✅ 当前使用 | 所有后端代码已迁移至此 |
 
 **查找接口**：使用 `grep` 在 `qixidi-service` 文件夹中搜索接口路径
@@ -213,8 +210,6 @@ public class DataBo {
 ---
 
 ## 接口对接规范（重要）
-
-**⚠️ 后端代码位置变更**：后端代码已迁移至 `qixidi-service` 文件夹，`qixidi-service-plus` 已弃用。
 
 **前端开发时**：当用户提到服务端接口路径时，必须先去 `qixidi-service` 项目查看接口定义，确保：
 

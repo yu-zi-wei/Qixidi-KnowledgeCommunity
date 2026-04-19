@@ -7,7 +7,7 @@
 ## 接口信息
 
 ### 后端 Controller
-- **文件位置**：`qixidi-service-plus/qixidi-business/src/main/java/com/qixidi/business/api/frontDesk/article/UserArticleController.java`
+- **文件位置**：`qixidi-service/qixidi-business/src/main/java/com/qixidi/business/api/frontDesk/article/UserArticleController.java`
 
 ### 主要接口
 
