@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ArrowLeft, Check } from '@vicons/tabler'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const route = useRoute()
 const router = useRouter()

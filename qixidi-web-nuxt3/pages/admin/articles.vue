@@ -142,7 +142,7 @@ import { Search, FileText, Eye, Heart, MessageCircle, Clock, Plus } from '@vicon
 import type { AdminArticleItem } from '~/types'
 import { ArticleAuditState } from '~/types'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const route = useRoute()
 const router = useRouter()

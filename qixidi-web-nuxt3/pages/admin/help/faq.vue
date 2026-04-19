@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { Help } from '@vicons/tabler'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 </script>
 
 <style scoped>

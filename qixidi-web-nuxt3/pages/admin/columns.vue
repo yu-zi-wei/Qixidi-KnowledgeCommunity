@@ -180,7 +180,7 @@ import { Plus, Folder, FileText, CloudUpload, X, Calendar, Search } from '@vicon
 import type { FormInst, FormRules, UploadCustomRequestOptions } from 'naive-ui'
 import type { AdminSpecialItem } from '~/types'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const router = useRouter()
 const message = useMessage()

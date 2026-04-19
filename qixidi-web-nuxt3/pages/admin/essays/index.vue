@@ -171,7 +171,7 @@
 import { Plus, Search, Calendar, MessageCircle, Edit, ExternalLink, Share } from '@vicons/tabler'
 import type { ReadingEssaysInfo } from '~/types'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const message = useMessage()
 const essayDrawerStore = useEssayDrawerStore()

@@ -72,7 +72,7 @@ import type { TimeNotesInfo } from '~/types'
 
 definePageMeta({
   layout: 'editor',
-  middleware: 'auth'
+  middleware: 'creator'
 })
 
 const route = useRoute()

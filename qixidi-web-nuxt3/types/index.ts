@@ -152,6 +152,7 @@ export interface UserInfo {
   blog?: string
   grade?: string
   empirical?: number
+  roleId?: number          // 角色：1-普通用户，2-创作者，3-管理员
   articleCount?: number
   collectionCount?: number
   followCount?: number

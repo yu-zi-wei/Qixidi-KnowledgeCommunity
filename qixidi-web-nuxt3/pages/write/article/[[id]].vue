@@ -10,7 +10,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'editor',
-  middleware: 'auth'
+  middleware: 'creator'
 })
 
 const route = useRoute()

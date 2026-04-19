@@ -110,7 +110,7 @@
       </button>
 
       <template v-if="authStore.isLoggedIn">
-        <n-dropdown :options="publishOptions" @select="handlePublish">
+        <n-dropdown v-if="authStore.isCreator" :options="publishOptions" @select="handlePublish">
           <button class="icon-btn" title="创作">
             <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -312,13 +312,19 @@ const handlePublish = (key: string) => {
 }
 
 // 用户菜单
-const userMenuOptions = computed(() => [
-  { label: '创作中心', key: 'admin' },
-  { label: '我的主页', key: 'profile' },
-  { label: '我的设置', key: 'settings' },
-  { type: 'divider', key: 'd1' },
-  { label: '退出登录', key: 'logout' }
-])
+const userMenuOptions = computed(() => {
+  const items: { label: string; key: string; type?: string }[] = []
+  if (authStore.isCreator) {
+    items.push({ label: '创作中心', key: 'admin' })
+  }
+  items.push(
+    { label: '我的主页', key: 'profile' },
+    { label: '我的设置', key: 'settings' },
+    { type: 'divider', key: 'd1' } as any,
+    { label: '退出登录', key: 'logout' }
+  )
+  return items
+})
 
 const authApi = useAuthApi()
 const showLogoutConfirm = ref(false)

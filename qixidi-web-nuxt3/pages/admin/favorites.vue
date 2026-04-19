@@ -143,7 +143,7 @@ import { Plus, Folder, FileText, Calendar, Search } from '@vicons/tabler'
 import type { FormInst, FormRules } from 'naive-ui'
 import type { CollectionItem } from '~/types'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const message = useMessage()
 const collectionApi = useCollectionApi()

@@ -159,7 +159,7 @@ import { Plus, Folder, FileText, Calendar, CloudUpload, X, Search } from '@vicon
 import type { FormInst, FormRules, UploadCustomRequestOptions } from 'naive-ui'
 import type { ReadingEssaysAlbum } from '~/types'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const message = useMessage()
 const albumApi = useDictumAlbumApi()

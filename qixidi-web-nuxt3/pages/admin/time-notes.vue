@@ -101,7 +101,7 @@
 import { Plus, FileText, Search } from '@vicons/tabler'
 import type { TimeNotesInfo } from '~/types'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const message = useMessage()
 const route = useRoute()

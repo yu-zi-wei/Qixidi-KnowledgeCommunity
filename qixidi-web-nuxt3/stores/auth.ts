@@ -8,6 +8,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isLoggedIn = computed(() => !!token.value && !!user.value)
 
+  const isCreator = computed(() => {
+    const rid = user.value?.roleId
+    return rid === 2 || rid === 3
+  })
+
   const setToken = (val: string) => {
     token.value = val
   }
@@ -37,7 +42,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { token, user, isLoggedIn, setToken, setUser, logout, fetchUser }
+  return { token, user, isLoggedIn, isCreator, setToken, setUser, logout, fetchUser }
 }, {
   persist: true
 })

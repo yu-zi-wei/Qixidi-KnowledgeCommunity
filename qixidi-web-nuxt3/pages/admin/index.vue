@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { FileText, Layout, Bookmark, Users, MessageCircle, Disc, Notebook, Clock } from '@vicons/tabler'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const censusApi = useUserCensusApi()
 
