@@ -1,6 +1,6 @@
 <p align=center>
    <img src="./img/logo.png" alt="栖息地" style="width:160px;height:160px"/>
-<h1 align=center>栖息地</h1>
+<h1 align=center>栖息地 v-1.0</h1>
 <p align="center">
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/star.svg?theme=dark" ></img>
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/fork.svg?theme=dark" ></img>
