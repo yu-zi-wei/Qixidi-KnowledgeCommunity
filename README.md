@@ -1,6 +1,6 @@
 <p align=center>
    <img src="./img/logo.png" alt="栖息地" style="width:160px;height:160px"/>
-<h1 align=center>栖息地</h1>
+<h1 align=center>栖息地 v-2.0</h1>
 <p align="center">
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/star.svg?theme=dark" ></img>
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/fork.svg?theme=dark" ></img>
@@ -9,7 +9,7 @@
 
 ## 前言
 
-栖息地是一个开源的知识社区博客系统，它的诞生源于一个简单的想法——拥有一个完全属于自己的知识空间。
+栖息地是一个开源的知识社区博客系统，它的诞生源于一个简单的想法——拥有一个完全属于自己的知识空间。(还在持续开发中，敬请期待......)
 
 1.0 版本是基于 RuoYi 二次开发构建的，随着功能不断迭代，早期架构的局限逐渐暴露：代码耦合度高、难以维护、前端技术栈老化。与其在一个摇摇欲坠的地基上反复修补，不如推倒重来。
 
@@ -19,7 +19,7 @@
 - **前端**：基于 Nuxt 3 + Vue 3 + Naive UI 全面重写，SSR 渲染 + 响应式设计
 - **AI 驱动开发**：整个 2.0 版本从架构设计到代码实现，全程由 AI 参与开发和维护
 
-> **1.0 版本**已归档至 [main-v1.0](https://gitee.com/yu-zi-wei/qixidi/tree/main-v1.0/) 分支，不再维护。
+> **1.0 版本**已归档至 [main-v1.0](https://gitee.com/yu-zi-wei/qixidi/tree/main-v1.0/) 分支，不再维护（bug除外）。
 
 ### 网站地址：https://qixidi.top/
 
