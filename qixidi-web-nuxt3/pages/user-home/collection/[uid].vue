@@ -7,7 +7,7 @@
 
     <!-- 空状态 -->
     <div v-else-if="!collectionList.length" class="collection-empty">
-      <n-empty description="暂无收藏夹" />
+      <CommonEmptyState description="暂无收藏夹" />
     </div>
 
     <!-- 收藏夹列表（可滚动） -->

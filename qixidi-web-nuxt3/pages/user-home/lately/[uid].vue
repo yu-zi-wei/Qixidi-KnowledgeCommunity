@@ -7,7 +7,7 @@
 
     <!-- 空状态 -->
     <div v-else-if="!historyList.length" class="empty-state">
-      <n-empty description="暂无浏览记录" />
+      <CommonEmptyState description="暂无浏览记录" />
     </div>
 
     <!-- 列表 -->

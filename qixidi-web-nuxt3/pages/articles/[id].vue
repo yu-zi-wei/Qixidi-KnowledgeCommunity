@@ -86,6 +86,7 @@ watch(() => article.value, (newArticle) => {
         nickname: newArticle.nickname,
         avatar: newArticle.avatar,
         occupation: newArticle.occupation,
+        roleId: newArticle.roleId,
         isFollow: newArticle.isFollow,
         // 统计数据
         articleCount: newArticle.articleCount,

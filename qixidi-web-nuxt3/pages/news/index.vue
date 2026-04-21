@@ -34,7 +34,7 @@
         <!-- 左侧：用户列表 -->
         <div class="chat-user-list">
           <div v-if="chatUserLoading" class="chat-loading"><n-spin size="small" /></div>
-          <div v-else-if="!chatUserList.length" class="chat-empty"><n-empty description="暂无私信" size="small" /></div>
+          <div v-else-if="!chatUserList.length" class="chat-empty"><CommonEmptyState description="暂无私信" size="small" /></div>
           <template v-else>
             <div
               v-for="user in chatUserList"
@@ -66,7 +66,7 @@
         <div class="chat-panel">
           <!-- 未选择用户 -->
           <div v-if="!selectedTargetUid" class="chat-panel-empty">
-            <n-empty description="选择一个用户开始聊天" size="small" />
+            <CommonEmptyState description="选择一个用户开始聊天" size="small" />
           </div>
 
           <template v-else>
@@ -147,7 +147,7 @@
 
         <!-- 空状态 -->
         <div v-else-if="!newsList.length" class="empty-state">
-          <n-empty :description="`暂无${currentTabLabel}消息`" />
+          <CommonEmptyState :description="`暂无${currentTabLabel}消息`" />
         </div>
 
         <!-- 列表内容 -->

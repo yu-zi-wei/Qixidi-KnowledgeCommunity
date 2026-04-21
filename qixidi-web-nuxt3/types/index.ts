@@ -110,6 +110,7 @@ export interface ArticleInfo {
 export interface FollowUser {
   id: number
   userId: string
+  uuid?: string
   nickname: string
   avatar: string
   username: string
@@ -501,8 +502,9 @@ export interface UserCensusCount {
   followCount: number       // 关注数
   commentCount: number      // 总获评论数
   albumCount: number        // 专辑总数
-  essayCount: number        // 阅读随笔
+  dictumCount: number       // 阅读随笔
   timeNotesCount: number    // 时光小记数
+  fabulousCount: number     // 点赞数
 }
 
 // 用户投稿记录项（接口返回格式）

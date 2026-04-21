@@ -20,6 +20,7 @@
         <component :is="sidebarComponent" />
       </div>
     </div>
+    <CreatorApplyDialog />
   </div>
 </template>
 

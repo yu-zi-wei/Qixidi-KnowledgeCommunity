@@ -129,6 +129,7 @@
                um.nickname,
                um.avatar,
                um.occupation,
+               um.role_id,
                cuw.fabulous_count,
                cuw.fans_fabulous_count,
                cuw.collection_count,

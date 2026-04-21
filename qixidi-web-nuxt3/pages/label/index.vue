@@ -4,7 +4,7 @@
       <n-spin size="large" />
     </div>
     <div v-else-if="!labels.length" class="label-empty">
-      <n-empty description="暂无标签" />
+      <CommonEmptyState description="暂无标签" />
     </div>
     <LabelCardList v-else :list="labels" />
   </div>

@@ -15,7 +15,7 @@
         </n-input>
         <n-button @click="handleSearch">搜索</n-button>
       </div>
-      <n-button type="primary" @click="handleCreate">
+      <n-button v-if="authStore.isCreator" type="primary" @click="handleCreate">
         <template #icon>
           <n-icon><Plus /></n-icon>
         </template>
@@ -30,11 +30,11 @@
       </div>
 
       <div v-else-if="!noteList.length" class="empty-state">
-        <n-empty description="暂无时光小记">
+        <CommonEmptyState description="暂无时光小记">
           <template #extra>
-            <n-button type="primary" @click="handleCreate">立即创建</n-button>
+            <n-button v-if="authStore.isCreator" type="primary" @click="handleCreate">立即创建</n-button>
           </template>
-        </n-empty>
+        </CommonEmptyState>
       </div>
 
       <template v-else>
@@ -106,6 +106,7 @@ definePageMeta({ layout: 'admin', middleware: 'creator' })
 const message = useMessage()
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 const timeNotesApi = useTimeNotesAdminApi()
 
 // 列表 - 从 URL 参数恢复状态

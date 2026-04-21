@@ -28,11 +28,11 @@
       </div>
 
       <div v-else-if="!filteredList.length" class="empty-state">
-        <n-empty :description="searchKeyword ? '未找到匹配的专辑' : '暂无专辑'">
+        <CommonEmptyState :description="searchKeyword ? '未找到匹配的专辑' : '暂无专辑'">
           <template v-if="!searchKeyword" #extra>
             <n-button type="primary" @click="handleCreate">立即创建</n-button>
           </template>
-        </n-empty>
+        </CommonEmptyState>
       </div>
 
       <template v-else>

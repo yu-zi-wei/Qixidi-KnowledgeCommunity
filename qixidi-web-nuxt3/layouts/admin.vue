@@ -21,7 +21,7 @@
           />
           <div class="sidebar-user-info">
             <div class="sidebar-user-name">{{ authStore.user.nickname }}</div>
-            <div class="sidebar-user-desc">{{ authStore.user.occupation || '' }}</div>
+            <div class="sidebar-user-meta"><UserRoleBadge /><span v-if="authStore.user.occupation" class="sidebar-user-desc">{{ authStore.user.occupation }}</span></div>
           </div>
         </div>
         <n-menu
@@ -31,11 +31,17 @@
           :default-expanded-keys="defaultExpandedKeys"
           @update:value="handleMenuSelect"
         />
+        <div v-if="!authStore.isCreator" class="sidebar-apply">
+          <n-button type="primary" block round @click="handleApply">
+            申请成为创作者
+          </n-button>
+        </div>
       </aside>
       <main class="admin-content">
         <slot />
       </main>
     </div>
+    <CreatorApplyDialog />
   </div>
 </template>
 
@@ -126,6 +132,11 @@ const handleMenuSelect = (key: string) => {
 const goHome = () => {
   router.push('/')
 }
+
+const handleApply = () => {
+  const creatorApplyStore = useCreatorApplyStore()
+  creatorApplyStore.show()
+}
 </script>
 
 <style scoped>
@@ -157,12 +168,14 @@ const goHome = () => {
   padding: 16px;
   box-shadow: var(--shadow-sm);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-header {
-  padding: 8px 0 16px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border-light);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .back-home-btn {
@@ -180,9 +193,9 @@ const goHome = () => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 8px 24px;
+  padding: 6px 8px 16px;
   border-bottom: 1px solid var(--color-border-light);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .sidebar-user-name {
@@ -194,7 +207,13 @@ const goHome = () => {
 .sidebar-user-desc {
   font-size: 12px;
   color: var(--color-ink-muted);
-  margin-top: 2px;
+}
+
+.sidebar-user-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
 }
 
 .admin-content {
@@ -217,6 +236,11 @@ const goHome = () => {
 .sidebar-icon :deep(svg) {
   width: 18px;
   height: 18px;
+}
+
+.sidebar-apply {
+  margin-top: auto;
+  padding-top: 16px;
 }
 
 /* 响应式 */

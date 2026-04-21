@@ -46,11 +46,11 @@
 
       <!-- 空状态 -->
       <div v-else-if="!essayList.length" class="empty-state">
-        <n-empty description="暂无随笔">
+        <CommonEmptyState description="暂无随笔">
           <template #extra>
             <n-button type="primary" @click="essayDrawerStore.open()">写一篇</n-button>
           </template>
-        </n-empty>
+        </CommonEmptyState>
       </div>
 
       <!-- 列表 -->

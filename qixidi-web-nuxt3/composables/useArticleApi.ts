@@ -57,11 +57,8 @@ export const useArticleApi = () => {
    */
   const getDetail = async (id: string | number): Promise<any> => {
     const data = await api.get<any>(`/user/get/article/${id}`)
-    // 转换后端的 labelId（字符串）为前端的 labelIds（数组）
-    if (data && data.labelId) {
-      data.labelIds = data.labelId.split(',').map(Number)
-      // 不要删除原字段，可能其他地方需要
-      // delete (data as any).labelId
+    if (data) {
+      data.labelIds = data.labelLongList || []
     }
     return data
   }

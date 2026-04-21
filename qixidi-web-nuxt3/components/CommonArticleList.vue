@@ -2,7 +2,7 @@
   <div class="article-scroll" ref="scrollAreaRef">
     <!-- 空状态 -->
     <div v-if="!articleList.length" class="article-list-empty">
-      <n-empty description="暂无文章" />
+      <CommonEmptyState description="暂无文章" />
     </div>
 
     <div class="article-list" v-else>
@@ -12,7 +12,7 @@
         class="article-item"
       >
         <NuxtLink
-          v-if="article.articleCover"
+          v-if="article.articleCover && !hideCover"
           :to="`/articles/${article.id}`"
           class="item-cover"
           @click="handleClick"
@@ -58,9 +58,12 @@
 import { Calendar, Eye, Heart, MessageCircle } from '@vicons/tabler'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
-defineProps<{
+const props = withDefaults(defineProps<{
   articleList: any[]
-}>()
+  hideCover?: boolean
+}>(), {
+  hideCover: false
+})
 
 const emit = defineEmits<{
   'save-state': [scrollTop: number]

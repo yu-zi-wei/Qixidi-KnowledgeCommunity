@@ -19,7 +19,10 @@
                 <span class="owner-badge" v-if="isOwner">本人</span>
               </div>
               <div class="user-main">
-                <h1 class="user-nickname">{{ userInfo.nickname || userInfo.username }}</h1>
+                <h1 class="user-nickname">
+                  {{ userInfo.nickname || userInfo.username }}
+                  <UserRoleBadge :role-id="userInfo.roleId" />
+                </h1>
                 <p class="user-introduce" v-if="userInfo.introduce">{{ userInfo.introduce }}</p>
                 <div class="user-meta">
                   <span v-if="userInfo.occupation" class="meta-tag">
@@ -357,6 +360,9 @@ const handlePrivateMsg = async () => {
 }
 
 .user-nickname {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: var(--text-lg);
   font-weight: 700;
   color: var(--color-ink);

@@ -23,7 +23,7 @@
 
       <!-- 空状态 -->
       <div v-else-if="!articleList.length" class="fabulous-empty">
-        <n-empty description="暂无点赞的文章" />
+        <CommonEmptyState description="暂无点赞的文章" />
       </div>
 
       <!-- 文章列表 -->
@@ -31,6 +31,7 @@
         <CommonArticleList
           ref="articleListRef"
           :article-list="articleList"
+          hide-cover
           @save-state="handleSaveState"
         />
       </template>

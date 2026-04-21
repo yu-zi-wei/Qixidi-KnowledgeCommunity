@@ -216,6 +216,11 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
     private String occupation;
 
     /**
+     * 用户角色
+     */
+    private Integer roleId;
+
+    /**
      * 账号名称
      */
     private String username;

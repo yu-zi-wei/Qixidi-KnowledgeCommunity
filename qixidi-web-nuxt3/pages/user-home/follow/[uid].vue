@@ -26,7 +26,7 @@
       <!-- 关注用户列表 -->
       <template v-else-if="activeTab === 1">
         <div v-if="!userList?.length" class="follow-empty">
-          <n-empty description="暂无关注的用户" />
+          <CommonEmptyState description="暂无关注的用户" />
         </div>
         <div class="follow-user-list" v-else>
           <div v-for="user in userList" :key="user.uuid" class="follow-user-card">
@@ -64,7 +64,7 @@
       <!-- 关注标签列表 -->
       <template v-else-if="activeTab === 2">
         <div v-if="!tagList?.length" class="follow-empty">
-          <n-empty description="暂无关注的标签" />
+          <CommonEmptyState description="暂无关注的标签" />
         </div>
         <div class="follow-tag-list" v-else>
           <NuxtLink

@@ -52,7 +52,7 @@
       <main class="essay-scroll-area">
         <div class="essay-section">
           <div v-if="essayList.length === 0 && !loadingMore" class="empty-state">
-            <n-empty description="暂无随笔" />
+            <CommonEmptyState description="暂无随笔" />
           </div>
 
           <div class="essay-list" v-else>

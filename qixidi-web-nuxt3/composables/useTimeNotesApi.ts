@@ -27,8 +27,21 @@ export const useTimeNotesApi = () => {
     return await api.get<TimeNotesInfo>(`/white/time/notes/getInfo/${id}`)
   }
 
+  /**
+   * 小记归档
+   * 接口：POST /white/time/notes/archive
+   * 返回格式：{ total, rows: TimeNotesVo[] }
+   */
+  const getTimeNotesArchive = async (params?: TimeNotesSearchBo): Promise<TableDataInfo<TimeNotesVo>> => {
+    return await api.postPage<TimeNotesVo>(
+      '/white/time/notes/archive',
+      params
+    )
+  }
+
   return {
     getTimeNotesList,
-    getTimeNotesDetail
+    getTimeNotesDetail,
+    getTimeNotesArchive
   }
 }

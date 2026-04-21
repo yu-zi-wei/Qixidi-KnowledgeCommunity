@@ -119,19 +119,77 @@
           </button>
         </n-dropdown>
 
-        <n-dropdown :options="newsDropdownOptions" @select="handleNewsSelect" trigger="hover" :show-arrow="false" placement="bottom-end">
-          <NuxtLink to="/news" class="icon-btn news-trigger" title="通知" @click.native="handleNewsClick">
+        <n-dropdown :options="newsDropdownOptions" @select="handleNewsSelect" :show-arrow="false" placement="bottom-end">
+          <button class="icon-btn news-trigger" title="通知">
             <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
             <span v-if="totalUnread > 0" class="news-badge">{{ totalUnread > 99 ? '99+' : totalUnread }}</span>
-          </NuxtLink>
+          </button>
         </n-dropdown>
 
-        <n-dropdown :options="userMenuOptions" @select="handleUserMenu">
-          <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="user-avatar" />
-        </n-dropdown>
+        <n-popover v-model:show="showUserPopover" trigger="hover" placement="bottom-end" :show-arrow="false" :width="260" raw :delay="100" :duration="150">
+          <template #trigger>
+            <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="user-avatar" />
+          </template>
+          <div class="user-popover">
+            <!-- 用户信息 -->
+            <div class="user-popover-header">
+              <n-avatar round :size="40" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" />
+              <div class="popover-user-meta">
+                <div class="popover-name-row"><span class="popover-name">{{ authStore.user?.nickname }}</span><UserRoleBadge /></div>
+                <span v-if="authStore.user?.occupation" class="popover-job">{{ authStore.user.occupation }}</span>
+              </div>
+            </div>
+            <!-- 统计 -->
+            <div class="popover-stats">
+              <NuxtLink :to="`/user-home/article/${authStore.user?.uuid}`" class="stat-item">
+                <span class="stat-num">{{ userStats?.articleCount || 0 }}</span>
+                <span class="stat-label">文章</span>
+              </NuxtLink>
+              <NuxtLink :to="`/user-home/time-notes/${authStore.user?.uuid}`" class="stat-item">
+                <span class="stat-num">{{ userStats?.timeNotesCount || 0 }}</span>
+                <span class="stat-label">小记</span>
+              </NuxtLink>
+              <NuxtLink :to="`/user-home/reading-essays/${authStore.user?.uuid}`" class="stat-item">
+                <span class="stat-num">{{ userStats?.dictumCount || 0 }}</span>
+                <span class="stat-label">随笔</span>
+              </NuxtLink>
+              <NuxtLink :to="`/user-home/collection/${authStore.user?.uuid}`" class="stat-item">
+                <span class="stat-num">{{ userStats?.collectionCount || 0 }}</span>
+                <span class="stat-label">收藏</span>
+              </NuxtLink>
+            </div>
+            <!-- 菜单两列 -->
+            <div class="popover-menu-grid">
+              <NuxtLink to="/admin" class="popover-menu-item" @click="showUserPopover = false">
+                <n-icon size="15"><Dashboard /></n-icon>创作中心
+              </NuxtLink>
+              <NuxtLink :to="`/user-home/lately/${authStore.user?.uuid}`" class="popover-menu-item" @click="showUserPopover = false">
+                <n-icon size="15"><User /></n-icon>我的主页
+              </NuxtLink>
+              <NuxtLink to="/admin/articles" class="popover-menu-item" @click="showUserPopover = false">
+                <n-icon size="15"><News /></n-icon>文章
+              </NuxtLink>
+              <NuxtLink to="/admin/time-notes" class="popover-menu-item" @click="showUserPopover = false">
+                <n-icon size="15"><Clock /></n-icon>小记
+              </NuxtLink>
+              <NuxtLink to="/admin/essays" class="popover-menu-item" @click="showUserPopover = false">
+                <n-icon size="15"><Notebook /></n-icon>随笔
+              </NuxtLink>
+            </div>
+            <!-- 底部 -->
+            <div class="popover-footer">
+              <NuxtLink to="/settings" class="popover-link-secondary" @click="showUserPopover = false">
+                <n-icon size="14"><Settings /></n-icon>我的设置
+              </NuxtLink>
+              <button class="popover-link-secondary" @click="showLogoutConfirm = true; showUserPopover = false">
+                <n-icon size="14"><Logout /></n-icon>退出登录
+              </button>
+            </div>
+          </div>
+        </n-popover>
       </template>
 
       <template v-else>
@@ -197,6 +255,8 @@
 
 <script setup lang="ts">
 import type { Navigation } from '~/types'
+import type { UserCensusCount } from '~/types'
+import { FileText, Notebook, News, Dashboard, User, Settings, Logout, Clock } from '@vicons/tabler'
 import { useEssayDrawerStore } from '~/stores/essayDrawer'
 
 const { siteName } = useRuntimeConfig().public
@@ -312,19 +372,12 @@ const handlePublish = (key: string) => {
 }
 
 // 用户菜单
-const userMenuOptions = computed(() => {
-  const items: { label: string; key: string; type?: string }[] = []
-  if (authStore.isCreator) {
-    items.push({ label: '创作中心', key: 'admin' })
-  }
-  items.push(
-    { label: '我的主页', key: 'profile' },
-    { label: '我的设置', key: 'settings' },
-    { type: 'divider', key: 'd1' } as any,
-    { label: '退出登录', key: 'logout' }
-  )
-  return items
-})
+const showUserPopover = ref(false)
+const censusApi = useUserCensusApi()
+const { data: userStats } = await useAsyncData<UserCensusCount>(
+  'user-census-count',
+  () => censusApi.getUserCensusCount('')
+)
 
 const authApi = useAuthApi()
 const showLogoutConfirm = ref(false)
@@ -334,12 +387,6 @@ const doLogout = async () => {
   authStore.logout()
   showLogoutConfirm.value = false
   navigateTo('/')
-}
-
-const handleUserMenu = (key: string) => {
-  if (key === 'logout') { showLogoutConfirm.value = true; return }
-  const routes: Record<string, string> = { admin: '/admin', profile: `/user-home/lately/${authStore.user?.uuid}`, settings: '/settings' }
-  if (routes[key]) navigateTo(routes[key])
 }
 
 // 消息通知下拉
@@ -369,10 +416,6 @@ const handleNewsSelect = (key: string) => {
   } else {
     navigateTo({ path: '/news', query: { type } })
   }
-}
-
-const handleNewsClick = () => {
-  // 点击直接跳转 /news，由 NuxtLink 处理
 }
 
 // 吸顶状态
@@ -515,6 +558,140 @@ onMounted(() => {
 .dropdown-enter-active, .dropdown-leave-active { transition: all 0.2s ease; transform-origin: top center; }
 .dropdown-enter-from, .dropdown-leave-to { opacity: 0; transform: translateY(-8px) scale(0.95); }
 
+/* ==================== 用户 Popover ==================== */
+.user-popover {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
+  border: 1px solid var(--color-border-light);
+  overflow: hidden;
+}
+
+.user-popover-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 10px;
+}
+
+.popover-user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.popover-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popover-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popover-job {
+  font-size: var(--text-xs);
+  color: var(--color-ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popover-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.popover-stats .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.popover-stats .stat-item:hover {
+  background: var(--color-surface-dim);
+}
+
+.popover-stats .stat-num {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.popover-stats .stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-ink-muted);
+}
+
+/* 菜单两列网格 */
+.popover-menu-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px;
+  padding: 6px 8px;
+}
+
+.popover-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+  white-space: nowrap;
+  width: calc(50% - 1px);
+}
+
+.popover-menu-item:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-dim);
+}
+
+/* 底部：设置 + 退出 */
+.popover-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px 8px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.popover-link-secondary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  font-size: var(--text-xs);
+  color: var(--color-ink-faint);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+}
+
+.popover-link-secondary:hover {
+  color: var(--color-ink-muted);
+  background: var(--color-surface-dim);
+}
+
 /* ==================== 移动端适配 ==================== */
 @media (max-width: 768px) {
   .home-nav-bar {
@@ -539,8 +716,8 @@ onMounted(() => {
   .nav-menu { display: none !important; }
   .search-wrapper { max-width: 200px !important; min-width: 160px !important; }
   .nav-right { display: flex; align-items: center; gap: 4px; min-width: 68px; flex-shrink: 0; justify-content: flex-end; }
-  .theme-toggle, .icon-btn:not(.user-avatar):not([title="通知"]) { display: none; }
-  .icon-btn[title="通知"] { width: 36px; height: 36px; }
+  .theme-toggle, .icon-btn:not(.news-trigger) { display: none; }
+  .news-trigger { display: flex !important; width: 36px; height: 36px; }
   .news-badge { top: 0; right: 0; }
   .user-avatar { width: 32px !important; height: 32px !important; flex-shrink: 0; }
   .logo-icon { width: 28px; height: 28px; }

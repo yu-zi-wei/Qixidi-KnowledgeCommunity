@@ -21,6 +21,7 @@ import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.CommentTypeEnums;
@@ -126,6 +127,10 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long insertByBo(ArticleCommentBo bo) throws Exception {
+        ArticleInformation articleInformation = articleInformationMapper.selectById(bo.getArticleId());
+        if (articleInformation == null) {
+            throw new ServiceException("文章不存在");
+        }
         bo.setCommentUid(LoginHelper.getTripartiteUuid());
         ArticleComment add = BeanUtil.toBean(bo, ArticleComment.class);
         add.setCreateTime(new Date()).setUpdateTime(new Date());
@@ -164,7 +169,8 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
                 //发送邮件通知
                 TripartiteUserVo basicsUser = tripartiteUserMapper.getBasicsUser(bo.getTargetUid());
                 if (StrUtil.isNotEmpty(basicsUser.getEmail())) {
-                    MailUtils.sendText(basicsUser.getEmail(), "栖息地-收到新评论", add.getContent());
+                    MailUtils.sendText(basicsUser.getEmail(),
+                            "栖息地-收到新评论" + "文章《" + articleInformation.getArticleTitle() + "》", add.getContent());
                 }
             });
         }

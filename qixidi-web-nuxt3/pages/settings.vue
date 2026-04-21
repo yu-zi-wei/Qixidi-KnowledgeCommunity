@@ -227,7 +227,8 @@ import { User, Lock, Camera, Mail, ArrowLeft } from '@vicons/tabler'
 
 definePageMeta({
   layout: 'blank',
-  middleware: 'auth'
+  middleware: 'auth',
+  ssr: false
 })
 
 const authStore = useAuthStore()
@@ -437,7 +438,7 @@ const handleCancelAccount = async () => {
 .settings-page {
   min-height: 100vh;
   background: var(--color-surface-warm);
-  padding: 40px 24px;
+  padding: 24px 16px;
 }
 
 .settings-container {
@@ -446,16 +447,8 @@ const handleCancelAccount = async () => {
   margin: 0 auto;
 }
 
-.settings-layout {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-
 /* 左侧菜单 */
 .settings-sidebar {
-  width: 160px;
-  flex-shrink: 0;
   position: sticky;
   top: 40px;
 }
@@ -513,8 +506,6 @@ const handleCancelAccount = async () => {
 
 /* 右侧内容 */
 .settings-content {
-  width: 480px;
-  flex-shrink: 0;
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -536,15 +527,12 @@ const handleCancelAccount = async () => {
 
 /* 右侧头像区域 */
 .settings-avatar-side {
-  width: 140px;
-  flex-shrink: 0;
   position: sticky;
   top: 40px;
 }
 
 .settings-avatar-side.is-hidden {
-  visibility: hidden;
-  pointer-events: none;
+  display: none;
 }
 
 .avatar-card {
@@ -696,22 +684,7 @@ const handleCancelAccount = async () => {
 /* 响应式 */
 @media (max-width: 768px) {
   .settings-page {
-    padding: 16px 12px;
-  }
-
-  .settings-layout {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-
-  .settings-sidebar {
-    width: 100%;
-    position: static;
-  }
-
-  .settings-back {
-    margin-bottom: 8px;
+    padding: 12px;
   }
 
   .settings-menu {
@@ -734,11 +707,9 @@ const handleCancelAccount = async () => {
   }
 
   .settings-content {
-    width: 100%;
-    padding: 20px 16px;
+    padding: 12px;
   }
 
-  /* 移动端显示头像区域 */
   .mobile-avatar-area {
     display: flex;
     justify-content: center;
@@ -751,17 +722,8 @@ const handleCancelAccount = async () => {
     height: 80px;
   }
 
-  .mobile-avatar-area .avatar-upload-btn {
-    font-size: 10px;
-  }
-
   .mobile-avatar-area .avatar-upload-btn .n-icon {
     font-size: 20px;
-  }
-
-  /* 桌面端头像侧栏隐藏 */
-  .settings-avatar-side {
-    display: none;
   }
 
   .form-row {

@@ -11,29 +11,29 @@
         <span>站点数据</span>
       </div>
       <div class="stats-grid">
-        <div class="stat-cell">
+        <div class="stat-cell" style="--accent: #3b82f6">
           <span class="stat-num">{{ siteStatsData.userCount }}</span>
-          <span class="stat-label">用户数</span>
+          <span class="stat-label">用户</span>
         </div>
-        <div class="stat-cell">
-          <span class="stat-num">{{ siteStatsData.specialCount }}</span>
-          <span class="stat-label">专栏数</span>
-        </div>
-        <div class="stat-cell">
-          <span class="stat-num">{{ siteStatsData.labelCount }}</span>
-          <span class="stat-label">标签数</span>
-        </div>
-        <div class="stat-cell">
+        <div class="stat-cell" style="--accent: #8b5cf6">
           <span class="stat-num">{{ siteStatsData.articleCount }}</span>
-          <span class="stat-label">文章数</span>
+          <span class="stat-label">文章</span>
         </div>
-        <div class="stat-cell">
-          <span class="stat-num">{{ siteStatsData.dictumCount }}</span>
-          <span class="stat-label">随笔数</span>
-        </div>
-        <div class="stat-cell">
+        <div class="stat-cell" style="--accent: #f59e0b">
           <span class="stat-num">{{ siteStatsData.timeNotesCount }}</span>
-          <span class="stat-label">小记数</span>
+          <span class="stat-label">小记</span>
+        </div>
+        <div class="stat-cell" style="--accent: #10b981">
+          <span class="stat-num">{{ siteStatsData.dictumCount }}</span>
+          <span class="stat-label">随笔</span>
+        </div>
+        <div class="stat-cell" style="--accent: #ec4899">
+          <span class="stat-num">{{ siteStatsData.labelCount }}</span>
+          <span class="stat-label">标签</span>
+        </div>
+        <div class="stat-cell" style="--accent: #06b6d4">
+          <span class="stat-num">{{ siteStatsData.specialCount }}</span>
+          <span class="stat-label">专栏</span>
         </div>
       </div>
     </div>
@@ -234,7 +234,7 @@ const runningRemainDays = computed(() => {
 /* 卡片通用样式 - 轻透风格，与文章卡片统一 */
 .sidebar-card {
   background: rgba(255, 255, 255, 0.25);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   padding: 16px;
   transition: all 0.2s ease;
@@ -244,15 +244,18 @@ const runningRemainDays = computed(() => {
 
 .sidebar-card:hover {
   background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
 /* 暗色主题 */
 :root.dark .sidebar-card {
   background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 :root.dark .sidebar-card:hover {
   background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 卡片标题 */
@@ -309,17 +312,18 @@ const runningRemainDays = computed(() => {
   align-items: center;
   gap: 4px;
   padding: 10px 6px;
-  background: rgba(0, 0, 0, 0.03);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   border-radius: 8px;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  position: relative;
 }
 
 :root.dark .stat-cell {
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .stat-cell:hover {
-  background: rgba(61, 90, 128, 0.08);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .stat-num {
@@ -379,16 +383,30 @@ const runningRemainDays = computed(() => {
 }
 
 .rank-num.top-1 {
-  background: linear-gradient(135deg, #fef3c7, #fde68a);
-  color: #b45309;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
+
+:root.dark .rank-num.top-1 {
+  background: rgba(239, 68, 68, 0.15);
+}
+
 .rank-num.top-2 {
-  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
-  color: #4b5563;
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
 }
+
+:root.dark .rank-num.top-2 {
+  background: rgba(245, 158, 11, 0.15);
+}
+
 .rank-num.top-3 {
-  background: linear-gradient(135deg, #fed7aa, #fdba74);
-  color: #9a3412;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+:root.dark .rank-num.top-3 {
+  background: rgba(16, 185, 129, 0.15);
 }
 
 .rank-title {
@@ -455,6 +473,7 @@ const runningRemainDays = computed(() => {
   align-items: center;
   gap: 8px;
   font-size: 11px;
+  margin-top: 12px;
 }
 
 .opensource-label {
@@ -493,6 +512,7 @@ const runningRemainDays = computed(() => {
   font-size: 11px;
   text-decoration: none;
   transition: color 0.2s;
+  margin-top: 10px;
 }
 
 .opensource-link:hover {
@@ -513,6 +533,7 @@ const runningRemainDays = computed(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: 12px;
 }
 
 .filing-link,
@@ -520,6 +541,7 @@ const runningRemainDays = computed(() => {
   font-size: 10px;
   color: var(--color-ink-muted);
   text-decoration: none;
+  line-height: 1.8;
   transition: color 0.2s;
 }
 
@@ -529,9 +551,11 @@ const runningRemainDays = computed(() => {
 
 /* 版权信息 */
 .footer-meta {
-  padding-top: 10px;
+  padding-top: 12px;
+  margin-top: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   font-size: 10px;
+  line-height: 1.8;
   color: var(--color-ink-faint);
 }
 

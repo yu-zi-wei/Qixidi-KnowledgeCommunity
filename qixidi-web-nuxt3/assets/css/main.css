@@ -262,6 +262,46 @@ a:hover {
   background: var(--color-surface-dim);
 }
 
+/* 设置页布局骨架（ssr: false，需立即可用的布局规则） */
+.settings-page {
+  width: 100%;
+}
+.settings-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.settings-sidebar {
+  width: 160px;
+  flex-shrink: 0;
+}
+.settings-content {
+  width: 480px;
+  flex-shrink: 0;
+}
+.settings-avatar-side {
+  width: 140px;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .settings-layout {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .settings-sidebar {
+    width: 100%;
+    position: static;
+  }
+  .settings-content {
+    width: auto;
+    flex-shrink: 1;
+  }
+  .settings-avatar-side {
+    display: none !important;
+  }
+}
+
 /* 导航栏 */
 .app-header {
   position: sticky;
@@ -705,9 +745,13 @@ a:hover {
 /* 图片 */
 .markdown-body img {
   max-width: 100%;
-  box-sizing: border-box;
+  max-height: 800px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 16px auto;
   border-radius: var(--radius-md);
-  margin: 16px 0;
+  object-fit: cover;
 }
 
 /* 分隔线 */

@@ -80,6 +80,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         LambdaQueryWrapper<TimeNotes> lambdaQueryWrapper = new LambdaQueryWrapper<TimeNotes>()
                 .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime, TimeNotes::getContent)
                 .like(bo.getTitle() != null, TimeNotes::getTitle, bo.getTitle())
+                .eq(bo.getUid() != null, TimeNotes::getUid, bo.getUid())
                 .orderByDesc(TimeNotes::getRecordTime);
         Page<TimeNotes> timeNotesPage = timeNotesMapper.selectPage(build, lambdaQueryWrapper);
         List<TimeNotes> records = timeNotesPage.getRecords();
@@ -128,10 +129,16 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     @Override
     public TableDataInfo<TimeNotes> queryList(TimeNotesSearchBo bo, Page<TimeNotes> build) {
         Page<TimeNotes> timeNotesPage = timeNotesMapper.selectPage(build, new LambdaQueryWrapper<TimeNotes>()
-                .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime)
+                .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getRecordTime, TimeNotes::getContent)
                 .eq(TimeNotes::getUid, LoginHelper.getTripartiteUuid())
                 .like(bo.getTitle() != null, TimeNotes::getTitle, bo.getTitle())
                 .orderByDesc(TimeNotes::getRecordTime));
+        List<TimeNotes> records = timeNotesPage.getRecords();
+        for (TimeNotes item : records) {
+            if (StrUtil.isNotEmpty(item.getContent())) {
+                item.setIsContent(true);
+            }
+        }
         return TableDataInfo.build(timeNotesPage);
     }
 }

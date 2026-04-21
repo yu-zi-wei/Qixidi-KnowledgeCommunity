@@ -23,8 +23,8 @@
         <div v-if="followUsers.length" class="follow-users-scroll">
           <NuxtLink
             v-for="user in followUsers"
-            :key="user.userId"
-            :to="`/user-home/article/${user.userId}`"
+            :key="user.userId || user.uuid"
+            :to="`/user-home/article/${user.userId || user.uuid}`"
             target="_blank"
             class="follow-user-item"
           >

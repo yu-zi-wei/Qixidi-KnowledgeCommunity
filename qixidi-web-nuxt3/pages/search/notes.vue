@@ -4,7 +4,7 @@
       <n-spin size="large" />
     </div>
     <div v-else-if="!timeNotesGroups.length" class="notes-search-empty">
-      <n-empty :description="keyword ? '未找到相关小记' : '请输入搜索关键词'" />
+      <CommonEmptyState :description="keyword ? '未找到相关小记' : '请输入搜索关键词'" />
     </div>
     <template v-else>
       <div

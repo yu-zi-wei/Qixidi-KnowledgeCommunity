@@ -14,6 +14,8 @@ export const useReadingEssaysApi = () => {
     albumId?: number
     author?: string
     label?: string
+    uid?: string
+    content?: string
   }) => {
     return await api.getPage<{ total: number; rows: ReadingEssaysInfo[] }>(
       '/white/dictum/info/list',

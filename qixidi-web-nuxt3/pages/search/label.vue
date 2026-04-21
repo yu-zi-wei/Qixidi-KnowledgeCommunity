@@ -4,7 +4,7 @@
       <n-spin size="large" />
     </div>
     <div v-else-if="!labelList.length" class="search-empty">
-      <n-empty :description="keyword ? '未找到相关标签' : '请输入搜索关键词'" />
+      <CommonEmptyState :description="keyword ? '未找到相关标签' : '请输入搜索关键词'" />
     </div>
     <LabelCardList v-else :list="labelList" />
   </div>

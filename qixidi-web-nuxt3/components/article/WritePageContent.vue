@@ -144,7 +144,7 @@
           <div class="config-section">
             <label class="section-label">标签 <span class="required">*</span></label>
             <n-select
-              v-model:value="formData.labelIds"
+              v-model:value="selectedLabelIds"
               :options="labelOptions"
               placeholder="选择标签（最多3个）"
               multiple
@@ -292,7 +292,7 @@ const currentArticleId = computed(() => props.articleId || route.params.id as st
 
 // 加载文章数据（如果提供了 ID）
 const { data: articleDetail } = await useAsyncData(
-  computed(() => currentArticleId.value ? `article-${currentArticleId.value}` : 'article-new'),
+  computed(() => currentArticleId.value ? `article-edit-${currentArticleId.value}` : 'article-edit-new'),
   () => currentArticleId.value ? articleApi.getDetail(currentArticleId.value) : Promise.resolve(null)
 )
 
@@ -314,6 +314,9 @@ const initialArticle = computed(() => {
     abstractSelect: data.abstractSelect !== undefined ? data.abstractSelect : true
   }
 })
+
+// 标签选择（直接从已加载的 initialArticle 初始化，不依赖 watch）
+const selectedLabelIds = ref<number[]>(initialArticle.value?.labelIds || [])
 
 // 分类选项
 const groupingOptions = computed(() =>
@@ -406,12 +409,11 @@ const handleSelectCategory = (categoryId: number) => {
 
 // 标签选择限制（最多3个）
 const handleLabelChange = (value: number[]) => {
-  const form = formData.value
-  if (form && value.length > 3) {
-    form.labelIds = value.slice(0, 3)
+  if (value.length > 3) {
+    selectedLabelIds.value = value.slice(0, 3)
     message.warning('最多只能选择3个标签')
   } else {
-    form.labelIds = value
+    selectedLabelIds.value = value
   }
 }
 
@@ -425,6 +427,7 @@ const handleQuickSaveDraft = async () => {
 
   try {
     form.status = 0
+    form.labelIds = selectedLabelIds.value
     const result = await articleApi.saveDraft(form)
 
     // 保存返回的 ID 到表单，后续操作都是更新而非新增
@@ -452,7 +455,7 @@ const validateForm = (): boolean => {
     message.error('请选择分类')
     return false
   }
-  if (!form?.labelIds || form.labelIds.length === 0) {
+  if (!selectedLabelIds.value || selectedLabelIds.value.length === 0) {
     message.error('请选择至少一个标签')
     return false
   }
@@ -479,6 +482,7 @@ const handlePublish = async () => {
       try {
         const form = formData.value
         form.status = 1
+        form.labelIds = selectedLabelIds.value
 
         await articleApi.insertArticle(form)
         message.success(isEdit.value ? '文章更新成功！' : '文章发布成功！')

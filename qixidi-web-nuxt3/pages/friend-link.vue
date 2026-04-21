@@ -43,7 +43,7 @@
         <n-spin size="large" />
       </div>
       <div v-else-if="!friendLinks.length" class="fl-empty">
-        <n-empty description="暂无友链" />
+        <CommonEmptyState description="暂无友链" />
       </div>
       <div v-else class="fl-grid">
         <a

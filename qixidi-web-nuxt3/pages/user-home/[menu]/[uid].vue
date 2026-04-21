@@ -3,9 +3,6 @@
     <div v-if="pending" class="loading-state">
       <n-spin size="large" />
     </div>
-    <div v-else-if="!currentMenu" class="empty-state">
-      <n-empty description="页面不存在" />
-    </div>
     <div v-else class="menu-content">
       <!-- 根据 jurisdiction 判断是否需要登录 -->
       <div v-if="currentMenu.jurisdiction === 1 && !authStore.isLoggedIn" class="login-prompt">
@@ -43,6 +40,10 @@ const currentMenu = computed(() => {
   const list = menuList.value || []
   return list.find((m: any) => m.route === menuRoute.value)
 })
+
+if (!pending.value && !currentMenu.value) {
+  throw createError({ statusCode: 404, statusMessage: '页面不存在' })
+}
 </script>
 
 <style scoped>
@@ -50,8 +51,7 @@ const currentMenu = computed(() => {
   min-height: 400px;
 }
 
-.loading-state,
-.empty-state {
+.loading-state {
   display: flex;
   align-items: center;
   justify-content: center;

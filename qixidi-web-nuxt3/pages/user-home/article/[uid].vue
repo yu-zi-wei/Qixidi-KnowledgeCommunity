@@ -20,7 +20,7 @@
 
     <!-- 空状态 -->
     <div v-else-if="!articleList.length" class="empty-state">
-      <n-empty :description="apiKeyword ? '没有找到相关文章' : '暂无文章'" />
+      <CommonEmptyState :description="apiKeyword ? '没有找到相关文章' : '暂无文章'" />
     </div>
 
     <!-- 文章列表 -->

@@ -553,6 +553,11 @@ const labelItems = computed(() => {
   /* Markdown 样式已在 main.css 中全局定义 */
 }
 
+.article-content :deep(p),
+.article-content :deep(li) {
+  line-height: 30px;
+}
+
 /* 响应式 */
 @media (max-width: 1024px) {
   .article-actions-sidebar {

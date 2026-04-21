@@ -530,10 +530,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (StringUtils.isNotBlank(details.getLabelId())) {
             List<LabelInfo> labelInfos = labelInfoMapper.selectList();
             Map<String, String> map = labelInfos.stream().collect(Collectors.toMap(LabelInfo::getIdStr, LabelInfo::getLabelName));
-            List<String> strings = Arrays.asList(details.getLabelId().split(","));
+            List<String> labelIds = Arrays.asList(details.getLabelId().split(","));
             List<LabelInfo> list = new ArrayList<>();
-
-            strings.forEach(item -> {
+            details.setLabelLongList(labelIds.stream().map(item -> Long.valueOf(item)).toList());
+            labelIds.forEach(item -> {
                 if (map.get(item) != null) {
                     LabelInfo labelInfo = new LabelInfo();
                     labelInfo.setId(Long.valueOf(item));
@@ -606,7 +606,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public Page<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
-        bo.setAuditState(ArticleAuditStateEnums.APPROV.getCode());
+//        bo.setAuditState(ArticleAuditStateEnums.APPROV.getCode());
         Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, pageQuery.build());
         return articleInfo;
     }

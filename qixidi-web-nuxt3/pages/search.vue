@@ -144,6 +144,7 @@ onMounted(() => {
 
   .search-results {
     padding: 16px;
+    padding-top: 60px;
   }
 }
 </style>

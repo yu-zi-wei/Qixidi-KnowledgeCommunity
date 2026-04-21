@@ -24,7 +24,7 @@
         <n-spin size="large" />
       </div>
       <div v-else-if="!tools.length" class="tool-empty">
-        <n-empty description="暂无工具" />
+        <CommonEmptyState description="暂无工具" />
       </div>
       <div v-else class="tool-grid">
         <a

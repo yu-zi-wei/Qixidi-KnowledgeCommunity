@@ -30,11 +30,11 @@
 
       <!-- 空状态 -->
       <div v-else-if="!filteredList.length" class="empty-state">
-        <n-empty :description="searchKeyword ? '未找到匹配的收藏夹' : '暂无收藏夹'">
+        <CommonEmptyState :description="searchKeyword ? '未找到匹配的收藏夹' : '暂无收藏夹'">
           <template v-if="!searchKeyword" #extra>
             <n-button type="primary" @click="handleCreate">立即创建</n-button>
           </template>
-        </n-empty>
+        </CommonEmptyState>
       </div>
 
       <!-- 列表 -->

@@ -4,7 +4,7 @@
       <n-spin size="large" />
     </div>
     <div v-else-if="!userList.length" class="search-empty">
-      <n-empty :description="keyword ? '未找到相关用户' : '请输入搜索关键词'" />
+      <CommonEmptyState :description="keyword ? '未找到相关用户' : '请输入搜索关键词'" />
     </div>
     <div v-else class="user-results">
       <div v-for="user in userList" :key="user.uuid" class="user-result-card">

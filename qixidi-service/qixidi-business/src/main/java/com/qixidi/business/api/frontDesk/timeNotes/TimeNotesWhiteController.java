@@ -2,6 +2,7 @@ package com.qixidi.business.api.frontDesk.timeNotes;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
@@ -45,4 +46,18 @@ public class TimeNotesWhiteController {
         return timeNotesService.list(bo, query.build());
     }
 
+    /**
+     * 小记归档
+     *
+     * @return
+     */
+    @PostMapping("/archive")
+    public TableDataInfo<TimeNotesVo> archive(@RequestBody TimeNotesSearchBo bo) {
+        PageQuery query = bo;
+        String tripartiteUuid = LoginHelper.getTripartiteUuid();
+        if (tripartiteUuid != null) {
+            bo.setUid(Long.valueOf(tripartiteUuid));
+        }
+        return timeNotesService.list(bo, query.build());
+    }
 }

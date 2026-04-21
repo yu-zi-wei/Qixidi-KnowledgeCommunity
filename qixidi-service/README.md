@@ -4,7 +4,7 @@
 
 1、加作者微信：zsh2978824265，获取获取数据库脚本、环境配置文件
 
-2、在本地创建数据库“aurora_admin”，并执行SQL脚本生成对应的数据表。
+2、在本地创建数据库“qixidi_admin”，并执行SQL脚本生成对应的数据表。
 
 3、在qixidi-startup的resources目录下创建applicationConfig/dev文件
 

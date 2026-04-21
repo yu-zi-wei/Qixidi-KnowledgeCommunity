@@ -6,7 +6,7 @@
         <img :src="author.avatar" :alt="author.nickname" class="author-avatar" />
         <div class="author-info">
           <h4 class="author-name">{{ author.nickname }}</h4>
-          <p class="author-title">{{ author.occupation || '博主' }}</p>
+          <p class="author-title"><UserRoleBadge :role-id="author.roleId" /><span v-if="author.occupation">{{ author.occupation }}</span><span v-else>博主</span></p>
         </div>
       </NuxtLink>
 
@@ -41,9 +41,7 @@
     <!-- 特殊卡片 - 平台介绍 -->
     <div v-else-if="specialCard?.type === 'platform'" class="sidebar-card platform-card">
       <div class="platform-header">
-        <svg class="platform-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-          <path d="M844.288 514.56c-52.736-27.392-201.216-35.84-201.216-35.84s152.576-4.352 240.896-33.536c0 0 102.656-40.96 68.864-162.048 0 0-20.736-63.488-132.864-75.264 0 0 9.984-83.968-70.656-132.352 0 0-56.832-34.304-141.056 17.92-71.936 52.224-80.64 234.752-81.152 246.272 0.512-11.008 6.144-177.664-33.792-249.088 0 0-42.752-99.072-164.096-48.128 0 0-102.912 33.024-81.664 128 0 0-150.272-31.744-171.008 111.104 0 0-17.92 116.224 109.568 141.568 41.472 10.24 182.016 32.768 182.016 32.768S79.872 429.312 65.792 569.344c0 0-24.32 131.584 125.184 128.256 0 0-16.128 98.816 79.36 131.328 0.256-0.256 127.232 36.608 187.648-124.928 13.312-37.632 24.576-63.488 30.976-128.256 0 0 2.304 256.512-214.272 387.072l72.192 43.008s157.696-154.88 160-409.6c-0.256-13.568-0.256-21.76-0.256-21.76 0.256 7.424 0.256 14.592 0.256 21.76 1.024 50.176 8.704 173.056 52.992 219.392 0 0 63.232 87.04 172.544 41.984 0 0 65.28-23.808 65.792-109.824 0 0 100.864 15.104 122.88-88.832-0.512 0 29.184-91.648-76.8-144.384z m0 0" fill="#3d5a80"/>
-        </svg>
+        <img src="/images/logo.svg" alt="栖息地" class="platform-icon" />
         <div class="platform-info">
           <h4 class="platform-name">{{ siteName }}</h4>
           <p class="platform-desc">专注分享，记录成长</p>
@@ -188,9 +186,18 @@ const toggleFollow = async () => {
     return
   }
 
-  // TODO: 调用关注接口
+  const followApi = useFollowApi()
+  const userId = author.value.userId
   const newState = !author.value.isFollow
-  author.value.isFollow = newState
+
+  try {
+    if (newState) {
+      await followApi.addFollow(userId, 1)
+    } else {
+      await followApi.cancelFollow(userId, 1)
+    }
+    author.value.isFollow = newState
+  } catch {}
 }
 
 // 动画相关
@@ -444,6 +451,9 @@ onMounted(() => {
 }
 
 .author-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   color: var(--color-ink-muted);
   margin: 0;
@@ -565,9 +575,7 @@ onMounted(() => {
   width: 42px;
   height: 42px;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: contain;
 }
 
 .platform-info {

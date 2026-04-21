@@ -7,7 +7,7 @@
 
     <!-- 空状态 -->
     <div v-else-if="!specialList.length" class="special-empty">
-      <n-empty description="暂无专栏" />
+      <CommonEmptyState description="暂无专栏" />
     </div>
 
     <!-- 专栏列表（可滚动） -->

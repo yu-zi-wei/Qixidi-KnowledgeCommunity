@@ -15,7 +15,7 @@
           </template>
         </n-input>
         <n-button @click="handleSearch">搜索</n-button>
-        <n-button type="primary" @click="handleCreate">
+        <n-button v-if="authStore.isCreator" type="primary" @click="handleCreate">
           <template #icon>
             <n-icon><Plus /></n-icon>
           </template>
@@ -45,7 +45,7 @@
 
       <!-- 空状态 -->
       <div v-else-if="!articleList.length" class="empty-state">
-        <n-empty description="暂无文章" />
+        <CommonEmptyState description="暂无文章" />
       </div>
 
       <!-- 文章列表 -->
@@ -147,6 +147,7 @@ definePageMeta({ layout: 'admin', middleware: 'creator' })
 const route = useRoute()
 const router = useRouter()
 const message = useMessage()
+const authStore = useAuthStore()
 const articleApi = useAdminArticleApi()
 
 // 状态 Tab 配置

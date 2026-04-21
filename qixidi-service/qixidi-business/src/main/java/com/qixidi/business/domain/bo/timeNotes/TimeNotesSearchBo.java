@@ -9,8 +9,14 @@ import lombok.Data;
  */
 @Data
 public class TimeNotesSearchBo extends PageQuery {
+
     /**
      * 标题
      */
     private String title;
+
+    /**
+     * uid
+     */
+    private Long uid;
 }

@@ -9,7 +9,7 @@ import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 import { visit } from 'unist-util-visit'
 import type { Plugin, Transformer } from 'unified'
-import type { Root, Element } from 'hast'
+import type { Root } from 'hast'
 
 /**
  * 视频链接识别
@@ -66,7 +66,6 @@ const remarkVideo: Plugin = (): Transformer => {
         // 处理 @[video](url) 语法
         if (child.type === 'text') {
           const text = child.value
-          // @[video](url) 或 @[video title="xxx"](url) 或 @[video poster="xxx"](url)
           const regex = /@\[video(?:\s+title="([^"]*)")?(?:\s+poster="([^"]*)")?\]\(([^)]+)\)/g
           let lastIndex = 0
           let match
@@ -119,7 +118,7 @@ const remarkVideo: Plugin = (): Transformer => {
 }
 
 /**
- * 自定义 sanitize schema，允许视频 embed div 和标题 id
+ * 自定义 sanitize schema
  */
 const videoSanitizeSchema = {
   tagNames: [
@@ -160,11 +159,11 @@ export const useMarkdown = () => {
     const processor = unified()
       .use(remarkParse)
       .use(remarkGfm)
-      .use(remarkVideo)          // 解析视频语法
+      .use(remarkVideo)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeSlug)
       .use(rehypeRaw)
-      .use(rehypeSanitize, videoSanitizeSchema as any)  // 使用自定义 schema
+      .use(rehypeSanitize, videoSanitizeSchema as any)
 
     if (includeHighlight && import.meta.client) {
       processor.use(rehypeHighlight, { detect: true, subset: false })

@@ -4,7 +4,7 @@
       <n-spin size="large" />
     </div>
     <div v-else-if="!articleList.length" class="search-empty">
-      <n-empty :description="keyword ? '未找到相关文章' : '请输入搜索关键词'" />
+      <CommonEmptyState :description="keyword ? '未找到相关文章' : '请输入搜索关键词'" />
     </div>
     <ArticleList
       v-else
