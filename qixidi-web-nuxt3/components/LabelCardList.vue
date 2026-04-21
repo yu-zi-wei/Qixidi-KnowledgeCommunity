@@ -21,11 +21,12 @@
       </div>
       <n-button
         size="small"
-        :type="label.isFollow ? 'default' : 'primary'"
-        :loading="label._loading"
-        @click.prevent="toggleFollow(label)"
+        :type="isFollow(label.id) ? 'default' : 'primary'"
+        :loading="togglingId === label.id"
+        :disabled="togglingId !== null"
+        @click.prevent="handleToggle(label)"
       >
-        {{ label.isFollow ? '已关注' : '关注' }}
+        {{ isFollow(label.id) ? '已关注' : '关注' }}
       </n-button>
     </NuxtLink>
   </div>
@@ -42,10 +43,9 @@ interface LabelItem {
   followNumber?: number
   articleNumber?: number
   isFollow?: boolean
-  _loading?: boolean
 }
 
-defineProps<{
+const props = defineProps<{
   list: LabelItem[]
 }>()
 
@@ -53,22 +53,32 @@ const followApi = useFollowApi()
 const authStore = useAuthStore()
 const message = useMessage()
 
-const toggleFollow = async (item: LabelItem) => {
+const togglingId = ref<number | null>(null)
+const followState = reactive<Record<number, boolean>>({})
+
+const isFollow = (id: number) => {
+  if (followState[id] !== undefined) return followState[id]
+  return !!props.list.find(l => l.id === id)?.isFollow
+}
+
+const handleToggle = async (item: LabelItem) => {
   if (!authStore.isLoggedIn) {
     message.warning('请先登录')
     return
   }
-  item._loading = true
+  if (togglingId.value !== null) return
+  togglingId.value = item.id
+
+  const followed = isFollow(item.id)
   try {
-    if (item.isFollow) {
+    if (followed) {
       await followApi.cancelFollow(item.id, 2)
-      item.isFollow = false
     } else {
       await followApi.addFollow(item.id, 2)
-      item.isFollow = true
     }
+    followState[item.id] = !followed
   } finally {
-    item._loading = false
+    togglingId.value = null
   }
 }
 </script>

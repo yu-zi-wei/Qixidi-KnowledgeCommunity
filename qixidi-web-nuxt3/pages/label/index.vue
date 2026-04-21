@@ -29,7 +29,6 @@ interface LabelItem {
   followNumber?: number
   articleNumber?: number
   isFollow?: boolean
-  _loading?: boolean
 }
 
 const { data: rawData, pending } = await useAsyncData(
@@ -37,9 +36,13 @@ const { data: rawData, pending } = await useAsyncData(
   () => labelApi.getSystemLabels()
 )
 
-const labels = computed<LabelItem[]>(() =>
-  (rawData.value || []).map((l: any) => ({ ...l, _loading: false }))
-)
+const labels = ref<LabelItem[]>()
+
+watch(() => rawData.value, (data) => {
+  if (data) {
+    labels.value = [...data]
+  }
+}, { immediate: true })
 </script>
 
 <style>

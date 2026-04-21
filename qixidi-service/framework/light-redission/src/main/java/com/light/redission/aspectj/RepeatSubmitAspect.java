@@ -3,13 +3,13 @@ package com.light.redission.aspectj;
 import cn.dev33.satoken.SaManager;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.light.redission.annotation.RepeatSubmit;
 import com.light.core.constant.Constants;
 import com.light.core.core.domain.R;
 import com.light.core.utils.JsonUtils;
 import com.light.core.utils.ServletUtils;
 import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
+import com.light.redission.annotation.RepeatSubmit;
 import com.light.redission.utils.RedisUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -69,7 +69,7 @@ public class RepeatSubmitAspect {
             KEY_CACHE.set(cacheRepeatKey);
         } else {
             String message = repeatSubmit.message();
-            throw new Exception(message);
+            throw new ServiceException(message);
         }
     }
 
