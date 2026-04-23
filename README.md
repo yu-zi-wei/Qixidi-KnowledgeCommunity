@@ -124,45 +124,56 @@ qixidi/
 
 ### 前台页面截图（网站具体ui与截图可能存在部分差异，以实际网站ui为主）
 
-#### 网站首页
-
-![首页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%A6%96%E9%A1%B5.png)
-
-#### 名言广场
-
-![阅读随笔.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%98%85%E8%AF%BB%E9%9A%8F%E7%AC%94.png)
-
-![阅读随笔2.png](img%2F%E5%89%8D%E5%8F%B0%2F%E9%98%85%E8%AF%BB%E9%9A%8F%E7%AC%942.png)
-
-#### 名言空间
-
-![名言空间.png](img%2F%E5%89%8D%E5%8F%B0%2F%E5%90%8D%E8%A8%80%E7%A9%BA%E9%97%B4.png)
-
-#### 时光小记
-
-![时光小记.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%97%B6%E5%85%89%E5%B0%8F%E8%AE%B0.png)
-
-#### 文章详情页
-
-![文章详情.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85.png)
-
-#### 文章编辑/发布页
-
-![文章编辑.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E7%BC%96%E8%BE%91.png)
-![文章发布2.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E5%8F%91%E5%B8%832.png)
-![文章发布.png](img%2F%E5%89%8D%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E5%8F%91%E5%B8%83.png)
-
-#### 用户私信
-
-![私信.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%A7%81%E4%BF%A1.png)
-
-#### 用户后台
-
-![用户后台.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E5%90%8E%E5%8F%B0.png)
-
-#### 用户主页
-
-![用户主页.png](img%2F%E5%89%8D%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E4%B8%BB%E9%A1%B5.png)
+<table>
+<tr>
+<td><img src="img/前台/首页.png" alt="网站首页" /></td>
+<td><img src="img/前台/阅读随笔.png" alt="名言广场" /></td>
+</tr>
+<tr>
+<td align="center">网站首页</td>
+<td align="center">名言广场</td>
+</tr>
+<tr>
+<td><img src="img/前台/阅读随笔2.png" alt="名言广场" /></td>
+<td><img src="img/前台/名言空间.png" alt="名言空间" /></td>
+</tr>
+<tr>
+<td align="center">名言广场</td>
+<td align="center">名言空间</td>
+</tr>
+<tr>
+<td><img src="img/前台/时光小记.png" alt="时光小记" /></td>
+<td><img src="img/前台/文章详情.png" alt="文章详情页" /></td>
+</tr>
+<tr>
+<td align="center">时光小记</td>
+<td align="center">文章详情页</td>
+</tr>
+<tr>
+<td><img src="img/前台/文章编辑.png" alt="文章编辑" /></td>
+<td><img src="img/前台/文章发布2.png" alt="文章发布" /></td>
+</tr>
+<tr>
+<td align="center">文章编辑</td>
+<td align="center">文章发布</td>
+</tr>
+<tr>
+<td><img src="img/前台/文章发布.png" alt="文章发布" /></td>
+<td><img src="img/前台/私信.png" alt="用户私信" /></td>
+</tr>
+<tr>
+<td align="center">文章发布</td>
+<td align="center">用户私信</td>
+</tr>
+<tr>
+<td><img src="img/前台/用户后台.png" alt="用户后台" /></td>
+<td><img src="img/前台/用户主页.png" alt="用户主页" /></td>
+</tr>
+<tr>
+<td align="center">用户后台</td>
+<td align="center">用户主页</td>
+</tr>
+</table>
 
 ### 后台功能点
 
@@ -170,15 +181,32 @@ qixidi/
 
 ### 后台页面截图（网站具体ui与截图可能存在部分差异，以实际网站ui为主）
 
-![后台首页.png](img%2F%E5%90%8E%E5%8F%B0%2F%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5.png)
-
-![用户管理.png](img%2F%E5%90%8E%E5%8F%B0%2F%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
-
-![文章列为.png](img%2F%E5%90%8E%E5%8F%B0%2F%E6%96%87%E7%AB%A0%E5%88%97%E4%B8%BA.png)
-
-![系统任务.png](img%2F%E5%90%8E%E5%8F%B0%2F%E7%B3%BB%E7%BB%9F%E4%BB%BB%E5%8A%A1.png)
-
-![导航配置.png](img%2F%E5%90%8E%E5%8F%B0%2F%E5%AF%BC%E8%88%AA%E9%85%8D%E7%BD%AE.png)
+<table>
+<tr>
+<td><img src="img/后台/后台首页.png" alt="后台首页" /></td>
+<td><img src="img/后台/用户管理.png" alt="用户管理" /></td>
+</tr>
+<tr>
+<td align="center">后台首页</td>
+<td align="center">用户管理</td>
+</tr>
+<tr>
+<td><img src="img/后台/文章列为.png" alt="文章管理" /></td>
+<td><img src="img/后台/系统任务.png" alt="系统任务" /></td>
+</tr>
+<tr>
+<td align="center">文章管理</td>
+<td align="center">系统任务</td>
+</tr>
+<tr>
+<td><img src="img/后台/导航配置.png" alt="导航配置" /></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">导航配置</td>
+<td></td>
+</tr>
+</table>
 
 ## 最后☕
 
