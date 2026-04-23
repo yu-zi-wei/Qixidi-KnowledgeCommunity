@@ -50,11 +50,11 @@
 
     <!-- 统计信息 -->
     <div class="essay-stats">
-      <span class="stat-item">
+      <span class="essay-detail-stat">
         <MessageCircle class="stat-icon" />
         {{ essay.commentSum || 0 }} 评论
       </span>
-      <span class="stat-item">
+      <span class="essay-detail-stat">
         <ThumbUp class="stat-icon" />
         {{ essay.helpSum || 0 }} 赞
       </span>
@@ -214,7 +214,7 @@ const handleCommentAdded = () => {
   border-top: 1px solid var(--color-border-light);
 }
 
-.stat-item {
+.essay-detail-stat {
   display: flex;
   align-items: center;
   gap: 6px;

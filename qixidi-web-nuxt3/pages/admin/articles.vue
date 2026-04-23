@@ -28,7 +28,7 @@
         <div
           v-for="tab in statusTabs"
           :key="String(tab.value)"
-          :class="['tab-item', { active: currentStatus === tab.value }]"
+          :class="['admin-article-tab', { active: currentStatus === tab.value }]"
           @click="handleTabChange(tab.value)"
         >
           {{ tab.label }}
@@ -309,7 +309,7 @@ onMounted(() => fetchArticles())
   border-bottom: 1px solid var(--color-border-light);
 }
 
-.status-tabs .tab-item {
+.status-tabs .admin-article-tab {
   position: relative;
   padding: 8px 4px 12px;
   font-size: var(--text-sm);
@@ -320,18 +320,18 @@ onMounted(() => fetchArticles())
   transition: color var(--transition-base);
 }
 
-.status-tabs .tab-item:hover {
+.status-tabs .admin-article-tab:hover {
   background: transparent;
   color: var(--color-ink-light);
 }
 
-.status-tabs .tab-item.active {
+.status-tabs .admin-article-tab.active {
   background: transparent;
   color: var(--color-primary);
   font-weight: 500;
 }
 
-.status-tabs .tab-item.active::after {
+.status-tabs .admin-article-tab.active::after {
   content: '';
   position: absolute;
   bottom: -1px;

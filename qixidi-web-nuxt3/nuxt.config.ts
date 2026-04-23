@@ -125,8 +125,9 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        // 内联所有依赖，避免 Windows junction/symlink 导致 zip 复制丢文件
-        noExternals: true,
+        // 生产构建时内联所有依赖，避免 Windows junction/symlink 导致 zip 复制丢文件
+        // dev 模式下不能开启，否则会导致模块加载异常
+        noExternals: process.env.NODE_ENV === 'production',
         devProxy: {
             '/api': {
                 target: 'http://127.0.0.1:9001',

@@ -64,11 +64,11 @@
                 </p>
                 <div class="collection-footer">
                   <div class="collection-meta">
-                    <span class="meta-item">
+                    <span class="fav-meta-item">
                       <n-icon><FileText /></n-icon>
                       {{ item.includedCount || 0 }} 篇文章
                     </span>
-                    <span class="meta-item" :title="getFullDateTime(item.createTime)">
+                    <span class="fav-meta-item" :title="getFullDateTime(item.createTime)">
                       <n-icon><Calendar /></n-icon>
                       {{ formatTime(item.createTime) }}
                     </span>
@@ -410,7 +410,7 @@ onMounted(() => fetchList())
   gap: 12px;
 }
 
-.meta-item {
+.fav-meta-item {
   display: flex;
   align-items: center;
   gap: 4px;

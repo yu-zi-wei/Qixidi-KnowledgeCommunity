@@ -61,11 +61,11 @@
               <p class="album-desc" v-if="album.briefIntroduction">{{ album.briefIntroduction }}</p>
               <div class="album-footer">
                 <div class="album-meta">
-                  <span class="meta-item">
+                  <span class="album-meta-item">
                     <n-icon><FileText /></n-icon>
                     {{ album.employSum || 0 }} 篇
                   </span>
-                  <span class="meta-item" :title="getFullDateTime(album.createTime)">
+                  <span class="album-meta-item" :title="getFullDateTime(album.createTime)">
                     <n-icon><Calendar /></n-icon>
                     {{ formatTime(album.createTime) }}
                   </span>
@@ -475,7 +475,7 @@ onMounted(() => fetchList())
   gap: var(--space-3);
 }
 
-.meta-item {
+.album-meta-item {
   display: flex;
   align-items: center;
   gap: 4px;

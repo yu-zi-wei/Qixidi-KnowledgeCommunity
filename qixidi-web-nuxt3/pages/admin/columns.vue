@@ -67,11 +67,11 @@
               </p>
               <div class="special-footer">
                 <div class="special-meta">
-                  <span class="meta-item">
+                  <span class="column-meta-item">
                     <n-icon><FileText /></n-icon>
                     {{ special.includedCount || 0 }} 篇文章
                   </span>
-                  <span class="meta-item" :title="getFullDateTime(special.createTime)">
+                  <span class="column-meta-item" :title="getFullDateTime(special.createTime)">
                     <n-icon><Calendar /></n-icon>
                     {{ formatTime(special.createTime) }}
                   </span>
@@ -502,7 +502,7 @@ onMounted(() => fetchSpecialList())
   gap: 12px;
 }
 
-.meta-item {
+.column-meta-item {
   display: flex;
   align-items: center;
   gap: 4px;

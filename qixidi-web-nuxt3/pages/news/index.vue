@@ -5,7 +5,7 @@
       <template v-for="tab in tabs" :key="tab.type">
         <span
           v-if="tab.type === 4 && isMobile"
-          class="tab-item disabled"
+          class="news-tab disabled"
         >
           <span class="tab-label">{{ tab.label }}</span>
           <span v-if="getUnreadCount(tab.type) > 0" class="tab-badge">
@@ -15,7 +15,7 @@
         <NuxtLink
           v-else
           :to="{ path: '/news', query: tab.type === 1 ? undefined : { type: tab.type } }"
-          class="tab-item"
+          class="news-tab"
           :class="{ active: currentType === tab.type }"
           @click.prevent="switchTab(tab.type)"
         >
@@ -592,7 +592,7 @@ useHead({
   align-self: flex-start;
 }
 
-.tab-item {
+.news-tab {
   position: relative;
   display: flex;
   align-items: center;
@@ -609,19 +609,19 @@ useHead({
   white-space: nowrap;
 }
 
-.tab-item:hover:not(.disabled) {
+.news-tab:hover:not(.disabled) {
   background: var(--color-surface-dim);
   color: var(--color-ink);
 }
 
-.tab-item.active {
+.news-tab.active {
   background: var(--color-primary-light);
   color: var(--color-primary);
   font-weight: 500;
   border-left-color: var(--color-primary);
 }
 
-.tab-item.disabled {
+.news-tab.disabled {
   opacity: 0.4;
   cursor: default;
 }
@@ -1252,7 +1252,7 @@ useHead({
     z-index: 40;
   }
 
-  .tab-item {
+  .news-tab {
     padding: 6px 14px;
     font-size: 13px;
     border-left: none;
@@ -1260,7 +1260,7 @@ useHead({
     border-radius: var(--radius-sm);
   }
 
-  .tab-item.active {
+  .news-tab.active {
     border-left-color: transparent;
     border-bottom-color: var(--color-primary);
   }

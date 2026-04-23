@@ -17,7 +17,7 @@
       <div v-for="user in users" :key="user.uuid" class="user-card">
         <div class="user-top">
           <NuxtLink :to="`/user-home/article/${user.uuid}`" target="_blank" class="user-avatar-link">
-            <img :src="user.avatar || '/images/default-avatar.png'" :alt="user.nickname" class="user-avatar" />
+            <img :src="user.avatar || '/images/default-avatar.png'" :alt="user.nickname" class="users-page-avatar" />
           </NuxtLink>
           <div class="user-main">
             <NuxtLink :to="`/user-home/article/${user.uuid}`" target="_blank" class="user-name">
@@ -46,23 +46,23 @@
         <p v-if="user.introduce" class="user-bio">{{ user.introduce }}</p>
 
         <div class="user-stats">
-          <div class="stat-item">
+          <div class="users-stat">
             <span class="stat-num">{{ user.articleCount || 0 }}</span>
             <span class="stat-label">文章</span>
           </div>
-          <div class="stat-item">
+          <div class="users-stat">
             <span class="stat-num">{{ user.timeNotesCount || 0 }}</span>
             <span class="stat-label">小记</span>
           </div>
-          <div class="stat-item">
+          <div class="users-stat">
             <span class="stat-num">{{ user.dictumCount || 0 }}</span>
             <span class="stat-label">随笔</span>
           </div>
-          <div class="stat-item">
+          <div class="users-stat">
             <span class="stat-num">{{ user.fansFollowCount || 0 }}</span>
             <span class="stat-label">粉丝</span>
           </div>
-          <div class="stat-item">
+          <div class="users-stat">
             <span class="stat-num">{{ user.fansFabulousCount || 0 }}</span>
             <span class="stat-label">获赞</span>
           </div>
@@ -195,7 +195,7 @@ const handleToggle = async (user: any) => {
   flex-shrink: 0;
 }
 
-.user-avatar {
+.users-page-avatar {
   width: 48px;
   height: 48px;
   border-radius: var(--radius-full);
@@ -266,7 +266,7 @@ const handleToggle = async (user: any) => {
   border-top: 1px solid var(--color-border-light);
 }
 
-.stat-item {
+.users-stat {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -278,7 +278,7 @@ const handleToggle = async (user: any) => {
   transition: background var(--transition-fast);
 }
 
-.stat-item:hover {
+.users-stat:hover {
   background: var(--color-surface-dim);
 }
 

@@ -28,11 +28,11 @@
               {{ albumData.briefIntroduction }}
             </p>
             <div class="album-meta">
-              <span class="stat-item">
+              <span class="album-stat">
                 <n-icon><FileText /></n-icon>
                 {{ albumData.employSum || 0 }} 篇随笔
               </span>
-              <span class="stat-item" v-if="albumData.createTime" :title="getFullDateTime(albumData.createTime)">
+              <span class="album-stat" v-if="albumData.createTime" :title="getFullDateTime(albumData.createTime)">
                 <n-icon><Calendar /></n-icon>
                 {{ formatTime(albumData.createTime) }}
               </span>
@@ -86,11 +86,11 @@
               <!-- 底部 -->
               <div class="essay-footer">
                 <div class="footer-left">
-                  <span class="stat-item">
+                  <span class="album-stat">
                     <n-icon><MessageCircle /></n-icon>
                     {{ essay.commentSum || 0 }}
                   </span>
-                  <span class="stat-item" :title="getFullDateTime(essay.createTime)">
+                  <span class="album-stat" :title="getFullDateTime(essay.createTime)">
                     <n-icon><Calendar /></n-icon>
                     {{ formatTime(essay.createTime) }}
                   </span>
@@ -271,7 +271,7 @@ useHead(() => ({
   gap: 16px;
 }
 
-.stat-item {
+.album-stat {
   display: flex;
   align-items: center;
   gap: 4px;

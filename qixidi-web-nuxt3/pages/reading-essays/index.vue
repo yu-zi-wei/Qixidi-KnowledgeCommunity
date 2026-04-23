@@ -565,7 +565,7 @@ onMounted(async () => {
   padding-top: 8px;
 }
 
-.stat-item {
+.re-stat {
   display: flex;
   align-items: center;
   gap: 8px;

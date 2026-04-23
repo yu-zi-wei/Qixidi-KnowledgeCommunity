@@ -25,7 +25,7 @@
     <!-- 底部栏 -->
     <div class="reading-essays-footer">
       <div class="footer-left">
-        <span v-if="readingEssay.commentSum !== undefined" class="stat-item" title="评论">
+        <span v-if="readingEssay.commentSum !== undefined" class="essay-card-stat" title="评论">
           <MessageCircle class="stat-icon" />
           {{ readingEssay.commentSum }}
         </span>
@@ -231,7 +231,7 @@ onMounted(() => {
 }
 
 /* 统计项 */
-.stat-item {
+.essay-card-stat {
   display: flex;
   align-items: center;
   gap: 4px;

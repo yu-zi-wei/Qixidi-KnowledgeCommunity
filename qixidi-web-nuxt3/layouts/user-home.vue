@@ -12,7 +12,7 @@
                 主页
               </NuxtLink>
               <div class="user-avatar-wrap">
-                <img v-if="userInfo.avatar" :src="userInfo.avatar" :alt="userInfo.nickname || userInfo.username" class="user-avatar" />
+                <img v-if="userInfo.avatar" :src="userInfo.avatar" :alt="userInfo.nickname || userInfo.username" class="user-home-avatar" />
                 <div v-else class="user-avatar user-avatar-placeholder">
                   <n-icon size="36"><User /></n-icon>
                 </div>
@@ -319,7 +319,7 @@ const handlePrivateMsg = async () => {
   height: 52px;
 }
 
-.user-avatar {
+.user-home-avatar {
   width: 52px;
   height: 52px;
   border-radius: var(--radius-full);

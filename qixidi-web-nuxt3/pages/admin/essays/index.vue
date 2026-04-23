@@ -28,7 +28,7 @@
         <span
           v-for="tab in statusTabs"
           :key="tab.value"
-          class="tab-item"
+          class="admin-essay-tab"
           :class="{ active: currentStatus === tab.value }"
           @click="handleTabChange(tab.value)"
         >
@@ -327,7 +327,7 @@ onMounted(() => fetchList())
   gap: var(--space-1);
 }
 
-.tab-item {
+.admin-essay-tab {
   padding: 4px 12px;
   font-size: var(--text-sm);
   color: var(--color-ink-muted);
@@ -337,12 +337,12 @@ onMounted(() => fetchList())
   user-select: none;
 }
 
-.tab-item:hover {
+.admin-essay-tab:hover {
   color: var(--color-ink);
   background: var(--color-surface-dim);
 }
 
-.tab-item.active {
+.admin-essay-tab.active {
   color: var(--color-primary);
   background: var(--color-primary-light);
   font-weight: 500;

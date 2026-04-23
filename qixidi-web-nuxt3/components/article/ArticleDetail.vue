@@ -47,7 +47,7 @@
         </div>
 
         <div class="meta-right">
-          <span class="meta-item">
+          <span class="article-meta-item">
             <Eye class="meta-icon" />
             {{ article.numberTimes }}
           </span>
@@ -455,7 +455,7 @@ const labelItems = computed(() => {
   gap: 16px;
 }
 
-.meta-item {
+.article-meta-item {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -467,7 +467,7 @@ const labelItems = computed(() => {
   transition: all 0.2s ease;
 }
 
-.meta-item:hover {
+.article-meta-item:hover {
   background: rgba(154, 113, 88, 0.08);
   color: var(--color-primary);
 }

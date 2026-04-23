@@ -6,7 +6,7 @@
       <NuxtLink
         v-for="tab in fixedTabs"
         :key="tab.key"
-        class="tab-item"
+        class="content-tab"
         :class="{ active: activeFixed === tab.key }"
         :to="tab.to"
       >
@@ -22,7 +22,7 @@
       <NuxtLink
         v-for="label in labels"
         :key="label.id"
-        class="tab-item"
+        class="content-tab"
         :class="{ active: activeGroupingId === label.id }"
         :to="`/category/${label.id}`"
       >
@@ -159,7 +159,7 @@ onMounted(() => {
   gap: var(--space-2);
 }
 
-.tab-item {
+.content-tab {
   padding: 7px 14px;
   font-size: 13px;
   color: var(--color-ink-light);
@@ -176,12 +176,12 @@ onMounted(() => {
   align-items: center;
 }
 
-.tab-item:hover {
+.content-tab:hover {
   background: var(--color-surface-dim);
   color: var(--color-ink);
 }
 
-.tab-item.active {
+.content-tab.active {
   background: var(--color-surface-dim);
   color: var(--color-ink);
   font-weight: 500;
@@ -198,7 +198,7 @@ onMounted(() => {
 
 /* ==================== 移动端适配 ==================== */
 @media (max-width: 768px) {
-  .tab-item {
+  .content-tab {
     white-space: normal;
   }
 

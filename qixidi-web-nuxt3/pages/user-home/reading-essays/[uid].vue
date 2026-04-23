@@ -43,15 +43,15 @@
 
             <div class="essay-footer">
               <div class="footer-left">
-                <span class="stat-item">
+                <span class="user-essay-stat">
                   <n-icon size="14"><Heart /></n-icon>
                   {{ essay.helpSum || 0 }}
                 </span>
-                <span class="stat-item">
+                <span class="user-essay-stat">
                   <n-icon size="14"><MessageCircle /></n-icon>
                   {{ essay.commentSum || 0 }}
                 </span>
-                <span class="stat-item" :title="getFullDateTime(essay.createTime)">
+                <span class="user-essay-stat" :title="getFullDateTime(essay.createTime)">
                   <n-icon size="14"><Calendar /></n-icon>
                   {{ formatTime(essay.createTime) }}
                 </span>
@@ -268,7 +268,7 @@ const handlePageChange = (page: number) => {
   gap: 12px;
 }
 
-.stat-item {
+.user-essay-stat {
   display: flex;
   align-items: center;
   gap: 4px;
