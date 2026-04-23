@@ -144,19 +144,19 @@
             </div>
             <!-- 统计 -->
             <div class="popover-stats">
-              <NuxtLink :to="`/user-home/article/${authStore.user?.uuid}`" class="stat-item">
+              <NuxtLink :to="`/user-home/article/${authStore.user?.uuid}`" class="popover-stat">
                 <span class="stat-num">{{ userStats?.articleCount || 0 }}</span>
                 <span class="stat-label">文章</span>
               </NuxtLink>
-              <NuxtLink :to="`/user-home/time-notes/${authStore.user?.uuid}`" class="stat-item">
+              <NuxtLink :to="`/user-home/time-notes/${authStore.user?.uuid}`" class="popover-stat">
                 <span class="stat-num">{{ userStats?.timeNotesCount || 0 }}</span>
                 <span class="stat-label">小记</span>
               </NuxtLink>
-              <NuxtLink :to="`/user-home/reading-essays/${authStore.user?.uuid}`" class="stat-item">
+              <NuxtLink :to="`/user-home/reading-essays/${authStore.user?.uuid}`" class="popover-stat">
                 <span class="stat-num">{{ userStats?.dictumCount || 0 }}</span>
                 <span class="stat-label">随笔</span>
               </NuxtLink>
-              <NuxtLink :to="`/user-home/collection/${authStore.user?.uuid}`" class="stat-item">
+              <NuxtLink :to="`/user-home/collection/${authStore.user?.uuid}`" class="popover-stat">
                 <span class="stat-num">{{ userStats?.collectionCount || 0 }}</span>
                 <span class="stat-label">收藏</span>
               </NuxtLink>
@@ -611,7 +611,7 @@ onMounted(() => {
   border-bottom: 1px solid var(--color-border-light);
 }
 
-.popover-stats .stat-item {
+.popover-stats .popover-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -621,7 +621,7 @@ onMounted(() => {
   transition: background 0.15s;
 }
 
-.popover-stats .stat-item:hover {
+.popover-stats .popover-stat:hover {
   background: var(--color-surface-dim);
 }
 

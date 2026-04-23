@@ -413,4 +413,79 @@ useHead({
 
 ---
 
+## Scoped CSS 类名冲突（强制）
+
+**Nuxt SSR 下 scoped CSS 的注入顺序不稳定，不同组件使用相同类名会互相覆盖。**
+
+### 根因
+
+Vue scoped CSS 通过给元素添加 `data-v-xxx` 属性实现隔离，但 Nuxt SSR 在构建时合并所有组件的 CSS，注入顺序取决于组件加载顺序（路由、动态导入等）。当两个组件使用相同类名但样式不同时，**后注入的会覆盖先注入的**，导致样式随机错乱。
+
+### 禁止
+
+❌ 多个组件共用一个通用类名（如 `stat-item`、`card-item`、`meta-info`），各自定义不同样式：
+
+```vue
+<!-- ❌ 组件 A：水平排列 -->
+<style scoped>
+.stat-item { display: flex; align-items: center; }
+</style>
+
+<!-- ❌ 组件 B：垂直排列 -->
+<style scoped>
+.stat-item { display: flex; flex-direction: column; }
+</style>
+```
+
+两个组件的 `.stat-item` 会互相覆盖，哪个生效取决于路由和加载顺序。
+
+### 正确做法
+
+✅ 每个组件使用**带组件前缀的唯一类名**：
+
+```vue
+<!-- ✅ 组件 A -->
+<span class="article-stat">
+  <n-icon><Eye /></n-icon>
+  {{ article.views }}
+</span>
+
+<!-- ✅ 组件 B -->
+<div class="popover-stat">
+  <span class="stat-num">{{ count }}</span>
+  <span class="stat-label">文章</span>
+</div>
+
+<!-- ✅ 组件 C -->
+<div class="sidebar-stat">
+  <span class="stat-num">{{ count }}</span>
+</div>
+```
+
+### 命名规范
+
+| 模式 | 格式 | 示例 |
+|------|------|------|
+| 组件名 + 用途 | `{component}-{purpose}` | `article-stat`、`sidebar-stat` |
+| 页面名 + 用途 | `{page}-{purpose}` | `admin-stat`、`profile-stat` |
+| 弹窗/浮层 + 用途 | `{context}-{purpose}` | `popover-stat` |
+
+### 例外
+
+以下情况可以安全使用同名类：
+
+1. **全局样式**：`main.css` 中定义的类，所有组件共用同一套样式（如 `.article-stats`）
+2. **Tailwind 工具类**：如 `flex`、`gap-4`，本身就是单一样式
+
+### 检查清单
+
+新增组件或修改样式时：
+
+- [ ] 是否使用了其他组件已有的类名？（用 Grep 搜索确认）
+- [ ] 样式定义是否和全局 `main.css` 冲突？
+- [ ] 类名是否带组件/页面前缀？
+- [ ] 刷新页面后样式是否正常？（SSR 注入顺序可能和客户端路由不同）
+
+---
+
 **核心原则**：所有新代码必须支持双主题，禁止硬编码颜色，禁止瞎编接口字段名。

@@ -11,26 +11,26 @@
         <span>站点数据</span>
       </div>
       <div class="stats-grid">
-        <div class="stat-cell" style="--accent: #3b82f6">
+        <NuxtLink to="/users" class="stat-cell stat-link" style="--accent: #3b82f6">
           <span class="stat-num">{{ siteStatsData.userCount }}</span>
           <span class="stat-label">用户</span>
-        </div>
+        </NuxtLink>
         <div class="stat-cell" style="--accent: #8b5cf6">
           <span class="stat-num">{{ siteStatsData.articleCount }}</span>
           <span class="stat-label">文章</span>
         </div>
-        <div class="stat-cell" style="--accent: #f59e0b">
+        <NuxtLink to="/time-notes" class="stat-cell stat-link" style="--accent: #f59e0b">
           <span class="stat-num">{{ siteStatsData.timeNotesCount }}</span>
           <span class="stat-label">小记</span>
-        </div>
-        <div class="stat-cell" style="--accent: #10b981">
+        </NuxtLink>
+        <NuxtLink to="/reading-essays" class="stat-cell stat-link" style="--accent: #10b981">
           <span class="stat-num">{{ siteStatsData.dictumCount }}</span>
           <span class="stat-label">随笔</span>
-        </div>
-        <div class="stat-cell" style="--accent: #ec4899">
+        </NuxtLink>
+        <NuxtLink to="/label" class="stat-cell stat-link" style="--accent: #ec4899">
           <span class="stat-num">{{ siteStatsData.labelCount }}</span>
           <span class="stat-label">标签</span>
-        </div>
+        </NuxtLink>
         <div class="stat-cell" style="--accent: #06b6d4">
           <span class="stat-num">{{ siteStatsData.specialCount }}</span>
           <span class="stat-label">专栏</span>
@@ -324,6 +324,11 @@ const runningRemainDays = computed(() => {
 
 .stat-cell:hover {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.stat-link {
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .stat-num {

@@ -11,17 +11,17 @@
       </NuxtLink>
 
       <div class="author-stats">
-        <div class="stat-item">
+        <div class="sidebar-stat">
           <span class="stat-num">{{ authorStats.articleCount || 0 }}</span>
           <span class="stat-label">文章</span>
         </div>
         <div class="stat-divider"></div>
-        <div class="stat-item">
+        <div class="sidebar-stat">
           <span class="stat-num">{{ formatNumber(authorStats.fansFollowCount || 0) }}</span>
           <span class="stat-label">粉丝</span>
         </div>
         <div class="stat-divider"></div>
-        <div class="stat-item">
+        <div class="sidebar-stat">
           <span class="stat-num">{{ formatNumber(authorStats.fabulousCount || 0) }}</span>
           <span class="stat-label">获赞</span>
         </div>
@@ -478,7 +478,7 @@ onMounted(() => {
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
-.stat-item {
+.sidebar-stat {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

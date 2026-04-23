@@ -1,9 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from '@tailwindcss/vite'
 
-// 后端 API 地址常量
-const API_BASE_URL = 'http://127.0.0.1:9001'
-
 export default defineNuxtConfig({
     compatibilityDate: '2025-01-01',
     devtools: {enabled: true},
@@ -58,13 +55,10 @@ export default defineNuxtConfig({
     css: ['~/assets/css/tailwind.css', '~/assets/css/main.css'],
 
     runtimeConfig: {
-        // 服务端环境变量（SSR 时直接请求后端）
-        apiBase: process.env.NUXT_API_SERVER_URL || API_BASE_URL,
+        apiBase: 'http://127.0.0.1:9001',
         public: {
-            // 客户端环境变量（通过 devProxy 代理）
-            apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
-            // WebSocket 直连后端（不走 HTTP 代理）
-            wsBase: process.env.NUXT_PUBLIC_WS_BASE || API_BASE_URL,
+            apiBase: '/api',
+            wsBase: 'http://127.0.0.1:9001',
             appName: 'qixidi-blog',
             siteName: '栖息地'
         }
@@ -131,9 +125,11 @@ export default defineNuxtConfig({
     },
 
     nitro: {
+        // 内联所有依赖，避免 Windows junction/symlink 导致 zip 复制丢文件
+        noExternals: true,
         devProxy: {
             '/api': {
-                target: process.env.NUXT_API_SERVER_URL || API_BASE_URL,
+                target: 'http://127.0.0.1:9001',
                 changeOrigin: true
             }
         }

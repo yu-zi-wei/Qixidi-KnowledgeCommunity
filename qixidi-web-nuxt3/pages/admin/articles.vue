@@ -77,15 +77,15 @@
 
               <!-- 统计数据 -->
               <div class="article-stats">
-                <span class="stat-item">
+                <span class="admin-stat">
                   <n-icon><Eye /></n-icon>
                   {{ article.numberTimes || 0 }}
                 </span>
-                <span class="stat-item">
+                <span class="admin-stat">
                   <n-icon><Heart /></n-icon>
                   {{ article.likeTimes || 0 }}
                 </span>
-                <span class="stat-item">
+                <span class="admin-stat">
                   <n-icon><MessageCircle /></n-icon>
                   {{ article.commentTimes || 0 }}
                 </span>
@@ -480,7 +480,7 @@ onMounted(() => fetchArticles())
   gap: 16px;
 }
 
-.stat-item {
+.admin-stat {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -488,7 +488,7 @@ onMounted(() => fetchArticles())
   color: var(--color-ink-muted);
 }
 
-.stat-item .n-icon {
+.admin-stat .n-icon {
   font-size: 14px;
 }
 

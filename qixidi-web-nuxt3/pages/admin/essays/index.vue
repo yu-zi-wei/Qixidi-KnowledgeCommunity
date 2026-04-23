@@ -95,11 +95,11 @@
             <!-- 底部 -->
             <div class="essay-footer">
               <div class="footer-left">
-                <span class="stat-item">
+                <span class="admin-stat">
                   <n-icon><MessageCircle /></n-icon>
                   {{ essay.commentSum || 0 }}
                 </span>
-                <span class="stat-item" :title="getFullDateTime(essay.createTime)">
+                <span class="admin-stat" :title="getFullDateTime(essay.createTime)">
                   <n-icon><Calendar /></n-icon>
                   {{ formatTime(essay.createTime) }}
                 </span>
@@ -523,7 +523,7 @@ onMounted(() => fetchList())
   gap: var(--space-3);
 }
 
-.stat-item {
+.admin-stat {
   display: flex;
   align-items: center;
   gap: 4px;

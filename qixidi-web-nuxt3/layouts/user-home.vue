@@ -119,27 +119,27 @@
           <div class="stats-card" v-if="userInfo">
             <h3 class="stats-title">数据统计</h3>
             <div class="stats-grid">
-              <div class="stat-item">
+              <div class="profile-stat">
                 <span class="stat-value">{{ userInfo.articleCount || 0 }}</span>
                 <span class="stat-label">文章</span>
               </div>
-              <div class="stat-item">
+              <div class="profile-stat">
                 <span class="stat-value">{{ userInfo.dictumCount || 0 }}</span>
                 <span class="stat-label">随笔</span>
               </div>
-              <div class="stat-item">
+              <div class="profile-stat">
                 <span class="stat-value">{{ userInfo.timeNotesCount || 0 }}</span>
                 <span class="stat-label">小记</span>
               </div>
-              <div class="stat-item">
+              <div class="profile-stat">
                 <span class="stat-value">{{ userInfo.albumCount || 0 }}</span>
                 <span class="stat-label">专辑</span>
               </div>
-              <div class="stat-item">
+              <div class="profile-stat">
                 <span class="stat-value">{{ userInfo.specialColumnCount || 0 }}</span>
                 <span class="stat-label">专栏</span>
               </div>
-              <div class="stat-item">
+              <div class="profile-stat">
                 <span class="stat-value">{{ userInfo.fansFollowCount || 0 }}</span>
                 <span class="stat-label">关注者</span>
               </div>
@@ -468,7 +468,7 @@ const handlePrivateMsg = async () => {
   gap: 10px;
 }
 
-.stat-item {
+.profile-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -478,7 +478,7 @@ const handlePrivateMsg = async () => {
   transition: background var(--transition-fast);
 }
 
-.stat-item:hover {
+.profile-stat:hover {
   background: var(--color-surface-dim);
 }
 

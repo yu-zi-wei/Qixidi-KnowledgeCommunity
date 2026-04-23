@@ -31,15 +31,15 @@
         </h3>
         <p class="article-excerpt" :style="{ WebkitLineClamp: excerptLines }">{{ item.articleAbstract }}</p>
         <div class="article-stats">
-          <span class="stat-item">
+          <span class="article-stat">
             <Eye class="stat-icon" />
             {{ item.numberTimes || 0 }}
           </span>
-          <span class="stat-item">
+          <span class="article-stat">
             <Heart class="stat-icon" />
             {{ item.likeTimes || 0 }}
           </span>
-          <span class="stat-item">
+          <span class="article-stat">
             <MessageCircle class="stat-icon" />
             {{ item.commentTimes || 0 }}
           </span>
@@ -334,7 +334,7 @@ watch(() => props.articles.length, () => {
   border-top-color: #363a3e;
 }
 
-.stat-item {
+.article-stat {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -346,7 +346,7 @@ watch(() => props.articles.length, () => {
   border-radius: 6px;
 }
 
-.stat-item:hover {
+.article-stat:hover {
   color: var(--color-primary);
   background: var(--color-primary-light);
 }

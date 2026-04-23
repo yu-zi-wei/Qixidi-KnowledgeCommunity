@@ -11,5 +11,9 @@ export const useSiteApi = () => {
     return api.get<SiteInfo>('/white/site/info')
   }
 
-  return { getTotalData, getInfo }
+  const getUserAllList = () => {
+    return api.getPage<any>('/white/userAllList')
+  }
+
+  return { getTotalData, getInfo, getUserAllList }
 }
