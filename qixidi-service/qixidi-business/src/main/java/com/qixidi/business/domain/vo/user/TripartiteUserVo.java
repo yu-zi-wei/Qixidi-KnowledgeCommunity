@@ -4,7 +4,6 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
-import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.entity.user.UserInformation;
 import lombok.Data;
 
@@ -19,7 +18,9 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class TripartiteUserVo extends CountUserWebsiteEntity {
+public class TripartiteUserVo {
+
+    private String uuid;
 
     /**
      * 用户名
@@ -166,6 +167,22 @@ public class TripartiteUserVo extends CountUserWebsiteEntity {
      * 时间
      */
     private Date createTime;
+
+    // 统计字段
+    private int fabulousCount;
+    private int fansFabulousCount;
+    private int collectionCount;
+    private int followCount;
+    private int fansFollowCount;
+    private int commentCount;
+    private int fansCommentCount;
+    private int articleCount;
+    private int specialColumnCount;
+    private int fansSpecialColumn;
+    private int circleCount;
+    private int albumCount;
+    private int dictumCount;
+    private int timeNotesCount;
 
     public void fillUserInformation(UserInformation userInformation) {
         this.introduce = userInformation.getIntroduce();

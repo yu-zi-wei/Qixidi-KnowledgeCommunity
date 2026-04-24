@@ -10,11 +10,9 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserFollowBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.entity.user.UserFollow;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.user.IUserFollowService;
@@ -34,7 +32,6 @@ import java.util.concurrent.ExecutorService;
 public class UserFollowServiceImpl implements IUserFollowService {
 
     private final UserFollowMapper baseMapper;
-    private final CountUserWebsiteMapper countUserWebsiteMapper;
     private final LabelInfoMapper labelInfoMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     @Resource(name = "threadPoolInstance")
@@ -55,8 +52,6 @@ public class UserFollowServiceImpl implements IUserFollowService {
             throw new ServiceException("你已经关注了该对象");
         }
         if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) {//  用户关注
-            countUserWebsiteMapper.updateAdd(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
-            countUserWebsiteMapper.updateAdd(bo.getTargetId(), CountUserTypeEnums.FANS_FOLLOW_COUNT.getCode());
 //            发送消息
             executorService.execute(new Runnable() {
                 @Override
@@ -88,8 +83,6 @@ public class UserFollowServiceImpl implements IUserFollowService {
     public boolean cancelFollow(UserFollowBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
         if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注取消
-            countUserWebsiteMapper.updateDelete(bo.getUid(), CountUserTypeEnums.FOLLOW_COUNT.getCode());
-            countUserWebsiteMapper.updateDelete(bo.getTargetId(), CountUserTypeEnums.FANS_FOLLOW_COUNT.getCode());
         } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注取消
             labelInfoMapper.updateDeleteFollow(bo.getTargetId());
         }

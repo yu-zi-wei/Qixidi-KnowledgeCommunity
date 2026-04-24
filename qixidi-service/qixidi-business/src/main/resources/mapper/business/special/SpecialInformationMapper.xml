@@ -11,7 +11,6 @@
                si.uid,
                si.create_time,
                si.update_id,
-               si.included_count,
                si.update_time,
                um.nickname as username
         from b_special_information as si
@@ -33,11 +32,14 @@
           AND si.`state` = 0;
     </select>
 
-    <select id="selectSpecialTask" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        SELECT uid        as uuid,
-               count(uid) as specialColumnCount
-        FROM `b_special_information`
-        WHERE state = 0
+    <select id="selectSpecialCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT uid AS uuid, COUNT(*) AS specialColumnCount
+        FROM b_special_information
+        WHERE uid IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND state = 0
         GROUP BY uid
     </select>
 </mapper>

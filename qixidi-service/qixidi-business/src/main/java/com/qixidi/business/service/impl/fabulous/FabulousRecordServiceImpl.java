@@ -3,7 +3,6 @@ package com.qixidi.business.service.impl.fabulous;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,6 +16,7 @@ import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
@@ -147,93 +147,67 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
     @Override
     public void spotFabulous(FabulousRecordBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        log.info("点赞数据存入redis开始，articleId:{}，uid:{}，FabulousSum:{}", bo.getType(), bo.getUid(), bo.getFabulousSum());
-        synchronized (this) {
-            //            文章点赞总数加一
-            Map<String, Object> sumMap = new HashMap();
-            sumMap.put(bo.getTypeId().toString(), bo.getFabulousSum() + 1);
-            RedisUtils.setCacheMapValue(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey(), bo.getTypeId().toString(), bo.getFabulousSum() + 1);
-            //            我的点赞文章加一
-            Map<String, Set<String>> cacheMpa = new HashMap();
-            if (RedisUtils.hasKey(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey())) {
-                cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
-            }
-            Set<String> userFuSet = CollectionUtils.isEmpty(cacheMpa.get(bo.getUid())) ? new HashSet()
-                    : cacheMpa.get(bo.getUid());
-            userFuSet.add(bo.getTypeId().toString());
-            cacheMpa.put(bo.getUid(), userFuSet);
-            RedisUtils.setCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
+        log.info("点赞开始，typeId:{}，uid:{}", bo.getTypeId(), bo.getUid());
 
-            //文章点赞用户列表加1
-            Map<String, Set<String>> articleMap = new HashMap();
-            if (RedisUtils.hasKey(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey())) {
-                articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-            }
-            Set<String> articleSet = CollectionUtils.isEmpty(articleMap.get(bo.getTypeId().toString())) ? new HashSet()
-                    : articleMap.get(bo.getTypeId().toString());
-            articleSet.add(bo.getUid());
-            articleMap.put(bo.getTypeId().toString(), articleSet);
-            RedisUtils.setCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
-            //记录文章亲密度
-            articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), 2D);
-        }
+        // 1. 写 DB
+        FabulousRecord record = new FabulousRecord();
+        record.setUid(bo.getUid());
+        record.setTypeId(bo.getTypeId());
+        record.setTargetId(bo.getTargetId());
+        record.setTargetUid(bo.getTargetUid());
+        record.setType(bo.getType());
+        record.setState(CommonStatusEnums.NORMAL.getCode());
+        record.setCreateTime(new Date());
+        baseMapper.insert(record);
+
+        // 2. 写 Redis（点赞时间戳）
+        String redisKey = RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey();
+        RedisUtils.setCacheMapValue(redisKey, bo.getTypeId() + ":" + bo.getUid(), System.currentTimeMillis());
+
+        // 3. 记录文章亲密度
+        articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), 2D);
+
+        // 4. 通知
         if (bo.getUid().equals(bo.getTargetUid())) return;
-//        发送消息
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                NewsUserRecord newsUserRecord = new NewsUserRecord();
-                newsUserRecord.setUid(bo.getTargetUid());
-                newsUserRecord.setTargetId(bo.getTargetId());
-                newsUserRecord.setTargetUid(bo.getUid());
-                newsUserRecord.setType(NewsType.FABULOUS_NEWS.getCode());
-                newsUserRecord.setContent(bo.getTargetTitle());
-                newsUserRecord.setCreateTime(new Date());
-                newsUserRecordMapper.insert(newsUserRecord);
-                //WebSocket推送消息
-                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
-            }
+        executorService.execute(() -> {
+            NewsUserRecord newsUserRecord = new NewsUserRecord();
+            newsUserRecord.setUid(bo.getTargetUid());
+            newsUserRecord.setTargetId(bo.getTargetId());
+            newsUserRecord.setTargetUid(bo.getUid());
+            newsUserRecord.setType(NewsType.FABULOUS_NEWS.getCode());
+            newsUserRecord.setContent(bo.getTargetTitle());
+            newsUserRecord.setCreateTime(new Date());
+            newsUserRecordMapper.insert(newsUserRecord);
+            WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
         });
     }
 
     @Override
     public void cancelFabulous(FabulousRecordBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        log.info("取消点赞开始，articleId:{}，uid:{}，FabulousSum:{}", bo.getType(), bo.getUid(), bo.getFabulousSum());
-        synchronized (this) {
-            //            文章点赞总数减一
-            Map<String, Object> mapCount = new HashMap();
-            mapCount.put(bo.getTypeId().toString(), bo.getFabulousSum() - 1);
-            RedisUtils.setCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey(), mapCount);
-            //            用户点赞的文章减一
-            Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
-            Set<String> userFuSet = cacheMpa.get(bo.getUid());
-            userFuSet.remove(bo.getTypeId().toString());
-            cacheMpa.put(bo.getUid(), userFuSet);
-            RedisUtils.setCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey(), cacheMpa);
+        log.info("取消点赞开始，typeId:{}，uid:{}", bo.getTypeId(), bo.getUid());
 
-            //文章点赞人加一
-            Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-            Set<String> articleSet = articleMap.get(bo.getTypeId().toString());
-            articleSet.remove(bo.getUid());
-            articleMap.put(bo.getTypeId().toString(), articleSet);
-            RedisUtils.setCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey(), articleMap);
-            //记录亲密度
-            articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), -2D);
-            //发送消息
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
-                            .eq(NewsUserRecord::getTargetUid, bo.getUid())
-                            .eq(NewsUserRecord::getUid, bo.getTargetUid())
-                            .eq(NewsUserRecord::getType, NewsType.FABULOUS_NEWS.getCode()));
-                    //WebSocket推送消息
-                    WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
-                }
-            });
-        }
-        log.info("取消点赞结束");
+        // 1. 删 DB 记录
+        baseMapper.delete(new LambdaQueryWrapper<FabulousRecord>()
+                .eq(FabulousRecord::getUid, bo.getUid())
+                .eq(FabulousRecord::getTypeId, bo.getTypeId())
+                .eq(FabulousRecord::getType, bo.getType()));
+
+        // 2. 删 Redis 时间戳
+        String redisKey = RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey();
+        RedisUtils.delCacheMapValue(redisKey, bo.getTypeId() + ":" + bo.getUid());
+
+        // 3. 记录亲密度
+        articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), -2D);
+
+        // 4. 通知
+        executorService.execute(() -> {
+            newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+                    .eq(NewsUserRecord::getTargetUid, bo.getUid())
+                    .eq(NewsUserRecord::getUid, bo.getTargetUid())
+                    .eq(NewsUserRecord::getType, NewsType.FABULOUS_NEWS.getCode()));
+            WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
+        });
     }
 
     @Override

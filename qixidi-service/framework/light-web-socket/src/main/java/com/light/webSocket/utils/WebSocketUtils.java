@@ -29,7 +29,7 @@ public class WebSocketUtils {
      */
     public static void addLinks(String key, Session session) {
         websocketMap.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()).add(session);
-        logger.info("用户创建连接：{}，sessionId:{}，当前该key连接数:{}，总连接数:{}", key, session.getId(), websocketMap.get(key).size(), websocketMap.size());
+//        logger.info("用户创建连接：{}，sessionId:{}，当前该key连接数:{}，总连接数:{}", key, session.getId(), websocketMap.get(key).size(), websocketMap.size());
     }
 
     /**
@@ -42,7 +42,7 @@ public class WebSocketUtils {
             if (sessions.isEmpty()) {
                 websocketMap.remove(key);
             }
-            logger.info("用户关闭连接：{}，sessionId:{}，剩余连接数:{}", key, session.getId(), sessions.size());
+//            logger.info("用户关闭连接：{}，sessionId:{}，剩余连接数:{}", key, session.getId(), sessions.size());
         }
     }
 

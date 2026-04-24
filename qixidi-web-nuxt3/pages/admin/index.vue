@@ -18,7 +18,7 @@
             <Layout />
           </div>
           <div class="stat-content">
-            <div class="stat-value">{{ censusData?.columnCount || 0 }}</div>
+            <div class="stat-value">{{ censusData?.specialColumnCount || 0 }}</div>
             <div class="stat-label">专栏</div>
           </div>
         </div>
@@ -68,7 +68,7 @@
             <Notebook />
           </div>
           <div class="stat-content">
-            <div class="stat-value">{{ censusData?.essayCount || 0 }}</div>
+            <div class="stat-value">{{ censusData?.dictumCount || 0 }}</div>
             <div class="stat-label">随笔</div>
           </div>
         </div>
@@ -104,16 +104,10 @@ definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const censusApi = useUserCensusApi()
 
-// 获取当前月份
-const currentMonth = computed(() => {
-  const now = new Date()
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-})
-
-// 获取统计数据
+// 获取统计数据（实时查询，无需传时间）
 const { data: censusData } = await useAsyncData(
   'admin-census',
-  () => censusApi.getUserCensusCount(currentMonth.value)
+  () => censusApi.getUserCensusCount()
 )
 
 // 获取投稿记录

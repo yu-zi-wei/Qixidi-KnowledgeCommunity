@@ -2,10 +2,8 @@ package com.qixidi.business.domain.enums;
 
 public enum RedisBusinessKeyEnums {
     /**
-     * 点赞
+     * 点赞（articleId:uid → timestamp，7天内有效）
      */
-    TOTAL_LIKE_COUNT_KEY("TOTAL_LIKE_COUNT_KEY", "文章总点赞总数"),
-    USER_LIKE_ARTICLE_KEY("USER_LIKE_ARTICLE_KEY", "用户点赞的文章列表"),
     ARTICLE_LIKED_USER_KEY("ARTICLE_LIKED_USER_KEY", "点赞文章的用户列表"),
     /**
      * 文章浏览

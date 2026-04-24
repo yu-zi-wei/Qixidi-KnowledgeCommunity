@@ -497,7 +497,7 @@ export interface TimeNotesBo {
 // 用户统计数据
 export interface UserCensusCount {
   articleCount: number      // 文章总数
-  columnCount: number       // 专栏数
+  specialColumnCount: number  // 专栏数
   collectionCount: number   // 收藏夹数
   followCount: number       // 关注数
   commentCount: number      // 总获评论数

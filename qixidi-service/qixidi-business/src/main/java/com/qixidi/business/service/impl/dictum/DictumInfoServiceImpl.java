@@ -183,10 +183,6 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         add.setCreateTime(new Date());
         add.setUpdateTime(new Date());
         boolean flag = baseMapper.insert(add) > 0;
-        dictumGroupMapper.addEmploySum(bo.getGroupId());
-        if (ObjectUtils.isNotEmpty(bo.getAlbumId())) {
-            baseMapper.addEmploy(bo.getAlbumId());
-        }
         if (flag) {
             bo.setId(add.getId());
         }
@@ -224,12 +220,6 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteWithValidById(Long id, Long groupId) {
-        dictumGroupMapper.deleteEmploySum(groupId);
-        DictumInfoVo dictumInfoVo = baseMapper.selectVoOne(new LambdaQueryWrapper<DictumInfo>()
-                .eq(DictumInfo::getId, id));
-        if (ObjectUtils.isNotEmpty(dictumInfoVo.getAlbumId())) {
-            baseMapper.deleteEmploy(dictumInfoVo.getAlbumId());
-        }
         return baseMapper.deleteById(id) > 0;
     }
 }

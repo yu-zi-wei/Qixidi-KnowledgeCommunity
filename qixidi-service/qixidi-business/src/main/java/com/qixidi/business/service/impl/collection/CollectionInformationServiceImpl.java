@@ -20,13 +20,12 @@ import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
 import com.qixidi.business.domain.enums.CollectionTypeEnums;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
+import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionRecordMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.service.collection.ICollectionInformationService;
 import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,6 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
 
     private final CollectionInformationMapper baseMapper;
     private final CollectionRecordMapper collectionRecordMapper;
-    private final CountUserWebsiteMapper countUserWebsiteMapper;
     private final ArticleInformationServiceImpl articleInformationService;
     private final ArticleInformationMapper articleInformationMapper;
 
@@ -80,8 +78,8 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     public TableDataInfo<CollectionInformationVo> queryPageList(CollectionInformationBo bo, PageQuery pageQuery) {
         QueryWrapper<CollectionInformation> lqw = buildQueryWrappers(bo);
         Page<CollectionInformationVo> result = baseMapper.selectUserName(pageQuery.build(), lqw);
+        enrichWithIncludedCount(result.getRecords());
         return TableDataInfo.build(result);
-
     }
 
     /**
@@ -168,7 +166,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     public List<CollectionInformationVo> listUid(String uid) {
         List<CollectionInformationVo> list1 = baseMapper.selectVoList(new LambdaQueryWrapper<CollectionInformation>()
                 .eq(CollectionInformation::getUid, uid)
-                .eq(CollectionInformation::getState, 0)
+                .eq(CollectionInformation::getState, CommonStatusEnums.NORMAL.getCode())
                 .orderByDesc(CollectionInformation::getId)
         );
         List<CollectionInformationVo> list = collectionRecordMapper.selectGroupOn(uid);
@@ -239,14 +237,12 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         if (flag) {
             bo.setId(add.getId());
         }
-        countUserWebsiteMapper.updateAdd(add.getUid(), CountUserTypeEnums.COLLECTION_COUNT.getCode());
         return flag;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeCollection(Long id) {
-        countUserWebsiteMapper.updateDelete(LoginHelper.getTripartiteUuid(), CountUserTypeEnums.COLLECTION_COUNT.getCode());
         collectionRecordMapper.update(null,
                 new UpdateWrapper<CollectionRecord>().set("state", 1).eq("collection_id", id));
         return baseMapper.deleteById(id) > 0;
@@ -256,6 +252,23 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     public List<CensusVo> timeCollectionCensus(CensusEntity bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
         return baseMapper.timeCollectionCensus(bo);
+    }
+
+    private void enrichWithIncludedCount(List<CollectionInformationVo> list) {
+        if (CollectionUtils.isEmpty(list)) return;
+        List<Long> collectionIds = list.stream().map(CollectionInformationVo::getId).collect(Collectors.toList());
+        List<CollectionRecord> records = collectionRecordMapper.selectList(new LambdaQueryWrapper<CollectionRecord>()
+                .select(CollectionRecord::getId, CollectionRecord::getCollectionId)
+                .in(CollectionRecord::getCollectionId, collectionIds)
+                .eq(CollectionRecord::getState, CommonStatusEnums.NORMAL.getCode()));
+        Map<Long, Long> countMap = records.stream()
+                .collect(Collectors.groupingBy(CollectionRecord::getCollectionId, Collectors.counting()));
+        list.forEach(item -> {
+            Long count = countMap.get(item.getId());
+            if (count != null) {
+                item.setIncludedCount(count.intValue());
+            }
+        });
     }
 }
 

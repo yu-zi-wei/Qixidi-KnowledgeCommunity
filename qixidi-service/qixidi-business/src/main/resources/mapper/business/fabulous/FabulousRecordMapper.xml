@@ -22,9 +22,6 @@
                         ai.article_cover,
                         ai.type,
                         ai.special_id,
-                        ai.like_times,
-                        ai.comment_times,
-                        ai.collection_times,
                         ai.number_times,
                         um.nickname,
                         um.occupation,
@@ -37,5 +34,16 @@
           and ai.audit_state = 2
           and fr.uid = #{bo.uid}
         order by fr.create_time desc
+    </select>
+
+    <select id="selectLikeCountByArticleIds" resultType="com.qixidi.business.domain.vo.article.ArticleCountVo">
+        SELECT type_id AS articleId, COUNT(*) AS count
+        FROM b_fabulous_record
+        WHERE type_id IN
+        <foreach collection="articleIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND type = 1 AND state = 0
+        GROUP BY type_id
     </select>
 </mapper>

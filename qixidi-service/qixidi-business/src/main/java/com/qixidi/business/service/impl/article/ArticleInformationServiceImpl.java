@@ -41,10 +41,8 @@ import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
-import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.enums.CollectionTypeEnums;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
@@ -55,19 +53,17 @@ import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.mapper.SearchRecordsMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionRecordMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
-import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.article.IArticleInformationService;
+import com.qixidi.business.service.count.ArticleCountQueryHelper;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,14 +90,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final ArticleInformationMapper baseMapper;
     private final LabelInfoMapper labelInfoMapper;
     private final LabelGroupingInfoMapper labelGroupingInfoMapper;
-    private final CountUserWebsiteMapper countUserWebsiteMapper;
     private final CollectionRecordMapper collectionRecordMapper;
     private final UserFollowMapper userFollowMapper;
     private final SearchRecordsMapper searchRecordsMapper;
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
-    private final SpecialInformationMapper specialInformationMapper;
     private final DeepSeekService deepSeekService;
+    private final ArticleCountQueryHelper articleCountQueryHelper;
 
     /**
      * 查询文章信息
@@ -181,43 +176,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             }
             //文章自动审核，发送消息
             articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), id, uuid);
-            // 重算专栏数据
-            recalculationColumn(uuid);
         });
 
         return vo;
     }
 
 
-    public void recalculationColumn(String uuid) {
-        List<SpecialInformation> specialInformations = specialInformationMapper.selectList(
-                new LambdaQueryWrapper<SpecialInformation>().select(SpecialInformation::getId).eq(SpecialInformation::getUid, uuid));
-
-        if (CollectionUtil.isEmpty(specialInformations)) return;
-        List<Long> specialIds = specialInformations.stream().map(SpecialInformation::getId).collect(Collectors.toList());
-        List<ArticleInformation> articleInformations = baseMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
-                .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
-                .in(ArticleInformation::getSpecialId, specialIds)
-                .eq(ArticleInformation::getState, StatusEnums.NORMAL.getCode())
-                .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode())
-                .isNotNull(ArticleInformation::getSpecialId));
-        if (CollectionUtil.isEmpty(articleInformations)) return;
-        Map<Long, Long> collectMap = articleInformations.stream().collect(Collectors.groupingBy(ArticleInformation::getSpecialId, Collectors.counting()));
-        List<SpecialInformation> updateSpecialInformations = new ArrayList<>();
-        specialInformations.forEach(item -> {
-            Long sum = collectMap.get(item.getId());
-            if (sum != null) {
-                SpecialInformation specialInformation = new SpecialInformation();
-                specialInformation.setId(item.getId());
-                specialInformation.setIncludedCount(Integer.valueOf(sum.toString()));
-                updateSpecialInformations.add(specialInformation);
-            }
-        });
-        specialInformationMapper.updateBatchById(updateSpecialInformations);
-    }
-
-    public void articleReview(String Title, String Content, String Abstract, Long id, String uuid) {
-        if (id == null) return;
+    public Integer articleReview(String Title, String Content, String Abstract, Long id, String uuid) {
         //文章审核
         List<String> cacheList = RedisUtils.getCacheList(RedisBusinessKeyEnums.BLOCKING_WORDS.getKey());
         if (CollectionUtils.isEmpty(cacheList)) {
@@ -238,14 +203,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "文章自动审核失败",
                     String.format("文章名称：%s，标题触发敏感词数：%s，内容触发敏感词数：%s，摘要触发敏感词数：%s",
                             Title, wordCount, wordCount1, wordCount2));
-            return;
+            return ArticleAuditStateEnums.FAILED_TO_PASS_REVIEW.getCode();
         }
 //                修改文章状态
-        baseMapper.update(null, new LambdaUpdateWrapper<ArticleInformation>()
-                .set(ArticleInformation::getAuditState, 2).set(ArticleInformation::getAuditTime, new Date())
+        baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
+                .set(ArticleInformation::getAuditState,
+                        ArticleAuditStateEnums.APPROV.getCode()).set(ArticleInformation::getAuditTime, new Date())
                 .eq(ArticleInformation::getId, id));
-        //文章数量加一
-        countUserWebsiteMapper.updateAdd(uuid, CountUserTypeEnums.ARTICLE_COUNT.getCode());
 //        发送消息
         NewsSystemInfo newsSystemInfo = new NewsSystemInfo()
                 .setNewsTitle("你的文章《" + Title + "》已审核通过！")
@@ -258,18 +222,19 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         newsSystemInfoMapper.insert(newsSystemInfo);
         //WebSocket推送消息
         WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uuid);
+        return ArticleAuditStateEnums.APPROV.getCode();
     }
 
     public void articleWeightAlgorithms(List<ArticleInformationVo> list) {
         List<ArticleInformation> heatWeightList = list.stream().map(item -> {
             ArticleInformation articleInformation = new ArticleInformation();
-            BeanUtils.copyProperties(item, articleInformation);
+            articleInformation.setId(item.getId());
             Map<String, Integer> datePoor = DateUtils.getDatePoor(item.getCreateTime(), new Date());
             Integer day = datePoor.get("day");
-            double heatWeight = (articleInformation.getLikeTimes() == null ? 0 : articleInformation.getLikeTimes())
-                    + (articleInformation.getCommentTimes() == null ? 0 : articleInformation.getCommentTimes() * 2)
-                    + (articleInformation.getCollectionTimes() == null ? 0 : articleInformation.getCollectionTimes() * 2)
-                    + (articleInformation.getNumberTimes() == null ? 0 : articleInformation.getNumberTimes())
+            double heatWeight = (item.getLikeTimes() == null ? 0 : item.getLikeTimes())
+                    + (item.getCommentTimes() == null ? 0 : item.getCommentTimes() * 2)
+                    + (item.getCollectionTimes() == null ? 0 : item.getCollectionTimes() * 2)
+                    + (item.getNumberTimes() == null ? 0 : item.getNumberTimes())
                     + (AlgorithmUtils.directionExport(day));
             articleInformation.setHeatWeight(heatWeight);
             return articleInformation;
@@ -287,7 +252,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ArticleInformationVo updateByBo(ArticleInformationBo bo) {
-        Integer integer = judgmentPlusOne(bo);
         ArticleInformation update = BeanUtil.toBean(bo, ArticleInformation.class);
         TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
         String uuid = tripartiteUser.getUuid();
@@ -296,20 +260,17 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
         update.setUpdateId(uuid);
         update.setUpdateTime(new Date());
-        if (integer > 0) {
+        boolean shouldReview = !ArticleAuditStateEnums.DRAFT.getCode().equals(bo.getAuditState());
+        if (shouldReview) {
             update.setCreateTime(new Date());
             ArticleInformationVo articleInformationVo = BeanUtil.toBean(update, ArticleInformationVo.class);
             List<ArticleInformationVo> list = new ArrayList();
             list.add(articleInformationVo);
-            //        计算文章权重，审核文章
-            executorService.execute(() -> {
-                //计算文章权重
-                articleWeightAlgorithms(list);
-                //更新文章
-                articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), update.getId(), uuid);
-            });
-        } else if (integer < 0) {
-            countUserWebsiteMapper.updateDelete(uuid, CountUserTypeEnums.ARTICLE_COUNT.getCode());
+            //计算文章权重
+            articleWeightAlgorithms(list);
+            //文章审核
+            Integer auditStateInteger = articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), update.getId(), uuid);
+            update.setAuditState(auditStateInteger);
         }
         if (baseMapper.updateById(update) > 0) {
             ArticleInformationVo articleInformationVo = new ArticleInformationVo();
@@ -324,8 +285,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             });
             return articleInformationVo;
         }
-        //  重算专栏数据
-        recalculationColumn(uuid);
         return new ArticleInformationVo();
     }
 
@@ -370,32 +329,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     }
 
     /**
-     * 判断文章是否需要加一
-     *
-     * @param bo
-     * @return 1：文章数加一，0：无变化，-1：文章数减一
-     */
-    public Integer judgmentPlusOne(ArticleInformationBo bo) {
-        ArticleInformationVo articleVo = baseMapper.selectAuditStatus(bo.getId());
-//        添加文章
-        if (ObjectUtils.isEmpty(articleVo)
-                && bo.getAuditState().equals(ArticleAuditStateEnums.APPROV.getCode())) return 1;
-//        保存草稿
-        if (ObjectUtils.isEmpty(articleVo)
-                && bo.getAuditState().equals(ArticleAuditStateEnums.DRAFT.getCode())) return 0;
-//        正常更新
-        if (articleVo.getAuditState().equals(ArticleAuditStateEnums.APPROV.getCode())
-                && bo.getAuditState().equals(ArticleAuditStateEnums.APPROV.getCode())) return 0;
-//        文章变为草稿
-        if (articleVo.getAuditState().equals(ArticleAuditStateEnums.APPROV.getCode())
-                && bo.getAuditState().equals(ArticleAuditStateEnums.DRAFT.getCode())) return -1;
-//        草稿变为文章
-        if (articleVo.getAuditState().equals(ArticleAuditStateEnums.DRAFT.getCode())
-                && bo.getAuditState().equals(ArticleAuditStateEnums.APPROV.getCode())) return 1;
-        return 0;
-    }
-
-    /**
      * 批量删除文章信息
      *
      * @param ids 需要删除的文章信息主键
@@ -424,12 +357,15 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 item.setLabelNameList(list1);
             }
         });
+        enrichWithRealTimeCounts(index.getRecords());
         return TableDataInfo.build(index);
     }
 
     @Override
     public IPage<ArticleInformationVo> sortIndex(SortTypeBo bo, PageQuery pageQuery) {
-        return baseMapper.selectTypeSort(bo, pageQuery.build());
+        IPage<ArticleInformationVo> page = baseMapper.selectTypeSort(bo, pageQuery.build());
+        enrichWithRealTimeCounts(page.getRecords());
+        return page;
     }
 
     @Override
@@ -452,7 +388,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 }
             });
         }
-        return baseMapper.articleList(bo, pageQuery.build());
+        IPage<ArticleInformationVo> page = baseMapper.articleList(bo, pageQuery.build());
+        enrichWithRealTimeCounts(page.getRecords());
+        return page;
     }
 
     @Override
@@ -469,12 +407,16 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
         Set<Object> labelSet = RedisUtils.getZset(String.format(RedisBusinessKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), 0, 10);
         String result = StringUtils.join(labelSet, ", ");
-        return baseMapper.articleRecommendList(bo, result, pageQuery.build());
+        IPage<ArticleInformationVo> page = baseMapper.articleRecommendList(bo, result, pageQuery.build());
+        enrichWithRealTimeCounts(page.getRecords());
+        return page;
     }
 
     @Override
     public TableDataInfo<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(baseMapper.latelyArticleList(bo, pageQuery.build()));
+        IPage<ArticleInformationVo> page = baseMapper.latelyArticleList(bo, pageQuery.build());
+        enrichWithRealTimeCounts(page.getRecords());
+        return TableDataInfo.build(page);
     }
 
     @Override
@@ -545,26 +487,30 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
         //获取专栏数据
         details.setGroupingName(labelGroupingInfoMapper.selectNameById(details.getGroupingId()));
-        // 获取点赞数据
-        Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
-        if (CollectionUtils.isNotEmpty(cacheMap)) {
-            details.setLikeTimes(cacheMap.get(details.getId().toString()) == null
-                    ? details.getLikeTimes() : Long.valueOf(cacheMap.get(details.getId().toString()).toString()));
-        }
-        Map<String, Set<String>> FaMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-        if (CollectionUtils.isNotEmpty(FaMap)) {
-            details.setFabulousUserSet(FaMap.get(details.getId().toString()));
-        }
+        // 获取实时统计数据
+        Long articleId = details.getId();
+        details.setLikeTimes((long) articleCountQueryHelper.likeCount(articleId));
+        Map<Long, Integer> commentCounts = articleCountQueryHelper.commentCount(List.of(articleId));
+        details.setCommentTimes(commentCounts.getOrDefault(articleId, 0).longValue());
+        Map<Long, Integer> collectionCounts = articleCountQueryHelper.collectionCount(List.of(articleId));
+        details.setCollectionTimes(collectionCounts.getOrDefault(articleId, 0));
 
         String uuid = LoginHelper.getTripartiteUuid();
+        // 获取当前用户点赞状态
+        if (uuid != null) {
+            String redisKey = RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey();
+            Object likeTimestamp = RedisUtils.getCacheMapValue(redisKey, articleId + ":" + uuid);
+            if (likeTimestamp != null) {
+                long ts = Long.parseLong(likeTimestamp.toString());
+                details.setIsFabulous((System.currentTimeMillis() - ts) < 7L * 24 * 60 * 60 * 1000);
+            }
+        }
         if (ObjectUtils.isEmpty(uuid)) return details;
-        //获取收藏数据
-        List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectList(new LambdaQueryWrapper<CollectionRecord>()
+        //获取当前用户收藏状态
+        CollectionRecord collectionRecord = collectionRecordMapper.selectOne(new LambdaQueryWrapper<CollectionRecord>()
                 .eq(CollectionRecord::getType, CollectionTypeEnums.ARTICLE_TYPE.getCode())
+                .eq(CollectionRecord::getUid, uuid)
                 .eq(CollectionRecord::getTargetId, details.getId()));
-        Map<String, CollectionRecord> collectionRecordMap = collectionRecordList.stream().collect(Collectors.toMap(CollectionRecord::getUid, item -> item));
-        details.setCollectionTimes(collectionRecordMap.size());
-        CollectionRecord collectionRecord = collectionRecordMap.get(uuid);
         if (collectionRecord == null) {
             details.setIsCollection(false);
         } else {
@@ -577,7 +523,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return baseMapper.relatedList(bo, pageQuery);
+        List<ArticleInformationVo> list = baseMapper.relatedList(bo, pageQuery);
+        enrichWithRealTimeCounts(list);
+        return list;
     }
 
 
@@ -606,18 +554,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public Page<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
-//        bo.setAuditState(ArticleAuditStateEnums.APPROV.getCode());
         Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, pageQuery.build());
+        enrichWithRealTimeCounts(articleInfo.getRecords());
         return articleInfo;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int delete(Long id) {
-        ArticleInformationVo articleInformationVo = baseMapper.basicInfo(id);
-        if (articleInformationVo.getAuditState().equals(ArticleAuditStateEnums.APPROV.getCode())) {
-            countUserWebsiteMapper.updateDelete(articleInformationVo.getUserId(), CountUserTypeEnums.ARTICLE_COUNT.getCode());
-        }
         return baseMapper.deleteById(id);
     }
 
@@ -630,19 +574,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         ArticleInformation info = BeanUtil.toBean(bo, ArticleInformation.class);
         ArticleInformationVo vo = new ArticleInformationVo();
         if (info.getId() == null) return this.insertByBo(articleInformationBo);
-        Integer integer = judgmentPlusOne(articleInformationBo);
         String uuid = LoginHelper.getTripartiteUuid();
         info.setUpdateId(uuid);
         info.setUpdateTime(new Date());
         baseMapper.updateById(info);
-        LoginHelper.getTripartiteUuid();
-        if (integer > 0) {
-            //文章数加一
-            countUserWebsiteMapper.updateAdd(uuid, CountUserTypeEnums.ARTICLE_COUNT.getCode());
-        } else if (integer < 0) {
-            //文章数减一
-            countUserWebsiteMapper.updateDelete(uuid, CountUserTypeEnums.ARTICLE_COUNT.getCode());
-        }
         vo.setId(info.getId());
         return vo;
     }
@@ -654,7 +589,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public List<ArticleInformationVo> selected() {
-        return baseMapper.selected();
+        List<ArticleInformationVo> list = baseMapper.selected();
+        enrichWithRealTimeCounts(list);
+        return list;
     }
 
     /**
@@ -712,12 +649,33 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return null;
         bo.setUid(uuid);
-        return baseMapper.FollowArticleInfoList(bo, pageQuery.build());
+        Page<ArticleInformationVo> page = baseMapper.FollowArticleInfoList(bo, pageQuery.build());
+        enrichWithRealTimeCounts(page.getRecords());
+        return page;
     }
 
     @Override
     public Page<ArticleInformationVo> LabelGArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
-        return baseMapper.LabelGArticleInfoList(bo, pageQuery.build());
+        Page<ArticleInformationVo> page = baseMapper.LabelGArticleInfoList(bo, pageQuery.build());
+        enrichWithRealTimeCounts(page.getRecords());
+        return page;
+    }
+
+    /**
+     * 为文章列表补充实时统计数据（评论数、收藏数、点赞数）
+     */
+    private void enrichWithRealTimeCounts(List<ArticleInformationVo> articles) {
+        if (CollectionUtils.isEmpty(articles)) return;
+        List<Long> articleIds = articles.stream().map(ArticleInformationVo::getId).toList();
+        Map<Long, Integer> commentCounts = articleCountQueryHelper.commentCount(articleIds);
+        Map<Long, Integer> collectionCounts = articleCountQueryHelper.collectionCount(articleIds);
+        Map<Long, Integer> likeCounts = articleCountQueryHelper.likeCount(articleIds);
+        articles.forEach(article -> {
+            Long id = article.getId();
+            article.setCommentTimes(commentCounts.getOrDefault(id, 0).longValue());
+            article.setCollectionTimes(collectionCounts.getOrDefault(id, 0));
+            article.setLikeTimes(likeCounts.getOrDefault(id, 0).longValue());
+        });
     }
 
 }

@@ -24,7 +24,9 @@ public interface UserFollowMapper extends BaseMapperPlus<UserFollowMapper, UserF
 
     List<TripartiteUserVo> followUserList(@Param("uid") String uid, @Param("type") Integer type);
 
-    List<CountUserWebsiteVo> selectFollowTask();
+    List<CountUserWebsiteVo> selectFollowCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
+
+    List<CountUserWebsiteVo> selectFansCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 
     List<UserFollowVo> selectVoLabelGroup();
 

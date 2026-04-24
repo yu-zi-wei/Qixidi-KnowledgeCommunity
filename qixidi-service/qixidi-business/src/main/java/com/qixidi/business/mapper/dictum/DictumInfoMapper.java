@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -25,23 +24,12 @@ public interface DictumInfoMapper extends BaseMapperPlus<DictumInfoMapper, Dictu
 
     IPage<DictumInfoVo> selectVoPageXml(@Param("bo") DictumInfoBo bo, Page<Object> build);
 
-    @Update("update b_dictum_album set employ_sum=employ_sum+1 where id=#{albumId}")
-    Integer addEmploy(@Param("albumId") Long albumId);
-
-    @Update("update b_dictum_album set employ_sum=employ_sum-1 where id=#{albumId}")
-    Integer deleteEmploy(@Param("albumId") Long albumId);
-
-    List<DictumInfoVo> selectGroupId();
-
-    List<DictumInfoVo> selectAlbumId();
-
     @Select("select label from b_dictum_info where label is not null and label!='' and `state`=0")
     List<DictumInfoVo> selectAuthorLabel();
 
-    List<CountUserWebsiteVo> selectDictumInfo();
+    List<CountUserWebsiteVo> selectDictumCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 
     @Select("select author from b_dictum_info where author is not null and author!='' and `state`=0")
     List<DictumInfoVo> selectAuthorAuthors();
 
 }
-

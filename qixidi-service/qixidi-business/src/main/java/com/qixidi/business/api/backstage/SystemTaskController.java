@@ -2,7 +2,10 @@ package com.qixidi.business.api.backstage;
 
 import com.qixidi.business.domain.vo.SystemTaskConfigVo;
 import com.qixidi.business.service.SystemTaskConfigService;
-import com.qixidi.business.task.*;
+import com.qixidi.business.task.ArticleTask;
+import com.qixidi.business.task.DictumTask;
+import com.qixidi.business.task.LabelTask;
+import com.qixidi.business.task.StatTask;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +28,7 @@ public class SystemTaskController {
     private final ArticleTask articleTask;
     private final DictumTask dictumTask;
     private final LabelTask labelTask;
-    private final SpecialTask specialTask;
     private final StatTask statTask;
-    private final UserTask userTask;
 
     /**
      * 获取任务列表
@@ -51,26 +52,6 @@ public class SystemTaskController {
 
 
     /**
-     * 同步文章点赞任务
-     *
-     * @return
-     */
-    @GetMapping("/sync_article_click_like")
-    public void syncArticleClickLike() {
-        articleTask.syncFabulous();
-    }
-
-    /**
-     * 同步名言数据任务
-     *
-     * @return
-     */
-    @GetMapping("/syncing_quotes_data")
-    public void syncingQuotesData() {
-        dictumTask.dictumDataShn();
-    }
-
-    /**
      * 计算热门数据任务
      *
      * @return
@@ -91,16 +72,6 @@ public class SystemTaskController {
     }
 
     /**
-     * 同步专栏文章数任务
-     *
-     * @return
-     */
-    @GetMapping("/sync_number_columns")
-    public void syncNumberColumns() {
-        specialTask.recalculationColumn();
-    }
-
-    /**
      * 更新网站每日数据任务
      *
      * @return
@@ -118,16 +89,6 @@ public class SystemTaskController {
     @GetMapping("/update_website_monthly_data")
     public void updateWebsiteMonthlyData() {
         statTask.StatTheInfoUpdate();
-    }
-
-    /**
-     * 用户网站数据同步任务
-     *
-     * @return
-     */
-    @GetMapping("/syncing_user_site_data")
-    public void syncingUserSiteData() {
-        userTask.useWebsiteSync();
     }
 
 }

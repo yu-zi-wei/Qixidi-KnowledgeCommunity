@@ -59,11 +59,6 @@ public class DictumInfoBo extends BaseEntity {
     private String label;
 
     /**
-     * 点赞总数
-     */
-    private Long helpSum;
-
-    /**
      * 评论总数
      */
     private Long commentSum;

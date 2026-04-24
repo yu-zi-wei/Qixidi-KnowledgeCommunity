@@ -167,7 +167,12 @@
                 <div class="news-body">
                   <div class="news-header">
                     <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-user">{{ item.commentName }}</NuxtLink>
-                    <span class="news-action">评论了你的文章</span>
+                    <template v-if="item.type === 2">
+                      <span class="news-action">回复了你的评论，来源于文章</span>
+                    </template>
+                    <template v-else>
+                      <span class="news-action">评论了你的文章</span>
+                    </template>
                     <NuxtLink :to="`/articles/${item.articleId}`" class="news-target">《{{ item.articleTitle }}》</NuxtLink>
                   </div>
                   <div class="news-comment-content">{{ item.content }}</div>

@@ -19,13 +19,14 @@ import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
+import com.qixidi.business.domain.enums.CommonStatusEnums;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
+import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.business.service.special.ISpecialInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 专栏信息Service业务层处理
@@ -50,7 +52,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
 
     private final SpecialInformationMapper baseMapper;
     private final ArticleInformationMapper articleInformationMapper;
-    private final CountUserWebsiteMapper countUserWebsiteMapper;
+    private final UserCountQueryHelper userCountQueryHelper;
 
     /**
      * 查询专栏信息
@@ -60,7 +62,11 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
      */
     @Override
     public SpecialInformationVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
+        SpecialInformationVo vo = baseMapper.selectVoById(id);
+        if (vo != null) {
+            enrichWithIncludedCount(List.of(vo));
+        }
+        return vo;
     }
 
     /**
@@ -73,6 +79,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     public TableDataInfo<SpecialInformationVo> queryPageList(SpecialInformationBo bo, PageQuery pageQuery) {
         QueryWrapper<SpecialInformation> lqw = buildQueryWrappers(bo);
         Page<SpecialInformationVo> result = baseMapper.selectUserName(pageQuery.build(), lqw);
+        enrichWithIncludedCount(result.getRecords());
         return TableDataInfo.build(result);
     }
 
@@ -124,8 +131,6 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     public Boolean insertByBo(SpecialInformationBo bo) {
         SpecialInformation add = BeanUtil.toBean(bo, SpecialInformation.class);
         validEntityBeforeSave(add);
-//        同步用户数据
-        countUserWebsiteMapper.updateAdd(add.getUid(), CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
@@ -171,19 +176,23 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
 
     @Override
     public List<SpecialInformationVo> specialListUid(SpecialInformationBo bo) {
-        return baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>()
+        List<SpecialInformationVo> list = baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>()
                 .eq(SpecialInformation::getUid, bo.getUid())
                 .like(StringUtils.isNotBlank(bo.getSpecialName()), SpecialInformation::getSpecialName, bo.getSpecialName())
                 .orderByDesc(SpecialInformation::getCreateTime));
+        enrichWithIncludedCount(list);
+        return list;
     }
 
     @Override
     public List<SpecialInformationVo> specialList() {
         String uuid = LoginHelper.getTripartiteUuid();
-        return baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>()
+        List<SpecialInformationVo> list = baseMapper.selectVoList(new LambdaQueryWrapper<SpecialInformation>()
                 .eq(SpecialInformation::getUid, uuid)
-                .eq(SpecialInformation::getState, 0)
+                .eq(SpecialInformation::getState, CommonStatusEnums.NORMAL.getCode())
                 .orderByDesc(SpecialInformation::getCreateTime));
+        enrichWithIncludedCount(list);
+        return list;
     }
 
     @Override
@@ -209,8 +218,6 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         List<ArticleInformationVo> list = articleInformationMapper.selectSpecial(id, uuid);
         if (CollectionUtils.isNotEmpty(list)) throw new ServiceException(MsgEnums.SPECIAL_CONDITION_ERROR);
-        //        同步用户数据
-        countUserWebsiteMapper.updateDelete(uuid, CountUserTypeEnums.SPECIAL_COLUMN_COUNT.getCode());
         boolean bs = baseMapper.deleteById(id) > 0;
         if (!bs) throw new ServiceException(MsgEnums.DELETE_ERROR);
     }
@@ -222,10 +229,10 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     }
 
     @Override
-    public CountUserWebsiteVo CountUserCensus(CensusEntity bo) {
-        bo.setUid(LoginHelper.getTripartiteUuid());
-        CountUserWebsiteVo countUserWebsiteVo = countUserWebsiteMapper.selectCensus(bo.getUid());
-        return countUserWebsiteVo;
+    public CountUserWebsiteVo CountUserCensus() {
+        String uuid = LoginHelper.getTripartiteUuid();
+        CountUserWebsiteVo countUserWebsiteVo = userCountQueryHelper.allCounts(List.of(uuid)).get(uuid);
+        return countUserWebsiteVo != null ? countUserWebsiteVo : new CountUserWebsiteVo();
     }
 
     @Override
@@ -246,5 +253,23 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         return articleInformationMapper.submissionCensus(uuid, formattedDate);
     }
 
+    private void enrichWithIncludedCount(List<SpecialInformationVo> list) {
+        if (CollectionUtils.isEmpty(list)) return;
+        List<Long> specialIds = list.stream().map(SpecialInformationVo::getId).collect(Collectors.toList());
+        List<ArticleInformation> articles = articleInformationMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
+                .select(ArticleInformation::getId, ArticleInformation::getSpecialId)
+                .in(ArticleInformation::getSpecialId, specialIds)
+                .eq(ArticleInformation::getState, CommonStatusEnums.NORMAL.getCode())
+                .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode())
+                .isNotNull(ArticleInformation::getSpecialId));
+        Map<Long, Long> countMap = articles.stream()
+                .collect(Collectors.groupingBy(ArticleInformation::getSpecialId, Collectors.counting()));
+        list.forEach(item -> {
+            Long count = countMap.get(item.getId());
+            if (count != null) {
+                item.setIncludedCount(count.intValue());
+            }
+        });
+    }
 }
 

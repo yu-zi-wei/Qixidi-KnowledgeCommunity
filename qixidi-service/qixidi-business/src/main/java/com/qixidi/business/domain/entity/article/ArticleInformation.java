@@ -87,18 +87,6 @@ public class ArticleInformation {
      * 标签（多个以逗号隔开）
      */
     private String labelId;
-    /**
-     * 点赞次数
-     */
-    private Long likeTimes;
-    /**
-     * 评论次数
-     */
-    private Long commentTimes;
-    /**
-     * 收藏次数
-     */
-    private Long collectionTimes;
 
     /**
      * 浏览次数

@@ -10,7 +10,7 @@ import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
-import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
+import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.user.IUserFollowService;
@@ -82,7 +82,7 @@ public class UserWebInfoController {
      * @return
      */
     @GetMapping("/white/user/data/{uuid}")
-    public CountUserWebsiteEntity fdUserData(@NotNull(message = "主键不能为空")
+    public CountUserWebsiteVo fdUserData(@NotNull(message = "主键不能为空")
                                              @PathVariable("uuid") String uuid) {
         return iTripartiteUserService.fdUserData(uuid);
     }

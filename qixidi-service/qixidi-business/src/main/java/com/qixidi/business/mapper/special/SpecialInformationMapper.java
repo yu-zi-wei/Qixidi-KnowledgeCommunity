@@ -27,5 +27,5 @@ public interface SpecialInformationMapper extends BaseMapperPlus<SpecialInformat
 
     List<CensusVo> timeSpecialCensus(@Param("bo")CensusEntity bo);
 
-    List<CountUserWebsiteVo> selectSpecialTask();
+    List<CountUserWebsiteVo> selectSpecialCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 }

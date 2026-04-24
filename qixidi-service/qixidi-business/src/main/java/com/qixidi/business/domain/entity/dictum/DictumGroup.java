@@ -40,10 +40,6 @@ public class DictumGroup {
      */
     private String briefIntroduction;
     /**
-     * 收录数
-     */
-    private Long employSum;
-    /**
      * 状态（0：正常吗：已删除）
      */
     private Integer state;

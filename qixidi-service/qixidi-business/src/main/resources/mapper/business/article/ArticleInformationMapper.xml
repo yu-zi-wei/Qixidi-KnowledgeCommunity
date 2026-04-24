@@ -18,7 +18,6 @@
         <result property="updateTime" column="update_time"/>
         <result property="specialId" column="special_id"/>
         <result property="labelId" column="label_id"/>
-        <result property="likeTimes" column="like_times"/>
         <result property="numberTimes" column="number_times"/>
         <result property="isPublic" column="is_public"/>
         <result property="auditState" column="audit_state"/>
@@ -36,10 +35,7 @@
                ai.special_id,
                ai.label_id,
                ai.grouping_id,
-               ai.like_times,
-               ai.comment_times,
                ai.number_times,
-               ai.label_id,
                ai.audit_state,
                ai.audit_time,
                lgi.grouping_name,
@@ -63,7 +59,7 @@
             ORDER BY ai.number_times DESC
         </if>
         <if test="bo.likeTimes!=null and bo.likeTimes!=''">
-            ORDER BY ai.like_times DESC
+            ORDER BY ai.number_times DESC
         </if>
         <if test="bo.createTime!=null and bo.createTime!=''">
             ORDER BY ai.create_time DESC
@@ -119,31 +115,16 @@
                ai.special_id,
                ai.label_id,
                ai.grouping_id,
-               ai.like_times,
-               ai.comment_times,
                ai.number_times,
                ai.audit_state,
-               ai.collection_times,
                ai.audit_time,
                um.username,
                um.nickname,
                um.avatar,
                um.occupation,
-               um.role_id,
-               cuw.fabulous_count,
-               cuw.fans_fabulous_count,
-               cuw.collection_count,
-               cuw.follow_count,
-               cuw.fans_follow_count,
-               cuw.comment_count,
-               cuw.fans_comment_count,
-               cuw.article_count,
-               cuw.special_column_count,
-               cuw.fans_special_column,
-               cuw.circle_count
+               um.role_id
         from b_article_information as ai
                  left join b_user_main as um on ai.user_id = um.uuid
-                 left JOIN b_count_user_website AS cuw ON ai.user_id = cuw.uuid
         where ai.id = #{id}
     </select>
 
@@ -185,15 +166,6 @@
     <update id="updateAdd">
         update b_article_information
         <trim prefix="SET" suffixOverrides=",">
-            <if test="code==1">
-                like_times=like_times+1
-            </if>
-            <if test="code==2">
-                comment_times=comment_times+1
-            </if>
-            <if test="code==3">
-                collection_times=collection_times+1
-            </if>
             <if test="code==4">
                 number_times=number_times+1
             </if>
@@ -204,15 +176,6 @@
     <update id="updateDelete">
         update b_article_information
         <trim prefix="SET" suffixOverrides=",">
-            <if test="code==1">
-                like_times=like_times-1
-            </if>
-            <if test="code==2">
-                comment_times=comment_times-1
-            </if>
-            <if test="code==3">
-                collection_times=collection_times-1
-            </if>
             <if test="code==4">
                 number_times=number_times-1
             </if>
@@ -236,11 +199,8 @@
                special_id,
                label_id,
                grouping_id,
-               like_times,
-               comment_times,
                number_times,
-               audit_state,
-               collection_times
+               audit_state
         from b_article_information
         where id = #{id}
           and `state` !=1
@@ -256,15 +216,6 @@
     <update id="updateDeleteNumber">
         update b_article_information
         <trim prefix="SET" suffixOverrides=",">
-            <if test="code==1">
-                like_times=like_times-#{size}
-            </if>
-            <if test="code==2">
-                comment_times=comment_times-#{size}
-            </if>
-            <if test="code==3">
-                collection_times=collection_times-#{size}
-            </if>
             <if test="code==4">
                 number_times=number_times-#{size}
             </if>
@@ -278,16 +229,13 @@
                article_title,
                `type`,
                number_times,
-               like_times,
-               comment_times,
                create_time
         FROM b_article_information
         WHERE audit_state = 2
           AND `state` = 0
           AND platform_type = 1
         ORDER BY heat_weight DESC,
-                 like_times DESC,
-                 collection_times DESC LIMIT 0,10
+                 create_time DESC LIMIT 0,10
     </select>
 
     <select id="selectCensusMonth" resultType="com.light.core.core.domain.vo.CensusVo">
@@ -331,7 +279,7 @@
     </select>
 
     <select id="selectData" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
-        select id, article_title, like_times, comment_times, collection_times, number_times, create_time
+        select id, article_title, number_times, create_time
         from b_article_information
         where `state` = 0
           and audit_state = 2
@@ -348,11 +296,14 @@
         </foreach>
     </update>
 
-    <select id="selectUserArticleTask" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        SELECT user_id as uuid, count(user_id) as articleCount
-        FROM `b_article_information`
-        where state = 0
-          and audit_state = 2
+    <select id="selectArticleCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT user_id AS uuid, COUNT(*) AS articleCount
+        FROM b_article_information
+        WHERE user_id IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND state = 0 AND audit_state = 2
         GROUP BY user_id
     </select>
 
@@ -370,11 +321,8 @@
         ai.special_id,
         ai.label_id,
         ai.grouping_id,
-        ai.like_times,
-        ai.comment_times,
         ai.number_times,
         ai.audit_state,
-        ai.collection_times,
         ai.audit_time,
         um.username,
         um.nickname,
@@ -430,9 +378,6 @@
         user_id as userId,
         article_title as articleTitle,
         type as type,
-        like_times as likeTimes,
-        comment_times as commentTimes,
-        collection_times as collectionTimes,
         number_times as numberTimes,
         audit_state as auditState,
         create_time as createTime,

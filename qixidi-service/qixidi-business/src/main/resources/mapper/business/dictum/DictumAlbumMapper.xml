@@ -10,8 +10,6 @@
         <result property="cover" column="cover"/>
         <result property="briefIntroduction" column="brief_introduction"/>
         <result property="albumState" column="album_state"/>
-        <result property="helpSum" column="help_sum"/>
-        <result property="followSum" column="follow_sum"/>
         <result property="state" column="state"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
@@ -26,7 +24,6 @@
         da.album_state,
         da.create_time,
         da.update_time,
-        da.employ_sum,
         um.nickname,
         um.avatar,
         um.occupation,
@@ -48,18 +45,14 @@
         </where>
     </select>
 
-    <update id="updateList">
-        <foreach collection="list" item="item" separator=";">
-            update b_dictum_album
-            set`employ_sum` = #{item.sum}
-            where `id` = #{item.albumId}
+    <select id="selectAlbumCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT uid AS uuid, COUNT(*) AS albumCount
+        FROM b_dictum_album
+        WHERE uid IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
         </foreach>
-    </update>
-
-    <select id="selectAlbumTask" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        SELECT uid as uuid, count(uid) as albumCount
-        FROM `b_dictum_album`
-        where state = 0
+        AND state = 0
         GROUP BY uid
     </select>
 </mapper>

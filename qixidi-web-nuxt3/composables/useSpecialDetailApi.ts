@@ -52,7 +52,7 @@ export const useSpecialDetailApi = () => {
   }
 
   /** 专栏文章列表（分页） */
-  const getSpecialArticles = (params: { userId: string; specialId: number; pageNum: number; pageSize: number; articleTitle?: string }) => {
+  const getSpecialArticles = (params: { userId: string; specialId: number; pageNum: number; pageSize: number; articleTitle?: string; auditState?: number }) => {
     return api.getPage<SpecialArticleVo>('/white/article/user/list', params)
   }
 

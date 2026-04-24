@@ -3,8 +3,11 @@ package com.qixidi.business.service.impl.dictum;
 import cn.hutool.core.bean.BeanUtil;
 import com.qixidi.business.domain.bo.dictum.DictumGroupBo;
 import com.qixidi.business.domain.entity.dictum.DictumGroup;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
+import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.vo.dictum.DictumGroupVo;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
+import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.qixidi.business.service.dictum.IDictumGroupService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
@@ -19,6 +22,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 名言分组Service业务层处理
@@ -31,6 +35,7 @@ import java.util.Map;
 public class DictumGroupServiceImpl implements IDictumGroupService {
 
     private final DictumGroupMapper baseMapper;
+    private final DictumInfoMapper dictumInfoMapper;
 
     /**
      * 查询名言分组
@@ -40,7 +45,11 @@ public class DictumGroupServiceImpl implements IDictumGroupService {
      */
     @Override
     public DictumGroupVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
+        DictumGroupVo vo = baseMapper.selectVoById(id);
+        if (vo != null) {
+            enrichWithEmploySum(List.of(vo));
+        }
+        return vo;
     }
 
     /**
@@ -52,6 +61,7 @@ public class DictumGroupServiceImpl implements IDictumGroupService {
     @Override
     public TableDataInfo<DictumGroupVo> queryPageList(DictumGroupBo bo, PageQuery pageQuery) {
         IPage<DictumGroupVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
+        enrichWithEmploySum(result.getRecords());
         return TableDataInfo.build(result);
     }
 
@@ -117,6 +127,24 @@ public class DictumGroupServiceImpl implements IDictumGroupService {
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    private void enrichWithEmploySum(List<DictumGroupVo> list) {
+        if (list == null || list.isEmpty()) return;
+        List<Long> groupIds = list.stream().map(DictumGroupVo::getId).collect(Collectors.toList());
+        List<DictumInfo> dictumInfos = dictumInfoMapper.selectList(new LambdaQueryWrapper<DictumInfo>()
+                .select(DictumInfo::getId, DictumInfo::getGroupId)
+                .in(DictumInfo::getGroupId, groupIds)
+                .eq(DictumInfo::getState, CommonStatusEnums.NORMAL.getCode())
+                .isNotNull(DictumInfo::getGroupId));
+        Map<Long, Long> countMap = dictumInfos.stream()
+                .collect(Collectors.groupingBy(DictumInfo::getGroupId, Collectors.counting()));
+        list.forEach(item -> {
+            Long count = countMap.get(item.getId());
+            if (count != null) {
+                item.setEmploySum(count);
+            }
+        });
     }
 }
 

@@ -12,6 +12,7 @@ import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoSearchBo;
 import com.qixidi.business.domain.entity.dictum.DictumAlbum;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
+import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
@@ -23,6 +24,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 名言专辑Service业务层处理
@@ -45,7 +47,11 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
      */
     @Override
     public DictumAlbumVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
+        DictumAlbumVo vo = baseMapper.selectVoById(id);
+        if (vo != null) {
+            enrichWithEmploySum(List.of(vo));
+        }
+        return vo;
     }
 
     /**
@@ -56,8 +62,8 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
      */
     @Override
     public TableDataInfo<DictumAlbumVo> queryPageList(DictumAlbumBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<DictumAlbum> lqw = buildQueryWrapper(bo);
         IPage<DictumAlbumVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
+        enrichWithEmploySum(result.getRecords());
         return TableDataInfo.build(result);
     }
 
@@ -81,8 +87,6 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
         lqw.eq(StringUtils.isNotBlank(bo.getCover()), DictumAlbum::getCover, bo.getCover());
         lqw.eq(StringUtils.isNotBlank(bo.getBriefIntroduction()), DictumAlbum::getBriefIntroduction, bo.getBriefIntroduction());
         lqw.eq(bo.getAlbumState() != null, DictumAlbum::getAlbumState, bo.getAlbumState());
-        lqw.eq(bo.getHelpSum() != null, DictumAlbum::getHelpSum, bo.getHelpSum());
-        lqw.eq(bo.getFollowSum() != null, DictumAlbum::getFollowSum, bo.getFollowSum());
         lqw.eq(bo.getState() != null, DictumAlbum::getState, bo.getState());
         return lqw;
     }
@@ -141,12 +145,30 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
 
     @Override
     public TableDataInfo<DictumAlbumVo> recommendedAlbum(DictumInfoSearchBo bo, PageQuery pageQuery) {
-        IPage iPage = baseMapper.selectVoPage(pageQuery.build(),
+        IPage<DictumAlbumVo> iPage = baseMapper.selectVoPage(pageQuery.build(),
                 new LambdaQueryWrapper<DictumAlbum>()
                         .like(StringUtils.isNotBlank(bo.getAlbumName()), DictumAlbum::getName, bo.getAlbumName())
-                        .orderByDesc(DictumAlbum::getEmploySum));
+                        .orderByDesc(DictumAlbum::getCreateTime));
+        enrichWithEmploySum(iPage.getRecords());
         return TableDataInfo.build(iPage);
     }
 
+    private void enrichWithEmploySum(List<DictumAlbumVo> list) {
+        if (list == null || list.isEmpty()) return;
+        List<Long> albumIds = list.stream().map(DictumAlbumVo::getId).collect(Collectors.toList());
+        List<DictumInfo> dictumInfos = dictumInfoMapper.selectList(new LambdaQueryWrapper<DictumInfo>()
+                .select(DictumInfo::getId, DictumInfo::getAlbumId)
+                .in(DictumInfo::getAlbumId, albumIds)
+                .eq(DictumInfo::getState, CommonStatusEnums.NORMAL.getCode())
+                .isNotNull(DictumInfo::getAlbumId));
+        Map<Long, Long> countMap = dictumInfos.stream()
+                .collect(Collectors.groupingBy(DictumInfo::getAlbumId, Collectors.counting()));
+        list.forEach(item -> {
+            Long count = countMap.get(item.getId());
+            if (count != null) {
+                item.setEmploySum(count);
+            }
+        });
+    }
 }
 

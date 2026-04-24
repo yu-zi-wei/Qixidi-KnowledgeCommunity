@@ -3,16 +3,15 @@ package com.qixidi.business.api.frontDesk.webSocket;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.light.webSocket.utils.WebSocketUtils;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import jodd.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * 用户 WebSocket 端点（单连接，统一推送所有消息类型）
@@ -66,9 +65,20 @@ public class WebSocketUserApi {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        if (StringUtil.isNotEmpty(message)) {
-            logger.info("收到用户消息:{},报文:{}", key, message);
-        }
+//        if (StringUtil.isNotEmpty(message)) {
+//            logger.info("收到用户消息:{},报文:{}", key, message);
+//        }
     }
 
+    // ===================== 加上下面这个方法 =====================
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        // EOFException 是客户端断开，属于正常现象，只需要静默处理
+        if (throwable instanceof IOException) {
+            logger.debug("WebSocket 客户端断开连接：{}", session.getId());
+            return;
+        }
+        // 其他错误才打印
+        logger.error("WebSocket 异常", throwable);
+    }
 }

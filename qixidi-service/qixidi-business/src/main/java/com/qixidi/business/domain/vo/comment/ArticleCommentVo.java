@@ -102,11 +102,11 @@ public class ArticleCommentVo {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-
     /**
      * 目标用户头像
      */
     private String targetAvatar;
+
     /**
      * 目标用户名称
      */

@@ -18,19 +18,10 @@
                dg.name,
                dg.cover,
                dg.brief_introduction,
-               dg.employ_sum,
                dg.create_time,
                dg.update_time
         from b_dictum_group as dg
         where dg.state = 0
-        order by dg.employ_sum desc
+        order by dg.create_time desc
     </select>
-
-    <update id="updateList">
-        <foreach collection="list" item="item" separator=";">
-            update b_dictum_group
-            set`employ_sum` = #{item.sum}
-            where `id` = #{item.groupId}
-        </foreach>
-    </update>
 </mapper>

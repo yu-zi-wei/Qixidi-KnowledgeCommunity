@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.business.mapper.TimeNotesMapper">
+    <select id="selectTimeNotesCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT uid AS uuid, COUNT(*) AS timeNotesCount
+        FROM b_time_notes
+        WHERE uid IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        GROUP BY uid
+    </select>
+</mapper>

@@ -28,10 +28,6 @@ public interface CollectionInformationMapper extends BaseMapperPlus<CollectionIn
 
     Page<CollectionInformationVo> selectUserName(Page<Object> build, @Param(Constants.WRAPPER) QueryWrapper<CollectionInformation> lqw);
 
-    int updateDelete(@Param("collectionId") Long collectionId);
-
-    int updateAdd(@Param("collectionId") Long collectionId);
-
     List<CollectionInformationVo> selectCensus(@Param("bo") CensusEntity bo);
 
     List<CensusVo> timeCollectionCensus(@Param("bo") CensusEntity bo);

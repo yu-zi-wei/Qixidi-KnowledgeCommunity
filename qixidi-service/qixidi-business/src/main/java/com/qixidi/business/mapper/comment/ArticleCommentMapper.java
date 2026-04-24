@@ -1,6 +1,8 @@
 package com.qixidi.business.mapper.comment;
 
 import com.qixidi.business.domain.entity.comment.ArticleComment;
+import com.qixidi.business.domain.vo.CountUserWebsiteVo;
+import com.qixidi.business.domain.vo.article.ArticleCountVo;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,5 +21,11 @@ import java.util.List;
 public interface ArticleCommentMapper extends BaseMapperPlus<ArticleCommentMapper, ArticleComment, ArticleCommentVo> {
 
     List<ArticleCommentVo> selectBasicsLis(@Param("ids") Collection<Long> ids);
+
+    List<CountUserWebsiteVo> selectCommentCountByUserIds(@Param("uuids") Collection<String> uuids);
+
+    List<CountUserWebsiteVo> selectFansCommentCountByUserIds(@Param("uuids") Collection<String> uuids);
+
+    List<ArticleCountVo> selectCommentCountByArticleIds(@Param("articleIds") Collection<Long> articleIds);
 }
 

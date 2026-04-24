@@ -11,10 +11,7 @@ import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
-import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
-import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,39 +23,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class DictumTask {
 
-    private final DictumAlbumMapper dictumAlbumMapper;
-    private final DictumGroupMapper dictumGroupMapper;
-    private final DictumInfoMapper dictumInfoMapper;
+    @Autowired
+    private DictumInfoMapper dictumInfoMapper;
     @Autowired
     private SystemTaskConfigMapper systemTaskConfigMapper;
-
-    /**
-     * 同步名言数据
-     * 每半小时一次
-     */
-    @Scheduled(cron = "0 */30 * * * *")
-    public void dictumDataShn() {
-        try {
-            List<DictumInfoVo> dictumInfoVos = dictumInfoMapper.selectGroupId();
-            dictumGroupMapper.updateList(dictumInfoVos);
-        } catch (Exception e) {
-            e.printStackTrace();
-            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "名言分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
-        }
-        try {
-            List<DictumInfoVo> albumId = dictumInfoMapper.selectAlbumId();
-            dictumAlbumMapper.updateList(albumId);
-
-        } catch (Exception e) {
-            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "专辑分类数据同步异常（dictumDataShn）任务异常", e.getMessage());
-            e.printStackTrace();
-        }
-        systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNCING_QUOTES_DATA.getCode());
-
-    }
 
     /**
      * 计算名言广场热门数据（作者、标签）

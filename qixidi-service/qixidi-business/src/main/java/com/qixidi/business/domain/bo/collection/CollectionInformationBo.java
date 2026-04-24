@@ -55,10 +55,5 @@ public class CollectionInformationBo extends BaseEntity {
      * 修改者id
      */
     private Long updateId;
-
-    /**
-     * 收录数
-     */
-    private Integer includedCount;
 }
 

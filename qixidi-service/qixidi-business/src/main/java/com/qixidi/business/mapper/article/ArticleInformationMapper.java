@@ -17,7 +17,6 @@ import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -39,12 +38,6 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     ArticleInformationVo details(@Param("id") Long id);
 
     List<ArticleInformationVo> relatedList(@Param("bo") ArticleInformationBo bo, @Param("pageQuery") PageQuery pageQuery);
-
-    @Update("update b_article_information set like_times = like_times+1 where id=#{id}")
-    Integer updateLikeTimes(Long id);
-
-    @Select("")
-    Long selectByUid(Long id);
 
     @Select("select id,user_id,article_title,audit_state,update_time from b_article_information where id=#{id}")
     ArticleInformationVo basicInfo(@Param("id") Long id);
@@ -84,7 +77,7 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     Integer updateListHeatWeight(@Param("list") List<ArticleInformation> heatWeightList);
 
-    List<CountUserWebsiteVo> selectUserArticleTask();
+    List<CountUserWebsiteVo> selectArticleCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 
     @Select("select audit_state,is_public from b_article_information where id=#{id} and state=0")
     ArticleInformationVo selectAuditStatus(@Param("id") Long id);

@@ -49,7 +49,7 @@ import com.qixidi.business.domain.bo.user.CreatorApplicationBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
-import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
+import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.entity.user.UserInformation;
@@ -62,7 +62,6 @@ import com.qixidi.business.domain.vo.user.UserFollowVo;
 import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
@@ -98,7 +97,7 @@ import java.util.stream.Collectors;
 public class TripartiteUserServiceImpl implements ITripartiteUserService, UserInfoInterface {
 
     private final TripartiteUserMapper baseMapper;
-    private final CountUserWebsiteMapper countUserWebsiteMapper;
+    private final UserCountQueryHelper userCountQueryHelper;
     private final UserInformationMapper userInformationMapper;
     private final UserFollowMapper userFollowMapper;
     @Resource(name = "threadPoolInstance")
@@ -118,10 +117,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
      */
     @Override
     public TripartiteUserVo queryById(String uuid) {
-        CountUserWebsiteVo countUserWebsiteVo = countUserWebsiteMapper.selectCensus(uuid);
-        TripartiteUserVo tripartiteUserVo = baseMapper.selectVoById(uuid);
-        BeanUtils.copyProperties(countUserWebsiteVo, tripartiteUserVo);
-        return tripartiteUserVo;
+        return getWebsiteInfo(uuid);
     }
 
     /**
@@ -260,9 +256,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                     .setRoleId(UserRoleEnums.GENERAL_USER.getCode());
             tripartiteUser.setCreateTime(new Date());
             baseMapper.insert(tripartiteUser);
-            CountUserWebsiteEntity countUserWebsiteEntity = new CountUserWebsiteEntity();
-            countUserWebsiteEntity.setUuid(tripartiteUser.getUuid());
-            countUserWebsiteMapper.insert(countUserWebsiteEntity);
             UserInformation userInformation = new UserInformation()
                     .setUuid(tripartiteUser.getUuid())
                     .setNickname(tripartiteUser.getUsername())
@@ -343,9 +336,6 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 .setRoleId(UserRoleEnums.GENERAL_USER.getCode())
                 .setSource("平台注册");
         int insert = baseMapper.insert(tripartiteUser);
-        CountUserWebsiteEntity countUserWebsiteEntity = new CountUserWebsiteEntity()
-                .setUuid(tripartiteUser.getUuid());
-        countUserWebsiteMapper.insert(countUserWebsiteEntity);
         UserInformation userInformation = new UserInformation()
                 .setUuid(tripartiteUser.getUuid())
                 .setNickname(tripartiteUser.getNickname())
@@ -393,6 +383,32 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     @Override
     public TripartiteUserVo getWebsiteInfo(String uuid) {
         TripartiteUserVo tripartiteUserVo = baseMapper.selectWebInfo(uuid);
+        if (tripartiteUserVo == null) return null;
+
+        // 查询统计数据
+        List<String> uuids = List.of(uuid);
+        Map<String, Integer> articleCounts = userCountQueryHelper.articleCount(uuids);
+        Map<String, Integer> followCounts = userCountQueryHelper.followCount(uuids);
+        Map<String, Integer> fansCounts = userCountQueryHelper.fansCount(uuids);
+        Map<String, Integer> commentCounts = userCountQueryHelper.commentCount(uuids);
+        Map<String, Integer> fansCommentCounts = userCountQueryHelper.fansCommentCount(uuids);
+        Map<String, Integer> collectionCounts = userCountQueryHelper.collectionCount(uuids);
+        Map<String, Integer> specialCounts = userCountQueryHelper.specialCount(uuids);
+        Map<String, Integer> albumCounts = userCountQueryHelper.albumCount(uuids);
+        Map<String, Integer> dictumCounts = userCountQueryHelper.dictumCount(uuids);
+        Map<String, Integer> timeNotesCounts = userCountQueryHelper.timeNotesCount(uuids);
+
+        tripartiteUserVo.setArticleCount(articleCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setFollowCount(followCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setFansFollowCount(fansCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setCommentCount(commentCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setFansCommentCount(fansCommentCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setCollectionCount(collectionCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setSpecialColumnCount(specialCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setAlbumCount(albumCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setDictumCount(dictumCounts.getOrDefault(uuid, 0));
+        tripartiteUserVo.setTimeNotesCount(timeNotesCounts.getOrDefault(uuid, 0));
+
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new LambdaQueryWrapper<UserFollow>()
                 .eq(UserFollow::getTargetId, uuid)
@@ -488,10 +504,9 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     @Override
-    public CountUserWebsiteEntity fdUserData(String uuid) {
-        CountUserWebsiteEntity countUserWebsiteEntity = countUserWebsiteMapper.selectOne(
-                new LambdaQueryWrapper<CountUserWebsiteEntity>().eq(CountUserWebsiteEntity::getUuid, uuid));
-        return countUserWebsiteEntity;
+    public CountUserWebsiteVo fdUserData(String uuid) {
+        Map<String, CountUserWebsiteVo> counts = userCountQueryHelper.allCounts(List.of(uuid));
+        return counts.getOrDefault(uuid, new CountUserWebsiteVo());
     }
 
     @Override
@@ -719,10 +734,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 .orderByAsc(TripartiteUser::getCreateTime)
         );
         List<String> uuids = tripartiteUsers.stream().map(TripartiteUser::getUuid).toList();
-        List<CountUserWebsiteEntity> countUserWebsiteEntities = countUserWebsiteMapper.selectList(new LambdaQueryWrapper<CountUserWebsiteEntity>()
-                .in(CountUserWebsiteEntity::getUuid, uuids));
-        Map<String, CountUserWebsiteEntity> countUserWebsiteMap = countUserWebsiteEntities.stream()
-                .collect(Collectors.toMap(CountUserWebsiteEntity::getUuid, a -> a));
+        Map<String, CountUserWebsiteVo> allCounts = userCountQueryHelper.allCounts(uuids);
         List<UserInformation> userInformationEntities = userInformationMapper.selectList(new LambdaQueryWrapper<UserInformation>()
                 .in(UserInformation::getUuid, uuids));
         Map<String, UserInformation> userInformationMap = userInformationEntities.stream()
@@ -731,9 +743,18 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         List<TripartiteUserVo> voList = new ArrayList<>();
         tripartiteUsers.forEach(tripartiteUser -> {
             TripartiteUserVo tripartiteUserVo = BeanUtil.copyProperties(tripartiteUser, TripartiteUserVo.class);
-            CountUserWebsiteEntity countUserWebsiteEntity = countUserWebsiteMap.get(tripartiteUser.getUuid());
-            if (countUserWebsiteEntity != null) {
-                tripartiteUserVo.fillCountUserWebsite(countUserWebsiteEntity);
+            CountUserWebsiteVo counts = allCounts.get(tripartiteUser.getUuid());
+            if (counts != null) {
+                tripartiteUserVo.setArticleCount(counts.getArticleCount());
+                tripartiteUserVo.setFollowCount(counts.getFollowCount());
+                tripartiteUserVo.setFansFollowCount(counts.getFansFollowCount());
+                tripartiteUserVo.setCommentCount(counts.getCommentCount());
+                tripartiteUserVo.setFansCommentCount(counts.getFansCommentCount());
+                tripartiteUserVo.setCollectionCount(counts.getCollectionCount());
+                tripartiteUserVo.setSpecialColumnCount(counts.getSpecialColumnCount());
+                tripartiteUserVo.setAlbumCount(counts.getAlbumCount());
+                tripartiteUserVo.setDictumCount(counts.getDictumCount());
+                tripartiteUserVo.setTimeNotesCount(counts.getTimeNotesCount());
             }
             UserInformation userInformation = userInformationMap.get(tripartiteUser.getUuid());
             if (userInformation != null) {

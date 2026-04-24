@@ -11,7 +11,7 @@ import com.qixidi.business.domain.bo.user.CreatorApplicationBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
-import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
+import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
@@ -95,7 +95,7 @@ public interface ITripartiteUserService {
 
     List<TripartiteUserVo> fdUserList(UserInfoBo bo);
 
-    CountUserWebsiteEntity fdUserData(String uuid);
+    CountUserWebsiteVo fdUserData(String uuid);
 
     Integer resetPassword(RegisterUserMain registerUserMain);
 

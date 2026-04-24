@@ -33,11 +33,6 @@ public class DictumAlbumBo extends BaseEntity {
     private String uid;
 
     /**
-     * 收录总数
-     */
-    private Long employSum;
-
-    /**
      * 专辑名称
      */
     @NotBlank(message = "专辑名称不能为空", groups = {AddGroup.class, EditGroup.class})
@@ -58,16 +53,6 @@ public class DictumAlbumBo extends BaseEntity {
      */
     @NotNull(message = "专辑状态（1：公开，2：私有，3：关注可看）不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long albumState;
-
-    /**
-     * 点赞总数
-     */
-    private Long helpSum;
-
-    /**
-     * 关注总数
-     */
-    private Long followSum;
 
     /**
      * 状态（0：正常吗：已删除）

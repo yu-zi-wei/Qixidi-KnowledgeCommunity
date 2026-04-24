@@ -7,4 +7,38 @@
         select *
         from b_article_information ;
     </select>
+
+    <select id="selectCommentCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT comment_uid AS uuid, COUNT(*) AS commentCount
+        FROM b_article_comment
+        WHERE comment_uid IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND state = 0
+        GROUP BY comment_uid
+    </select>
+
+    <select id="selectFansCommentCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT ai.user_id AS uuid, COUNT(*) AS fansCommentCount
+        FROM b_article_comment ac
+            INNER JOIN b_article_information ai ON ac.article_id = ai.id
+        WHERE ai.user_id IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND ac.state = 0
+        GROUP BY ai.user_id
+    </select>
+
+    <select id="selectCommentCountByArticleIds" resultType="com.qixidi.business.domain.vo.article.ArticleCountVo">
+        SELECT article_id AS articleId, COUNT(*) AS count
+        FROM b_article_comment
+        WHERE article_id IN
+        <foreach collection="articleIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND state = 0
+        GROUP BY article_id
+    </select>
 </mapper>

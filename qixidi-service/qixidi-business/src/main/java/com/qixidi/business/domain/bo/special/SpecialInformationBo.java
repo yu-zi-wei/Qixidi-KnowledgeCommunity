@@ -60,11 +60,5 @@ public class SpecialInformationBo extends BaseEntity {
      */
     private String updateId;
 
-    /**
-     * 收录数
-     */
-    private Integer includedCount;
-
-
 }
 

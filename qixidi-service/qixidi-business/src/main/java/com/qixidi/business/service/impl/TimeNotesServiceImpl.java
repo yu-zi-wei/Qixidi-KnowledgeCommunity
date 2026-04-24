@@ -17,11 +17,9 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
-import com.qixidi.business.domain.enums.CountUserTypeEnums;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
-import com.qixidi.business.mapper.count.CountUserWebsiteMapper;
 import com.qixidi.business.service.TimeNotesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,7 +41,6 @@ import java.util.Map;
 public class TimeNotesServiceImpl implements TimeNotesService {
 
     private final TimeNotesMapper timeNotesMapper;
-    private final CountUserWebsiteMapper countUserWebsiteMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -55,7 +52,6 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
         timeNotes.setUid(tripartiteUser.getUuid());
         timeNotesMapper.insert(timeNotes);
-        countUserWebsiteMapper.updateAdd(tripartiteUser.getUuid(), CountUserTypeEnums.B_TIME_NOTES.getCode());
     }
 
     @Override
@@ -72,7 +68,6 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     @Override
     public void delete(Long id) {
         timeNotesMapper.deleteById(id);
-        countUserWebsiteMapper.updateDelete(LoginHelper.getTripartiteUuid(), CountUserTypeEnums.B_TIME_NOTES.getCode());
     }
 
     @Override

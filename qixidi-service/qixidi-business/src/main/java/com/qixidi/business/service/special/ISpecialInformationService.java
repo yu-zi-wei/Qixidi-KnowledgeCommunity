@@ -83,7 +83,7 @@ public interface ISpecialInformationService {
 
     List<CensusVo> timeSpecialCensus(CensusEntity bo);
 
-    CountUserWebsiteVo CountUserCensus(CensusEntity bo);
+    CountUserWebsiteVo CountUserCensus();
 
     Page<ArticleInformationVo> getArticleList(ArticleInformationBo bo, PageQuery pageQuery);
 

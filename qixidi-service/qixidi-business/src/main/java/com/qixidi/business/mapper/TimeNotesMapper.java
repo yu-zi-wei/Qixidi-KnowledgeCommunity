@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.List;
 @Mapper
 public interface TimeNotesMapper extends BaseMapper<TimeNotes> {
 
-    @Select(" SELECT uid as uuid, count(uid) as timeNotesCount FROM `b_time_notes` GROUP BY uid")
-    List<CountUserWebsiteVo> selectNotesCount();
+    List<CountUserWebsiteVo> selectTimeNotesCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 
 }

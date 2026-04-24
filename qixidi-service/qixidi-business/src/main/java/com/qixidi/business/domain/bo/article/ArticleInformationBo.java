@@ -104,24 +104,10 @@ public class ArticleInformationBo extends BaseEntity {
     private String labelId;
 
     /**
-     * 点赞次数
-     */
-    private Long likeTimes;
-
-    /**
      * 浏览次数
      */
     private Long numberTimes;
 
-    /**
-     * 收藏次数
-     */
-    private Long collectionTimes;
-
-    /**
-     * 评论次数
-     */
-    private Long commentTimes;
     /**
      * 是否公开（1：公开，2：不公开）
      */

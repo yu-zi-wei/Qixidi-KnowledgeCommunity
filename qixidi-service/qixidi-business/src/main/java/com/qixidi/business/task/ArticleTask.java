@@ -2,21 +2,15 @@ package com.qixidi.business.task;
 
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.light.core.constant.SystemConstant;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
-import com.light.redission.utils.RedisUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
-import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
-import com.qixidi.business.domain.enums.CommentTypeEnums;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
-import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -35,8 +29,6 @@ public class ArticleTask {
 
     @Autowired
     private ArticleInformationMapper articleInformationMapper;//文章
-    @Autowired
-    private FabulousRecordMapper fabulousRecordMapper;
     @Autowired
     private SystemTaskConfigMapper systemTaskConfigMapper;
 
@@ -93,13 +85,13 @@ public class ArticleTask {
     public void articleWeightAlgorithm(List<ArticleInformationVo> list) {
         List<ArticleInformation> heatWeightList = list.stream().map(item -> {
             ArticleInformation articleInformation = new ArticleInformation();
-            BeanUtils.copyProperties(item, articleInformation);
+            articleInformation.setId(item.getId());
             Map<String, Integer> datePoor = DateUtils.getDatePoor(item.getCreateTime(), new Date());
             Integer day = datePoor.get("day");
-            double heatWeight = (articleInformation.getLikeTimes())
-                    + (articleInformation.getCommentTimes() * 2)
-                    + (articleInformation.getCollectionTimes() * 2)
-                    + (articleInformation.getNumberTimes())
+            double heatWeight = (item.getLikeTimes() == null ? 0 : item.getLikeTimes())
+                    + (item.getCommentTimes() == null ? 0 : item.getCommentTimes() * 2)
+                    + (item.getCollectionTimes() == null ? 0 : item.getCollectionTimes() * 2)
+                    + (item.getNumberTimes() == null ? 0 : item.getNumberTimes())
                     + (AlgorithmUtils.directionExport(day));
             articleInformation.setHeatWeight(heatWeight);
             return articleInformation;
@@ -151,72 +143,5 @@ public class ArticleTask {
             }
         }
         systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.CALCULATING_ARTICLE_WEIGHTS.getCode());
-    }
-
-    /**
-     * 同步文章点赞
-     * 每周天晚上0点执行
-     */
-    @Scheduled(cron = "0 0 0 ? * SUN")
-    public void syncFabulous() {
-        try {
-//         用户点赞的文章列表
-            Map<String, Set<String>> cacheMpa = RedisUtils.getCacheMap(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
-//         文章点赞人列表
-            Map<String, Set<String>> articleMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-//      文章点赞总数
-            Map<String, Object> cacheMap = RedisUtils.getCacheMap(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
-            if (CollectionUtils.isNotEmpty(cacheMpa)) {
-//            文章点赞记录落盘
-                syncArticleFl(articleMap, cacheMap);
-                RedisUtils.deleteObject(RedisBusinessKeyEnums.USER_LIKE_ARTICLE_KEY.getKey());
-                RedisUtils.deleteObject(RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey());
-                RedisUtils.deleteObject(RedisBusinessKeyEnums.TOTAL_LIKE_COUNT_KEY.getKey());
-            }
-            systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_ARTICLE_CLICK_LIKE.getCode());
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("同步文章点赞 执行异常异常：{}", e.getMessage());
-            MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "同步文章点赞任务异常",
-                    String.format("{}，发生时间：{}", "同步文章点赞任务异常！syncFabulous", DateUtil.formatDateTime(new Date())));
-        }
-    }
-
-    /**
-     * @param articleMap 文章点赞人列表
-     * @param cacheMap   文章点赞总数
-     */
-    private void syncArticleFl(Map<String, Set<String>> articleMap, Map<String, Object> cacheMap) {
-        executorService.execute(() -> {
-            try {
-                //同步点赞记录
-                articleMap.forEach((k, v) -> {
-                    List<FabulousRecord> list = new ArrayList<>();
-                    for (String uid : v) {
-                        FabulousRecord fabulousRecord = new FabulousRecord();
-                        fabulousRecord.setTypeId(Long.valueOf(k));
-                        fabulousRecord.setUid(uid);
-                        fabulousRecord.setCreateTime(new Date());
-                        fabulousRecord.setType(CommentTypeEnums.ARTICLE_TYPE.getCode());
-                        list.add(fabulousRecord);
-                    }
-//                        同步点赞表
-                    fabulousRecordMapper.insertBatch(list);
-                });
-                //                        同步文章点赞数
-                List<ArticleInformation> articleInformation = new ArrayList<>();
-                cacheMap.forEach((k, v) -> {
-                    ArticleInformation articleInformation1 = new ArticleInformation();
-                    articleInformation1.setId(Long.valueOf(k)).setLikeTimes(Long.valueOf(v.toString()));
-                    articleInformation.add(articleInformation1);
-                });
-                articleInformationMapper.updateBatchById(articleInformation);
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error("点赞同步 执行异常异常：{}", e.getMessage());
-//                    发送异常邮件
-                MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "点赞信息同步异常->定时任务：syncFabulous", e.getMessage());
-            }
-        });
     }
 }

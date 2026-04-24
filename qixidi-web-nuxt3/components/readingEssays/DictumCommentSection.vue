@@ -68,7 +68,7 @@
       <div v-else-if="comments.length > 0" class="comment-list">
         <!-- 一级评论 -->
         <div v-for="comment in comments" :key="comment.id" class="comment-item">
-          <img :src="comment.avatar" :alt="comment.nickname" class="comment-avatar" />
+          <img :src="comment.avatar || '/images/default-avatar.svg'" :alt="comment.nickname" class="comment-avatar" />
           <div class="comment-content-wrapper">
             <div class="comment-meta">
               <span class="comment-author">{{ comment.nickname }}</span>
@@ -298,7 +298,7 @@ const addCommentOptimistically = (content: string, target: DictumCommentVo | nul
     createTime: new Date().toISOString(),
     nickname: user.nickname || '我',
     username: user.username || '',
-    avatar: user.avatar || '',
+    avatar: user.avatar || '/images/default-avatar.svg',
     targetNickname: target?.nickname || '',
     targetUsername: target?.username || '',
     targetAvatar: target?.avatar || '',

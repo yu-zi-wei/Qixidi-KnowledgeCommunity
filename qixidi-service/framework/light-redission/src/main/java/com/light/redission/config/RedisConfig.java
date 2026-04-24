@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 public class RedisConfig extends CachingConfigurerSupport {
 
     private static final String REDIS_PROTOCOL_PREFIX = "redis://";
-    private static final String REDISS_PROTOCOL_PREFIX = "rediss://";
 
     @Autowired
     private RedisProperties redisProperties;

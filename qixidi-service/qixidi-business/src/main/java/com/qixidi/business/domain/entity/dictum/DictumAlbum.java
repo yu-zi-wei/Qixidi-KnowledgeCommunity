@@ -47,23 +47,10 @@ public class DictumAlbum {
     private Long albumState;
 
     /**
-     * 收录总数
-     */
-    private Long employSum;
-
-    /**
      * 推荐率
      */
     private Long recommendRate;
 
-    /**
-     * 点赞总数
-     */
-    private Long helpSum;
-    /**
-     * 关注总数
-     */
-    private Long followSum;
     /**
      * 状态（0：正常吗：已删除）
      */

@@ -68,7 +68,7 @@
       <div v-else-if="comments.length > 0" class="comment-list">
         <!-- 一级评论 -->
         <div v-for="comment in comments" :key="comment.id" class="comment-item">
-          <img :src="comment.commentAvatar" :alt="comment.commentName" class="comment-avatar" />
+          <img :src="comment.commentAvatar || '/images/default-avatar.svg'" :alt="comment.commentName" class="comment-avatar" />
           <div class="comment-content-wrapper">
             <div class="comment-meta">
               <span class="comment-author">{{ comment.commentName }}</span>
@@ -82,7 +82,7 @@
             <!-- 子评论列表（二级及三级） -->
             <div v-if="comment.mountComment && comment.mountComment.length > 0" class="reply-list">
               <div v-for="reply in comment.mountComment" :key="reply.id" class="reply-item">
-                <img :src="reply.commentAvatar" :alt="reply.commentName" class="reply-avatar" />
+                <img :src="reply.commentAvatar || '/images/default-avatar.svg'" :alt="reply.commentName" class="reply-avatar" />
                 <div class="reply-content">
                   <!-- 用户名 + 回复对象 -->
                   <div class="reply-header">
@@ -259,7 +259,7 @@ const addCommentOptimistically = (content: string, target: ArticleCommentVo | nu
     state: 0,
     createTime: new Date().toISOString(),
     commentName: user.nickname || '我',
-    commentAvatar: user.avatar || '',
+    commentAvatar: user.avatar || '/images/default-avatar.svg',
     mountComment: []
   }
 

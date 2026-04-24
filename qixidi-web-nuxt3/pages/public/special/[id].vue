@@ -152,7 +152,8 @@ const { data: articleData } = await useAsyncData(
       specialId: specialId.value,
       pageNum: currentPage.value,
       pageSize,
-      articleTitle: apiKeyword.value || undefined
+      articleTitle: apiKeyword.value || undefined,
+      auditState: 2
     })
   },
   { watch: [() => specialData.value?.uid] }

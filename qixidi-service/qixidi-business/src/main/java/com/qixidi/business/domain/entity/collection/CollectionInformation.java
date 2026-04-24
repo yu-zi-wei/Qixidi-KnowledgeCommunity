@@ -49,10 +49,5 @@ public class CollectionInformation {
     private String updateId;
 
     private Date updateTime;
-
-    /**
-     * 收录数
-     */
-    private Integer includedCount;
 }
 

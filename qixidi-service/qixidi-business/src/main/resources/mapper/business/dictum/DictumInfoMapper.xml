@@ -77,28 +77,14 @@
         order by di.update_time desc
     </select>
 
-    <select id="selectGroupId" resultType="com.qixidi.business.domain.vo.dictum.DictumInfoVo">
-        SELECT group_id,
-               count(id) AS `sum`
+    <select id="selectDictumCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT uid AS uuid, COUNT(*) AS dictumCount
         FROM b_dictum_info
-        where state = 0
-        GROUP BY group_id
-        HAVING COUNT(group_id) > 0
-    </select>
-
-    <select id="selectAlbumId" resultType="com.qixidi.business.domain.vo.dictum.DictumInfoVo">
-        SELECT album_id,
-               count(id) AS `sum`
-        FROM b_dictum_info
-        where state = 0
-        GROUP BY album_id
-        HAVING COUNT(album_id) > 0
-    </select>
-
-    <select id="selectDictumInfo" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        SELECT uid as uuid, count(uid) as dictumCount
-        FROM `b_dictum_info`
-        where state = 0
+        WHERE uid IN
+        <foreach collection="uuids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND state = 0
         GROUP BY uid
     </select>
 </mapper>

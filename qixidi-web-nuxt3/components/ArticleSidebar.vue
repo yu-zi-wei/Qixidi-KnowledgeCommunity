@@ -11,19 +11,19 @@
       </NuxtLink>
 
       <div class="author-stats">
-        <div class="sidebar-stat">
-          <span class="stat-num">{{ authorStats.articleCount || 0 }}</span>
-          <span class="stat-label">文章</span>
+        <div class="author-stat-item">
+          <span class="author-stat-num">{{ authorStats.articleCount || 0 }}</span>
+          <span class="author-stat-label">文章</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="sidebar-stat">
-          <span class="stat-num">{{ formatNumber(authorStats.fansFollowCount || 0) }}</span>
-          <span class="stat-label">粉丝</span>
+        <div class="author-stat-divider"></div>
+        <div class="author-stat-item">
+          <span class="author-stat-num">{{ formatNumber(authorStats.fansFollowCount || 0) }}</span>
+          <span class="author-stat-label">粉丝</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="sidebar-stat">
-          <span class="stat-num">{{ formatNumber(authorStats.fabulousCount || 0) }}</span>
-          <span class="stat-label">获赞</span>
+        <div class="author-stat-divider"></div>
+        <div class="author-stat-item">
+          <span class="author-stat-num">{{ formatNumber(authorStats.fabulousCount || 0) }}</span>
+          <span class="author-stat-label">获赞</span>
         </div>
       </div>
 
@@ -478,25 +478,25 @@ onMounted(() => {
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
-.sidebar-stat {
+.author-stat-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1px;
 }
 
-.stat-num {
+.author-stat-num {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-ink);
 }
 
-.stat-label {
+.author-stat-label {
   font-size: 11px;
   color: var(--color-ink-muted);
 }
 
-.stat-divider {
+.author-stat-divider {
   display: none;
 }
 

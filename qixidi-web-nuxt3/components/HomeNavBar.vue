@@ -379,7 +379,7 @@ const showUserPopover = ref(false)
 const censusApi = useUserCensusApi()
 const { data: userStats } = await useAsyncData<UserCensusCount>(
   'user-census-count',
-  () => censusApi.getUserCensusCount('')
+  () => censusApi.getUserCensusCount()
 )
 
 const authApi = useAuthApi()

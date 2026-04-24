@@ -3,12 +3,9 @@ import type { UserCensusCount, UserSubmissionItem, UserSubmissionRecord } from '
 export const useUserCensusApi = () => {
   const api = useApi()
 
-  /**
-   * 获取用户统计数据
-   * @param month 月份，格式：YYYY-MM
-   */
-  const getUserCensusCount = (month: string) => {
-    return api.get<UserCensusCount>('/user/census/count/user', { month })
+  /** 获取用户统计数据（实时查询） */
+  const getUserCensusCount = () => {
+    return api.get<UserCensusCount>('/user/census/count/user')
   }
 
   /**

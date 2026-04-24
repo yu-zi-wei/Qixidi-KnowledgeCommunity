@@ -16,11 +16,8 @@
         ai.special_id,
         ai.label_id,
         ai.grouping_id,
-        ai.like_times,
-        ai.comment_times ,
         ai.number_times,
         ai.audit_state,
-        ai.collection_times,
         ai.audit_time,
         um.username,
         um.nickname,
@@ -51,25 +48,12 @@
                ci.uid,
                ci.create_time,
                ci.update_id,
-               ci.included_count,
                ci.update_time,
                um.nickname as username
         from b_collection_information as ci
                  inner join b_user_main as um on ci.uid = um.uuid
             ${ew.getCustomSqlSegment}
     </select>
-
-    <update id="updateDelete">
-        update b_collection_information
-        set included_count=included_count - 1
-        where id = #{collectionId};
-    </update>
-
-    <update id="updateAdd">
-        update b_collection_information
-        set included_count=included_count + 1
-        where id = #{collectionId};
-    </update>
 
     <select id="selectCensus" resultType="com.qixidi.business.domain.vo.collection.CollectionInformationVo">
         select id, collection_name, create_time, uid

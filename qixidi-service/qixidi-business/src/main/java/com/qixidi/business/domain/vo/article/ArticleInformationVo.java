@@ -5,13 +5,12 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
-import com.qixidi.business.domain.entity.count.CountUserWebsiteEntity;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 
 
 /**
@@ -22,7 +21,7 @@ import java.util.Set;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class ArticleInformationVo extends CountUserWebsiteEntity {
+public class ArticleInformationVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -142,9 +141,9 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
     private Long likeTimes = 0L;
 
     /**
-     * 是否点赞
+     * 是否点赞（当前用户）
      */
-    private Set<String> fabulousUserSet;
+    private Boolean isFabulous;
 
     /**
      * 是否收藏
@@ -244,5 +243,18 @@ public class ArticleInformationVo extends CountUserWebsiteEntity {
      * 关注按钮状态
      */
     private Boolean buttonLoading = false;
+
+    // 作者统计字段（用于文章详情页展示作者信息）
+    private int fabulousCount;
+    private int fansFabulousCount;
+    private int collectionCount;
+    private int followCount;
+    private int fansFollowCount;
+    private int commentCount;
+    private int fansCommentCount;
+    private int articleCount;
+    private int specialColumnCount;
+    private int fansSpecialColumn;
+    private int circleCount;
 }
 

@@ -53,9 +53,4 @@ public class SpecialInformation {
     private Date createTime;
 
     private Date updateTime;
-
-    /**
-     * 收录数
-     */
-    private Integer includedCount;
 }

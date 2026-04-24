@@ -26,6 +26,7 @@ https://cloud.siliconflow.cn/i/EXJdGpo9
 
 ### 数据表文档
 b_article_information
-- id：（-11：关于作者）
+
+- id：（-11：关于栖息地）
 - id：（-12：友链）
-- id：（-13：作者）
+- id：（-13：关于作者）

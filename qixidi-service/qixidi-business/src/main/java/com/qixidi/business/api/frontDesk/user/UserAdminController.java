@@ -68,13 +68,10 @@ public class UserAdminController {
 
     /**
      * 用户基本数据信息
-     *
-     * @param bo
-     * @return
      */
     @GetMapping("/count/user")
-    public CountUserWebsiteVo CountUserCensus(CensusEntity bo) {
-        return iSpecialInformationService.CountUserCensus(bo);
+    public CountUserWebsiteVo CountUserCensus() {
+        return iSpecialInformationService.CountUserCensus();
     }
 
 }
