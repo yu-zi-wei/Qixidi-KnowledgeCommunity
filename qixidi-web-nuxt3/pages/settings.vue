@@ -434,7 +434,7 @@ const handleCancelAccount = async () => {
 }
 </script>
 
-<style>
+<style scoped>
 .settings-page {
   min-height: 100vh;
   background: var(--color-surface-warm);

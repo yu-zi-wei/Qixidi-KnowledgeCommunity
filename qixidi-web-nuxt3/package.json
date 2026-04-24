@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev",
-    "build": "nuxt build",
+    "build": "nuxt cleanup && nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "pack": "powershell -c \"Compress-Archive -Path .output -DestinationPath ../deployment.zip -Force\"",
