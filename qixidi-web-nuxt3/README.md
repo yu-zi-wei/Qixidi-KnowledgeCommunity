@@ -136,7 +136,7 @@ npm run pack
 # 3. 上传并重启
 scp ../deployment.zip user@server:/path/to/app/
 ssh user@server
-cd /path/to/app/
+cd /data/qixidi/web
 unzip -o deployment.zip
 pm2 restart qixidi-web --update-env
 ```
