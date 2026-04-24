@@ -46,4 +46,16 @@
         AND type = 1 AND state = 0
         GROUP BY type_id
     </select>
+
+    <select id="selectFabulousCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
+        SELECT ai.user_id AS uuid, COUNT(*) AS fabulousCount
+        FROM b_fabulous_record fr
+        LEFT JOIN b_article_information ai ON fr.type_id = ai.id
+        WHERE ai.user_id IN
+        <foreach collection="uuids" item="uuid" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+        AND fr.type = 1 AND fr.state = 0
+        GROUP BY ai.user_id
+    </select>
 </mapper>

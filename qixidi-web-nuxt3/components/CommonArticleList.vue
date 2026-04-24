@@ -44,7 +44,7 @@
             </div>
             <div class="item-stats">
               <span><n-icon><Eye /></n-icon>{{ article.numberTimes || 0 }}</span>
-              <span><n-icon><Heart /></n-icon>{{ article.likeTimes || 0 }}</span>
+              <span><n-icon><ThumbUp /></n-icon>{{ article.likeTimes || 0 }}</span>
               <span><n-icon><MessageCircle /></n-icon>{{ article.commentTimes || 0 }}</span>
             </div>
           </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { Calendar, Eye, Heart, MessageCircle } from '@vicons/tabler'
+import { Calendar, Eye, ThumbUp, MessageCircle } from '@vicons/tabler'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 const props = withDefaults(defineProps<{

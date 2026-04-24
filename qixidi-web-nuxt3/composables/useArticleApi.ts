@@ -105,6 +105,14 @@ export const useArticleApi = () => {
     return api.put<ArticleInfo>('/user/save/draft', transformedData)
   }
 
+  /**
+   * 文章浏览数 +1
+   * 接口：GET /white/article/add/browse-count/{id}/{label}
+   */
+  const addBrowseCount = (id: string | number, label: string) => {
+    return api.get(`/white/article/add/browse-count/${id}/${label}`)
+  }
+
   return {
     getRecommendList,
     getSortList,
@@ -114,6 +122,7 @@ export const useArticleApi = () => {
     getArticleDetail,
     getLatelyArticleList,
     insertArticle,
-    saveDraft
+    saveDraft,
+    addBrowseCount
   }
 }

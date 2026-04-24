@@ -36,7 +36,7 @@
             {{ item.numberTimes || 0 }}
           </span>
           <span class="article-stat">
-            <Heart class="stat-icon" />
+            <ThumbUp class="stat-icon" />
             {{ item.likeTimes || 0 }}
           </span>
           <span class="article-stat">
@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { Eye, Heart, MessageCircle } from '@vicons/tabler'
+import { Eye, ThumbUp, MessageCircle } from '@vicons/tabler'
 import type { ArticleInfo } from '~/types'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 

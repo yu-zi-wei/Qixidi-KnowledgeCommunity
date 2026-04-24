@@ -127,7 +127,7 @@ interface Article {
   likeTimes: number
   commentTimes: number
   isCollection?: boolean
-  fabulousUserSet?: Set<string>
+  isFabulous?: boolean
   collectionRecordId?: number  // 收藏记录 id（用于取消收藏）
   isFollow?: boolean
   // 继承自 CountUserWebsiteEntity 的统计字段
@@ -161,20 +161,7 @@ defineEmits<{
 
 // 是否已点赞
 const isLiked = computed(() => {
-  const authStore = useAuthStore()
-  const userId = authStore.user?.uuid  // 使用 uuid 而不是 userId
-  if (!userId || !props.article.fabulousUserSet) return false
-
-  // 处理 SSR 序列化后 Set 变成数组的情况
-  const userSet = props.article.fabulousUserSet
-  if (typeof userSet.has === 'function') {
-    // 是 Set 类型 - 需要转换为字符串比较
-    return userSet.has(String(userId))
-  } else if (Array.isArray(userSet)) {
-    // 是数组类型（SSR 序列化后）
-    return userSet.some(id => String(id) === String(userId))
-  }
-  return false
+  return !!props.article.isFabulous
 })
 
 // 是否是文章作者

@@ -81,6 +81,23 @@ export const useArticlesStore = defineStore('articles', {
       }
     },
 
+    // 替换页面数据（始终覆盖，用于刷新）
+    replacePage(key: string, articles: ArticleInfo[], total: number) {
+      if (!this.pages[key]) {
+        this.pages[key] = {
+          articles: [],
+          pageNum: 1,
+          total: 0,
+          scrollPosition: 0,
+          hasMore: true
+        }
+      }
+
+      this.pages[key].articles = articles
+      this.pages[key].total = total
+      this.pages[key].pageNum = 1
+    },
+
     // 追加文章列表（用于加载更多）
     appendArticles(key: string, newArticles: ArticleInfo[], total: number) {
       if (!this.pages[key]) {

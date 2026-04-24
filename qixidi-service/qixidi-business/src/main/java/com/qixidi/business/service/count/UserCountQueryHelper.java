@@ -8,6 +8,7 @@ import com.qixidi.business.mapper.collection.CollectionRecordMapper;
 import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
+import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class UserCountQueryHelper {
     private final DictumAlbumMapper albumMapper;
     private final DictumInfoMapper dictumMapper;
     private final TimeNotesMapper timeNotesMapper;
+    private final FabulousRecordMapper fabulousMapper;
 
     public Map<String, Integer> articleCount(Collection<String> uuids) {
         if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
@@ -89,6 +91,12 @@ public class UserCountQueryHelper {
         if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
         return toMap(timeNotesMapper.selectTimeNotesCountByUserIds(uuids),
             CountUserWebsiteVo::getUuid, CountUserWebsiteVo::getTimeNotesCount);
+    }
+
+    public Map<String, Integer> fabulousCount(Collection<String> uuids) {
+        if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
+        return toMap(fabulousMapper.selectFabulousCountByUserIds(uuids),
+            CountUserWebsiteVo::getUuid, CountUserWebsiteVo::getFabulousCount);
     }
 
     public Map<String, CountUserWebsiteVo> allCounts(Collection<String> uuids) {

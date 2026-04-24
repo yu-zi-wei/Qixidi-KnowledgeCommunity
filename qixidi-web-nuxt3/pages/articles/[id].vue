@@ -65,16 +65,7 @@ const showCollectionDialog = ref(false)
 // 获取文章详情
 const { data: article, pending, error, refresh } = await useAsyncData(
   `article-${articleId.value}`,
-  () => articleApi.getArticleDetail(articleId.value),
-  {
-    transform: (data) => {
-      // 确保 fabulousUserSet 是 Set 类型（SSR 序列化后会变成数组）
-      if (data?.fabulousUserSet && !(data.fabulousUserSet instanceof Set)) {
-        data.fabulousUserSet = new Set(data.fabulousUserSet)
-      }
-      return data
-    }
-  }
+  () => articleApi.getArticleDetail(articleId.value)
 )
 
 // 设置侧边栏数据（使用 watch 而不是 watchEffect，避免循环）
@@ -162,29 +153,18 @@ const handleLike = async () => {
 
   if (!article.value) return
 
-  // 确保 fabulousUserSet 是 Set 类型
-  if (!article.value.fabulousUserSet || !(article.value.fabulousUserSet instanceof Set)) {
-    article.value.fabulousUserSet = new Set()
-  }
-
-  // 判断当前是否已点赞（使用 uuid）
-  const userId = authStore.user?.uuid
-  const hasLiked = userId && article.value.fabulousUserSet.has(userId) || false
+  const hasLiked = !!article.value.isFabulous
   const newState = !hasLiked
-
-  // 保存旧状态，用于失败回滚
-  const oldLikedState = hasLiked
   const oldLikeTimes = article.value.likeTimes || 0
 
   try {
-    // 1. 调用后端接口（传递点赞前的数量）
     const requestData = {
       typeId: article.value.id,
       targetId: article.value.id,
       targetUid: article.value.userId,
       type: 1,
       state: 0,
-      fabulousSum: oldLikeTimes,  // 传递点赞前的数量
+      fabulousSum: oldLikeTimes,
       targetTitle: article.value.articleTitle || '',
       labelId: article.value.labelNameList?.join(',') || ''
     }
@@ -195,18 +175,11 @@ const handleLike = async () => {
       await fabulousApi.cancelLikeArticle(requestData)
     }
 
-    // 2. 接口成功后，更新 UI
-    if (newState && userId) {
-      article.value.fabulousUserSet.add(userId)
-    } else if (userId) {
-      article.value.fabulousUserSet.delete(userId)
-    }
+    // 接口成功后更新 UI
+    article.value.isFabulous = newState
     article.value.likeTimes = oldLikeTimes + (newState ? 1 : -1)
-
-    // 3. 成功，保持更新状态
   } catch (err) {
     console.error('点赞操作失败:', err)
-    // 失败不需要回滚，因为还没更新 UI
   }
 }
 
@@ -233,6 +206,12 @@ useHead({
 // 页面挂载时立即滚动到顶部（避免从首页滚动的位置过渡）
 onMounted(() => {
   window.scrollTo({ top: 0, behavior: 'instant' })
+
+  // 文章浏览数 +1
+  if (article.value) {
+    const label = article.value.labelList?.map((l: any) => l.id).join(',') || ''
+    articleApi.addBrowseCount(article.value.id, label).catch(() => {})
+  }
 })
 </script>
 

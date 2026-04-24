@@ -60,6 +60,7 @@ import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.article.IArticleInformationService;
 import com.qixidi.business.service.count.ArticleCountQueryHelper;
+import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,6 +98,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final NewsSystemInfoMapper newsSystemInfoMapper;
     private final DeepSeekService deepSeekService;
     private final ArticleCountQueryHelper articleCountQueryHelper;
+    private final UserCountQueryHelper userCountQueryHelper;
 
     /**
      * 查询文章信息
@@ -460,6 +462,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public ArticleInformationVo details(Long id) {
         ArticleInformationVo details = baseMapper.details(id);
+        if (details == null) throw new ServiceException("文章不存在");
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new LambdaQueryWrapper<UserFollow>()
                 .eq(UserFollow::getTargetId, details.getUserId())
@@ -494,6 +497,15 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         details.setCommentTimes(commentCounts.getOrDefault(articleId, 0).longValue());
         Map<Long, Integer> collectionCounts = articleCountQueryHelper.collectionCount(List.of(articleId));
         details.setCollectionTimes(collectionCounts.getOrDefault(articleId, 0));
+
+        // 获取作者统计（文章数、粉丝数、获赞数）
+        String authorUuid = details.getUserId();
+        Map<String, Integer> articleCounts = userCountQueryHelper.articleCount(List.of(authorUuid));
+        details.setArticleCount(articleCounts.getOrDefault(authorUuid, 0));
+        Map<String, Integer> fansCounts = userCountQueryHelper.fansCount(List.of(authorUuid));
+        details.setFansFollowCount(fansCounts.getOrDefault(authorUuid, 0));
+        Map<String, Integer> fabulousCounts = userCountQueryHelper.fabulousCount(List.of(authorUuid));
+        details.setFabulousCount(fabulousCounts.getOrDefault(authorUuid, 0));
 
         String uuid = LoginHelper.getTripartiteUuid();
         // 获取当前用户点赞状态
@@ -584,7 +596,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public List<ArticleInformationVo> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return baseMapper.selectTime(bo);
+        List<ArticleInformationVo> list = baseMapper.selectTime(bo);
+        enrichWithRealTimeCounts(list);
+        return list;
     }
 
     @Override

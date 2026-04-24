@@ -2,11 +2,11 @@
   <aside v-if="isReady" ref="sidebarRef" class="article-sidebar" :class="{ 'is-visible': isVisible }">
     <!-- 作者信息卡片 -->
     <div v-if="author" class="sidebar-card author-card">
-      <NuxtLink :to="`/user-home/article/${author.userId}`" target="_blank" class="author-link">
-        <img :src="author.avatar" :alt="author.nickname" class="author-avatar" />
-        <div class="author-info">
-          <h4 class="author-name">{{ author.nickname }}</h4>
-          <p class="author-title"><UserRoleBadge :role-id="author.roleId" /><span v-if="author.occupation">{{ author.occupation }}</span><span v-else>博主</span></p>
+      <NuxtLink :to="`/user-home/article/${author.userId}`" target="_blank" class="sidebar-author-link">
+        <img :src="author.avatar" :alt="author.nickname" class="sidebar-author-avatar" />
+        <div class="sidebar-author-info">
+          <h4 class="sidebar-author-name">{{ author.nickname }}</h4>
+          <p class="sidebar-author-title"><UserRoleBadge :role-id="author.roleId" /><span v-if="author.occupation">{{ author.occupation }}</span><span v-else>博主</span></p>
         </div>
       </NuxtLink>
 
@@ -413,7 +413,7 @@ onMounted(() => {
   border-color: rgba(255, 255, 255, 0.06);
 }
 
-.author-link {
+.sidebar-author-link {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -422,7 +422,7 @@ onMounted(() => {
   margin-bottom: 12px;
 }
 
-.author-avatar {
+.sidebar-author-avatar {
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -430,12 +430,12 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-.author-info {
+.sidebar-author-info {
   flex: 1;
   min-width: 0;
 }
 
-.author-name {
+.sidebar-author-name {
   font-size: 15px;
   font-weight: 600;
   color: var(--color-ink);
@@ -446,11 +446,11 @@ onMounted(() => {
   transition: color 0.2s ease;
 }
 
-.author-link:hover .author-name {
+.sidebar-author-link:hover .sidebar-author-name {
   color: var(--color-primary);
 }
 
-.author-title {
+.sidebar-author-title {
   display: flex;
   align-items: center;
   gap: 6px;

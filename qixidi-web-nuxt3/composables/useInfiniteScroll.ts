@@ -10,6 +10,18 @@ interface UseInfiniteScrollOptions {
   pageSize?: number
 }
 
+// Tab 切换页面路径：这些页面间切换时需要刷新数据
+const tabPaths = ['/', '/featured', '/follow', '/latest']
+
+function isTabNavigation(path: string): boolean {
+  if (tabPaths.includes(path)) return true
+  if (path.match(/^\/category\//)) return true
+  return false
+}
+
+// 记录哪些 storeKey 应该在返回时使用缓存（从详情页返回）
+const preserveCacheKeys = new Set<string>()
+
 /**
  * 无限滚动 Hook
  * - 自动管理文章列表和分页状态
@@ -63,18 +75,22 @@ export const useInfiniteScroll = (options: UseInfiniteScrollOptions) => {
   }
 
   /**
-   * 初始化数据（用于 SSR 首屏渲染）
-   * @param force - 是否强制重新加载（忽略已有数据）
+   * 初始化数据
+   * - 从详情页返回：使用缓存 + 恢复滚动位置
+   * - 其他场景（首次访问、Tab 切换）：获取最新数据
    */
-  const initArticles = async (force = false) => {
-    // 检查是否已有数据
-    if (articles.value.length > 0 && !force) {
-      // 有数据则恢复滚动位置（延迟执行，确保 DOM 已渲染）
+  const initArticles = async () => {
+    if (loadingMore.value) return
+
+    const key = currentStoreKey.value
+
+    // 从详情页返回 → 使用缓存，恢复滚动位置
+    if (preserveCacheKeys.has(key)) {
+      preserveCacheKeys.delete(key)
       if (import.meta.client) {
         nextTick(() => {
-          const savedPosition = localStorage.getItem(`scroll-${currentStoreKey.value}`)
+          const savedPosition = localStorage.getItem(`scroll-${key}`)
           if (savedPosition) {
-            // 使用 instant 避免滚动动画
             window.scrollTo({ top: Number(savedPosition), behavior: 'instant' })
           }
         })
@@ -82,11 +98,11 @@ export const useInfiniteScroll = (options: UseInfiniteScrollOptions) => {
       return
     }
 
-    // 无数据或强制刷新则加载第一页
+    // 其他场景 → 获取最新数据
     loadingMore.value = true
     try {
       const result = await fetchFn(1)
-      articlesStore.initPage(currentStoreKey.value, result.rows, result.total)
+      articlesStore.replacePage(key, result.rows, result.total)
     } catch (error) {
       console.error('加载文章失败:', error)
     } finally {
@@ -125,9 +141,12 @@ export const useInfiniteScroll = (options: UseInfiniteScrollOptions) => {
     if (scrollTimer) clearTimeout(scrollTimer)
   })
 
-  // 离开页面时保存滚动位置
-  onBeforeRouteLeave(() => {
+  // 离开页面时：保存滚动位置，非 Tab 切换时标记保留缓存
+  onBeforeRouteLeave((to) => {
     saveScrollPosition()
+    if (!isTabNavigation(to.path)) {
+      preserveCacheKeys.add(currentStoreKey.value)
+    }
   })
 
   return {

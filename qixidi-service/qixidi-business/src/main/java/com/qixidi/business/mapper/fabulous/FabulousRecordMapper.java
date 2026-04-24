@@ -4,6 +4,7 @@ package com.qixidi.business.mapper.fabulous;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
+import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.article.ArticleCountVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
@@ -28,5 +29,7 @@ public interface FabulousRecordMapper extends BaseMapperPlus<FabulousRecordMappe
     IPage<ArticleInformationVo> fabulousArticleList(@Param("bo") UserHomeBo bo, Page<ArticleInformation> build);
 
     List<ArticleCountVo> selectLikeCountByArticleIds(@Param("articleIds") Collection<Long> articleIds);
+
+    List<CountUserWebsiteVo> selectFabulousCountByUserIds(@Param("uuids") Collection<String> uuids);
 }
 
