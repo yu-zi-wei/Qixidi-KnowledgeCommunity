@@ -205,7 +205,24 @@ minio:
 deep-seek:
   config:
     authorization-key: ${config.deepSeek.authorizationKey}
-    url: ${config.deepSeek.url}
-    model: ${config.deepSeek.model}
-    role: ${config.deepSeek.role}
+    url: https://api.siliconflow.cn/v1/chat/completions
+    model: Qwen/QwQ-32B
+    role: user
 
+
+spring:
+  ai:
+    deepseek:
+      api-key: ${spring.ai.openai.deepseek}
+      base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com
+      chat:
+        options:
+          model: deepseek-reasoner # 使用深度思考模型
+          temperature: 0.8 # 温度值
+    openai:
+      api-key: ${spring.ai.openai.apiKey}
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      chat:
+        options:
+          model: qwen3.6-plus
+          temperature: 0.7
