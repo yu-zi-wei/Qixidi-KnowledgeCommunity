@@ -3,12 +3,15 @@ package com.light.oss.service.Impl;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
+import com.light.core.constant.CloudStorageProvider;
+import com.light.core.utils.StringUtils;
 import com.light.oss.config.OSSConfig;
 import com.light.oss.domain.dto.OssDto;
 import com.light.oss.service.OssService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,11 +30,17 @@ import java.util.UUID;
 public class OSSConfigImpl implements OssService {
 
     private final OSSConfig ossConfig;
+
+    @Value("${qixidi.storage.provider}")
+    private String storageProvider;
+
     private OSS ossClient;
 
     @PostConstruct
     public void initOssClient() {
-        if (!ossConfig.getEnabledSwitch()) return;
+        if (StringUtils.isEmpty(storageProvider) || !CloudStorageProvider.OSS.equals(storageProvider)) {
+            return;
+        }
         if (ossClient == null) {
             log.info("初始化OSS客户端");
             ossClient = new OSSClientBuilder().build(ossConfig.getEndPoint(),

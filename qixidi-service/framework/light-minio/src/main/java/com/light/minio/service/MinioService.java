@@ -10,5 +10,6 @@ import java.io.IOException;
  * @create 2025/2/20 14:58
  */
 public interface MinioService {
+
     MinioDto upload(MultipartFile file);
 }

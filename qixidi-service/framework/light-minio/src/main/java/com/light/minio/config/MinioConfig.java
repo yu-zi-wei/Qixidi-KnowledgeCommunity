@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * @author zi-wei
  * @create 2025/2/19 15:53
  */
-@ConfigurationProperties(prefix = "minio.storage")
+@ConfigurationProperties(prefix = "qixidi.minio.storage")
 @Configuration
 @Data
 public class MinioConfig {
@@ -37,10 +37,5 @@ public class MinioConfig {
      * secretKey
      */
     private String secretKey;
-
-    /**
-     * 开关
-     */
-    private Boolean enabledSwitch = false;
 
 }

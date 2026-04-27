@@ -4,11 +4,14 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.constant.CloudStorageProvider;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
+import com.light.exception.ServiceException;
 import com.light.minio.domain.dto.MinioDto;
 import com.light.minio.service.MinioService;
+import com.light.oss.domain.dto.OssDto;
 import com.light.oss.service.OssService;
 import com.qixidi.system.domain.bo.SysOssBo;
 import com.qixidi.system.domain.entity.SysOss;
@@ -17,6 +20,7 @@ import com.qixidi.system.mapper.SysOssMapper;
 import com.qixidi.system.service.ISysOssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +40,9 @@ public class SysOssServiceImpl implements ISysOssService {
     private final SysOssMapper baseMapper;
     private final OssService ossService;
     private final MinioService minioService;
+
+    @Value("${qixidi.storage.provider}")
+    private String storageProvider;
 
     @Override
     public TableDataInfo<SysOssVo> queryPageList(SysOssBo bo, PageQuery pageQuery) {
@@ -66,17 +73,18 @@ public class SysOssServiceImpl implements ISysOssService {
 
     @Override
     public SysOss upload(MultipartFile file) {
-        //Minio 上传
-        MinioDto upload = minioService.upload(file);
-        log.info("Minio_url:" + upload.getUrl());
-        SysOss sysOss = BeanUtil.copyProperties(upload, SysOss.class);
-
-        //oss上传（不使用）
-//        OssDto ossDto = ossService.upload(file);
-//        log.info("ossDto_url:" + ossDto.getUrl());
-//        SysOss sysOss = BeanUtil.copyProperties(ossDto, SysOss.class);
+        SysOss sysOss = new SysOss();
+        if (CloudStorageProvider.MINIO.equals(storageProvider)) {
+            MinioDto upload = minioService.upload(file);
+            sysOss = BeanUtil.copyProperties(upload, SysOss.class);
+        } else if (CloudStorageProvider.OSS.equals(storageProvider)) {
+            OssDto ossDto = ossService.upload(file);
+            sysOss = BeanUtil.copyProperties(ossDto, SysOss.class);
+        } else {
+            throw new ServiceException("暂不支持该存储服务");
+        }
         // 保存文件信息
-        baseMapper.insert(sysOss);
+//        baseMapper.insert(sysOss);
         return sysOss;
     }
 

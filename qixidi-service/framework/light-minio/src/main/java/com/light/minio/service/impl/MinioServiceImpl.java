@@ -1,5 +1,7 @@
 package com.light.minio.service.impl;
 
+import com.light.core.constant.CloudStorageProvider;
+import com.light.core.utils.StringUtils;
 import com.light.minio.config.MinioConfig;
 import com.light.minio.domain.dto.MinioDto;
 import com.light.minio.service.MinioService;
@@ -11,6 +13,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +46,8 @@ import java.util.UUID;
 public class MinioServiceImpl implements MinioService {
 
     private MinioClient minioClient;
+    @Value("${qixidi.storage.provider}")
+    private String storageProvider;
     private final MinioConfig minioConfig;
 
     //是否开启压缩
@@ -50,7 +55,9 @@ public class MinioServiceImpl implements MinioService {
 
     @PostConstruct
     public void initMinioClient() {
-        if (!minioConfig.getEnabledSwitch()) return;
+        if (StringUtils.isEmpty(storageProvider) || !CloudStorageProvider.MINIO.equals(storageProvider)) {
+            return;
+        }
         if (minioClient == null) {
             log.info("初始化Minio客户端");
             minioClient = MinioClient.builder()

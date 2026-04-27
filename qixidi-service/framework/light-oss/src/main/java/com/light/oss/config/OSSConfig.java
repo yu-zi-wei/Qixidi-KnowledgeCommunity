@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * @author zi-wei
  * @create 2025/2/20 14:14
  */
-@ConfigurationProperties(prefix = "aliyun.oss")
+@ConfigurationProperties(prefix = "qixidi.aliyun.oss")
 @Configuration
 @Data
 public class OSSConfig {
@@ -37,10 +37,5 @@ public class OSSConfig {
      * http协议
      */
     private String httpProtocol;
-
-    /**
-     * 开关
-     */
-    private Boolean enabledSwitch = false;
 
 }
