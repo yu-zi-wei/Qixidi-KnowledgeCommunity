@@ -25,12 +25,34 @@
                 <LinkIcon />
               </n-icon>
             </template>
-            添加链接
+            插入第三方视频
           </n-button>
+          <n-button size="small" quaternary @click="showGalleryDialog = true">
+            <template #icon>
+              <n-icon :size="16">
+                <Photo />
+              </n-icon>
+            </template>
+            多图排版
+          </n-button>
+          <n-upload
+            :custom-request="handleAttachmentUpload"
+            :show-file-list="false"
+          >
+            <n-button size="small" quaternary :loading="attachmentUploading">
+              <template #icon>
+                <n-icon :size="16">
+                  <Paperclip />
+                </n-icon>
+              </template>
+              上传附件
+            </n-button>
+          </n-upload>
         </div>
       </div>
 
       <MdEditor
+        ref="mdEditorRef"
         v-model="content"
         :toolbars="editorToolbars"
         :theme="editorTheme"
@@ -78,14 +100,55 @@
         </ul>
       </div>
     </n-modal>
+
+    <!-- 多图排版弹窗 -->
+    <n-modal
+      v-model:show="showGalleryDialog"
+      preset="card"
+      title="多图排版"
+      style="width: 600px"
+      :mask-closable="false"
+    >
+      <div class="gallery-dialog-content">
+        <div class="gallery-option">
+          <span class="gallery-label">列数</span>
+          <n-radio-group v-model:value="galleryColumns" size="small">
+            <n-radio-button :value="2">2 列</n-radio-button>
+            <n-radio-button :value="3">3 列</n-radio-button>
+            <n-radio-button :value="4">4 列</n-radio-button>
+          </n-radio-group>
+        </div>
+        <div class="gallery-upload-area">
+          <n-upload
+            :custom-request="handleGalleryUpload"
+            :show-file-list="true"
+            list-type="image-card"
+            accept="image/*"
+            multiple
+          />
+        </div>
+      </div>
+      <template #footer>
+        <div class="gallery-footer">
+          <n-button @click="showGalleryDialog = false">取消</n-button>
+          <n-button
+            type="primary"
+            :disabled="galleryUploading"
+            @click="handleGalleryInsert"
+          >
+            {{ galleryDoneCount > 0 ? `插入（${galleryDoneCount} 张）` : '插入空表格' }}
+          </n-button>
+        </div>
+      </template>
+    </n-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
-import { PlayerRecord, Link as LinkIcon } from '@vicons/tabler'
+import { PlayerRecord, Link as LinkIcon, Photo, Paperclip } from '@vicons/tabler'
 import type { UploadSetCustomRequestOptions } from 'naive-ui'
 
 const colorMode = useColorMode()
@@ -109,8 +172,19 @@ const emit = defineEmits<{
 const message = useMessage()
 const ossApi = useOssApi()
 
+const mdEditorRef = ref<InstanceType<typeof MdEditor>>()
+const attachmentUploading = ref(false)
+
 const showVideoLinkDialog = ref(false)
 const videoUploading = ref(false)
+
+// 多图排版状态
+const showGalleryDialog = ref(false)
+const galleryColumns = ref(2)
+const galleryFiles = ref<{ uid: string; url: string; status: 'done' | 'error' }[]>([])
+const galleryUploadingCount = ref(0)
+const galleryUploading = computed(() => galleryUploadingCount.value > 0)
+const galleryDoneCount = computed(() => galleryFiles.value.filter(f => f.status === 'done').length)
 
 const videoLinkForm = reactive({
   url: '',
@@ -169,6 +243,30 @@ const handleImageUpload = async (files: File[], callback: (urls: string[]) => vo
     console.error('图片上传失败:', error)
     message.error('图片上传失败，请重试')
     callback([])
+  }
+}
+
+// 上传附件（在光标位置插入 URL）
+const handleAttachmentUpload = async ({ file, onFinish, onError }: UploadSetCustomRequestOptions) => {
+  attachmentUploading.value = true
+  try {
+    const url = await ossApi.uploadFile(file.file as File)
+    if (mdEditorRef.value) {
+      mdEditorRef.value.insert(() => ({
+        targetValue: url,
+        select: true
+      }))
+    } else {
+      content.value += url
+    }
+    message.success('附件上传成功')
+    onFinish()
+  } catch (error) {
+    console.error('附件上传失败:', error)
+    message.error('附件上传失败，请重试')
+    onError()
+  } finally {
+    attachmentUploading.value = false
   }
 }
 
@@ -257,6 +355,59 @@ const handleInsertVideoLink = () => {
   return true
 }
 
+// 多图排版上传
+const handleGalleryUpload = async ({ file, onFinish, onError }: UploadSetCustomRequestOptions) => {
+  galleryUploadingCount.value++
+  try {
+    const url = await ossApi.uploadFile(file.file as File)
+    galleryFiles.value.push({ uid: file.id, url, status: 'done' })
+    onFinish()
+  } catch (error) {
+    console.error('图片上传失败:', error)
+    onError()
+  } finally {
+    galleryUploadingCount.value--
+  }
+}
+
+// 多图排版插入
+const handleGalleryInsert = () => {
+  const doneFiles = galleryFiles.value.filter(f => f.status === 'done')
+  const cols = galleryColumns.value
+  const rows: string[] = []
+
+  if (doneFiles.length === 0) {
+    // 无图片：插入一行空表格骨架
+    const cells = Array.from({ length: cols }, () => '<td><img src=""/></td>')
+    rows.push(`<tr>\n${cells.join('\n')}\n</tr>`)
+  } else {
+    // 有图片：按列数分行
+    for (let i = 0; i < doneFiles.length; i += cols) {
+      const cells = doneFiles.slice(i, i + cols).map(f => `<td><img src="${f.url}" /></td>`)
+      while (cells.length < cols) cells.push('<td></td>')
+      rows.push(`<tr>\n${cells.join('\n')}\n</tr>`)
+    }
+  }
+
+  const tableHtml = `\n<table>\n${rows.join('\n')}\n</table>\n`
+  content.value += tableHtml
+  showGalleryDialog.value = false
+  message.success(doneFiles.length > 0
+    ? `已插入 ${doneFiles.length} 张图片（${cols}列排版）`
+    : `已插入 ${cols} 列空表格`
+  )
+  return true
+}
+
+// 关闭弹窗时重置状态
+watch(showGalleryDialog, (val) => {
+  if (!val) {
+    galleryFiles.value = []
+    galleryColumns.value = 2
+    galleryUploadingCount.value = 0
+  }
+})
+
 // 暴露方法
 defineExpose({
   getContent: () => content.value,
@@ -336,5 +487,33 @@ defineExpose({
 
 .video-link-tips li {
   margin: var(--space-1) 0;
+}
+
+.gallery-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.gallery-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.gallery-label {
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  white-space: nowrap;
+}
+
+.gallery-upload-area {
+  min-height: 120px;
+}
+
+.gallery-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
 }
 </style>

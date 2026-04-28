@@ -754,6 +754,33 @@ a:hover {
   object-fit: cover;
 }
 
+/* 多图排版 table 优化 */
+.markdown-body table td img,
+.md-editor-preview table td img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.markdown-body table:has(img),
+.md-editor-preview table:has(img) {
+  border-collapse: collapse;
+}
+
+.markdown-body table:has(img) td,
+.md-editor-preview table:has(img) td {
+  padding: 8px;
+}
+
+.markdown-body table:has(img) tr,
+.md-editor-preview table:has(img) tr {
+  background: none;
+  border: none;
+}
+
 /* 分隔线 */
 .markdown-body hr {
   height: 2px;
