@@ -30,7 +30,6 @@ public class SaTokenConfig implements WebMvcConfigurer {
                     try {
                         StpUtil.checkLogin();
                     } catch (Exception e) {
-                        e.printStackTrace();
                         throw new ServiceException("用户登录失效，请重新登录");
                     }
                 }))

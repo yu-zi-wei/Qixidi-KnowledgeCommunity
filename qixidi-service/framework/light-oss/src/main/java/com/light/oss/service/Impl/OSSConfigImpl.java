@@ -85,9 +85,6 @@ public class OSSConfigImpl implements OssService {
             }
         } catch (IOException e) {
             log.error("文件上传失败:{}", e.getMessage());
-        } finally {
-            //OSS关闭服务
-            ossClient.shutdown();
         }
         return oss;
     }
