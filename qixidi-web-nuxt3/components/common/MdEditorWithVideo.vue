@@ -117,27 +117,45 @@
             <n-radio-button :value="3">3 列</n-radio-button>
             <n-radio-button :value="4">4 列</n-radio-button>
           </n-radio-group>
-        </div>
-        <div class="gallery-upload-area">
+          <div style="flex: 1" />
           <n-upload
+            :key="galleryKey"
             :custom-request="handleGalleryUpload"
-            :show-file-list="true"
-            list-type="image-card"
+            :show-file-list="false"
             accept="image/*"
             multiple
-          />
+            :disabled="galleryUploading"
+          >
+            <n-button :disabled="galleryUploading">
+              {{ galleryUploading ? '上传中...' : '选择图片上传' }}
+            </n-button>
+          </n-upload>
+        </div>
+        <div
+          v-if="galleryUrls.length > 0"
+          class="gallery-preview"
+          :style="{ gridTemplateColumns: `repeat(${galleryColumns}, 1fr)` }"
+        >
+          <div v-for="(url, i) in galleryUrls" :key="i" class="gallery-preview-item">
+            <img :src="url" class="gallery-preview-img" />
+            <button class="gallery-preview-remove" @click="galleryUrls.splice(i, 1)">
+              <n-icon :size="14"><X /></n-icon>
+            </button>
+          </div>
         </div>
       </div>
       <template #footer>
         <div class="gallery-footer">
-          <n-button @click="showGalleryDialog = false">取消</n-button>
-          <n-button
-            type="primary"
-            :disabled="galleryUploading"
-            @click="handleGalleryInsert"
-          >
-            {{ galleryDoneCount > 0 ? `插入（${galleryDoneCount} 张）` : '插入空表格' }}
-          </n-button>
+          <div v-if="galleryUploading" class="gallery-uploading-tip">
+            <n-spin size="small" />
+            <span>图片上传中，请稍候...</span>
+          </div>
+          <div class="gallery-footer-actions">
+            <n-button @click="showGalleryDialog = false">取消</n-button>
+            <n-button type="primary" @click="handleGalleryInsert">
+              {{ galleryUrls.length > 0 ? `插入（${galleryUrls.length} 张）` : '插入空表格' }}
+            </n-button>
+          </div>
         </div>
       </template>
     </n-modal>
@@ -148,7 +166,7 @@
 import { ref, reactive, watch, computed } from 'vue'
 import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
-import { PlayerRecord, Link as LinkIcon, Photo, Paperclip } from '@vicons/tabler'
+import { PlayerRecord, Link as LinkIcon, Photo, Paperclip, X } from '@vicons/tabler'
 import type { UploadSetCustomRequestOptions } from 'naive-ui'
 
 const colorMode = useColorMode()
@@ -181,10 +199,10 @@ const videoUploading = ref(false)
 // 多图排版状态
 const showGalleryDialog = ref(false)
 const galleryColumns = ref(2)
-const galleryFiles = ref<{ uid: string; url: string; status: 'done' | 'error' }[]>([])
+const galleryUrls = ref<string[]>([])
+const galleryKey = ref(0)
 const galleryUploadingCount = ref(0)
 const galleryUploading = computed(() => galleryUploadingCount.value > 0)
-const galleryDoneCount = computed(() => galleryFiles.value.filter(f => f.status === 'done').length)
 
 const videoLinkForm = reactive({
   url: '',
@@ -360,10 +378,11 @@ const handleGalleryUpload = async ({ file, onFinish, onError }: UploadSetCustomR
   galleryUploadingCount.value++
   try {
     const url = await ossApi.uploadFile(file.file as File)
-    galleryFiles.value.push({ uid: file.id, url, status: 'done' })
+    galleryUrls.value.push(url)
     onFinish()
   } catch (error) {
     console.error('图片上传失败:', error)
+    message.error(`${file.name} 上传失败`)
     onError()
   } finally {
     galleryUploadingCount.value--
@@ -372,19 +391,17 @@ const handleGalleryUpload = async ({ file, onFinish, onError }: UploadSetCustomR
 
 // 多图排版插入
 const handleGalleryInsert = () => {
-  const doneFiles = galleryFiles.value.filter(f => f.status === 'done')
   const cols = galleryColumns.value
+  const urls = galleryUrls.value
   const rows: string[] = []
 
-  if (doneFiles.length === 0) {
-    // 无图片：插入一行空表格骨架
+  if (urls.length === 0) {
     const cells = Array.from({ length: cols }, () => '<td><img src=""/></td>')
     rows.push(`<tr>\n${cells.join('\n')}\n</tr>`)
   } else {
-    // 有图片：按列数分行
-    for (let i = 0; i < doneFiles.length; i += cols) {
-      const cells = doneFiles.slice(i, i + cols).map(f => `<td><img src="${f.url}" /></td>`)
-      while (cells.length < cols) cells.push('<td></td>')
+    for (let i = 0; i < urls.length; i += cols) {
+      const cells = urls.slice(i, i + cols).map(url => `<td><img src="${url}" /></td>`)
+      while (cells.length < cols) cells.push('<td><img src=""/></td>')
       rows.push(`<tr>\n${cells.join('\n')}\n</tr>`)
     }
   }
@@ -392,19 +409,20 @@ const handleGalleryInsert = () => {
   const tableHtml = `\n<table>\n${rows.join('\n')}\n</table>\n`
   content.value += tableHtml
   showGalleryDialog.value = false
-  message.success(doneFiles.length > 0
-    ? `已插入 ${doneFiles.length} 张图片（${cols}列排版）`
+  message.success(urls.length > 0
+    ? `已插入 ${urls.length} 张图片（${cols}列排版）`
     : `已插入 ${cols} 列空表格`
   )
   return true
 }
 
-// 关闭弹窗时重置状态
+// 关闭弹窗时重置状态，key 递增强制 n-upload 重建
 watch(showGalleryDialog, (val) => {
   if (!val) {
-    galleryFiles.value = []
+    galleryUrls.value = []
     galleryColumns.value = 2
     galleryUploadingCount.value = 0
+    galleryKey.value++
   }
 })
 
@@ -507,13 +525,67 @@ defineExpose({
   white-space: nowrap;
 }
 
-.gallery-upload-area {
-  min-height: 120px;
+.gallery-preview {
+  display: grid;
+  gap: 8px;
+  margin-top: var(--space-3);
+}
+
+.gallery-preview {
+  display: grid;
+  gap: 8px;
+  margin-top: var(--space-3);
+}
+
+.gallery-preview-item {
+  position: relative;
+}
+
+.gallery-preview-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.gallery-preview-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.gallery-preview-item:hover .gallery-preview-remove {
+  opacity: 1;
+}
+
+.gallery-uploading-tip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
 }
 
 .gallery-footer {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gallery-footer-actions {
+  display: flex;
   gap: var(--space-3);
 }
 </style>
