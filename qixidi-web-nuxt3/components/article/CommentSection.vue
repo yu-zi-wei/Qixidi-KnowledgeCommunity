@@ -30,27 +30,29 @@
 
       <div class="comment-input-footer">
         <div class="input-footer-left">
-          <!-- 表情按钮 -->
-          <n-popover placement="top-start" trigger="click" :show-arrow="false">
-            <template #trigger>
-              <button class="emoji-btn" title="表情">
-                <span class="emoji-trigger">😊</span>
-              </button>
-            </template>
-            <div class="emoji-picker">
-              <div class="emoji-category" v-for="(emojis, category) in emojiCategories" :key="category">
-                <div class="emoji-category-title">{{ category }}</div>
-                <div class="emoji-list">
-                  <span
-                    v-for="emoji in emojis"
-                    :key="emoji"
-                    class="emoji-item"
-                    @click="insertEmoji(emoji)"
-                  >{{ emoji }}</span>
+          <!-- 表情按钮（ClientOnly 避免 SSR 水合时 n-popover 点击事件未绑定） -->
+          <ClientOnly>
+            <n-popover placement="top-start" trigger="click" :show-arrow="false">
+              <template #trigger>
+                <button class="emoji-btn" title="表情">
+                  <span class="emoji-trigger">😊</span>
+                </button>
+              </template>
+              <div class="emoji-picker">
+                <div class="emoji-category" v-for="(emojis, category) in emojiCategories" :key="category">
+                  <div class="emoji-category-title">{{ category }}</div>
+                  <div class="emoji-list">
+                    <span
+                      v-for="emoji in emojis"
+                      :key="emoji"
+                      class="emoji-item"
+                      @click="insertEmoji(emoji)"
+                    >{{ emoji }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </n-popover>
+            </n-popover>
+          </ClientOnly>
           <span class="comment-hint">Ctrl + Enter 发送</span>
         </div>
         <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
