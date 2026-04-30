@@ -54,7 +54,7 @@
   --md-code-bg: #eef0f2;
   --md-code-border: #e2e4e8;
   --md-inline-code-bg: rgba(61, 90, 128, 0.08);
-  --md-quote-border: #e2e4e8;
+  --md-quote-border: #35B378;
   --md-quote-text: #6a737d;
   --md-link-color: var(--color-primary);
   --md-table-border: #e2e4e8;
@@ -167,7 +167,7 @@
   --md-code-bg: #17171b;
   --md-code-border: #38383e;
   --md-inline-code-bg: rgba(90, 127, 168, 0.2);
-  --md-quote-border: #363a3e;
+  --md-quote-border: #35B378;
   --md-quote-text: #8a8c92;
   --md-link-color: var(--color-primary);
   --md-table-border: #363a3e;

@@ -17,7 +17,7 @@
       <div v-for="user in users" :key="user.uuid" class="user-card">
         <div class="user-top">
           <NuxtLink :to="`/user-home/article/${user.uuid}`" target="_blank" class="user-avatar-link">
-            <img :src="user.avatar || '/images/default-avatar.png'" :alt="user.nickname" class="users-page-avatar" />
+            <img :src="user.avatar || '/images/default-avatar.svg'" :alt="user.nickname" class="users-page-avatar" />
           </NuxtLink>
           <div class="user-main">
             <NuxtLink :to="`/user-home/article/${user.uuid}`" target="_blank" class="user-name">
@@ -32,15 +32,6 @@
               <span v-if="user.source" class="meta-text">来自 {{ user.source }}</span>
             </div>
           </div>
-          <n-button
-            size="small"
-            :type="isFollow(user.uuid) ? 'default' : 'primary'"
-            :loading="togglingId === user.uuid"
-            :disabled="togglingId !== null"
-            @click="handleToggle(user)"
-          >
-            {{ isFollow(user.uuid) ? '已关注' : '关注' }}
-          </n-button>
         </div>
 
         <p v-if="user.introduce" class="user-bio">{{ user.introduce }}</p>
@@ -80,9 +71,6 @@ useHead({
 })
 
 const siteApi = useSiteApi()
-const followApi = useFollowApi()
-const authStore = useAuthStore()
-const message = useMessage()
 
 const { data: rawData, pending } = await useAsyncData(
   'site-users',
@@ -95,36 +83,6 @@ const total = computed(() => rawData.value?.total || 0)
 const formatJoinTime = (timestamp: number) => {
   const date = new Date(timestamp)
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-}
-
-const togglingId = ref<string | null>(null)
-const followState = reactive<Record<string, boolean>>({})
-
-const isFollow = (uuid: string) => {
-  if (followState[uuid] !== undefined) return followState[uuid]
-  const user = users.value.find(u => u.uuid === uuid)
-  return !!user?.isFollow
-}
-
-const handleToggle = async (user: any) => {
-  if (!authStore.isLoggedIn) {
-    message.warning('请先登录')
-    return
-  }
-  if (togglingId.value !== null) return
-  togglingId.value = user.uuid
-
-  const followed = isFollow(user.uuid)
-  try {
-    if (followed) {
-      await followApi.cancelFollow(user.uuid, 1)
-    } else {
-      await followApi.addFollow(user.uuid, 1)
-    }
-    followState[user.uuid] = !followed
-  } finally {
-    togglingId.value = null
-  }
 }
 </script>
 

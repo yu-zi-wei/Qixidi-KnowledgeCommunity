@@ -210,7 +210,7 @@ deep-seek:
   config:
     authorization-key: ${config.deepSeek.authorizationKey}
     url: https://api.siliconflow.cn/v1/chat/completions
-    model: Qwen/QwQ-32B
+    model: deepseek-ai/DeepSeek-V4-Flash
     role: user
 
 spring:

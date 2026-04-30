@@ -12,6 +12,34 @@ import type { Plugin, Transformer } from 'unified'
 import type { Root } from 'hast'
 
 /**
+ * remark 插件：blockquote 内软换行转为硬换行
+ * 解决 > 12\n> 34\n> 45 渲染为一行的问题
+ */
+const remarkBlockquoteLineBreaks: Plugin = (): Transformer => {
+  return (tree: any) => {
+    visit(tree, 'blockquote', (blockNode: any) => {
+      if (!blockNode.children) return
+      for (const child of blockNode.children) {
+        if (child.type !== 'paragraph' || !child.children) continue
+        const newChildren: any[] = []
+        for (const inline of child.children) {
+          if (inline.type === 'text' && typeof inline.value === 'string' && inline.value.includes('\n')) {
+            const parts = inline.value.split('\n')
+            for (let i = 0; i < parts.length; i++) {
+              if (parts[i]) newChildren.push({ type: 'text', value: parts[i] })
+              if (i < parts.length - 1) newChildren.push({ type: 'break' })
+            }
+          } else {
+            newChildren.push(inline)
+          }
+        }
+        child.children = newChildren
+      }
+    })
+  }
+}
+
+/**
  * 视频链接识别
  * - 本地视频: .mp4, .webm, .ogg, .mov
  * - B站: bilibili.com/video/, b23.tv/
@@ -159,6 +187,7 @@ export const useMarkdown = () => {
     const processor = unified()
       .use(remarkParse)
       .use(remarkGfm)
+      .use(remarkBlockquoteLineBreaks)
       .use(remarkVideo)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeSlug)
