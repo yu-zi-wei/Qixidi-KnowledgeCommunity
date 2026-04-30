@@ -135,13 +135,8 @@ const handleCollect = async () => {
 const onCollectionSuccess = () => {
   if (!article.value) return
 
-  // 更新收藏状态
   article.value.isCollection = true
   article.value.collectionTimes = (article.value.collectionTimes || 0) + 1
-
-  // 注意：collectionRecordId 需要从后端返回，或者刷新文章详情获取
-  // 这里简单处理：刷新文章详情
-  refresh()
 }
 
 // 点赞文章

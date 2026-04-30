@@ -97,8 +97,8 @@
     <ArticleToc v-if="showToc && articleContent" :content="articleContent" class="toc-section" />
   </aside>
 
-  <!-- 加载占位 - 精致骨架屏 -->
-  <aside v-else class="article-sidebar placeholder">
+  <!-- 骨架屏 - 仅客户端导航时显示，避免 SSR 水合闪烁 -->
+  <aside v-else-if="hasMounted" class="article-sidebar placeholder">
     <div class="skeleton-card">
       <div class="skeleton-header">
         <div class="skeleton-avatar"></div>
@@ -203,8 +203,10 @@ const toggleFollow = async () => {
 // 动画相关
 const sidebarRef = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
+const hasMounted = ref(false)
 
 onMounted(() => {
+  hasMounted.value = true
   // 延迟触发动画
   setTimeout(() => {
     isVisible.value = true

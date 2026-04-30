@@ -630,7 +630,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (ip == null) return true;
         String key = String.format(RedisBusinessKeyEnums.ARTICLE_GLANCE_OVER.getKey(), id, ip);
         if (RedisUtils.hasKey(key)) return true;
-        RedisUtils.setCacheObject(key, key, 30, TimeUnit.MINUTES);
+        RedisUtils.setCacheObject(key, key, 12, TimeUnit.HOURS);
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null || StringUtils.isEmpty(label)) return true;
         //记录文章亲密度
