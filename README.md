@@ -43,7 +43,7 @@ qixidi/
     │
     ├── qixidi-system # 基础业务（原ruoyi项目业务逻辑）
     │
-    ├── sql  # sql文件
+    ├── sql  # sql文件（暂不提供，需要可加微信（请注明来意，sql是有偿的：169元/包售后）：zsh2978824265）
     │
 ├── qixid-web-nuxt3  # 项目前台（Nuxt3.js）
 │
