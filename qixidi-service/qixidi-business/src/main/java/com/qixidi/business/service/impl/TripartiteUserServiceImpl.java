@@ -49,7 +49,6 @@ import com.qixidi.business.domain.bo.user.CreatorApplicationBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.bo.user.UserBindBo;
 import com.qixidi.business.domain.bo.user.UserInfoBo;
-import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.entity.user.UserInformation;
@@ -66,6 +65,7 @@ import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
 import com.qixidi.business.service.ITripartiteUserService;
+import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -346,9 +346,19 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 //            发送邮件
             executorService.execute(() -> {
                 StringBuffer mags = new StringBuffer();
-                mags.append(String.format("【栖息地】新用户注册；用户来源：%s，用户名：%s，邮箱：%s，密码：%s",
-                        "平台注册", tripartiteUser.getNickname(), tripartiteUser.getEmail(), tripartiteUser.getPassword()));
-                MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "【栖息地】新用户注册", mags.toString());
+                mags.append("<div style=\"text-align: center\">");
+                mags.append("<p>【栖息地】新用户注册</p>");
+                mags.append("<p style=\"font-weight: bold;font-size: 26px\">" + tripartiteUser.getNickname() + "</p>");
+                mags.append(String.format("<p>用户来源：%s</p>", "平台注册"));
+                mags.append(String.format("<p>用户名：%s</p>", tripartiteUser.getNickname()));
+                mags.append(String.format("<p>邮箱：%s</p>", tripartiteUser.getEmail()));
+                mags.append(String.format("<p>密码：%s</p>", tripartiteUser.getPassword()));
+                mags.append("</div>");
+                try {
+                    MailUtils.sendHtml(SystemConstant.getAdministratorMailboxList(), "【栖息地】新用户注册", mags.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
         }
         return insert;

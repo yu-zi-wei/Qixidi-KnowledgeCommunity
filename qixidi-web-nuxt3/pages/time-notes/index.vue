@@ -156,8 +156,8 @@ const loadTimeNotes = async (reset = false) => {
   } catch (error) {
     console.error('加载时光小记失败:', error)
     if (import.meta.client) {
-      // @ts-ignore
-      window.$message?.error('加载失败，请重试')
+      const message = useMessage()
+      message.error('加载失败，请重试')
     }
   } finally {
     loading.value = false

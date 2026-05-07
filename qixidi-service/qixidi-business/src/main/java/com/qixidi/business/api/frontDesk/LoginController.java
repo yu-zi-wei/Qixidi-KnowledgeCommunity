@@ -81,7 +81,7 @@ public class LoginController {
     @PostMapping("/oauth/frontDesk/register")
     public void register(@Validated @RequestBody RegisterUserMain registerUserMain) {
         registerUserMain.setUserType(justAuthConfig.getTripartiteUserType());
-        iTripartiteUserService.register(registerUserMain);
+        iTripartiteUserService. register(registerUserMain);
     }
 
     /**

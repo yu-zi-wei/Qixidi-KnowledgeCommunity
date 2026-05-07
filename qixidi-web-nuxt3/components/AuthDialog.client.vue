@@ -136,6 +136,7 @@ const authStore = useAuthStore()
 const { siteName } = useRuntimeConfig().public
 const authApi = useAuthApi()
 const authDialogStore = useAuthDialogStore()
+const message = useMessage()
 
 // 使用本地 ref 管理 visible，通过 watch 同步 store
 const visible = ref(false)
@@ -270,23 +271,23 @@ const resetView = () => {
 const sendCode = async (type: 'register' | 'reset') => {
   const email = type === 'register' ? registerForm.value.email : resetForm.value.email
   if (!email) {
-    window.$message?.warning('请先输入邮箱')
+    message?.warning('请先输入邮箱')
     return
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
-    window.$message?.warning('邮箱格式不正确')
+    message?.warning('邮箱格式不正确')
     return
   }
 
   sendingCode.value = true
   try {
     await authApi.sendEmailCode(email, type === 'register' ? 1 : 2)
-    window.$message?.success('验证码已发送')
+    message?.success('验证码已发送')
     startCountdown(type)
   } catch (e: any) {
     const errorMsg = e?.statusMessage || e?.message || '发送失败'
-    window.$message?.error(errorMsg)
+    message?.error(errorMsg)
   } finally {
     sendingCode.value = false
   }
@@ -313,7 +314,7 @@ const handleLogin = async () => {
     const result = await authApi.login(loginForm.value)
     authStore.setToken(result.token)
     await authStore.fetchUser()
-    window.$message?.success('登录成功')
+    message?.success('登录成功')
 
     // 获取重定向路径
     const redirect = authDialogStore.redirectAfterLogin || ''
@@ -332,7 +333,7 @@ const handleLogin = async () => {
     loginForm.value = { username: '', password: '' }
   } catch (e: any) {
     const errorMsg = e?.statusMessage || e?.message || '登录失败，请重试'
-    window.$message?.error(errorMsg)
+    message?.error(errorMsg)
   } finally {
     loading.value = false
   }
@@ -352,12 +353,12 @@ const handleRegister = async () => {
       password: registerForm.value.password,
       code: registerForm.value.code
     })
-    window.$message?.success('注册成功，请登录')
+    message?.success('注册成功，请登录')
     registerForm.value = { email: '', password: '', code: '' }
     currentView.value = 'login'
   } catch (e: any) {
     const errorMsg = e?.statusMessage || e?.message || '注册失败，请重试'
-    window.$message?.error(errorMsg)
+    message?.error(errorMsg)
   } finally {
     loading.value = false
   }
@@ -377,12 +378,12 @@ const handleReset = async () => {
       password: resetForm.value.password,
       code: resetForm.value.code
     })
-    window.$message?.success('密码重置成功，请登录')
+    message?.success('密码重置成功，请登录')
     resetForm.value = { email: '', password: '', code: '' }
     currentView.value = 'login'
   } catch (e: any) {
     const errorMsg = e?.statusMessage || e?.message || '重置失败，请重试'
-    window.$message?.error(errorMsg)
+    message?.error(errorMsg)
   } finally {
     loading.value = false
   }

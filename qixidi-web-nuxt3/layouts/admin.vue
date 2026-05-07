@@ -16,8 +16,7 @@
           <n-avatar
             round
             :size="44"
-            :src="authStore.user.avatar"
-            fallback-src="/img/tx.jpg"
+            :src="authStore.user.avatar || '/images/default-avatar.svg'"
           />
           <div class="sidebar-user-info">
             <div class="sidebar-user-name">{{ authStore.user.nickname }}</div>

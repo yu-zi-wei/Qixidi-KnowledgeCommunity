@@ -133,14 +133,14 @@
 
           <n-popover v-model:show="showUserPopover" trigger="hover" placement="bottom-end" :show-arrow="false" :width="260" raw :delay="100" :duration="150">
             <template #trigger>
-              <n-avatar round :size="32" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" class="nav-avatar" />
+              <n-avatar round :size="32" :src="authStore.user?.avatar || '/images/default-avatar.svg'" class="nav-avatar" />
             </template>
             <div class="user-popover">
               <!-- 用户信息 -->
               <div class="user-popover-header">
-                <n-avatar round :size="40" :src="authStore.user?.avatar" fallback-src="/img/tx.jpg" />
+                <n-avatar round :size="40" :src="authStore.user?.avatar || '/images/default-avatar.svg'" />
                 <div class="popover-user-meta">
-                  <div class="popover-name-row"><span class="popover-name">{{ authStore.user?.nickname }}</span><UserRoleBadge /></div>
+                  <div class="popover-name-row"><span class="popover-name" :title="authStore.user?.nickname">{{ authStore.user?.nickname }}</span><UserRoleBadge /></div>
                   <span v-if="authStore.user?.occupation" class="popover-job">{{ authStore.user.occupation }}</span>
                 </div>
               </div>
@@ -577,6 +577,10 @@ onMounted(() => {
   padding: 14px 16px 10px;
 }
 
+.user-popover-header :deep(.n-avatar) {
+  flex-shrink: 0;
+}
+
 .popover-user-meta {
   display: flex;
   flex-direction: column;
@@ -597,6 +601,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
 }
 
 .popover-job {
