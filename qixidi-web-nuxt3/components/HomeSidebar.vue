@@ -107,7 +107,11 @@
 
       <!-- 版权信息 -->
       <div class="footer-meta">
-        © {{ year }} 栖息地
+        <span>© {{ year }} 栖息地</span>
+        <a href="/rss.xml" target="_blank" class="rss-link" title="RSS 订阅">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+          RSS
+        </a>
       </div>
     </div>
   </aside>
@@ -556,15 +560,30 @@ const runningRemainDays = computed(() => {
 
 /* 版权信息 */
 .footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding-top: 12px;
   margin-top: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   font-size: 10px;
-  line-height: 1.8;
   color: var(--color-ink-faint);
 }
 
 :root.dark .footer-meta {
   border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.rss-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-ink-faint);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.rss-link:hover {
+  color: var(--color-primary);
 }
 </style>

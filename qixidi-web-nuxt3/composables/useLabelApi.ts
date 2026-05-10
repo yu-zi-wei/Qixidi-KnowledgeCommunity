@@ -19,7 +19,7 @@ export const useLabelApi = () => {
   /**
    * 获取标签分组列表（前台展示用）
    */
-  const getGroupingList = (pageNum: number = 0, pageSize: number = 12) => {
+  const getGroupingList = (pageNum: number = 0, pageSize: number = 10) => {
     return api.getPage<LabelGrouping>(
       '/white/label/grouping/list',
       { pageNum, pageSize }

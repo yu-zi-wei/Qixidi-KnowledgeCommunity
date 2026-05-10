@@ -81,7 +81,8 @@ export default defineNuxtConfig({
                 {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
                 {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
                 {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
-                {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=optional'}
+                {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=optional'},
+                {rel: 'alternate', type: 'application/rss+xml', title: '栖息地 RSS', href: '/rss.xml'}
             ]
         }
     },
@@ -92,6 +93,8 @@ export default defineNuxtConfig({
 
     // 混合渲染策略
     routeRules: {
+        // RSS 订阅 —— 纯 XML，不走 Vue 渲染
+        '/rss.xml': { ssr: false },
         // 前台展示页面 —— SSR（SEO 友好）
         '/': {ssr: true},
         '/latest': {ssr: true},

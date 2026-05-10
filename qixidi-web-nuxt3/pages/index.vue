@@ -29,8 +29,7 @@ const { articles, loadingMore, noMore, loadMore } = useInfiniteScroll({
   fetchFn: (page) => articleApi.getSortList({
     pageNum: page,
     pageSize: 10,
-    createTime: 1,
-    sortType: 1
+    createTime: 1
   }),
   storeKey: 'index' // 首页使用 'index' 作为 key
 })

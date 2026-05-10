@@ -47,7 +47,7 @@ const fetchArticles = (page: number) => {
   const { groupingId } = route.query
   return articleApi.getSortList({
     pageNum: page, pageSize,
-    createTime: 1, sortType: 1,
+    createTime: 1,
     ...(groupingId ? { groupingId: Number(groupingId) } : {})
   })
 }

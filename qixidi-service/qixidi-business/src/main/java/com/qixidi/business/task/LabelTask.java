@@ -112,6 +112,8 @@ public class LabelTask {
                 Long sum = map.get(item.getId());
                 if (sum != null) {
                     item.setEntriesNumber(sum);
+                } else {
+                    item.setEntriesNumber(0L);
                 }
             });
             labelGroupingInfoMapper.updateById(labelGroupingInfos);

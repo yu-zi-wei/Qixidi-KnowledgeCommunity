@@ -74,6 +74,7 @@
                   {{ article.articleTitle }}
                 </NuxtLink>
               </h3>
+              <p v-if="article.articleAbstract" class="article-abstract">{{ article.articleAbstract }}</p>
 
               <!-- 统计数据 -->
               <div class="article-stats">
@@ -82,7 +83,7 @@
                   {{ article.numberTimes || 0 }}
                 </span>
                 <span class="admin-stat">
-                  <n-icon><Heart /></n-icon>
+                  <n-icon><ThumbUp /></n-icon>
                   {{ article.likeTimes || 0 }}
                 </span>
                 <span class="admin-stat">
@@ -93,26 +94,23 @@
 
               <!-- 底部：时间和状态 + 操作按钮 -->
               <div class="article-footer">
-                <div class="article-meta">
-                  <span class="meta-time">
-                    <n-icon><Clock /></n-icon>
-                    {{ formatTime(article.createTime) }}
-                  </span>
-                  <span class="status-badge" :class="getStatusClass(article.auditState)">
-                    {{ getStatusText(article.auditState) }}
-                  </span>
-                </div>
-                <div class="article-actions">
-                  <n-button text size="tiny" type="primary" @click="handleEdit(article.id)">
-                    编辑
-                  </n-button>
-                  <n-popconfirm @positive-click="handleDelete(article.id)">
-                    <template #trigger>
-                      <n-button text size="tiny" type="error">删除</n-button>
-                    </template>
-                    确定要删除这篇文章吗？
-                  </n-popconfirm>
-                </div>
+                <span class="meta-time">
+                  <n-icon><Clock /></n-icon>
+                  {{ formatTime(article.createTime) }}
+                </span>
+                <span class="status-badge" :class="getStatusClass(article.auditState)">
+                  {{ getStatusText(article.auditState) }}
+                </span>
+                <span class="footer-spacer"></span>
+                <n-button text size="tiny" type="primary" @click="handleEdit(article.id)">
+                  编辑
+                </n-button>
+                <n-popconfirm @positive-click="handleDelete(article.id)">
+                  <template #trigger>
+                    <n-button text size="tiny" type="error">删除</n-button>
+                  </template>
+                  确定要删除这篇文章吗？
+                </n-popconfirm>
               </div>
             </div>
           </div>
@@ -138,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { Search, FileText, Eye, Heart, MessageCircle, Clock, Plus } from '@vicons/tabler'
+import { Search, FileText, Eye, ThumbUp, MessageCircle, Clock, Plus } from '@vicons/tabler'
 import type { AdminArticleItem } from '~/types'
 import { ArticleAuditState } from '~/types'
 
@@ -473,6 +471,16 @@ onMounted(() => fetchArticles())
   color: var(--color-primary);
 }
 
+.article-abstract {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+  margin: 4px 0 0;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* 统计数据 */
 .article-stats {
   display: flex;
@@ -496,18 +504,15 @@ onMounted(() => fetchArticles())
 .article-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-}
-
-.article-meta {
-  display: flex;
-  align-items: center;
   gap: 10px;
 }
 
+.footer-spacer {
+  flex: 1;
+}
+
 .meta-time {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: var(--text-xs);
@@ -520,6 +525,8 @@ onMounted(() => fetchArticles())
 
 /* 状态徽章 */
 .status-badge {
+  display: inline-flex;
+  align-items: center;
   padding: 2px 8px;
   font-size: 11px;
   font-weight: 500;

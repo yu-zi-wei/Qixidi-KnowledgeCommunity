@@ -207,7 +207,10 @@
           <div v-if="showMobileMenu" class="mobile-menu-overlay" @click="showMobileMenu = false">
             <div class="mobile-menu-drawer" @click.stop>
               <div class="mobile-menu-header">
-                <span class="menu-title">菜单</span>
+                <NuxtLink to="/" class="mobile-logo" @click="showMobileMenu = false">
+                  <img src="/images/logo.svg" alt="栖息地" class="mobile-logo-icon" />
+                  <span class="mobile-logo-text">{{ siteName }}</span>
+                </NuxtLink>
                 <button class="close-btn" @click="showMobileMenu = false">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -513,10 +516,12 @@ onMounted(() => {
 .mobile-menu-btn svg { width: 22px; height: 22px; stroke-width: 2; }
 
 /* ==================== 移动端菜单抽屉 ==================== */
-.mobile-menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150; background: rgba(0,0,0,0.5); }
+.mobile-menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; background: rgba(0,0,0,0.5); }
 .mobile-menu-drawer { position: absolute; top: 0; left: 0; bottom: 0; width: 220px; max-width: 70vw; background: var(--color-surface); display: flex; flex-direction: column; box-shadow: var(--shadow-float); }
 .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--color-border-light); }
-.menu-title { font-size: 18px; font-weight: 600; color: var(--color-ink); }
+.mobile-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.mobile-logo-icon { width: 28px; height: 28px; object-fit: contain; }
+.mobile-logo-text { font-family: var(--font-logo); font-size: 18px; font-weight: 400; color: var(--color-ink); letter-spacing: 2px; }
 .close-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: none; background: transparent; color: var(--color-ink-light); border-radius: var(--radius-md); cursor: pointer; }
 .close-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
 .close-btn svg { width: 20px; height: 20px; }
@@ -708,7 +713,7 @@ onMounted(() => {
     left: 0;
     right: 0;
     width: 100%;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto 1fr auto;
     gap: 8px;
     padding: 12px 12px 12px 16px;
     padding-right: max(12px, env(safe-area-inset-right));
@@ -719,7 +724,7 @@ onMounted(() => {
   }
 
   .mobile-menu-btn { display: flex !important; }
-  .nav-left { flex-shrink: 0; }
+  .nav-left { display: none; }
   .nav-center { justify-self: start; min-width: 0; flex-shrink: 1; }
   .nav-menu { display: none !important; }
   .search-wrapper { max-width: 200px !important; min-width: 160px !important; }
@@ -728,12 +733,9 @@ onMounted(() => {
   .news-trigger { display: flex !important; width: 36px; height: 36px; }
   .news-badge { top: 0; right: 0; }
   .nav-avatar { width: 32px !important; height: 32px !important; flex-shrink: 0; }
-  .logo-icon { width: 28px; height: 28px; }
-  .logo-text { font-size: 16px; }
 }
 
 @media (max-width: 480px) {
   .home-nav-bar { padding: 10px 12px; }
-  .logo-text { display: none; }
 }
 </style>

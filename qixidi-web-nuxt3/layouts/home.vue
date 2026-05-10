@@ -37,7 +37,7 @@ const [{ data: navigationData }, { data: labelData }] = await Promise.all([
     return rows || []
   }),
   useAsyncData('layout-labels', async () => {
-    const result = await labelApi.getGroupingList(1, 10)
+    const result = await labelApi.getGroupingList(1, 9)
     return result.rows || []
   })
 ])

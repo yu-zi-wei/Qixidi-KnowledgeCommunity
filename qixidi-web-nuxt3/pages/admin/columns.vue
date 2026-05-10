@@ -136,16 +136,23 @@
           <div class="cover-upload">
             <div class="cover-preview" v-if="formData.cover">
               <img :src="formData.cover" alt="封面预览" />
-              <n-button
-                class="remove-btn"
-                circle
-                size="tiny"
-                @click="formData.cover = ''"
-              >
-                <template #icon>
-                  <n-icon><X /></n-icon>
-                </template>
-              </n-button>
+              <div class="cover-mask">
+                <div class="cover-actions">
+                  <n-button size="small" @click="formData.cover = ''">
+                    <template #icon><n-icon><X /></n-icon></template>
+                    删除
+                  </n-button>
+                  <n-upload
+                    :custom-request="customUploadRequest"
+                    :show-file-list="false"
+                  >
+                    <n-button size="small">
+                      <template #icon><n-icon><Upload /></n-icon></template>
+                      替换
+                    </n-button>
+                  </n-upload>
+                </div>
+              </div>
             </div>
             <n-upload
               v-else
@@ -176,7 +183,7 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, Folder, FileText, CloudUpload, X, Calendar, Search } from '@vicons/tabler'
+import { Plus, Folder, FileText, CloudUpload, X, Calendar, Search, Upload } from '@vicons/tabler'
 import type { FormInst, FormRules, UploadCustomRequestOptions } from 'naive-ui'
 import type { AdminSpecialItem } from '~/types'
 
@@ -533,12 +540,41 @@ onMounted(() => fetchSpecialList())
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.cover-preview .remove-btn {
+.cover-mask {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.cover-mask :deep(.n-button) {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cover-mask :deep(.n-button:hover) {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.cover-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cover-preview:hover .cover-mask {
+  opacity: 1;
 }
 
 .upload-hint {

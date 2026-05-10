@@ -3,16 +3,22 @@
     <div
       v-if="!modelValue"
       class="upload-area"
-      :class="{ 'drag-over': isDragOver }"
-      @click="handleClick"
-      @dragenter.prevent="isDragOver = true"
+      :class="{ 'drag-over': isDragOver, 'is-uploading': uploading }"
+      @click="!uploading && handleClick()"
+      @dragenter.prevent="!uploading && (isDragOver = true)"
       @dragleave.prevent="isDragOver = false"
       @dragover.prevent
-      @drop.prevent="handleDrop"
+      @drop.prevent="!uploading && handleDrop($event)"
     >
-      <div class="upload-icon">📷</div>
-      <div class="upload-text">点击或拖拽上传</div>
-      <div class="upload-hint">支持 JPG、PNG，最大 5MB</div>
+      <template v-if="uploading">
+        <div class="upload-spinner"></div>
+        <div class="upload-text">上传中...</div>
+      </template>
+      <template v-else>
+        <div class="upload-icon">📷</div>
+        <div class="upload-text">点击或拖拽上传</div>
+        <div class="upload-hint">支持 JPG、PNG，最大 5MB</div>
+      </template>
     </div>
 
     <div v-else class="preview-area">
@@ -57,6 +63,7 @@ const message = useMessage()
 
 const fileInputRef = ref<HTMLInputElement>()
 const isDragOver = ref(false)
+const uploading = ref(false)
 const uploadProgress = ref(0)
 
 const handleClick = () => {
@@ -93,6 +100,7 @@ const uploadFile = async (file: File) => {
   }
 
   try {
+    uploading.value = true
     uploadProgress.value = 0
     const url = await ossApi.uploadFile(file, (percent) => {
       uploadProgress.value = percent
@@ -102,6 +110,7 @@ const uploadFile = async (file: File) => {
   } catch (error: any) {
     message.error(error.message || '上传失败')
   } finally {
+    uploading.value = false
     uploadProgress.value = 0
   }
 }
@@ -153,6 +162,25 @@ const handleReplace = () => {
 .upload-hint {
   font-size: var(--text-xs);
   color: var(--color-ink-muted);
+}
+
+.upload-area.is-uploading {
+  pointer-events: none;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.upload-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: upload-spin 0.8s linear infinite;
+}
+
+@keyframes upload-spin {
+  to { transform: rotate(360deg); }
 }
 
 .preview-area {
