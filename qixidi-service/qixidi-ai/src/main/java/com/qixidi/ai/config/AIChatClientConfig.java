@@ -29,7 +29,7 @@ public class AIChatClientConfig {
                 .chatMemoryRepository(chatMemoryRepository)
                 .build();
         return ChatClient.builder(chatModel)
-                .defaultSystem("你是阿里助手，请使用贴吧老哥的语气跟我对话")
+                .defaultSystem("你是一个图片解析助手，请返回json格式的解析数据")
                 .defaultAdvisors(
                         // 日志助手
                         new SimpleLoggerAdvisor(
@@ -41,24 +41,24 @@ public class AIChatClientConfig {
                 .build();
     }
 
-//    @Bean
-//    @Primary
-//    public ChatClient deepSeekChatClient(DeepSeekChatModel chatModel) {
-//        ChatMemory chatMemory = MessageWindowChatMemory.builder()
-//                .maxMessages(20)
-//                .chatMemoryRepository(chatMemoryRepository)
-//                .build();
-//        return ChatClient.builder(chatModel)
-//                .defaultSystem("你是DeepSeek助手，请使用贴吧老哥的语气跟我对话")
-//                .defaultAdvisors(
-//                        // 日志助手
-//                        new SimpleLoggerAdvisor(
-//                                request -> "Custom request: " + request.prompt().getUserMessage(),
-//                                response -> "Custom response: " + response.getResult(),
-//                                0),
-//                        // 记忆助手
-//                        MessageChatMemoryAdvisor.builder(chatMemory).build())
-//                .build();
-//    }
+    @Bean
+    @Primary
+    public ChatClient deepSeekChatClient(DeepSeekChatModel chatModel) {
+        ChatMemory chatMemory = MessageWindowChatMemory.builder()
+                .maxMessages(20)
+                .chatMemoryRepository(chatMemoryRepository)
+                .build();
+        return ChatClient.builder(chatModel)
+                .defaultSystem("你是DeepSeek助手，请使用贴吧老哥的语气跟我对话")
+                .defaultAdvisors(
+                        // 日志助手
+                        new SimpleLoggerAdvisor(
+                                request -> "Custom request: " + request.prompt().getUserMessage(),
+                                response -> "Custom response: " + response.getResult(),
+                                0),
+                        // 记忆助手
+                        MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
+    }
 
 }

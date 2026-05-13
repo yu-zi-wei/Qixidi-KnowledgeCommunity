@@ -135,6 +135,7 @@ security:
     - /xcxLogin
     - /logout
     - /register
+    - /ai/**
     - /captchaImage
     - /api/system/baskups/**
     # 前台登录/注册

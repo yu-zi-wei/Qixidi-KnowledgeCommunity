@@ -391,14 +391,14 @@
             </dependency>
 
 
-<!--            &lt;!&ndash; Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-openai-spring-boot-starter &ndash;&gt;-->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.ai</groupId>-->
-<!--                <artifactId>spring-ai-openai-spring-boot-starter</artifactId>-->
-<!--                <version>${spring-ai.version}</version>-->
-<!--            </dependency>-->
+            <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-openai-spring-boot-starter -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+                <version>${spring-ai.version}</version>
+            </dependency>
 
-            <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-bom -->
+            <!--             Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-bom -->
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
