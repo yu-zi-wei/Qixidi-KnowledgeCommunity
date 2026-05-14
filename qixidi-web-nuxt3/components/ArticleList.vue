@@ -285,12 +285,12 @@ watch(() => props.articles.length, () => {
   font-weight: 500;
 }
 
-/* 标题 - 更紧凑 */
+/* 标题 */
 .article-title {
   font-size: 17px;
   font-weight: 600;
-  line-height: 1.35;
-  margin-bottom: 6px;
+  line-height: 1.4;
+  margin-bottom: 8px;
   overflow-wrap: break-word;
   word-break: break-word;
   letter-spacing: -0.01em;
@@ -306,10 +306,10 @@ watch(() => props.articles.length, () => {
   color: var(--color-primary);
 }
 
-/* 摘要 - 更紧凑 */
+/* 摘要 */
 .article-excerpt {
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-ink-light);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -358,12 +358,12 @@ watch(() => props.articles.length, () => {
   flex-shrink: 0;
 }
 
-/* 封面图片 - 紧凑轻量 */
+/* 封面图片 */
 .article-cover {
-  width: 120px;
-  height: 90px;
+  width: 180px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
   flex-shrink: 0;
   background: var(--color-surface-dim);
   align-self: center;
@@ -391,8 +391,8 @@ watch(() => props.articles.length, () => {
 /* 响应式 */
 @media (max-width: 1024px) {
   .article-cover {
-    width: 100px;
-    height: 76px;
+    width: 150px;
+    height: 100px;
   }
 }
 

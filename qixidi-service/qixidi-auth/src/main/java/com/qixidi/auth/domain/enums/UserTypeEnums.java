@@ -15,7 +15,7 @@ import lombok.Getter;
 public enum UserTypeEnums {
 
     /**
-     * pc端
+     * 后台用户
      */
     SYS_USER("sys_user"),
 
@@ -25,7 +25,7 @@ public enum UserTypeEnums {
     APP_USER("app_user"),
 
     /**
-     * 第三方登录
+     * 前台门户端
      */
     TRIPARTITE_USER("tripartite_user");
 

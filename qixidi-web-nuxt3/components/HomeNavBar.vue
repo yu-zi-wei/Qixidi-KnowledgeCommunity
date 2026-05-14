@@ -21,11 +21,19 @@
     <!-- 中间：搜索框 + 导航菜单 -->
     <div class="nav-center">
       <!-- 搜索框 -->
-      <div class="search-wrapper" ref="searchWrapperRef" v-click-outside="() => showDropdown = false">
+      <div class="search-wrapper" :class="{ expanded: searchExpanded }" ref="searchWrapperRef" v-click-outside="handleSearchOutside">
+        <!-- 中屏折叠态：搜索图标按钮 -->
+        <button v-if="!searchExpanded" class="search-toggle-btn" @click="expandSearch">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+        <!-- 展开态：完整搜索框 -->
         <div
+          v-else
           class="search-input-wrapper"
           :class="{ focused: showDropdown }"
-          @click="handleSearchClick"
         >
           <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
@@ -313,6 +321,48 @@ const searchKeyword = ref('')
 const searchHistory = ref<{ content: string }[]>([])
 const searchHistoryLoaded = ref(false)
 const showDropdown = ref(false)
+const searchExpanded = ref(true)
+
+const MEDIUM_BREAKPOINT = 1400
+
+const syncSearchState = () => {
+  if (window.innerWidth <= MEDIUM_BREAKPOINT && !searchKeyword.value) {
+    searchExpanded.value = false
+  } else if (window.innerWidth > MEDIUM_BREAKPOINT) {
+    searchExpanded.value = true
+  }
+}
+
+onMounted(() => {
+  syncSearchState()
+  window.addEventListener('resize', syncSearchState)
+  onUnmounted(() => window.removeEventListener('resize', syncSearchState))
+})
+
+let justExpanded = false
+
+const expandSearch = () => {
+  searchExpanded.value = true
+  justExpanded = true
+  nextTick(() => {
+    searchInputRef.value?.focus()
+    loadSearchHistory()
+    showDropdown.value = true
+    setTimeout(() => { justExpanded = false }, 0)
+  })
+}
+
+const collapseSearch = () => {
+  showDropdown.value = false
+  if (window.innerWidth <= MEDIUM_BREAKPOINT) {
+    searchExpanded.value = false
+  }
+}
+
+const handleSearchOutside = () => {
+  if (justExpanded) return
+  collapseSearch()
+}
 
 const loadSearchHistory = async () => {
   if (!authStore.isLoggedIn || searchHistoryLoaded.value) return
@@ -325,12 +375,6 @@ const loadSearchHistory = async () => {
   }
 }
 
-const handleSearchClick = () => {
-  loadSearchHistory()
-  showDropdown.value = true
-  searchInputRef.value?.focus()
-}
-
 const handleSearchFocus = () => {
   loadSearchHistory()
   showDropdown.value = true
@@ -338,7 +382,7 @@ const handleSearchFocus = () => {
 
 const handleSearch = () => {
   if (!searchKeyword.value.trim()) return
-  showDropdown.value = false
+  collapseSearch()
   navigateTo(searchTargetRoute(searchKeyword.value.trim()))
 }
 
@@ -473,6 +517,7 @@ onMounted(() => {
 
 /* 搜索框 */
 .search-wrapper { position: relative; min-width: 180px; max-width: 240px; }
+.search-toggle-btn { display: none; }
 .search-input-wrapper { display: flex; align-items: center; gap: 8px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 6px 14px; cursor: text; transition: all 0.2s ease; }
 .search-input-wrapper:hover { border-color: var(--color-primary); background: var(--color-surface-dim); }
 .search-input-wrapper.focused { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
@@ -703,6 +748,68 @@ onMounted(() => {
 .popover-link-secondary:hover {
   color: var(--color-ink-muted);
   background: var(--color-surface-dim);
+}
+
+/* ==================== 中屏适配（14寸笔记本） ==================== */
+@media (max-width: 1400px) {
+  /* 搜索框折叠为图标 */
+  .search-wrapper {
+    min-width: unset;
+    max-width: unset;
+  }
+  .search-wrapper:not(.expanded) .search-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--color-ink-muted);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .search-wrapper:not(.expanded) .search-toggle-btn:hover {
+    background: var(--color-surface-dim);
+    color: var(--color-ink);
+  }
+  /* 覆盖式展开：wrapper 保持 toggle 按钮宽度占位，输入框绝对定位覆盖菜单 */
+  .search-wrapper.expanded {
+    width: 36px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+  .search-wrapper.expanded .search-input-wrapper {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 240px;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    animation: search-expand 0.2s ease;
+  }
+  /* 导航项略微收紧 */
+  .nav-link {
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+  .nav-center {
+    gap: 16px;
+  }
+}
+
+@keyframes search-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1);
+  }
 }
 
 /* ==================== 移动端适配 ==================== */

@@ -151,7 +151,7 @@
       <el-table-column label="标签名称" align="center" prop="labelName">
         <template slot-scope="scope">
           <div v-if="scope.row.labelNameList.length>0">
-            <el-tag v-for="items of scope.row.labelNameList" style="margin-bottom: 6px">
+            <el-tag v-for="(items, index) of scope.row.labelNameList" :key="index" style="margin-bottom: 6px">
               {{ items }}
             </el-tag>
           </div>
