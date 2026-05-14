@@ -360,8 +360,8 @@ watch(() => props.articles.length, () => {
 
 /* 封面图片 */
 .article-cover {
-  width: 180px;
-  height: 120px;
+  width: 170px;
+  height: 110px;
   object-fit: cover;
   border-radius: 8px;
   flex-shrink: 0;
@@ -391,8 +391,8 @@ watch(() => props.articles.length, () => {
 /* 响应式 */
 @media (max-width: 1024px) {
   .article-cover {
-    width: 150px;
-    height: 100px;
+    width: 140px;
+    height: 90px;
   }
 }
 
