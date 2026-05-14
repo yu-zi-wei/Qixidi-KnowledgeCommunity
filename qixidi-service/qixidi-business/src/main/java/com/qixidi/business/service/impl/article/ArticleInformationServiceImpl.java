@@ -34,6 +34,7 @@ import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.event.ArticleEvent;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
@@ -66,8 +67,11 @@ import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -82,12 +86,15 @@ import java.util.stream.Collectors;
  * @author aurora
  * @date 2022-08-16
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ArticleInformationServiceImpl implements IArticleInformationService {
 
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     private final ArticleInformationMapper baseMapper;
     private final LabelInfoMapper labelInfoMapper;
@@ -164,24 +171,37 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         Long id = add.getId();
         vo.setId(id);
         if (bo.getAuditState().equals(ArticleAuditStateEnums.DRAFT.getCode())) return vo;
-        ArticleInformationVo articleInformationVo = BeanUtil.toBean(add, ArticleInformationVo.class);
-        List<ArticleInformationVo> list = new ArrayList();
-        list.add(articleInformationVo);
-        //        计算文章权重，审核文章
-        executorService.execute(() -> {
-            //计算文章推荐权证
-            articleWeightAlgorithms(list);
-            //生成 ai总结
-            aiSummary(id, add.getArticleTitle(), add.getArticleContent());
-            //生成ai摘要
-            if (bo.getAbstractSelect() != null && bo.getAbstractSelect()) {
-                aiAbstract(id, add.getArticleTitle(), add.getArticleContent());
-            }
-            //文章自动审核，发送消息
-            articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), id, uuid);
-        });
+
+        // 发布事件，事务提交后异步执行
+        eventPublisher.publishEvent(new ArticleEvent(
+                id, add.getArticleTitle(), add.getArticleContent(),
+                bo.getArticleAbstract(), uuid,
+                bo.getAbstractSelect() != null && bo.getAbstractSelect(),
+                true
+        ));
 
         return vo;
+    }
+
+    @Override
+    public void handleArticleAsync(ArticleEvent event) {
+        Long id = event.getArticleId();
+        //计算文章推荐权重
+        ArticleInformationVo vo = new ArticleInformationVo();
+        vo.setId(id);
+        vo.setCreateTime(new Date());
+        articleWeightAlgorithms(List.of(vo));
+        //生成 AI 总结
+        aiSummary(id, event.getArticleTitle(), event.getArticleContent());
+        //生成 AI 摘要
+        if (event.isGenerateAbstract()) {
+            aiAbstract(id, event.getArticleTitle(), event.getArticleContent());
+        }
+        //文章自动审核，发送消息
+        if (event.isNeedReview()) {
+            articleReview(event.getArticleTitle(), event.getArticleContent(),
+                    event.getArticleAbstract(), id, event.getAuthorUuid());
+        }
     }
 
 
@@ -266,26 +286,17 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         boolean shouldReview = !ArticleAuditStateEnums.DRAFT.getCode().equals(bo.getAuditState());
         if (shouldReview) {
             update.setCreateTime(new Date());
-            ArticleInformationVo articleInformationVo = BeanUtil.toBean(update, ArticleInformationVo.class);
-            List<ArticleInformationVo> list = new ArrayList();
-            list.add(articleInformationVo);
-            //计算文章权重
-            articleWeightAlgorithms(list);
-            //文章审核
-            Integer auditStateInteger = articleReview(bo.getArticleTitle(), bo.getArticleContent(), bo.getArticleAbstract(), update.getId(), uuid);
-            update.setAuditState(auditStateInteger);
         }
         if (baseMapper.updateById(update) > 0) {
             ArticleInformationVo articleInformationVo = new ArticleInformationVo();
             articleInformationVo.setId(bo.getId());
-            executorService.execute(() -> {
-                //生成 ai总结
-                aiSummary(update.getId(), update.getArticleTitle(), update.getArticleContent());
-                if (bo.getAbstractSelect() != null && bo.getAbstractSelect()) {
-                    //生成ai摘要
-                    aiAbstract(update.getId(), update.getArticleTitle(), update.getArticleContent());
-                }
-            });
+            // 发布事件，事务提交后异步执行
+            eventPublisher.publishEvent(new ArticleEvent(
+                    update.getId(), update.getArticleTitle(), update.getArticleContent(),
+                    bo.getArticleAbstract(), uuid,
+                    bo.getAbstractSelect() != null && bo.getAbstractSelect(),
+                    shouldReview
+            ));
             return articleInformationVo;
         }
         return new ArticleInformationVo();
@@ -299,6 +310,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      * @param articleContent
      */
     private void aiAbstract(Long id, String articleTitle, String articleContent) {
+        log.info("开始【AI 生成摘要】:" + id);
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("\n 文章标题：" + articleTitle);
         stringBuffer.append("\n 文章内容：" + articleContent);
@@ -308,6 +320,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
                     .set(ArticleInformation::getArticleAbstract, Summary.toString())
                     .eq(ArticleInformation::getId, id));
+            log.info("【AI 获取摘要】:" + id + ":" + Summary.toString());
         }
     }
 
@@ -319,6 +332,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      * @param articleContent
      */
     private void aiSummary(Long id, String articleTitle, String articleContent) {
+        log.info("开始【AI 生成总结】:" + id);
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("\n 文章标题：" + articleTitle);
         stringBuffer.append("\n 文章内容：" + articleContent);
@@ -328,6 +342,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
                     .set(ArticleInformation::getArticleSummary, Summary.toString())
                     .eq(ArticleInformation::getId, id));
+            log.info("【AI 获取总结】:" + id + ":" + Summary.toString());
         }
     }
 

@@ -13,12 +13,14 @@ import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -70,10 +72,8 @@ public class ArticleTask {
         List<ArticleInformationVo> list = articleInformationMapper.selectData(pageId, size);
 //        获取最大id数
         Long pageIds = list.stream().map(ArticleInformationVo::getId).max(Long::compareTo).get();
-        executorService.execute(() -> {
 //                计算权重
-            this.articleWeightAlgorithm(list);
-        });
+        this.articleWeightAlgorithm(list);
 //            接受线程返回结果
         Thread.sleep(1000);
 //        Boolean shutdown = shutdown(executorService, 40, TimeUnit.SECONDS);

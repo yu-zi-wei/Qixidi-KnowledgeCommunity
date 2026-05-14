@@ -6,6 +6,7 @@ import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
+import com.qixidi.business.domain.event.ArticleEvent;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
@@ -107,5 +108,10 @@ public interface IArticleInformationService {
     TableDataInfo<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery);
 
     TableDataInfo<ArticleArchiveVo> articleArchive(PageQuery pageQuery);
+
+    /**
+     * 文章异步处理（权重、AI总结、AI摘要、审核）
+     */
+    void handleArticleAsync(ArticleEvent event);
 }
 
