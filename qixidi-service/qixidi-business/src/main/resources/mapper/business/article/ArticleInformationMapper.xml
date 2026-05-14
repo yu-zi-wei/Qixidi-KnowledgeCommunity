@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.article.ArticleInformationMapper">
     <resultMap type="com.qixidi.business.domain.entity.article.ArticleInformation" id="ArticleInformationResult">
         <result property="id" column="id"/>
@@ -73,8 +73,10 @@
             and ai.platform_type =1
             and ai.`audit_state`=2
             <if test="bo.articleTitle!=null and bo.articleTitle!=''">
-                and (ai.article_title like concat('%' ,#{bo.articleTitle},'%')
-                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%'))
+                and (
+                ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%')
+                )
             </if>
             <if test="bo.labelId!=null and bo.labelId!=''">
                 and FIND_IN_SET(#{bo.labelId}, ai.label_id)
@@ -134,8 +136,10 @@
             ai.audit_state=2 and ai.platform_type =1
             <if test="bo.articleTitle!=null and bo.articleTitle!=''">
                 and ai.id!=#{bo.id}
-                and ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                and (
+                ai.article_title like concat('%' ,#{bo.articleTitle},'%')
                 or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%')
+                )
             </if>
         </where>
         order by ai.create_time desc
@@ -148,7 +152,10 @@
             ai.state = 0
             and ai.platform_type =1
             <if test="bo.articleTitle !='' and bo.articleTitle !=null">
-                and ai.article_title like concat(#{bo.articleTitle},'%')
+                and (
+                ai.article_title like concat('%' ,#{bo.articleTitle},'%')
+                or ai.article_abstract like concat('%' ,#{bo.articleTitle},'%')
+                )
             </if>
             <if test="bo.auditState !='' and bo.auditState !=null">
                 and ai.audit_state=#{bo.auditState}

@@ -22,6 +22,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
 import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
+import com.light.core.utils.EscapeUtil;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.ip.AddressUtils;
@@ -390,6 +391,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 }
             });
         }
+        bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         IPage<ArticleInformationVo> page = baseMapper.articleList(bo, pageQuery.build());
         enrichWithRealTimeCounts(page.getRecords());
         return page;
@@ -535,6 +537,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
+        bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         List<ArticleInformationVo> list = baseMapper.relatedList(bo, pageQuery);
         enrichWithRealTimeCounts(list);
         return list;
@@ -566,6 +569,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     @Override
     public Page<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
+        bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, pageQuery.build());
         enrichWithRealTimeCounts(articleInfo.getRecords());
         return articleInfo;

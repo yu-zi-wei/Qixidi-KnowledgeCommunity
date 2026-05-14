@@ -13,6 +13,7 @@ import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.EscapeUtil;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
@@ -189,6 +190,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
 
     @Override
     public Page<ArticleInformationVo> articleList(CollectionRecordBo bo, PageQuery pageQuery) {
+        bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         return baseMapper.articleList(bo, pageQuery.build());
     }
 

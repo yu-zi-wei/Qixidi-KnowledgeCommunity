@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.EscapeUtil;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.label.LabelInfoBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
@@ -65,6 +66,8 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
      */
     @Override
     public TableDataInfo<LabelInfoVo> queryPageList(LabelInfoBo bo, PageQuery pageQuery) {
+        bo.setLabelName(EscapeUtil.escapeChar(bo.getLabelName()));
+        bo.setGroupingName(EscapeUtil.escapeChar(bo.getGroupingName()));
         Page<LabelInfoVo> result = baseMapper.selectVoPages(bo, pageQuery.build());
         return TableDataInfo.build(result);
     }

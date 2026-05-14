@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
+import com.light.core.utils.EscapeUtil;
 import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
@@ -110,6 +111,9 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
      */
     @Override
     public TableDataInfo<DictumInfoVo> queryPageList(DictumInfoBo bo, PageQuery pageQuery) {
+        bo.setLabel(EscapeUtil.escapeChar(bo.getLabel()));
+        bo.setContent(EscapeUtil.escapeChar(bo.getContent()));
+        bo.setAlbumName(EscapeUtil.escapeChar(bo.getAlbumName()));
         IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
         List<DictumInfoVo> records = result.getRecords();
         if (ObjectUtils.isEmpty(records)) return TableDataInfo.build();

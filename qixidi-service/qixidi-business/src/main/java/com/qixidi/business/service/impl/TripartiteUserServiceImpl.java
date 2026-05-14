@@ -23,10 +23,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.DeviceType;
 import com.light.core.enums.MsgEnums;
-import com.light.core.utils.DateUtils;
-import com.light.core.utils.RandomNumberUtils;
-import com.light.core.utils.SecureUtils;
-import com.light.core.utils.StringUtils;
+import com.light.core.utils.*;
 import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.ip.AddressUtils;
 import com.light.exception.ServiceException;
@@ -496,6 +493,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         List<TripartiteUserVo> list = new ArrayList<>();
         if (ObjectUtils.isEmpty(bo.getNickname())) return list;
 
+        bo.setNickname(EscapeUtil.escapeChar(bo.getNickname()));
         list = baseMapper.fdUserList(bo);
         if (ObjectUtils.isEmpty(bo.getUuid()) || CollectionUtils.isEmpty(list)) return list;
 

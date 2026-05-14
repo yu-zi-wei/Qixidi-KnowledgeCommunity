@@ -13,6 +13,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
+import com.light.core.utils.EscapeUtil;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
@@ -237,6 +238,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
 
     @Override
     public Page<ArticleInformationVo> getArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+        bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         Page<ArticleInformationVo> articleInfo = articleInformationMapper.getArticleInfo(bo, pageQuery.build());
         return articleInfo;
     }
