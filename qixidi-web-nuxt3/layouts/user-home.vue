@@ -165,11 +165,16 @@ const currentPath = computed(() => route.path)
 const isOwner = computed(() => authStore.user?.uuid && authStore.user.uuid === uid.value)
 
 // --- 用户信息（SSR） ---
-const { data: userInfo } = await useAsyncData(
+const { data: userInfo, refresh: refreshUserInfo } = await useAsyncData(
   `user-home-info-${uid.value}`,
   () => specialDetailApi.getUserInfo(uid.value),
   { watch: [uid] }
 )
+
+// 登录后刷新用户信息（isFollow 字段依赖登录态）
+watch(() => authStore.isLoggedIn, (val) => {
+  if (val) refreshUserInfo()
+})
 
 // --- 个人主页菜单 ---
 const { data: menuData } = await useAsyncData('user-home-menu', async () => {

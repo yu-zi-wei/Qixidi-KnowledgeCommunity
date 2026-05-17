@@ -68,6 +68,11 @@ const { data: article, pending, error, refresh } = await useAsyncData(
   () => articleApi.getArticleDetail(articleId.value)
 )
 
+// 登录后刷新文章详情（isFollow/isCollection/isFabulous 等字段依赖登录态）
+watch(() => authStore.isLoggedIn, (val) => {
+  if (val) refresh()
+})
+
 // 设置侧边栏数据（使用 watch 而不是 watchEffect，避免循环）
 watch(() => article.value, (newArticle) => {
   if (newArticle) {

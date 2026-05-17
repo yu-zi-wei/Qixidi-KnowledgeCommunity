@@ -205,10 +205,10 @@ qixidi:
 # deepSeek配置
 deep-seek:
   config:
-    whether-enable: true # 是否启用
+    whether-enable: false # 是否启用
     authorization-key: ${config.deepSeek.authorizationKey}
     url: https://api.siliconflow.cn/v1/chat/completions
-    model: deepseek-ai/DeepSeek-V4-Flash # 模型名称
+    model: Qwen/Qwen3.6-35B-A3B # 模型名称
     role: user
 
 spring:

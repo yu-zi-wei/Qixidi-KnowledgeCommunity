@@ -325,10 +325,16 @@ const searchExpanded = ref(true)
 
 const MEDIUM_BREAKPOINT = 1400
 
+const MOBILE_BREAKPOINT = 768
+
 const syncSearchState = () => {
-  if (window.innerWidth <= MEDIUM_BREAKPOINT && !searchKeyword.value) {
+  const w = window.innerWidth
+  if (w <= MOBILE_BREAKPOINT) {
+    // 移动端菜单已隐藏，空间充足，始终展开
+    searchExpanded.value = true
+  } else if (w <= MEDIUM_BREAKPOINT && !searchKeyword.value) {
     searchExpanded.value = false
-  } else if (window.innerWidth > MEDIUM_BREAKPOINT) {
+  } else if (w > MEDIUM_BREAKPOINT) {
     searchExpanded.value = true
   }
 }
@@ -424,10 +430,15 @@ const handlePublish = (key: string) => {
 // 用户菜单
 const showUserPopover = ref(false)
 const censusApi = useUserCensusApi()
-const { data: userStats } = await useAsyncData<UserCensusCount>(
+const { data: userStats, refresh: refreshUserStats } = await useAsyncData<UserCensusCount>(
   'user-census-count',
   () => censusApi.getUserCensusCount()
 )
+
+// 登录后刷新统计数据
+watch(() => authStore.isLoggedIn, (val) => {
+  if (val) refreshUserStats()
+})
 
 const authApi = useAuthApi()
 const showLogoutConfirm = ref(false)

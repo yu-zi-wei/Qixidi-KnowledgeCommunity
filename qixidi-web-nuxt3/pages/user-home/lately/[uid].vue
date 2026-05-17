@@ -69,7 +69,7 @@ if (import.meta.client) {
 // computed key —— 页码变化时自动重新获取
 const cacheKey = computed(() => `user-home-lately-${uid.value}-${currentPage.value}`)
 
-const { data: pageData, pending } = useAsyncData(
+const { data: pageData, pending, refresh: refreshHistory } = useAsyncData(
   cacheKey,
   () => browsingHistoryApi.getList({
     pageNum: currentPage.value,
@@ -77,6 +77,11 @@ const { data: pageData, pending } = useAsyncData(
     uid: uid.value
   })
 )
+
+// 登录后刷新浏览记录
+watch(() => authStore.isLoggedIn, (val) => {
+  if (val) refreshHistory()
+})
 
 const historyList = computed(() => pageData.value?.rows || [])
 const total = computed(() => pageData.value?.total || 0)

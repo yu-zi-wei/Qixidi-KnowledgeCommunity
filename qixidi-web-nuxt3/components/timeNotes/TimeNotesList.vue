@@ -86,16 +86,18 @@ let observer: IntersectionObserver | null = null
 // 设置 IntersectionObserver 自动加载
 onMounted(() => {
   if (loadMoreTrigger.value) {
+    // 移动端列表无固定高度（height: auto），容器不会滚动，
+    // 需用视口作为 root 才能正确检测"滚动到底部"
+    const isMobile = window.innerWidth < 768
     observer = new IntersectionObserver(
       (entries) => {
-        // 当触发器可见且有更多数据且不在加载中时，触发加载
         if (entries[0].isIntersecting && props.hasMore && !props.loading) {
           emit('loadMore')
         }
       },
       {
-        root: listRef.value,
-        rootMargin: '100px',
+        root: isMobile ? null : listRef.value,
+        rootMargin: isMobile ? '200px' : '100px',
         threshold: 0
       }
     )

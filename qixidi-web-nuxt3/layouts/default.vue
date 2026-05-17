@@ -21,6 +21,7 @@
       </div>
     </div>
     <CreatorApplyDialog />
+    <ScrollToTop />
   </div>
 </template>
 

@@ -20,6 +20,7 @@
         <HomeSidebar />
       </div>
     </div>
+    <ScrollToTop />
   </div>
 </template>
 

@@ -6,7 +6,7 @@
     :closable="true"
     preset="card"
     title=""
-    :style="{ width: '800px' }"
+    :style="{ width: '680px' }"
     @after-leave="resetView"
   >
     <div class="auth-dialog">
@@ -29,7 +29,7 @@
         <!-- 登录 -->
         <n-form v-if="currentView === 'login'" ref="loginFormRef" :model="loginForm" :rules="loginRules">
           <n-form-item path="username" :show-label="false">
-            <n-input v-model:value="loginForm.username" placeholder="邮箱地址" size="large" />
+            <n-input v-model:value="loginForm.username" placeholder="邮箱地址" size="medium" />
           </n-form-item>
           <n-form-item path="password" :show-label="false">
             <n-input
@@ -37,11 +37,11 @@
               type="password"
               show-password-on="click"
               placeholder="密码"
-              size="large"
+              size="medium"
               @keyup.enter="handleLogin"
             />
           </n-form-item>
-          <n-button type="primary" block size="large" :loading="loading" @click="handleLogin">
+          <n-button type="primary" block size="medium" :loading="loading" @click="handleLogin">
             登 录
           </n-button>
           <div class="auth-links">
@@ -53,7 +53,7 @@
         <!-- 注册 -->
         <n-form v-else-if="currentView === 'register'" ref="registerFormRef" :model="registerForm" :rules="registerRules">
           <n-form-item path="email" :show-label="false">
-            <n-input v-model:value="registerForm.email" placeholder="邮箱地址" size="large" />
+            <n-input v-model:value="registerForm.email" placeholder="邮箱地址" size="medium" />
           </n-form-item>
           <n-form-item path="password" :show-label="false">
             <n-input
@@ -61,12 +61,12 @@
               type="password"
               show-password-on="click"
               placeholder="设置密码（至少6位）"
-              size="large"
+              size="medium"
             />
           </n-form-item>
           <n-form-item path="code" :show-label="false">
             <div class="code-row">
-              <n-input v-model:value="registerForm.code" placeholder="邮箱验证码" size="large" />
+              <n-input v-model:value="registerForm.code" placeholder="邮箱验证码" size="medium" />
               <button
                 type="button"
                 class="code-btn"
@@ -77,7 +77,7 @@
               </button>
             </div>
           </n-form-item>
-          <n-button type="primary" block size="large" :loading="loading" @click="handleRegister">
+          <n-button type="primary" block size="medium" :loading="loading" @click="handleRegister">
             创建账号
           </n-button>
           <div class="auth-links auth-links-center">
@@ -90,7 +90,7 @@
         <!-- 重置密码 -->
         <n-form v-else ref="resetFormRef" :model="resetForm" :rules="resetRules">
           <n-form-item path="email" :show-label="false">
-            <n-input v-model:value="resetForm.email" placeholder="邮箱地址" size="large" />
+            <n-input v-model:value="resetForm.email" placeholder="邮箱地址" size="medium" />
           </n-form-item>
           <n-form-item path="password" :show-label="false">
             <n-input
@@ -98,12 +98,12 @@
               type="password"
               show-password-on="click"
               placeholder="新密码（至少6位）"
-              size="large"
+              size="medium"
             />
           </n-form-item>
           <n-form-item path="code" :show-label="false">
             <div class="code-row">
-              <n-input v-model:value="resetForm.code" placeholder="邮箱验证码" size="large" />
+              <n-input v-model:value="resetForm.code" placeholder="邮箱验证码" size="medium" />
               <button
                 type="button"
                 class="code-btn"
@@ -114,7 +114,7 @@
               </button>
             </div>
           </n-form-item>
-          <n-button type="primary" block size="large" :loading="loading" @click="handleReset">
+          <n-button type="primary" block size="medium" :loading="loading" @click="handleReset">
             重置密码
           </n-button>
           <div class="auth-links auth-links-center">
@@ -393,7 +393,7 @@ const handleReset = async () => {
 <style scoped>
 .auth-dialog {
   display: flex;
-  min-height: 450px;
+  min-height: 380px;
 }
 
 .auth-aside {
@@ -404,7 +404,7 @@ const handleReset = async () => {
   justify-content: center;
   align-items: center;
   color: white;
-  padding: 48px;
+  padding: 36px;
   position: relative;
   overflow: hidden;
 }
@@ -415,23 +415,23 @@ const handleReset = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   width: 100%;
 }
 
 .aside-logo {
-  width: 100px;
-  height: 100px;
+  width: 72px;
+  height: 72px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
+  border-radius: 20px;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  padding: 20px;
+  padding: 16px;
   object-fit: contain;
 }
 
 .aside-title {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 700;
   margin: 0;
   letter-spacing: 2px;
@@ -439,14 +439,14 @@ const handleReset = async () => {
 }
 
 .aside-desc {
-  font-size: 15px;
+  font-size: 14px;
   opacity: 1;
   line-height: 1.6;
   margin: 0;
 }
 
 .aside-quote {
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.9;
   font-style: italic;
   margin: 0;
@@ -460,7 +460,7 @@ const handleReset = async () => {
   top: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
+  font-size: 20px;
   opacity: 0.3;
 }
 
@@ -469,7 +469,7 @@ const handleReset = async () => {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 100px;
   background-image:
     radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
@@ -479,22 +479,22 @@ const handleReset = async () => {
 
 .auth-form-area {
   flex: 1.3;
-  padding: 44px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
 }
 
 .form-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--color-ink);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .form-subtitle {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-ink-light);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .input-icon {
@@ -527,13 +527,13 @@ const handleReset = async () => {
 .auth-links {
   display: flex;
   justify-content: space-between;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .auth-links-center {
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .text-btn {
