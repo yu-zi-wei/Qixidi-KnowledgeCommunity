@@ -35,6 +35,7 @@ public class DeepSeekService {
      * @param questions
      */
     public Object generationContent(String questions) {
+        if (!deepSeekConfig.getWhetherEnable()) return null;
         Map<String, Object> requestBody = new HashMap<>();
         Map<String, String> message = new HashMap<>();
         Object reasoningContent = "";//深度思考
@@ -78,6 +79,7 @@ public class DeepSeekService {
      * @param session
      */
     public void generationContentFlow(String questions, Session session) {
+        if (!deepSeekConfig.getWhetherEnable()) return;
         Map<String, Object> requestBody = new HashMap<>();
         Map<String, String> message = new HashMap<>();
 

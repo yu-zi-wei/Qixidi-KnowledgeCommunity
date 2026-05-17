@@ -26,6 +26,11 @@ public class DeepSeekConfig {
     private String authorizationKey;
 
     /**
+     * 是否启用
+     */
+    private Boolean whetherEnable = false;
+
+    /**
      * 地址
      */
     private String url;
