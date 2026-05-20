@@ -191,3 +191,12 @@ server {
     }
 }
 ```
+
+### 服务器脚本
+```shell
+#!/bin/bash
+
+cd /data/qixidi/web
+unzip -o deployment.zip
+pm2 restart qixidi-web --update-env
+```

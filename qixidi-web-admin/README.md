@@ -23,11 +23,14 @@ admin/123456
 ## 发布
 
 ```bash
-# 构建测试环境
+## 构建测试环境
 npm run build:stage
 
-# 构建生产环境
+## 构建生产环境
 npm run build:prod
+
+## 构建+打包
+npm run build:prod && npm run zip
 
 ## 上传dist.zip并解压
 cd /data/aurora/web/aurora-ht/
@@ -43,4 +46,17 @@ unzip -u dist.zip
 ## 用于重启
 ./sbin/nginx -t   ##检查 配置是否正确
 ./sbin/nginx -s reload  ## 重启
+```
+
+## 服务器启动脚本
+```shell
+#!/bin/bash
+
+cd /data/qixidi/web-admin
+unzip -o dist.zip
+
+/data/app/nginx/sbin/nginx -t
+
+/data/app/nginx/sbin/nginx -s reload
+
 ```

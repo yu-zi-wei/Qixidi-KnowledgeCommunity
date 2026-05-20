@@ -6,8 +6,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-    "build:prod": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "build:prod": "rimraf dist && SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
     "build:stage": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode staging",
+    "zip": "powershell -Command \"if(Test-Path dist.zip){Remove-Item dist.zip};Compress-Archive -Path dist/* -DestinationPath dist.zip -Force\"",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src"
   },
