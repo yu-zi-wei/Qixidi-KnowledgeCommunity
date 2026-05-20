@@ -52,6 +52,7 @@
           <el-avatar :src="scope.row.avatar"></el-avatar>
         </template>
       </el-table-column>
+      <el-table-column label="UUID" align="center" prop="uuid"/>
       <el-table-column label="用户名" align="center" prop="username"/>
       <el-table-column label="用户昵称" align="center" prop="nickname"/>
       <el-table-column label="用户角色" align="center" prop="roleId">
