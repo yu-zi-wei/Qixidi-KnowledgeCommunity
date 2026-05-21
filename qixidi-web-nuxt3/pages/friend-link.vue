@@ -75,6 +75,7 @@ import ArticleCommentSection from '~/components/article/CommentSection.vue'
 definePageMeta({ showTabBar: false })
 
 useHead({
+  title: '友链',
   bodyAttrs: {
     class: 'page-friend-link'
   }

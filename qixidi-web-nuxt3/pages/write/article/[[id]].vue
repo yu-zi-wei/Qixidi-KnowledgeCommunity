@@ -13,6 +13,8 @@ definePageMeta({
   middleware: 'creator'
 })
 
+useHead({ title: '写文章' })
+
 const route = useRoute()
 const groupingApi = useGroupingApi()
 const labelApi = useLabelApi()

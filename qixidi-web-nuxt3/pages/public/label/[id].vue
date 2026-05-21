@@ -172,7 +172,7 @@ onMounted(() => {
 
 // SEO
 useHead(() => ({
-  title: labelData.value?.labelName ? `${labelData.value.labelName} - ${siteName}` : `标签 - ${siteName}`,
+  title: labelData.value?.labelName ? `标签详情-${labelData.value.labelName}` : '标签',
   meta: [
     { name: 'description', content: labelData.value?.labelDescribe || labelData.value?.labelName || '' }
   ]

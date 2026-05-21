@@ -86,6 +86,7 @@ definePageMeta({
 
 // 给 body 添加页面特定的 class，用于覆盖布局样式
 useHead({
+  title: '随笔',
   bodyAttrs: {
     class: 'page-reading-essays'
   }

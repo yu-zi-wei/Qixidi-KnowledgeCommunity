@@ -201,6 +201,20 @@ const isMenuActive = (menuRoute: string) => {
   return currentPath.value.startsWith(menuRoute)
 }
 
+// 根据当前路由匹配菜单名称，设置页面标题：个人主页-菜单名称-栖息地
+const pageTitle = computed(() => {
+  const path = currentPath.value
+  let menuName = ''
+  if (menuData.value) {
+    const menu = (menuData.value as any[]).find((m: any) => path.startsWith(m.route))
+    if (menu) menuName = menu.navigationName
+  }
+  if (path.includes('/lately')) menuName = '最近'
+  return menuName ? `个人主页-${menuName}` : '个人主页'
+})
+
+useHead(() => ({ title: pageTitle.value }))
+
 // 关注
 const followApi = useFollowApi()
 const followLoading = ref(false)

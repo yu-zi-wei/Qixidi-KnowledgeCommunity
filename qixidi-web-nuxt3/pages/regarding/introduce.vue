@@ -148,7 +148,7 @@ const handleEdit = () => {
 
 // SEO 设置
 useHead({
-  title: () => article.value?.articleTitle || `关于${siteName}`,
+  title: () => article.value?.articleTitle || '关于',
   meta: [
     {
       name: 'description',

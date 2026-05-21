@@ -68,7 +68,8 @@ export default defineNuxtConfig({
 
     app: {
         head: {
-            title: '栖息地 — 在文字里，找到栖身之所',
+            titleTemplate: '%s - 栖息地',
+            title: '首页',
             meta: [
                 {charset: 'utf-8'},
                 {name: 'viewport', content: 'width=device-width, initial-scale=1'},

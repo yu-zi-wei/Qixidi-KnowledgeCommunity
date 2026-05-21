@@ -57,6 +57,7 @@ import { Tool } from '@vicons/tabler'
 definePageMeta({ showTabBar: false })
 
 useHead({
+  title: '工具',
   bodyAttrs: {
     class: 'page-tool'
   }

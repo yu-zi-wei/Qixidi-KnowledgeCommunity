@@ -35,6 +35,7 @@ definePageMeta({
 })
 
 useHead({
+  title: '时光小记',
   bodyAttrs: {
     class: 'page-time-notes'
   }

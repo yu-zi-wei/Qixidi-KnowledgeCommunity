@@ -174,7 +174,7 @@ watch(() => albumData.value?.id, (id) => {
 
 // SEO
 useHead(() => ({
-  title: albumData.value?.name ? `${albumData.value.name} - ${siteName}` : `专辑 - ${siteName}`,
+  title: albumData.value?.name ? `专辑详情-${albumData.value.name}` : '专辑',
   meta: [
     { name: 'description', content: albumData.value?.briefIntroduction || albumData.value?.name || '' }
   ]

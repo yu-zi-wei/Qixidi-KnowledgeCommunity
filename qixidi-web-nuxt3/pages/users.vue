@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 useHead({
+  title: '用户',
   bodyAttrs: {
     class: 'page-users'
   }

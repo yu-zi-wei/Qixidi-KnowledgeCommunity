@@ -127,6 +127,30 @@ const handleMenuSelect = (key: string) => {
   }
 }
 
+// 根据当前路由匹配侧边栏菜单名称，设置页面标题：菜单名称-创作者中心-栖息地
+const currentMenuLabel = computed(() => {
+  const path = route.path
+  const findLabel = (items: Sidebar[]): string | undefined => {
+    for (const item of items) {
+      if (item.route === path) return item.sidebarName
+      if (item.levelList?.length) {
+        const found = findLabel(item.levelList)
+        if (found) return found
+      }
+    }
+  }
+  if (sidebarData.value) {
+    const label = findLabel(sidebarData.value)
+    return label ? `${label}-创作者中心` : '创作者中心'
+  }
+  return '创作者中心'
+})
+
+useHead(() => ({
+  title: currentMenuLabel.value,
+  titleTemplate: '%s - 栖息地'
+}))
+
 // 返回首页
 const goHome = () => {
   router.push('/')

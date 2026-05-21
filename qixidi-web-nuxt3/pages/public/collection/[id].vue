@@ -177,7 +177,7 @@ onMounted(() => {
 
 // SEO
 useHead(() => ({
-  title: collectionData.value?.collectionName ? `${collectionData.value.collectionName} - ${siteName}` : `收藏夹 - ${siteName}`,
+  title: collectionData.value?.collectionName ? `收藏夹详情-${collectionData.value.collectionName}` : '收藏夹',
   meta: [
     { name: 'description', content: collectionData.value?.collectionIntroduce || collectionData.value?.collectionName || '' }
   ]

@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 useHead({
+  title: '搜索',
   bodyAttrs: {
     class: 'page-search'
   }

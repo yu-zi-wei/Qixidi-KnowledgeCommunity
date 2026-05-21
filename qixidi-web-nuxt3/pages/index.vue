@@ -19,6 +19,7 @@ const route = useRoute()
 const articleApi = useArticleApi()
 
 useHead({
+  title: '首页',
   bodyAttrs: {
     class: 'page-home'
   }

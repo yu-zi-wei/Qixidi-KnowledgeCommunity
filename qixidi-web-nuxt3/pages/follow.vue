@@ -67,7 +67,7 @@ definePageMeta({
   middleware: 'auth'
 })
 
-useHead({ bodyAttrs: { class: 'page-home' } })
+useHead({ title: '关注', bodyAttrs: { class: 'page-home' } })
 
 const route = useRoute()
 const authStore = useAuthStore()

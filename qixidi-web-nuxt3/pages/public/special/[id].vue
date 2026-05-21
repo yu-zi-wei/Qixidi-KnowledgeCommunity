@@ -197,7 +197,7 @@ onMounted(() => {
 
 // SEO
 useHead(() => ({
-  title: specialData.value?.specialName ? `${specialData.value.specialName} - ${siteName}` : `专栏 - ${siteName}`,
+  title: specialData.value?.specialName ? `专栏详情-${specialData.value.specialName}` : '专栏',
   meta: [
     { name: 'description', content: specialData.value?.specialIntroduce || specialData.value?.specialName || '' }
   ]

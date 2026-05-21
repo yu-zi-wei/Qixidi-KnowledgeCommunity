@@ -15,7 +15,7 @@ definePageMeta({
   sidebar: 'home'
 })
 
-useHead({ bodyAttrs: { class: 'page-home' } })
+useHead({ title: '精选', bodyAttrs: { class: 'page-home' } })
 
 const route = useRoute()
 const articleApi = useArticleApi()

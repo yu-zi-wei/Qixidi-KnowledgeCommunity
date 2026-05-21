@@ -231,6 +231,8 @@ definePageMeta({
   ssr: false
 })
 
+useHead({ title: '设置' })
+
 const authStore = useAuthStore()
 const settingsApi = useSettingsApi()
 const ossApi = useOssApi()
@@ -687,27 +689,33 @@ const handleCancelAccount = async () => {
     padding: 12px;
   }
 
+  .settings-sidebar {
+    position: static;
+    margin-bottom: 12px;
+  }
+
   .settings-menu {
     flex-direction: row;
     border-bottom: 1px solid var(--color-border-light);
-    padding-bottom: 4px;
+    padding-bottom: 0;
   }
 
   .settings-menu-item {
     flex: 1;
     justify-content: center;
-    padding: 8px 12px;
-    font-size: var(--text-xs);
-    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: var(--text-sm);
+    border-radius: 0;
+    border-bottom: 2px solid transparent;
   }
 
   .settings-menu-item.active {
     border-bottom: 2px solid var(--color-primary);
-    border-radius: 0;
+    background: none;
   }
 
   .settings-content {
-    padding: 12px;
+    padding: 20px 16px;
   }
 
   .mobile-avatar-area {

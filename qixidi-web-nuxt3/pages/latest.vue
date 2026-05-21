@@ -18,6 +18,8 @@ definePageMeta({
   sidebar: 'home'
 })
 
+useHead({ title: '最新' })
+
 const pageMeta = useState('pageMeta')
 pageMeta.value = {
   showTabBar: true,

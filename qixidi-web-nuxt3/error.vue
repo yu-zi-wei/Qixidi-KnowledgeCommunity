@@ -54,7 +54,7 @@ const handleGoBack = () => {
 }
 
 useHead({
-  title: `${props.error?.statusCode || 404} - ${siteName}`
+  title: `${props.error?.statusCode || 404} - 页面未找到`
 })
 </script>
 

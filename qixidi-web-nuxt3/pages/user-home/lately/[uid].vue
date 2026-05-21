@@ -79,6 +79,7 @@ const { data: pageData, pending, refresh: refreshHistory } = useAsyncData(
 )
 
 // 登录后刷新浏览记录
+const authStore = useAuthStore()
 watch(() => authStore.isLoggedIn, (val) => {
   if (val) refreshHistory()
 })

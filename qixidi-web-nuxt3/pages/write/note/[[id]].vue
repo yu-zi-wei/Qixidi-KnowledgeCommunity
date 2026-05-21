@@ -75,6 +75,8 @@ definePageMeta({
   middleware: 'creator'
 })
 
+useHead({ title: '时光小记' })
+
 const route = useRoute()
 const router = useRouter()
 const message = useMessage()

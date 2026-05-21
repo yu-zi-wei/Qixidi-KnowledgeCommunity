@@ -14,6 +14,7 @@
 definePageMeta({ showTabBar: false })
 
 useHead({
+  title: '标签',
   bodyAttrs: {
     class: 'page-label'
   }
