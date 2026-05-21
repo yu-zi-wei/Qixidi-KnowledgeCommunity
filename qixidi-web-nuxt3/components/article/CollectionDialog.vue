@@ -11,9 +11,9 @@
           @click="selectFolder(folder.id)"
         >
           <div class="folder-info">
-            <div class="folder-header">
-              <div class="folder-name">{{ folder.collectionName }}</div>
-              <div class="folder-count">{{ folder.includedCount || 0 }}篇</div>
+            <div class="folder-name">
+              {{ folder.collectionName }}
+              <span class="folder-count">({{ folder.includedCount || 0 }}篇)</span>
             </div>
             <div v-if="folder.collectionIntroduce" class="folder-introduce">{{ folder.collectionIntroduce }}</div>
           </div>
@@ -257,23 +257,17 @@ const handleCollect = async () => {
   min-width: 0;
 }
 
-.folder-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-2);
-  margin-bottom: var(--space-1);
-}
-
 .folder-name {
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-ink);
+  margin-bottom: var(--space-1);
 }
 
 .folder-count {
   font-size: var(--text-xs);
   color: var(--color-ink-muted);
+  font-weight: 400;
 }
 
 .folder-introduce {

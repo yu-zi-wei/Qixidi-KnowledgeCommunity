@@ -589,3 +589,10 @@ defineExpose({
   gap: var(--space-3);
 }
 </style>
+
+<!-- 非 scoped：修正 md-editor-v3 z-index 过高盖住 Naive UI 弹窗 -->
+<style>
+.md-editor-preview .md-editor-code .md-editor-code-head {
+  z-index: 10;
+}
+</style>

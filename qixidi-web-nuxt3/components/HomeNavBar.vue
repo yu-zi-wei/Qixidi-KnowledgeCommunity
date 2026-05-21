@@ -329,9 +329,8 @@ const MOBILE_BREAKPOINT = 768
 
 const syncSearchState = () => {
   const w = window.innerWidth
-  if (w <= MOBILE_BREAKPOINT && !searchKeyword.value) {
-    // 移动端也折叠搜索，点击图标展开
-    searchExpanded.value = false
+  if (w <= MOBILE_BREAKPOINT) {
+    searchExpanded.value = true
   } else if (w <= MEDIUM_BREAKPOINT && !searchKeyword.value) {
     searchExpanded.value = false
   } else if (w > MEDIUM_BREAKPOINT) {
@@ -360,12 +359,11 @@ const expandSearch = () => {
 
 const collapseSearch = () => {
   showDropdown.value = false
-  if (window.innerWidth <= MEDIUM_BREAKPOINT) {
+  // 仅中屏（768~1400px）折叠搜索框，移动端和桌面端保持展开
+  if (window.innerWidth > MOBILE_BREAKPOINT && window.innerWidth <= MEDIUM_BREAKPOINT) {
     searchExpanded.value = false
   }
 }
-
-const shouldCollapse = () => window.innerWidth <= MEDIUM_BREAKPOINT
 
 const handleSearchOutside = () => {
   if (justExpanded) return
@@ -846,8 +844,8 @@ onMounted(() => {
     left: 0;
     right: 0;
     width: 100%;
-    grid-template-columns: auto auto auto 1fr;
-    gap: 6px;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
     padding: 12px 12px 12px 16px;
     padding-right: max(12px, env(safe-area-inset-right));
     z-index: 9999;
@@ -857,32 +855,31 @@ onMounted(() => {
   }
 
   .mobile-menu-btn { display: flex !important; }
-  .nav-left { display: flex; }
-  .logo-text { display: none; }
-  .logo-icon { width: 28px; height: 28px; }
-  .nav-center { justify-self: start; min-width: unset; flex-shrink: 0; }
+  .nav-left { display: none; }
+  .nav-center { min-width: 0; max-width: unset; }
   .nav-menu { display: none !important; }
-  /* 搜索框：折叠为图标，展开时向右覆盖 */
-  .search-wrapper { min-width: unset; max-width: unset; }
-  .search-wrapper:not(.expanded) .search-toggle-btn { display: flex; }
+  /* 搜索框：始终展开，宽度自适应 */
+  .search-wrapper,
   .search-wrapper.expanded {
-    width: 36px;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 10;
+    min-width: unset;
+    max-width: unset;
+    width: 100%;
+    position: static;
+    z-index: auto;
   }
+  .search-wrapper .search-toggle-btn { display: none !important; }
+  .search-wrapper .search-input-wrapper,
   .search-wrapper.expanded .search-input-wrapper {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 200px;
+    display: flex !important;
+    position: static;
+    transform: none;
+    width: 100%;
+    box-shadow: none;
+    animation: none;
     background: var(--color-surface);
-    box-shadow: var(--shadow-md);
-    border-radius: var(--radius-full);
-    animation: search-expand 0.2s ease;
+    border: 1px solid var(--color-border);
   }
-  .nav-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; justify-content: flex-end; }
+  .nav-right { display: flex; align-items: center; gap: 4px; min-width: 68px; flex-shrink: 0; justify-content: flex-end; }
   .theme-toggle, .icon-btn:not(.news-trigger) { display: none; }
   .news-trigger { display: flex !important; width: 36px; height: 36px; }
   .news-badge { top: 0; right: 0; }

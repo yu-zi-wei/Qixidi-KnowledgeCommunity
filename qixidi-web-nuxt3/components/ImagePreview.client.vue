@@ -1,11 +1,10 @@
 <template>
   <Teleport to="body">
-    <Transition name="preview">
+    <Transition name="preview" @before-leave="onBeforeLeave" @after-leave="onAfterLeave">
       <div
         v-if="visible"
         class="image-preview-overlay"
         @click.self="close"
-        @touchmove.prevent
       >
         <!-- 关闭按钮 -->
         <button class="close-btn" @click="close">
@@ -15,9 +14,12 @@
         <!-- 图片容器 -->
         <div
           class="image-container"
-          @wheel="handleWheel"
+          @wheel.prevent="handleWheel"
           @mousedown="startDrag"
           @dblclick="reset"
+          @touchstart.passive="onTouchStart"
+          @touchmove.prevent="onTouchMove"
+          @touchend="onTouchEnd"
         >
           <img
             ref="imgRef"
@@ -45,7 +47,7 @@
         </div>
 
         <!-- 提示 -->
-        <div class="hint">滚轮缩放 · 拖拽移动 · 双击重置</div>
+        <div class="hint">{{ isMobile ? '双指缩放 · 单指拖拽 · 双击重置' : '滚轮缩放 · 拖拽移动 · 双击重置' }}</div>
       </div>
     </Transition>
   </Teleport>
@@ -67,6 +69,11 @@ const emit = defineEmits<{
 }>()
 
 const imgRef = ref<HTMLImageElement | null>(null)
+const isMobile = ref(false)
+
+onMounted(() => {
+  isMobile.value = 'ontouchstart' in window
+})
 
 // 缩放和平移状态
 const scale = ref(1)
@@ -80,6 +87,15 @@ const dragStartX = ref(0)
 const dragStartY = ref(0)
 const dragStartTranslateX = ref(0)
 const dragStartTranslateY = ref(0)
+
+// 触摸状态
+let touchStartDistance = 0
+let touchStartScale = 1
+let touchStartCenterX = 0
+let touchStartCenterY = 0
+let touchStartTranslateX = 0
+let touchStartTranslateY = 0
+let lastTapTime = 0
 
 // 计算图片样式
 const imageStyle = computed(() => ({
@@ -97,7 +113,6 @@ const zoomIn = () => {
 const zoomOut = () => {
   if (scale.value > 0.5) {
     scale.value = Math.max(0.5, scale.value - 0.25)
-    // 缩小后如果图片超出边界，重置位置
     if (scale.value <= 1) {
       translateX.value = 0
       translateY.value = 0
@@ -120,7 +135,6 @@ const rotateRight = () => {
 
 // 滚轮缩放
 const handleWheel = (e: WheelEvent) => {
-  e.preventDefault()
   if (e.deltaY < 0) {
     zoomIn()
   } else {
@@ -160,6 +174,73 @@ const stopDrag = () => {
   document.removeEventListener('mouseup', stopDrag)
 }
 
+// --- 触摸手势 ---
+
+const getTouchDistance = (touches: TouchList) => {
+  const dx = touches[0].clientX - touches[1].clientX
+  const dy = touches[0].clientY - touches[1].clientY
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
+const getTouchCenter = (touches: TouchList) => ({
+  x: (touches[0].clientX + touches[1].clientX) / 2,
+  y: (touches[0].clientY + touches[1].clientY) / 2
+})
+
+const onTouchStart = (e: TouchEvent) => {
+  if (e.touches.length === 2) {
+    // 双指：准备缩放
+    touchStartDistance = getTouchDistance(e.touches)
+    touchStartScale = scale.value
+    const center = getTouchCenter(e.touches)
+    touchStartCenterX = center.x
+    touchStartCenterY = center.y
+    touchStartTranslateX = translateX.value
+    touchStartTranslateY = translateY.value
+  } else if (e.touches.length === 1) {
+    // 单指：准备拖拽或检测双击
+    const now = Date.now()
+    if (now - lastTapTime < 300) {
+      reset()
+      lastTapTime = 0
+      return
+    }
+    lastTapTime = now
+
+    isDragging.value = true
+    dragStartX.value = e.touches[0].clientX
+    dragStartY.value = e.touches[0].clientY
+    dragStartTranslateX.value = translateX.value
+    dragStartTranslateY.value = translateY.value
+  }
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  if (e.touches.length === 2) {
+    // 双指缩放 + 平移
+    const newDistance = getTouchDistance(e.touches)
+    const ratio = newDistance / touchStartDistance
+    const newScale = Math.max(0.5, Math.min(3, touchStartScale * ratio))
+    scale.value = newScale
+
+    const center = getTouchCenter(e.touches)
+    translateX.value = touchStartTranslateX + (center.x - touchStartCenterX)
+    translateY.value = touchStartTranslateY + (center.y - touchStartCenterY)
+  } else if (e.touches.length === 1 && isDragging.value) {
+    // 单指拖拽
+    translateX.value = dragStartTranslateX.value + (e.touches[0].clientX - dragStartX.value)
+    translateY.value = dragStartTranslateY.value + (e.touches[0].clientY - dragStartY.value)
+  }
+}
+
+const onTouchEnd = () => {
+  isDragging.value = false
+  if (scale.value <= 1) {
+    translateX.value = 0
+    translateY.value = 0
+  }
+}
+
 // 关闭
 const close = () => {
   reset()
@@ -173,19 +254,50 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
+// 锁定/恢复 body 滚动（标志位防止重复锁定）
+let scrollLocked = false
+const lockBodyScroll = () => {
+  if (scrollLocked) return
+  scrollLocked = true
+  document.documentElement.style.overflow = 'hidden'
+  document.body.style.overflow = 'hidden'
+}
+const restoreBodyScroll = () => {
+  if (!scrollLocked) return
+  scrollLocked = false
+  document.documentElement.style.overflow = ''
+  document.body.style.overflow = ''
+}
+
+// 离开动画开始前：让 overlay 透传触摸，页面立即恢复可交互
+const onBeforeLeave = (el: Element) => {
+  ;(el as HTMLElement).style.pointerEvents = 'none'
+}
+
+// 离开动画结束后：恢复 body 滚动
+const onAfterLeave = () => {
+  restoreBodyScroll()
+}
+
 // 监听 visible 变化，重置状态
 watch(() => props.visible, (val) => {
   if (val) {
     reset()
+    lockBodyScroll()
   }
+  // 关闭时的恢复交给 @before-leave + @after-leave
 })
 
 onMounted(() => {
+  // 防止上次会话残留的 overflow 锁定
+  document.documentElement.style.overflow = ''
+  document.body.style.overflow = ''
   document.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
+  restoreBodyScroll()
 })
 </script>
 
@@ -202,6 +314,7 @@ onUnmounted(() => {
   justify-content: center;
   background: rgba(0, 0, 0, 0.75);
   user-select: none;
+  touch-action: none;
 }
 
 /* 关闭按钮 */
@@ -240,6 +353,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   z-index: 1;
+  touch-action: none;
 }
 
 .preview-image {
