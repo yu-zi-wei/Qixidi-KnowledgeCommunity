@@ -31,8 +31,20 @@ const previewAlt = ref('')
 // 用于存储事件处理器
 const imageClickHandlers = new WeakMap<HTMLImageElement, () => void>()
 
+// ECharts 实例清理
+const echartsCleanups: (() => void)[] = []
+
+// hydrate 版本号，防止过期异步操作
+let hydrateVersion = 0
+
 // 客户端交互增强
 const hydrate = () => {
+  // 清理上一次的 ECharts 实例
+  echartsCleanups.forEach(fn => fn())
+  echartsCleanups.length = 0
+
+  const currentVersion = ++hydrateVersion
+
   nextTick(() => {
     bindLinkTargets()
     bindImageClickEvents()
@@ -45,6 +57,11 @@ const hydrate = () => {
 }
 
 onMounted(hydrate)
+
+onUnmounted(() => {
+  echartsCleanups.forEach(fn => fn())
+  echartsCleanups.length = 0
+})
 
 watch(() => props.html, () => {
   if (import.meta.client) hydrate()
@@ -113,7 +130,8 @@ const enhanceCodeBlocks = () => {
     const right = document.createElement('span')
     right.className = 'code-block-right'
 
-    // 语言标签
+    right.appendChild(langLabel)
+
     const copyBtn = document.createElement('button')
     copyBtn.className = 'code-block-copy'
     copyBtn.textContent = '复制'
@@ -133,8 +151,6 @@ const enhanceCodeBlocks = () => {
       }
     })
 
-    header.appendChild(copyBtn)
-    right.appendChild(langLabel)
     right.appendChild(copyBtn)
     header.appendChild(right)
     pre.insertBefore(header, pre.firstChild)
@@ -179,10 +195,11 @@ const hydrateVideoEmbeds = () => {
         break
 
       case 'bilibili':
+        if (!/^[\w]+$/.test(videoId || '')) return
         playerHtml = `
           <iframe
             src="https://player.bilibili.com/player.html?bvid=${videoId}&high_quality=1&autoplay=0"
-            title="${title || 'B站视频'}"
+            title="B站视频"
             scrolling="no"
             border="0"
             frameborder="no"
@@ -194,10 +211,11 @@ const hydrateVideoEmbeds = () => {
         break
 
       case 'youtube':
+        if (!/^[\w-]+$/.test(videoId || '')) return
         playerHtml = `
           <iframe
             src="https://www.youtube.com/embed/${videoId}"
-            title="${title || 'YouTube视频'}"
+            title="YouTube视频"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -236,10 +254,12 @@ const hydrateMermaidDiagrams = async () => {
 
     mermaid.default.render(`mermaid-${Date.now()}-${index}`, source)
       .then(({ svg }) => {
+        if (hydrateVersion !== currentVersion) return
         htmlEl.innerHTML = svg
         htmlEl.classList.add('mermaid-rendered')
       })
       .catch((err: Error) => {
+        if (hydrateVersion !== currentVersion) return
         htmlEl.innerHTML = `<p style="color:var(--color-danger);font-size:13px;">图表渲染失败: ${err.message}</p>`
       })
   })
@@ -276,6 +296,12 @@ const hydrateEchartsDiagrams = async () => {
       // 响应窗口变化
       const resizeObserver = new ResizeObserver(() => chart.resize())
       resizeObserver.observe(htmlEl)
+
+      // 注册清理函数
+      echartsCleanups.push(() => {
+        resizeObserver.disconnect()
+        chart.dispose()
+      })
     } catch (err: any) {
       htmlEl.innerHTML = `<p style="color:var(--color-danger);font-size:13px;">图表渲染失败: ${err.message}</p>`
     }

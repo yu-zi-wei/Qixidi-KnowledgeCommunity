@@ -10,6 +10,7 @@ import rehypeStringify from 'rehype-stringify'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { visit } from 'unist-util-visit'
+import hljs from 'highlight.js'
 import type { Plugin, Transformer } from 'unified'
 import type { Root } from 'hast'
 
@@ -40,6 +41,11 @@ const remarkBlockquoteLineBreaks: Plugin = (): Transformer => {
     })
   }
 }
+
+/**
+ * HTML 属性值转义（防 XSS）
+ */
+const escAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 /**
  * 视频链接识别
@@ -110,7 +116,7 @@ const remarkVideo: Plugin = (): Transformer => {
             if (videoInfo) {
               newChildren.push({
                 type: 'html',
-                value: `<div class="video-embed" data-video-type="${videoInfo.type}" data-video-url="${videoInfo.embedUrl || ''}" data-video-id="${videoInfo.videoId || ''}" data-video-title="${match[1] || ''}" data-video-poster="${match[2] || ''}"></div>`
+                value: `<div class="video-embed" data-video-type="${videoInfo.type}" data-video-url="${escAttr(videoInfo.embedUrl || '')}" data-video-id="${escAttr(videoInfo.videoId || '')}" data-video-title="${escAttr(match[1] || '')}" data-video-poster="${escAttr(match[2] || '')}"></div>`
               })
             } else {
               newChildren.push({ type: 'text', value: match[0] })
@@ -129,7 +135,7 @@ const remarkVideo: Plugin = (): Transformer => {
             changed = true
             newChildren.push({
               type: 'html',
-              value: `<div class="video-embed" data-video-type="${videoInfo.type}" data-video-url="${videoInfo.embedUrl || ''}" data-video-id="${videoInfo.videoId || ''}"></div>`
+              value: `<div class="video-embed" data-video-type="${videoInfo.type}" data-video-url="${escAttr(videoInfo.embedUrl || '')}" data-video-id="${escAttr(videoInfo.videoId || '')}"></div>`
             })
           } else {
             newChildren.push(child)
@@ -310,6 +316,30 @@ const rehypeLanguageAlias: Plugin = (): Transformer => {
 }
 
 /**
+ * rehype 插件：不支持的代码语言回退到 php 高亮
+ */
+const SUPPORTED_LANGS = new Set(hljs.listLanguages())
+const rehypeHighlightFallback: Plugin = (): Transformer => {
+  return (tree: any) => {
+    visit(tree, 'element', (node: any) => {
+      if (node.tagName !== 'code') return
+      const classes: string[] = node.properties?.className || []
+      for (let i = 0; i < classes.length; i++) {
+        if (typeof classes[i] === 'string' && classes[i].startsWith('language-')) {
+          const lang = classes[i].slice(9).toLowerCase()
+          // 已被 alias 插件处理或 highlight.js 支持，跳过
+          if (node.properties?.dataLanguage || SUPPORTED_LANGS.has(lang)) return
+          // 不支持的语言：保留原始名称用于显示，用 php 做回退高亮
+          node.properties.dataLanguage = lang
+          classes[i] = 'language-php'
+          return
+        }
+      }
+    })
+  }
+}
+
+/**
  * Admonition 类型与默认标题
  */
 const ADMONITION_TYPES = new Set([
@@ -445,7 +475,8 @@ export const useMarkdown = () => {
 
     if (includeHighlight) {
       processor.use(rehypeLanguageAlias)
-      processor.use(rehypeHighlight, { detect: true, subset: false })
+      processor.use(rehypeHighlightFallback)
+      processor.use(rehypeHighlight, { detect: false, subset: false })
     }
 
     processor.use(rehypeStringify)
