@@ -63,14 +63,7 @@
         </el-form-item>
 
       </el-form-item>
-      <!--      <el-form-item label="审核时间" prop="auditTime">-->
-      <!--        <el-date-picker clearable-->
-      <!--                        v-model="queryParams.auditTime"-->
-      <!--                        type="date"-->
-      <!--                        value-format="yyyy-MM-dd"-->
-      <!--                        placeholder="请选择审核时间">-->
-      <!--        </el-date-picker>-->
-      <!--      </el-form-item>-->
+
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="daterangeCreateTime"
@@ -119,11 +112,6 @@
       <el-table-column type="selection" width="55" align="center"/>
       <!--      <el-table-column label="文章id" align="center" prop="id" v-if="true"/>-->
       <el-table-column label="作者名称" align="center" prop="nickname"/>
-      <el-table-column label="头像" align="center" prop="avatar">
-        <template slot-scope="scope">
-          <el-avatar :src="scope.row.avatar"></el-avatar>
-        </template>
-      </el-table-column>
       <el-table-column label="文章标题" align="center" prop="articleTitle"/>
       <el-table-column label="文章封面" align="center" prop="articleCover">
         <template slot-scope="scope">
@@ -148,20 +136,13 @@
         </template>
       </el-table-column>
       <el-table-column label="文章分类" align="center" prop="groupingName"/>
-      <el-table-column label="标签名称" align="center" prop="labelName">
+      <el-table-column label="标签" align="center" prop="labelName">
         <template slot-scope="scope">
           <div v-if="scope.row.labelNameList.length>0">
-            <el-tag v-for="(items, index) of scope.row.labelNameList" :key="index" style="margin-bottom: 6px">
-              {{ items }}
-            </el-tag>
+            <span v-for="(items, index) of scope.row.labelNameList" :key="index" style="margin-bottom: 6px">
+              #{{ items }}
+            </span>
           </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否公开" align="center" prop="isPublic">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.isPublic == 1?'success':'warning'">
-            {{ scope.row.isPublic == 1 ? '公开' : '不公开' }}
-          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="审核状态" align="center" prop="auditState">

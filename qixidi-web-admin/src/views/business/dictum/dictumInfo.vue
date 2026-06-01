@@ -78,29 +78,13 @@
       </el-table-column>
       <el-table-column label="分类名称" align="center" prop="groupName"/>
       <el-table-column label="专辑名称" align="center" prop="albumName"/>
-      <el-table-column label="标签" align="center" prop="label" width="200px">
-        <template slot-scope="scope">
-          <div v-if="scope.row.labelList.length>0">
-            <el-tag type="warning" v-for="items of scope.row.labelList" style="margin-bottom: 6px">
-              {{ items }}
-            </el-tag>
-          </div>
-        </template>
-      </el-table-column>
+      <el-table-column label="标签" align="center" prop="label" width="200px"></el-table-column>
       <el-table-column label="点赞总数" align="center" prop="helpSum"/>
       <el-table-column label="评论总数" align="center" prop="commentSum"/>
       <el-table-column label="图片" align="center" prop="picture"/>
       <el-table-column label="名言状态" align="center" prop="dictumState"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['business:dictum:info:edit']"
-          >修改
-          </el-button>
           <el-button
             size="mini"
             type="text"
@@ -121,42 +105,6 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改名言信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户id" prop="uid">
-          <el-input v-model="form.uid" placeholder="请输入用户id"/>
-        </el-form-item>
-        <el-form-item label="内容">
-          <editor v-model="form.content" :min-height="192"/>
-        </el-form-item>
-        <el-form-item label="分类id" prop="sortId">
-          <el-input v-model="form.sortId" placeholder="请输入分类id"/>
-        </el-form-item>
-        <el-form-item label="标签" prop="label">
-          <el-input v-model="form.label" placeholder="请输入标签"/>
-        </el-form-item>
-        <el-form-item label="点赞总数" prop="helpSum">
-          <el-input v-model="form.helpSum" placeholder="请输入点赞总数"/>
-        </el-form-item>
-        <el-form-item label="评论总数" prop="commentSum">
-          <el-input v-model="form.commentSum" placeholder="请输入评论总数"/>
-        </el-form-item>
-        <el-form-item label="图片" prop="picture">
-          <el-input v-model="form.picture" type="textarea" placeholder="请输入内容"/>
-        </el-form-item>
-        <el-form-item label="名言状态" prop="dictumState">
-          <el-input v-model="form.dictumState" placeholder="请输入名言状态"/>
-        </el-form-item>
-        <el-form-item label="状态" prop="state">
-          <el-input v-model="form.state" placeholder="请输入状态"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 

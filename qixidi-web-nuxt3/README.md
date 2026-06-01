@@ -136,6 +136,9 @@ npm run pack
 ## 或者（打包加压缩）
 npm run build && npm run pack
   
+##  切换控制台到power
+pwsh
+
 # 3. 上传并重启
 scp ../deployment.zip user@server:/path/to/app/
 ssh user@server

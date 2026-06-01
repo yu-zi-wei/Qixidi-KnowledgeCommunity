@@ -64,14 +64,8 @@
     <el-table v-loading="loading" :data="groupList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="分组名称" align="center" prop="name"/>
-      <el-table-column label="封面" align="center" prop="cover">
-        <template slot-scope="scope">
-          <el-image fit="cover" :src="scope.row.cover"></el-image>
-        </template>
-      </el-table-column>
       <el-table-column label="简介" align="center" prop="briefIntroduction"/>
-      <el-table-column label="分组状态" align="center" prop="groupState"/>
-      <el-table-column label="状态" align="center" prop="state"/>
+<!--      <el-table-column label="状态" align="center" prop="state"/>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

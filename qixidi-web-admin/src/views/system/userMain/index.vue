@@ -61,8 +61,6 @@
         </template>
       </el-table-column>
       <el-table-column label="邮箱" align="center" prop="email"/>
-      <el-table-column label="职业" align="center" prop="occupation"/>
-      <el-table-column label="用户备注" align="center" prop="remark"/>
       <el-table-column label="用户来源" align="center" prop="source"/>
       <el-table-column label="注册时间" align="center" prop="createTime">
         <template slot-scope="scope">
