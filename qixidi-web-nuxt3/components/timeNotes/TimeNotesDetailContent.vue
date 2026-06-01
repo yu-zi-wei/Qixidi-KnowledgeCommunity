@@ -23,7 +23,7 @@
 
     <!-- 内容区域 -->
     <div class="detail-content">
-      <MarkdownRenderer :content="note.content" />
+      <MarkdownRenderer :html="renderedHtml || ''" />
     </div>
   </div>
 </template>
@@ -36,7 +36,14 @@ interface Props {
   note: TimeNotesInfo
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+// 内部渲染 Markdown → HTML（SSR 输出完整 HTML）
+const { renderMarkdown } = useMarkdown()
+const { data: renderedHtml } = await useAsyncData(
+  () => `note-html-${props.note.id}`,
+  () => renderMarkdown(props.note.content || '')
+)
 </script>
 
 <style scoped>

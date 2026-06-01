@@ -54,6 +54,22 @@
         </div>
       </div>
 
+      <!-- AI 总结（默认折叠，与摘要共享开关） -->
+      <div v-if="showAbstract && article.articleSummary" class="ai-summary-wrapper">
+        <div class="ai-summary-header" @click="aiSummaryExpanded = !aiSummaryExpanded">
+          <div class="ai-summary-title">
+            <n-icon class="ai-icon"><Robot /></n-icon>
+            <span>AI 总结</span>
+          </div>
+          <n-icon class="ai-summary-toggle" :class="{ expanded: aiSummaryExpanded }">
+            <ChevronDown />
+          </n-icon>
+        </div>
+        <div v-if="aiSummaryExpanded" class="ai-summary-content">
+          {{ article.articleSummary }}
+        </div>
+      </div>
+
       <!-- 文章摘要 -->
       <div v-if="showAbstract && article.articleAbstract" class="article-abstract-wrapper">
         <div class="abstract-icon">
@@ -65,7 +81,7 @@
       </div>
 
       <!-- 文章内容 -->
-      <MarkdownRenderer :content="article.articleContent" class="article-content" />
+      <MarkdownRenderer :html="renderedHtml || ''" class="article-content" />
 
       <!-- 文章标签 -->
       <div v-if="labelItems.length > 0" class="article-tags">
@@ -90,7 +106,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Eye, Heart, ThumbUp, MessageCircle, Edit, Quote, Hash } from '@vicons/tabler'
+import { Eye, Heart, ThumbUp, MessageCircle, Edit, Quote, Hash, Robot, ChevronDown } from '@vicons/tabler'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 interface LabelInfo {
@@ -151,6 +167,15 @@ const props = withDefaults(defineProps<Props>(), {
   showEdit: true,
   showAbstract: true
 })
+
+const aiSummaryExpanded = ref(false)
+
+// 内部渲染 Markdown → HTML（SSR 输出完整 HTML）
+const { renderMarkdown } = useMarkdown()
+const { data: renderedHtml } = await useAsyncData(
+  () => `article-html-${props.article.id}`,
+  () => renderMarkdown(props.article.articleContent || '')
+)
 
 defineEmits<{
   collect: []
@@ -363,7 +388,7 @@ const labelItems = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: 16px 0 5px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   margin-bottom: 28px;
 }
@@ -485,6 +510,59 @@ const labelItems = computed(() => {
   color: var(--color-ink-light);
   margin: 0;
   font-style: italic;
+}
+
+/* AI 总结 */
+.ai-summary-wrapper {
+  margin-bottom: 32px;
+  background: rgba(68, 138, 255, 0.06);
+  border: 1px solid rgba(68, 138, 255, 0.15);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ai-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition-fast);
+}
+
+.ai-summary-header:hover {
+  background: rgba(68, 138, 255, 0.08);
+}
+
+.ai-summary-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: #448aff;
+}
+
+.ai-icon {
+  font-size: 16px;
+}
+
+.ai-summary-toggle {
+  font-size: 16px;
+  color: #448aff;
+  transition: transform var(--transition-base);
+}
+
+.ai-summary-toggle.expanded {
+  transform: rotate(180deg);
+}
+
+.ai-summary-content {
+  padding: 0 var(--space-4) var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-ink-light);
 }
 
 /* 文章标签 - 简洁设计 */

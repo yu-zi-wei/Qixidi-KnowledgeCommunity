@@ -56,7 +56,7 @@
   --md-inline-code-bg: rgba(61, 90, 128, 0.08);
   --md-quote-border: #35B378;
   --md-quote-text: #6a737d;
-  --md-link-color: var(--color-primary);
+  --md-link-color: #3b82f6;
   --md-table-border: #e2e4e8;
 
   /* === 字体 === */
@@ -169,7 +169,7 @@
   --md-inline-code-bg: rgba(90, 127, 168, 0.2);
   --md-quote-border: #35B378;
   --md-quote-text: #8a8c92;
-  --md-link-color: var(--color-primary);
+  --md-link-color: #60a5fa;
   --md-table-border: #363a3e;
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -212,7 +212,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-synthesis: none;
+  font-synthesis: weight;
 }
 
 /* 滚动条 - 固定宽度，避免内容偏移 */
@@ -677,27 +677,134 @@ a:hover {
 
 /* 代码块 */
 .markdown-body pre {
-  padding: 16px;
+  position: relative;
+  padding: 0;
   overflow: auto;
   font-size: 14px;
   line-height: var(--leading-normal);
-  background-color: var(--md-code-bg);
+  background-color: #282c34;
   border-radius: var(--radius-md);
   border: 1px solid var(--md-code-border);
   margin-bottom: 16px;
 }
 
 .markdown-body pre code {
-  padding: 0;
+  display: block;
+  padding: 16px 20px;
   background-color: transparent;
   border: none;
-  font-size: inherit;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #abb2bf;
+}
+
+/* 代码块头部 */
+.markdown-body pre .code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #21252b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.markdown-body pre .code-block-header + code {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+/* 三色点 */
+.markdown-body pre .code-block-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.markdown-body pre .code-block-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.markdown-body pre .code-block-dots i:nth-child(1) { background: #ff5f57; }
+.markdown-body pre .code-block-dots i:nth-child(2) { background: #febc2e; }
+.markdown-body pre .code-block-dots i:nth-child(3) { background: #28c840; }
+
+/* 右侧：语言标签 + 复制按钮 */
+.markdown-body pre .code-block-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 语言标签 */
+.markdown-body pre .code-block-lang {
+  font-size: 12px;
+  color: #636d83;
+  font-family: var(--font-mono);
+  text-transform: lowercase;
+}
+
+/* 复制按钮 */
+.markdown-body pre .code-block-copy {
+  font-size: 12px;
+  color: #636d83;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: all var(--transition-fast);
+}
+
+.markdown-body pre .code-block-copy:hover {
+  color: #abb2bf;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.markdown-body pre .code-block-copy.copied {
+  color: #28c840;
+  border-color: #28c840;
+}
+
+/* Mermaid 图表 */
+.markdown-body .mermaid-placeholder {
+  text-align: center;
+  padding: 24px;
+  background: var(--color-surface-dim);
+  border-radius: var(--radius-md);
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.markdown-body .mermaid-placeholder svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ECharts 图表 */
+.markdown-body .echarts-placeholder {
+  padding: 0;
+  background: var(--color-surface-dim);
+  border-radius: var(--radius-md);
+  margin: 16px 0;
+  overflow: hidden;
+}
+
+/* KaTeX 公式 */
+.markdown-body .katex-display {
+  margin: 16px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
 }
 
 /* 引用 */
 .markdown-body blockquote {
-  padding: 0 16px;
-  margin: 0 0 16px 0;
+  padding: var(--space-2) var(--space-4) var(--space-2) 16px;
+  margin: var(--space-2) 0;
   color: var(--md-quote-text);
   border-left: 4px solid var(--md-quote-border);
   background-color: var(--color-surface-dim);
@@ -795,25 +902,186 @@ a:hover {
   margin-right: 8px;
 }
 
-/* 代码高亮主题 */
+/* 代码高亮基础（颜色由 highlight.js atom-one-dark 主题提供） */
 .markdown-body .hljs {
+  display: block;
+  overflow-x: auto;
   background: transparent;
 }
 
 /* GFM 任务列表 */
 .markdown-body .task-list-item {
-  list-style-type: none;
+  list-style-type: none !important;
 }
 
-.markdown-body .task-list-item input {
-  margin: 0 8px 0.25em -1.6em;
+/* 编辑器预览区任务列表 */
+.md-editor-preview .task-list-item {
+  list-style-type: none !important;
+}
+
+/* 自定义复选框 */
+.markdown-body .task-list-item input[type="checkbox"],
+.md-editor-preview .task-list-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 3px;
   vertical-align: middle;
+  margin: 0 8px 0.25em -1.6em;
+  position: relative;
+  background: var(--color-surface);
+  cursor: default;
 }
 
-/* 代码高亮基础（颜色由 highlight.js atom-one-dark 主题提供） */
-.markdown-body .hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0;
-  background: transparent;
+.markdown-body .task-list-item input[type="checkbox"]:checked,
+.md-editor-preview .task-list-item input[type="checkbox"]:checked {
+  background: #00c853;
+  border-color: #00c853;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
 }
+
+/* ============================================
+   Admonition（提示框）样式
+   ============================================ */
+
+.markdown-body .admonition {
+  padding: var(--space-4);
+  margin: var(--space-4) 0;
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+  font-size: var(--text-sm);
+}
+
+.markdown-body .admonition-title {
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+  font-size: var(--text-base);
+}
+
+.markdown-body .admonition > .admonition-title {
+  margin-top: 0;
+}
+
+.markdown-body .admonition > *:last-child {
+  margin-bottom: 0;
+}
+
+/* note */
+.markdown-body .admonition-note { border-color: rgb(166.2, 166.2, 166.2); background: #FFFFFF; color: #212121; }
+.markdown-body .admonition-note .admonition-title { color: #212121; }
+
+/* tip */
+.markdown-body .admonition-tip { border-color: rgb(185.8, 185.8, 185.8); background: #F5F5F5; color: #616161; }
+.markdown-body .admonition-tip .admonition-title { color: #616161; }
+
+/* info */
+.markdown-body .admonition-info { border-color: rgb(170.4, 170.4, 170.4); background: #F0F0F0; color: #424242; }
+.markdown-body .admonition-info .admonition-title { color: #424242; }
+
+/* quote */
+.markdown-body .admonition-quote { border-color: rgb(169.2, 179.4, 184.6); background: #eceff1; color: #455a64; }
+.markdown-body .admonition-quote .admonition-title { color: #455a64; }
+
+/* abstract */
+.markdown-body .admonition-abstract { border-color: rgb(135.8, 201.4, 236); background: #e1f5fe; color: #0288d1; }
+.markdown-body .admonition-abstract .admonition-title { color: #0288d1; }
+
+/* attention */
+.markdown-body .admonition-attention { border-color: rgb(148.2, 199.6, 243.4); background: #e3f2fd; color: #1e88e5; }
+.markdown-body .admonition-attention .admonition-title { color: #1e88e5; }
+
+/* example */
+.markdown-body .admonition-example { border-color: rgb(179.8, 159.8, 218.4); background: #ede7f6; color: #5e35b1; }
+.markdown-body .admonition-example .admonition-title { color: #5e35b1; }
+
+/* hint */
+.markdown-body .admonition-hint { border-color: rgb(134.4, 200, 193.8); background: #E0F2F1; color: #00897B; }
+.markdown-body .admonition-hint .admonition-title { color: #00897B; }
+
+/* success */
+.markdown-body .admonition-success { border-color: rgb(161.6, 203.8, 163.8); background: #e8f5e9; color: #388e3c; }
+.markdown-body .admonition-success .admonition-title { color: #388e3c; }
+
+/* question */
+.markdown-body .admonition-question { border-color: rgb(252.6, 219, 153.4); background: #fffde7; color: #f9a825; }
+.markdown-body .admonition-question .admonition-title { color: #f9a825; }
+
+/* caution */
+.markdown-body .admonition-caution { border-color: rgb(253.4, 204.8, 135); background: #fff8e1; color: #fb8c00; }
+.markdown-body .admonition-caution .admonition-title { color: #fb8c00; }
+
+/* warning */
+.markdown-body .admonition-warning { border-color: rgb(251, 195.4, 134.4); background: #fff3e0; color: #f57c00; }
+.markdown-body .admonition-warning .admonition-title { color: #f57c00; }
+
+/* danger */
+.markdown-body .admonition-danger { border-color: rgb(239.4, 167.8, 151.2); background: #ffebee; color: #d84315; }
+.markdown-body .admonition-danger .admonition-title { color: #d84315; }
+
+/* failure */
+.markdown-body .admonition-failure { border-color: rgb(236.8, 154.4, 156.8); background: #fee2e6; color: #d32f2f; }
+.markdown-body .admonition-failure .admonition-title { color: #d32f2f; }
+
+/* bug */
+.markdown-body .admonition-bug { border-color: rgb(229.8, 141.2, 143); background: #fddadd; color: #c31a1a; }
+.markdown-body .admonition-bug .admonition-title { color: #c31a1a; }
+
+/* error */
+.markdown-body .admonition-error { border-color: rgb(225, 137.2, 139.6); background: #fdd2d6; color: #b71c1c; }
+.markdown-body .admonition-error .admonition-title { color: #b71c1c; }
+
+/* 深色模式 Admonition */
+.dark .markdown-body .admonition-note { border-color: rgb(107.6, 107.6, 107.6); background: #1E1E1E; color: #E0E0E0; }
+.dark .markdown-body .admonition-note .admonition-title { color: #E0E0E0; }
+
+.dark .markdown-body .admonition-tip { border-color: rgb(93.2, 93.2, 93.2); background: #262626; color: #B0B0B0; }
+.dark .markdown-body .admonition-tip .admonition-title { color: #B0B0B0; }
+
+.dark .markdown-body .admonition-info { border-color: rgb(97.4, 97.4, 97.4); background: #2B2B2B; color: #B3B3B3; }
+.dark .markdown-body .admonition-info .admonition-title { color: #B3B3B3; }
+
+.dark .markdown-body .admonition-quote { border-color: rgb(93.2, 106, 112.4); background: #263238; color: #b0bec5; }
+.dark .markdown-body .admonition-quote .admonition-title { color: #b0bec5; }
+
+.dark .markdown-body .admonition-abstract { border-color: rgb(52.2, 113, 141.4); background: #012f45; color: #81d4fa; }
+.dark .markdown-body .admonition-abstract .admonition-title { color: #81d4fa; }
+
+.dark .markdown-body .admonition-attention { border-color: rgb(49.6, 97.6, 144); background: #102a4c; color: #64b5f6; }
+.dark .markdown-body .admonition-attention .admonition-title { color: #64b5f6; }
+
+.dark .markdown-body .admonition-example { border-color: rgb(83, 63, 131.2); background: #271b52; color: #9575cd; }
+.dark .markdown-body .admonition-example .admonition-title { color: #9575cd; }
+
+.dark .markdown-body .admonition-hint { border-color: rgb(30.8, 109.4, 103.6); background: #003D3A; color: #4DB6AC; }
+.dark .markdown-body .admonition-hint .admonition-title { color: #4DB6AC; }
+
+.dark .markdown-body .admonition-success { border-color: rgb(67.8, 136, 72); background: #1b5e20; color: #81c784; }
+.dark .markdown-body .admonition-success .admonition-title { color: #81c784; }
+
+.dark .markdown-body .admonition-question { border-color: rgb(139.2, 113.4, 31.6); background: #3e2f00; color: #ffd54f; }
+.dark .markdown-body .admonition-question .admonition-title { color: #ffd54f; }
+
+.dark .markdown-body .admonition-caution { border-color: rgb(139.2, 104.4, 51.2); background: #3e2600; color: #ffcc80; }
+.dark .markdown-body .admonition-caution .admonition-title { color: #ffcc80; }
+
+.dark .markdown-body .admonition-warning { border-color: rgb(138.6, 96, 30.8); background: #3d2600; color: #ffb74d; }
+.dark .markdown-body .admonition-warning .admonition-title { color: #ffb74d; }
+
+.dark .markdown-body .admonition-danger { border-color: rgb(131.6, 61.6, 61.6); background: #3c0000; color: #ef9a9a; }
+.dark .markdown-body .admonition-danger .admonition-title { color: #ef9a9a; }
+
+.dark .markdown-body .admonition-failure { border-color: rgb(131.6, 67, 61.6); background: #3c0900; color: #ef9a9a; }
+.dark .markdown-body .admonition-failure .admonition-title { color: #ef9a9a; }
+
+.dark .markdown-body .admonition-bug { border-color: rgb(120.8, 52.4, 51.6); background: #300000; color: #e68381; }
+.dark .markdown-body .admonition-bug .admonition-title { color: #e68381; }
+
+.dark .markdown-body .admonition-error { border-color: rgb(124.4, 33.2, 32); background: #300000; color: #ef5350; }
+.dark .markdown-body .admonition-error .admonition-title { color: #ef5350; }

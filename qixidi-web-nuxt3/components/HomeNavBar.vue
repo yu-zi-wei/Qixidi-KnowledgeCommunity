@@ -264,6 +264,9 @@
       positive-text="确定" negative-text="取消"
       @positive-click="doLogout"
     />
+    <!-- 预取写作页面 chunk -->
+    <NuxtLink v-if="authStore.isLoggedIn" to="/write/article" class="hidden-prefetch" />
+    <NuxtLink v-if="authStore.isLoggedIn" to="/write/note" class="hidden-prefetch" />
   </header>
 </template>
 
@@ -494,6 +497,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.hidden-prefetch {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 /* 导航栏 */
 .home-nav-bar {
   position: sticky;

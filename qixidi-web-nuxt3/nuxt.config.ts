@@ -113,8 +113,8 @@ export default defineNuxtConfig({
         '/user-home/**': {ssr: true},       // 个人主页（用户信息 SSR）
 
         // 写作页面 —— CSR（需要登录，客户端交互）
-        '/write': {ssr: false},
-        '/write/**': {ssr: false},
+        '/write': {ssr: false, prefetch: true},
+        '/write/**': {ssr: false, prefetch: true},
 
         // 需要登录的页面 —— CSR
         '/news': {ssr: false},

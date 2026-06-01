@@ -48,8 +48,8 @@ const activeId = ref<string>('')
 const extractHeadingsFromDOM = () => {
   const container = document.querySelector('.markdown-body')
   if (!container) {
-    // 如果 DOM 还没渲染，先解析 Markdown 源文本作为备用
-    return parseHeadingsFromMarkdown(props.content || '')
+    // 如果 DOM 还没渲染，先从 HTML 字符串解析标题作为备用
+    return parseHeadingsFromHtml(props.content || '')
   }
 
   const elements = container.querySelectorAll('h2[id], h3[id], h4[id]')
@@ -67,19 +67,19 @@ const extractHeadingsFromDOM = () => {
   return found
 }
 
-// 备用方案：从 Markdown 源文本解析
-const parseHeadingsFromMarkdown = (content: string) => {
-  if (!content) return []
+// 备用方案：从 HTML 字符串解析标题
+const parseHeadingsFromHtml = (html: string) => {
+  if (!html) return []
 
-  const regex = /^(#{2,4})\s+(.+)$/gm
+  const regex = /<h([2-4])[^>]*id="([^"]*)"[^>]*>(.*?)<\/h\1>/g
   const found: Heading[] = []
   let match
 
-  while ((match = regex.exec(content)) !== null) {
-    const level = match[1].length
-    const text = match[2].trim()
-    // 生成与 rehype-slug 一致的 ID
-    const id = generateSlug(text)
+  while ((match = regex.exec(html)) !== null) {
+    const level = parseInt(match[1])
+    const id = match[2]
+    // 去除 HTML 标签，只保留文本
+    const text = match[3].replace(/<[^>]*>/g, '').trim()
 
     found.push({ id, text, level })
   }
@@ -87,16 +87,6 @@ const parseHeadingsFromMarkdown = (content: string) => {
   return found
 }
 
-// 生成与 rehype-slug 一致的 ID
-const generateSlug = (text: string): string => {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w\u4e00-\u9fa5\u4e00-\u9fff\u3000-\u303f\uff00-\uffef-]/g, '')
-    .replace(/^[-]+|[-]+$/g, '')
-    .replace(/[-]{2,}/g, '-')
-}
 
 // 更新目录
 const updateHeadings = () => {
