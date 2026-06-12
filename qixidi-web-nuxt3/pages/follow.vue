@@ -48,7 +48,12 @@
         </button>
       </div>
 
+      <div v-if="articles.length === 0 && !loadingMore" class="empty-state">
+        <p>暂无文章</p>
+      </div>
+
       <ArticleList
+        v-show="articles.length > 0"
         :articles="articles"
         :loading="loadingMore"
         :no-more="noMore"
@@ -286,5 +291,17 @@ const handleTabChange = (value: string) => {
 .tab-button.active {
   color: var(--color-primary);
   border-bottom-color: var(--color-primary);
+}
+
+/* === 空状态 === */
+.empty-state {
+  text-align: center;
+  padding: 60px var(--space-5);
+  color: var(--color-ink-muted);
+}
+
+.empty-state p {
+  font-size: var(--text-sm);
+  margin: 0;
 }
 </style>

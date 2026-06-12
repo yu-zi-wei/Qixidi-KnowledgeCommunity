@@ -1,5 +1,6 @@
 package com.qixidi.business.task;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.light.core.constant.SystemConstant;
@@ -7,7 +8,9 @@ import com.light.core.utils.AlgorithmUtils;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
+import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.enums.SystemTaskEnums;
+import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
@@ -70,6 +73,7 @@ public class ArticleTask {
     public Map<String, Object> recurrence(Long pageId, Long size) throws InterruptedException {
         Map<String, Object> map = new HashMap();
         List<ArticleInformationVo> list = articleInformationMapper.selectData(pageId, size);
+        if (CollectionUtil.isEmpty(list)) return map;
 //        获取最大id数
         Long pageIds = list.stream().map(ArticleInformationVo::getId).max(Long::compareTo).get();
 //                计算权重
@@ -112,7 +116,8 @@ public class ArticleTask {
 //    @Scheduled(cron = "0 */2 * * * ?")
     public void ArticleCalculateWeight() {
         Long aLong = articleInformationMapper.selectCount(new LambdaQueryWrapper<ArticleInformation>()
-                .eq(ArticleInformation::getState, 0).eq(ArticleInformation::getAuditState, 2));
+                .eq(ArticleInformation::getState, CommonStatusEnums.NORMAL.getCode())
+                .eq(ArticleInformation::getAuditState, ArticleAuditStateEnums.APPROV.getCode()));
         Boolean state = true;
         //当前最大文章id
         Long pageId = 0L;

@@ -54,7 +54,7 @@
           </svg>
         </button>
       </div>
-      <ol class="rank-list">
+      <ol v-if="recommendList.length > 0" class="rank-list">
         <li v-for="(article, i) in recommendList" :key="article.id" class="rank-item">
           <span class="rank-num" :class="`top-${i + 1}`">{{ i + 1 }}</span>
           <NuxtLink :to="`/articles/${article.id}`" class="rank-title">
@@ -62,6 +62,7 @@
           </NuxtLink>
         </li>
       </ol>
+      <p v-else class="sidebar-empty">暂无精选文章</p>
     </div>
 
     <!-- 站点信息 -->
@@ -432,6 +433,14 @@ const runningRemainDays = computed(() => {
 
 .rank-title:hover {
   color: var(--color-primary);
+}
+
+.sidebar-empty {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-ink-faint);
+  margin: 12px 0 0;
+  padding: 16px 0;
 }
 
 /* 站点信息卡片 - 更轻 */

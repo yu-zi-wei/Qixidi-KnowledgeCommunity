@@ -55,7 +55,7 @@
   </div>
 
   <!-- 加载状态 -->
-  <div ref="loadTrigger" class="load-more">
+  <div v-if="articles.length > 0" ref="loadTrigger" class="load-more">
     <n-spin v-if="loading" :size="20" />
     <span v-else-if="noMore" class="load-more-text">— 没有更多了 —</span>
   </div>

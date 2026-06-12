@@ -1,6 +1,7 @@
 package com.qixidi.business.task;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.light.core.constant.SystemConstant;
@@ -54,6 +55,7 @@ public class LabelTask {
             List<UserFollowVo> userFollowVos = userFollowMapper.selectVoLabelGroup();
             Map<String, Integer> collect1 = userFollowVos.stream().collect(Collectors.toMap(UserFollowVo::getTargetId, UserFollowVo::getSum));
             List<String> listLabel = articleInformationMapper.selectLabel();
+            if (CollectionUtil.isEmpty(listLabel)) return;
             List<String> strings = new ArrayList<>();
             listLabel.forEach(item -> {
                 strings.addAll(Arrays.asList(item.split(",")));

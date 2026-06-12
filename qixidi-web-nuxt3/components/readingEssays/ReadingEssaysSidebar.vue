@@ -1,46 +1,49 @@
 <template>
   <aside v-if="isReady" class="reading-essays-sidebar">
     <!-- 专辑（带封面） -->
-    <section v-if="displayedAlbums.length > 0" class="sidebar-card sidebar-section" style="--delay: 0">
+    <section class="sidebar-card sidebar-section" style="--delay: 0">
       <div class="section-title">
         <Folder class="section-icon" />
         <span>推荐专辑</span>
       </div>
-      <div class="album-list">
-        <NuxtLink
-          v-for="album in displayedAlbums"
-          :key="album.id"
-          :to="buildFilterLink({ albumId: selectedAlbumId === album.id ? null : album.id })"
-          class="album-card"
-          :class="{ active: selectedAlbumId === album.id }"
-          @click="handleAlbumClick(album.id)"
-        >
-          <div v-if="album.cover" class="album-cover">
-            <img :src="album.cover" :alt="album.name" loading="lazy" />
-          </div>
-          <div v-else class="album-cover album-cover-placeholder">
-            <Folder class="placeholder-icon" />
-          </div>
-          <div class="album-info">
-            <div class="album-name">{{ album.name }}</div>
-            <div v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</div>
-          </div>
-        </NuxtLink>
-      </div>
-      <button v-if="totalAlbums > 5" class="btn-view-all" @click="showAlbumSelector = true">
-        查看全部 {{ totalAlbums }} 个专辑
-        <ChevronRight style="width: 14px; height: 14px;" />
-      </button>
+      <template v-if="displayedAlbums.length > 0">
+        <div class="album-list">
+          <NuxtLink
+            v-for="album in displayedAlbums"
+            :key="album.id"
+            :to="buildFilterLink({ albumId: selectedAlbumId === album.id ? null : album.id })"
+            class="album-card"
+            :class="{ active: selectedAlbumId === album.id }"
+            @click="handleAlbumClick(album.id)"
+          >
+            <div v-if="album.cover" class="album-cover">
+              <img :src="album.cover" :alt="album.name" loading="lazy" />
+            </div>
+            <div v-else class="album-cover album-cover-placeholder">
+              <Folder class="placeholder-icon" />
+            </div>
+            <div class="album-info">
+              <div class="album-name">{{ album.name }}</div>
+              <div v-if="album.employSum !== undefined" class="album-count">{{ album.employSum }} 篇</div>
+            </div>
+          </NuxtLink>
+        </div>
+        <button v-if="totalAlbums > 5" class="btn-view-all" @click="showAlbumSelector = true">
+          查看全部 {{ totalAlbums }} 个专辑
+          <ChevronRight style="width: 14px; height: 14px;" />
+        </button>
+      </template>
+      <p v-else class="sidebar-empty">暂无专辑</p>
     </section>
 
     <!-- 热门作者（可展开） -->
-    <section v-if="popularAuthors.length > 0" class="sidebar-card sidebar-section" style="--delay: 1">
+    <section class="sidebar-card sidebar-section" style="--delay: 1">
       <div class="section-title section-title-clickable" @click="toggleAuthorsExpand">
         <User class="section-icon" />
         <span>热门作者</span>
-        <ChevronDown class="chevron-icon" :class="{ expanded: authorsExpanded }" />
+        <ChevronDown v-if="popularAuthors.length > 0" class="chevron-icon" :class="{ expanded: authorsExpanded }" />
       </div>
-      <div v-show="authorsExpanded" class="tag-cloud">
+      <div v-if="popularAuthors.length > 0" v-show="authorsExpanded" class="tag-cloud">
         <NuxtLink
           v-for="authorItem in displayedAuthors"
           :key="authorItem.author"
@@ -52,16 +55,17 @@
           {{ authorItem.author }} +{{ authorItem.count }}
         </NuxtLink>
       </div>
+      <p v-else class="sidebar-empty">暂无作者</p>
     </section>
 
     <!-- 热门标签（可展开） -->
-    <section v-if="popularLabels.length > 0" class="sidebar-card sidebar-section" style="--delay: 2">
+    <section class="sidebar-card sidebar-section" style="--delay: 2">
       <div class="section-title section-title-clickable" @click="toggleLabelsExpand">
         <Hash class="section-icon" />
         <span>热门标签</span>
-        <ChevronDown class="chevron-icon" :class="{ expanded: labelsExpanded }" />
+        <ChevronDown v-if="popularLabels.length > 0" class="chevron-icon" :class="{ expanded: labelsExpanded }" />
       </div>
-      <div v-show="labelsExpanded" class="tag-cloud">
+      <div v-if="popularLabels.length > 0" v-show="labelsExpanded" class="tag-cloud">
         <NuxtLink
           v-for="labelItem in popularLabels"
           :key="labelItem.label"
@@ -73,6 +77,7 @@
           # {{ labelItem.label }} +{{ labelItem.count }}
         </NuxtLink>
       </div>
+      <p v-else class="sidebar-empty">暂无标签</p>
     </section>
   </aside>
 
@@ -462,5 +467,13 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 
 :root.dark .tag-cloud-item:hover {
   background: rgba(90, 127, 168, 0.15);
+}
+
+.sidebar-empty {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-ink-faint);
+  margin: 8px 0 0;
+  padding: 12px 0;
 }
 </style>

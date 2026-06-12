@@ -51,6 +51,7 @@ export const useInfiniteScroll = (options: UseInfiniteScrollOptions) => {
 
   // 判断是否已加载完所有数据
   const noMore = computed(() => {
+    if (total.value === 0 && !loadingMore.value) return true
     return articles.value.length >= total.value && total.value > 0
   })
 

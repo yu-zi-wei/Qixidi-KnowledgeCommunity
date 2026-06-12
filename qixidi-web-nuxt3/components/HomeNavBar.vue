@@ -574,7 +574,7 @@ onMounted(() => {
 .action-icon { width: 20px; height: 20px; stroke-width: 1.5; }
 .nav-avatar { flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease; }
 .nav-avatar:hover { transform: scale(1.08); }
-.login-btn { padding: 7px 18px; font-size: 13px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; }
+.login-btn { padding: 7px 18px; font-size: 13px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; white-space: nowrap; flex-shrink: 0; }
 .login-btn:hover { background: var(--color-primary); transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* 汉堡菜单按钮 */
