@@ -60,7 +60,12 @@ export default defineNuxtConfig({
             apiBase: '/api',
             wsBase: 'http://127.0.0.1:9001',
             appName: 'qixidi-blog',
-            siteName: '栖息地'
+            siteName: '栖息地',
+            piniaPluginPersistedstate: {
+                cookieOptions: {
+                    maxAge: 60 * 60 * 24 * 300  // 300 天（浏览器上限400天）
+                }
+            }
         }
     },
 
