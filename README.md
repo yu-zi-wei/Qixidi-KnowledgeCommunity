@@ -24,7 +24,7 @@ UI，全程 AI 驱动开发**。
 
 ### 开源地址（GitHub）：https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity
 
-### 账号密码（仅限本地）
+### 默认账号密码（仅限本地）
 > 前台：123@qq.com/123456
 > 后台：admin/123456
 ---
