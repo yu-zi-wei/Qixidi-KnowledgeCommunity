@@ -43,7 +43,7 @@
             ref="searchInputRef"
             v-model="searchKeyword"
             type="text"
-            placeholder="搜索..."
+            placeholder="探索栖息地"
             class="search-input"
             @focus="handleSearchFocus"
             @keydown.enter="handleSearch"
@@ -204,6 +204,11 @@
 
         <template v-else>
           <button class="login-btn" @click="handleShowLogin">登录</button>
+        </template>
+
+        <!-- SSR 阶段占位：保证导航栏右侧布局稳定，避免水合时跳动 -->
+        <template #fallback>
+          <span class="auth-placeholder" aria-hidden="true"></span>
         </template>
       </ClientOnly>
     </div>
@@ -435,7 +440,14 @@ const showUserPopover = ref(false)
 const censusApi = useUserCensusApi()
 const { data: userStats, refresh: refreshUserStats } = await useAsyncData<UserCensusCount>(
   'user-census-count',
-  () => censusApi.getUserCensusCount()
+  () => {
+    if (!authStore.token) return Promise.resolve(null)
+    return censusApi.getUserCensusCount()
+  },
+  {
+    server: false,
+    default: () => null as any
+  }
 )
 
 // 登录后刷新统计数据
@@ -483,17 +495,7 @@ const handleNewsSelect = (key: string) => {
 }
 
 // 吸顶状态
-const isSticky = ref(false)
-
-onMounted(() => {
-  const checkSticky = () => {
-    const nav = document.querySelector('.home-nav-bar')
-    if (nav) isSticky.value = nav.getBoundingClientRect().top <= 0
-  }
-  checkSticky()
-  window.addEventListener('scroll', checkSticky, { passive: true })
-  onUnmounted(() => window.removeEventListener('scroll', checkSticky))
-})
+const { isSticky } = useStickyScroll('.home-nav-bar', 0)
 </script>
 
 <style scoped>
@@ -503,6 +505,13 @@ onMounted(() => {
   height: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+/* SSR 阶段 auth 区域占位，避免水合时右侧布局跳动 */
+.auth-placeholder {
+  display: inline-block;
+  min-width: 50px;
+  height: 32px;
 }
 
 /* 导航栏 */

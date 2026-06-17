@@ -22,6 +22,7 @@
 | [nuxt3-data-fetching.md](../frontend/nuxt3-data-fetching.md) | useAsyncData、无限滚动、分页状态管理 |
 | [global-component-management.md](../frontend/global-component-management.md) | 全局组件状态管理（弹窗、对话框） |
 | [route-auth-interaction.md](../frontend/route-auth-interaction.md) | 路由认证交互方式（登录框、重定向） |
+| [deployment.md](../frontend/deployment.md) | 部署配置：SSR 用 127.0.0.1、PM2 重启规范、nginx 反代 |
 
 ### 后端规则（Spring Boot）
 

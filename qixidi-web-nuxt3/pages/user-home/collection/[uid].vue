@@ -6,7 +6,7 @@
     </div>
 
     <!-- 空状态 -->
-    <div v-else-if="!collectionList.length" class="collection-empty">
+    <div v-else-if="!collectionList?.length" class="collection-empty">
       <CommonEmptyState description="暂无收藏夹" />
     </div>
 
@@ -55,7 +55,8 @@ const uid = computed(() => route.params.uid as string)
 
 const { data: collectionList, pending } = useAsyncData(
   `user-collection-list-${uid.value}`,
-  () => collectionApi.getCollectionFolders(uid.value)
+  () => collectionApi.getCollectionFolders(uid.value),
+  { default: () => [] as any }
 )
 </script>
 

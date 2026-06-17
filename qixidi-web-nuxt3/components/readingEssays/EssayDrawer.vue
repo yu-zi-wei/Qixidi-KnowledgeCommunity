@@ -122,10 +122,12 @@ import { ref, computed, watch, reactive } from 'vue'
 import { Plus } from '@vicons/tabler'
 import type { ReadingEssaysGroup, ReadingEssaysAlbum } from '~/types'
 import type { DictumForm } from '~/composables/useReadingEssaysApi'
+import type { EssayPreset } from '~/stores/essayDrawer'
 
 const props = defineProps<{
   show: boolean
   editId?: number
+  preset?: EssayPreset
 }>()
 
 const emit = defineEmits<{
@@ -236,6 +238,10 @@ watch([() => props.show, () => props.editId], async ([show, editId]) => {
       picture: '',
       dictumState: 1
     })
+    // 应用预填数据（复制场景：保留分类/作者/作品/专辑，内容留空让用户填写）
+    if (props.preset) {
+      Object.assign(form, props.preset)
+    }
   }
 }, { immediate: true })
 

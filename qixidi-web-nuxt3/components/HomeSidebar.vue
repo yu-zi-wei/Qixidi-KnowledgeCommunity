@@ -126,13 +126,29 @@ const articleApi = useArticleApi()
 
 const year = new Date().getFullYear()
 
-// 在组件中获取数据
-const { data: siteStatsData } = await useAsyncData('home-sidebar-stats', () =>
-  siteApi.getTotalData()
+// 在组件中获取数据（SSR 阶段失败时返回 null，避免阻塞渲染；客户端 onMounted 兜底刷新）
+const { data: siteStatsData, refresh: refreshSiteStats } = await useAsyncData(
+  'home-sidebar-stats',
+  async () => {
+    try {
+      return await siteApi.getTotalData()
+    } catch (e) {
+      return null
+    }
+  },
+  { default: () => null as any }
 )
 
-const { data: siteInfoData } = await useAsyncData('home-sidebar-info', () =>
-  siteApi.getInfo()
+const { data: siteInfoData, refresh: refreshSiteInfo } = await useAsyncData(
+  'home-sidebar-info',
+  async () => {
+    try {
+      return await siteApi.getInfo()
+    } catch (e) {
+      return null
+    }
+  },
+  { default: () => null as any }
 )
 
 const MAX_REFRESH_PAGE = 3
@@ -140,7 +156,14 @@ const recommendPage = ref(1)
 const recommendTotal = ref(0)
 const { data: recommendData, refresh: refreshRecommendData } = await useAsyncData(
   'home-sidebar-recommend',
-  () => articleApi.getRecommendList(recommendPage.value, 10)
+  async () => {
+    try {
+      return await articleApi.getRecommendList(recommendPage.value, 10)
+    } catch (e) {
+      return { total: 0, rows: [] }
+    }
+  },
+  { default: () => ({ total: 0, rows: [] }) as any }
 )
 const recommendList = computed(() => recommendData.value?.rows || [])
 
@@ -148,6 +171,19 @@ const recommendList = computed(() => recommendData.value?.rows || [])
 watch(() => recommendData.value, (data) => {
   if (data?.total !== undefined) recommendTotal.value = data.total
 }, { immediate: true })
+
+// 客户端兜底：SSR 失败导致数据为空时，在客户端重新获取
+onMounted(async () => {
+  if (!siteStatsData.value) {
+    await refreshSiteStats()
+  }
+  if (!siteInfoData.value) {
+    await refreshSiteInfo()
+  }
+  if (!recommendData.value || recommendList.value.length === 0) {
+    await refreshRecommendData()
+  }
+})
 
 const handleRefresh = () => {
   const totalPages = Math.max(1, Math.ceil(recommendTotal.value / 10))

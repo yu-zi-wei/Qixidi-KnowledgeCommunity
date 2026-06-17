@@ -2,6 +2,7 @@
   <ReadingEssaysEssayDrawer
     v-model:show="visible"
     :edit-id="editId"
+    :preset="preset"
     @success="handleSuccess"
   />
 </template>
@@ -11,7 +12,7 @@ import { storeToRefs } from 'pinia'
 import { useEssayDrawerStore } from '~/stores/essayDrawer'
 
 const store = useEssayDrawerStore()
-const { visible, editId } = storeToRefs(store)
+const { visible, editId, preset } = storeToRefs(store)
 
 const handleSuccess = () => {
   store.close()

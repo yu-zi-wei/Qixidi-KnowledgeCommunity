@@ -6,7 +6,7 @@
     </div>
 
     <!-- 空状态 -->
-    <div v-else-if="!specialList.length" class="special-empty">
+    <div v-else-if="!specialList?.length" class="special-empty">
       <CommonEmptyState description="暂无专栏" />
     </div>
 
@@ -58,7 +58,8 @@ const uid = computed(() => route.params.uid as string)
 
 const { data: specialList, pending } = useAsyncData(
   `user-special-list-${uid.value}`,
-  () => specialDetailApi.getSpecialList(uid.value)
+  () => specialDetailApi.getSpecialList(uid.value),
+  { default: () => [] as any }
 )
 </script>
 

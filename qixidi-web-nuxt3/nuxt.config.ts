@@ -75,6 +75,9 @@ export default defineNuxtConfig({
         head: {
             titleTemplate: '%s - 栖息地',
             title: '首页',
+            htmlAttrs: {
+                lang: 'zh-CN'
+            },
             meta: [
                 {charset: 'utf-8'},
                 {name: 'viewport', content: 'width=device-width, initial-scale=1'},
@@ -129,7 +132,8 @@ export default defineNuxtConfig({
         '/login': {ssr: false},
         '/register': {ssr: false},
         '/admin/**': {ssr: false},
-        '/user/**': {ssr: false}
+        '/user/**': {ssr: false},
+        '/settings': {ssr: false}
     },
 
     nitro: {

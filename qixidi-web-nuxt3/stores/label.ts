@@ -7,12 +7,11 @@ export const useLabelStore = defineStore('label', () => {
 
   const labelApi = useLabelApi()
 
-  // 获取标签列表（只加载一次）
   async function fetchLabelList() {
     if (loaded.value) return labelList.value
 
     try {
-      const result = await labelApi.getGroupingList(0, 10)
+      const result = await labelApi.getGroupingList(1, 10)
       labelList.value = result.rows || []
       loaded.value = true
       return labelList.value
@@ -22,9 +21,17 @@ export const useLabelStore = defineStore('label', () => {
     }
   }
 
+  function setLabelList(list: LabelGrouping[]) {
+    if (list && list.length > 0) {
+      labelList.value = list
+      loaded.value = true
+    }
+  }
+
   return {
     labelList,
     loaded,
-    fetchLabelList
+    fetchLabelList,
+    setLabelList
   }
 })

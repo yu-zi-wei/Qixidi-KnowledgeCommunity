@@ -105,6 +105,7 @@
                 </span>
               </div>
               <div class="footer-actions">
+                <n-button text size="tiny" type="primary" @click="handleCopy(essay)">复制</n-button>
                 <n-button text size="tiny" type="primary" @click="handleEdit(essay)">编辑</n-button>
                 <n-popconfirm @positive-click="handleDelete(essay)">
                   <template #trigger>
@@ -270,6 +271,16 @@ const handleCommentAdded = () => {
 // 编辑
 const handleEdit = (essay: ReadingEssaysInfo) => {
   essayDrawerStore.openEdit(essay.id)
+}
+
+// 复制（基于已有随笔的分类/作者/作品/专辑快速新建）
+const handleCopy = (essay: ReadingEssaysInfo) => {
+  essayDrawerStore.openWithPreset({
+    groupId: essay.groupId,
+    author: essay.author,
+    worksName: essay.worksName,
+    albumId: essay.albumId
+  })
 }
 
 // 删除

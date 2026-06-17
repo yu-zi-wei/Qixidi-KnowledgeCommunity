@@ -177,9 +177,24 @@ watch(() => authStore.isLoggedIn, (val) => {
 })
 
 // --- 个人主页菜单 ---
-const { data: menuData } = await useAsyncData('user-home-menu', async () => {
-  const { rows } = await navigationApi.getList(2, 0)
-  return rows || []
+const { data: menuData, refresh: refreshMenu } = await useAsyncData(
+  'user-home-menu',
+  async () => {
+    try {
+      const { rows } = await navigationApi.getList(2, 0)
+      return rows || []
+    } catch (e) {
+      return []
+    }
+  },
+  { default: () => [] as any }
+)
+
+// 客户端兜底：SSR 失败导致菜单为空时，重新获取
+onMounted(async () => {
+  if (!menuData.value || menuData.value.length === 0) {
+    await refreshMenu()
+  }
 })
 const menuList = computed(() => {
   const list = menuData.value || []

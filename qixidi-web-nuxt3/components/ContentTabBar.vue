@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref } from 'vue'
 import type { LabelGrouping } from '~/types'
 
 defineProps<{
@@ -42,7 +42,7 @@ defineProps<{
 
 const route = useRoute()
 const tabBarRef = ref<HTMLElement | null>(null)
-const isSticky = ref(false)
+const { isSticky } = useStickyScroll(tabBarRef, 66)
 
 const fixedTabs = [
   { key: 'latest', label: '最新', to: '/' },
@@ -65,27 +65,6 @@ const activeGroupingId = computed(() => {
   }
   const gid = route.query.groupingId
   return gid ? Number(gid) : null
-})
-
-// 监听吸顶状态
-onMounted(() => {
-  const checkSticky = () => {
-    if (!tabBarRef.value) return
-    // 获取元素相对于视口的位置
-    const rect = tabBarRef.value.getBoundingClientRect()
-    // 当元素顶部到达或超过吸顶位置（66px）时，认为已吸顶
-    isSticky.value = rect.top <= 66
-  }
-
-  // 初始检查
-  checkSticky()
-
-  // 监听滚动
-  window.addEventListener('scroll', checkSticky, { passive: true })
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', checkSticky)
-  })
 })
 </script>
 

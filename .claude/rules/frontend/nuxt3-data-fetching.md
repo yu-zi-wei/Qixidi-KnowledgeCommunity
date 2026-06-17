@@ -10,6 +10,91 @@
 
 ---
 
+## useAsyncData 调用方式（强制）
+
+### ❌ 禁止：使用 Promise.all 包裹 useAsyncData
+
+```typescript
+// ❌ 禁止：会导致 onMounted 兜底失效
+const [{ data: dataA, refresh: refreshA },
+       { data: dataB, refresh: refreshB }] = await Promise.all([
+  useAsyncData('key-a', () => fetchA()),
+  useAsyncData('key-b', () => fetchB())
+])
+
+onMounted(async () => {
+  if (!dataA.value?.length) {
+    await refreshA()  // ❌ 永远不会被调用！
+  }
+})
+```
+
+**根本原因**：
+- Vue 3 的 `<script setup>` 编译器为每个 `await` 自动保存/恢复 `currentInstance`
+- 但 `await Promise.all([...])` 是**组合 await**，在 Nuxt 3 的 useAsyncData 模式下注册 onMounted 的时序被破坏
+- onMounted 静默失败（不抛错，但回调永远不会被调用）
+
+**症状**：SSR 失败时，payload 中数据为空，但 onMounted 中的 refresh 永远不会执行，客户端不会自动重新获取数据。
+
+### ✅ 正确：顺序 await
+
+```typescript
+// ✅ 正确：每个 useAsyncData 单独 await
+const { data: dataA, refresh: refreshA } = await useAsyncData(
+  'key-a',
+  () => fetchA()
+)
+
+const { data: dataB, refresh: refreshB } = await useAsyncData(
+  'key-b',
+  () => fetchB()
+)
+
+onMounted(async () => {
+  if (!dataA.value?.length) {
+    await refreshA()  // ✅ 正常调用
+  }
+  if (!dataB.value?.length) {
+    await refreshB()
+  }
+})
+```
+
+**性能说明**：顺序 await 看似比 Promise.all 慢，但：
+- Nuxt 3 的 useAsyncData 在 SSR 中会自动并行执行 handler
+- 关键是保证 onMounted 等生命周期 hook 正确注册
+- 不要为了并行性能牺牲正确性
+
+### SSR 兜底机制（强制）
+
+所有在 layout、公共组件中的 useAsyncData 都必须有：
+
+1. **try/catch 包裹 handler**：SSR 失败返回空值，避免阻塞渲染
+2. **onMounted 客户端兜底**：SSR 数据为空时自动 refresh
+3. **default 选项**：避免 data 是 undefined
+
+```typescript
+const { data, refresh } = await useAsyncData(
+  'unique-key',
+  async () => {
+    try {
+      return await api.getData()
+    } catch (e) {
+      return null  // 或空数组、空对象
+    }
+  },
+  { default: () => null as any }
+)
+
+onMounted(async () => {
+  if (!data.value || (Array.isArray(data.value) && data.value.length === 0)) {
+    await refresh()
+  }
+})
+```
+
+---
+
 ## useAsyncData 正确用法
 
 ### ✅ 正确：使用 computed key

@@ -26,32 +26,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const labelStore = useLabelStore()
 const labelApi = useLabelApi()
 const navigationApi = useNavigationApi()
 
-// 并行获取导航数据和标签数据
-const [{ data: navigationData }, { data: labelData }] = await Promise.all([
-  useAsyncData('layout-navigation', async () => {
-    const { rows } = await navigationApi.getList(1, 0)
-    return rows || []
-  }),
-  useAsyncData('layout-labels', async () => {
-    const result = await labelApi.getGroupingList(1, 9)
-    return result.rows || []
-  })
-])
+// 完整 SSR 模式：useAsyncData 在 SSR 阶段调用接口，try/catch 防止抛错
+// default 选项确保初始值非空；onMounted 兜底覆盖 SSR 失败场景
+const { data: navigationData, refresh: refreshNavigation } = await useAsyncData(
+  'layout-navigation',
+  async () => {
+    try {
+      const { rows } = await navigationApi.getList(1, 0)
+      return rows || []
+    } catch (e: any) {
+      console.error('[layout-default] navigation SSR error:', e?.message || e)
+      return []
+    }
+  },
+  { default: () => [] as any }
+)
+
+const { data: labelData, refresh: refreshLabels } = await useAsyncData(
+  'layout-labels',
+  async () => {
+    try {
+      const result = await labelApi.getGroupingList(1, 9)
+      return result.rows || []
+    } catch (e: any) {
+      console.error('[layout-default] labels SSR error:', e?.message || e)
+      return []
+    }
+  },
+  { default: () => [] as any }
+)
 
 const navigationList = computed(() => navigationData.value || [])
 const labelList = computed(() => labelData.value || [])
 
-// 同步更新 labelStore
-if (labelData.value?.length) {
-  labelStore.labelList = labelData.value
-  labelStore.loaded = true
-}
+// 同步 labelStore
+watch(() => labelData.value, (val) => {
+  if (val && val.length > 0) {
+    labelStore.setLabelList(val)
+  }
+}, { immediate: true })
+
+// 客户端兜底：SSR 失败时（如本机回环不可用）刷新数据
+onMounted(async () => {
+  if (!navigationData.value || navigationData.value.length === 0) {
+    await refreshNavigation()
+  }
+  if (!labelData.value || labelData.value.length === 0) {
+    await refreshLabels()
+  }
+})
 
 const route = useRoute()
 
@@ -63,9 +92,9 @@ const pageMeta = computed(() => ({
 const showSidebar = computed(() => pageMeta.value.sidebar !== false)
 
 const sidebarComponents = {
-  home: defineAsyncComponent(() => import('~/components/HomeSidebar.vue')),
-  article: defineAsyncComponent(() => import('~/components/ArticleSidebar.vue')),
-  readingEssays: defineAsyncComponent(() => import('~/components/readingEssays/ReadingEssaysSidebar.vue')),
+  home: resolveComponent('HomeSidebar'),
+  article: resolveComponent('ArticleSidebar'),
+  readingEssays: resolveComponent('ReadingEssaysSidebar'),
 }
 
 const sidebarComponent = computed(() => {

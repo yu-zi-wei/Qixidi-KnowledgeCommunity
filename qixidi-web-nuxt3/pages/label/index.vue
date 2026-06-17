@@ -3,7 +3,7 @@
     <div v-if="pending" class="label-loading">
       <n-spin size="large" />
     </div>
-    <div v-else-if="!labels.length" class="label-empty">
+    <div v-else-if="!labels?.length" class="label-empty">
       <CommonEmptyState description="暂无标签" />
     </div>
     <LabelCardList v-else :list="labels" />
@@ -37,7 +37,7 @@ const { data: rawData, pending } = await useAsyncData(
   () => labelApi.getSystemLabels()
 )
 
-const labels = ref<LabelItem[]>()
+const labels = ref<LabelItem[]>([])
 
 watch(() => rawData.value, (data) => {
   if (data) {
