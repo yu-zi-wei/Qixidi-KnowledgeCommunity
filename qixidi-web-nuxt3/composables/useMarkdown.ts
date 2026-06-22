@@ -15,29 +15,27 @@ import type { Plugin, Transformer } from 'unified'
 import type { Root } from 'hast'
 
 /**
- * remark 插件：blockquote 内软换行转为硬换行
- * 解决 > 12\n> 34\n> 45 渲染为一行的问题
+ * remark 插件：段落内软换行转硬换行
+ * 将单个换行符 \n 渲染为 <br>，使「回车一次即换行」，无需空两行
+ * 覆盖普通段落与引用块（blockquote 的子节点也是 paragraph，会被一并命中）
  */
-const remarkBlockquoteLineBreaks: Plugin = (): Transformer => {
+const remarkSoftBreaks: Plugin = (): Transformer => {
   return (tree: any) => {
-    visit(tree, 'blockquote', (blockNode: any) => {
-      if (!blockNode.children) return
-      for (const child of blockNode.children) {
-        if (child.type !== 'paragraph' || !child.children) continue
-        const newChildren: any[] = []
-        for (const inline of child.children) {
-          if (inline.type === 'text' && typeof inline.value === 'string' && inline.value.includes('\n')) {
-            const parts = inline.value.split('\n')
-            for (let i = 0; i < parts.length; i++) {
-              if (parts[i]) newChildren.push({ type: 'text', value: parts[i] })
-              if (i < parts.length - 1) newChildren.push({ type: 'break' })
-            }
-          } else {
-            newChildren.push(inline)
+    visit(tree, 'paragraph', (node: any) => {
+      if (!node.children) return
+      const newChildren: any[] = []
+      for (const child of node.children) {
+        if (child.type === 'text' && typeof child.value === 'string' && child.value.includes('\n')) {
+          const parts = child.value.split('\n')
+          for (let i = 0; i < parts.length; i++) {
+            if (parts[i]) newChildren.push({ type: 'text', value: parts[i] })
+            if (i < parts.length - 1) newChildren.push({ type: 'break' })
           }
+        } else {
+          newChildren.push(child)
         }
-        child.children = newChildren
       }
+      node.children = newChildren
     })
   }
 }
@@ -463,7 +461,7 @@ export const useMarkdown = () => {
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkMath)
-      .use(remarkBlockquoteLineBreaks)
+      .use(remarkSoftBreaks)
       .use(remarkVideo)
       .use(remarkDiagram)
       .use(remarkRehype, { allowDangerousHtml: true })

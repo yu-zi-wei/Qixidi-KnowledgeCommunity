@@ -57,6 +57,7 @@
         :toolbars="editorToolbars"
         :theme="editorTheme"
         :placeholder="placeholder"
+        :markdown-it-config="markdownItConfig"
         class="markdown-editor"
         @onUploadImg="handleImageUpload"
       />
@@ -171,6 +172,11 @@ import type { UploadSetCustomRequestOptions } from 'naive-ui'
 
 const colorMode = useColorMode()
 const editorTheme = computed(() => colorMode.value === 'dark' ? 'dark' : 'light')
+
+// markdown-it 配置：开启 breaks，单个换行符渲染为 <br>，与文章详情页（unified + remarkSoftBreaks）表现一致
+const markdownItConfig = (md: any) => {
+  md.set({ breaks: true })
+}
 
 interface Props {
   modelValue: string

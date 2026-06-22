@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { ArticleAuditState } from '~/types'
+
 // 配置页面 meta
 definePageMeta({
   showTabBar: false,
@@ -207,8 +209,8 @@ useHead({
 onMounted(() => {
   window.scrollTo({ top: 0, behavior: 'instant' })
 
-  // 文章浏览数 +1
-  if (article.value) {
+  // 文章浏览数 +1（仅已发布文章才计数，草稿/审核中/审核不通过不调用）
+  if (article.value && article.value.auditState === ArticleAuditState.PUBLISHED) {
     const label = article.value.labelList?.map((l: any) => l.id).join(',') || ''
     articleApi.addBrowseCount(article.value.id, label).catch(() => {})
   }

@@ -104,7 +104,7 @@ remarkGfm                ← GFM 扩展：表格、删除线、任务列表、�
     │
 remarkMath               ← 数学公式标记：$x^2$、$$x^2$$
     │
-remarkBlockquoteLineBreaks ← 引用块内软换行 → 硬换行 <br>
+remarkSoftBreaks           ← 段落内软换行 → 硬换行 <br>（回车一次即换行）
     │
 remarkVideo              ← @[video](url) + 视频链接 → 占位符 <div>
     │
@@ -161,17 +161,21 @@ rehypeStringify          ← hast → HTML 字符串
 
 这样做的目的是避免这些代码块被 `rehypeHighlight` 当作普通代码高亮。客户端 hydrate 时用 mermaid/echarts 库渲染。
 
-#### remarkBlockquoteLineBreaks
+#### remarkSoftBreaks
 
-解决引用块内软换行被忽略的问题。GFM 默认把引用块内的换行合并为一行，但用户期望每行独立显示：
+解决段落内软换行被忽略的问题。标准 Markdown（含 GFM）默认把单个换行符合并为同一行，用户期望「回车一次即换行」，无需空两行：
 
 ```markdown
-> 第一行
-> 第二行
-> 第三行
+成都出发
+⬇️
+翻越巴郎山(途中也有几个不错的观景台可做停留)
+⬇️
+猫鼻梁观景台(可以在这里吃午饭稍作休息)
 ```
 
-插件把段落内的 `\n` 转为 `<br>` break 节点。
+插件遍历所有 paragraph 节点，把文本里的 `\n` 拆成多个 text 节点，并在其间插入 break 节点（渲染为 `<br>`）。引用块（blockquote）的子节点也是 paragraph，所以一并覆盖。
+
+> 编辑器预览（md-editor-v3）通过 `markdownItConfig` 设置 `breaks: true` 达到一致表现，见 `MdEditorWithVideo.vue`。
 
 #### rehypeAdmonition
 
