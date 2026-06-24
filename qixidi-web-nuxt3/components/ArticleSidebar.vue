@@ -231,6 +231,10 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* 填满父级 .home-sidebar（height: calc(100vh - 48px)）的高度，
+     内部 flex 布局才能让目录区 flex:1 + overflow-y:auto 生效 */
+  height: 100%;
+  max-height: 100%;
   /* 初始状态 */
   opacity: 0;
   transform: translateX(16px);

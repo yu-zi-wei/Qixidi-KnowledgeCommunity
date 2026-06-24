@@ -17,6 +17,7 @@
         <a
           :href="`#${heading.id}`"
           class="toc-link"
+          :title="heading.text"
           @click.prevent="scrollToHeading(heading.id)"
         >
           {{ heading.text }}
@@ -158,16 +159,44 @@ onUnmounted(() => {
 /* 目录 - 精致竖线 + 圆点指示器 */
 .article-toc {
   position: relative;
-  padding: 0 0 0 28px;
+  padding: 0 0 0 36px; /* 36px：给左侧轨道留足空间，圆点完全落在容器内，不被 overflow 裁切 */
   margin-left: 8px;
   background: transparent;
+  flex: 0 1 auto;    /* 按内容高度，不强制撑满：目录少则矮（竖线短），目录多则收缩并滚动 */
+  min-height: 0;     /* flex 子项收缩关键，否则 overflow 不生效 */
+  overflow-y: auto;  /* 目录过多时滚动 */
 }
 
-/* 竖线 - 稍微粗一点 */
-.article-toc::before {
+/* 滚动条美化 */
+.article-toc::-webkit-scrollbar {
+  width: 6px;
+}
+
+.article-toc::-webkit-scrollbar-thumb {
+  background: var(--color-ink-faint);
+  border-radius: 3px;
+}
+
+.article-toc::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-muted);
+}
+
+.toc-header {
+  display: none;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative; /* 给竖线 ::before 提供定位上下文 */
+}
+
+/* 竖线放在 .toc-list 上（而非 .article-toc），跟随内容一起滚动，保证滚动后每个目录项旁都有竖线 */
+.toc-list::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: -27.5px; /* 对齐圆点中心：圆点相对 li left -30.5 + 半宽 4 = -26.5，竖线宽 2 中心取 -26.5 → left -27.5 */
   top: 4px;
   bottom: 4px;
   width: 2px;
@@ -181,7 +210,7 @@ onUnmounted(() => {
   border-radius: 1px;
 }
 
-.dark .article-toc::before {
+.dark .toc-list::before {
   background: linear-gradient(
     180deg,
     transparent 0%,
@@ -189,16 +218,6 @@ onUnmounted(() => {
     rgba(255, 255, 255, 0.08) 92%,
     transparent 100%
   );
-}
-
-.toc-header {
-  display: none;
-}
-
-.toc-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .toc-item {
@@ -211,7 +230,7 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   left: -30.5px; /* 微调：-31px + 0.5px */
-  top: 50%;
+  top: 16px; /* 对齐第一行文字中心：padding-top(6) + 半行高(~10)；多行时圆点不会跑到行间 */
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
@@ -245,12 +264,15 @@ onUnmounted(() => {
 
 .toc-link {
   display: block;
+  white-space: nowrap;       /* 单行截断：中文字体下行盒高度稳定，无多行亚像素问题 */
+  overflow: hidden;
+  text-overflow: ellipsis;   /* 超出部分显示省略号，完整标题靠 title 属性 hover 查看 */
   padding: 6px 0;
   font-size: 13px;
+  line-height: 20px;
   color: var(--color-ink-muted);
   text-decoration: none;
   transition: color 0.2s ease;
-  line-height: 1.5;
 }
 
 .toc-link:hover {

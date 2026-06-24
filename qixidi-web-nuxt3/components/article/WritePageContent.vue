@@ -311,7 +311,9 @@ const initialArticle = computed(() => {
     groupingId: data.groupingId,
     labelIds: data.labelIds || [],
     specialId: data.specialId,
-    abstractSelect: data.abstractSelect !== undefined ? data.abstractSelect : true
+    abstractSelect: data.abstractSelect !== undefined
+      ? data.abstractSelect
+      : !(data.articleAbstract && data.articleAbstract.trim()) // 摘要有内容则不打开 AI，为空才默认打开
   }
 })
 
