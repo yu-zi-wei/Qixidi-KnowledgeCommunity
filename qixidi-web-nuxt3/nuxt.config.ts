@@ -7,6 +7,9 @@ export default defineNuxtConfig({
 
     // 开发服务器配置
     devServer: {
+        // 监听所有 IPv4 接口：127.0.0.1 / localhost / 局域网 IP 都能访问，手机连同一 WiFi 可调试
+        // 不设 host 时 Node 18+ 会把 localhost 解析成 IPv6 ::1，导致 127.0.0.1 连不上
+        host: '127.0.0.1',
         port: 9007
     },
 

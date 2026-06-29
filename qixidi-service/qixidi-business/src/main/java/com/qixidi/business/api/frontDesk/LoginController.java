@@ -198,9 +198,10 @@ public class LoginController {
         tripartiteUser.setUserType(justAuthConfig.getTripartiteUserType());
         iTripartiteUserService.oauthLogin(tripartiteUser);
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
-        //跳转到前端登录中转页，并提供token
+        //跳转到前端登录中转页，并提供 token 和登录平台标识（供前端中转页展示当前登录平台）
         response.sendRedirect(justAuthConfig.getTransferUrl() + "?key=" + authResponse.getData().getUuid()
-                + "&token=" + saTokenInfo.getTokenValue());
+                + "&token=" + saTokenInfo.getTokenValue()
+                + "&source=" + source);
         return authResponse;
     }
 

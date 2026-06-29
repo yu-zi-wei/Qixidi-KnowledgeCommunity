@@ -123,6 +123,17 @@
             </button>
           </div>
         </n-form>
+
+        <!-- 第三方登录（仅登录/注册视图显示） -->
+        <div v-if="currentView !== 'reset'" class="oauth-section">
+          <div class="oauth-divider"><span>第三方登录</span></div>
+          <button type="button" class="oauth-btn" @click="handleGiteeLogin">
+            <svg class="oauth-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12A12 12 0 0 0 24 12 12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.594.594 0 0 0-.592-.593h-4.15a.594.594 0 0 1-.592-.592v-1.482a.594.594 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4.15 4.15 0 0 1-4.148 4.15H6.074a.594.594 0 0 1-.593-.593V9.333a4.074 4.074 0 0 1 4.074-4.074h8.519z"/>
+            </svg>
+            <span>Gitee 登录</span>
+          </button>
+        </div>
       </div>
     </div>
   </n-modal>
@@ -137,6 +148,7 @@ const { siteName } = useRuntimeConfig().public
 const authApi = useAuthApi()
 const authDialogStore = useAuthDialogStore()
 const message = useMessage()
+const route = useRoute()
 
 // 使用本地 ref 管理 visible，通过 watch 同步 store
 const visible = ref(false)
@@ -388,6 +400,21 @@ const handleReset = async () => {
     loading.value = false
   }
 }
+
+// 第三方登录（Gitee）：OAuth 整页跳转，需提前把跳转目标持久化到 sessionStorage
+const handleGiteeLogin = async () => {
+  try {
+    const redirect = authDialogStore.redirectAfterLogin || '/'
+    sessionStorage.setItem('oauth_redirect_target', redirect)
+    authDialogStore.visible = false
+
+    const { url } = await authApi.getOauthUrl('gitee')
+    window.location.href = url
+  } catch (e: any) {
+    const errorMsg = e?.statusMessage || e?.message || '获取授权链接失败'
+    message?.error(errorMsg)
+  }
+}
 </script>
 
 <style scoped>
@@ -555,6 +582,60 @@ const handleReset = async () => {
 
 .text-btn .icon {
   margin-right: 4px;
+}
+
+/* 第三方登录 */
+.oauth-section {
+  margin-top: 24px;
+}
+
+.oauth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--color-ink-faint);
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.oauth-divider::before,
+.oauth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-light);
+}
+
+.oauth-divider span {
+  padding: 0 12px;
+}
+
+.oauth-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-ink);
+  transition: all 0.2s ease;
+}
+
+.oauth-btn:hover {
+  border-color: #c71d23;
+  background: rgba(199, 29, 35, 0.04);
+}
+
+.oauth-icon {
+  width: 18px;
+  height: 18px;
+  color: #c71d23;
+  flex-shrink: 0;
 }
 
 /* 深色模式 */

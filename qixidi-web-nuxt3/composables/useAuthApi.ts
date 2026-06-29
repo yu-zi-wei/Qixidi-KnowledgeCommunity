@@ -38,9 +38,18 @@ export const useAuthApi = () => {
         return api.get<GetInfoResult>('/oauth/getInfo')
     }
 
+    /**
+     * 获取第三方登录授权页 URL
+     * 接口：GET /oauth/render/{source}（后端用 JustAuth 生成授权链接）
+     * 返回 { url }，前端拿到后整页跳转完成 OAuth
+     */
+    const getOauthUrl = (source: string) => {
+        return api.get<{ url: string }>(`/oauth/render/${source}`)
+    }
+
     const logout = () => {
         return api.post<void>('/oauth/logout')
     }
 
-    return {login, register, resetPassword, sendEmailCode, getInfo, logout}
+    return {login, register, resetPassword, sendEmailCode, getInfo, getOauthUrl, logout}
 }
