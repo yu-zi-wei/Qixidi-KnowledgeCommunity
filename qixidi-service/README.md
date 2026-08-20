@@ -2,9 +2,9 @@
 
 > 前提：你有完整的java开发环境，以及数据库环境、Redis环境
 
-1、加作者微信：zsh2978824265，获取获取数据库脚本、环境配置文件
+1、加作者微信（注明来意）：zsh2978824265，获取获取数据库脚本、环境配置文件，脚本是有偿的/169。
 
-2、在本地创建数据库“qixidi_admin”，并执行SQL脚本生成对应的数据表。
+2、在本地创建数据库“qixidi_admin”，执行“交付文件”中的SQL生成对应的数据表。
 
 3、在qixidi-startup的resources目录下创建applicationConfig/dev文件
 
@@ -17,7 +17,7 @@
 ## 打包
 ```
 ## 打生产环境包
-mvn clean package -P prod
+mvn clean package -P prod -DskipTests
 ```
 ## 其他配置
 
