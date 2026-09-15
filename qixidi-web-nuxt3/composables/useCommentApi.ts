@@ -27,15 +27,11 @@ export const useCommentApi = () => {
   /**
    * 删除评论
    * 接口：/api/article/delete/comment
-   * @param data - 删除评论所需参数
+   * 后端仅使用 id（子评论与关联通知由后端联动清理）
+   * @param id - 评论 id
    */
-  const deleteComment = async (data: {
-    id: number
-    articleId: number
-    uid: string
-    commentUid: string
-  }): Promise<void> => {
-    await api.post('/article/delete/comment', data)
+  const deleteComment = async (id: number): Promise<void> => {
+    await api.post('/article/delete/comment', { id })
   }
 
   return {

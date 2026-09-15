@@ -11,6 +11,7 @@ import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
 
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.service.dictum.IDictumInfoService;
@@ -58,6 +59,16 @@ public class FdDictumInfoController {
         } else {
             iDictumInfoService.insertByBo(bo);
         }
+    }
+
+    /**
+     * 批量新增名言信息（一次发布多条，分类/作者等元信息共享）
+     */
+    @Log(title = "批量新增名言信息", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/batch")
+    public void addBatch(@Validated(AddGroup.class) @RequestBody DictumBatchBo bo) {
+        iDictumInfoService.insertBatchByBo(bo);
     }
 
     /**

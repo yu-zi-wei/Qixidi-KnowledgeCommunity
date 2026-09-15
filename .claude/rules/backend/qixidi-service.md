@@ -129,6 +129,18 @@ public interface DataMapper extends BaseMapperPlus<DataEntity> {
 }
 ```
 
+### 批量插入
+
+**不继承 `ServiceImpl` 的 Service（`@RequiredArgsConstructor` + final mapper 风格）没有 `saveBatch`**，用 `BaseMapperPlus` 自带的 `insertBatch`：
+
+```java
+// ✅ 批量插入（BaseMapperPlus 自带，配合 @Transactional 全成功或全回滚）
+mapper.insertBatch(entityList);
+
+// ❌ 禁止在循环中逐条 insert
+for (Entity e : list) { mapper.insert(e); }
+```
+
 ---
 
 ## 日志规范

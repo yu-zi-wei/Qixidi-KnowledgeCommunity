@@ -51,10 +51,6 @@ public class NewsUserInfo {
      */
     private String worksParentUid;
     /**
-     * 消息目标类型（1：文章，2：评论，3：圈子，4：活动）
-     */
-    private Integer worksType;
-    /**
      * 消息目标内容
      */
     private String worksContent;

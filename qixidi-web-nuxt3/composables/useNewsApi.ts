@@ -1,4 +1,4 @@
-import type { NewsUserSumVo, NewsUserInfoVo, ArticleCommentNewsVo } from '~/types'
+import type { NewsUserSumVo, NewsUserInfoVo, ArticleCommentNewsVo, TimeNotesCommentNewsVo, DictumCommentNewsVo } from '~/types'
 
 export const useNewsApi = () => {
   const api = useApi()
@@ -8,9 +8,19 @@ export const useNewsApi = () => {
     return api.get<NewsUserSumVo[]>('/frontDesk/news/list/sum')
   }
 
-  /** 评论消息列表 */
+  /** 评论消息列表（文章） */
   const getCommentList = (pageNum: number = 1, pageSize: number = 20) => {
     return api.getPage<ArticleCommentNewsVo>('/frontDesk/news/comment/list', { pageNum, pageSize })
+  }
+
+  /** 小记评论消息列表 */
+  const getTimeNotesCommentList = (pageNum: number = 1, pageSize: number = 20) => {
+    return api.getPage<TimeNotesCommentNewsVo>('/frontDesk/news/comment/time-notes/list', { pageNum, pageSize })
+  }
+
+  /** 随笔评论消息列表 */
+  const getDictumCommentList = (pageNum: number = 1, pageSize: number = 20) => {
+    return api.getPage<DictumCommentNewsVo>('/frontDesk/news/comment/dictum/list', { pageNum, pageSize })
   }
 
   /** 点赞消息列表 */
@@ -36,6 +46,8 @@ export const useNewsApi = () => {
   return {
     getNewsSum,
     getCommentList,
+    getTimeNotesCommentList,
+    getDictumCommentList,
     getFabulousList,
     getFollowList,
     getSystemList,

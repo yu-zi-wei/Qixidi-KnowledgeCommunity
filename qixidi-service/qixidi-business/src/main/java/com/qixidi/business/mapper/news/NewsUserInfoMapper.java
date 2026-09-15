@@ -3,7 +3,9 @@ package com.qixidi.business.mapper.news;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserInfo;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
+import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
+import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,6 +30,10 @@ public interface NewsUserInfoMapper extends BaseMapperPlus<NewsUserInfoMapper, N
     IPage<NewsUserInfoVo> userList(@Param("bo") NewsUserInfoBo bo, Page<NewsUserInfo> build);
 
     IPage<ArticleCommentNewsVo> selectArticleNews(@Param("uid") String uuid, @Param("type")int type,Page build);
+
+    IPage<TimeNotesCommentNewsVo> selectTimeNotesCommentNews(@Param("uid") String uuid, @Param("type") int type, Page build);
+
+    IPage<DictumCommentNewsVo> selectDictumCommentNews(@Param("uid") String uuid, @Param("type") int type, Page build);
 
     IPage<NewsUserInfoVo> selectFollowNews(@Param("uid")String uuid,@Param("type") Integer type, Page<Object> build);
 

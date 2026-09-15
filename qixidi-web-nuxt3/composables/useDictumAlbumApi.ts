@@ -13,8 +13,8 @@ export const useDictumAlbumApi = () => {
       pageSize: -1
     }),
 
-    /** 新建专辑 */
-    create: (data: Partial<ReadingEssaysAlbum>) => api.post('/frontDesk/dictum/album', data),
+    /** 新建专辑（返回新专辑 id） */
+    create: (data: Partial<ReadingEssaysAlbum>): Promise<number> => api.post('/frontDesk/dictum/album', data),
 
     /** 更新专辑 */
     update: (data: Partial<ReadingEssaysAlbum>) => api.put('/frontDesk/dictum/album', data),

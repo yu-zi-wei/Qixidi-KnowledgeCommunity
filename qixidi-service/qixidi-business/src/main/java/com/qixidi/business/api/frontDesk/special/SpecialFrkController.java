@@ -1,6 +1,11 @@
 package com.qixidi.business.api.frontDesk.special;
 
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.validate.AddGroup;
+import com.light.core.enums.BusinessType;
+import com.light.exception.ServiceException;
+import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
 
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
@@ -40,6 +45,17 @@ public class SpecialFrkController {
     @GetMapping("/aut/special/list")
     public List<SpecialInformationVo> specialList() {
         return iSpecialInformationService.specialList();
+    }
+
+    /**
+     * 新增专栏信息（写文章页发布设置内创建）
+     */
+    @Log(title = "专栏信息", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/aut/special")
+    public Long add(@Validated(AddGroup.class) @RequestBody SpecialInformationBo bo) {
+        if (!iSpecialInformationService.insertByBo(bo)) throw new ServiceException("创建专栏失败");
+        return bo.getId();
     }
 
     /**

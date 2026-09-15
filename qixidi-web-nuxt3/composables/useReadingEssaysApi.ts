@@ -137,6 +137,14 @@ export const useReadingEssaysApi = () => {
   }
 
   /**
+   * 批量发布随笔（一次多条，分类/作者等元信息共享）
+   * 接口：POST /frontDesk/dictum/info/batch
+   */
+  const createDictumBatch = async (data: DictumBatchForm): Promise<void> => {
+    return await api.post<void>('/frontDesk/dictum/info/batch', data)
+  }
+
+  /**
    * 获取随笔详情（白名单接口）
    * 接口：GET /white/dictum/info/{id}
    */
@@ -181,6 +189,7 @@ export const useReadingEssaysApi = () => {
     getDictumGroups,
     getDictumAlbums,
     createDictum,
+    createDictumBatch,
     updateDictum,
     // 后台管理
     getAdminList,
@@ -193,6 +202,18 @@ export interface DictumForm {
   id?: number
   content: string           // 内容（必填）
   contentMd?: string        // Markdown 内容
+  groupId: number           // 分类 id（必填）
+  albumId?: number          // 专辑 id
+  label?: string            // 标签（多个逗号隔开）
+  author?: string           // 作者
+  worksName?: string        // 作品名称
+  picture?: string          // 图片（多个逗号隔开）
+  dictumState: number       // 状态：1=公开，2=私有
+}
+
+// 随笔批量发布表单（一次多条，元信息共享，仅新建用）
+export interface DictumBatchForm {
+  contents: string[]        // 内容列表（至少 1 条非空，最多 10 条）
   groupId: number           // 分类 id（必填）
   albumId?: number          // 专辑 id
   label?: string            // 标签（多个逗号隔开）

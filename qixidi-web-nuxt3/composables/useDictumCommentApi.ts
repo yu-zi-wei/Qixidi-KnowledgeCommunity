@@ -1,4 +1,4 @@
-import type { DictumCommentBo, DictumCommentVo, PageQuery, TableDataInfo } from '~/types'
+import type { CommentItem, DictumCommentBo, DictumCommentVo, PageQuery, TableDataInfo } from '~/types'
 
 export const useDictumCommentApi = () => {
   const api = useApi()
@@ -12,20 +12,26 @@ export const useDictumCommentApi = () => {
   const getCommentList = async (
     dictumId: string | number,
     pageQuery?: PageQuery
-  ): Promise<TableDataInfo<DictumCommentVo>> => {
-    return await api.getPage<DictumCommentVo>(
+  ): Promise<TableDataInfo<CommentItem>> => {
+    const result = await api.getPage<DictumCommentVo>(
       `/white/dictum/comment/list/${dictumId}`,
       pageQuery
     )
+    //后端次级集合字段是 dictumCommentVoList，映射为通用评论组件的 children
+    return {
+      total: result.total,
+      rows: result.rows.map(row => ({ ...row, children: row.dictumCommentVoList || [] }))
+    }
   }
 
   /**
    * 新增评论
    * 接口：POST /frontDesk/dictum/comment/add
    * @param data - 评论数据
+   * @returns 后端生成的新评论（至少含真实 id，供乐观更新原位落定）
    */
-  const addComment = async (data: DictumCommentBo): Promise<void> => {
-    await api.post('/frontDesk/dictum/comment/add', data)
+  const addComment = async (data: DictumCommentBo): Promise<Partial<CommentItem>> => {
+    return await api.post<Partial<CommentItem>>('/frontDesk/dictum/comment/add', data)
   }
 
   /**

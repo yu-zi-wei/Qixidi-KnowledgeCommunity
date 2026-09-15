@@ -1,9 +1,7 @@
 ######################################################################
 # Build Tools
 
-.gradle
 /build/
-!gradle/wrapper/gradle-wrapper.jar
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
@@ -33,8 +31,6 @@ nbproject/private/
 build/*
 nbbuild/
 nbdist/
-.nb-gradle/
-
 ######################################################################
 # Others
 #*.log

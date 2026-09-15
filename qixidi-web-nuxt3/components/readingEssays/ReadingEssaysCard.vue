@@ -25,7 +25,7 @@
     <!-- 底部栏 -->
     <div class="reading-essays-footer">
       <div class="footer-left">
-        <span v-if="readingEssay.commentSum !== undefined" class="essay-card-stat" title="评论">
+        <span v-if="readingEssay.commentSum" class="essay-card-stat" title="评论">
           <MessageCircle class="stat-icon" />
           {{ readingEssay.commentSum }}
         </span>

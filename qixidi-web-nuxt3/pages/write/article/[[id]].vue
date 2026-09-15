@@ -4,6 +4,7 @@
     :groupings="groupings"
     :labels="labels"
     :specials="specials"
+    @special-created="() => refreshSpecials()"
   />
 </template>
 
@@ -35,7 +36,7 @@ const { data: labelsData } = await useAsyncData('labels', () =>
   labelApi.getList()
 )
 
-const { data: specialsData } = await useAsyncData('specials', () =>
+const { data: specialsData, refresh: refreshSpecials } = await useAsyncData('specials', () =>
   specialApi.getList()
 )
 

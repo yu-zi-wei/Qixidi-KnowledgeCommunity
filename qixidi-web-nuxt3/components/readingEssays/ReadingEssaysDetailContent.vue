@@ -48,43 +48,43 @@
       </div>
     </div>
 
-    <!-- 统计信息 -->
-    <div class="essay-stats">
-      <span class="essay-detail-stat">
-        <MessageCircle class="stat-icon" />
-        {{ essay.commentSum || 0 }} 评论
-      </span>
-      <span class="essay-detail-stat">
-        <ThumbUp class="stat-icon" />
-        {{ essay.helpSum || 0 }} 赞
-      </span>
-    </div>
-
-    <!-- 评论区域 -->
-    <DictumCommentSection
+    <!-- 评论区域（通用评论区组件，业务 id 通过闭包组装） -->
+    <ThreadedCommentSection
       :key="essay.id"
-      :dictum-id="essay.id"
-      :dictum-uid="essay.uid"
+      :biz-id="essay.id"
+      :biz-uid="essay.uid"
+      :fetch-list="fetchCommentList"
+      :submit="submitComment"
+      :remove="removeComment"
       @comment-added="handleCommentAdded"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { MessageCircle, ThumbUp } from '@vicons/tabler'
-import type { ReadingEssaysInfo } from '~/types'
+import type { CommentSubmitPayload, PageQuery, ReadingEssaysInfo } from '~/types'
 import { getFullDateCN } from '~/utils/formatTime'
-
-import DictumCommentSection from './DictumCommentSection.vue'
 
 interface Props {
   essay: ReadingEssaysInfo
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<{
   commentAdded: []
 }>()
+
+// 评论区数据注入（业务 id 通过闭包组装，组件本身业务无关）
+const dictumCommentApi = useDictumCommentApi()
+
+const fetchCommentList = (pageQuery: PageQuery) =>
+  dictumCommentApi.getCommentList(props.essay.id, pageQuery)
+
+const submitComment = (payload: CommentSubmitPayload) =>
+  dictumCommentApi.addComment({ dictumId: props.essay.id, ...payload })
+
+const removeComment = (id: string | number) =>
+  dictumCommentApi.deleteComment(id)
 
 const handleCommentAdded = () => {
   emit('commentAdded')
@@ -204,27 +204,6 @@ const handleCommentAdded = () => {
   background: var(--color-primary-light);
   padding: 4px 12px;
   border-radius: var(--radius-full);
-}
-
-/* 统计信息 */
-.essay-stats {
-  display: flex;
-  gap: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--color-border-light);
-}
-
-.essay-detail-stat {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--text-sm);
-  color: var(--color-ink-muted);
-}
-
-.stat-icon {
-  width: 16px;
-  height: 16px;
 }
 
 /* 响应式 */

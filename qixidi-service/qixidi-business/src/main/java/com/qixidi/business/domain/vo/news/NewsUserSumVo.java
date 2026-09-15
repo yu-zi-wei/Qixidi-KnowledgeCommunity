@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -32,5 +33,9 @@ public class NewsUserSumVo implements Serializable {
      * 消息总数
      */
     private Integer newsSum;
+    /**
+     * 子类型分项明细（仅"评论"类型携带：文章 1、小记 7、随笔 6 的各自未读数，前端二级 tab 红点用）
+     */
+    private List<NewsUserSumVo> subList;
 
 }

@@ -1,6 +1,7 @@
 package com.qixidi.business.api.frontDesk.dictum;
 
 import com.qixidi.business.domain.bo.dictum.DictumCommentBo;
+import com.qixidi.business.domain.vo.dictum.DictumCommentVo;
 import com.qixidi.business.service.dictum.DictumCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class DictumCommentController {
     /**
      * 新增评论
      *
-     * @param bo
-     * @return
+     * @param bo 评论信息
+     * @return 新增后的评论（含真实 id）
      */
     @PostMapping("/add")
-    public void add(@Validated @RequestBody DictumCommentBo bo) {
-        dictumCommentService.add(bo);
+    public DictumCommentVo add(@Validated @RequestBody DictumCommentBo bo) {
+        return dictumCommentService.add(bo);
     }
 
     /**

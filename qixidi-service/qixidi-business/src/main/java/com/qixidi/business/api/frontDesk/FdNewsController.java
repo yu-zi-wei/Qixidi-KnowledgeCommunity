@@ -9,8 +9,10 @@ import com.qixidi.auth.annotation.Log;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
+import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
+import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -49,6 +51,22 @@ public class FdNewsController {
     @GetMapping("/comment/list")
     public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
         return iNewsUserInfoService.commentList(pageQuery);
+    }
+
+    /**
+     * 小记评论消息列表
+     */
+    @GetMapping("/comment/time-notes/list")
+    public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery) {
+        return iNewsUserInfoService.timeNotesCommentList(pageQuery);
+    }
+
+    /**
+     * 随笔评论消息列表
+     */
+    @GetMapping("/comment/dictum/list")
+    public TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery) {
+        return iNewsUserInfoService.dictumCommentList(pageQuery);
     }
 
     /**

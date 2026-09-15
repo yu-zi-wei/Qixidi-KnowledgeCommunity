@@ -140,6 +140,23 @@
 
       <!-- 消息列表 -->
       <template v-else>
+        <!-- 评论消息二级子 tab（文章/小记/随笔） -->
+        <div v-if="currentType === 1" class="news-sub-bar">
+          <NuxtLink
+            v-for="sub in commentSubs"
+            :key="sub.key"
+            :to="{ path: '/news', query: sub.key === 'article' ? undefined : { sub: sub.key } }"
+            class="news-sub-tab"
+            :class="{ active: currentSub === sub.key }"
+            @click.prevent="switchCommentSub(sub.key)"
+          >
+            {{ sub.label }}
+            <span v-if="getSubUnreadCount(sub.type) > 0" class="tab-badge">
+              {{ getSubUnreadCount(sub.type) > 99 ? '99+' : getSubUnreadCount(sub.type) }}
+            </span>
+          </NuxtLink>
+        </div>
+
         <!-- 加载状态 -->
         <div v-if="pending" class="loading-state">
           <n-spin size="large" />
@@ -153,8 +170,8 @@
         <!-- 列表内容 -->
         <template v-else>
           <div class="news-list">
-            <!-- 评论消息 (type=1) -->
-            <template v-if="currentType === 1">
+            <!-- 评论消息 - 文章 (type=1, sub=article) -->
+            <template v-if="currentType === 1 && currentSub === 'article'">
               <div
                 v-for="item in (newsList as ArticleCommentNewsVo[])"
                 :key="item.id"
@@ -174,6 +191,62 @@
                       <span class="news-action">评论了你的文章</span>
                     </template>
                     <NuxtLink :to="`/articles/${item.articleId}`" class="news-target">《{{ item.articleTitle }}》</NuxtLink>
+                  </div>
+                  <div class="news-comment-content">{{ item.content }}</div>
+                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                </div>
+              </div>
+            </template>
+
+            <!-- 评论消息 - 小记 (type=1, sub=timeNotes) -->
+            <template v-else-if="currentType === 1 && currentSub === 'timeNotes'">
+              <div
+                v-for="item in (newsList as TimeNotesCommentNewsVo[])"
+                :key="item.id"
+                class="news-item"
+                :class="{ unread: !item.beenRead }"
+              >
+                <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-avatar-link">
+                  <img :src="item.commentAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
+                </NuxtLink>
+                <div class="news-body">
+                  <div class="news-header">
+                    <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-user">{{ item.commentName }}</NuxtLink>
+                    <template v-if="item.type === 2">
+                      <span class="news-action">回复了你的评论，来源于小记</span>
+                    </template>
+                    <template v-else>
+                      <span class="news-action">评论了你的小记</span>
+                    </template>
+                    <NuxtLink :to="`/time-notes/${item.timeNotesId}`" class="news-target">《{{ item.title }}》</NuxtLink>
+                  </div>
+                  <div class="news-comment-content">{{ item.content }}</div>
+                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                </div>
+              </div>
+            </template>
+
+            <!-- 评论消息 - 随笔 (type=1, sub=dictum，随笔无标题，展示截断内容) -->
+            <template v-else-if="currentType === 1 && currentSub === 'dictum'">
+              <div
+                v-for="item in (newsList as DictumCommentNewsVo[])"
+                :key="item.id"
+                class="news-item"
+                :class="{ unread: !item.beenRead }"
+              >
+                <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-avatar-link">
+                  <img :src="item.commentAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
+                </NuxtLink>
+                <div class="news-body">
+                  <div class="news-header">
+                    <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-user">{{ item.commentName }}</NuxtLink>
+                    <template v-if="item.type === 2">
+                      <span class="news-action">回复了你的评论，来源于随笔</span>
+                    </template>
+                    <template v-else>
+                      <span class="news-action">评论了你的随笔</span>
+                    </template>
+                    <NuxtLink :to="`/reading-essays/${item.dictumId}`" class="news-target news-target-text">{{ truncateText(item.worksContent, 20) }}</NuxtLink>
                   </div>
                   <div class="news-comment-content">{{ item.content }}</div>
                   <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
@@ -264,7 +337,7 @@
 
 <script setup lang="ts">
 import { Bell } from '@vicons/tabler'
-import type { NewsUserSumVo, NewsUserInfoVo, ArticleCommentNewsVo, PrivateUserVo, PrivateNewsInfoVo } from '~/types'
+import type { NewsUserSumVo, NewsUserInfoVo, ArticleCommentNewsVo, TimeNotesCommentNewsVo, DictumCommentNewsVo, PrivateUserVo, PrivateNewsInfoVo } from '~/types'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 import { emojiCategories } from '~/utils/emoji'
 
@@ -301,8 +374,24 @@ const tabs = [
   { type: 5, label: '系统' }
 ]
 
+// 评论消息二级子 tab（key 对应 route.query.sub，type 对应后端 NewsType）
+const commentSubs = [
+  { key: 'article', type: 1, label: '文章' },
+  { key: 'timeNotes', type: 7, label: '小记' },
+  { key: 'dictum', type: 6, label: '随笔' }
+]
+
 // 当前选中的 Tab 类型（默认评论）
 const currentType = computed(() => Number(route.query.type) || 1)
+
+// 当前评论子 tab（仅 currentType===1 生效，默认文章）
+const currentSub = computed(() => {
+  const sub = commentSubs.find(s => s.key === route.query.sub)
+  return sub ? sub.key : 'article'
+})
+
+// 当前评论子 tab 对应的消息类型（markRead 用）
+const currentSubType = computed(() => commentSubs.find(s => s.key === currentSub.value)!.type)
 
 // 移动端直接访问私信页时重定向到评论
 watch(isMobile, (mobile) => {
@@ -312,7 +401,12 @@ watch(isMobile, (mobile) => {
 })
 
 const currentTabLabel = computed(() => {
-  return tabs.find(t => t.type === currentType.value)?.label || ''
+  const label = tabs.find(t => t.type === currentType.value)?.label || ''
+  // 评论 tab 下细化到子类型（空状态文案用）
+  if (currentType.value === 1) {
+    return `${commentSubs.find(s => s.key === currentSub.value)?.label || ''}${label}`
+  }
+  return label
 })
 
 // 分页
@@ -320,30 +414,41 @@ const pageSize = 20
 const currentPage = ref(1)
 
 // 未读汇总（使用 WebSocket 实时数据）
-const { unreadMap, connected: wsConnected } = useWebSocket()
+const { unreadMap, subUnreadMap, connected: wsConnected } = useWebSocket()
 const getUnreadCount = (type: number) => unreadMap.value[type] || 0
+// 评论子类型分项未读（二级 tab 红点）
+const getSubUnreadCount = (type: number) => subUnreadMap.value[type] || 0
 
-// WebSocket 未连接时，HTTP 兜底
-const fetchUnreadSum = async () => {
-  if (wsConnected.value) return
+// 拉取未读汇总（force=true 时无视 WebSocket 在线状态强制拉取，如标已读后刷新、进入页面初始化分项）
+const fetchUnreadSum = async (force = false) => {
+  if (!force && wsConnected.value) return
   try {
     const list = await newsApi.getNewsSum()
     const map: Record<number, number> = {}
+    const subMap: Record<number, number> = {}
     list.forEach((item: NewsUserSumVo) => {
       map[item.type] = item.newsSum
+      item.subList?.forEach((sub) => {
+        subMap[sub.type] = sub.newsSum
+      })
     })
     unreadMap.value = map
+    subUnreadMap.value = subMap
   } catch {
     // useApi 统一处理错误
   }
 }
 
-// 消息列表
-const cacheKey = computed(() => `news-${currentType.value}-${currentPage.value}`)
+// 消息列表（评论 tab 按二级子 tab 区分缓存）
+const cacheKey = computed(() => `news-${currentType.value}-${currentSub.value}-${currentPage.value}`)
 
 const fetchNewsList = (): Promise<any> => {
   const type = currentType.value
-  if (type === 1) return newsApi.getCommentList(currentPage.value, pageSize)
+  if (type === 1) {
+    if (currentSub.value === 'timeNotes') return newsApi.getTimeNotesCommentList(currentPage.value, pageSize)
+    if (currentSub.value === 'dictum') return newsApi.getDictumCommentList(currentPage.value, pageSize)
+    return newsApi.getCommentList(currentPage.value, pageSize)
+  }
   if (type === 2) return newsApi.getFabulousList(currentPage.value, pageSize)
   if (type === 3) return newsApi.getFollowList(currentPage.value, pageSize)
   if (type === 5) return newsApi.getSystemList(currentPage.value, pageSize)
@@ -365,11 +470,32 @@ const switchTab = (type: number) => {
   }
 }
 
+// 评论二级子 tab 切换
+const switchCommentSub = (key: string) => {
+  currentPage.value = 1
+  if (key === 'article') {
+    navigateTo({ path: '/news' })
+  } else {
+    navigateTo({ path: '/news', query: { sub: key } })
+  }
+}
+
+// 文本截断（随笔无标题，用内容前缀展示）
+const truncateText = (text: string, max: number) => {
+  if (!text) return ''
+  return text.length > max ? `${text.slice(0, max)}…` : text
+}
+
 // 从 URL 获取选中的聊天用户
 const chatTargetUid = computed(() => route.query.uid as string || '')
 
-// 切换 Tab 时重置页码
+// 切换 Tab / 评论子 tab 时重置页码
 watch(currentType, () => {
+  currentPage.value = 1
+  markReadIfNeeded()
+})
+
+watch(currentSub, () => {
   currentPage.value = 1
   markReadIfNeeded()
 })
@@ -384,20 +510,23 @@ const handlePageChange = (page: number) => {
 const markReadIfNeeded = async () => {
   const type = currentType.value
   if (type === 4) return
+  // 评论 tab 按二级子 tab 对应的类型标记（文章=1、小记=7、随笔=6）；
+  // 未读判断用一级类型（后端把 6/7 的未读合并进了"评论"总数）
+  const readType = type === 1 ? currentSubType.value : type
   if (getUnreadCount(type) > 0) {
     try {
-      await newsApi.markRead(type)
-      // 更新本地未读数
-      unreadMap.value = { ...unreadMap.value, [type]: 0 }
+      await newsApi.markRead(readType)
+      //刷新汇总拿最新合并数与分项：不能本地把合并总数归零（评论只清了当前子类型的部分）
+      await fetchUnreadSum(true)
     } catch {
       // useApi 统一处理错误
     }
   }
 }
 
-// 页面初始化
+// 页面初始化（分项未读不依赖 WebSocket 推送，强制拉一次保证二级 tab 红点初始化）
 onMounted(async () => {
-  await fetchUnreadSum()
+  await fetchUnreadSum(true)
   markReadIfNeeded()
 })
 
@@ -655,6 +784,55 @@ useHead({
 .news-content {
   flex: 1;
   min-width: 0;
+}
+
+/* 评论消息二级子 tab */
+.news-sub-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.news-sub-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--color-ink-muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--transition-fast);
+}
+
+.news-sub-tab:hover {
+  color: var(--color-ink);
+}
+
+.news-sub-tab.active {
+  color: var(--color-primary);
+  font-weight: 500;
+  border-bottom-color: var(--color-primary);
+}
+
+/* 二级 tab 红点比一级小一档 */
+.news-sub-tab .tab-badge {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
+  border-radius: 8px;
+}
+
+/* 随笔无标题，消息目标展示截断的正文 */
+.news-target-text {
+  color: var(--color-ink);
+}
+
+.news-target-text:hover {
+  color: var(--color-primary);
 }
 
 /* 加载/空状态 */

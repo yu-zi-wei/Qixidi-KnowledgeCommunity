@@ -21,9 +21,11 @@ import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
+import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
+import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.news.NewsUserInfoMapper;
@@ -147,6 +149,9 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public List<NewsUserSumVo> listSums(String uid) {
         List<NewsUserSumVo> list = new ArrayList<>();
         for (NewsType value : NewsType.values()) {
+            if (isCommentSubType(value)) {
+                continue;//评论子类型（随笔/小记）不单独展示，未读数合并进"评论"
+            }
             NewsUserSumVo newsUserSumVo = new NewsUserSumVo().setType(value.getCode()).setTypeInfo(value.getValue())
                     .setNewsSum(0).setRoute(value.getRoute());
             list.add(newsUserSumVo);
@@ -181,12 +186,40 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
             collect.put(NewsType.SYSTEM_NEWS.getCode(), systemNewsList);
         }
 
+        //随笔/小记评论是"评论"的子类型：先取出各自分项数量（供二级 tab 红点），再把未读记录合并进"评论"
+        List<NewsUserRecord> dictumRecords = collect.remove(NewsType.DICTUM_COMMENT_NEWS.getCode());
+        List<NewsUserRecord> timeNotesRecords = collect.remove(NewsType.TIME_NOTES_COMMENT_NEWS.getCode());
+        List<NewsUserRecord> articleRecords = collect.get(NewsType.COMMENT_NEWS.getCode());
+        int articleUnread = CollectionUtils.isEmpty(articleRecords) ? 0 : articleRecords.size();
+        int dictumUnread = CollectionUtils.isEmpty(dictumRecords) ? 0 : dictumRecords.size();
+        int timeNotesUnread = CollectionUtils.isEmpty(timeNotesRecords) ? 0 : timeNotesRecords.size();
+        List<NewsUserRecord> commentRecords = collect.computeIfAbsent(NewsType.COMMENT_NEWS.getCode(), k -> new ArrayList<>());
+        if (CollectionUtils.isNotEmpty(dictumRecords)) {
+            commentRecords.addAll(dictumRecords);
+        }
+        if (CollectionUtils.isNotEmpty(timeNotesRecords)) {
+            commentRecords.addAll(timeNotesRecords);
+        }
+
         Map<Integer, List<NewsUserRecord>> finalCollect = collect;
         list.forEach(item -> {
             if (finalCollect.get(item.getType()) != null) {
                 item.setNewsSum(finalCollect.get(item.getType()).size());
             }
         });
+
+        //评论条目附加子类型分项（文章/小记/随笔各自未读数，前端二级 tab 红点用）
+        list.stream()
+                .filter(item -> NewsType.COMMENT_NEWS.getCode().equals(item.getType()))
+                .findFirst()
+                .ifPresent(item -> item.setSubList(Arrays.asList(
+                        new NewsUserSumVo().setType(NewsType.COMMENT_NEWS.getCode()).setTypeInfo("文章")
+                                .setNewsSum(articleUnread).setRoute(item.getRoute()),
+                        new NewsUserSumVo().setType(NewsType.TIME_NOTES_COMMENT_NEWS.getCode()).setTypeInfo("小记")
+                                .setNewsSum(timeNotesUnread).setRoute(item.getRoute()),
+                        new NewsUserSumVo().setType(NewsType.DICTUM_COMMENT_NEWS.getCode()).setTypeInfo("随笔")
+                                .setNewsSum(dictumUnread).setRoute(item.getRoute())
+                )));
         return list;
     }
 
@@ -194,6 +227,20 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         IPage<ArticleCommentNewsVo> page = baseMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), pageQuery.build());
+        return TableDataInfo.build(page);
+    }
+
+    @Override
+    public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery) {
+        String uuid = LoginHelper.getTripartiteUuid();
+        IPage<TimeNotesCommentNewsVo> page = baseMapper.selectTimeNotesCommentNews(uuid, NewsType.TIME_NOTES_COMMENT_NEWS.getCode(), pageQuery.build());
+        return TableDataInfo.build(page);
+    }
+
+    @Override
+    public TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery) {
+        String uuid = LoginHelper.getTripartiteUuid();
+        IPage<DictumCommentNewsVo> page = baseMapper.selectDictumCommentNews(uuid, NewsType.DICTUM_COMMENT_NEWS.getCode(), pageQuery.build());
         return TableDataInfo.build(page);
     }
 
@@ -253,10 +300,21 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public List<NewsUserSumVo> listInfo() {
         List<NewsUserSumVo> list = new ArrayList<>();
         for (NewsType value : NewsType.values()) {
+            if (isCommentSubType(value)) {
+                continue;//评论子类型（随笔/小记）不单独展示
+            }
             NewsUserSumVo newsUserSumVo = new NewsUserSumVo().setType(value.getCode()).setTypeInfo(value.getValue())
                     .setNewsSum(0).setRoute(value.getRoute());
             list.add(newsUserSumVo);
         }
         return list;
+    }
+
+    /**
+     * 是否为评论子类型（随笔/小记评论，未读数归属"评论"类型，不单独展示）
+     */
+    private boolean isCommentSubType(NewsType type) {
+        return NewsType.DICTUM_COMMENT_NEWS.getCode().equals(type.getCode())
+                || NewsType.TIME_NOTES_COMMENT_NEWS.getCode().equals(type.getCode());
     }
 }

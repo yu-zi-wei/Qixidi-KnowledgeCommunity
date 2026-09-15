@@ -56,8 +56,9 @@ public class FdDictumAlbumController {
     @Log(title = "名言专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public void add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
+    public Long add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
         if (!iDictumAlbumService.insertByBo(bo)) throw new ServiceException("创建名言失败");
+        return bo.getId();
     }
 
     /**

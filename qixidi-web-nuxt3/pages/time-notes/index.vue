@@ -21,13 +21,24 @@
           :loading="detailLoading"
           @edit="handleEdit"
         />
+        <!-- 评论区（详情加载完成后渲染，key 绑定详情 id 保证切换时重建） -->
+        <ThreadedCommentSection
+          v-if="selectedDetail"
+          :key="selectedDetail.id"
+          class="detail-comment-section"
+          :biz-id="selectedDetail.id"
+          :biz-uid="selectedDetail.uid"
+          :fetch-list="fetchCommentList"
+          :submit="submitComment"
+          :remove="removeComment"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TimeNotesVo, TimeNotesInfo } from '~/types'
+import type { CommentSubmitPayload, PageQuery, TimeNotesVo, TimeNotesInfo } from '~/types'
 
 definePageMeta({
   sidebar: false,
@@ -212,6 +223,18 @@ const handleEdit = (id: number) => {
   navigateTo(`/write/note/${id}`)
 }
 
+// 评论区数据注入（业务 id 通过闭包组装，组件本身业务无关）
+const timeNotesCommentApi = useTimeNotesCommentApi()
+
+const fetchCommentList = (pageQuery: PageQuery) =>
+  timeNotesCommentApi.getCommentList(selectedId.value, pageQuery)
+
+const submitComment = (payload: CommentSubmitPayload) =>
+  timeNotesCommentApi.addComment({ timeNotesId: selectedId.value, ...payload })
+
+const removeComment = (id: string | number) =>
+  timeNotesCommentApi.deleteComment(id)
+
 // 初始化
 // 1. 先加载列表
 await loadTimeNotes(true)
@@ -281,6 +304,10 @@ if (urlId) {
   border-left: none;
   border-radius: 0 16px 16px 0;
   overflow: visible;
+}
+
+.detail-comment-section {
+  margin: 0 var(--space-4) var(--space-4);
 }
 
 /* 移动端：只展示列表 */

@@ -157,13 +157,18 @@
           <!-- 专栏选择 -->
           <div class="config-section">
             <label class="section-label">专栏</label>
-            <n-select
-              v-model:value="formData.specialId"
-              :options="specialOptions"
-              placeholder="选择专栏（可选）"
-              clearable
-              filterable
-            />
+            <div class="special-select-row">
+              <n-select
+                v-model:value="formData.specialId"
+                :options="specialOptions"
+                placeholder="选择专栏（可选）"
+                clearable
+                filterable
+              />
+              <n-button class="special-create-btn" @click="showSpecialDialog = true">
+                + 新建
+              </n-button>
+            </div>
           </div>
 
           <!-- 文章类型 -->
@@ -219,6 +224,12 @@
       </div>
     </div>
   </div>
+
+  <!-- 新建专栏弹窗 -->
+  <ArticleSpecialCreateDialog
+    v-model:show="showSpecialDialog"
+    @success="handleSpecialCreated"
+  />
 </template>
 
 <script setup lang="ts">
@@ -239,6 +250,11 @@ const props = withDefaults(defineProps<Props>(), {
   labels: () => [],
   specials: () => []
 })
+
+const emit = defineEmits<{
+  /** 专栏创建成功（页面据此刷新专栏列表） */
+  specialCreated: [id: number]
+}>()
 
 const route = useRoute()
 const router = useRouter()
@@ -343,6 +359,15 @@ const specialOptions = computed(() =>
     value: item.id
   }))
 )
+
+// 新建专栏弹窗
+const showSpecialDialog = ref(false)
+
+// 专栏创建成功：自动选中新专栏，并通知页面刷新专栏列表
+const handleSpecialCreated = (id: number) => {
+  formData.value.specialId = id
+  emit('specialCreated', id)
+}
 
 // 是否为编辑模式
 const isEdit = computed(() => !!currentArticleId.value)
@@ -598,6 +623,21 @@ const handleBack = () => {
   font-weight: 500;
   color: var(--color-ink);
   margin-bottom: 0;
+}
+
+/* 专栏下拉与新建按钮同行 */
+.special-select-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.special-select-row .n-select {
+  flex: 1;
+}
+
+.special-create-btn {
+  flex-shrink: 0;
 }
 
 .section-hint {

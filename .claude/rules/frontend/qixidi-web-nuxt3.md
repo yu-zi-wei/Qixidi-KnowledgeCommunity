@@ -486,6 +486,57 @@ Vue scoped CSS 通过给元素添加 `data-v-xxx` 属性实现隔离，但 Nuxt 
 - [ ] 类名是否带组件/页面前缀？
 - [ ] 刷新页面后样式是否正常？（SSR 注入顺序可能和客户端路由不同）
 
+## Nuxt dev 与 build 互斥（强制）
+
+**dev server 运行期间，禁止执行 `nuxi build`。**
+
+两者共用 `.nuxt` 目录，同时运行会互相污染：
+
+| 方向 | 后果 |
+|------|------|
+| build 重写 `.nuxt` 生成文件 | dev server 内存模块图与磁盘不一致 → HMR 失效，**新增组件不被识别**（页面看不到新组件，也无报错） |
+| dev 占用中的 `.nuxt` 被 build 读取 | 产出被污染的 `.output`（混入 vite-node 代码）→ 启动报 `Vite Node IPC socket path not configured` |
+
+**症状识别**：
+- dev 运行中新组件/新页面始终不生效 → 先确认是否在 dev 运行时跑过 build
+- build 产物启动报 Vite Node IPC 错误 → 产物已被污染，必须重新 build
+
+**修复**：停 dev → 删除 `.nuxt` 和 `.output` → 重启 dev（或重新 build）
+
+**同族坑：先改引用、后建组件文件 → transform 缓存陈旧（2026-09-15）**
+
+在已有组件中引用一个**尚不存在**的新组件（Edit 引用 → 再 Write 新组件文件），Vite 会在文件还不存在时立即 transform 引用方，组件名无法解析时回退为 `_resolveComponent` 运行时解析。Nuxt 3.2x **没有运行时全局注册表**，解析必然静默失败——症状是「点击按钮无反应」（ref 正常变化，但组件渲染成未知元素，仅控制台有 Failed to resolve component 警告）。之后即使组件被扫描注册（components.d.ts 已更新），引用方内容未变就不会重新 transform，坏缓存一直被 serve。
+
+- **诊断**：`curl http://127.0.0.1:9007/_nuxt/components/xxx/引用方.vue | grep "新组件"` —— 若是 `_resolveComponent("Xxx")` 而非 `import ... from ".../Xxx.vue?t=..."`，即命中此坑
+- **修复**：`touch` 引用方文件强制重新 transform（无需重启 dev）
+- **预防**：**先 Write 新组件文件，再 Edit 引用方**，顺序不要反
+
+**验证代码的正确姿势**：
+- 开发期验证：dev server + 浏览器（改动热更新即可见）
+- 需要 build 验证编译：**先停 dev**，再 build，验证完重启 dev
+
+---
+
+## md-editor-v3 插入内容到光标位置（强制）
+
+编辑器内编程式插入内容（图片/视频/表格等），禁止 `content.value += text`（永远追加末尾）。
+
+```ts
+// md-editor-v3 的 insert 依赖 textarea selection，从未聚焦时 selectionStart = 0，会错误地插到【开头】
+// 必须先用 @onFocus 标记"放置过光标"，未聚焦过才追加末尾
+const editorFocusedOnce = ref(false)  // 模板绑定 @onFocus="editorFocusedOnce = true"
+
+const insertToEditor = (text: string) => {
+  if (mdEditorRef.value && editorFocusedOnce.value) {
+    mdEditorRef.value.insert(() => ({ targetValue: text, select: true }))
+  } else {
+    content.value += text
+  }
+}
+```
+
+统一入口是 `components/common/MdEditorWithVideo.vue` 的 `insertToEditor`。
+
 ---
 
 **核心原则**：所有新代码必须支持双主题，禁止硬编码颜色，禁止瞎编接口字段名。

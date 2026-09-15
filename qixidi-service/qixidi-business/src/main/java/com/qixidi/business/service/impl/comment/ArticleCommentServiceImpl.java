@@ -284,6 +284,10 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
             //        异步更新数据
             commentDeletePreprocessing(bo, collect.size());
         });
+        //同步删除这批评论（含子评论）产生的通知记录：news_id 存的是评论 id，各业务评论表独立自增会撞车，必须限定 type=文章评论，防止误删其他业务的通知
+        newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+                .eq(NewsUserRecord::getType, NewsType.COMMENT_NEWS.getCode())
+                .in(NewsUserRecord::getNewsId, collect));
         return baseMapper.deleteBatchIds(collect) > 0;
     }
 

@@ -1,5 +1,6 @@
 package com.qixidi.business.service.dictum;
 
+import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.light.core.core.domain.PageQuery;
@@ -55,6 +56,14 @@ public interface IDictumInfoService {
      * @return 结果
      */
     Boolean insertByBo(DictumInfoBo bo);
+
+    /**
+     * 批量新增名言信息（一次发布多条，分类/作者等元信息共享）
+     *
+     * @param bo 批量名言信息
+     * @return 结果
+     */
+    Boolean insertBatchByBo(DictumBatchBo bo);
 
     /**
      * 修改名言信息

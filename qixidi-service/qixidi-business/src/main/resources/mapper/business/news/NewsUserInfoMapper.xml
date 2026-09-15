@@ -13,7 +13,6 @@
         nui.sender_id,
         nui.recipient_id,
         nui.works_id,
-        nui.works_type,
         nui.works_content,
         nui.works_parent_id,
         nui.works_parent_uid,
@@ -55,6 +54,58 @@
                  LEFT JOIN b_article_information AS ai ON ai.id = ac.article_id
                  LEFT JOIN b_user_main AS um ON ac.comment_uid = um.uuid
         where ac.state = 0
+          and nur.type = #{type}
+          and nur.uid = #{uid}
+        ORDER BY nur.create_time DESC
+    </select>
+
+    <select id="selectTimeNotesCommentNews" resultType="com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo">
+        SELECT nur.id            as newsId,
+               tc.id,
+               tc.time_notes_id  as timeNotesId,
+               tc.parent_id      as parentId,
+               tc.comment_grade  as commentGrade,
+               tc.comment_uid    as commentUid,
+               tc.target_id      as targetId,
+               tc.target_uid     as targetUid,
+               tc.content        as content,
+               tc.type           as type,
+               tn.title          AS title,
+               nur.been_read     as beenRead,
+               nur.create_time   as createTime,
+               um.nickname       AS commentName,
+               um.avatar         AS commentAvatar
+        FROM b_news_user_record AS nur
+                 LEFT JOIN b_time_notes_comment AS tc ON nur.news_id = tc.id
+                 LEFT JOIN b_time_notes AS tn ON tn.id = tc.time_notes_id
+                 LEFT JOIN b_user_main AS um ON tc.comment_uid = um.uuid
+        where tc.status = 0
+          and nur.type = #{type}
+          and nur.uid = #{uid}
+        ORDER BY nur.create_time DESC
+    </select>
+
+    <select id="selectDictumCommentNews" resultType="com.qixidi.business.domain.vo.news.DictumCommentNewsVo">
+        SELECT nur.id            as newsId,
+               dc.id,
+               dc.dictum_id      as dictumId,
+               dc.parent_id      as parentId,
+               dc.comment_grade  as commentGrade,
+               dc.comment_uid    as commentUid,
+               dc.target_id      as targetId,
+               dc.target_uid     as targetUid,
+               dc.content        as content,
+               dc.type           as type,
+               di.content        AS worksContent,
+               nur.been_read     as beenRead,
+               nur.create_time   as createTime,
+               um.nickname       AS commentName,
+               um.avatar         AS commentAvatar
+        FROM b_news_user_record AS nur
+                 LEFT JOIN b_dictum_comment AS dc ON nur.news_id = dc.id
+                 LEFT JOIN b_dictum_info AS di ON di.id = dc.dictum_id
+                 LEFT JOIN b_user_main AS um ON dc.comment_uid = um.uuid
+        where dc.status = 0
           and nur.type = #{type}
           and nur.uid = #{uid}
         ORDER BY nur.create_time DESC

@@ -2,40 +2,53 @@
   <div class="time-notes-detail-page">
     <!-- 内容区域 -->
     <main class="detail-main">
-      <!-- 加载状态 -->
-      <div v-if="pending" class="loading-state">
-        <n-spin size="large" />
-      </div>
-
-      <!-- 错误状态 -->
-      <div v-else-if="error" class="error-state">
-        <p>加载失败</p>
-        <n-button @click="handleRefresh">重试</n-button>
-      </div>
-
-      <!-- 时光小记详情 -->
-      <article v-else-if="note" class="detail-card">
-        <div class="detail-actions">
-          <n-button v-if="isOwner" quaternary size="small" @click="handleEdit" title="编辑">
-            <template #icon>
-              <n-icon><Edit /></n-icon>
-            </template>
-          </n-button>
-          <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
-            <template #icon>
-              <n-icon><Share /></n-icon>
-            </template>
-          </n-button>
+      <div class="detail-column">
+        <!-- 加载状态 -->
+        <div v-if="pending" class="loading-state">
+          <n-spin size="large" />
         </div>
-        <TimeNotesDetailContent :note="note" />
-      </article>
+
+        <!-- 错误状态 -->
+        <div v-else-if="error" class="error-state">
+          <p>加载失败</p>
+          <n-button @click="handleRefresh">重试</n-button>
+        </div>
+
+        <!-- 时光小记详情 -->
+        <article v-else-if="note" class="detail-card">
+          <div class="detail-actions">
+            <n-button v-if="isOwner" quaternary size="small" @click="handleEdit" title="编辑">
+              <template #icon>
+                <n-icon><Edit /></n-icon>
+              </template>
+            </n-button>
+            <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
+              <template #icon>
+                <n-icon><Share /></n-icon>
+              </template>
+            </n-button>
+          </div>
+          <TimeNotesDetailContent :note="note" />
+        </article>
+
+        <!-- 评论区 -->
+        <ThreadedCommentSection
+          v-if="note"
+          class="detail-comment"
+          :biz-id="noteId"
+          :biz-uid="note.uid"
+          :fetch-list="fetchCommentList"
+          :submit="submitComment"
+          :remove="removeComment"
+        />
+      </div>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Share, Edit } from '@vicons/tabler'
-import type { TimeNotesInfo } from '~/types'
+import type { CommentSubmitPayload, PageQuery, TimeNotesInfo } from '~/types'
 
 definePageMeta({
   layout: false,
@@ -45,6 +58,7 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const timeNotesApi = useTimeNotesApi()
+const timeNotesCommentApi = useTimeNotesCommentApi()
 const authStore = useAuthStore()
 const message = useMessage()
 
@@ -84,6 +98,16 @@ const handleRefresh = () => {
   refresh()
 }
 
+// 评论区数据注入（业务 id 通过闭包组装，组件本身业务无关）
+const fetchCommentList = (pageQuery: PageQuery) =>
+  timeNotesCommentApi.getCommentList(noteId.value, pageQuery)
+
+const submitComment = (payload: CommentSubmitPayload) =>
+  timeNotesCommentApi.addComment({ timeNotesId: noteId.value, ...payload })
+
+const removeComment = (id: string | number) =>
+  timeNotesCommentApi.deleteComment(id)
+
 watch(() => route.params.id, async (newId, oldId) => {
   if (newId !== oldId) {
     await refresh()
@@ -103,6 +127,15 @@ watch(() => route.params.id, async (newId, oldId) => {
   display: flex;
   justify-content: center;
   padding: 32px 24px;
+}
+
+.detail-column {
+  width: 100%;
+  max-width: 800px;
+}
+
+.detail-comment {
+  margin-top: var(--space-4);
 }
 
 .detail-card {

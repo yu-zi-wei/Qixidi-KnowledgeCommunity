@@ -4,11 +4,16 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.qixidi.business.domain.bo.dictum.DictumCommentBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
+import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.dictum.DictumCommentVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
+import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.service.dictum.DictumCommentService;
 import com.light.core.core.domain.PageQuery;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.common.domain.enums.StatusEnums;
@@ -17,8 +22,11 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ExecutorService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,9 +41,14 @@ public class DictumCommentServiceImpl implements DictumCommentService {
     private DictumCommentMapper dictumCommentMapper;
     @Autowired
     private TripartiteUserMapper tripartiteUserMapper;
+    @Autowired
+    private NewsUserRecordMapper newsUserRecordMapper;
+
+    @Resource(name = "threadPoolInstance")
+    private ExecutorService executorService;
 
     @Override
-    public void add(DictumCommentBo bo) {
+    public DictumCommentVo add(DictumCommentBo bo) {
         DictumComment dictumComment = BeanUtil.copyProperties(bo, DictumComment.class);
         dictumComment.setCommentUid(LoginHelper.getTripartiteUuid());
         dictumComment.setCreateTime(new Date());
@@ -51,13 +64,39 @@ public class DictumCommentServiceImpl implements DictumCommentService {
         if (insert < 0) {
             throw new ServiceException("添加失败");
         }
+        //通知被评论人（一级评论通知随笔作者、回复通知被回复人），自己评论自己不发；异步落库 + WebSocket 推送
+        if (!dictumComment.getCommentUid().equals(bo.getTargetUid())) {
+            executorService.execute(() -> {
+                NewsUserRecord newsUserRecord = new NewsUserRecord();
+                newsUserRecord.setUid(bo.getTargetUid());
+                newsUserRecord.setNewsId(dictumComment.getId());
+                newsUserRecord.setTargetUid(dictumComment.getCommentUid());
+                newsUserRecord.setType(NewsType.DICTUM_COMMENT_NEWS.getCode());
+                newsUserRecord.setCreateTime(new Date());
+                newsUserRecordMapper.insert(newsUserRecord);
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(bo.getTargetUid());
+            });
+        }
+        //插入后主键已回填 entity，直接转 VO 返回（用户昵称头像由前端登录态填充，不再查库）
+        return BeanUtil.copyProperties(dictumComment, DictumCommentVo.class);
     }
 
     @Override
     public void delete(Long id) {
+        DictumComment comment = dictumCommentMapper.selectById(id);
+        if (comment == null || Objects.equals(comment.getStatus(), StatusEnums.DELETE.getCode())) {
+            throw new ServiceException("评论不存在");
+        }
+        if (!Objects.equals(comment.getCommentUid(), LoginHelper.getTripartiteUuid())) {
+            throw new ServiceException("只能删除自己的评论");
+        }
         dictumCommentMapper.update(null, new LambdaUpdateWrapper<DictumComment>()
             .eq(DictumComment::getId, id)
             .set(DictumComment::getStatus, StatusEnums.DELETE.getCode()));
+        //同步删除该评论产生的通知记录：news_id 存的是评论 id，各业务评论表独立自增会撞车，必须限定 type=随笔评论，防止误删其他业务的通知
+        newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+            .eq(NewsUserRecord::getType, NewsType.DICTUM_COMMENT_NEWS.getCode())
+            .eq(NewsUserRecord::getNewsId, id));
     }
 
     @Override
@@ -81,40 +120,54 @@ public class DictumCommentServiceImpl implements DictumCommentService {
         Set<String> uids = new HashSet<>();
         records.forEach(item -> uids.add(item.getCommentUid()));
         if (CollectionUtil.isNotEmpty(dictumCommentLevelIPage)) {
-            dictumCommentLevelIPage.forEach(item -> uids.add(item.getTargetUid()));
+            dictumCommentLevelIPage.forEach(item -> {
+                uids.add(item.getCommentUid());
+                uids.add(item.getTargetUid());
+            });
         }
 
         List<TripartiteUser> tripartiteUserVos = tripartiteUserMapper.selectList(new LambdaQueryWrapper<TripartiteUser>()
             .in(TripartiteUser::getUuid, uids));
-        Map<String, TripartiteUser> userMpa = tripartiteUserVos.stream().collect(Collectors.toMap(TripartiteUser::getUuid, item -> item));
+        Map<String, TripartiteUser> userMap = tripartiteUserVos.stream().collect(Collectors.toMap(TripartiteUser::getUuid, item -> item));
         Map<Long, List<DictumCommentVo>> levelmap = new HashMap<>();
         for (DictumCommentVo dictumCommentVo : dictumCommentLevelIPage) {
-            List<DictumCommentVo> dictumCommentVos = levelmap.get(dictumCommentVo.getParentId());
-            if (dictumCommentVos == null) dictumCommentVos = new ArrayList<>();
+            List<DictumCommentVo> dictumCommentVos = levelmap.computeIfAbsent(dictumCommentVo.getParentId(), k -> new ArrayList<>());
             //填充用户信息
-            TripartiteUser user = userMpa.get(dictumCommentVo.getCommentUid());
-            dictumCommentVo.setUsername(user.getUsername());
-            dictumCommentVo.setNickname(user.getNickname());
-            dictumCommentVo.setAvatar(user.getAvatar());
-            TripartiteUser targetUser = userMpa.get(dictumCommentVo.getTargetUid());
-            dictumCommentVo.setTargetUsername(targetUser.getUsername());
-            dictumCommentVo.setTargetNickname(targetUser.getNickname());
-            dictumCommentVo.setTargetAvatar(targetUser.getAvatar());
+            fillUserInfo(userMap.get(dictumCommentVo.getCommentUid()), dictumCommentVo, false);
+            fillUserInfo(userMap.get(dictumCommentVo.getTargetUid()), dictumCommentVo, true);
             dictumCommentVos.add(dictumCommentVo);
-            levelmap.put(dictumCommentVo.getParentId(), dictumCommentVos);
         }
         //组装数据
         for (DictumCommentVo record : records) {
-            TripartiteUser user = userMpa.get(record.getCommentUid());
-            record.setUsername(user.getUsername());
-            record.setNickname(user.getNickname());
-            record.setAvatar(user.getAvatar());
+            fillUserInfo(userMap.get(record.getCommentUid()), record, false);
             List<DictumCommentVo> dictumCommentVos = levelmap.get(record.getId());
             if (dictumCommentVos != null) {
                 record.setDictumCommentVoList(dictumCommentVos);
             }
         }
         return TableDataInfo.build(records);
+    }
+
+    /**
+     * 填充评论用户信息（用户可能已注销，需判空）
+     *
+     * @param user     用户信息
+     * @param vo       评论 VO
+     * @param isTarget true 填充目标用户字段，false 填充评论人字段
+     */
+    private void fillUserInfo(TripartiteUser user, DictumCommentVo vo, boolean isTarget) {
+        if (user == null) {
+            return;
+        }
+        if (isTarget) {
+            vo.setTargetUsername(user.getUsername());
+            vo.setTargetNickname(user.getNickname());
+            vo.setTargetAvatar(user.getAvatar());
+        } else {
+            vo.setUsername(user.getUsername());
+            vo.setNickname(user.getNickname());
+            vo.setAvatar(user.getAvatar());
+        }
     }
 
     /**

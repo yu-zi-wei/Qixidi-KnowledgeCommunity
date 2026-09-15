@@ -303,19 +303,50 @@ export interface DictumCommentVo {
   dictumCommentVoList?: DictumCommentVo[]  // 次级评论集合
 }
 
-// 新增随笔评论请求
-export interface DictumCommentBo {
+// 新增随笔评论请求（通用载荷 + 业务 id，供 ThreadedCommentSection 使用）
+export interface DictumCommentBo extends CommentSubmitPayload {
   dictumId: string | number     // 随笔 id（大整数，保持字符串避免精度丢失）
-  worksContent?: string         // 目标内容
-  uid: string                   // 随笔用户 id
-  parentId: string | number     // 父级评论 id（大整数）
-  commentGrade: number          // 评论等级：1=一级，2=二级，3=三级及以下
-  targetId: string | number     // 目标 id（大整数）
-  targetUid: string             // 目标用户 id
-  commentUid?: string           // 评论人 id（后端自动填充）
-  content: string               // 评论内容
-  type: number                  // 评论类型：1=名言，2=评论
-  status?: number               // 评论状态
+}
+
+// ==================== 通用评论区（通用组件 CommentSection 使用） ====================
+
+// 通用评论项（对齐后端评论 VO 结构，不含业务 id 字段）
+export interface CommentItem {
+  id: string | number            // 评论 id（大整数，保持字符串避免精度丢失）
+  uid?: string                   // 内容作者 id
+  parentId: string | number      // 父级评论 id（一级评论的 parentId = 业务内容 id）
+  commentGrade: number           // 评论等级：1=一级，2=二级，3=三级及以下
+  targetId: string | number      // 目标 id（被回复的评论 id或业务内容 id）
+  targetUid: string              // 目标用户 id
+  commentUid: string             // 评论人 id
+  content: string                // 评论内容
+  type: number                   // 评论类型：1=内容本体，2=回复评论
+  status: number                 // 评论状态：0=正常，1=已删除
+  createTime: string
+  updateTime?: string
+  username: string               // 评论用户名
+  nickname: string               // 评论用户昵称
+  avatar: string                 // 评论用户头像
+  targetUsername?: string        // 目标评论用户名
+  targetNickname?: string        // 目标评论用户昵称
+  targetAvatar?: string          // 目标评论用户头像
+  children?: CommentItem[]       // 次级评论集合
+}
+
+// 评论提交载荷（不含业务 id，由调用方补充 timeNotesId / dictumId 等字段）
+export interface CommentSubmitPayload {
+  uid: string                    // 内容作者 id
+  parentId: string | number      // 父级评论 id（一级评论 = 业务内容 id）
+  commentGrade: number           // 评论等级：1=一级，2=二级，3=三级及以下
+  targetId: string | number      // 目标 id
+  targetUid: string              // 目标用户 id
+  content: string                // 评论内容
+  type: number                   // 评论类型：1=内容本体，2=回复评论
+}
+
+// 时光小记评论新增请求
+export interface TimeNotesCommentBo extends CommentSubmitPayload {
+  timeNotesId: string | number   // 时光小记 id（大整数，保持字符串避免精度丢失）
 }
 
 // ==================== 点赞相关 ====================
@@ -552,6 +583,7 @@ export interface NewsUserSumVo {
   typeInfo: string       // 类型描述
   route: string          // 路由路径
   newsSum: number        // 未读数
+  subList?: NewsUserSumVo[]  // 子类型分项（仅"评论"携带：文章1/小记7/随笔6 各自未读数）
 }
 
 // 通用消息（点赞 type=2、关注 type=3）
@@ -578,6 +610,46 @@ export interface ArticleCommentNewsVo {
   uid: string
   parentId: number
   commentGrade: number       // 评论等级（1：一级，2：二级，3：三级及以下）
+  targetId: string
+  targetUid: string
+  commentUid: string
+  commentName: string
+  commentAvatar: string
+  content: string
+  type: number
+  beenRead: number
+  createTime: string
+}
+
+// 小记评论消息（评论消息内的"小记"二级 tab，后端 type=7）
+export interface TimeNotesCommentNewsVo {
+  id: number | string        // 评论 id（大整数时后端序列化为字符串）
+  newsId: number | string
+  timeNotesId: number | string  // 小记 id
+  title: string              // 小记标题
+  uid: string
+  parentId: number | string
+  commentGrade: number
+  targetId: string
+  targetUid: string
+  commentUid: string
+  commentName: string
+  commentAvatar: string
+  content: string
+  type: number
+  beenRead: number
+  createTime: string
+}
+
+// 随笔评论消息（评论消息内的"随笔"二级 tab，后端 type=6）
+export interface DictumCommentNewsVo {
+  id: number | string        // 评论 id（大整数时后端序列化为字符串）
+  newsId: number | string
+  dictumId: number | string  // 随笔 id
+  worksContent: string       // 随笔内容（随笔无标题，截断展示）
+  uid: string
+  parentId: number | string
+  commentGrade: number
   targetId: string
   targetUid: string
   commentUid: string

@@ -2,8 +2,8 @@
   <n-drawer v-model:show="visible" :width="630" placement="right" :mask-closable="false">
     <n-drawer-content :title="isEdit ? '编辑随笔' : '记随笔'" closable>
       <div class="drawer-content">
-        <!-- 随笔内容 -->
-        <div class="form-item">
+        <!-- 随笔内容（编辑模式：单条） -->
+        <div v-if="isEdit" class="form-item">
           <n-input
             v-model:value="form.content"
             type="textarea"
@@ -11,6 +11,37 @@
             :autosize="{ minRows: 5, maxRows: 10 }"
           />
         </div>
+
+        <!-- 随笔内容（新建模式：可一次发布多条） -->
+        <template v-else>
+          <div v-for="(item, index) in contents" :key="index" class="essay-content-item">
+            <n-input
+              v-model:value="contents[index]"
+              type="textarea"
+              placeholder="记录此刻的想法、灵感、感悟..."
+              :autosize="{ minRows: 4, maxRows: 10 }"
+            />
+            <span
+              v-if="contents.length > 1"
+              class="essay-content-remove"
+              title="删除"
+              @click="removeContent(index)"
+            >
+              <X class="icon-tiny" />
+            </span>
+          </div>
+          <n-button
+            v-if="contents.length < MAX_CONTENTS"
+            dashed
+            block
+            @click="addContent"
+          >
+            <template #icon>
+              <Plus class="icon-tiny" />
+            </template>
+            添加一条随笔
+          </n-button>
+        </template>
 
         <!-- 分类 -->
         <div class="form-item">
@@ -42,15 +73,23 @@
         <!-- 专辑 -->
         <div class="form-item">
           <label class="form-label">收录专辑</label>
-          <n-select
-            v-model:value="form.albumId"
-            :options="albumOptions"
-            placeholder="选择专辑"
-            clearable
-            filterable
-            :loading="albumsLoading"
-            @search="handleAlbumSearch"
-          />
+          <div class="essay-album-row">
+            <n-select
+              v-model:value="form.albumId"
+              :options="albumOptions"
+              placeholder="选择专辑"
+              clearable
+              filterable
+              :loading="albumsLoading"
+              @search="handleAlbumSearch"
+            />
+            <n-button class="essay-album-create" @click="showAlbumCreateDialog = true">
+              <template #icon>
+                <Plus class="icon-tiny" />
+              </template>
+              新建
+            </n-button>
+          </div>
         </div>
 
         <!-- 标签 -->
@@ -100,6 +139,12 @@
         </div>
       </div>
 
+      <!-- 快捷新建专辑弹窗 -->
+      <ReadingEssaysAlbumCreateDialog
+        v-model:show="showAlbumCreateDialog"
+        @success="handleAlbumCreated"
+      />
+
       <template #footer>
         <div class="drawer-footer">
           <n-button @click="handleClose">取消</n-button>
@@ -119,7 +164,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, reactive } from 'vue'
-import { Plus } from '@vicons/tabler'
+import { Plus, X } from '@vicons/tabler'
 import type { ReadingEssaysGroup, ReadingEssaysAlbum } from '~/types'
 import type { DictumForm } from '~/composables/useReadingEssaysApi'
 import type { EssayPreset } from '~/stores/essayDrawer'
@@ -160,6 +205,20 @@ const form = reactive<DictumForm>({
   picture: '',
   dictumState: 1
 })
+
+// 新建模式：多条随笔内容（与后端 /batch 接口上限保持一致）
+const MAX_CONTENTS = 10
+const contents = ref<string[]>([''])
+
+const addContent = () => {
+  if (contents.value.length < MAX_CONTENTS) {
+    contents.value.push('')
+  }
+}
+
+const removeContent = (index: number) => {
+  contents.value.splice(index, 1)
+}
 
 // 分类数据
 const groupsData = ref<{ rows: ReadingEssaysGroup[] } | null>(null)
@@ -227,6 +286,7 @@ watch([() => props.show, () => props.editId], async ([show, editId]) => {
     }
   } else if (show && !editId) {
     // 重置表单
+    contents.value = ['']
     Object.assign(form, {
       content: '',
       contentMd: '',
@@ -258,6 +318,14 @@ const loadAlbums = async (searchName?: string) => {
 
 const handleAlbumSearch = (query: string) => loadAlbums(query)
 
+// 专辑快捷创建（弹窗，创建成功后刷新列表并自动选中）
+const showAlbumCreateDialog = ref(false)
+
+const handleAlbumCreated = async (id: number) => {
+  await loadAlbums()
+  form.albumId = id
+}
+
 const handleSelectGroup = (groupId: number) => {
   form.groupId = form.groupId === groupId ? 0 : groupId
 }
@@ -278,7 +346,12 @@ const handleRemoveLabel = (index: number) => {
 }
 
 const validateForm = (): boolean => {
-  if (!form.content?.trim()) {
+  if (isEdit.value) {
+    if (!form.content?.trim()) {
+      message.error('请输入随笔内容')
+      return false
+    }
+  } else if (!contents.value.some(item => item.trim())) {
     message.error('请输入随笔内容')
     return false
   }
@@ -300,8 +373,19 @@ const handlePublish = async () => {
       await dictumApi.updateDictum({ ...form, id: props.editId })
       message.success('更新成功！')
     } else {
-      await dictumApi.createDictum(form)
-      message.success('发布成功！')
+      // 过滤空内容块，只发布非空随笔（元信息共享）
+      const list = contents.value.map(item => item.trim()).filter(Boolean)
+      await dictumApi.createDictumBatch({
+        contents: list,
+        groupId: form.groupId,
+        albumId: form.albumId,
+        label: form.label,
+        author: form.author,
+        worksName: form.worksName,
+        picture: form.picture,
+        dictumState: form.dictumState
+      })
+      message.success(`成功发布 ${list.length} 条随笔！`)
     }
     emit('success')
     handleClose()
@@ -348,6 +432,40 @@ const handleClose = () => {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
+}
+
+.essay-content-item {
+  position: relative;
+}
+
+.essay-content-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  color: var(--color-ink-muted);
+  background: var(--color-surface-dim);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.essay-content-remove:hover {
+  color: var(--color-danger);
+}
+
+.essay-album-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.essay-album-create {
+  flex-shrink: 0;
 }
 
 .required {

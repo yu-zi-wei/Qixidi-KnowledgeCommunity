@@ -60,6 +60,7 @@
         :markdown-it-config="markdownItConfig"
         class="markdown-editor"
         @onUploadImg="handleImageUpload"
+        @onFocus="editorFocusedOnce = true"
       />
       <template #fallback>
         <div class="editor-loading">
@@ -198,6 +199,23 @@ const ossApi = useOssApi()
 
 const mdEditorRef = ref<InstanceType<typeof MdEditor>>()
 const attachmentUploading = ref(false)
+// 编辑器是否放置过光标（决定插入位置：光标处 vs 末尾）
+const editorFocusedOnce = ref(false)
+
+/**
+ * 在光标位置插入内容；编辑器从未放置过光标时追加到末尾
+ * （md-editor-v3 的 insert 依赖 textarea 的 selection，从未聚焦时 selectionStart 为 0，会错误地插到开头）
+ */
+const insertToEditor = (text: string) => {
+  if (mdEditorRef.value && editorFocusedOnce.value) {
+    mdEditorRef.value.insert(() => ({
+      targetValue: text,
+      select: true
+    }))
+  } else {
+    content.value += text
+  }
+}
 
 const showVideoLinkDialog = ref(false)
 const videoUploading = ref(false)
@@ -275,14 +293,7 @@ const handleAttachmentUpload = async ({ file, onFinish, onError }: UploadSetCust
   attachmentUploading.value = true
   try {
     const url = await ossApi.uploadFile(file.file as File)
-    if (mdEditorRef.value) {
-      mdEditorRef.value.insert(() => ({
-        targetValue: url,
-        select: true
-      }))
-    } else {
-      content.value += url
-    }
+    insertToEditor(url)
     message.success('附件上传成功')
     onFinish()
   } catch (error) {
@@ -303,7 +314,7 @@ const handleVideoUpload = async ({ file, onFinish, onError }: UploadSetCustomReq
     const fileName = file.name || 'video.mp4'
     const videoSyntax = `\n[${fileName}](${url})\n`
 
-    content.value += videoSyntax
+    insertToEditor(videoSyntax)
     message.success('视频上传成功！')
     onFinish()
   } catch (error) {
@@ -347,7 +358,7 @@ const handleInsertVideoLink = () => {
     const displayTitle = title || extractedTitle
     const videoSyntax = `\n[${displayTitle}](${extractedUrl})\n`
 
-    content.value += videoSyntax
+    insertToEditor(videoSyntax)
 
     videoLinkForm.url = ''
     videoLinkForm.title = ''
@@ -370,7 +381,7 @@ const handleInsertVideoLink = () => {
   const displayTitle = title || '视频'
   const videoSyntax = `\n[${displayTitle}](${url})\n`
 
-  content.value += videoSyntax
+  insertToEditor(videoSyntax)
 
   videoLinkForm.url = ''
   videoLinkForm.title = ''
@@ -413,7 +424,7 @@ const handleGalleryInsert = () => {
   }
 
   const tableHtml = `\n<table>\n${rows.join('\n')}\n</table>\n`
-  content.value += tableHtml
+  insertToEditor(tableHtml)
   showGalleryDialog.value = false
   message.success(urls.length > 0
     ? `已插入 ${urls.length} 张图片（${cols}列排版）`

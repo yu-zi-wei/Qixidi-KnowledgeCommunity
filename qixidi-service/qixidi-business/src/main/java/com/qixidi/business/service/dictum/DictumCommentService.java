@@ -11,8 +11,19 @@ import com.light.core.core.page.TableDataInfo;
  */
 public interface DictumCommentService {
 
-    void add(DictumCommentBo bo);
+    /**
+     * 新增评论
+     *
+     * @param bo 评论信息
+     * @return 新增后的评论（含后端生成的 id，供前端落定乐观更新节点）
+     */
+    DictumCommentVo add(DictumCommentBo bo);
 
+    /**
+     * 删除评论（软删，仅本人可删）
+     *
+     * @param id 评论 id
+     */
     void delete(Long id);
 
     TableDataInfo<DictumCommentVo> commentList(Long id, PageQuery pageQuery);

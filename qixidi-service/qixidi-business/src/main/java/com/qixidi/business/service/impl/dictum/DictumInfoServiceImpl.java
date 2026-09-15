@@ -14,6 +14,7 @@ import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
@@ -191,6 +192,47 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
             bo.setId(add.getId());
         }
         return flag;
+    }
+
+    /**
+     * 批量新增名言信息（一次发布多条，分类/作者等元信息共享，单次最多 10 条）
+     *
+     * @param bo 批量名言信息
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean insertBatchByBo(DictumBatchBo bo) {
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
+        }
+        //过滤空白内容，全空视为无效请求
+        List<String> contents = bo.getContents().stream()
+                .filter(StringUtils::isNotBlank)
+                .map(String::trim)
+                .collect(Collectors.toList());
+        if (contents.isEmpty()) {
+            throw new ServiceException("随笔内容不能为空");
+        }
+        Date now = new Date();
+        String uid = LoginHelper.getTripartiteUuid();
+        List<DictumInfo> addList = contents.stream().map(content -> {
+            DictumInfo add = new DictumInfo();
+            add.setContent(content);
+            add.setGroupId(bo.getGroupId());
+            add.setAlbumId(bo.getAlbumId());
+            add.setLabel(bo.getLabel());
+            add.setAuthor(bo.getAuthor());
+            add.setWorksName(bo.getWorksName());
+            add.setPicture(bo.getPicture());
+            add.setDictumState(bo.getDictumState());
+            add.setUid(uid);
+            add.setCreateTime(now);
+            add.setUpdateTime(now);
+            return add;
+        }).collect(Collectors.toList());
+        return baseMapper.insertBatch(addList);
     }
 
     /**

@@ -12,6 +12,8 @@ interface WsMessage<T> {
 let ws: WebSocket | null = null
 const connected = ref(false)
 const unreadMap = ref<Record<number, number>>({})
+// 评论子类型分项未读（文章1/小记7/随笔6，来源 listSums 的 subList）
+const subUnreadMap = ref<Record<number, number>>({})
 
 // type=2 私信红点数据
 const privateUserList = ref<PrivateUserVo[]>([])
@@ -33,15 +35,18 @@ const totalUnread = computed(() =>
  */
 export const useWebSocket = () => {
   const getUnread = (type: number) => unreadMap.value[type] || 0
+  const getSubUnread = (type: number) => subUnreadMap.value[type] || 0
 
   // SSR 直接返回空壳
   if (import.meta.server) {
     return {
       connected: ref(false),
       unreadMap: ref<Record<number, number>>({}),
+      subUnreadMap: ref<Record<number, number>>({}),
       totalUnread: ref(0),
       privateUserList: ref<PrivateUserVo[]>([]),
       getUnread: (_type: number) => 0,
+      getSubUnread: (_type: number) => 0,
       onPrivateMessage: (_cb: (data: PrivateUserVo[]) => void) => {},
       offPrivateMessage: () => {}
     }
@@ -93,10 +98,15 @@ export const useWebSocket = () => {
           // type=1 站内通知汇总
           if (msg.type === 1 && Array.isArray(msg.data)) {
             const map: Record<number, number> = {}
+            const subMap: Record<number, number> = {}
             ;(msg.data as NewsUserSumVo[]).forEach((item) => {
               map[item.type] = item.newsSum
+              item.subList?.forEach((sub) => {
+                subMap[sub.type] = sub.newsSum
+              })
             })
             unreadMap.value = map
+            subUnreadMap.value = subMap
           }
 
           // type=2 私信红点（用户列表含未读数）
@@ -140,6 +150,7 @@ export const useWebSocket = () => {
     }
     connected.value = false
     unreadMap.value = {}
+    subUnreadMap.value = {}
     privateUserList.value = []
   }
 
@@ -192,9 +203,11 @@ export const useWebSocket = () => {
   return {
     connected,
     unreadMap,
+    subUnreadMap,
     totalUnread,
     privateUserList,
     getUnread,
+    getSubUnread,
     onPrivateMessage: registerOnPrivateMessage,
     offPrivateMessage: unregisterOnPrivateMessage
   }

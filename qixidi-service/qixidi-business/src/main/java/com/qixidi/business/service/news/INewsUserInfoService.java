@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
+import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
+import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,12 @@ public interface INewsUserInfoService {
 
     /** 评论消息列表 */
     TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery);
+
+    /** 小记评论消息列表 */
+    TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery);
+
+    /** 随笔评论消息列表 */
+    TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery);
 
     /** 点赞消息列表 */
     TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery);

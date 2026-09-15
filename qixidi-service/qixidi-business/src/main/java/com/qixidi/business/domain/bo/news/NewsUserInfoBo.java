@@ -55,11 +55,6 @@ public class NewsUserInfoBo extends BaseEntity {
      */
     private String worksParentUid;
     /**
-     * 消息目标类型（1：文章，2：评论，3：圈子，4：活动）
-     */
-    @NotNull(message = "目标消息类型不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Integer worksType;
-    /**
      * 消息目标内容
      */
     private String worksContent;
