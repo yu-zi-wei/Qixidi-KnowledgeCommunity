@@ -38,6 +38,19 @@ spring:
   config:
     # 读取 config.properties 配置文件用于填充 application-xx.yml
     import: "classpath:applicationConfig/${spring.profiles.active}/config.properties"
+  autoconfigure:
+    # 两处排除，各管一个坑：
+    # 1. Redisson 的 spring-data-redis 适配装配：Redisson 4.7.0 的 RedissonConnection#set 不识别
+    #    Expiration.keepTtl() 哨兵值（下发 PX -2000 → ERR invalid expire time in set，见 sa-token#970/#973）。
+    #    排除后 RedisTemplate/StringRedisTemplate（Sa-Token dao、CacheController）由 Boot 原生装配走
+    #    Lettuce 连接工厂（同一份 spring.data.redis 配置，lettuce-core 已在 light-core 显式引入）；
+    #    RedissonClient 为手动 @Bean（RedisConfig），RedisUtils/分布式缓存/分布式锁不受影响。
+    # 2. Sa-Token 官方 Redis dao：其 setStringAndKeepTTL 依赖 Redis 6.0+ 的 KEEPTTL 语法（本地 Redis 3.2
+    #    报 ERR syntax error），且自动装配无 @ConditionalOnMissingBean 守卫。排除后由
+    #    SaTokenDaoRedisCompat（qixidi-auth）接管，读 TTL + 正数 PX 写入，兼容所有 Redis 版本。
+    exclude:
+      - org.redisson.spring.starter.RedissonAutoConfigurationV4
+      - cn.dev33.satoken.dao.SaTokenDaoForRedisTemplate
   # 文件上传
   servlet:
     multipart:
@@ -120,6 +133,9 @@ sa-token:
   is-read-cookie: false
   # token前缀
   token-prefix: "Bearer"
+  # 允许 loginId 包含冒号：本项目 loginId 为 "userType:userId" 格式（LoginHelper.JOIN_CODE），
+  # Sa-Token 1.46 起默认禁止冒号，必须显式开启，否则登录报 "loginId 不能包含冒号(:)"
+  allow-login-id-colon: true
   # jwt秘钥
   jwt-secret-key: abcdefghijklmnopqrstuvwxyz
   # 是否输出操作日志

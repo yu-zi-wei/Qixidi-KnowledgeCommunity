@@ -3,7 +3,6 @@ package com.qixidi.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qixidi.business.domain.entity.FriendLink;
 import com.qixidi.business.domain.entity.ToSiteInfo;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
@@ -29,7 +28,8 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInfo> implements SiteInfoService {
+public class SiteInfoServiceImpl implements SiteInfoService {
+    private final ToSiteInfoMapper toSiteInfoMapper;
     private final FriendLinkMapper friendLinkMapper;
     private final StatDataInfoMapper statDataInfoMapper;
     private final LabelInfoMapper labelInfoMapper;
@@ -37,7 +37,7 @@ public class SiteInfoServiceImpl extends ServiceImpl<ToSiteInfoMapper, ToSiteInf
 
     @Override
     public ToSiteInfo info() {
-        return baseMapper.selectById(1);
+        return toSiteInfoMapper.selectById(1);
     }
 
     @Override

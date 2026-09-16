@@ -94,7 +94,8 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
                 (sqlSession, entity) -> {
                     MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
                     param.put(Constants.ENTITY, entity);
-                    sqlSession.update(sqlStatement, param);
+                    // MP 3.5.17 executeBatch 参数从 BiConsumer 变为 BiFunction，需返回影响行数
+                    return sqlSession.update(sqlStatement, param);
                 });
     }
 
@@ -115,7 +116,8 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
             MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
             param.put(Constants.ENTITY, entity);
             String sqlStatement = SqlHelper.getSqlStatement(this.currentMapperClass(), SqlMethod.UPDATE_BY_ID);
-            sqlSession.update(sqlStatement, param);
+            // MP 3.5.17 saveOrUpdateBatch 参数从 BiConsumer 变为 BiFunction，需返回影响行数
+            return sqlSession.update(sqlStatement, param);
         });
     }
 

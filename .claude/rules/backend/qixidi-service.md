@@ -19,11 +19,84 @@ globs: qixidi-service/**, qixidi-service\**
 
 ## 技术栈
 
-- **框架**：Spring Boot 3.3.2 + Java 17
-- **ORM**：MyBatis Plus 3.5.7
-- **数据库**：MySQL 8.0
-- **缓存**：Redis + Redisson
-- **认证**：Sa-Token 1.37.0
+- **框架**：Spring Boot 4.0.1 + Java 17（2026-09-16 从 3.3.2 升级）
+- **JSON**：Jackson 3（`tools.jackson`，Boot 4 默认）
+- **ORM**：MyBatis Plus 3.5.17（`mybatis-plus-spring-boot4-starter` + `mybatis-plus-jsqlparser`）
+- **数据库**：MySQL 8.0（druid-spring-boot-4-starter + dynamic-datasource-spring-boot4-starter）
+- **缓存**：Redis + Redisson 4.7（`redisson-spring-boot-starter` + 显式 `redisson-spring-cache`）
+- **认证**：Sa-Token 1.46.0（`sa-token-spring-boot4-starter`）
+- **AI**：Spring AI 2.0.1（spring-ai-bom）
+
+---
+
+## Spring Boot 4 / Jackson 3 升级要点（2026-09-16 沉淀）
+
+### Jackson 3（tools.jackson）
+
+| 变更点 | 说明 |
+|--------|------|
+| 定制入口 | `org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer`（`customize(JsonMapper.Builder)`），`spring.jackson.*` 仍走 `JacksonProperties`（同包） |
+| 实体注解 | `@JsonSerialize` 等 databind 注解 → `tools.jackson.databind.annotation`；`@JsonFormat/@JsonIgnore/@JsonInclude` 等**纯注解留在 `com.fasterxml.jackson.annotation`**（jackson-annotations 2.20，Jackson 2/3 共用，不要改） |
+| 自定义序列化器 | `JsonSerializer` → `ValueSerializer<T>`；`SerializerProvider` → `SerializationContext`；`NumberSerializer` 在 `tools.jackson.databind.ser.jdk` |
+| LocalDateTime | 内置于 `tools.jackson.databind.ext.javatime.ser/deser` |
+| 异常 | 读写**不再抛受检异常**，`JsonProcessingException` catch 和 `@SneakyThrows` 全部删除 |
+| 入口类 | `ObjectMapper` → `JsonMapper`（`JsonMapper.builder().build()`） |
+
+### MyBatis Plus 3.5.7 → 3.5.17
+
+- **`ServiceImpl`/`IService` 已删除**：Service 一律 `@RequiredArgsConstructor` + final mapper 构造注入（本来就是项目规范）；批量写用 `BaseMapperPlus.insertBatch`
+- **`SqlHelper.executeBatch/saveOrUpdateBatch` 回调从 `BiConsumer` 变 `BiFunction`**：lambda 必须 `return sqlSession.update(...)` 返回影响行数
+- jsqlparser 拆为独立构件 `mybatis-plus-jsqlparser`，必须显式引入（分页插件依赖）
+
+### Boot 4 / 组件版本坑
+
+| 坑 | 修复 |
+|----|------|
+| `spring-boot-starter-aop` 已移除 | 直接依赖 `aspectjweaver`（Boot 4 parent 不管版本，自 pin 1.9.25） |
+| `RedisProperties` 改名 `DataRedisProperties`（`org.springframework.boot.data.redis.autoconfigure`） | 改 import 即可，getter 不变 |
+| `CachingConfigurerSupport` 已移除（Spring 7） | 删除 extends |
+| Redisson 4.x 把 `CacheConfig/RedissonSpringCacheManager` 拆到 `redisson-spring-cache`，且 starter 里是 **optional** 不传递 | 显式加依赖 |
+| Sa-Token 1.46 `SaTokenListener`：`doLogin` 第 4 参 `SaLoginModel`→`SaLoginParameter`（`stp.parameter` 包）；`doRenewTimeout` 新增 tokenValue 参数 | 按接口新签名 override |
+| 启动器坐标全部换 boot4 版 | sa-token-spring-boot4-starter / mybatis-plus-spring-boot4-starter / druid-spring-boot-4-starter / dynamic-datasource-spring-boot4-starter |
+| **Boot 4 的 `spring-boot-starter-data-redis` 不再携带 lettuce-core** | starter 只剩 spring-boot-starter + spring-boot-data-redis 两构件；需要 Lettuce 客户端必须显式加 `io.lettuce:lettuce-core`（版本 Boot parent 管理） |
+| **Redisson 4.7.0 适配层不兼容 spring-data-redis 4.x 的 `Expiration.keepTtl()`** | 适配层把 KeepTtl 哨兵翻译成 `PX -2000` → `ERR invalid expire time in set`；已在 application.yml 排除 `RedissonAutoConfigurationV4`，spring-data-redis（Sa-Token dao、CacheController）走 Boot 原生 Lettuce 装配；RedissonClient 是手动 @Bean，RedisUtils/缓存/锁不受影响 |
+| logback 1.5.2x：`SizeAndTimeBasedFNATP` 废弃告警 | `logback.xml` 用 `SizeAndTimeBasedRollingPolicy` 合并时间+大小滚动（`FileNamePattern` 必须含 `%i`） |
+| Redisson 4.x：server config 上 `setPassword` 废弃告警 | 统一在 `Config.setPassword(...)` 设置 |
+| **父 pom 用 `${revision}`（CI-friendly）**：单独 `-pl 模块` 构建会解析不了兄弟模块的 `${revision}` 父版本（Bad Request 400） | 必须整仓构建：`mvn package`（不带 `-pl`） |
+
+---
+
+## Sa-Token 1.37 → 1.46 认证体系（2026-09-16 登录故障全案）
+
+### 版本变化坑（升级必踩清单）
+
+| # | 坑 | 修复 |
+|---|-----|------|
+| 1 | loginId 冒号校验：1.46 `checkLoginArgs` 默认禁止冒号，项目 loginId 为 `userType:userId` | `sa-token.allow-login-id-colon: true`（application.yml） |
+| 2 | `sa-token-redis-jackson` 变空壳聚合包（0 class） | 换坐标 `sa-token-redis-template`（dao）+ starter 自带 jackson3（序列化 SPI，先装者胜） |
+| 3 | SaSession 结构变化（tokenSignList→terminalList、TokenSign→SaTerminalInfo），1.37 写入的旧 JSON 带 `@class: SaSessionForJacksonCustomized`（类已删）→ `InvalidTypeIdException`（登录也炸：login 需读 Account-Session 挂终端） | **旧登录态不可恢复**，升级后清空 Redis 中 `Authorization:*` key（token-name 为前缀），全员重新登录；**每套环境的 Redis 独立清**（本地清了≠生产清了，发版后立即执行，无需重启应用） |
+| 4 | 官方 dao `setStringAndKeepTTL` 用 `SET KEEPTTL XX`：Redisson 适配层报 invalid expire time（见上表），Redis < 6.0 报 syntax error（本地 3.2） | 自定义 `SaTokenDaoRedisCompat`（qixidi-auth/config）：读 TTL → 正数 PX 写入，兼容所有版本；配套 exclude `cn.dev33.satoken.dao.SaTokenDaoForRedisTemplate`（官方装配无 @ConditionalOnMissingBean 守卫，不排除则 bean 歧义） |
+| 5 | jackson3 序列化器带**反序列化类型白名单**：SaSession dataMap 里的自定义类型读回报"无法反序列化的类型…注册到 JSON 全局类型白名单" | `qixidi-auth/src/main/resources/META-INF/satoken/sa-json-type.list` 列出类名（每行一个，# 注释；`SaJsonStrategy` 初始化前经 ClassLoader 读取）。新增存入 session 的类型必须同步登记 |
+
+### 认证链路关键位置
+
+- loginId 格式：`{userType}:{userId}`（`LoginHelper.JOIN_CODE`），前台 userType=`tripartite_user`
+- 登录：POST `/oauth/frontDesk/login`（username/password Base64）→ SM3 摘要比对 → `LoginHelper.tripartiteLoginByDevice` → `StpUtil.login`
+- session 自定义类型入口：`LoginHelper.setLoginUser/setTripartiteUser`（往 token-session 塞 LoginUser/TripartiteUser）
+- Redis key 前缀 = token-name（`Authorization:`）；本机 Redis db1 与 guanmai 项目共用，**只能动 `Authorization:*`，绝不能动 `token:*`**
+
+### 诊断方法论（本案沉淀）
+
+- 三层故障逐层显形：冒号校验（配置）→ 旧数据反序列化（清库）→ KEEPTTL 兼容（环境）——**每修一层，错误位置会后移一层，别把新报错当回归**
+- Redis 报错先看命令真身：`invalid expire time`（PX 负数）≠ `syntax error`（语法不支持）≠ 反序列化异常（白名单/类型缺失），三者根因完全不同
+- 用 `javap -c` 反汇编依赖 jar 确认装配条件（如官方 dao 无 @ConditionalOnMissingBean）与命令构造（KEEPTTL/XX），不猜
+
+### 升级方法论
+
+1. **用 `javap`/`unzip -l` 查本地仓库 jar 确认 API 签名**，不猜（如 `javap -cp xxx.jar 类名`），一遍过
+2. **最终验证必须 `mvn clean compile`**：增量编译会复用旧 target class 造成"SUCCESS 假阳性"（light-redission 曾带旧包名编译"通过"）
+3. 报错信息里的"候选方法"列表就是权威签名来源
+4. 冒烟验证链路：`/white/site/info`（MySQL+Jackson3 格式化）、`/white/site/friend-link`（MP 分页）、未登录访问受保护接口（Sa-Token 拦截）
 
 ---
 
@@ -122,9 +195,11 @@ mapper.lambdaUpdate()
 
 ### Mapper 继承
 
+三泛型 `<M, T, V>`：M=Mapper 自身、T=实体、V=默认 VO（MP 3.5.17 起 `ServiceImpl/IService` 已删除，勿再引入）：
+
 ```java
 @Mapper
-public interface DataMapper extends BaseMapperPlus<DataEntity> {
+public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataVo> {
     // 自定义方法
 }
 ```

@@ -27,10 +27,7 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
+        <!-- spring-boot-starter-aop：Boot 4 已移除该 starter，AOP 由 starter-web(传递 spring-aop) + aspectjweaver 覆盖 -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -119,7 +116,7 @@
         <!--        DB  -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+            <artifactId>dynamic-datasource-spring-boot4-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -129,12 +126,12 @@
 
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.jsqlparser</groupId>
-            <artifactId>jsqlparser</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
 
         <dependency>
@@ -143,23 +140,33 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-3-starter</artifactId>
+            <artifactId>druid-spring-boot-4-starter</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot3-starter</artifactId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
         </dependency>
 
+        <!-- Sa-Token 1.46 起 sa-token-redis-jackson 为空壳聚合包；Redis 持久化 = redis-template(dao) + starter 自带的 jackson3(序列化 SPI) -->
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-redis-jackson</artifactId>
+            <artifactId>sa-token-redis-template</artifactId>
+        </dependency>
+
+        <!-- Boot 4 的 spring-boot-starter-data-redis 不再携带 Lettuce 客户端（版本由 Boot parent 管理）。
+             Redisson 的 RedisConnectionFactory 自动装配已在 application.yml 排除（其 set 命令不兼容
+             Expiration.keepTtl，Sa-Token 1.46 会话更新必报 ERR invalid expire time in set），
+             spring-data-redis（Sa-Token dao、CacheController）由此走 Lettuce 连接工厂 -->
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
         </dependency>
 
         <dependency>

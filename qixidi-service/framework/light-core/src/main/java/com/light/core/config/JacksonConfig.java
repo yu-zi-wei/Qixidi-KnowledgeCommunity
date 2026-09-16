@@ -1,17 +1,16 @@
 package com.light.core.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.light.core.jackson.BigNumberSerializer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
+import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import tools.jackson.databind.ext.javatime.deser.LocalDateTimeDeserializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateTimeSerializer;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -20,31 +19,34 @@ import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 /**
- * jackson 配置
+ * jackson 配置（Jackson 3 / tools.jackson）
+ * 通过官方 JsonMapperBuilderCustomizer 挂到自动装配的 JsonMapper 上，spring.jackson.* 配置继续生效
  *
  * @author Lion Li
  */
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 public class JacksonConfig {
 
-    @Primary
+    private final JacksonProperties jacksonProperties;
+
     @Bean
-    public ObjectMapper getObjectMapper(Jackson2ObjectMapperBuilder builder, JacksonProperties jacksonProperties) {
-        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
-        // 全局配置序列化返回 JSON 处理
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
-        simpleModule.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
-        simpleModule.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
-        simpleModule.addSerializer(BigDecimal.class, ToStringSerializer.instance);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(jacksonProperties.getDateFormat());
-        simpleModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(formatter));
-        simpleModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
-        objectMapper.registerModule(simpleModule);
-        objectMapper.setTimeZone(TimeZone.getDefault());
-        log.info("初始化 jackson 配置");
-        return objectMapper;
+    public JsonMapperBuilderCustomizer bigNumberJsonMapperCustomizer() {
+        return builder -> {
+            // 全局配置序列化返回 JSON 处理
+            SimpleModule simpleModule = new SimpleModule();
+            simpleModule.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
+            simpleModule.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
+            simpleModule.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
+            simpleModule.addSerializer(BigDecimal.class, ToStringSerializer.instance);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(jacksonProperties.getDateFormat());
+            simpleModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(formatter));
+            simpleModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
+            builder.addModule(simpleModule);
+            builder.defaultTimeZone(TimeZone.getDefault());
+            log.info("初始化 jackson 配置");
+        };
     }
 
 }

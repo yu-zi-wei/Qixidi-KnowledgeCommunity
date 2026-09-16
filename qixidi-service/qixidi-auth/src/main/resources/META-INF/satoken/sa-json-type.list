@@ -1,0 +1,6 @@
+# Sa-Token 1.46 jackson3 序列化器的反序列化类型白名单
+# （SaJsonStrategy 通过 ClassLoader 读取本文件，在初始化前合并进 allowType 校验器；
+#   缺失时读回 SaSession 报"无法反序列化的类型...请先将其注册到 JSON 全局类型白名单"）
+# 本项目会写入 SaSession 的自定义类型（LoginHelper.setLoginUser / setTripartiteUser）：
+com.qixidi.auth.domain.model.LoginUser
+com.qixidi.auth.domain.entity.TripartiteUser

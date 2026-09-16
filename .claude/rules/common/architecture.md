@@ -18,7 +18,7 @@
 |------|----------|
 | 前端 | Nuxt 3 + Vue 3 + Naive UI |
 | 状态管理 | Pinia |
-| 后端 | Spring Boot 3.3 + Java 17 |
+| 后端 | Spring Boot 4.0 + Java 17 |
 | ORM | MyBatis Plus |
 | 认证 | Sa-Token |
 | 缓存 | Redis |

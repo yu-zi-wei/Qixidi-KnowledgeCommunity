@@ -1,7 +1,7 @@
 package com.light.core.annotation;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import com.light.core.enums.SensitiveStrategy;
 import com.light.core.jackson.SensitiveJsonSerializer;
 

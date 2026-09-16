@@ -1,30 +1,27 @@
 package com.light.core.jackson;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.light.core.annotation.Sensitive;
 import com.light.core.core.service.SensitiveService;
 import com.light.core.enums.SensitiveStrategy;
 import com.light.core.utils.spring.SpringUtils;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.BeanProperty;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
- * 数据脱敏json序列化工具
+ * 数据脱敏json序列化工具（Jackson 3：ContextualSerializer 能力并入 ValueSerializer）
  *
  * @author Yjoioooo
  */
-public class SensitiveJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
+public class SensitiveJsonSerializer extends ValueSerializer<String> {
 
     private SensitiveStrategy strategy;
 
     @Override
-    public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(String value, JsonGenerator gen, SerializationContext serializers) {
         SensitiveService sensitiveService = SpringUtils.getBean(SensitiveService.class);
         if (sensitiveService.isSensitive()) {
             gen.writeString(value);
@@ -35,12 +32,12 @@ public class SensitiveJsonSerializer extends JsonSerializer<String> implements C
     }
 
     @Override
-    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
+    public ValueSerializer<?> createContextual(SerializationContext ctxt, BeanProperty property) {
         Sensitive annotation = property.getAnnotation(Sensitive.class);
         if (Objects.nonNull(annotation) && Objects.equals(String.class, property.getType().getRawClass())) {
             this.strategy = annotation.strategy();
             return this;
         }
-        return prov.findValueSerializer(property.getType(), property);
+        return ctxt.findValueSerializer(property.getType());
     }
 }

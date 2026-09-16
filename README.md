@@ -13,7 +13,7 @@
 
 1.0 版本是基于 RuoYi 二次开发构建的，随着功能不断迭代，早期架构的局限逐渐暴露：代码耦合度高、难以维护、前端技术栈老化。与其在一个摇摇欲坠的地基上反复修补，不如推倒重来。
 
-于是 2.0 诞生了。这不是一次简单的升级，而是从零开始的全面重构——**后端 Spring Boot 3 + Java 17，前端 Nuxt 3 + Vue 3 + Naive
+于是 2.0 诞生了。这不是一次简单的升级，而是从零开始的全面重构——**后端 Spring Boot 4 + Java 17，前端 Nuxt 3 + Vue 3 + Naive
 UI，全程 AI 驱动开发**。
 
 > **1.0 版本**已归档至 [main-v1.0](https://gitee.com/yu-zi-wei/qixidi/tree/main-v1.0/) 分支，不再维护（bug 除外）。
@@ -35,7 +35,7 @@ UI，全程 AI 驱动开发**。
 ```text
 qixidi/
 │
-└── qixidi-service  # 项目后端plus版本（基于SpringBoot-v3 + jdk17 完成）
+└── qixidi-service  # 项目后端plus版本（基于SpringBoot-v4 + jdk17 完成）
     │
     ├── qixidi-startup # 后台启动模块
     │
@@ -91,10 +91,10 @@ qixidi/
 
 | 名称               | 版本     | 说明     |
 |------------------|--------|--------|
-| Spring Boot      | 3.3.2  | 基础框架   |
-| Sa-Token         | 1.37.0 | 认证框架   |
-| MyBatis-Plus     | 3.5.7  | ORM 框架 |
-| Spring WebSocket | 3.4.2  | 长连接    |
+| Spring Boot      | 4.0.1  | 基础框架   |
+| Sa-Token         | 1.46.0 | 认证框架   |
+| MyBatis-Plus     | 3.5.17 | ORM 框架 |
+| Spring WebSocket | 7.0.2  | 长连接    |
 | Aliyun OSS       | 3.14.0 | 云存储    |
 | MinIO            | 8.3.8  | 对象存储   |
 | MySQL            | 8.0    | 数据库    |

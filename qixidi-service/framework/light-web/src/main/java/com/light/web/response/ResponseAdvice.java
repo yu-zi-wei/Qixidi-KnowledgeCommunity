@@ -1,10 +1,8 @@
 package com.light.web.response;
 
 import cn.hutool.core.text.AntPathMatcher;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.light.core.core.domain.R;
 import com.light.core.core.page.TableDataInfo;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -12,6 +10,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 接口统一格式返回
@@ -19,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @ControllerAdvice(basePackages = "com.qixidi")
 public class ResponseAdvice implements ResponseBodyAdvice {
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     // 用于匹配路径的 Ant 风格路径匹配器
     private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
@@ -30,7 +29,6 @@ public class ResponseAdvice implements ResponseBodyAdvice {
         return true;
     }
 
-    @SneakyThrows
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         //获取当前请求的路径
@@ -46,7 +44,7 @@ public class ResponseAdvice implements ResponseBodyAdvice {
             return body;
         } else if (body instanceof String) {
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-            return objectMapper.writeValueAsString(R.ok(body));
+            return jsonMapper.writeValueAsString(R.ok(body));
         }
         return R.ok(body);
     }

@@ -11,9 +11,8 @@ import org.redisson.config.Config;
 import org.redisson.spring.cache.CacheConfig;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisProperties;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +31,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Configuration
 @EnableCaching
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig {
 
     private static final String REDIS_PROTOCOL_PREFIX = "redis://";
 
     @Autowired
-    private RedisProperties redisProperties;
+    private DataRedisProperties redisProperties;
 
     @Autowired
     private RedissonProperties redissonProperties;
@@ -47,6 +46,10 @@ public class RedisConfig extends CachingConfigurerSupport {
     public RedissonClient redisson() {
         String prefix = REDIS_PROTOCOL_PREFIX;
         Config config = new Config();
+        // Redisson 4.x：密码统一在 Config 上设置（server config 上的 setPassword 已废弃）
+        if (StringUtils.isNotBlank(redisProperties.getPassword())) {
+            config.setPassword(redisProperties.getPassword());
+        }
         config.setThreads(redissonProperties.getThreads())
                 .setNettyThreads(redissonProperties.getNettyThreads())
                 .setCodec(JsonJacksonCodec.INSTANCE);
@@ -58,7 +61,6 @@ public class RedisConfig extends CachingConfigurerSupport {
                     .setAddress(prefix + redisProperties.getHost() + ":" + redisProperties.getPort())
                     .setConnectTimeout(((Long) redisProperties.getTimeout().toMillis()).intValue())
                     .setDatabase(redisProperties.getDatabase())
-                    .setPassword(StringUtils.isNotBlank(redisProperties.getPassword()) ? redisProperties.getPassword() : null)
                     .setTimeout(singleServerConfig.getTimeout())
                     .setClientName(singleServerConfig.getClientName())
                     .setIdleConnectionTimeout(singleServerConfig.getIdleConnectionTimeout())
@@ -78,7 +80,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 
             config.useClusterServers()
                     .setConnectTimeout(((Long) redisProperties.getTimeout().toMillis()).intValue())
-                    .setPassword(StringUtils.isNotBlank(redisProperties.getPassword()) ? redisProperties.getPassword() : null)
                     .setTimeout(clusterServersConfig.getTimeout())
                     .setClientName(clusterServersConfig.getClientName())
                     .setIdleConnectionTimeout(clusterServersConfig.getIdleConnectionTimeout())

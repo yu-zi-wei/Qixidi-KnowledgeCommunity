@@ -1,13 +1,12 @@
 package com.qixidi.ai.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qixidi.ai.config.ChatStrategyMap;
 import jakarta.annotation.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @author zi-wei
@@ -21,7 +20,7 @@ public class AIChatController {
     private ChatStrategyMap executeStrategy;
 
     @Resource
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     /**
      * 流式对话接口（支持图片）
@@ -57,8 +56,8 @@ public class AIChatController {
                            @RequestParam(value = "conversationId", defaultValue = "1") String conversationId,
                            @RequestParam(value = "modelType", defaultValue = "openai") String modelType,
                            @RequestParam(value = "openReasoner", defaultValue = "false") Boolean openReasoner,
-                           @RequestPart(value = "image", required = false) MultipartFile image) throws JsonProcessingException {
+                           @RequestPart(value = "image", required = false) MultipartFile image) {
         String result = executeStrategy.executeStrategySync(modelType, message, conversationId, openReasoner, image);
-        return objectMapper.readValue(result, Object.class);
+        return jsonMapper.readValue(result, Object.class);
     }
 }

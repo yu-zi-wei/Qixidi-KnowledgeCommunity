@@ -2,7 +2,7 @@ package com.qixidi.auth.listener;
 
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.listener.SaTokenListener;
-import cn.dev33.satoken.stp.SaLoginModel;
+import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import com.light.core.constant.Constants;
 import com.light.redission.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ public class UserActionListener implements SaTokenListener {
      * 每次登录时触发
      */
     @Override
-    public void doLogin(String loginType, Object loginId, String s1, SaLoginModel saLoginModel) {
+    public void doLogin(String loginType, Object loginId, String s1, SaLoginParameter saLoginParameter) {
         log.info("用户登录：【{}】【{}】【{}】", loginType, loginId, s1);
-        log.info("saLoginModel:{}", saLoginModel);
+        log.info("saLoginParameter:{}", saLoginParameter);
     }
 
     /**
@@ -107,7 +107,7 @@ public class UserActionListener implements SaTokenListener {
     }
 
     @Override
-    public void doRenewTimeout(String s, Object o, long l) {
+    public void doRenewTimeout(String s, Object o, String s1, long l) {
 
     }
 

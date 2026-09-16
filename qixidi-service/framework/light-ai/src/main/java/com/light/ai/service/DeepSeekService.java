@@ -2,8 +2,6 @@ package com.light.ai.service;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.light.ai.config.DeepSeekConfig;
 import com.light.webSocket.utils.WebSocketUtils;
 import jakarta.websocket.Session;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class DeepSeekService {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper jsonMapper = JsonMapper.builder().build();
     private final DeepSeekConfig deepSeekConfig;
 
     /**
@@ -56,19 +55,14 @@ public class DeepSeekService {
                 .retrieve()
                 .bodyToMono(String.class);
         String block = authorization.block();
-        try {
-            Map<String, Object> jsonObj = objectMapper.readValue(block, Map.class);
-            List<Object> choicesList = (List<Object>) jsonObj.get("choices");
-            Object choicesObj = choicesList.get(0);
-            JSONObject entries = JSONUtil.parseObj(choicesObj);
-            Object data = entries.get("message");
-            JSONObject dataJson = JSONUtil.parseObj(data);
-            reasoningContent = dataJson.get("reasoning_content");//获取推理内容
-            content = dataJson.get("content");//获取推理内容
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        Map<String, Object> jsonObj = jsonMapper.readValue(block, Map.class);
+        List<Object> choicesList = (List<Object>) jsonObj.get("choices");
+        Object choicesObj = choicesList.get(0);
+        JSONObject entries = JSONUtil.parseObj(choicesObj);
+        Object data = entries.get("message");
+        JSONObject dataJson = JSONUtil.parseObj(data);
+        reasoningContent = dataJson.get("reasoning_content");//获取推理内容
+        content = dataJson.get("content");//获取推理内容
         return content;
     }
 
@@ -101,25 +95,21 @@ public class DeepSeekService {
 
         authorization.subscribe(
                 chunk -> {
-                    try {
-                        if (!chunk.equals("[DONE]")) {
-                            //数据清洗
-                            Map<String, Object> jsonObj = objectMapper.readValue(chunk, Map.class);
-                            List<Object> choicesList = (List<Object>) jsonObj.get("choices");
-                            Object choicesObj = choicesList.get(0);
-                            JSONObject entries = JSONUtil.parseObj(choicesObj);
-                            Object data = entries.get("delta");
-                            JSONObject dataJson = JSONUtil.parseObj(data);
-                            Object reasoningContent = dataJson.get("reasoning_content");//深度思考内容
-                            if (reasoningContent != null) {
-                                WebSocketUtils.sendMessage(session, reasoningContent);//webSocket消息推送
-                            } else {
-                                Object content = dataJson.get("content");//最终回答内容
-                                WebSocketUtils.sendMessage(session, content);//webSocket消息推送
-                            }
+                    if (!chunk.equals("[DONE]")) {
+                        //数据清洗
+                        Map<String, Object> jsonObj = jsonMapper.readValue(chunk, Map.class);
+                        List<Object> choicesList = (List<Object>) jsonObj.get("choices");
+                        Object choicesObj = choicesList.get(0);
+                        JSONObject entries = JSONUtil.parseObj(choicesObj);
+                        Object data = entries.get("delta");
+                        JSONObject dataJson = JSONUtil.parseObj(data);
+                        Object reasoningContent = dataJson.get("reasoning_content");//深度思考内容
+                        if (reasoningContent != null) {
+                            WebSocketUtils.sendMessage(session, reasoningContent);//webSocket消息推送
+                        } else {
+                            Object content = dataJson.get("content");//最终回答内容
+                            WebSocketUtils.sendMessage(session, content);//webSocket消息推送
                         }
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
                     }
                 },
                 error -> {
