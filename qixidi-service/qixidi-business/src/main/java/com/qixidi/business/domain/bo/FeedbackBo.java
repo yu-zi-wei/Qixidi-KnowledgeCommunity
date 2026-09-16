@@ -38,13 +38,13 @@ public class FeedbackBo extends BaseEntity {
     /**
      * 反馈内容
      */
-    private String FeedbackContent;
+    private String feedbackContent;
 
     /**
      * 反馈标题
      */
     @NotBlank(message = "标题不能为空", groups = {AddGroup.class, EditGroup.class})
-    private String FeedbackTitle;
+    private String feedbackTitle;
 
     /**
      * 状态

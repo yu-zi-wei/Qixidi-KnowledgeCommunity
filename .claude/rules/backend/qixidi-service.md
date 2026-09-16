@@ -41,6 +41,7 @@ globs: qixidi-service/**, qixidi-service\**
 | LocalDateTime | 内置于 `tools.jackson.databind.ext.javatime.ser/deser` |
 | 异常 | 读写**不再抛受检异常**，`JsonProcessingException` catch 和 `@SneakyThrows` 全部删除 |
 | 入口类 | `ObjectMapper` → `JsonMapper`（`JsonMapper.builder().build()`） |
+| **属性名推导变了**：字段首字母大写（如 `LevelList`/`FeedbackContent`，历史遗留坏命名）时，Jackson 2 按 getter 推导输出小写驼峰 `levelList`，**Jackson 3 直接用字段原名输出 `LevelList`** → 前端读小写属性拿 undefined（导航栏下拉消失的根因，2026-09-16 生产实例）。机制（实验证实）：getter 推导规则两代相同；变的是**字段↔访问器链接**——Jackson 2 弱链接不合并大小写不一致的 private 字段（等于替坏命名兜底），Jackson 3 按忽略大小写合并且属性名取字段名 | 实体字段一律小写驼峰；升级时全局扫 `private\s+[\w.<>\[\],\s]+\s+[A-Z]\w*\s*;` 排雷（static/final 常量除外）。Lombok getter/setter 名不随字段首字母大小写变化，改名对 Java 调用点零影响；MP 驼峰转列名 `i>0` 才加下划线，`FeedbackContent`/`feedbackContent` 同映射 `feedback_content`，Entity 改名安全 |
 
 ### MyBatis Plus 3.5.7 → 3.5.17
 

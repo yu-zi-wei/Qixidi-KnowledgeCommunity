@@ -84,5 +84,5 @@ public class ToNavigationVo {
     /**
      * 二级菜单列表
      */
-    private List<ToNavigationVo> LevelList;
+    private List<ToNavigationVo> levelList;
 }

@@ -41,12 +41,12 @@ public class FeedbackVo {
      * 反馈内容
      */
     @ExcelProperty(value = "反馈内容")
-    private String FeedbackContent;
+    private String feedbackContent;
 
     /**
      * 反馈标题
      */
-    private String FeedbackTitle;
+    private String feedbackTitle;
 
     /**
      * 状态
