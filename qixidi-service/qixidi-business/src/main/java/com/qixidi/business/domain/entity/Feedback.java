@@ -36,7 +36,7 @@ public class Feedback {
     /**
      * 反馈内容
      */
-    private String FeedbackContent;
+    private String feedbackContent;
     /**
      * 反馈时间
      */
@@ -45,7 +45,7 @@ public class Feedback {
     /**
      * 反馈标题
      */
-    private String FeedbackTitle;
+    private String feedbackTitle;
 
     /**
      * 状态（1-待处理，2-进行中，3-已完成，4-已关闭）
