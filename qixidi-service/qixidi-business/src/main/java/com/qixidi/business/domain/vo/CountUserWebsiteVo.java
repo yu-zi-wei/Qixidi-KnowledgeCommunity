@@ -74,6 +74,10 @@ public class CountUserWebsiteVo {
      */
     private int timeNotesCount;
     /**
+     * 总浏览量（已发布文章浏览次数合计）
+     */
+    private int viewCount;
+    /**
      * 更新时间
      */
     private Date updateTime = new Date();

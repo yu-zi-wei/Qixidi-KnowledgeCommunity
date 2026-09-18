@@ -79,6 +79,8 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     List<CountUserWebsiteVo> selectArticleCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 
+    List<CountUserWebsiteVo> selectViewCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
+
     @Select("select audit_state,is_public from b_article_information where id=#{id} and state=0")
     ArticleInformationVo selectAuditStatus(@Param("id") Long id);
 

@@ -99,6 +99,12 @@ public class UserCountQueryHelper {
             CountUserWebsiteVo::getUuid, CountUserWebsiteVo::getFabulousCount);
     }
 
+    public Map<String, Integer> viewCount(Collection<String> uuids) {
+        if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
+        return toMap(articleMapper.selectViewCountByUserIds(uuids),
+            CountUserWebsiteVo::getUuid, CountUserWebsiteVo::getViewCount);
+    }
+
     public Map<String, CountUserWebsiteVo> allCounts(Collection<String> uuids) {
         if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
         Map<String, CountUserWebsiteVo> result = new HashMap<>();
@@ -114,6 +120,8 @@ public class UserCountQueryHelper {
         merge(result, albumCount(uuids), CountUserWebsiteVo::setAlbumCount);
         merge(result, dictumCount(uuids), CountUserWebsiteVo::setDictumCount);
         merge(result, timeNotesCount(uuids), CountUserWebsiteVo::setTimeNotesCount);
+        merge(result, fabulousCount(uuids), CountUserWebsiteVo::setFabulousCount);
+        merge(result, viewCount(uuids), CountUserWebsiteVo::setViewCount);
         return result;
     }
 

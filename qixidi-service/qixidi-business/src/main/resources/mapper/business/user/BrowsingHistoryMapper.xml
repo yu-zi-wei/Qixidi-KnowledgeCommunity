@@ -33,4 +33,15 @@
         UPDATE update_time =
         VALUES (update_time);
     </insert>
+
+    <!-- 按天聚合我的内容浏览趋势：表按（uid+target）去重、重复访问仅刷新 update_time，故按 update_time 聚合 -->
+    <select id="selectBrowseTrend" resultType="com.light.core.core.domain.vo.CensusVo">
+        SELECT DATE_FORMAT(update_time, '%Y-%m-%d') as dateTimes, COUNT(*) as censusSum
+        FROM b_browsing_history
+        WHERE target_uid = #{targetUid}
+          and target_type = 1
+          and update_time <![CDATA[ >= ]]> #{time}
+        GROUP BY DATE_FORMAT(update_time, '%Y-%m-%d')
+        ORDER BY DATE_FORMAT(update_time, '%Y-%m-%d')
+    </select>
 </mapper>

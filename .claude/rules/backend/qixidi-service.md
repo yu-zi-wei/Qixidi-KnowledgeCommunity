@@ -205,6 +205,13 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 }
 ```
 
+### 数据模型坑（统计/聚合前必读）
+
+- **b_browsing_history 按（uid+target）去重合并**：`insertOrUpdates` 用 `ON DUPLICATE KEY UPDATE update_time`，重复浏览不新增行、只刷新 update_time。**按天做浏览趋势必须聚合 `update_time`**（聚合 create_time 会漏掉所有回访）；代价是"同一访问者同一天多次浏览同一内容只计 1 次"
+- **用户统计走 `UserCountQueryHelper`**（service/count）：新增统计字段时三处同步——`CountUserWebsiteVo` 加字段 → 对应 Mapper 加 `selectXxxCountByUserIds`（XML，resultType=CountUserWebsiteVo）→ helper 加方法**并在 `allCounts()` 里 merge**（fabulousCount 曾漏 merge，前端永远显示 0）
+- **`CensusVo` 是通用时间序列货币**（dateTimes/censusSum/title），趋势类接口直接复用，title 填序列名（如 fabulous/comment）
+- **本机 `mysql.exe` CLI 会挂起**（无论 -p 还是 MYSQL_PWD，均卡到超时）：验证 SQL 用"`mvn clean compile` + 启动成功"代替——MyBatis 在启动期绑定 XML 方法签名，`Invalid bound statement` 会启动即炸，起得来就是绑定通过；SQL 列名用现有 XML/entity 交叉核对
+
 ### 批量插入
 
 **不继承 `ServiceImpl` 的 Service（`@RequiredArgsConstructor` + final mapper 风格）没有 `saveBatch`**，用 `BaseMapperPlus` 自带的 `insertBatch`：

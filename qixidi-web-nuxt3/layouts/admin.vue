@@ -243,7 +243,10 @@ const handleApply = () => {
   flex: 1;
   min-width: 0;
   min-height: 0;
-  overflow: hidden;
+  /* 内容区整体可滚：自管滚动的页面（height:100%+内部滚动）不受影响，
+     文档流页面（反馈、工作台）超出视口时不再被裁掉 */
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }

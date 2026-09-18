@@ -1,6 +1,7 @@
 package com.qixidi.business.service.news;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
@@ -80,6 +81,9 @@ public interface INewsUserInfoService {
     boolean newsRead(NewsUserRecord bo);
 
     List<NewsUserSumVo> listInfo();
+
+    /** 近30天互动趋势（获赞/评论按天聚合，title 区分序列） */
+    List<CensusVo> interactTrend();
 
 }
 

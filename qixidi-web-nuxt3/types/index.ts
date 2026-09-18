@@ -536,12 +536,20 @@ export interface UserCensusCount {
   dictumCount: number       // 阅读随笔
   timeNotesCount: number    // 时光小记数
   fabulousCount: number     // 点赞数
+  viewCount: number         // 总浏览量（已发布文章）
 }
 
 // 用户投稿记录项（接口返回格式）
 export interface UserSubmissionItem {
   dateTimes: string         // 日期
   censusSum: number         // 投稿数量
+}
+
+// 趋势数据点（浏览/互动趋势接口返回格式）
+export interface CensusTrendItem {
+  dateTimes: string         // 日期（YYYY-MM-DD）
+  censusSum: number         // 当日数量
+  title?: string            // 互动趋势序列名：fabulous=获赞 comment=评论
 }
 
 // 用户投稿记录（日期 -> 数量映射，用于图表组件）
@@ -704,4 +712,45 @@ export interface UserSimpleInfoVo {
   nickname: string
   avatar: string
   occupation: string
+}
+
+// ==================== 意见反馈 ====================
+
+// 反馈状态（1-待处理，2-进行中，3-已完成，4-已关闭）
+export const FeedbackStatus = {
+  TO_BE_PROCESSED: 1,
+  UNDER_WAY: 2,
+  COMPLETED: 3,
+  CLOSED: 4
+} as const
+
+// 反馈状态选项（下拉/筛选用）
+export const FeedbackStatusOptions = [
+  { label: '待处理', value: FeedbackStatus.TO_BE_PROCESSED },
+  { label: '进行中', value: FeedbackStatus.UNDER_WAY },
+  { label: '已完成', value: FeedbackStatus.COMPLETED },
+  { label: '已关闭', value: FeedbackStatus.CLOSED }
+] as const
+
+// 用户反馈
+export interface FeedbackVo {
+  id: number
+  uid: string
+  nickname: string
+  feedbackTitle: string
+  feedbackContent: string
+  status: number             // FeedbackStatus
+  createTime: string
+  updateTime: string
+  updateBy?: string
+  updateName?: string
+}
+
+// 反馈状态汇总
+export interface FeedbackStatusSumVo {
+  toBeProcessed: number
+  underWay: number
+  completed: number
+  closed: number
+  allData: number
 }

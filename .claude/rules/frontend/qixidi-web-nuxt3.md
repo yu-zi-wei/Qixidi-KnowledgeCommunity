@@ -141,6 +141,8 @@ import { Eye, Heart } from '@vicons/tabler'
 
 **❌ 禁止**：使用 @nuxt/icon 或 Emoji 替代图标
 
+**图标名以 Tabler 官方名为准，不能凭记忆写**（2026-09-18 实例：写了 antd 风格的 `CircleFilled`，@vicons/tabler 无此导出，运行时整页崩 `does not provide an export named`）。实心圆点用 `Point`。拿不准先查：`ls node_modules/@vicons/tabler/es/ | grep -i 关键词`
+
 ---
 
 ## 核心约定
@@ -153,6 +155,7 @@ import { Eye, Heart } from '@vicons/tabler'
 | **Markdown** | 编辑器 client-only，渲染用 unified（SSR 兼容） |
 | **组件抽取** | 复用 ≥ 2 次或逻辑复杂，不过度拆分 |
 | **样式** | 简单用 Tailwind 工具类，复杂用 scoped CSS |
+| **组件自动导入前缀** | `components/` 子目录的组件名带目录前缀：`common/MdEditorWithVideo.vue` → `<CommonMdEditorWithVideo>`（写 `<MdEditorWithVideo>` 会静默渲染失败，先 grep 使用先例确认组件名） |
 
 ---
 
@@ -316,6 +319,21 @@ import { Eye, Heart } from '@vicons/tabler'
 **错误流程**：
 - ❌ 一开始就写复杂 CSS + 多个功能
 - ❌ 功能不正常时就加样式补丁
+
+---
+
+## Naive UI n-tabs 行内占位（2026-09-18）
+
+`n-tabs` 根元素默认占满整行（width:100%），放进 `flex-wrap: wrap` 的 flex 行内会**独自占满一行、把其余元素全部挤到第二行**（症状：同行元素 top 值差 ~46px，看似"莫名换行"）。与其他元素并排时必须收回：
+
+```css
+.list-header :deep(.n-tabs) {
+  width: auto;
+  flex-shrink: 0;
+}
+```
+
+`size="small"` 只缩小 tab 内部尺寸，解决不了占满整行的问题，需配合上面的 width 修复。
 
 ---
 
@@ -536,6 +554,63 @@ const insertToEditor = (text: string) => {
 ```
 
 统一入口是 `components/common/MdEditorWithVideo.vue` 的 `insertToEditor`。
+
+---
+
+## admin 布局滚动模型（强制，2026-09-18 分页不可见事故沉淀）
+
+`layouts/admin.vue` 整页永不滚动（`.layout-admin{height:100vh;overflow:hidden}`），滚动责任在 `.admin-content`（现为 `overflow-x:hidden; overflow-y:auto`）。**新页面两种写法皆可，都天然正确**：
+
+| 模式 | 写法 | 滚动位置 |
+|------|------|---------|
+| 自管滚动（文章管理、反馈中心等） | 根节点 `height:100%` + 列表区 `flex:1;min-height:0;overflow-y:auto` | 页面内部列表区 |
+| 文档流（工作台） | 无高度约束，正常文档流 | `.admin-content` 整体 |
+
+自管滚动的额外红利：分页放在滚动容器**外面**（列表区 flex 尾部 `flex-shrink:0`）即可常驻底部，用户不用滚到页面最底才能翻页。
+
+**事故根因**：曾把 `.admin-content` 写成 `overflow:hidden`，文档流页面（内容超出视口）被直接裁掉——分页在页面最底部够不到、页面滚不动。一处布局级修复（`overflow-y:auto`）覆盖两页；自管滚动页面内容恰好 100% 高，不触发外层滚动条，零影响。
+
+**新增后台页面后的必测项**：内容超出视口时（长列表）能否滚到最底部（分页/末条可见）。
+
+---
+
+## UI 改动必须真实浏览器验证（强制）
+
+**curl 只能验证 HTTP 200，验证不了布局/滚动/可见性。** 布局类改动（滚动、溢出、吸顶吸底、弹窗）必须用无头浏览器做量测 + 截图验证，标准套路（脚本存 `%TEMP%\qixidi-pptr\verify.js` 可直接改造复用）：
+
+1. **驱动**：`puppeteer-core` + 本机 Edge 无头（`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`）
+2. **登录态构造**（admin 页必经）：
+   - token 来源：Redis db1 `KEYS "Authorization:login:token:*"` 取 TTL>120 的 key 后缀（**只读，token 值不得打进日志**）
+   - **注入方式必须是 `auth` cookie**：`document.cookie = 'auth=' + encodeURIComponent(JSON.stringify({token})) + '; path=/'`，注入后重载一次让 `plugins/auth-init.client.ts` 读到
+   - 🔴 **不能往 localStorage 注入**：本项目 `pinia-plugin-persistedstate/nuxt`（v4）默认 storage 是 **cookie**（key=store id=`auth`），localStorage 注入永远到不了 pinia state
+3. **页面导航**：admin 页用客户端导航模拟用户真实路径——`document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push(path)`（等价点 NuxtLink）；已登录态下直接 URL goto（刷新场景）也要测
+4. **断言**：量测（`getBoundingClientRect` 在视口内、`scrollHeight > clientHeight`、`getComputedStyle().overflowY`）+ 截图双确认；`page.on('pageerror')` 收集运行时错误
+
+**登录态断言用 pinia 内存态**（`$pinia.state.value.auth.token/user`），**禁止 `body.innerText.includes('用户名')`**——作者名会命中同名文章造成假阳性。
+
+---
+
+## dev server 运维要点（Windows/PowerShell）
+
+| 坑 | 规则 |
+|----|------|
+| PowerShell `run_in_background` 管道式任务（`npx nuxi dev \| Out-File`）会被宿主会话回收（exit code 9、无任何日志） | 拉长驻 dev server 必须独立进程：`Start-Process cmd.exe /c "npx nuxi dev > %TEMP%\xxx.log 2>&1"` |
+| **dev server 启动早于新页面文件创建**（尤其新建子目录 `pages/admin/help/`）→ 路由 watcher 失效，新页面 404 | 新建页面目录后 404，先比对 dev 启动时间 vs 文件创建时间，重启 dev server 解决 |
+| Nuxt dev 路由是 Vite 虚拟模块**不落盘**，grep `.nuxt` 找路由是无效诊断 | 权威判据：浏览器里 `__vue_app__...$router.getRoutes()` 读真实路由表 |
+| 未登录直接 URL 访问 `/admin/**`（ssr:false）会因路由守卫 abort 显示 404 错误页 | 属预期行为（未登录不让进）；验证 admin 页须先构造登录态 |
+
+---
+
+## 站点刻意设计清单（勿当缺陷上报，2026-09-18 用户确认）
+
+| 现象 | 定性 |
+|------|------|
+| 时光小记用宽容器（1352px 无侧栏），其他内容页 992px | 刻意设计 |
+| 用户主页无站点导航，独立布局（1200px） | 刻意设计 |
+| 全站无传统 footer，页脚信息放首页侧边栏 | 刻意设计 |
+| 各页卡片圆角/阴影存在差异 | 风格选择 |
+
+UI 巡检/一致性审查先排除本清单；新发现的跨页差异先确认设计意图再下结论，判断标准是 bug 和功能障碍，不是风格差异。
 
 ---
 

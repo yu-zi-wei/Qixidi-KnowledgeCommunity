@@ -1,6 +1,7 @@
 package com.qixidi.business.service.impl.news;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
 import com.light.redission.utils.RedisUtils;
@@ -316,5 +318,15 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     private boolean isCommentSubType(NewsType type) {
         return NewsType.DICTUM_COMMENT_NEWS.getCode().equals(type.getCode())
                 || NewsType.TIME_NOTES_COMMENT_NEWS.getCode().equals(type.getCode());
+    }
+
+    /**
+     * 近30天互动趋势（获赞/评论按天聚合，评论子类型 6/7 并入评论）
+     */
+    @Override
+    public List<CensusVo> interactTrend() {
+        String uuid = LoginHelper.getTripartiteUuid();
+        String time = DateUtil.formatDate(DateUtil.offsetDay(new Date(), -30));
+        return newsUserRecordMapper.selectInteractTrend(uuid, time);
     }
 }

@@ -8,6 +8,7 @@ import com.qixidi.business.domain.vo.user.BrowsingHistoryVo;
 import com.qixidi.business.mapper.user.BrowsingHistoryMapper;
 import com.qixidi.business.service.IBrowsingHistoryService;
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
@@ -140,6 +141,16 @@ public class BrowsingHistoryServiceImpl implements IBrowsingHistoryService {
         LambdaQueryWrapper<BrowsingHistory> lqw = buildQueryWrapper(bo);
         Page<BrowsingHistoryVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 近30天我的内容浏览趋势（按天聚合，同一访问者对同一内容一天内去重）
+     */
+    @Override
+    public List<CensusVo> browseTrend() {
+        String uuid = LoginHelper.getTripartiteUuid();
+        String time = DateUtil.formatDate(DateUtil.offsetDay(new Date(), -30));
+        return baseMapper.selectBrowseTrend(uuid, time);
     }
 }
 

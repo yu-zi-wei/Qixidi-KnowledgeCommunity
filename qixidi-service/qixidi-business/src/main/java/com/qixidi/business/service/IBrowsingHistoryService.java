@@ -1,5 +1,6 @@
 package com.qixidi.business.service;
 
+import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.bo.user.BrowsingHistoryBo;
 import com.qixidi.business.domain.vo.user.BrowsingHistoryVo;
 import com.light.core.core.domain.PageQuery;
@@ -90,5 +91,10 @@ public interface IBrowsingHistoryService {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     TableDataInfo<BrowsingHistoryVo> queryPageUidList(BrowsingHistoryBo bo, PageQuery pageQuery);
+
+    /**
+     * 近30天我的内容浏览趋势（按天聚合）
+     */
+    List<CensusVo> browseTrend();
 }
 

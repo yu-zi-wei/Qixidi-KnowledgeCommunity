@@ -34,8 +34,9 @@ const imageClickHandlers = new WeakMap<HTMLImageElement, () => void>()
 // ECharts 实例清理
 const echartsCleanups: (() => void)[] = []
 
-// hydrate 版本号，防止过期异步操作
+// hydrate 版本号，防止过期异步操作（异步回调 hydrateMermaidDiagrams 也要引用，必须放 setup 级作用域）
 let hydrateVersion = 0
+let currentVersion = 0
 
 // 客户端交互增强
 const hydrate = () => {
@@ -43,7 +44,7 @@ const hydrate = () => {
   echartsCleanups.forEach(fn => fn())
   echartsCleanups.length = 0
 
-  const currentVersion = ++hydrateVersion
+  currentVersion = ++hydrateVersion
 
   nextTick(() => {
     bindLinkTargets()
