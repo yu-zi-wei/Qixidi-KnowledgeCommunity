@@ -33,33 +33,35 @@ const labelApi = useLabelApi()
 const navigationApi = useNavigationApi()
 
 // 完整 SSR 模式：useAsyncData 在 SSR 阶段调用接口，try/catch 防止抛错
-// default 选项确保初始值非空；onMounted 兜底覆盖 SSR 失败场景
+// ⚠️ 失败必须返回 null 而非 []，且不能配 default 选项：
+// Nuxt 把 payload 里的非 null 值（含空数组）当有效缓存，会在水合期间拦截
+// 客户端重取（data.value=[] 非 null → 短路），导致菜单缺失永不自愈
+// 返回 null + 无 default → data.value 为 undefined → onBeforeMount 自动重新请求
 const { data: navigationData, refresh: refreshNavigation } = await useAsyncData(
   'layout-navigation',
   async () => {
     try {
       const { rows } = await navigationApi.getList(1, 0)
-      return rows || []
+      return rows || null
     } catch (e: any) {
       console.error('[layout-default] navigation SSR error:', e?.message || e)
-      return []
+      return null
     }
-  },
-  { default: () => [] as any }
+  }
 )
 
+// 同上：失败返回 null（勿返回 []，勿加 default）
 const { data: labelData, refresh: refreshLabels } = await useAsyncData(
   'layout-labels',
   async () => {
     try {
       const result = await labelApi.getGroupingList(1, 9)
-      return result.rows || []
+      return result.rows || null
     } catch (e: any) {
       console.error('[layout-default] labels SSR error:', e?.message || e)
-      return []
+      return null
     }
-  },
-  { default: () => [] as any }
+  }
 )
 
 const navigationList = computed(() => navigationData.value || [])

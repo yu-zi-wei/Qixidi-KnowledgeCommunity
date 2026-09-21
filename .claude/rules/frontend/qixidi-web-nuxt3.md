@@ -74,6 +74,52 @@ find D:/Project/qixidi/qixidi-service -name "*Vo.java"
 
 ---
 
+## useAsyncData SSR 失败兜底的缓存陷阱（强制，2026-09-20 生产导航丢失事故）
+
+**SSR 可能失败的 useAsyncData，handler 失败必须返回 `null`，且禁止配 `default` 选项。**
+
+### 事故链（Nuxt 3.21.2 源码验证）
+
+| 步骤 | 发生了什么 |
+|------|-----------|
+| 1 | SSR fetch 失败被 handler 内 try/catch 吞掉，返回 `[]`（空数组非 null）→ `payload.data[key] = []` |
+| 2 | 客户端水合期间（isHydrating），`execute` 先查缓存：默认 `getCachedData` 无条件返回 `payload.data[key]`；`[] != null` 为真 → 短路返回"成功"，handler 永不执行 |
+| 3 | onMounted 里的 `refresh()` 兜底走同一条 execute 路径 → 同样被拦 → **静默失效，零报错** |
+| 4 | 症状：刷新后导航/菜单缺失永不自愈；从其他页面客户端路由切过来（内存数据还在）正常，再刷新又丢 |
+
+### 修复模式（layouts/default.vue、layouts/user-home.vue）
+
+```typescript
+// ✅ 正确：失败返回 null + 无 default 选项
+const { data } = await useAsyncData('key', async () => {
+  try {
+    const { rows } = await api.getList()
+    return rows || null
+  } catch (e) {
+    return null
+  }
+})
+const list = computed(() => data.value || [])  // 消费端兜底渲染
+
+// ❌ 错误：返回 [] 会被当有效缓存拦截客户端重取
+// ❌ 错误：配 default: () => [] —— default 会让 data.value 非 null，
+//    连 null 路径也走不进"无缓存"分支（源码 line 114 的 data.value != null 判断）
+```
+
+### 机制要点
+
+- `null` + 无 `default` → 水合时 data.value 为 `undefined`（`undefined != null` 为 false）→ 不拦截 → **onBeforeMount 自动重新请求**，比 onMounted 兜底更早
+- SSR 成功有真数据时零额外请求（payload 有数据直接用缓存），正常路径不受影响
+- dev 模式 SSR 返回 null 会打 `must return a value...may be duplicated on the client side` 警告——**这是预期提示**（客户端会重取），不是错误，勿"修复"掉
+
+### 排查方法论（本次沉淀）
+
+- **payload 里某 key 是 `[]` 而非真数据** = "SSR 失败被 try/catch 吞掉"的签名（生产取证：view-source 搜 key 名）
+- 判定页面自身是否发过某请求用 `performance.getEntriesByType('resource')`；但 **pending 中的请求不进 resource timing**——"timing 里没有"要区分"没发"（缓存拦截）和"挂着"（代理/后端死了），二者根因不同
+- 网络监听器数组（`page.on('response')` 收集的）是引用，延迟打印会混入之后 evaluate 里的手动 fetch，不可作判据
+
+---
+
 ## HTML 嵌套禁忌（SSR 必读）
 
 **浏览器会自动"修复"非法嵌套的 DOM，导致 SSR 输出与客户端不一致，引发布局错位。**

@@ -177,17 +177,18 @@ watch(() => authStore.isLoggedIn, (val) => {
 })
 
 // --- 个人主页菜单 ---
+// 失败返回 null 而非 []、不加 default：Nuxt 把非 null（含空数组）当有效缓存，
+// 会在水合期间拦截客户端重取；null 才能让 onBeforeMount 自动重新请求
 const { data: menuData, refresh: refreshMenu } = await useAsyncData(
   'user-home-menu',
   async () => {
     try {
       const { rows } = await navigationApi.getList(2, 0)
-      return rows || []
+      return rows || null
     } catch (e) {
-      return []
+      return null
     }
-  },
-  { default: () => [] as any }
+  }
 )
 
 // 客户端兜底：SSR 失败导致菜单为空时，重新获取
