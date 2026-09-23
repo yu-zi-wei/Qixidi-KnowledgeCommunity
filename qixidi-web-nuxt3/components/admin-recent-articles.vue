@@ -19,7 +19,7 @@
       <li v-for="item in articles" :key="item.id" class="article-item">
         <div class="article-info">
           <div class="article-title-row">
-            <span class="article-title">{{ item.articleTitle || '未命名文章' }}</span>
+            <span class="article-title" :title="item.articleTitle || '未命名文章'">{{ item.articleTitle || '未命名文章' }}</span>
             <span class="article-state" :class="`state-${item.auditState}`">{{ stateText(item.auditState) }}</span>
           </div>
           <time class="article-time" :title="getFullDateTime(item.updateTime)">

@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.light.ai.service.DeepSeekService;
 import com.light.core.constant.SystemConstant;
 import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
@@ -31,6 +30,7 @@ import com.light.exception.ServiceException;
 import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
+import com.qixidi.ai.service.AiGenerationService;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
@@ -68,6 +68,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,6 +95,12 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
 
+    /**
+     * 文章 AI 生成开关（生成总结/摘要），对应 yml qixidi.article.ai.enable
+     */
+    @Value("${qixidi.article.ai.enable:true}")
+    private boolean articleAiEnabled;
+
     private final ApplicationEventPublisher eventPublisher;
 
     private final ArticleInformationMapper baseMapper;
@@ -104,7 +111,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final SearchRecordsMapper searchRecordsMapper;
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
-    private final DeepSeekService deepSeekService;
+    private final AiGenerationService aiGenerationService;
     private final ArticleCountQueryHelper articleCountQueryHelper;
     private final UserCountQueryHelper userCountQueryHelper;
 
@@ -191,11 +198,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         vo.setId(id);
         vo.setCreateTime(new Date());
         articleWeightAlgorithms(List.of(vo));
-        //生成 AI 总结
-        aiSummary(id, event.getArticleTitle(), event.getArticleContent());
-        //生成 AI 摘要
-        if (event.isGenerateAbstract()) {
-            aiAbstract(id, event.getArticleTitle(), event.getArticleContent());
+        //AI 生成总结/摘要（qixidi.article.ai.enable 开关控制）
+        if (articleAiEnabled) {
+            //生成 AI 总结
+            aiSummary(id, event.getArticleTitle(), event.getArticleContent());
+            //生成 AI 摘要
+            if (event.isGenerateAbstract()) {
+                aiAbstract(id, event.getArticleTitle(), event.getArticleContent());
+            }
         }
         //文章自动审核，发送消息
         if (event.isNeedReview()) {
@@ -315,12 +325,12 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         stringBuffer.append("\n 文章标题：" + articleTitle);
         stringBuffer.append("\n 文章内容：" + articleContent);
         stringBuffer.append("\n 要求：对该文章内容生成简单的文章摘要，要求纯文字返回，不要返回markdown格式，且不超过400个字符。");
-        Object Summary = deepSeekService.generationContent(stringBuffer.toString());
-        if (Summary != null) {
+        String summary = aiGenerationService.generateContent(stringBuffer.toString());
+        if (summary != null) {
             baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
-                    .set(ArticleInformation::getArticleAbstract, Summary.toString())
+                    .set(ArticleInformation::getArticleAbstract, summary)
                     .eq(ArticleInformation::getId, id));
-            log.info("【AI 获取摘要】:" + id + ":" + Summary.toString());
+            log.info("【AI 获取摘要】:" + id + ":" + summary);
         }
     }
 
@@ -337,12 +347,12 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         stringBuffer.append("\n 文章标题：" + articleTitle);
         stringBuffer.append("\n 文章内容：" + articleContent);
         stringBuffer.append("\n 要求：对该文章内容生成简单的总结，只需要总结这篇文章的大概内容，不需要详细总结。要求纯文字返回，不要返回markdown格式，且不超过400个字符。");
-        Object Summary = deepSeekService.generationContent(stringBuffer.toString());
-        if (Summary != null) {
+        String summary = aiGenerationService.generateContent(stringBuffer.toString());
+        if (summary != null) {
             baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
-                    .set(ArticleInformation::getArticleSummary, Summary.toString())
+                    .set(ArticleInformation::getArticleSummary, summary)
                     .eq(ArticleInformation::getId, id));
-            log.info("【AI 获取总结】:" + id + ":" + Summary.toString());
+            log.info("【AI 获取总结】:" + id + ":" + summary);
         }
     }
 

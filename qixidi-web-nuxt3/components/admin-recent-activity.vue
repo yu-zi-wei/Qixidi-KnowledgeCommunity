@@ -18,7 +18,7 @@
       <li v-for="item in activities" :key="item.key" class="activity-item" @click="goTarget(item)">
         <n-avatar round :size="34" :src="item.senderAvatar || '/images/default-avatar.svg'" class="activity-avatar" />
         <div class="activity-body">
-          <p class="activity-text">
+          <p class="activity-text" :title="`${item.senderName} ${item.action}${item.target ? ` ${item.target}` : ''}`">
             <span class="activity-name">{{ item.senderName }}</span>
             <span class="activity-action">{{ item.action }}</span>
             <span v-if="item.target" class="activity-target">{{ item.target }}</span>

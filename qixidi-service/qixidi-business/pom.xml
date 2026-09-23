@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.light</groupId>
-            <artifactId>light-ai</artifactId>
+            <artifactId>qixidi-ai</artifactId>
         </dependency>
 
         <dependency>

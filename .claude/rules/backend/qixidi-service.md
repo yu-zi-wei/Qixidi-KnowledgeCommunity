@@ -29,6 +29,22 @@ globs: qixidi-service/**, qixidi-service\**
 
 ---
 
+## AI 开发规范（qixidi-ai）
+
+AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大模型 HTTP API 的实现。
+
+| 场景 | 入口 |
+|------|------|
+| 业务文本生成（文章摘要/总结等） | `AiGenerationService.generateContent(prompt)`（同步无记忆，失败返回 null 不影响主流程） |
+| 多轮对话（记忆/图片） | `ChatStrategyMap.executeStrategy*` |
+
+- **多个 ChatClient bean 注入必须 `@Resource(name = "...")`**：`@Primary` 是 deepSeekChatClient，按类型注入会错拿
+- 场景化 ChatClient 装配集中在 `AIChatClientConfig`：`openAiChatClient`（图片解析+记忆）/ `deepSeekChatClient`（@Primary，对话）/ `generationChatClient`（无状态纯文本，无 advisor）
+- AI 返回内容清洗统一用 `AiTextUtils.stripMarkdownCodeBlock`（qixidi-ai/utils）
+- AI 外部化配置走项目惯例：`config.ai.*` 定义在 `applicationConfig/{profile}/config.properties`，yml 用 `${config.ai.xxx}` 占位符引用（与 redis/minio 同模式）
+
+---
+
 ## Spring Boot 4 / Jackson 3 升级要点（2026-09-16 沉淀）
 
 ### Jackson 3（tools.jackson）
@@ -64,6 +80,7 @@ globs: qixidi-service/**, qixidi-service\**
 | logback 1.5.2x：`SizeAndTimeBasedFNATP` 废弃告警 | `logback.xml` 用 `SizeAndTimeBasedRollingPolicy` 合并时间+大小滚动（`FileNamePattern` 必须含 `%i`） |
 | Redisson 4.x：server config 上 `setPassword` 废弃告警 | 统一在 `Config.setPassword(...)` 设置 |
 | **父 pom 用 `${revision}`（CI-friendly）**：单独 `-pl 模块` 构建会解析不了兄弟模块的 `${revision}` 父版本（Bad Request 400） | 必须整仓构建：`mvn package`（不带 `-pl`） |
+| **Spring AI 2.0 openai 模块 base-url 必须带 `/v1`**：底层 OpenAI 官方 SDK 直接拼 `/chat/completions` 不自动补版本路径，少 `/v1` 报 `404: Unknown`（路径 404，非鉴权问题） | base-url 写全版本路径（如 `https://dashscope.aliyuncs.com/compatible-mode/v1`）；curl 带/不带 `/v1` 二分验证 |
 
 ---
 

@@ -383,6 +383,12 @@ import { Eye, Heart } from '@vicons/tabler'
 
 ---
 
+## grid 双栏等宽 + 内容省略号（强制）
+
+并排卡片列一律写 `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)`，**不能只写 `1fr 1fr`**：grid 子项默认 `min-width: auto`，且 `text-overflow: ellipsis` 不参与 min-content 计算——子项里 nowrap 长文本会把本列撑开、挤压遮盖相邻列（即使组件内部省略号样式全对也拦不住）。`minmax(0, 1fr)` 让列可收缩，内部 ellipsis 才能生效；截断的文本补 `:title` 展示完整内容。
+
+---
+
 ## API 错误处理规范（强制）
 
 **`useApi` 已统一拦截错误并弹出后端 `msg`，页面禁止重复写 `message.error`。**
@@ -559,6 +565,7 @@ Vue scoped CSS 通过给元素添加 `data-v-xxx` 属性实现隔离，但 Nuxt 
 | 方向 | 后果 |
 |------|------|
 | build 重写 `.nuxt` 生成文件 | dev server 内存模块图与磁盘不一致 → HMR 失效，**新增组件不被识别**（页面看不到新组件，也无报错） |
+| build 重写 `.nuxt` 生成文件 | dev 启动报 `Pre-transform error: Failed to resolve import "#app-manifest"`（死代码分支的虚拟模块解析失败，2026-09-23 实例） |
 | dev 占用中的 `.nuxt` 被 build 读取 | 产出被污染的 `.output`（混入 vite-node 代码）→ 启动报 `Vite Node IPC socket path not configured` |
 
 **症状识别**：
@@ -566,6 +573,8 @@ Vue scoped CSS 通过给元素添加 `data-v-xxx` 属性实现隔离，但 Nuxt 
 - build 产物启动报 Vite Node IPC 错误 → 产物已被污染，必须重新 build
 
 **修复**：停 dev → 删除 `.nuxt` 和 `.output` → 重启 dev（或重新 build）
+
+**最常见触发方式：测试完不关 dev**（长驻实例挂着，之后打包必污染）——测试实例用完必须立即关闭，见 code-basics「测试实例管理」。2026-09-23 生产整站 500 实例：dev 挂着运行 32 分钟后执行 build，`.output/server/chunks/build/server.mjs` 混入 `NUXT_VITE_NODE_OPTIONS`，部署后 Nitro 启动即挂。
 
 **同族坑：先改引用、后建组件文件 → transform 缓存陈旧（2026-09-15）**
 

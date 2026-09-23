@@ -18,8 +18,35 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class QixidiStartupApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(QixidiStartupApplication.class, args);
-        System.out.println("==================> (♥◠‿◠)ﾉﾞ  qi-xi-di Startup success   ლ(´ڡ`ლ)ﾞ  <==================");
+        ConfigurableApplicationContext context = SpringApplication.run(QixidiStartupApplication.class, args);
+        printStartupBanner(context);
+    }
+
+    /**
+     * 启动完成后打印站点横幅（ANSI 颜色，IDEA/Terminal 控制台渲染）
+     */
+    private static void printStartupBanner(ConfigurableApplicationContext context) {
+        String cyan = "\u001b[96m";
+        String dim = "\u001b[90m";
+        String reset = "\u001b[0m";
+        String line = "─".repeat(35);
+
+        String[] profiles = context.getEnvironment().getActiveProfiles();
+        String profile = profiles.length > 0 ? String.join("/", profiles) : "default";
+        String port = context.getEnvironment().getProperty("server.port", "8080");
+
+        String[] banner = {
+            cyan + "   ███   ███  █   █  ███  ███   ███",
+            cyan + "  █   █   █    █ █   █    █  █   █ ",
+            cyan + "  █   █   █     █    █    █  █   █ ",
+            cyan + "  █ █ █   █    █ █   █    █  █   █ ",
+            cyan + "   ████  ███  █   █  ███  ███   ███" + reset,
+            dim + line + reset,
+            "  qixidi · 栖息地启动成功",
+            "  环境: " + profile + "    端口: " + port,
+            dim + line + reset
+        };
+        System.out.println(String.join(System.lineSeparator(), banner));
     }
 
 }

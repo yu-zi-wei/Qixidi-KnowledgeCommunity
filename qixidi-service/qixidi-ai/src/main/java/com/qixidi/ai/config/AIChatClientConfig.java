@@ -29,7 +29,7 @@ public class AIChatClientConfig {
                 .chatMemoryRepository(chatMemoryRepository)
                 .build();
         return ChatClient.builder(chatModel)
-                .defaultSystem("你是一个图片解析助手，请返回json格式的解析数据")
+                .defaultSystem("你是栖息地博客的AI助手，请友好、简洁地回答用户的问题")
                 .defaultAdvisors(
                         // 日志助手
                         new SimpleLoggerAdvisor(
@@ -58,6 +58,16 @@ public class AIChatClientConfig {
                                 0),
                         // 记忆助手
                         MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
+    }
+
+    /**
+     * 业务文本生成专用（文章摘要/总结等）：无记忆、无日志 advisor
+     */
+    @Bean
+    public ChatClient generationChatClient(OpenAiChatModel chatModel) {
+        return ChatClient.builder(chatModel)
+                .defaultSystem("你是一个文本生成助手，请直接返回纯文本内容，不要使用 Markdown 格式")
                 .build();
     }
 

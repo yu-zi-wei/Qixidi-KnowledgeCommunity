@@ -4,17 +4,17 @@
     <div class="fl-tabs">
       <button
         class="fl-tab-item"
-        :class="{ active: activeTab === 'apply' }"
-        @click="activeTab = 'apply'"
-      >
-        友链申请
-      </button>
-      <button
-        class="fl-tab-item"
         :class="{ active: activeTab === 'list' }"
         @click="activeTab = 'list'"
       >
         友链列表
+      </button>
+      <button
+        class="fl-tab-item"
+        :class="{ active: activeTab === 'apply' }"
+        @click="activeTab = 'apply'"
+      >
+        友链申请
       </button>
     </div>
 
@@ -81,17 +81,18 @@ useHead({
   }
 })
 
-const activeTab = ref('apply')
+const activeTab = ref('list')
 
-// 友链申请：获取文章详情
+// 友链申请：文章详情改为点击时懒加载（默认 tab 不再无条件请求）
 const articleApi = useArticleApi()
 const fabulousApi = useFabulousApi()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
 
-const { data: articleData, pending: pendingArticle } = await useAsyncData(
+const { data: articleData, pending: pendingArticle, execute: loadArticle } = await useAsyncData(
   'friend-link-article',
-  () => articleApi.getArticleDetail(-12)
+  () => articleApi.getArticleDetail(-12),
+  { immediate: false }
 )
 
 // 编辑文章
@@ -154,7 +155,7 @@ const handleLike = async () => {
   }
 }
 
-// 友链列表：懒加载
+// 友链列表：默认 tab，SSR 直出
 const friendLinkApi = useFriendLinkApi()
 const friendLinks = ref<any[]>([])
 const loadingList = ref(false)
@@ -164,15 +165,18 @@ const loadFriendLinks = async () => {
   try {
     const res = await friendLinkApi.getFriendLinkList()
     friendLinks.value = res?.rows || []
+  } catch {
+    friendLinks.value = []
   } finally {
     loadingList.value = false
   }
 }
 
+await loadFriendLinks()
+
+// 切到友链申请时才拉取文章详情（数据已存在则跳过）
 watch(activeTab, (tab) => {
-  if (tab === 'list' && friendLinks.value.length === 0) {
-    loadFriendLinks()
-  }
+  if (tab === 'apply' && !articleData.value) loadArticle()
 })
 </script>
 

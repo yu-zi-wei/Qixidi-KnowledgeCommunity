@@ -83,11 +83,6 @@
 
         <dependency>
             <groupId>com.light</groupId>
-            <artifactId>light-ai</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.light</groupId>
             <artifactId>qixidi-common</artifactId>
         </dependency>
 

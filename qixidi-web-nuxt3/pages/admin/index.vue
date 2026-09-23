@@ -366,10 +366,10 @@ const formatViewCount = (v: number | undefined) => {
   box-shadow: var(--shadow-sm);
 }
 
-/* 最新互动 + 最近编辑双栏 */
+/* 最新互动 + 最近编辑双栏：minmax(0,1fr) 等宽且允许收缩到内容省略，否则子项 min-width:auto 会互相挤压 */
 .insight-section {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 24px;
 }
 

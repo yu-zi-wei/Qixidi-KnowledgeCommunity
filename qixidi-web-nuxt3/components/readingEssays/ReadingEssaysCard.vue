@@ -1,7 +1,7 @@
 <template>
   <div ref="cardRef" class="reading-essays-card" :class="{ 'is-visible': isVisible }" :style="{ '--delay': Math.min(delay, 8) }">
     <!-- 随笔内容 -->
-    <div class="reading-essays-content">
+    <div class="reading-essays-content" @click="openDetail">
       {{ readingEssay.content }}
     </div>
 
@@ -33,9 +33,6 @@
           {{ formatTime(readingEssay.createTime) }}
         </span>
       </div>
-      <button class="detail-btn" @click.stop="handleClick">
-        详情
-      </button>
     </div>
   </div>
 </template>
@@ -63,7 +60,7 @@ const emit = defineEmits<{
 const cardRef = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
 
-const handleClick = () => {
+const openDetail = () => {
   emit('showDetail')
 }
 
@@ -129,7 +126,7 @@ onMounted(() => {
   box-shadow: var(--shadow-lg);
 }
 
-/* 随笔内容 */
+/* 随笔内容（点击打开详情，悬停显示与详情抽屉同款虚线下划线） */
 .reading-essays-content {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
@@ -143,6 +140,14 @@ onMounted(() => {
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;
+  cursor: pointer;
+}
+
+.reading-essays-content:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--color-border);
 }
 
 /* 作者和作品 */
@@ -242,21 +247,6 @@ onMounted(() => {
 .stat-icon {
   width: 14px;
   height: 14px;
-}
-
-/* 详情按钮 */
-.detail-btn {
-  padding: 4px 12px;
-  font-size: var(--text-xs);
-  color: var(--color-ink-light);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.detail-btn:hover {
-  color: var(--color-primary);
 }
 
 .author-name {

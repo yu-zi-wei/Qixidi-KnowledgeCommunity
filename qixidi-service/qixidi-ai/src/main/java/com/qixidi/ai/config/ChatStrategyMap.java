@@ -1,6 +1,7 @@
 package com.qixidi.ai.config;
 
 import com.light.core.utils.StringUtils;
+import com.qixidi.ai.utils.AiTextUtils;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -116,31 +117,16 @@ public class ChatStrategyMap {
                 .map(chunks -> String.join("", chunks))
                 .block();
 
-        return stripMarkdownCodeBlock(raw);
-    }
-
-    private String stripMarkdownCodeBlock(String text) {
-        if (StringUtils.isBlank(text)) {
-            return text;
-        }
-        String trimmed = text.trim();
-        if (trimmed.startsWith("```")) {
-            int firstNewline = trimmed.indexOf('\n');
-            if (firstNewline > 0) {
-                trimmed = trimmed.substring(firstNewline + 1);
-            }
-            if (trimmed.endsWith("```")) {
-                trimmed = trimmed.substring(0, trimmed.length() - 3);
-            }
-        }
-        return trimmed.trim();
+        return AiTextUtils.stripMarkdownCodeBlock(raw);
     }
 
     private ChatClient.ChatClientRequestSpec buildOpenAiRequest(StrategyParams params) {
         ChatClient.ChatClientRequestSpec request;
 
         if (params.image != null && !params.image.isEmpty()) {
+            // 带图请求走图片解析人设（请求级覆盖默认 system）
             request = openAiChatClient.prompt()
+                    .system("你是一个图片解析助手，请返回json格式的解析数据")
                     .user(u -> u.text(params.message)
                             .media(MimeTypeUtils.parseMimeType(params.image.getContentType()),
                                     params.image.getResource()));

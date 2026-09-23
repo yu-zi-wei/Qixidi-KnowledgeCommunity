@@ -182,6 +182,10 @@ lipay:
   signType: RSA2
 
 qixidi:
+  # 文章 AI 生成开关（生成总结/摘要；关闭后文章发布不再调用 AI，不影响发布主流程）
+  article:
+    ai:
+      enable: true
   storage:
     provider: "oss"  # 选择对象存储的厂商，支持oss和minio
   # 阿里云OSS配置
@@ -202,28 +206,18 @@ qixidi:
       access-key: ${config.minio.storage.access_key}
       secret-key: ${config.minio.storage.secret_key}
 
-# deepSeek配置
-deep-seek:
-  config:
-    whether-enable: true # 是否启用
-    authorization-key: ${config.deepSeek.authorizationKey}
-    url: https://api.siliconflow.cn/v1/chat/completions
-    model: Qwen/Qwen3.6-35B-A3B # 模型名称
-    role: user
-
+# AI 配置维护在 applicationConfig/{profile}/config.properties（config.ai.* 前缀变量）
 spring:
   ai:
     deepseek:
-      api-key: ${spring.ai.openai.deepseek}
-      base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com
+      api-key: ${config.ai.deepseek.apiKey}
+      base-url: ${config.ai.deepseek.baseUrl}
       chat:
-        options:
-          model: deepseek-reasoner # 使用深度思考模型
-          temperature: 0.8 # 温度值
+        model: ${config.ai.deepseek.chatModel}
+        temperature: 0.8 # 温度值
     openai:
-      api-key: ${spring.ai.openai.apiKey}
-      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      api-key: ${config.ai.openai.apiKey}
+      base-url: ${config.ai.openai.baseUrl}
       chat:
-        options:
-          model: qwen3.6-plus
-          temperature: 0.7
+        model: ${config.ai.openai.chatModel}
+        temperature: 0.7
