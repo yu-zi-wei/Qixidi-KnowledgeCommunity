@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -19,10 +20,21 @@ public class CurrentLimitingHandler {
 
     private final ReentrantLock Lock = new ReentrantLock();
 
+    /**
+     * 免防刷 IP 白名单：本机回环地址
+     * SSR 渲染服务的请求全部来自 127.0.0.1，若参与计数等于把全站服务端流量算进一个桶，
+     * 高峰期触发拉黑后本机请求全部被拦截（返回空响应），SSR 整体瘫痪（2026-10-08 生产实例）
+     */
+    private static final Set<String> SKIP_LIMIT_IPS = Set.of("127.0.0.1", "0:0:0:0:0:0:0:1", "::1");
+
     public Boolean currentLimiting(HttpServletRequest request) {
+        String ip = AddressUtils.gainIp(request);
+        // 本机内部调用（SSR 渲染、运维 curl）不参与防刷计数
+        if (SKIP_LIMIT_IPS.contains(ip)) {
+            return true;
+        }
         Lock.lock();
         try {
-            String ip = AddressUtils.gainIp(request);
             if (SysBlackListManager.inst().isIp(ip)) {
                 throw new Exception("当前IP：[" + ip + "]，检测到非法操作，已被加入黑名单");
             }
@@ -48,7 +60,7 @@ public class CurrentLimitingHandler {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("防刷拦截处理异常：{}", e.getMessage(), e);
             return false;
         } finally {
             Lock.unlock();
