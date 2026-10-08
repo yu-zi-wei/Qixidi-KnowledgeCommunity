@@ -155,24 +155,20 @@ const handleLike = async () => {
   }
 }
 
-// 友链列表：默认 tab，SSR 直出
+// 友链列表：默认 tab，useAsyncData 失败返回 null（水合自动重取，SSR 失败不会水合错乱）
 const friendLinkApi = useFriendLinkApi()
-const friendLinks = ref<any[]>([])
-const loadingList = ref(false)
-
-const loadFriendLinks = async () => {
-  loadingList.value = true
-  try {
-    const res = await friendLinkApi.getFriendLinkList()
-    friendLinks.value = res?.rows || []
-  } catch {
-    friendLinks.value = []
-  } finally {
-    loadingList.value = false
+const { data: friendLinkData, pending: loadingList } = await useAsyncData(
+  'friend-link-list',
+  async () => {
+    try {
+      const res = await friendLinkApi.getFriendLinkList()
+      return res?.rows || null
+    } catch {
+      return null
+    }
   }
-}
-
-await loadFriendLinks()
+)
+const friendLinks = computed(() => friendLinkData.value || [])
 
 // 切到友链申请时才拉取文章详情（数据已存在则跳过）
 watch(activeTab, (tab) => {

@@ -88,7 +88,7 @@
     </div>
 
     <!-- 小记详情抽屉 -->
-    <n-drawer v-model:show="drawerVisible" :width="640" placement="right">
+    <n-drawer v-model:show="drawerVisible" :width="800" placement="right">
       <n-drawer-content title="小记详情" :closable="true" :native-scrollbar="false">
         <div class="drawer-detail-wrapper">
           <div v-if="drawerLoading" class="drawer-loading">

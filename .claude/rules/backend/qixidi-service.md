@@ -118,6 +118,15 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 
 ---
 
+## 防刷限流体系（CurrentLimitingInterceptor，2026-10-08 生产 SSR 全挂事故沉淀）
+
+- **架构事实**：`ResourcesConfig` 全局注册 `CurrentLimitingInterceptor` → `CurrentLimitingHandler` 按 `gainIp`（x-forwarded-for → remoteAddr）计数，**8 秒内 ≥250 次即拉黑**；拉黑名单**仅存内存**（`loadData()` 唯一调用点被注释，落库数据不会加载，重启即清空）
+- **SSR 请求必须免计数**：Nuxt SSR 的服务端请求全部来自 `127.0.0.1`（无代理头 → remoteAddr），参与计数等于把全站服务端流量算进一个桶，流量高峰触发拉黑后**本机所有请求（SSR、curl）被拦截，浏览器用户（各自公网 IP）正常**——已加 `SKIP_LIMIT_IPS` 回环白名单，勿删
+- **拦截器 preHandle 返回 false 且不写响应时，Spring 返回 200 + 空 body**——极难排查（业务日志零痕迹、HTTP 层看似正常）。拦截类组件必须显式写状态码 + JSON body（现为 429）
+- **诊断签名**：`200 + Content-Length: 0 + 后端业务日志无该请求痕迹` = 请求死于 Filter/Interceptor 层（没进 Controller）；对照"浏览器有数据、服务器 curl 空"可进一步锁定为按 IP 差异化处理
+
+---
+
 ## MVC 三层架构
 
 ### 分层职责
