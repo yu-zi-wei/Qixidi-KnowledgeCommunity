@@ -51,11 +51,14 @@
           </div>
         </div>
 
-        <!-- 底部加载检测器 -->
-        <div ref="loadMoreTrigger" class="load-more-trigger">
-          <n-spin v-if="loading && hasMore" size="small" />
-        </div>
       </template>
+
+      <!-- 底部加载检测器 -->
+      <!-- ⚠️ 必须用 v-show 不能用 v-if/template v-else：onMounted 创建触底观察器时数据未到达，
+           元素不存在会导致观察器永不创建，触底加载失效（同 ArticleList 2026-10-12 实例） -->
+      <div v-show="timeNotesGroups.length > 0" ref="loadMoreTrigger" class="load-more-trigger">
+        <n-spin v-if="loading && hasMore" size="small" />
+      </div>
     </div>
   </div>
 </template>

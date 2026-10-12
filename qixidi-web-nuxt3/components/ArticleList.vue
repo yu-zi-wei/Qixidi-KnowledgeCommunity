@@ -55,7 +55,9 @@
   </div>
 
   <!-- 加载状态 -->
-  <div v-if="articles.length > 0" ref="loadTrigger" class="load-more">
+  <!-- ⚠️ 必须用 v-show 不能用 v-if：onMounted 创建触底观察器时数据未到达，
+       v-if 会导致 loadTrigger 为 null、观察器永不创建，触底加载失效（2026-10-12 生产实例） -->
+  <div v-show="articles.length > 0" ref="loadTrigger" class="load-more">
     <n-spin v-if="loading" :size="20" />
     <span v-else-if="noMore" class="load-more-text">— 没有更多了 —</span>
   </div>

@@ -19,10 +19,6 @@
 ## 打生产环境包
 mvn clean package -P prod -DskipTests
 ```
-## 其他配置
-
-**deepSeek 配置来源**
-https://cloud.siliconflow.cn/i/EXJdGpo9
 
 ### 数据表文档
 b_article_information
