@@ -76,12 +76,18 @@ const createIconComponent = (svgString: string) => {
   })
 }
 
+// 菜单 key：分组父级的 route 是占位符 "-"（truthy，|| 兜底走不到），多个分组共用同一 key
+// 会导致 n-menu 折叠联动，分组一律用唯一 id；叶子节点用 route 供 :value 高亮匹配
+const getMenuKey = (item: Sidebar): string => {
+  return item.levelList?.length ? `menu-${item.id}` : (item.route || `menu-${item.id}`)
+}
+
 // 递归获取所有父级菜单的 key（用于默认展开）
 const getParentKeys = (items: Sidebar[]): string[] => {
   const keys: string[] = []
   items.forEach((item) => {
     if (item.levelList && item.levelList.length > 0) {
-      keys.push(item.route || `menu-${item.id}`)
+      keys.push(getMenuKey(item))
     }
   })
   return keys
@@ -92,7 +98,7 @@ const buildMenuOptions = (items: Sidebar[]): MenuOption[] => {
   return items.map((item) => {
     const menuItem: MenuOption = {
       label: item.sidebarName,
-      key: item.route || `menu-${item.id}`,
+      key: getMenuKey(item),
       icon: item.sidebarIcon ? createIconComponent(item.sidebarIcon) : undefined
     }
 

@@ -220,13 +220,13 @@ if (newData?.rows?.length > 0) {
 
 ---
 
-## 触底观察器目标元素禁止 v-if（强制，2026-10-12 生产触底失效实例）
+## 触底观察器目标元素禁止 v-if（强制）
 
-`ArticleList` 的 load-more 触发元素（`loadTrigger`）必须用 `v-show` 条件隐藏，**禁止 `v-if`**：
+onMounted 创建 IntersectionObserver 时数据通常尚未到达，`v-if` 会让目标元素不存在 → ref 为 null → 观察器创建被跳过，之后元素出现也无人补建，触底加载**静默失效**（无报错）。
 
-- `onMounted` 创建 IntersectionObserver 时数据尚未到达（`initArticles` 异步），`v-if="articles.length > 0"` 使元素不存在 → `loadTrigger` 为 null → 观察器创建被跳过；数据到达后元素出现，但**没有任何代码回头补建观察器** → 触底加载静默失效（无报错）
-- "从详情页返回"场景因 store 缓存（挂载时数据已在）观察器能正常创建，会掩盖问题——验证触底必须测**首次进入页面后滚动**
-- 通用规则：**任何在 onMounted 里创建、依赖模板 ref 的观察器/量测，其目标元素不能被 v-if 条件性移除**；需要条件隐藏用 v-show
+- 条件隐藏一律用 `v-show`（元素保持存在）
+- 通用规则：**在 onMounted 里创建、依赖模板 ref 的观察器/量测，目标元素不能被 v-if 条件性移除**
+- 验证触底必须测**首次进入页面后滚动**——"从详情页返回"场景因 store 缓存会掩盖问题
 
 ---
 

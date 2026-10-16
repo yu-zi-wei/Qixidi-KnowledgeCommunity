@@ -14,5 +14,7 @@
         FROM b_private_user AS pu
                  LEFT JOIN b_user_main AS um ON pu.target_uid = um.uuid
         where pu.uid = #{bo.uid}
+        <!-- update_time 即最新消息时间（发消息时 updatePrivateNews 双向刷新），其次按会话创建时间 -->
+        ORDER BY pu.update_time DESC, pu.create_time DESC
     </select>
 </mapper>
