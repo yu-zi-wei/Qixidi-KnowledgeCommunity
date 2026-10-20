@@ -274,7 +274,7 @@ const runningRemainDays = computed(() => {
 
 /* 卡片通用样式 - 轻透风格，与文章卡片统一 */
 .sidebar-card {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--sidebar-card-bg);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   padding: 16px;
@@ -284,18 +284,16 @@ const runningRemainDays = computed(() => {
 }
 
 .sidebar-card:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--sidebar-card-bg-hover);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
-/* 暗色主题 */
+/* 暗色主题（背景由 token 翻转，这里只管边框和阴影） */
 :root.dark .sidebar-card {
-  background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.06);
 }
 
 :root.dark .sidebar-card:hover {
-  background: rgba(255, 255, 255, 0.06);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -481,20 +479,12 @@ const runningRemainDays = computed(() => {
 
 /* 站点信息卡片 - 更轻 */
 .site-info-card {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--site-card-bg);
   padding: 14px;
 }
 
-:root.dark .site-info-card {
-  background: rgba(255, 255, 255, 0.02);
-}
-
 .site-info-card:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-:root.dark .site-info-card:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--site-card-bg-hover);
 }
 
 /* 品牌头部 */

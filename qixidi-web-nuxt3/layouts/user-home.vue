@@ -316,7 +316,7 @@ const handlePrivateMsg = async () => {
 
 /* ======== 用户头部 + 菜单合并卡片 ======== */
 .user-header-card {
-  background: var(--color-surface);
+  background: var(--user-card-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
@@ -381,7 +381,8 @@ const handlePrivateMsg = async () => {
   color: #fff;
   background: var(--color-primary);
   border-radius: var(--radius-full);
-  border: 2px solid var(--color-surface);
+  /* 描边色跟随卡片背景，避免白色卡片上露灰边 */
+  border: 2px solid var(--user-card-bg);
   font-weight: 500;
 }
 

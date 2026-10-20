@@ -182,7 +182,7 @@ watch(() => props.articles.length, () => {
   gap: 16px;
   padding: 16px;
   padding-left: 20px;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--article-card-bg);
   border: none;
   border-radius: 10px;
   transition: all 0.2s ease;
@@ -214,19 +214,11 @@ watch(() => props.articles.length, () => {
 }
 
 .article-card:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--article-card-bg-hover);
 }
 
 .article-card:hover .card-accent {
   opacity: 1;
-}
-
-:root.dark .article-card {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-:root.dark .article-card:hover {
-  background: rgba(255, 255, 255, 0.06);
 }
 
 .article-body {

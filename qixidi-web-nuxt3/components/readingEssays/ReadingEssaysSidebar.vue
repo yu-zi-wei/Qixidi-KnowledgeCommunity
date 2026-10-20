@@ -226,9 +226,9 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   display: none;
 }
 
-/* 卡片通用样式 - 轻透风格，与首页侧边栏统一 */
+/* 卡片通用样式 - 与首页侧边栏共用 token（main.css --sidebar-card-bg） */
 .sidebar-card {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--sidebar-card-bg);
   border: none;
   border-radius: 10px;
   padding: 16px;
@@ -238,16 +238,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 }
 
 .sidebar-card:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* 暗色主题 */
-:root.dark .sidebar-card {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-:root.dark .sidebar-card:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--sidebar-card-bg-hover);
 }
 
 /* 占位状态 */

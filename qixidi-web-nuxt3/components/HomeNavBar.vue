@@ -524,7 +524,9 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
   align-items: center;
   gap: 24px;
   padding: 14px 24px;
-  background: var(--color-surface);
+  background: var(--nav-bar-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-bottom: 1px solid var(--color-border-light);
   box-shadow: var(--shadow-sm);
   height: 66px;

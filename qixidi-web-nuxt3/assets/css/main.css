@@ -17,12 +17,26 @@
   --color-surface-warm: #f4f5f7;
   --color-surface-dim: #eef0f2;
 
+  /* 顶部导航栏背景（微透白，配合毛玻璃模糊） */
+  --nav-bar-bg: rgba(255, 255, 255, 0.9);
+
+  /* 个人主页用户信息卡背景（纯白） */
+  --user-card-bg: #ffffff;
+
   /* 网格效果 - 冷色调 */
-  --grid-color: rgba(61, 90, 128, 0.06);
+  --grid-color: rgba(61, 90, 128, 0.035);
   --grid-size: 40px;
 
   /* 卡片背景 - 冷白 */
   --card-bg: rgba(255, 255, 255, 0.6);
+
+  /* 半透明卡片分层：文章卡 > 侧边栏卡 > 站点信息卡（改透明度统一在这里调） */
+  --article-card-bg: rgba(255, 255, 255, 0.5);
+  --article-card-bg-hover: rgba(255, 255, 255, 0.6);
+  --sidebar-card-bg: rgba(255, 255, 255, 0.35);
+  --sidebar-card-bg-hover: rgba(255, 255, 255, 0.5);
+  --site-card-bg: rgba(255, 255, 255, 0.25);
+  --site-card-bg-hover: rgba(255, 255, 255, 0.35);
 
   /* 边框色 - 冷灰 */
   --color-border: #e2e4e8;
@@ -131,11 +145,25 @@
   --color-surface-warm: #17171b;
   --color-surface-dim: #28282e;
 
+  /* 顶部导航栏背景（微透深灰） */
+  --nav-bar-bg: rgba(30, 30, 34, 0.9);
+
+  /* 个人主页用户信息卡背景 */
+  --user-card-bg: #1e1e22;
+
   /* 网格效果 */
   --grid-color: rgba(90, 127, 168, 0.08);
 
   /* 卡片背景 - 冷灰 */
   --card-bg: rgba(23, 23, 27, 0.5);
+
+  /* 半透明卡片分层（深色主题走白色低透明叠加） */
+  --article-card-bg: rgba(255, 255, 255, 0.03);
+  --article-card-bg-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-card-bg: rgba(255, 255, 255, 0.03);
+  --sidebar-card-bg-hover: rgba(255, 255, 255, 0.06);
+  --site-card-bg: rgba(255, 255, 255, 0.02);
+  --site-card-bg-hover: rgba(255, 255, 255, 0.04);
 
   /* 边框色 - 冷灰 */
   --color-border: #38383e;
