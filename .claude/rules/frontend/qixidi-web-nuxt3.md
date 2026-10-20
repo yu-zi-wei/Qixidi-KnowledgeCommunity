@@ -105,6 +105,7 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 - **n-tabs 占满整行**：放进 flex 行内会独自占一行挤走其他元素，需 `width: auto; flex-shrink: 0`
 - **Transfer 穿梭框**：面板标题用 `source-title`/`target-title`（不是 render 函数）；不支持 `#source`/`#target` slot；高度用固定像素，禁百分比/flex。开发顺序：先最简实现跑通 → 再加样式，一次只改一个问题
 - **grid 双栏等宽**：并排卡片列写 `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)`，不能只写 `1fr 1fr`（子项 min-width:auto，nowrap 长文本会撑开挤压相邻列，内部 ellipsis 失效）
+- **flex 子项含不可收缩内容（nowrap 胶囊/chip 横滚条）必须 `min-width: 0` 断链**：否则固有宽度沿 flex 链层层外传，移动端撑出整页横向滚动（实测：12 个月份胶囊 678px 把 375px 页面撑到 771px）；外层容器可再叠 `overflow-x: clip` 兜底
 
 ### md-editor-v3 编程式插入（强制）
 
@@ -157,7 +158,7 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 
 1. **驱动**：`puppeteer-core` + 本机 Edge 无头（`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`）
 2. **登录态构造**（admin 页必经）：
-   - token 来源：Redis db1 `KEYS "Authorization:login:token:*"` 取 key 后缀（**只读，token 值不得进日志**）；需当前用户信息时用该 token 调 `/oauth/getInfo`（header 带 `Bearer` 前缀）
+   - token 来源：Redis db1 `KEYS "Authorization:login:token-session:*"` 取 key 后缀（注意不是 `login:token:*`——那个的后缀是 loginId:device；本机 Redis 3.2.100 的 `--scan` 不返回结果，必须用 `KEYS`；**只读，token 值不得进日志**）；需当前用户信息时用该 token 调 `/oauth/getInfo`（header 带 `Bearer` 前缀）
    - **注入方式必须是 `auth` cookie**：`document.cookie = 'auth=' + encodeURIComponent(JSON.stringify({token})) + '; path=/'`，注入后重载让 `auth-init.client.ts` 读到
    - 🔴 **不能往 localStorage 注入**：本项目 pinia persist 默认 storage 是 cookie（key=store id=`auth`）
 3. **页面导航**：admin 页用客户端导航模拟真实路径（`__vue_app__.config.globalProperties.$router.push(path)`）；已登录态 URL goto（刷新场景）也要测
