@@ -12,8 +12,8 @@
           class="date-wrapper"
           v-for="(dateData, dateIndex) in columnData.data"
           :key="dateIndex"
-          :style="{ background: getColor(dateData.number) }"
-          :title="`${dateData.date} +${dateData.number}`"
+          :style="{ background: getColor(countOf(dateData)) }"
+          :title="`${dateData.date}：文章 +${dateData.articleSum} · 小记 +${dateData.noteSum}`"
         />
       </div>
     </div>
@@ -40,13 +40,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+import type { SubmissionCensusType, UserSubmissionDay } from '~/types'
 
 const props = defineProps<{
-  profile?: Record<string, number>
+  profile?: Record<string, UserSubmissionDay>
+  censusType?: SubmissionCensusType
 }>()
 
-interface DateItem {
-  number: number
+interface DateItem extends UserSubmissionDay {
   date: string
 }
 
@@ -58,7 +59,20 @@ interface ColumnData {
 }
 
 const dateData = ref<ColumnData[]>([])
-const sumNumber = ref(0)
+
+// 统计口径由父级控制（tab 在页面标题行），不重建日历数据，仅切换取数与着色
+const activeType = computed<SubmissionCensusType>(() => props.censusType || 'all')
+
+// 当前口径下的当日数量
+const countOf = (item: UserSubmissionDay): number => {
+  if (activeType.value === 'article') return item.articleSum
+  if (activeType.value === 'note') return item.noteSum
+  return item.articleSum + item.noteSum
+}
+
+// 总贡献随口径联动
+const sumNumber = computed(() => dateData.value.reduce(
+  (sum, col) => sum + col.data.reduce((n, d) => n + countOf(d), 0), 0))
 
 const monthCN = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
 
@@ -91,7 +105,6 @@ const init = () => {
 
   // 绘制图表的源数据
   const result: ColumnData[] = []
-  let totalSum = 0
   const record = props.profile || {}
 
   for (let i = 0; i < lineNums; i++) {
@@ -126,11 +139,11 @@ const init = () => {
       date.setDate(firstMonday.getDate() + i * 7 + j)
       const dateStr = formatDate(date)
 
-      const number = record[dateStr] || 0
-      totalSum += number
+      const day = record[dateStr]
 
       columnData.data.push({
-        number,
+        articleSum: day?.articleSum || 0,
+        noteSum: day?.noteSum || 0,
         date: dateStr
       })
     }
@@ -139,7 +152,6 @@ const init = () => {
   }
 
   dateData.value = result
-  sumNumber.value = totalSum
 }
 
 const formatDate = (date: Date): string => {
@@ -149,11 +161,19 @@ const formatDate = (date: Date): string => {
   return `${year}-${month}-${day}`
 }
 
+// 各口径颜色分档阈值（小记发布频率高，档位放宽避免满屏深色）
+const THRESHOLDS: Record<SubmissionCensusType, number[]> = {
+  all: [1, 4, 8, 12],
+  article: [1, 4, 8, 12],
+  note: [1, 6, 12, 20]
+}
+
 const getColor = (number: number): string => {
-  if (number >= 12) return 'var(--chart-level-5)'
-  if (number >= 8) return 'var(--chart-level-4)'
-  if (number >= 4) return 'var(--chart-level-3)'
-  if (number >= 1) return 'var(--chart-level-2)'
+  const [level2, level3, level4, level5] = THRESHOLDS[activeType.value]
+  if (number >= level5) return 'var(--chart-level-5)'
+  if (number >= level4) return 'var(--chart-level-4)'
+  if (number >= level3) return 'var(--chart-level-3)'
+  if (number >= level2) return 'var(--chart-level-2)'
   return 'var(--chart-level-1)'
 }
 

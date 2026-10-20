@@ -12,4 +12,13 @@
         </foreach>
         GROUP BY uid
     </select>
+
+    <select id="submissionCensus" resultType="com.light.core.core.domain.vo.CensusVo">
+        SELECT DATE_FORMAT(create_time, '%Y-%m-%d') as dateTimes, count(id) as censusSum
+        FROM b_time_notes
+        WHERE DATE_FORMAT(create_time, '%Y-%m-%d')<![CDATA[ >= ]]>#{time}
+          AND uid = #{uuid}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
+        ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')
+    </select>
 </mapper>

@@ -19,14 +19,14 @@ export const useUserCensusApi = () => {
   }
 
   /**
-   * 获取用户投稿记录
-   * 返回格式：[{dateTimes, censusSum}, ...]
+   * 获取用户投稿记录（文章 + 小记按天统计）
+   * 返回格式：[{dateTimes, articleSum, noteSum}, ...]
    */
   const getUserSubmission = async (): Promise<UserSubmissionRecord> => {
     const data = await api.get<UserSubmissionItem[]>('/user/census/submission')
-    // 转换为 { dateTimes: censusSum } 格式
+    // 转换为 { dateTimes: {articleSum, noteSum} } 格式
     return (data || []).reduce((acc, item) => {
-      acc[item.dateTimes] = item.censusSum
+      acc[item.dateTimes] = { articleSum: item.articleSum || 0, noteSum: item.noteSum || 0 }
       return acc
     }, {} as UserSubmissionRecord)
   }

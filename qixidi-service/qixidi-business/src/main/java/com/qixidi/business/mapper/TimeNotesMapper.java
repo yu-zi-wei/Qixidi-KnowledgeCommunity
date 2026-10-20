@@ -1,6 +1,7 @@
 package com.qixidi.business.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,5 +18,7 @@ import java.util.List;
 public interface TimeNotesMapper extends BaseMapper<TimeNotes> {
 
     List<CountUserWebsiteVo> selectTimeNotesCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
+
+    List<CensusVo> submissionCensus(@Param("uuid") String uuid, @Param("time") String time);
 
 }

@@ -127,9 +127,14 @@
     <section class="submission-section">
       <div class="section-header">
         <h3 class="section-title">投稿贡献</h3>
+        <div class="submission-tabs">
+          <button class="submission-tab" :class="{ active: submissionType === 'all' }" @click="submissionType = 'all'">全部</button>
+          <button class="submission-tab" :class="{ active: submissionType === 'article' }" @click="submissionType = 'article'">文章</button>
+          <button class="submission-tab" :class="{ active: submissionType === 'note' }" @click="submissionType = 'note'">小记</button>
+        </div>
       </div>
       <div class="chart-wrapper">
-        <SubmissionChart :profile="submissionData || {}" />
+        <SubmissionChart :census-type="submissionType" :profile="submissionData || {}" />
       </div>
     </section>
 
@@ -165,7 +170,7 @@
 
 <script setup lang="ts">
 import { FileText, Layout, Bookmark, Users, MessageCircle, Disc, Notebook, Clock, Heart, Edit, Eye } from '@vicons/tabler'
-import type { CensusTrendItem } from '~/types'
+import type { CensusTrendItem, SubmissionCensusType } from '~/types'
 
 definePageMeta({ layout: 'admin', middleware: 'creator' })
 
@@ -187,6 +192,9 @@ const { data: submissionData } = await useAsyncData(
   'admin-submission',
   () => censusApi.getUserSubmission()
 )
+
+// 投稿贡献图统计口径：全部 / 文章 / 小记
+const submissionType = ref<SubmissionCensusType>('all')
 
 // 获取近30天趋势数据
 const { data: browseTrendData } = await useAsyncData(
@@ -413,6 +421,8 @@ const formatViewCount = (v: number | undefined) => {
 }
 
 .section-header {
+  display: flex;
+  align-items: center;
   margin-bottom: 16px;
 }
 
@@ -421,6 +431,34 @@ const formatViewCount = (v: number | undefined) => {
   font-weight: 600;
   color: var(--color-ink);
   margin: 0;
+}
+
+.submission-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.submission-tab {
+  padding: 2px 10px;
+  font-size: var(--text-xs);
+  color: var(--color-ink-muted);
+  background: none;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.submission-tab:hover {
+  color: var(--color-ink);
+}
+
+.submission-tab.active {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border-color: transparent;
+  font-weight: 500;
 }
 
 .chart-wrapper {

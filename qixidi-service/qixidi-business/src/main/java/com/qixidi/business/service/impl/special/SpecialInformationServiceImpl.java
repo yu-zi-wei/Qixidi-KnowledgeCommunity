@@ -23,8 +23,10 @@ import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
+import com.qixidi.business.domain.vo.SubmissionCensusVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
+import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
 import com.qixidi.business.service.count.UserCountQueryHelper;
@@ -36,7 +38,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,6 +58,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     private final SpecialInformationMapper baseMapper;
     private final ArticleInformationMapper articleInformationMapper;
     private final UserCountQueryHelper userCountQueryHelper;
+    private final TimeNotesMapper timeNotesMapper;
 
     /**
      * 查询专栏信息
@@ -244,7 +249,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     }
 
     @Override
-    public List<CensusVo> submissionCensus() {
+    public List<SubmissionCensusVo> submissionCensus() {
         LocalDate currentDate = LocalDate.now();
         // 减去一年
         LocalDate oneYearAgo = currentDate.minusYears(1);
@@ -252,7 +257,19 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = oneYearAgo.format(formatter);
         String uuid = LoginHelper.getTripartiteUuid();
-        return articleInformationMapper.submissionCensus(uuid, formattedDate);
+        // 文章与小记分别按天统计后按日期合并（Mapper 层复用时间序列 CensusVo）
+        Map<String, SubmissionCensusVo> merged = new HashMap<>();
+        for (CensusVo article : articleInformationMapper.submissionCensus(uuid, formattedDate)) {
+            SubmissionCensusVo vo = merged.computeIfAbsent(article.getDateTimes(), k -> new SubmissionCensusVo(k, 0L, 0L));
+            vo.setArticleSum(article.getCensusSum());
+        }
+        for (CensusVo note : timeNotesMapper.submissionCensus(uuid, formattedDate)) {
+            SubmissionCensusVo vo = merged.computeIfAbsent(note.getDateTimes(), k -> new SubmissionCensusVo(k, 0L, 0L));
+            vo.setNoteSum(note.getCensusSum());
+        }
+        return merged.values().stream()
+                .sorted(Comparator.comparing(SubmissionCensusVo::getDateTimes))
+                .collect(Collectors.toList());
     }
 
     private void enrichWithIncludedCount(List<SpecialInformationVo> list) {

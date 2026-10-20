@@ -539,10 +539,17 @@ export interface UserCensusCount {
   viewCount: number         // 总浏览量（已发布文章）
 }
 
-// 用户投稿记录项（接口返回格式）
+// 用户投稿记录项（接口返回格式，文章 + 小记按天统计）
 export interface UserSubmissionItem {
   dateTimes: string         // 日期
-  censusSum: number         // 投稿数量
+  articleSum: number        // 当日发布文章数
+  noteSum: number           // 当日发布小记数
+}
+
+// 单日投稿数据（用于图表组件）
+export interface UserSubmissionDay {
+  articleSum: number        // 当日发布文章数
+  noteSum: number           // 当日发布小记数
 }
 
 // 趋势数据点（浏览/互动趋势接口返回格式）
@@ -552,8 +559,11 @@ export interface CensusTrendItem {
   title?: string            // 互动趋势序列名：fabulous=获赞 comment=评论
 }
 
-// 用户投稿记录（日期 -> 数量映射，用于图表组件）
-export type UserSubmissionRecord = Record<string, number>
+// 用户投稿记录（日期 -> 当日投稿数据映射，用于图表组件）
+export type UserSubmissionRecord = Record<string, UserSubmissionDay>
+
+// 投稿统计口径：全部 / 仅文章 / 仅小记
+export type SubmissionCensusType = 'all' | 'article' | 'note'
 
 // ==================== 后台文章管理相关 ====================
 

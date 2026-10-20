@@ -8,6 +8,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
+import com.qixidi.business.domain.vo.SubmissionCensusVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
 
@@ -87,7 +88,7 @@ public interface ISpecialInformationService {
 
     Page<ArticleInformationVo> getArticleList(ArticleInformationBo bo, PageQuery pageQuery);
 
-    List<CensusVo> submissionCensus();
+    List<SubmissionCensusVo> submissionCensus();
 
 }
 

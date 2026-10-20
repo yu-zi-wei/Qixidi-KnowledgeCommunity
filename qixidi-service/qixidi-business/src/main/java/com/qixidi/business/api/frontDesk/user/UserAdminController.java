@@ -3,6 +3,7 @@ package com.qixidi.business.api.frontDesk.user;
 import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
+import com.qixidi.business.domain.vo.SubmissionCensusVo;
 import com.qixidi.business.service.IBrowsingHistoryService;
 import com.qixidi.business.service.article.IArticleInformationService;
 import com.qixidi.business.service.collection.ICollectionInformationService;
@@ -66,7 +67,7 @@ public class UserAdminController {
      * @return
      */
     @GetMapping("/submission")
-    public List<CensusVo> submissionCensus() {
+    public List<SubmissionCensusVo> submissionCensus() {
         return iSpecialInformationService.submissionCensus();
     }
 
