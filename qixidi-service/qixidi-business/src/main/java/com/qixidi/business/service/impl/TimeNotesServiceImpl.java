@@ -21,7 +21,9 @@ import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.service.TimeNotesService;
+import com.qixidi.business.service.album.IAlbumService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +38,13 @@ import java.util.Map;
  * @author zi-wei
  * @create 2025/3/26 10:09
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class TimeNotesServiceImpl implements TimeNotesService {
 
     private final TimeNotesMapper timeNotesMapper;
+    private final IAlbumService albumService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -52,6 +56,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
         timeNotes.setUid(tripartiteUser.getUuid());
         timeNotesMapper.insert(timeNotes);
+        syncAlbumQuietly(timeNotes);
     }
 
     @Override
@@ -62,12 +67,34 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         }
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
         timeNotesMapper.updateById(timeNotes);
+        // 以库中最新数据为准重新解析（bo 可能不带 uid；内容被清空时同步清空相册）
+        TimeNotes updated = timeNotesMapper.selectById(bo.getId());
+        if (updated != null) {
+            syncAlbumQuietly(updated);
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(Long id) {
         timeNotesMapper.deleteById(id);
+        try {
+            albumService.removeBySource(IAlbumService.SOURCE_TIME_NOTES, id);
+        } catch (Exception e) {
+            log.warn("删除小记相册记录失败, noteId={}: {}", id, e.getMessage());
+        }
+    }
+
+    /**
+     * 解析小记内容图片入相册，失败不影响小记主流程
+     */
+    private void syncAlbumQuietly(TimeNotes timeNotes) {
+        try {
+            albumService.syncImages(IAlbumService.SOURCE_TIME_NOTES,
+                    timeNotes.getId(), timeNotes.getUid(), timeNotes.getRecordTime(), timeNotes.getContent());
+        } catch (Exception e) {
+            log.warn("小记图片解析入相册失败, noteId={}: {}", timeNotes.getId(), e.getMessage());
+        }
     }
 
     @Override

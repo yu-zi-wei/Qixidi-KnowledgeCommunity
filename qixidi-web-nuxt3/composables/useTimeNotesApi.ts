@@ -23,7 +23,7 @@ export const useTimeNotesApi = () => {
    * 获取时光小记详情
    * 接口：GET /white/time/notes/getInfo/{id}
    */
-  const getTimeNotesDetail = async (id: number): Promise<TimeNotesInfo> => {
+  const getTimeNotesDetail = async (id: number | string): Promise<TimeNotesInfo> => {
     return await api.get<TimeNotesInfo>(`/white/time/notes/getInfo/${id}`)
   }
 
