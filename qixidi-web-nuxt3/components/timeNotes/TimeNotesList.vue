@@ -2,7 +2,13 @@
   <div class="time-notes-list">
     <!-- 标题 -->
     <div class="list-header">
-      <h2 class="list-title">时光小记</h2>
+      <div class="list-header-left">
+        <h2 class="list-title">时光小记</h2>
+        <NuxtLink to="/album" class="album-link">
+          <Photo class="album-link-icon" />
+          小记相册
+        </NuxtLink>
+      </div>
       <span class="list-count">共 {{ total }} 篇</span>
     </div>
 
@@ -65,6 +71,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { Photo } from '@vicons/tabler'
 import type { TimeNotesVo } from '~/types'
 
 interface Props {
@@ -158,6 +165,39 @@ const formatNoteDate = (dateStr: string) => {
   font-weight: 600;
   color: var(--color-ink);
   margin: 0;
+}
+
+.list-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* 相册入口：品牌浅底胶囊 + 图标（站内品牌提示视觉语言） */
+.album-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.album-link:hover {
+  color: var(--color-primary-hover);
+  filter: brightness(0.97);
+}
+
+.album-link-icon {
+  width: 14px;
+  height: 14px;
 }
 
 .list-count {
