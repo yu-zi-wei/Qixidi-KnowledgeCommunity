@@ -16,7 +16,7 @@
           <button
             class="album-year-btn"
             :class="{ active: activeMonth?.startsWith(yearGroup.year) }"
-            @click="handleYearClick(yearGroup.year)"
+            @click="filterTo(yearGroup.year)"
           >
             {{ yearGroup.year }}年
             <span class="album-month-count">{{ yearGroup.total }}</span>
@@ -25,68 +25,81 @@
       </template>
     </aside>
 
-    <!-- 右侧瀑布流内容（按月分组） -->
+    <!-- 中间瀑布流内容（连续流，无月份分割） -->
     <div class="album-main">
-      <!-- 吸顶月份条：跟随当前浏览年份，与左侧年份目录同步滚动/切换 -->
-      <div v-if="barMonths.length" ref="monthBarRef" class="album-month-bar" :class="{ stuck: barStuck }">
-        <span class="album-month-bar-year">{{ barYear }}年</span>
-        <div class="album-month-bar-list">
-          <button
-            v-for="stat in barMonths"
-            :key="stat.month"
-            class="album-month-bar-item"
-            :class="{ active: activeMonth === stat.month }"
-            @click="handleMonthClick(stat.month)"
-          >
-            {{ formatMonthTitle(stat.month) }}
-            <span class="album-month-bar-count">{{ stat.count }}</span>
-          </button>
-        </div>
-      </div>
       <div v-if="listLoading && !albumList.length" class="album-loading">
         <n-spin size="large" />
       </div>
       <CommonEmptyState v-else-if="!albumList.length" description="暂无图片" />
-      <template v-else>
-        <div
-          v-for="group in monthGroups"
-          :key="group.month"
-          :ref="(el: any) => setMonthRef(group.month, el)"
-          class="album-month-group"
-        >
-          <div class="album-month-header">
-            <span>{{ formatMonthTitle(group.month) }}</span>
-            <span class="album-month-sum">「{{ group.items.length }}张」</span>
-          </div>
-          <div class="album-masonry">
-            <div v-for="item in group.items" :key="item.id" class="album-item">
-              <!-- 点击图片放大预览 -->
-              <n-image
+      <div v-else class="album-masonry">
+        <div v-for="(col, colIndex) in distributedColumns" :key="colIndex" class="album-col">
+          <div
+            v-for="item in col"
+            :key="item.id"
+            class="album-item"
+            :data-month="monthOf(item)"
+            :data-month-first="monthFirstIds.has(item.id) ? '' : undefined"
+          >
+            <!-- 点击图片打开 ImagePreview 大图预览（与文章详情同款）；容器裁剪 hover 放大 -->
+            <div class="album-img">
+              <img
                 :src="item.url"
-                :img-props="{ loading: 'lazy' }"
-                object-fit="cover"
-                class="album-img"
-              />
-              <div class="album-meta">
-                <button
-                  v-if="item.source === 1"
-                  class="album-note-link"
-                  @click="handleNoteClick(item)"
-                >
-                  查看小记
-                </button>
-                <span class="album-time">{{ item.sourceTime }}</span>
-              </div>
+                loading="lazy"
+                :style="{ aspectRatio: 'auto 1' }"
+                alt="相册图片"
+                @load="onImgLoad(item, $event)"
+                @click="openPreview(item)"
+              >
+            </div>
+            <div class="album-meta">
+              <button
+                v-if="item.source === 1"
+                class="album-note-link"
+                @click="handleNoteClick(item)"
+              >
+                查看小记
+              </button>
+              <span class="album-time">{{ item.sourceTime }}</span>
             </div>
           </div>
         </div>
-      </template>
+      </div>
       <!-- 触底加载状态 -->
       <div v-if="albumList.length" class="album-load-status">
         <span v-if="listLoading">加载中...</span>
         <span v-else-if="!hasMore">— 没有更多了 —</span>
       </div>
     </div>
+
+    <!-- 右侧月份目录：只显示当前浏览年份的有图月份，滚动跨年自动切换；点击筛选该月 -->
+    <aside v-if="navMonths.length" class="album-month-nav">
+      <button
+        class="album-month-nav-item album-month-nav-all"
+        :class="{ active: !filterValue }"
+        @click="filterTo(null)"
+      >
+        全部
+        <span class="album-month-nav-count">{{ totalCount }}</span>
+      </button>
+      <button
+        v-for="stat in navMonths"
+        :key="stat.month"
+        class="album-month-nav-item"
+        :class="{ active: activeMonth === stat.month }"
+        @click="filterTo(stat.month)"
+      >
+        {{ formatMonthTitle(stat.month) }}
+        <span class="album-month-nav-count">{{ stat.count }}</span>
+      </button>
+    </aside>
+
+    <!-- 图片大图预览（复用文章详情组件：滚轮缩放 · 拖拽移动 · 双击重置） -->
+    <ImagePreview
+      :visible="previewVisible"
+      :image-src="previewSrc"
+      alt="相册图片"
+      @close="previewVisible = false"
+    />
 
     <!-- 小记详情抽屉（PC；移动端直接跳详情页） -->
     <n-drawer v-model:show="drawerVisible" :width="800" placement="right">
@@ -122,6 +135,15 @@ const timeNotesApi = useTimeNotesApi()
 const router = useRouter()
 const route = useRoute()
 
+// ==================== 图片大图预览（复用文章详情 ImagePreview） ====================
+const previewVisible = ref(false)
+const previewSrc = ref('')
+
+const openPreview = (item: AlbumItem) => {
+  previewSrc.value = item.url
+  previewVisible.value = true
+}
+
 // ==================== 小记详情抽屉 ====================
 // 移动端检测
 const isMobile = ref(false)
@@ -155,17 +177,14 @@ const handleNoteEdit = (id: number) => {
 
 onMounted(() => {
   isMobile.value = window.innerWidth < 768
+  calcColumnCount()
   const handleResize = () => {
     isMobile.value = window.innerWidth < 768
+    calcColumnCount()
   }
   window.addEventListener('resize', handleResize)
   onUnmounted(() => window.removeEventListener('resize', handleResize))
 })
-
-interface AlbumMonthGroup {
-  month: string
-  items: AlbumItem[]
-}
 
 interface AlbumYearGroup {
   year: string
@@ -189,6 +208,7 @@ const hasMore = computed(() => albumList.value.length < total.value)
 const loadAlbum = async (reset = false) => {
   if (listLoading.value) return false
   listLoading.value = true
+  if (reset) assignedColMap.clear() // 重置场景清空分配锁，新数据全量重排
   try {
     const current = reset ? 1 : pageNum.value
     const result = await albumApi.getAlbumList({
@@ -208,20 +228,79 @@ const loadAlbum = async (reset = false) => {
   }
 }
 
-// 已加载图片按 yyyy-MM 分组（渐进构建：同月跨页追加，新月新建分组）
-const monthGroups = computed<AlbumMonthGroup[]>(() => {
-  const map = new Map<string, AlbumItem[]>()
+// ==================== 组内瀑布流分列（贪心放最矮列） ====================
+// 稳定性靠分配锁：item 一旦分到某列就锁定，触底追加、图片加载更新高度时旧图永不换列
+// 均衡性靠真实比例：图片 @load 记录宽高比，新图按真实列高进最矮列，底部差距随翻页收敛
+// （CSS columns 是列优先填充且追加会全量重平衡，顺序乱、旧图跳位，故弃用）
+
+// item.id -> 图片宽高比（w/h），未加载的图按 1:1 占位估算
+const ratioMap = reactive(new Map<string, number>())
+
+// item.id -> 已分配列（分配锁；筛选重置/列数变化时清空，全量重排）
+const assignedColMap = reactive(new Map<string, number>())
+
+// 响应式列数：大屏 4 / 中屏 3 / 手机 2
+const columnCount = ref(3)
+
+const calcColumnCount = () => {
+  const width = window.innerWidth
+  const next = width >= 1100 ? 4 : width >= 769 ? 3 : 2
+  if (next !== columnCount.value) {
+    columnCount.value = next
+    assignedColMap.clear()
+  }
+}
+
+// 单卡高度估算：列宽归一化（1/ratio）+ meta 行近似（约 0.2 列宽）
+const estimateHeight = (item: AlbumItem) => 1 / (ratioMap.get(item.id) || 1) + 0.2
+
+// 图片加载后记录真实宽高比，让后续新图的分配越来越准（已分配列不动）
+const onImgLoad = (item: AlbumItem, e: Event) => {
+  const img = e.target as HTMLImageElement
+  if (img.naturalWidth && img.naturalHeight) {
+    ratioMap.set(item.id, img.naturalWidth / img.naturalHeight)
+  }
+}
+
+// 连续瀑布流：全部图片贪心分列（分配锁 + 真实比例，触底追加不重排旧图）
+const distributedColumns = computed(() => {
+  const n = columnCount.value
+  const columns: AlbumItem[][] = Array.from({ length: n }, () => [])
+  const heights = new Array(n).fill(0)
   albumList.value.forEach((item) => {
-    if (!item.sourceTime) return
-    const month = item.sourceTime.substring(0, 7)
-    const list = map.get(month) || []
-    list.push(item)
-    map.set(month, list)
+    const locked = assignedColMap.get(item.id)
+    let target: number
+    if (locked !== undefined && locked < n) {
+      target = locked
+    } else {
+      // 新图进当前最矮的列（高度并列时靠左，视觉顺序大致行优先）
+      target = 0
+      for (let i = 1; i < n; i++) {
+        if (heights[i] < heights[target]) target = i
+      }
+      assignedColMap.set(item.id, target)
+    }
+    columns[target].push(item)
+    heights[target] += estimateHeight(item)
   })
-  return Array.from(map.entries())
-    .sort(([a], [b]) => b.localeCompare(a))
-    .map(([month, items]) => ({ month, items }))
+  return columns
 })
+
+// 每月首图 id（时间倒序遍历中每月出现的第一张），渲染时打 data-month-first 标记供滚动高亮定位
+const monthFirstIds = computed(() => {
+  const ids = new Set<string>()
+  let lastMonth = ''
+  albumList.value.forEach((item) => {
+    const m = item.sourceTime?.substring(0, 7) || ''
+    if (m && m !== lastMonth) {
+      ids.add(item.id)
+      lastMonth = m
+    }
+  })
+  return ids
+})
+
+const monthOf = (item: AlbumItem) => item.sourceTime?.substring(0, 7) || ''
 
 // ==================== 月份目录（统计接口独立加载，不依赖图片分页） ====================
 const monthStats = ref<AlbumMonthStat[]>([])
@@ -244,29 +323,15 @@ const yearGroups = computed<AlbumYearGroup[]>(() => {
 // 全部图片总张数（「全部」目录项角标）
 const totalCount = computed(() => monthStats.value.reduce((n, s) => n + s.count, 0))
 
-// 右侧月份条：跟随当前浏览年份（滚动跨年自动切换显示该年月份）
-const barYear = computed(() =>
+// 右侧月份目录：只显示当前浏览年份的有图月份（滚动跨年自动切换，月份重置到新年第一个有图月）
+const navYear = computed(() =>
   activeMonth.value?.split('-')[0] || monthStats.value[0]?.month.split('-')[0] || '')
-const barMonths = computed(() =>
-  monthStats.value.filter(s => s.month.startsWith(barYear.value)))
+const navMonths = computed(() =>
+  monthStats.value.filter(s => s.month.startsWith(navYear.value)))
 
-const monthRefs = ref<Record<string, HTMLElement>>({})
 const activeMonth = ref<string | null>(null)
 
-// 月份条是否吸顶：贴合导航栏后去圆角边框，避免图片从圆角缺口漏出
-const monthBarRef = ref<HTMLElement | null>(null)
-const barStuck = ref(false)
-
-const setMonthRef = (month: string, el: any) => {
-  // el 为 null 表示该分组已卸载（筛选切换重置列表），清掉悬空引用避免锚点滚动失效
-  if (el) {
-    monthRefs.value[month] = el as HTMLElement
-  } else {
-    delete monthRefs.value[month]
-  }
-}
-
-// 高亮当前月份（左侧年份目录与右侧月份条据此联动）
+// 高亮当前月份（左侧年份目录与右侧月份目录据此联动）
 const setActiveMonth = (month: string) => {
   activeMonth.value = month
 }
@@ -279,7 +344,7 @@ const filterTo = (value: string | null) => {
   if (value?.includes('-')) {
     setActiveMonth(value)
   } else if (value) {
-    // 年筛选：月份条切到该年第一个月
+    // 年筛选：月份目录切到该年第一个有图月
     const first = monthStats.value.find(s => s.month.startsWith(value))
     if (first) setActiveMonth(first.month)
   }
@@ -289,51 +354,22 @@ const filterTo = (value: string | null) => {
   })
 }
 
-// 月份点击：全部模式下已加载的月份锚点滚动，否则切换到该月筛选
-const handleMonthClick = (month: string) => {
-  const el = !filterValue.value ? monthRefs.value[month] : null
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    setActiveMonth(month)
-    return
-  }
-  filterTo(month)
-}
-
-// 年份点击：全部模式下已加载的定位到该年第一个月，否则切换到该年筛选
-const handleYearClick = (year: string) => {
-  if (!filterValue.value) {
-    const loaded = monthGroups.value.find(g => g.month.startsWith(year))
-    const el = loaded ? monthRefs.value[loaded.month] : null
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setActiveMonth(loaded.month)
-      return
-    }
-  }
-  filterTo(year)
-}
-
-// 滚动：高亮当前月份 + 触底加载更多
+// 滚动：高亮当前月份（连续流按月首图标记定位，跨年联动年份目录与右侧月份目录）+ 触底加载更多
 const handleScroll = () => {
-  if (monthBarRef.value) {
-    // 吸顶位 66px，留 1px 容差
-    barStuck.value = monthBarRef.value.getBoundingClientRect().top <= 67
-  }
-  const groups = monthGroups.value
-  let current = groups[0]?.month || null
-  for (let i = groups.length - 1; i >= 0; i--) {
-    const el = monthRefs.value[groups[i].month]
-    if (el && el.getBoundingClientRect().top <= 160) {
-      current = groups[i].month
-      break
-    }
-  }
+  // 分列后 DOM 是列优先序 ≠ 时间序，不能取"最后一个过线的"；
+  // 时间倒序流中当前浏览位置 = 过线标记里时间最早的月份。
+  // 判定线取视口中线：滚动触发懒加载、图片完成撑高布局会让首图位置漂移，顶部线会误判
+  const marks = document.querySelectorAll<HTMLElement>('[data-month-first]')
+  let current: string | null = null
+  marks.forEach((el) => {
+    const m = el.getAttribute('data-month')
+    if (el.getBoundingClientRect().top <= window.innerHeight / 2 && (!current || m < current)) current = m
+  })
   if (current) setActiveMonth(current)
 
-  // 距底部 200px 内加载下一页
+  // 距底部 700px 内加载下一页（窗口须覆盖懒加载图片完成后撑高的幅度，快速滚底时才不会错过触发）
   if (!listLoading.value && hasMore.value
-      && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 200) {
+      && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 700) {
     loadAlbum()
   }
 }
@@ -357,7 +393,7 @@ onMounted(async () => {
   }
 })
 
-// 月份标签（月份条与分组头只出 "10月"，年份由年份目录/月份条年份标识展示）
+// 月份标签（右栏目录只出 "10月"，年份由年份目录/右栏年份标识展示）
 const formatMonthTitle = (month: string) => {
   if (!month) return ''
   return `${Number(month.split('-')[1])}月`
@@ -368,7 +404,7 @@ const formatMonthTitle = (month: string) => {
 .album-page {
   display: flex;
   gap: 24px;
-  padding-top: 20px;
+  padding-top: var(--space-8);
   align-items: flex-start;
 }
 
@@ -461,77 +497,56 @@ const formatMonthTitle = (month: string) => {
   box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
-/* 右侧吸顶月份条（跟随当前年份，与左侧目录同步）；top=导航栏高度 66px，紧贴无缝 */
-.album-month-bar {
-  position: sticky;
-  top: 66px;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  margin-bottom: var(--space-4);
-  background: var(--nav-bar-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.album-month-bar::-webkit-scrollbar {
-  display: none;
-}
-
-/* 吸顶态：去圆角边框满宽贴合导航栏，只留底部分隔线 */
-.album-month-bar.stuck {
-  border: none;
-  border-bottom: 1px solid var(--color-border-light);
-  border-radius: 0;
-}
-
-.album-month-bar-year {
+/* 右侧月份目录：只显示当前浏览年份的有图月份，滚动跨年自动切换；点击筛选该月 */
+.album-month-nav {
+  width: 110px;
   flex-shrink: 0;
-  font-size: var(--text-base);
+  position: sticky;
+  top: 78px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 12px;
+  border-left: 2px solid var(--color-border-light);
+}
+
+/* 全部入口：置顶加粗，底部分隔；筛选月份后由此切回全部浏览 */
+.album-month-nav-all {
   font-weight: 600;
   color: var(--color-ink);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
-.album-month-bar-list {
-  display: flex;
-  gap: var(--space-2);
-  /* 胶囊均不收缩，必须解除 flex 子项 min-width:auto，否则把父链撑出横向滚动 */
-  min-width: 0;
+.album-month-nav-all.active {
+  color: var(--color-primary);
 }
 
-.album-month-bar-item {
+.album-month-nav-item {
   display: flex;
   align-items: baseline;
   gap: 4px;
-  padding: 4px 12px;
+  padding: 6px 2px 6px 0;
   border: none;
-  background: var(--color-surface-dim);
-  border-radius: var(--radius-full);
-  font-size: var(--text-xs);
-  color: var(--color-ink-light);
+  background: none;
   cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
   transition: all var(--transition-fast);
+  text-align: left;
 }
 
-.album-month-bar-item:hover {
+.album-month-nav-item:hover {
   color: var(--color-ink);
 }
 
-.album-month-bar-item.active {
-  background: var(--color-primary-light);
+.album-month-nav-item.active {
   color: var(--color-primary);
   font-weight: 600;
 }
 
-.album-month-bar-count {
+.album-month-nav-count {
   font-size: var(--text-xs);
   color: var(--color-ink-faint);
 }
@@ -548,7 +563,6 @@ const formatMonthTitle = (month: string) => {
   /* 防月份条等不收缩内容在移动端撑出页面横向滚动 */
   max-width: 100%;
   overflow-x: clip;
-  padding-left: 16px;
 }
 
 .album-loading {
@@ -567,60 +581,44 @@ const formatMonthTitle = (month: string) => {
   color: var(--color-ink-faint);
 }
 
-.album-month-group {
-  margin-bottom: 24px;
-  /* 停在吸顶月份条下方（66 条吸顶位 + 约 44 条高 + 间隙） */
-  scroll-margin-top: 118px;
-}
-
-.album-month-header {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: var(--text-base);
-  font-weight: 600;
-  color: var(--color-ink);
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--color-border-light);
-  margin-bottom: var(--space-4);
-}
-
-.album-month-sum {
-  font-size: var(--text-sm);
-  font-weight: 400;
-  color: var(--color-ink-muted);
-}
-
-/* 组内瀑布流：大屏 4 列，小屏 3 列（手机 2 列在移动端区块） */
+/* 连续瀑布流：JS 贪心分列（列数随断点由 distributedColumns 计算），触底追加不重排旧图 */
 .album-masonry {
-  columns: 3;
-  column-gap: var(--space-4);
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
 }
 
-@media (min-width: 1100px) {
-  .album-masonry {
-    columns: 4;
-  }
+.album-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .album-item {
-  break-inside: avoid;
-  margin-bottom: var(--space-4);
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--color-surface);
 }
 
+/* 图片容器：裁剪悬停放大，防止向下延伸盖住 meta 行（卡片 overflow:hidden 裁不到容器内兄弟元素） */
 .album-img {
+  overflow: hidden;
+}
+
+/* 图片按列宽等比缩放，加载前以方形占位防跳高（有内在尺寸用内在比例，否则 1:1） */
+.album-img img {
   display: block;
   width: 100%;
+  height: auto;
   min-height: 60px;
   cursor: zoom-in;
   transition: transform var(--transition-slow);
 }
 
-/* 悬停放大（卡片 overflow:hidden，不溢出） */
-.album-item:hover .album-img {
+/* 悬停放大（在容器内裁剪，不溢出、不遮挡 meta） */
+.album-item:hover .album-img img {
   transform: scale(1.05);
 }
 
@@ -707,22 +705,54 @@ const formatMonthTitle = (month: string) => {
     padding: 8px 14px;
   }
 
-  /* 移动端月份条紧贴 fixed 导航栏（高 56px）底边 */
-  .album-month-bar {
-    top: 56px;
+  /* 移动端月份目录变横向胶囊条：排在年份条之后、瀑布流之前（DOM 顺序 sidebar→main→nav，用 order 调整） */
+  .album-month-nav {
+    order: 1;
+    width: 100%;
+    position: static;
+    flex-direction: row;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-left: none;
+    padding-left: 0;
+    /* 胶囊均不收缩，必须解除 flex 子项 min-width:auto，否则把父链撑出横向滚动 */
+    min-width: 0;
+  }
+
+  .album-month-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .album-month-nav-item {
+    flex: none;
+    justify-content: center;
+    padding: 4px 12px;
+    background: var(--color-surface-dim);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .album-month-nav-item.active {
+    background: var(--color-primary-light);
+  }
+
+  /* "全部"在横向胶囊条中与其他月份同形，去掉桌面端的置顶分隔 */
+  .album-month-nav-all {
+    border-bottom: none;
+    margin-bottom: 0;
   }
 
   .album-main {
-    padding-left: 0;
+    order: 2;
   }
 
   .album-masonry {
-    columns: 2;
-    column-gap: 10px;
+    gap: 10px;
   }
 
-  .album-item {
-    margin-bottom: 10px;
+  .album-col {
+    gap: 10px;
   }
 
   /* 窄列下放不下时按钮/时间整体换行，避免挤压断行 */
