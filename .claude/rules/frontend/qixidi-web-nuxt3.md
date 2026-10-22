@@ -107,6 +107,10 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 - **grid 双栏等宽**：并排卡片列写 `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)`，不能只写 `1fr 1fr`（子项 min-width:auto，nowrap 长文本会撑开挤压相邻列，内部 ellipsis 失效）
 - **flex 子项含不可收缩内容（nowrap 胶囊/chip 横滚条）必须 `min-width: 0` 断链**：否则固有宽度沿 flex 链层层外传，移动端撑出整页横向滚动（实测：12 个月份胶囊 678px 把 375px 页面撑到 771px）；外层容器可再叠 `overflow-x: clip` 兜底
 
+### 瀑布流布局（强制）
+
+禁止用 CSS `columns` 做瀑布流——列优先填充导致视觉顺序乱，且追加数据触发全列重新平衡、旧图跳位。一律 JS 贪心分列（逐项放最矮列），估算高度必须确定性（固定值），才能保证触底追加时已渲染项永不换列。分列后 **DOM 顺序是列优先序 ≠ 时间序**——滚动高亮等按 DOM 序取"最后一个"的逻辑必错，须按数据时间序判定（如取过线标记中时间最早的）。参考 `ReadingEssaysWaterfall`、`pages/album/index.vue`。
+
 ### md-editor-v3 编程式插入（强制）
 
 禁止 `content.value += text`（永远追加末尾）。编辑器从未聚焦时 selectionStart=0 会插到**开头**——用 `@onFocus` 标记"放置过光标"，统一入口 `components/common/MdEditorWithVideo.vue` 的 `insertToEditor`。

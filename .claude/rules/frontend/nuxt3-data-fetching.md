@@ -220,6 +220,10 @@ if (newData?.rows?.length > 0) {
 
 ---
 
+## 滚动距离判定触底时窗口必须覆盖懒加载撑高幅度
+
+`loading="lazy"` 图片与 scroll 距离判定触底并存时，触发窗口（距底距离）必须 ≥ 图片加载完成后撑高 scrollHeight 的幅度（相册实测一页 20 张撑高 500px+）：快速滚到底时 scroll 回调读到的 scrollHeight 已被撑高，小窗口（200px 级）判定失效，偶发不加载下一页。窗口取 600~700px 或改用 IntersectionObserver 哨兵。视口内判定线（如月份高亮）同理会被撑高漂移——取视口中线而非顶部边缘线。
+
 ## 触底观察器目标元素禁止 v-if（强制）
 
 onMounted 创建 IntersectionObserver 时数据通常尚未到达，`v-if` 会让目标元素不存在 → ref 为 null → 观察器创建被跳过，之后元素出现也无人补建，触底加载**静默失效**（无报错）。
