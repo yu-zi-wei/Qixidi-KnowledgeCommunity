@@ -12,6 +12,7 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -26,7 +27,59 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UploadImageTool {
 
+    /** 单图上限 10MB（防无界内存与 OSS 垃圾写入） */
+    private static final int MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+
     private final ISysOssService iSysOssService;
+
+    /**
+     * 上传前置校验：大小上限 + 图片魔数嗅探（png/jpg/gif/webp）
+     */
+    static void validateImage(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            throw new ServiceException("图片内容为空");
+        }
+        if (bytes.length > MAX_IMAGE_BYTES) {
+            throw new ServiceException("图片超过 10MB 上限");
+        }
+        if (!isImageMagic(bytes)) {
+            throw new ServiceException("仅支持图片（png/jpg/gif/webp），请确认 base64 内容是图片");
+        }
+    }
+
+    private static boolean isImageMagic(byte[] b) {
+        // PNG
+        if (startsWith(b, new byte[]{(byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A})) {
+            return true;
+        }
+        // JPEG
+        if (startsWith(b, new byte[]{(byte) 0xFF, (byte) 0xD8, (byte) 0xFF})) {
+            return true;
+        }
+        // GIF87a / GIF89a
+        if (startsWith(b, "GIF8".getBytes(StandardCharsets.US_ASCII))) {
+            return true;
+        }
+        // WEBP：RIFF????WEBP
+        return startsWith(b, "RIFF".getBytes(StandardCharsets.US_ASCII))
+            && startsWith(b, "WEBP".getBytes(StandardCharsets.US_ASCII), 8);
+    }
+
+    private static boolean startsWith(byte[] data, byte[] prefix) {
+        return startsWith(data, prefix, 0);
+    }
+
+    private static boolean startsWith(byte[] data, byte[] prefix, int offset) {
+        if (data.length < offset + prefix.length) {
+            return false;
+        }
+        for (int i = 0; i < prefix.length; i++) {
+            if (data[offset + i] != prefix[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     @Tool(name = "upload_image", description = "上传图片（base64 编码），返回 OSS url，用于文章封面与正文配图。支持 png/jpg/jpeg/gif/webp。")
     public String uploadImage(
@@ -43,6 +96,7 @@ public class UploadImageTool {
         } catch (IllegalArgumentException e) {
             throw new ServiceException("base64 内容无效，请传纯 base64（不含 data:image 前缀）");
         }
+        validateImage(bytes);
         String name = (filename == null || filename.isBlank()) ? "mcp-image.png" : filename.trim();
         SysOss oss = iSysOssService.upload(new ByteArrayMultipartFile("file", name, guessContentType(name), bytes));
         Map<String, Object> result = new LinkedHashMap<>();

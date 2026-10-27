@@ -78,6 +78,8 @@ qixidi-business（复用现有 Service：文章/小记/标签/专栏）
 
 参照 GitHub PAT：
 
+> ⚠️ **凭证语义（终审回填）**：会话桥方案下 key 明文即完整前台会话凭证——可直接以 `Authorization: Bearer qxmcp_...` 调用全部前台登录接口（含注销账号等敏感端点），不止 12 个 tools。`/agent/mcp-info` 已向用户声明"请像密码一样保管"；敏感接口对 `device=mcp-*` 会话加防线的评估列为后续任务。
+
 - 表 `b_agent_api_key`：`id, user_id(uuid 字符串，前台用户主键为 uuid 非数字 id), key_name(备注名), key_hash(SHA-256), status(启用/停用), expire_time(可空), create_time, update_time, last_used_time`
 - **签发资格**：仅创作者（roleId≥2）可创建 API key，创建入口校验角色
 - key 明文格式：`qxmcp_` + 48 位随机串；明文仅创建时返回一次，库中只存 SHA-256

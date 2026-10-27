@@ -2,3 +2,6 @@ deployment.zip
 deployment
 .idea
 node_modules
+
+# 应用运行日志
+logs/
