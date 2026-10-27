@@ -1,6 +1,8 @@
 package com.qixidi.mcp.tools;
 
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -88,6 +91,101 @@ public class ArticleTools {
         Map<String, Object> result = new HashMap<>();
         result.put("articleId", id);
         result.put("auditState", "UNDER_REVIEW");
+        return JSONUtil.toJsonStr(result);
+    }
+
+    @Tool(name = "list_my_articles", description = "分页查询当前用户的文章列表（含草稿），返回精简字段 id/title/auditState/updateTime。auditState 含义：1 审核中、2 审核通过、3 审核不通过、4 草稿。")
+    public String listMyArticles(
+        @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
+        @ToolParam(description = "每页条数，默认 10，最大 50", required = false) Integer pageSize
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        ArticleInformationBo bo = new ArticleInformationBo();
+        // 强制按当前用户过滤（与 UserArticleController 列表同款），防止列出他人文章
+        bo.setUserId(user.getUuid());
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setPageNum(pageNum == null || pageNum < 1 ? 1 : pageNum);
+        pageQuery.setPageSize(pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 50));
+        Page<ArticleInformationVo> page = iArticleInformationService.getArticleInfo(bo, pageQuery);
+        List<Map<String, Object>> rows = page.getRecords().stream().map(v -> {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("id", v.getId());
+            row.put("title", v.getArticleTitle());
+            row.put("auditState", v.getAuditState());
+            row.put("updateTime", v.getUpdateTime());
+            return row;
+        }).collect(Collectors.toList());
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("total", page.getTotal());
+        result.put("rows", rows);
+        return JSONUtil.toJsonStr(result);
+    }
+
+    @Tool(name = "get_article", description = "获取指定文章的完整内容（Markdown 正文、标签、分类等），仅限本人的文章，用于编辑前取原文。")
+    public ArticleInformationVo getArticle(
+        @ToolParam(description = "文章 id（来自 list_my_articles 或 create_article 返回值）") Long articleId
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        // Service 层已做属主校验，非本人文章抛"无权操作他人内容"
+        return iArticleInformationService.getArticle(articleId);
+    }
+
+    @Tool(name = "update_article", description = "更新已有文章，仅传需要修改的字段（未传字段保持不变），更新提交后重新进入审核。仅能更新自己的文章。")
+    public String updateArticle(
+        @ToolParam(description = "文章 id") Long articleId,
+        @ToolParam(description = "新标题（不修改则不传）", required = false) String title,
+        @ToolParam(description = "新 Markdown 正文（不修改则不传）", required = false) String content,
+        @ToolParam(description = "标签 id 列表（不修改则不传）", required = false) List<Long> labelIds,
+        @ToolParam(description = "分类分组 id（不修改则不传）", required = false) Long groupingId,
+        @ToolParam(description = "专栏 id（不修改则不传）", required = false) Long specialId,
+        @ToolParam(description = "文章类型：1 原创 2 转载（不修改则不传）", required = false) Integer type,
+        @ToolParam(description = "转载原文链接（不修改则不传）", required = false) String reprintUrl,
+        @ToolParam(description = "自定义摘要（不修改则不传）", required = false) String articleAbstract
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        ArticleInformationBo bo = new ArticleInformationBo();
+        bo.setId(articleId);
+        bo.setArticleTitle(title);
+        bo.setArticleContent(content);
+        bo.setGroupingId(groupingId);
+        bo.setSpecialId(specialId);
+        bo.setType(type);
+        bo.setReprintUrl(reprintUrl);
+        bo.setArticleAbstract(articleAbstract);
+        if (labelIds != null && !labelIds.isEmpty()) {
+            bo.setLabelId(labelIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
+        // 与前台编辑同语义：更新提交后重新进入审核
+        bo.setAuditState(ArticleAuditStateEnums.UNDER_REVIEW.getCode());
+        iArticleInformationService.updateByBo(bo);
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("articleId", articleId);
+        result.put("auditState", "UNDER_REVIEW");
+        return JSONUtil.toJsonStr(result);
+    }
+
+    @Tool(name = "delete_article", description = "删除自己的文章，仅限本人。")
+    public String deleteArticle(
+        @ToolParam(description = "文章 id") Long articleId
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        // Service 层已做属主校验，非本人文章抛"无权操作他人内容"
+        int rows = iArticleInformationService.delete(articleId);
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("articleId", articleId);
+        result.put("deleted", rows > 0);
         return JSONUtil.toJsonStr(result);
     }
 }
