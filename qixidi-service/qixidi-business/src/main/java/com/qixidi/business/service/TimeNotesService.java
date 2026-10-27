@@ -13,7 +13,7 @@ import com.qixidi.business.domain.vo.TimeNotesVo;
  * @create 2025/3/26 10:09
  */
 public interface TimeNotesService {
-    void add(TimeNotesBo bo);
+    Long add(TimeNotesBo bo);
 
     void update(TimeNotesBo bo);
 

@@ -5,6 +5,8 @@ import com.qixidi.mcp.service.ApiKeyService;
 import com.qixidi.mcp.tools.ArticleTools;
 import com.qixidi.mcp.tools.PingTool;
 import com.qixidi.mcp.tools.PublishContextTool;
+import com.qixidi.mcp.tools.SkillTool;
+import com.qixidi.mcp.tools.TimeNotesTool;
 import com.qixidi.mcp.tools.UploadImageTool;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
@@ -22,9 +24,11 @@ public class McpServerConfig {
 
     @Bean
     public ToolCallbackProvider tools(PingTool pingTool, PublishContextTool publishContextTool,
-                                      ArticleTools articleTools, UploadImageTool uploadImageTool) {
+                                      ArticleTools articleTools, UploadImageTool uploadImageTool,
+                                      TimeNotesTool timeNotesTool, SkillTool skillTool) {
         return MethodToolCallbackProvider.builder()
-            .toolObjects(pingTool, publishContextTool, articleTools, uploadImageTool)
+            .toolObjects(pingTool, publishContextTool, articleTools, uploadImageTool,
+                timeNotesTool, skillTool)
             .build();
     }
 

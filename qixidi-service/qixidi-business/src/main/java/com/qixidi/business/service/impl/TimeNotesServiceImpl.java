@@ -48,7 +48,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void add(TimeNotesBo bo) {
+    public Long add(TimeNotesBo bo) {
         TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
         if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
             throw new ServiceException(MsgEnums.NOT_CREATOR);
@@ -57,6 +57,8 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         timeNotes.setUid(tripartiteUser.getUuid());
         timeNotesMapper.insert(timeNotes);
         syncAlbumQuietly(timeNotes);
+        // MCP tool 需要拿 id 做后续更新；唯一调用方 Controller 忽略返回值，源兼容
+        return timeNotes.getId();
     }
 
     @Override
