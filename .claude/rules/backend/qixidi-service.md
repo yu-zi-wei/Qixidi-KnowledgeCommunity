@@ -132,10 +132,12 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 
 ## 返回值与 Controller 规范
 
-| 类型 | 格式 | 前端调用 |
+**Controller 一律返回裸数据（含 void），禁止返回 R**——`ResponseAdvice` 对 com.qixidi 全局统一包装，直接返回 R 会双层嵌套（`{"code":200,"data":{"code":200,...}}`）。String 返回值会被 JSON 序列化包装。
+
+| 类型 | 写法 | 前端调用 |
 |------|------|----------|
-| 非分页 | `Result.ok(data)` → `{ code, msg, data }` | `api.get/post/put/delete`（自动解包） |
-| 分页 | `TableDataInfo` → `{ total, rows }` | `api.getPage` |
+| 非分页 | 返回 VO/List/Map 或 void → `{ code, msg, data }` | `api.get/post/put/delete`（自动解包） |
+| 分页 | 返回 `TableDataInfo` → `{ total, rows }`（Advice 放行不包装） | `api.getPage` |
 
 - 权限：`@SaCheckPermission("data:query")`；防重复提交：`@RepeatSubmit`
 

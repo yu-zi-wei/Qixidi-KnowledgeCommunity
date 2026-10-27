@@ -247,6 +247,7 @@ qixidi-service/
 ├── framework            # 框架层
 ├── qixidi-system        # 系统模块
 ├── qixidi-auth         # 认证模块
+├── qixidi-mcp          # MCP 服务模块（无状态 /mcp 端点 + API key 会话桥 + /agent 管理接口）
 ├── qixidi-business     # 业务模块
 │   ├── api            # Controller（backstage/frontDesk）
 │   ├── domain         # entity/bo/vo/enums

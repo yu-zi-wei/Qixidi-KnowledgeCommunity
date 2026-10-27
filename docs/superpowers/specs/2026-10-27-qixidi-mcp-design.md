@@ -98,6 +98,7 @@ Builder check 核实的存量弱点：前台文章/小记的 get/update/delete S
 
 | tool | 入参 → 出参 | 复用的 Service 对接点 |
 |------|------------|---------------------|
+| `ping` | text?（可选回显）→ pong | 无（连通性自检） |
 | `get_publish_context` | 无 → 标签列表、分组列表、我的专栏列表、笔名 | LabelInfoService（`/white/label/list`、`/white/label/grouping/list`）、SpecialInformationService（`/white/special/list`） |
 | `list_my_articles` | page → 分页列表 | UserArticleController 对应的 article/list Service |
 | `get_article` | id → 详情（含草稿） | get/article/{id} Service |
@@ -123,18 +124,17 @@ Builder check 核实的存量弱点：前台文章/小记的 get/update/delete S
 
 ## 网站管理接口（Sa-Token 认证，frontDesk）
 
-- `POST /agent/apiKey` 创建（返回明文一次）、`GET /agent/apiKey/list`、`PUT /agent/apiKey/{id}`（改名/启停）、`DELETE /agent/apiKey/{id}`
+- `POST /agent/apiKey` 创建（返回明文一次）、`GET /agent/apiKey/list`（脱敏，不含哈希）、`PUT /agent/apiKey/{id}`（改名；启停预留）、`DELETE /agent/apiKey/{id}`（吊销=删行+删缓存+按 device 登出该 key 会话，立即 401）
+- `POST /agent/apiKey` 创建仅限创作者（UserRoleEnums 高级角色门槛，与文章/小记发布同款）
 - `/agent/skill` CRUD 同构
 - `GET /agent/mcp-info` → MCP 端点地址 + 各家客户端（Claude Code / Codex / 通用）的配置片段，前端直接渲染
 
-增删改按规范加 `@Log`。
+增删改按规范加 `@Log`。Controller 返回裸数据（含 void），由 ResponseAdvice 统一包装——直接返回 R 会被再包一层（实施实证）。
 
 ## 实施风险与必须先验证的点（Spike 范围）
 
 1. **`spring-ai-starter-mcp-server-webmvc` 与 Spring Boot 4 兼容性**：✅ 已验证（2026-10-27 spike）——starter 2.0.1 可用，无状态端点工作。实证配置键：`spring.ai.mcp.server.protocol: STATELESS`（枚举 SSE/STREAMABLE/STATELESS）、`spring.ai.mcp.server.name`、`spring.ai.mcp.server.streamable-http.mcpEndpoint: /mcp`；`@Tool` 在 `org.springframework.ai.tool.annotation`，注册用 `MethodToolCallbackProvider.builder().toolObjects(...)`。注意：`/mcp/**` 必须加入 `security.excludes`（Sa-Token 全局拦截），否则返回"用户登录失效"
-2. **LoginHelper 上下文打通**（最高风险）：现有 frontDesk Service 内部很可能通过 `LoginHelper`（Sa-Token 上下文）取 userId，MCP 线程没有会话。需 grep Service 调用点确认，二选一：
-   - BO/方法签名已带 uid → MCP 直接传
-   - Service 内部取上下文 → MCP 侧构造临时用户上下文（不可用 StpUtil.login 污染会话）
+2. **LoginHelper 上下文打通**（最高风险）：✅ 已解决（2026-10-27 实施定稿）——最终采用**会话桥**：签发 key 时以 key 明文为自定义 tokenValue 创建 Sa-Token 长效会话（device=`mcp-{id}` 与 web 会话隔离），`McpApiKeyFilter` 把 `X-API-Key` 换头为 `Authorization: Bearer {key}`，业务侧 LoginHelper 体系原生可用，属主校验落在 business Service 层（uid 限制），tools 零改造
 3. nginx 反代由**用户自行变更**（时机：开发完成、上生产前）。注意与 `/api/` 的剥前缀写法**不同**，此处必须保留原路径：`location /mcp { proxy_pass http://127.0.0.1:9001; proxy_buffering off; proxy_http_version 1.1; }`（proxy_pass 不带 URI 即不重写路径；勿用尾斜杠 location）。生产公网地址 `https://qixidi.top/mcp`，由 `/agent/mcp-info` 返回
 
 ## 落地顺序
