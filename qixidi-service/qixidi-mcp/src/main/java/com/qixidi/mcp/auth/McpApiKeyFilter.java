@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.io.IOException;
  *
  * @author zi-wei
  */
+@Slf4j
 @RequiredArgsConstructor
 public class McpApiKeyFilter extends OncePerRequestFilter {
 
@@ -42,6 +44,8 @@ public class McpApiKeyFilter extends OncePerRequestFilter {
         try {
             apiKeyService.validate(rawKey);
         } catch (Exception e) {
+            // 打日志再拒：瞬时基础设施抖动与真正的坏 key 在响应上无法区分，静默吞掉会变成无头案
+            log.warn("MCP API key 校验失败（{}）：{}", request.getRequestURI(), e.getMessage());
             reject(response);
             return;
         }
