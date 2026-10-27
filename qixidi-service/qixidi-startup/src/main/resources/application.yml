@@ -58,6 +58,15 @@ spring:
       max-file-size: 36MB
       # 设置总上传的文件大小
       max-request-size: 60MB
+  # MCP server（qixidi-mcp 模块，外部 agent 接入，设计文档 docs/superpowers/specs/2026-10-27-qixidi-mcp-design.md）
+  ai:
+    mcp:
+      server:
+        name: qixidi
+        # STATELESS：不保存会话，主服务重启/多实例部署无需会话粘性
+        protocol: STATELESS
+        streamable-http:
+          mcpEndpoint: /mcp
       # 临时存储地址
       location: /lightFile/service/temp
   jackson:

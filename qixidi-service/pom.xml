@@ -74,6 +74,7 @@
         <module>qixidi-business</module>
         <module>qixidi-common</module>
         <module>qixidi-ai</module>
+        <module>qixidi-mcp</module>
     </modules>
 
     <dependencyManagement>
@@ -98,6 +99,11 @@
             <dependency>
                 <groupId>com.light</groupId>
                 <artifactId>qixidi-ai</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.light</groupId>
+                <artifactId>qixidi-mcp</artifactId>
                 <version>${revision}</version>
             </dependency>
 

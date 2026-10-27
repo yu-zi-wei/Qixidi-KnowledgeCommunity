@@ -131,7 +131,7 @@ Builder check 核实的存量弱点：前台文章/小记的 get/update/delete S
 
 ## 实施风险与必须先验证的点（Spike 范围）
 
-1. **`spring-ai-starter-mcp-server-webmvc` 与 Spring Boot 4 兼容性**：先建模块跑通无状态端点 + 一个 demo tool，确认 starter 可用；不可用则手写 Streamable HTTP 端点（JSON-RPC 收发）
+1. **`spring-ai-starter-mcp-server-webmvc` 与 Spring Boot 4 兼容性**：✅ 已验证（2026-10-27 spike）——starter 2.0.1 可用，无状态端点工作。实证配置键：`spring.ai.mcp.server.protocol: STATELESS`（枚举 SSE/STREAMABLE/STATELESS）、`spring.ai.mcp.server.name`、`spring.ai.mcp.server.streamable-http.mcpEndpoint: /mcp`；`@Tool` 在 `org.springframework.ai.tool.annotation`，注册用 `MethodToolCallbackProvider.builder().toolObjects(...)`。注意：`/mcp/**` 必须加入 `security.excludes`（Sa-Token 全局拦截），否则返回"用户登录失效"
 2. **LoginHelper 上下文打通**（最高风险）：现有 frontDesk Service 内部很可能通过 `LoginHelper`（Sa-Token 上下文）取 userId，MCP 线程没有会话。需 grep Service 调用点确认，二选一：
    - BO/方法签名已带 uid → MCP 直接传
    - Service 内部取上下文 → MCP 侧构造临时用户上下文（不可用 StpUtil.login 污染会话）

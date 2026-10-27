@@ -36,6 +36,10 @@
             <groupId>com.light</groupId>
             <artifactId>qixidi-ai</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-mcp</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.light</groupId>
