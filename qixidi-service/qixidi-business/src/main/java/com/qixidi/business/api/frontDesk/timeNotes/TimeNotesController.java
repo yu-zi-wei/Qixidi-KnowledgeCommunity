@@ -2,6 +2,9 @@ package com.qixidi.business.api.frontDesk.timeNotes;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.exception.ServiceException;
+import com.qixidi.auth.domain.entity.TripartiteUser;
+import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
@@ -65,7 +68,13 @@ public class TimeNotesController {
      */
     @GetMapping("/getInfo/{id}")
     public TimeNotesInfoVo getInfo(@PathVariable("id") Long id) {
-        return timeNotesService.getInfo(id);
+        TimeNotesInfoVo vo = timeNotesService.getInfo(id);
+        // 编辑详情仅限本人；公开浏览走 /white 端点（getInfo 为 white 共用，不在 service 层拦截）
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user != null && !user.getUuid().equals(vo.getUid())) {
+            throw new ServiceException("无权操作他人内容");
+        }
+        return vo;
     }
 
 

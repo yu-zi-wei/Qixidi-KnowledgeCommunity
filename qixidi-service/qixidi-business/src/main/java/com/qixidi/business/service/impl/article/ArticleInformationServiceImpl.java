@@ -291,6 +291,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
             throw new ServiceException(MsgEnums.NOT_CREATOR);
         }
+        ArticleInformation existing = baseMapper.selectById(bo.getId());
+        if (existing != null) {
+            checkOwnership(existing.getUserId());
+        }
         update.setUpdateId(uuid);
         update.setUpdateTime(new Date());
         boolean shouldReview = !ArticleAuditStateEnums.DRAFT.getCode().equals(bo.getAuditState());
@@ -572,6 +576,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public ArticleInformationVo getArticle(Long id) {
         ArticleInformationVo articleInformationVo = baseMapper.selectVoByIds(id);
+        checkOwnership(articleInformationVo.getUserId());
         if (StringUtils.isNotBlank(articleInformationVo.getLabelId())) {
             List<LabelInfo> labelInfos = labelInfoMapper.selectList();
             Map<String, Long> map = labelInfos.stream().collect(Collectors.toMap(LabelInfo::getIdStr, LabelInfo::getId));
@@ -603,7 +608,21 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int delete(Long id) {
+        ArticleInformation existing = baseMapper.selectById(id);
+        if (existing != null) {
+            checkOwnership(existing.getUserId());
+        }
         return baseMapper.deleteById(id);
+    }
+
+    /**
+     * 前台链路属主校验：前台用户仅可操作自己的文章；后台 sys_user 链路（无前台会话）放行
+     */
+    private void checkOwnership(String ownerUserId) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user != null && !user.getUuid().equals(ownerUserId)) {
+            throw new ServiceException("无权操作他人内容");
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -615,6 +634,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         ArticleInformation info = BeanUtil.toBean(bo, ArticleInformation.class);
         ArticleInformationVo vo = new ArticleInformationVo();
         if (info.getId() == null) return this.insertByBo(articleInformationBo);
+        ArticleInformation existing = baseMapper.selectById(info.getId());
+        if (existing != null) {
+            checkOwnership(existing.getUserId());
+        }
         String uuid = LoginHelper.getTripartiteUuid();
         info.setUpdateId(uuid);
         info.setUpdateTime(new Date());

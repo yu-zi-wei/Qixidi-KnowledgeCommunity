@@ -65,6 +65,10 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
             throw new ServiceException(MsgEnums.NOT_CREATOR);
         }
+        TimeNotes existing = timeNotesMapper.selectById(bo.getId());
+        if (existing != null) {
+            checkOwnership(existing.getUid());
+        }
         TimeNotes timeNotes = BeanUtil.copyProperties(bo, TimeNotes.class);
         timeNotesMapper.updateById(timeNotes);
         // 以库中最新数据为准重新解析（bo 可能不带 uid；内容被清空时同步清空相册）
@@ -77,11 +81,25 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(Long id) {
+        TimeNotes existing = timeNotesMapper.selectById(id);
+        if (existing != null) {
+            checkOwnership(existing.getUid());
+        }
         timeNotesMapper.deleteById(id);
         try {
             albumService.removeBySource(IAlbumService.SOURCE_TIME_NOTES, id);
         } catch (Exception e) {
             log.warn("删除小记相册记录失败, noteId={}: {}", id, e.getMessage());
+        }
+    }
+
+    /**
+     * 前台链路属主校验：前台用户仅可操作自己的小记；后台 sys_user 链路（无前台会话）放行
+     */
+    private void checkOwnership(String ownerUid) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user != null && !user.getUuid().equals(ownerUid)) {
+            throw new ServiceException("无权操作他人内容");
         }
     }
 
