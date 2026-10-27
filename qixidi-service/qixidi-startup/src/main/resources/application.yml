@@ -167,6 +167,8 @@ security:
     - /oauth/**
     # 网站基本配置
     - /white/**
+    # MCP 端点（qixidi-mcp 模块，认证走 X-API-Key 过滤器，不走 Sa-Token 登录态）
+    - /mcp/**
     # 静态资源
     - /*.html
     - /**.html
