@@ -541,21 +541,21 @@ onMounted(() => {
   box-shadow: var(--shadow-sm);
 }
 
-/* 管理区列表上限高度：超出时列表内部滚动，防止 key/skill 过多顶出视口 */
+/* 管理区/文档区 4:6 分配页面高度，各自 pane 内部滚动 */
 .mcp-manage-tabs {
-  flex-shrink: 0;
+  flex: 4;
+  min-height: 0;
 }
 
-/* 管理区 pane 固定高度：高度恒定切换零跳动，key/skill 超出列表内部滚动 */
 .mcp-manage-tabs :deep(.n-tabs-pane-wrapper) {
+  flex: 1;
   min-height: 0;
-  height: 40vh;
   overflow-y: auto;
 }
 
 /* 文档区自管滚动：tab 条常驻外卡顶部，pane 内容区独立滚动 */
 .mcp-doc-tabs {
-  flex: 1;
+  flex: 6;
   min-height: 0;
 }
 
