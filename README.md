@@ -13,13 +13,13 @@
 
 这是 **AI 时代的知识社区和博客**：除了常规的创作与社交，你可以把自己的账号安全地交给 AI agent——创建一个 API key，Claude Code 等 agent 即可通过 MCP 协议以你的身份写文章、发小记、上传配图、管理内容，并遵循平台官方写作规范与你的个人写作偏好。AI 帮你写，你来审。
 
-技术上，后端 Spring Boot 4 + Java 17，前端 Nuxt 3 + Vue 3 + Naive UI，全程 AI 驱动开发。
+技术上，后端 Spring Boot 4 + Java 17 + Spring AI2.0 前端 Nuxt 3 + Vue 3 + Naive UI，全程 AI 驱动开发。
 
 ### 网站地址：https://qixidi.top/
 
-### 开源地址（Gitee）：https://gitee.com/yu-zi-wei/qixidi
-
-### 开源地址（GitHub）：https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity
+### 开源地址
+Gitee：https://gitee.com/yu-zi-wei/qixidi
+GitHub：https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity
 
 ### 默认账号密码（仅限本地）
 > 前台：123@qq.com/123456
@@ -42,7 +42,7 @@ qixidi/
 │   │
 │   ├── qixidi-ai  # AI 能力模块（Spring AI：对话、摘要生成）
 │   │
-│   ├── qixidi-mcp  # MCP 服务模块（无状态 /mcp 端点 + API key 会话桥 + 写作 skill）
+│   ├── qixidi-mcp  # MCP 服务模块（无状态 /mcp 端点 + API key + skill 管理）
 │   │
 │   ├── qixidi-business  # 核心业务
 │   │
