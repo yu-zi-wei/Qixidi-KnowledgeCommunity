@@ -26,7 +26,7 @@ public class AgentKeyBo implements Serializable {
     private String keyName;
 
     /**
-     * 有效期天数（缺省 365，仅创建时使用）
+     * 有效期天数（仅创建时使用）：0=永久；null=默认 365；>0=N 天
      */
     private Long validDays;
 }

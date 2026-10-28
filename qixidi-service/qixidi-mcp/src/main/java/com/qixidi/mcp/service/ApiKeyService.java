@@ -26,6 +26,9 @@ import java.util.concurrent.TimeUnit;
  * X-API-Key 换头成 Authorization，业务侧 LoginHelper 体系原生可用。
  * 吊销 = 删行 + 删缓存 + 按 device 精确登出该 key 的会话（库中不落任何明文）。
  *
+ * 过期模型：validDays 0=永久（expireTime 空、会话 timeout=-1）/ null=默认 365 / >0=N 天；
+ * 校验缓存 TTL 1 天，命中免查库，未命中查库通过后重写——过期 key 最多多活一个缓存周期。
+ *
  * @author zi-wei
  */
 @Slf4j
@@ -34,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class ApiKeyService {
 
     private static final String CACHE_PREFIX = "mcp:apikey:";
-    private static final long CACHE_TTL_MINUTES = 5;
+    private static final long CACHE_TTL_DAYS = 1;
     private static final String DEVICE_PREFIX = "mcp-";
     /** 默认有效期（天） */
     public static final long DEFAULT_VALID_DAYS = 365;
@@ -43,25 +46,28 @@ public class ApiKeyService {
     private final AgentApiKeyMapper apiKeyMapper;
 
     /**
-     * 签发 API key，返回明文（仅此一次）
+     * 签发 API key，返回明文（仅此一次）。
+     * validDays：0=永久（expireTime 空、会话永不过期）；null=默认 365；>0=N 天
      */
     public String createKey(TripartiteUser user, String keyName, Long validDays) {
-        long days = (validDays == null || validDays <= 0) ? DEFAULT_VALID_DAYS : validDays;
+        boolean permanent = validDays != null && validDays == 0;
+        long days = permanent ? 0 : (validDays == null || validDays < 0 ? DEFAULT_VALID_DAYS : validDays);
         String rawKey = ApiKeyGenerator.generate();
         AgentApiKey entity = new AgentApiKey();
         entity.setUserId(user.getUuid());
         entity.setKeyName(keyName);
         entity.setKeyHash(ApiKeyGenerator.sha256(rawKey));
         entity.setStatus(1);
-        entity.setExpireTime(new Date(System.currentTimeMillis() + days * SECONDS_PER_DAY * 1000));
+        entity.setExpireTime(permanent ? null : new Date(System.currentTimeMillis() + days * SECONDS_PER_DAY * 1000));
         apiKeyMapper.insert(entity);
 
-        // 创建 Sa-Token 长效会话：token 值 = API key 明文，device 按行 id 隔离
+        // 创建 Sa-Token 长效会话：token 值 = API key 明文，device 按行 id 隔离；
+        // timeout 与 expireTime 同天数对齐互为兜底，永久 key 传 -1（Sa-Token 永不过期语义）
         String device = DEVICE_PREFIX + entity.getId();
         StpUtil.login(user.getLoginId(), SaLoginParameter.create()
             .setDeviceType(device)
             .setToken(rawKey)
-            .setTimeout(days * SECONDS_PER_DAY)
+            .setTimeout(permanent ? -1 : days * SECONDS_PER_DAY)
             .setRightNowCreateTokenSession(true));
         // 用户信息写入该 token 的 session（key 与 LoginHelper.setTripartiteUser 一致，供读取）
         StpUtil.getTokenSessionByToken(rawKey).set(user.getLoginId(), user);
@@ -91,7 +97,7 @@ public class ApiKeyService {
         if (!(user instanceof TripartiteUser tripartiteUser)) {
             throw new ServiceException("API key 用户信息缺失，请重新签发");
         }
-        RedisUtils.setCacheObject(CACHE_PREFIX + hash, tripartiteUser, CACHE_TTL_MINUTES, TimeUnit.MINUTES);
+        RedisUtils.setCacheObject(CACHE_PREFIX + hash, tripartiteUser, CACHE_TTL_DAYS, TimeUnit.DAYS);
         // 最后使用时间：尽力而为的观测字段。update(null, wrapper) 不触发实体自动填充——
         // 填充器依赖 Sa-Token 上下文，而本方法在 Filter 阶段执行（Sa 拦截器尚未初始化上下文），
         // 用 updateById 会抛"SaTokenContext 上下文尚未初始化"把认证拖成 401（Tomcat 线程复用时偶发）
