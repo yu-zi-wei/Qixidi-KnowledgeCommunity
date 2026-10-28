@@ -13,12 +13,12 @@ import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
 import com.qixidi.mcp.domain.bo.article.McpArticleBo;
 import com.qixidi.mcp.domain.bo.article.McpArticleQueryBo;
-import com.qixidi.mcp.domain.vo.article.McpArticleBriefVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleDeleteVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleDetailVo;
 import com.qixidi.mcp.domain.vo.article.McpArticlePageVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleSearchItemVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleSubmitVo;
+import com.qixidi.mcp.utils.McpPageUtils;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.context.annotation.Lazy;
@@ -84,41 +84,11 @@ public class ArticleTools {
         return submitVo(id, "UNDER_REVIEW");
     }
 
-    @Tool(name = "list_my_articles", description = "分页查询当前用户的文章列表（含草稿），返回精简字段 id/title/auditState/updateTime。auditState 含义：1 审核中、2 审核通过、3 审核不通过、4 草稿。")
-    public McpArticlePageVo<McpArticleBriefVo> listMyArticles(
-        @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
-        @ToolParam(description = "每页条数，默认 10，最大 50", required = false) Integer pageSize
-    ) {
-        TripartiteUser user = LoginHelper.getTripartiteUser();
-        if (user == null) {
-            throw new ServiceException("登录状态无效，请检查 API key");
-        }
-        ArticleInformationBo bo = new ArticleInformationBo();
-        // 强制按当前用户过滤（与 UserArticleController 列表同款），防止列出他人文章
-        bo.setUserId(user.getUuid());
-        PageQuery pageQuery = new PageQuery();
-        pageQuery.setPageNum(pageNum == null || pageNum < 1 ? 1 : pageNum);
-        pageQuery.setPageSize(pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 50));
-        Page<ArticleInformationVo> page = iArticleInformationService.getArticleInfo(bo, pageQuery);
-        List<McpArticleBriefVo> rows = page.getRecords().stream().map(v -> {
-            McpArticleBriefVo row = new McpArticleBriefVo();
-            row.setId(v.getId());
-            row.setTitle(v.getArticleTitle());
-            row.setAuditState(v.getAuditState());
-            row.setUpdateTime(DateUtil.formatDateTime(v.getUpdateTime()));
-            return row;
-        }).collect(Collectors.toList());
-        McpArticlePageVo<McpArticleBriefVo> result = new McpArticlePageVo<>();
-        result.setTotal(page.getTotal());
-        result.setRows(rows);
-        return result;
-    }
-
-    @Tool(name = "search_articles", description = "多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。分页返回 id/title/articleAbstract/type/auditState/authorName/updateTime 元数据，不含正文；选中后用 get_article 查详情（仅限本人文章）。数据范围：不传 authorName 查本人全部状态；传 authorName 查该作者的已发布文章。")
-    public McpArticlePageVo<McpArticleSearchItemVo> searchArticles(
+    @Tool(name = "search_articles", description = "多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。分页返回 id/title/articleAbstract/type/auditState/authorName/updateTime 元数据，不含正文；选中后用 get_article 查详情（仅限本人文章）。数据范围：不传 authorName 查本人全部状态（查自己的文章列表即用本工具，不传条件即可）；传 authorName 查该作者的已发布文章。")
+    public McpArticlePageVo searchArticles(
         @ToolParam(description = "查询条件对象") McpArticleQueryBo query,
         @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
-        @ToolParam(description = "每页条数，默认 10，最大 200", required = false) Integer pageSize
+        @ToolParam(description = "每页条数，默认 100，最大 500", required = false) Integer pageSize
     ) {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {
@@ -147,8 +117,8 @@ public class ArticleTools {
             bo.getParams().put("endTime", end + " 23:59:59");
         }
         PageQuery pageQuery = new PageQuery();
-        pageQuery.setPageNum(pageNum == null || pageNum < 1 ? 1 : pageNum);
-        pageQuery.setPageSize(pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 200));
+        pageQuery.setPageNum(McpPageUtils.pageNum(pageNum));
+        pageQuery.setPageSize(McpPageUtils.pageSize(pageSize));
         Page<ArticleInformationVo> page = iArticleInformationService.getArticleInfo(bo, pageQuery);
         List<McpArticleSearchItemVo> rows = page.getRecords().stream().map(v -> {
             McpArticleSearchItemVo row = new McpArticleSearchItemVo();
@@ -161,7 +131,7 @@ public class ArticleTools {
             row.setUpdateTime(DateUtil.formatDateTime(v.getUpdateTime()));
             return row;
         }).collect(Collectors.toList());
-        McpArticlePageVo<McpArticleSearchItemVo> result = new McpArticlePageVo<>();
+        McpArticlePageVo result = new McpArticlePageVo();
         result.setTotal(page.getTotal());
         result.setRows(rows);
         return result;
@@ -169,7 +139,7 @@ public class ArticleTools {
 
     @Tool(name = "get_article", description = "获取指定文章的完整内容（Markdown 正文、标签、分类等），仅限本人的文章，用于编辑前取原文。")
     public McpArticleDetailVo getArticle(
-        @ToolParam(description = "文章 id（来自 list_my_articles 或 create_article 返回值）") Long articleId
+        @ToolParam(description = "文章 id（来自 search_articles 或 create_article 返回值）") Long articleId
     ) {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {

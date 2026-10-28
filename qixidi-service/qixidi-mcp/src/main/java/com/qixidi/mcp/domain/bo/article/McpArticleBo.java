@@ -52,6 +52,6 @@ public class McpArticleBo implements Serializable {
     @ToolParam(required = false, description = "是否由系统 AI 生成摘要：true 且未传摘要时触发生成；默认 false。草稿不触发")
     private Boolean abstractSelect;
 
-    @ToolParam(required = false, description = "文章 id：更新已有文章/草稿时必传（id 来自 list_my_articles 返回值），新建不传")
+    @ToolParam(required = false, description = "文章 id：更新已有文章/草稿时必传（id 来自 search_articles 返回值），新建不传")
     private Long articleId;
 }

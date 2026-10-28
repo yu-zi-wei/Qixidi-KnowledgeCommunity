@@ -11,6 +11,7 @@ import com.qixidi.mcp.domain.bo.timeNotes.McpTimeNoteQueryBo;
 import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNotePageVo;
 import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteSearchItemVo;
 import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteSubmitVo;
+import com.qixidi.mcp.utils.McpPageUtils;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.context.annotation.Lazy;
@@ -89,16 +90,13 @@ public class TimeNotesTool {
     public McpTimeNotePageVo searchTimeNotes(
         @ToolParam(description = "查询条件对象") McpTimeNoteQueryBo query,
         @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
-        @ToolParam(description = "每页条数，默认 10，最大 100", required = false) Integer pageSize
+        @ToolParam(description = "每页条数，默认 100，最大 500", required = false) Integer pageSize
     ) {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {
             throw new ServiceException("登录状态无效，请检查 API key");
         }
-        Page<TimeNotes> page = new Page<>(
-            pageNum == null || pageNum < 1 ? 1 : pageNum,
-            pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 100)
-        );
+        Page<TimeNotes> page = new Page<>(McpPageUtils.pageNum(pageNum), McpPageUtils.pageSize(pageSize));
         Page<TimeNotes> result = timeNotesService.searchForAgent(user.getUuid(),
             query.getTitle(), query.getContent(),
             parseDate(query.getBeginDate()), parseDate(query.getEndDate()), page);
