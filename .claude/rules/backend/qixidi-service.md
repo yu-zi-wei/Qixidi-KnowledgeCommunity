@@ -34,6 +34,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 - 入参与 POJO 字段一律 `@ToolParam(description, required)`：可选参数必须显式 `required = false`——POJO 字段默认 required（SpringAiSchemaModule requiredByDefault=true），不标 required 数组会全量误导调用方；必填性随场景变化（create 必填/update 可选）时标 false、场景写进 description（参考 McpArticleBo）
 - description 写明真实约束：枚举值（type：1 原创 2 转载）、长度（摘要 ≤200 字）、格式（yyyy-MM-dd）、大小（图片 ≤10MB）；无依据的约束不编造
 - ≥4 字段的大对象入参 POJO 化放 `domain/bo/{业务}/`（schema 会按参数名嵌套一层对象）；返回用专用 MCP VO（`domain/vo/{业务}/`）只含核心字段，禁直接返回业务 VO，时间格式化为字符串
+- 返回结构语义必须写进 tool description：AI 读不到 VO 的 javadoc，@Tool 链也不生成 outputSchema（decompile 实证那是 @McpTool.generateOutputSchema + @JsonPropertyDescription 体系）；枚举值/时间格式/字段用途只能靠 description 传达，VO 字段 javadoc 只给人读
 - tool 直调 Service 不经过 Controller 校验：BO 的 @NotBlank 等校验组不生效，必填项在 tool 方法内自行校验（参考 ArticleTools.checkTitleAndContent）
 - 每个 tool 入口 `LoginHelper.getTripartiteUser()` 判空；属主 uid 由 Service 层从登录态强制取，tool 层不信任入参 uid
 - 注入业务 Service 的 tool 构造器加 `@Lazy` 断 Spring AI 自动装配环（见 ArticleTools 构造器注释）
