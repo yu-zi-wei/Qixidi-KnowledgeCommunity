@@ -570,13 +570,8 @@ onMounted(() => {
   overflow-y: auto;
 }
 
-.mcp-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-sm);
-}
+/* section 只是语义容器：外层 tabs 卡已是壳（背景+边框），内层不再叠卡片样式，
+   避免双重 padding 和"包裹"边框 */
 
 .mcp-section-header {
   display: flex;
@@ -713,7 +708,6 @@ onMounted(() => {
   gap: var(--space-3);
 }
 
-/* 列表项无边框：滚动区里边框线有条纹感，分组靠间距 */
 .mcp-key-item,
 .mcp-skill-item {
   display: flex;
@@ -721,6 +715,8 @@ onMounted(() => {
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .mcp-key-main,
@@ -778,6 +774,8 @@ onMounted(() => {
 
 .mcp-tool-item {
   padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .mcp-tool-name {
