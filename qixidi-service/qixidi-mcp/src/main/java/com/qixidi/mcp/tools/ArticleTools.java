@@ -7,6 +7,7 @@ import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
+import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
@@ -44,7 +45,7 @@ public class ArticleTools {
         this.iArticleInformationService = iArticleInformationService;
     }
 
-    @Tool(name = "create_article", description = "创建或更新文章（更新时传 articleId），提交后进入审核(UNDER_REVIEW)。labelIds/groupingId/specialId 需先通过 get_publish_context 获取。")
+    @Tool(name = "create_article", description = "创建或更新文章并提交审核（auditState=UNDER_REVIEW）。title/content/labelIds/groupingId 必传，其中 labelIds/groupingId 需先通过 get_publish_context 获取。")
     public McpArticleSubmitVo createArticle(
         @ToolParam(description = "文章内容对象") McpArticleBo bo
     ) {
@@ -52,6 +53,7 @@ public class ArticleTools {
         if (user == null) {
             throw new ServiceException("登录状态无效，请检查 API key");
         }
+        checkTitleAndContent(bo);
         if (bo.getGroupingId() == null) {
             throw new ServiceException("groupingId 不能为空，请先调用 get_publish_context 获取分类分组");
         }
@@ -75,7 +77,7 @@ public class ArticleTools {
                 throw new ServiceException("文章创建失败");
             }
         }
-        return submitVo(id);
+        return submitVo(id, "UNDER_REVIEW");
     }
 
     @Tool(name = "list_my_articles", description = "分页查询当前用户的文章列表（含草稿），返回精简字段 id/title/auditState/updateTime。auditState 含义：1 审核中、2 审核通过、3 审核不通过、4 草稿。")
@@ -135,7 +137,35 @@ public class ArticleTools {
         return detail;
     }
 
-    @Tool(name = "update_article", description = "更新已有文章，仅传需要修改的字段（未传字段保持不变），更新提交后重新进入审核。仅能更新自己的文章。")
+    @Tool(name = "save_article_draft", description = "保存文章草稿（auditState=DRAFT，不进入审核、不触发 AI 摘要）。title/content 必传；不传 articleId 新建草稿，传 articleId 则覆盖保存已有草稿/文章。写完想直接发布用 create_article。")
+    public McpArticleSubmitVo saveArticleDraft(
+        @ToolParam(description = "文章内容对象") McpArticleBo bo
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        checkTitleAndContent(bo);
+        ArticleInformationTwoBo twoBo = new ArticleInformationTwoBo();
+        twoBo.setId(bo.getArticleId());
+        twoBo.setArticleTitle(bo.getTitle());
+        twoBo.setArticleContent(bo.getContent());
+        twoBo.setArticleAbstract(bo.getArticleAbstract());
+        twoBo.setType(bo.getType());
+        twoBo.setReprintUrl(bo.getReprintUrl());
+        twoBo.setGroupingId(bo.getGroupingId());
+        twoBo.setSpecialId(bo.getSpecialId());
+        if (bo.getLabelIds() != null && !bo.getLabelIds().isEmpty()) {
+            twoBo.setLabelId(bo.getLabelIds().stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
+        ArticleInformationVo vo = iArticleInformationService.saveDraft(twoBo);
+        if (vo == null || vo.getId() == null || vo.getId() <= 0) {
+            throw new ServiceException("草稿保存失败");
+        }
+        return submitVo(vo.getId(), "DRAFT");
+    }
+
+    @Tool(name = "update_article", description = "更新已有文章并重新提交审核（auditState=UNDER_REVIEW），仅传需要修改的字段（未传字段保持不变）。articleId 必传，仅能更新自己的文章。")
     public McpArticleSubmitVo updateArticle(
         @ToolParam(description = "文章内容对象，articleId 必传，其余仅传需修改字段") McpArticleBo bo
     ) {
@@ -150,7 +180,7 @@ public class ArticleTools {
         // 与前台编辑同语义：更新提交后重新进入审核
         info.setAuditState(ArticleAuditStateEnums.UNDER_REVIEW.getCode());
         iArticleInformationService.updateByBo(info);
-        return submitVo(bo.getArticleId());
+        return submitVo(bo.getArticleId(), "UNDER_REVIEW");
     }
 
     @Tool(name = "delete_article", description = "删除自己的文章，仅限本人。")
@@ -189,10 +219,23 @@ public class ArticleTools {
         return info;
     }
 
-    private McpArticleSubmitVo submitVo(Long articleId) {
+    /**
+     * 标题/正文非空校验：与前台发布校验（@NotBlank AddGroup/EditGroup）同语义，
+     * MCP 直调 Service 不经过 Controller 参数校验，需在此兜底
+     */
+    private void checkTitleAndContent(McpArticleBo bo) {
+        if (bo.getTitle() == null || bo.getTitle().isBlank()) {
+            throw new ServiceException("title 不能为空");
+        }
+        if (bo.getContent() == null || bo.getContent().isBlank()) {
+            throw new ServiceException("content 不能为空");
+        }
+    }
+
+    private McpArticleSubmitVo submitVo(Long articleId, String auditState) {
         McpArticleSubmitVo vo = new McpArticleSubmitVo();
         vo.setArticleId(articleId);
-        vo.setAuditState("UNDER_REVIEW");
+        vo.setAuditState(auditState);
         return vo;
     }
 }
