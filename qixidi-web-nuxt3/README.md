@@ -195,6 +195,14 @@ server {
 }
 ```
 
+```shell
+#检查配置
+/data/app/nginx/sbin/nginx -t
+
+# 重启nginx
+/data/app/nginx/sbin/nginx -s reload
+```
+
 ### 服务器脚本
 ```shell
 #!/bin/bash
