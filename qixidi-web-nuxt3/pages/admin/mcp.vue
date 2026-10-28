@@ -285,7 +285,7 @@ import { Code, Copy, Edit, Key, Plus, Robot, ShieldLock, Trash } from '@vicons/t
 import type { FormInst, FormRules } from 'naive-ui'
 import type { AgentApiKeyItem, AgentSkillItem, McpToolSummaryItem } from '~/composables/useAgentApi'
 
-definePageMeta({ layout: 'admin', middleware: 'creator' })
+definePageMeta({ layout: 'admin', middleware: ['creator', 'mcpCreator'] })
 
 const message = useMessage()
 const agentApi = useAgentApi()

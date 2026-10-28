@@ -10,6 +10,10 @@
   >
     <div class="apply-info">
       <div class="info-section">
+        <h4 class="info-title">成为创作者可以做什么？</h4>
+        <p class="info-text">发布文章与时光小记，参与社区内容共建；还可接入 MCP：创建 API key 让 AI agent（如 Claude Code）以你的身份帮你写文章、发小记、管理内容，并用自建写作 skill 沉淀你的写作偏好。</p>
+      </div>
+      <div class="info-section">
         <h4 class="info-title">创作者身份为什么需要申请？</h4>
         <p class="info-text">网站是面向所有用户的，为了保证内容的质量和减少测试内容的产生，导致其他正常用户的阅读体验。我们需要对创作者做一个简单的认证。</p>
       </div>
