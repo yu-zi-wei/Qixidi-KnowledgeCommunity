@@ -18,7 +18,13 @@ public class McpLabelItemVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 标签 id（写入文章的 labelIds 数组元素）
+     */
     private Long id;
 
+    /**
+     * 标签名
+     */
     private String name;
 }

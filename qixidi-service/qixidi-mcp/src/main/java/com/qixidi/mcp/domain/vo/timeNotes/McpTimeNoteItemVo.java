@@ -18,12 +18,23 @@ public class McpTimeNoteItemVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 小记 id
+     */
     private Long timeNoteId;
 
+    /**
+     * 标题
+     */
     private String title;
 
-    /** 记录日期 yyyy-MM-dd */
+    /**
+     * 记录日期（yyyy-MM-dd）
+     */
     private String recordTime;
 
+    /**
+     * 正文（Markdown）
+     */
     private String content;
 }

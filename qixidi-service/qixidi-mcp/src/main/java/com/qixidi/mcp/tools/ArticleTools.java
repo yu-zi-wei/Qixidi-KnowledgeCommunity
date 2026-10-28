@@ -84,7 +84,7 @@ public class ArticleTools {
         return submitVo(id, "UNDER_REVIEW");
     }
 
-    @Tool(name = "search_articles", description = "多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。分页返回 id/title/articleAbstract/type/auditState/authorName/updateTime 元数据，不含正文；选中后用 get_article 查详情（仅限本人文章）。数据范围：不传 authorName 查本人全部状态（查自己的文章列表即用本工具，不传条件即可）；传 authorName 查该作者的已发布文章。")
+    @Tool(name = "search_articles", description = "多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。返回 {total, rows[]}，rows 为元数据：id/title/articleAbstract/type(1 原创 2 转载)/auditState(1 审核中 2 已发布 3 审核不通过 4 草稿)/authorName/updateTime(yyyy-MM-dd HH:mm:ss)，不含正文；选中后用 get_article 查详情（仅限本人文章）。数据范围：不传 authorName 查本人全部状态（查自己的文章列表即用本工具，不传条件即可）；传 authorName 查该作者的已发布文章。")
     public McpArticlePageVo searchArticles(
         @ToolParam(description = "查询条件对象") McpArticleQueryBo query,
         @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
@@ -137,7 +137,7 @@ public class ArticleTools {
         return result;
     }
 
-    @Tool(name = "get_article", description = "获取指定文章的完整内容（Markdown 正文、标签、分类等），仅限本人的文章，用于编辑前取原文。")
+    @Tool(name = "get_article", description = "获取指定文章的完整内容，仅限本人文章，用于编辑前取原文或查看详情。返回 id/title(标题)/content(Markdown 正文)/articleAbstract(摘要)/type(1 原创 2 转载)/reprintUrl(转载原文 url，原创为空)/groupingId+groupingName(分类)/labelIds+labelNames(标签)/specialId(专栏，可空)/auditState(1 审核中 2 已发布 3 审核不通过 4 草稿)/updateTime(yyyy-MM-dd HH:mm:ss)。")
     public McpArticleDetailVo getArticle(
         @ToolParam(description = "文章 id（来自 search_articles 或 create_article 返回值）") Long articleId
     ) {

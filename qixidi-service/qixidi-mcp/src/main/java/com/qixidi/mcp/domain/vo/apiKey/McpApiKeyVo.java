@@ -19,13 +19,28 @@ public class McpApiKeyVo implements Serializable {
 
     private Long id;
 
+    /**
+     * 备注名
+     */
     private String keyName;
 
+    /**
+     * 状态（1 启用 0 停用）
+     */
     private Integer status;
 
+    /**
+     * 过期时间
+     */
     private Date expireTime;
 
+    /**
+     * 最后使用时间
+     */
     private Date lastUsedTime;
 
+    /**
+     * 创建时间
+     */
     private Date createTime;
 }

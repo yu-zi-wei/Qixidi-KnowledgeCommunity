@@ -18,7 +18,13 @@ public class McpSpecialItemVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 专栏 id（写入文章的 specialId）
+     */
     private Long id;
 
+    /**
+     * 专栏名
+     */
     private String name;
 }

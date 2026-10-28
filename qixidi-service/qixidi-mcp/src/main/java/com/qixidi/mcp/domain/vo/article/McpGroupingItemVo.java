@@ -18,7 +18,13 @@ public class McpGroupingItemVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 分组 id（写入文章的 groupingId）
+     */
     private Long id;
 
+    /**
+     * 分组名（文章所属分类）
+     */
     private String name;
 }
