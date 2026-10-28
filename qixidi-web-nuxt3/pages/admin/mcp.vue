@@ -1,7 +1,7 @@
 <template>
   <div class="admin-mcp">
-    <!-- 管理区：API key / 写作 skill tab 切换 -->
-    <n-tabs type="segment" animated class="mcp-tabs mcp-manage-tabs">
+    <!-- 管理区：API key / 写作 skill tab 切换（不用 animated：两 pane 高度不同，滑动过渡会造成高度先高后低抽动） -->
+    <n-tabs type="segment" class="mcp-tabs mcp-manage-tabs">
       <n-tab-pane name="apiKey" tab="API Key">
         <section class="mcp-section">
       <div class="mcp-section-header">
@@ -547,7 +547,6 @@ onMounted(() => {
 }
 
 .mcp-manage-tabs :deep(.n-tabs-pane-wrapper) {
-  flex: 1;
   min-height: 0;
   max-height: 40vh;
   overflow-y: auto;
