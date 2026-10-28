@@ -1,60 +1,9 @@
 <template>
   <div class="admin-mcp">
-    <!-- MCP 接入信息 -->
-    <section class="mcp-section">
-      <div class="mcp-section-header">
-        <h2 class="mcp-section-title"><n-icon><Rocket /></n-icon>MCP 接入</h2>
-        <n-button quaternary circle size="small" :loading="infoLoading" @click="fetchMcpInfo">
-          <template #icon><n-icon><Refresh /></n-icon></template>
-        </n-button>
-      </div>
-
-      <template v-if="mcpInfo">
-        <div class="mcp-info-grid">
-          <div class="mcp-info-item">
-            <span class="mcp-info-label">端点地址</span>
-            <div class="mcp-info-value-row">
-              <code class="mcp-info-code">{{ mcpInfo.endpoint }}</code>
-              <n-button quaternary circle size="tiny" @click="copyText(mcpInfo.endpoint)">
-                <template #icon><n-icon><Copy /></n-icon></template>
-              </n-button>
-            </div>
-          </div>
-          <div class="mcp-info-item">
-            <span class="mcp-info-label">认证请求头</span>
-            <div class="mcp-info-value-row">
-              <code class="mcp-info-code">{{ mcpInfo.headerName }}</code>
-              <n-button quaternary circle size="tiny" @click="copyText(mcpInfo.headerName)">
-                <template #icon><n-icon><Copy /></n-icon></template>
-              </n-button>
-            </div>
-          </div>
-        </div>
-
-        <div class="mcp-notice">
-          <n-icon class="mcp-notice-icon"><ShieldLock /></n-icon>
-          <span>{{ mcpInfo.notice }}</span>
-        </div>
-
-        <div class="mcp-snippets">
-          <div v-for="item in snippetList" :key="item.label" class="mcp-snippet">
-            <div class="mcp-snippet-header">
-              <span class="mcp-snippet-label"><n-icon><Code /></n-icon>{{ item.label }}</span>
-              <n-button quaternary circle size="tiny" @click="copyText(item.text)">
-                <template #icon><n-icon><Copy /></n-icon></template>
-              </n-button>
-            </div>
-            <pre class="mcp-snippet-code">{{ item.text }}</pre>
-          </div>
-        </div>
-      </template>
-      <div v-else-if="infoLoading" class="mcp-loading">
-        <n-spin size="small" />
-      </div>
-    </section>
-
-    <!-- API key 管理 -->
-    <section class="mcp-section">
+    <!-- 管理区：API key / 写作 skill tab 切换 -->
+    <n-tabs type="segment" animated class="mcp-tabs">
+      <n-tab-pane name="apiKey" tab="API Key">
+        <section class="mcp-section">
       <div class="mcp-section-header">
         <h2 class="mcp-section-title"><n-icon><Key /></n-icon>API Key</h2>
         <n-button size="small" type="primary" @click="openKeyCreate">
@@ -101,10 +50,10 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- 写作 skill 管理 -->
-    <section class="mcp-section">
+        </section>
+      </n-tab-pane>
+      <n-tab-pane name="skill" tab="写作 Skill">
+        <section class="mcp-section">
       <div class="mcp-section-header">
         <h2 class="mcp-section-title"><n-icon><Robot /></n-icon>写作 Skill</h2>
         <n-button size="small" type="primary" @click="openSkillCreate">
@@ -146,7 +95,82 @@
           </div>
         </div>
       </div>
-    </section>
+        </section>
+      </n-tab-pane>
+    </n-tabs>
+
+    <!-- 文档区：概览 / 接入指南 / 工具清单 -->
+    <n-tabs type="line" animated class="mcp-tabs">
+      <n-tab-pane name="overview" tab="概览">
+        <section class="mcp-section">
+          <p class="mcp-overview-intro">
+            栖息地 MCP 服务让 AI agent（Claude Code、Codex 等）以你的身份在栖息地读写内容：写文章、发小记、查询列表等。
+            agent 的所有操作等同于你本人登录，请像保管密码一样保管 API key，不再使用时立即吊销。
+          </p>
+          <template v-if="mcpInfo">
+            <div class="mcp-info-grid">
+              <div class="mcp-info-item">
+                <span class="mcp-info-label">端点地址</span>
+                <div class="mcp-info-value-row">
+                  <code class="mcp-info-code">{{ mcpInfo.endpoint }}</code>
+                  <n-button quaternary circle size="tiny" @click="copyText(mcpInfo.endpoint)">
+                    <template #icon><n-icon><Copy /></n-icon></template>
+                  </n-button>
+                </div>
+              </div>
+              <div class="mcp-info-item">
+                <span class="mcp-info-label">认证请求头</span>
+                <div class="mcp-info-value-row">
+                  <code class="mcp-info-code">{{ mcpInfo.headerName }}</code>
+                  <n-button quaternary circle size="tiny" @click="copyText(mcpInfo.headerName)">
+                    <template #icon><n-icon><Copy /></n-icon></template>
+                  </n-button>
+                </div>
+              </div>
+            </div>
+            <div class="mcp-notice">
+              <n-icon class="mcp-notice-icon"><ShieldLock /></n-icon>
+              <span>{{ mcpInfo.notice }}</span>
+            </div>
+          </template>
+          <div v-else-if="infoLoading" class="mcp-loading">
+            <n-spin size="small" />
+          </div>
+        </section>
+      </n-tab-pane>
+      <n-tab-pane name="guide" tab="接入指南">
+        <section class="mcp-section">
+          <template v-if="mcpInfo">
+            <div class="mcp-snippets">
+              <div v-for="item in snippetList" :key="item.label" class="mcp-snippet">
+                <div class="mcp-snippet-header">
+                  <span class="mcp-snippet-label"><n-icon><Code /></n-icon>{{ item.label }}</span>
+                  <n-button quaternary circle size="tiny" @click="copyText(item.text)">
+                    <template #icon><n-icon><Copy /></n-icon></template>
+                  </n-button>
+                </div>
+                <pre class="mcp-snippet-code">{{ item.text }}</pre>
+              </div>
+            </div>
+          </template>
+          <div v-else-if="infoLoading" class="mcp-loading">
+            <n-spin size="small" />
+          </div>
+        </section>
+      </n-tab-pane>
+      <n-tab-pane name="tools" :tab="toolsTabLabel">
+        <section class="mcp-section">
+          <div v-if="toolsLoading" class="mcp-loading"><n-spin size="small" /></div>
+          <CommonEmptyState v-else-if="!mcpTools.length" description="工具清单加载失败或暂无工具" />
+          <div v-else class="mcp-tool-list">
+            <div v-for="tool in mcpTools" :key="tool.name" class="mcp-tool-item">
+              <code class="mcp-tool-name">{{ tool.name }}</code>
+              <p class="mcp-tool-desc">{{ tool.description }}</p>
+            </div>
+          </div>
+        </section>
+      </n-tab-pane>
+    </n-tabs>
 
     <!-- 新建 API key -->
     <n-modal v-model:show="keyCreateVisible" preset="card" title="新建 API Key" :style="mcpModalStyle">
@@ -244,9 +268,9 @@
 </template>
 
 <script setup lang="ts">
-import { Code, Copy, Edit, Key, Plus, Refresh, Robot, Rocket, ShieldLock, Trash } from '@vicons/tabler'
+import { Code, Copy, Edit, Key, Plus, Robot, ShieldLock, Trash } from '@vicons/tabler'
 import type { FormInst, FormRules } from 'naive-ui'
-import type { AgentApiKeyItem, AgentSkillItem } from '~/composables/useAgentApi'
+import type { AgentApiKeyItem, AgentSkillItem, McpToolSummaryItem } from '~/composables/useAgentApi'
 
 definePageMeta({ layout: 'admin', middleware: 'creator' })
 
@@ -274,6 +298,24 @@ const fetchMcpInfo = async () => {
   } catch {
   } finally {
     infoLoading.value = false
+  }
+}
+
+// ==================== MCP 工具清单 ====================
+const toolsLoading = ref(false)
+const mcpTools = ref<McpToolSummaryItem[]>([])
+
+const toolsTabLabel = computed(() =>
+  mcpTools.value.length ? `工具清单 (${mcpTools.value.length})` : '工具清单'
+)
+
+const fetchMcpTools = async () => {
+  toolsLoading.value = true
+  try {
+    mcpTools.value = (await agentApi.getMcpTools()) || []
+  } catch {
+  } finally {
+    toolsLoading.value = false
   }
 }
 
@@ -463,6 +505,7 @@ const copyText = async (text: string) => {
 
 onMounted(() => {
   fetchMcpInfo()
+  fetchMcpTools()
   fetchKeyList()
   fetchSkillList()
 })
@@ -474,6 +517,14 @@ onMounted(() => {
   flex-direction: column;
   gap: var(--space-6);
   max-width: 960px;
+}
+
+.mcp-tabs {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  box-shadow: var(--shadow-sm);
 }
 
 .mcp-section {
@@ -563,11 +614,17 @@ onMounted(() => {
   color: var(--color-accent);
 }
 
+.mcp-overview-intro {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  line-height: var(--leading-relaxed);
+}
+
 .mcp-snippets {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  margin-top: var(--space-4);
 }
 
 .mcp-snippet {
@@ -668,6 +725,34 @@ onMounted(() => {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+/* ---- 工具清单 ---- */
+.mcp-tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mcp-tool-item {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+.mcp-tool-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.mcp-tool-desc {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  line-height: var(--leading-normal);
+  white-space: pre-line;
 }
 
 /* ---- 弹窗 ---- */

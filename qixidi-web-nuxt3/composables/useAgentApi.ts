@@ -28,6 +28,13 @@ export interface AgentSkillPayload {
   content: string
 }
 
+export interface McpToolSummaryItem {
+  /** 工具名（snake_case） */
+  name: string
+  /** 工具描述（多行） */
+  description: string
+}
+
 export const useAgentApi = () => {
   const api = useApi()
 
@@ -41,6 +48,13 @@ export const useAgentApi = () => {
       notice: string
       snippets: { claudeCode: string; codex: string; generic: string }
     }>('/agent/mcp-info')
+  }
+
+  /**
+   * 当前开放的 MCP tool 清单（后端聚合自 ToolCallbackProvider，工具增减自动同步）
+   */
+  const getMcpTools = () => {
+    return api.get<McpToolSummaryItem[]>('/agent/mcp-info/tools')
   }
 
   /**
@@ -102,6 +116,7 @@ export const useAgentApi = () => {
 
   return {
     getMcpInfo,
+    getMcpTools,
     getKeyList,
     createKey,
     renameKey,
