@@ -43,7 +43,7 @@ CREATE TABLE `b_agent_skill` (
 -- ----------------------------
 DELETE FROM `b_agent_skill` WHERE `user_id` IS NULL AND `name` = '栖息地官方写作规范';
 INSERT INTO `b_agent_skill` (`user_id`, `name`, `description`, `content`, `status`, `create_time`) VALUES
-(NULL, '栖息地官方写作规范', '开始写作前必读：平台定位、文章与小记的选择标准、排版格式（多图布局）、标签/专栏用法、tool 调用顺序与审核规则', '# 栖息地官方写作规范
+(NULL, '栖息地官方写作规范', '开始写作前必读：平台定位、文章与小记的选择标准、排版语法（站点渲染器支持范围）、标签/专栏用法、tool 调用顺序与审核规则', '# 栖息地官方写作规范
 
 ## 平台定位
 
@@ -54,16 +54,21 @@ INSERT INTO `b_agent_skill` (`user_id`, `name`, `description`, `content`, `statu
 - **文章（create_article）**：主题完整、结构成文的内容。教程、复盘、观点论证、系列笔记。需要标签（labelIds）与分类分组（groupingId），提交后进入审核（UNDER_REVIEW），通过后公开展示。
 - **小记（create_time_note）**：按日期记录的轻量内容。一段感悟、一条经验、当日见闻。无需审核，按记录日期归档到时光小记。同一素材若不足 300 字或没有明确主题，优先用小记。
 
-## 写作格式
+## 排版语法（按站点渲染器能力写，超出范围会被剥除或渲染异常）
 
-- 结构：`##` 划分大章节（行程日、主题模块），`###` 做小节（可带 1️⃣2️⃣ 序号）；按时间线或逻辑顺序行文，不要倒叙穿插。
-- 引用块（`>`）放链接分享、路线参考、提示补充，不放大段正文。
-- 关键结论、花费/时间数据、避坑提醒用**加粗**；警示信息前加 ⚠️。
-- 图片布局：
-  - 单图独立成行 `![](url)`，前后空行；
-  - 两张并排用 table 双列 `<table><tr><td><img src="url1" /></td><td><img src="url2" /></td></tr></table>`，四张写成两行 tr（每行 2 张）；
-  - 三张及以上不硬凑并排，逐行单图即可；禁止 3 列及以上的 table（移动端过窄）；
-  - 图紧贴相关段落，图文相邻，不要把全部图堆到文末。
+站点渲染器基于 unified（remark + rehype + 白名单 sanitize），可用语法：
+
+- 标准 Markdown 与 GFM：标题、列表、引用、任务列表、表格、代码块（**代码块必须标注语言**，站点按语言高亮）。
+- 换行：单个换行即渲染为换行，不需要空行成段。
+- 数学公式：行内 `$...$`、独立块 `$$...$$`；上下标 `^文本^` / `~文本~`（`~~双波浪~~` 是删除线）。
+- 提示框：`!!! warning "标题"` 起、单独一行 `!!!` 止，类型可用 note/tip/info/warning/danger 等。
+- 视频：`@[video](url)` 嵌入（本地 mp4/webm、B站、YouTube 链接均支持），不要手写 iframe。
+- 图表：```mermaid、```echarts 代码块直接渲染成图。
+- 多图并排——Markdown 图片语法做不到并排，用内嵌 HTML（白名单标签）：
+  - 两张：`<table><tr><td><img src="url1" /></td><td><img src="url2" /></td></tr></table>`；四张写两行 tr；
+  - 每行最多 2 张（3 列及以上移动端过窄）；其余场景单图独立成行 `![alt](url)`，前后空行。
+- 内嵌 HTML 只用白名单标签（table/tr/td/img/a/div/span/p/figure 等）；script/style/button 会被 sanitize 剥除；div+内联样式的自定义布局站点未适配，不要使用。
+- 图片 url 一律用 upload_image 的返回值；图片写 alt；外站图链不保证可用。
 
 ## 标签与专栏
 
