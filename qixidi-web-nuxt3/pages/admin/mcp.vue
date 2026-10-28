@@ -546,9 +546,10 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
+/* 管理区 pane 固定高度：高度恒定切换零跳动，key/skill 超出列表内部滚动 */
 .mcp-manage-tabs :deep(.n-tabs-pane-wrapper) {
   min-height: 0;
-  max-height: 40vh;
+  height: 40vh;
   overflow-y: auto;
 }
 
