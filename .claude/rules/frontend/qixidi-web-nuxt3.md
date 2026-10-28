@@ -79,6 +79,10 @@ const list = computed(() => data.value || [])  // 消费端兜底
 
 `components/` 子目录的组件名带目录前缀：`common/MdEditorWithVideo.vue` → `<CommonMdEditorWithVideo>`（写错会**静默渲染失败**，先 grep 使用先例确认）。
 
+### middleware 注册名（强制）
+
+**middleware 文件名 camelCase 会被注册为 kebab-case**：`mcpCreator.ts` → 注册名 `mcp-creator`，`definePageMeta` 引用必须写 `'mcp-creator'`——写 camelCase 点菜单直接崩（Unknown route middleware）。
+
 ### 图标（强制）
 
 统一 Tabler Icons（`@vicons/tabler`），禁止 @nuxt/icon 或 Emoji。**图标名以官方名为准，不能凭记忆写**——不存在的导出会运行时整页崩。拿不准先查：`ls node_modules/@vicons/tabler/es/ | grep -i 关键词`。
