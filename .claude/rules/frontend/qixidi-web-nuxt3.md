@@ -101,6 +101,8 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 
 ### Naive UI 组件行为差异
 
+- **n-modal/n-drawer teleport 到 body，scoped CSS 选不中节点静默失效**（实证：admin/mcp 弹窗 width 类从未生效撑满全屏）——宽度等尺寸样式只能 inline `:style` 或全局样式，禁止给 teleport 类组件写 scoped 尺寸类
+
 - **n-menu/n-tree 的 key 必须唯一**：折叠/展开按 key 增删，key 重复会联动。分组节点的 key 一律用唯一 id（`menu-${item.id}`），叶子节点可用 route（供 `:value` 高亮匹配）；`route || fallback` 兜不住非空占位串（如 `"-"`），见 `layouts/admin.vue` 的 `getMenuKey`
 - **n-tabs 占满整行**：放进 flex 行内会独自占一行挤走其他元素，需 `width: auto; flex-shrink: 0`
 - **Transfer 穿梭框**：面板标题用 `source-title`/`target-title`（不是 render 函数）；不支持 `#source`/`#target` slot；高度用固定像素，禁百分比/flex。开发顺序：先最简实现跑通 → 再加样式，一次只改一个问题
