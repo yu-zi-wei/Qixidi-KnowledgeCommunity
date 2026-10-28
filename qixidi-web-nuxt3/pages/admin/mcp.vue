@@ -545,9 +545,14 @@ onMounted(() => {
 .mcp-manage-tabs {
   flex: 4;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.mcp-manage-tabs :deep(.n-tabs-pane-wrapper) {
+/* 非 animated 的 n-tabs 不渲染 pane wrapper（Naive 源码实证：pane 直挂根下），
+   滚动约束必须直接落在 pane 上；animated 的 wrapper 还有 inline height 切换动画，flex 布局下会抖 */
+.mcp-manage-tabs :deep(.n-tab-pane) {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
