@@ -24,6 +24,8 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 - 场景化 ChatClient 装配集中在 `AIChatClientConfig`：`openAiChatClient`（图片解析+记忆）/ `deepSeekChatClient`（@Primary，对话）/ `generationChatClient`（无状态纯文本）
 - AI 返回内容清洗统一用 `AiTextUtils.stripMarkdownCodeBlock`（qixidi-ai/utils）
 - AI 配置走 `config.ai.*`（applicationConfig/{profile}/config.properties，yml 占位符引用）
+- MCP 工具 POJO 入参字段一律 `@ToolParam(description, required)`：字段默认 required（SpringAiSchemaModule requiredByDefault=true），可选字段必须显式 `required = false`；必填性随工具场景变化（如 create 必填/update 可选）时标 false 并把场景写进 description
+- MCP 工具直调 Service 不经过 Controller 校验：BO 上的 @NotBlank 等校验组不生效，必填项须在 tool 方法内自行校验
 
 ---
 
