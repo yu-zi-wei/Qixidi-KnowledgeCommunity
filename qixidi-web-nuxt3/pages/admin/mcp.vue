@@ -294,7 +294,7 @@ import { Code, Copy, Edit, Eye, Key, Plus, Robot, ShieldLock, Trash } from '@vic
 import type { FormInst, FormRules } from 'naive-ui'
 import type { AgentApiKeyItem, AgentSkillItem, McpToolSummaryItem } from '~/composables/useAgentApi'
 
-definePageMeta({ layout: 'admin', middleware: ['creator', 'mcp-creator'] })
+definePageMeta({ layout: 'admin', middleware: 'creator' })
 
 const message = useMessage()
 const agentApi = useAgentApi()
@@ -379,7 +379,16 @@ const fetchKeyList = async () => {
   }
 }
 
+/** 创建 key/skill 是创作者权益：非创作者点创建 → 弹申请引导（与后端门槛对齐，不发无效请求） */
+const guardCreator = () => {
+  const authStore = useAuthStore()
+  if (Number(authStore.user?.roleId ?? 1) >= 2) return true
+  useCreatorApplyStore().show()
+  return false
+}
+
 const openKeyCreate = () => {
+  if (!guardCreator()) return
   keyCreateForm.value = { keyName: '', permanent: false, validDays: 365 }
   keyCreateVisible.value = true
 }
@@ -470,6 +479,7 @@ const fetchSkillList = async () => {
 }
 
 const openSkillCreate = () => {
+  if (!guardCreator()) return
   skillReadonly.value = false
   skillEditingId.value = null
   skillForm.value = { name: '', description: '', content: '' }
