@@ -24,7 +24,7 @@ public class McpToolSummaryVo implements Serializable {
     private String name;
 
     /**
-     * 工具描述（多行）
+     * 工具简介（description 首段；完整描述走 MCP 协议 tool 定义，不在此返回）
      */
     private String description;
 }

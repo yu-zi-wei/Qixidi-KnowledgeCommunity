@@ -60,7 +60,8 @@ public class AgentMcpInfoController {
     }
 
     /**
-     * 当前注册的 MCP tool 清单（聚合自 ToolCallbackProvider，工具增减自动同步）
+     * 当前注册的 MCP tool 清单（聚合自 ToolCallbackProvider，工具增减自动同步）；
+     * description 只取首段——管理页要"干什么"的简介，完整三要素描述通过 MCP 协议留给 agent
      */
     @GetMapping("/tools")
     public List<McpToolSummaryVo> tools() {
@@ -69,10 +70,22 @@ public class AgentMcpInfoController {
                 var definition = callback.getToolDefinition();
                 McpToolSummaryVo vo = new McpToolSummaryVo();
                 vo.setName(definition.name());
-                vo.setDescription(definition.description());
+                vo.setDescription(briefDescription(definition.description()));
                 return vo;
             })
             .sorted(Comparator.comparing(McpToolSummaryVo::getName))
             .toList();
+    }
+
+    /**
+     * 取 description 首段（首个空行前）作为简介；tool 的 text block 描述首段即功能概括
+     */
+    private String briefDescription(String description) {
+        if (description == null || description.isBlank()) {
+            return "";
+        }
+        String stripped = description.strip();
+        int split = stripped.indexOf("\n\n");
+        return split < 0 ? stripped : stripped.substring(0, split);
     }
 }
