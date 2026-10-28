@@ -75,12 +75,14 @@ public class ApiKeyService {
     }
 
     /**
-     * 校验 API key 并返回绑定用户，失败抛 ServiceException
+     * 校验 API key 并返回绑定用户，失败抛 ServiceException。
+     * 两条路径（缓存命中/回源校验）都要刷新 lastUsedTime——命中路径用 hash 条件，不回查行
      */
     public TripartiteUser validate(String rawKey) {
         String hash = ApiKeyGenerator.sha256(rawKey);
         TripartiteUser cached = RedisUtils.getCacheObject(CACHE_PREFIX + hash);
         if (cached != null) {
+            touchLastUsed(hash);
             return cached;
         }
         AgentApiKey entity = apiKeyMapper.selectOne(
@@ -98,17 +100,23 @@ public class ApiKeyService {
             throw new ServiceException("API key 用户信息缺失，请重新签发");
         }
         RedisUtils.setCacheObject(CACHE_PREFIX + hash, tripartiteUser, CACHE_TTL_DAYS, TimeUnit.DAYS);
-        // 最后使用时间：尽力而为的观测字段。update(null, wrapper) 不触发实体自动填充——
-        // 填充器依赖 Sa-Token 上下文，而本方法在 Filter 阶段执行（Sa 拦截器尚未初始化上下文），
-        // 用 updateById 会抛"SaTokenContext 上下文尚未初始化"把认证拖成 401（Tomcat 线程复用时偶发）
+        touchLastUsed(hash);
+        return tripartiteUser;
+    }
+
+    /**
+     * 最后使用时间：尽力而为的观测字段。update(null, wrapper) 不触发实体自动填充——
+     * 填充器依赖 Sa-Token 上下文，而本方法在 Filter 阶段执行（Sa 拦截器尚未初始化上下文），
+     * 用 updateById 会抛"SaTokenContext 上下文尚未初始化"把认证拖成 401（Tomcat 线程复用时偶发）
+     */
+    private void touchLastUsed(String keyHash) {
         try {
             apiKeyMapper.update(null, Wrappers.<AgentApiKey>lambdaUpdate()
                 .set(AgentApiKey::getLastUsedTime, new Date())
-                .eq(AgentApiKey::getId, entity.getId()));
+                .eq(AgentApiKey::getKeyHash, keyHash));
         } catch (Exception e) {
             log.warn("lastUsedTime 更新失败（不影响认证）: {}", e.getMessage());
         }
-        return tripartiteUser;
     }
 
     /**
