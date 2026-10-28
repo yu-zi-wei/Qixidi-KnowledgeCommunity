@@ -27,5 +27,5 @@ public class McpTimeNotePageVo implements Serializable {
     /**
      * 当前页小记列表
      */
-    private List<McpTimeNoteSearchItemVo> rows;
+    private List<McpTimeNoteItemVo> rows;
 }

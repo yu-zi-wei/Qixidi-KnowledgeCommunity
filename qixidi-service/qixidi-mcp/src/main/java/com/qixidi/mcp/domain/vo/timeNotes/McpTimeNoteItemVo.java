@@ -7,13 +7,13 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 小记搜索结果行（MCP search_time_notes；小记无详情工具，正文直接返回）
+ * 小记条目（search_time_notes 列表行 / get_time_note 详情共用）
  *
  * @author zi-wei
  */
 @Data
 @NoArgsConstructor
-public class McpTimeNoteSearchItemVo implements Serializable {
+public class McpTimeNoteItemVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

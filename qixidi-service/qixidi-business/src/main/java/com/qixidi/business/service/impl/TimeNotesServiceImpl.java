@@ -162,6 +162,9 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     public TimeNotesInfoVo getInfo(Long id) {
         String uid = LoginHelper.getTripartiteUuid();
         TimeNotes timeNotes = timeNotesMapper.selectById(id);
+        if (timeNotes == null) {
+            return null;
+        }
         TimeNotesInfoVo timeNotesInfoVo = BeanUtil.copyProperties(timeNotes, TimeNotesInfoVo.class);
         if (uid != null && uid.equals(timeNotes.getUid())) {
             timeNotesInfoVo.setIsAuthor(0);

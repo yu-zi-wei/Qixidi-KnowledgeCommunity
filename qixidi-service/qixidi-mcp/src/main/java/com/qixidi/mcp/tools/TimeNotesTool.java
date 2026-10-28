@@ -7,9 +7,10 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.service.TimeNotesService;
+import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.mcp.domain.bo.timeNotes.McpTimeNoteQueryBo;
+import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteItemVo;
 import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNotePageVo;
-import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteSearchItemVo;
 import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteSubmitVo;
 import com.qixidi.mcp.utils.McpPageUtils;
 import org.springframework.ai.tool.annotation.Tool;
@@ -86,7 +87,7 @@ public class TimeNotesTool {
         return submitVo(timeNoteId, "updated");
     }
 
-    @Tool(name = "search_time_notes", description = "多条件搜索本人的小记：标题/正文模糊、记录日期范围。分页返回 timeNoteId/title/recordTime/content，含正文（小记无独立详情工具）。仅限本人小记。")
+    @Tool(name = "search_time_notes", description = "多条件搜索本人的小记：标题/正文模糊、记录日期范围。分页返回 timeNoteId/title/recordTime/content（含正文），单条详情可用 get_time_note。仅限本人小记。")
     public McpTimeNotePageVo searchTimeNotes(
         @ToolParam(description = "查询条件对象") McpTimeNoteQueryBo query,
         @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
@@ -100,8 +101,8 @@ public class TimeNotesTool {
         Page<TimeNotes> result = timeNotesService.searchForAgent(user.getUuid(),
             query.getTitle(), query.getContent(),
             parseDate(query.getBeginDate()), parseDate(query.getEndDate()), page);
-        List<McpTimeNoteSearchItemVo> rows = result.getRecords().stream().map(n -> {
-            McpTimeNoteSearchItemVo row = new McpTimeNoteSearchItemVo();
+        List<McpTimeNoteItemVo> rows = result.getRecords().stream().map(n -> {
+            McpTimeNoteItemVo row = new McpTimeNoteItemVo();
             row.setTimeNoteId(n.getId());
             row.setTitle(n.getTitle());
             row.setRecordTime(n.getRecordTime() == null ? null : n.getRecordTime().toString());
@@ -112,6 +113,27 @@ public class TimeNotesTool {
         vo.setTotal(result.getTotal());
         vo.setRows(rows);
         return vo;
+    }
+
+    @Tool(name = "get_time_note", description = "获取指定小记的详情（标题/正文/记录日期），timeNoteId 来自 search_time_notes 或 create_time_note 返回值。")
+    public McpTimeNoteItemVo getTimeNote(
+        @ToolParam(description = "小记 id") Long timeNoteId
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        // 复用前台公开详情链路 getInfo（小记为公开内容），不存在返回 null
+        TimeNotesInfoVo vo = timeNotesService.getInfo(timeNoteId);
+        if (vo == null) {
+            throw new ServiceException("小记不存在");
+        }
+        McpTimeNoteItemVo item = new McpTimeNoteItemVo();
+        item.setTimeNoteId(vo.getId());
+        item.setTitle(vo.getTitle());
+        item.setContent(vo.getContent());
+        item.setRecordTime(vo.getRecordTime() == null ? null : vo.getRecordTime().toString());
+        return item;
     }
 
     private McpTimeNoteSubmitVo submitVo(Long timeNoteId, String status) {
