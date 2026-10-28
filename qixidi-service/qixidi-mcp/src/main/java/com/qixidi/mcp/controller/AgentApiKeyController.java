@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * agent API key 管理（前台，需登录；创建仅限创作者）。
+ * agent API key 管理（前台，需登录；写操作仅限创作者/管理员）。
  * 遵循项目惯例返回裸数据（含 void），由 ResponseAdvice 统一包装为 R——Controller 直接返回 R 会被再包一层
  *
  * @author zi-wei
@@ -37,11 +37,7 @@ public class AgentApiKeyController {
     @Log(title = "agent API key", businessType = BusinessType.INSERT)
     @PostMapping
     public Map<String, String> create(@Validated @RequestBody AgentKeyBo bo) {
-        TripartiteUser user = requireUser();
-        // 与文章/小记发布同款创作者门槛
-        if (!UserRoleEnums.getAdvancedRoleList().contains(user.getRoleId())) {
-            throw new ServiceException(MsgEnums.NOT_CREATOR);
-        }
+        TripartiteUser user = requireCreator();
         String rawKey = apiKeyService.createKey(user, bo.getKeyName(), bo.getValidDays());
         return Map.of("apiKey", rawKey);
     }
@@ -63,7 +59,7 @@ public class AgentApiKeyController {
     @Log(title = "agent API key", businessType = BusinessType.UPDATE)
     @PutMapping("/{id}")
     public void rename(@PathVariable Long id, @Validated @RequestBody AgentKeyBo bo) {
-        TripartiteUser user = requireUser();
+        TripartiteUser user = requireCreator();
         apiKeyService.renameKey(id, user.getUuid(), bo.getKeyName());
     }
 
@@ -73,7 +69,7 @@ public class AgentApiKeyController {
     @Log(title = "agent API key", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public void revoke(@PathVariable Long id) {
-        TripartiteUser user = requireUser();
+        TripartiteUser user = requireCreator();
         apiKeyService.revokeKey(id, user.getUuid());
     }
 
@@ -81,6 +77,17 @@ public class AgentApiKeyController {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {
             throw new ServiceException("登录已过期");
+        }
+        return user;
+    }
+
+    /**
+     * 与文章/小记发布同款创作者门槛：创作者或管理员
+     */
+    private TripartiteUser requireCreator() {
+        TripartiteUser user = requireUser();
+        if (!UserRoleEnums.getAdvancedRoleList().contains(user.getRoleId())) {
+            throw new ServiceException(MsgEnums.NOT_CREATOR);
         }
         return user;
     }
