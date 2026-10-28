@@ -12,16 +12,20 @@ import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
 import com.qixidi.mcp.domain.bo.article.McpArticleBo;
+import com.qixidi.mcp.domain.bo.article.McpArticleQueryBo;
 import com.qixidi.mcp.domain.vo.article.McpArticleBriefVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleDeleteVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleDetailVo;
 import com.qixidi.mcp.domain.vo.article.McpArticlePageVo;
+import com.qixidi.mcp.domain.vo.article.McpArticleSearchItemVo;
 import com.qixidi.mcp.domain.vo.article.McpArticleSubmitVo;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,7 +85,7 @@ public class ArticleTools {
     }
 
     @Tool(name = "list_my_articles", description = "分页查询当前用户的文章列表（含草稿），返回精简字段 id/title/auditState/updateTime。auditState 含义：1 审核中、2 审核通过、3 审核不通过、4 草稿。")
-    public McpArticlePageVo listMyArticles(
+    public McpArticlePageVo<McpArticleBriefVo> listMyArticles(
         @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
         @ToolParam(description = "每页条数，默认 10，最大 50", required = false) Integer pageSize
     ) {
@@ -104,7 +108,60 @@ public class ArticleTools {
             row.setUpdateTime(DateUtil.formatDateTime(v.getUpdateTime()));
             return row;
         }).collect(Collectors.toList());
-        McpArticlePageVo result = new McpArticlePageVo();
+        McpArticlePageVo<McpArticleBriefVo> result = new McpArticlePageVo<>();
+        result.setTotal(page.getTotal());
+        result.setRows(rows);
+        return result;
+    }
+
+    @Tool(name = "search_articles", description = "多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。分页返回 id/title/articleAbstract/type/auditState/authorName/updateTime 元数据，不含正文；选中后用 get_article 查详情（仅限本人文章）。数据范围：不传 authorName 查本人全部状态；传 authorName 查该作者的已发布文章。")
+    public McpArticlePageVo<McpArticleSearchItemVo> searchArticles(
+        @ToolParam(description = "查询条件对象") McpArticleQueryBo query,
+        @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
+        @ToolParam(description = "每页条数，默认 10，最大 200", required = false) Integer pageSize
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        ArticleInformationBo bo = new ArticleInformationBo();
+        bo.setArticleTitle(query.getTitle());
+        bo.setArticleAbstract(query.getArticleAbstract());
+        bo.setType(query.getType());
+        bo.setSpecialId(query.getSpecialId());
+        if (query.getAuthorName() == null || query.getAuthorName().isBlank()) {
+            // 查本人：状态由调用方指定（缺省全部）
+            bo.setUserId(user.getUuid());
+            bo.setAuditStates(query.getAuditStates());
+        } else {
+            // 跨作者：只放开已发布文章，忽略调用方传入的状态
+            bo.setNickname(query.getAuthorName().trim());
+            bo.setAuditStates(List.of(ArticleAuditStateEnums.APPROV.getCode()));
+        }
+        LocalDate begin = parseDate(query.getBeginDate());
+        LocalDate end = parseDate(query.getEndDate());
+        if (begin != null) {
+            bo.getParams().put("beginTime", begin + " 00:00:00");
+        }
+        if (end != null) {
+            bo.getParams().put("endTime", end + " 23:59:59");
+        }
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setPageNum(pageNum == null || pageNum < 1 ? 1 : pageNum);
+        pageQuery.setPageSize(pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 200));
+        Page<ArticleInformationVo> page = iArticleInformationService.getArticleInfo(bo, pageQuery);
+        List<McpArticleSearchItemVo> rows = page.getRecords().stream().map(v -> {
+            McpArticleSearchItemVo row = new McpArticleSearchItemVo();
+            row.setId(v.getId());
+            row.setTitle(v.getArticleTitle());
+            row.setArticleAbstract(v.getArticleAbstract());
+            row.setType(v.getType());
+            row.setAuditState(v.getAuditState());
+            row.setAuthorName(v.getNickname());
+            row.setUpdateTime(DateUtil.formatDateTime(v.getUpdateTime()));
+            return row;
+        }).collect(Collectors.toList());
+        McpArticlePageVo<McpArticleSearchItemVo> result = new McpArticlePageVo<>();
         result.setTotal(page.getTotal());
         result.setRows(rows);
         return result;
@@ -229,6 +286,20 @@ public class ArticleTools {
         }
         if (bo.getContent() == null || bo.getContent().isBlank()) {
             throw new ServiceException("content 不能为空");
+        }
+    }
+
+    /**
+     * 日期入参解析：可空；格式错误明确报错（不静默忽略，避免 AI 以为条件已生效）
+     */
+    private LocalDate parseDate(String date) {
+        if (date == null || date.isBlank()) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(date.trim());
+        } catch (DateTimeParseException e) {
+            throw new ServiceException("日期格式须为 yyyy-MM-dd：" + date);
         }
     }
 

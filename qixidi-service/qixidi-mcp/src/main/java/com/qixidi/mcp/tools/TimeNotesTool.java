@@ -1,10 +1,15 @@
 package com.qixidi.mcp.tools;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
+import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.service.TimeNotesService;
+import com.qixidi.mcp.domain.bo.timeNotes.McpTimeNoteQueryBo;
+import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNotePageVo;
+import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteSearchItemVo;
 import com.qixidi.mcp.domain.vo.timeNotes.McpTimeNoteSubmitVo;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -13,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 小记 tool：复刻前台时光小记链路（add/update），service 层自带角色与属主校验
@@ -78,6 +85,37 @@ public class TimeNotesTool {
         return submitVo(timeNoteId, "updated");
     }
 
+    @Tool(name = "search_time_notes", description = "多条件搜索本人的小记：标题/正文模糊、记录日期范围。分页返回 timeNoteId/title/recordTime/content，含正文（小记无独立详情工具）。仅限本人小记。")
+    public McpTimeNotePageVo searchTimeNotes(
+        @ToolParam(description = "查询条件对象") McpTimeNoteQueryBo query,
+        @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
+        @ToolParam(description = "每页条数，默认 10，最大 100", required = false) Integer pageSize
+    ) {
+        TripartiteUser user = LoginHelper.getTripartiteUser();
+        if (user == null) {
+            throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        Page<TimeNotes> page = new Page<>(
+            pageNum == null || pageNum < 1 ? 1 : pageNum,
+            pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 100)
+        );
+        Page<TimeNotes> result = timeNotesService.searchForAgent(user.getUuid(),
+            query.getTitle(), query.getContent(),
+            parseDate(query.getBeginDate()), parseDate(query.getEndDate()), page);
+        List<McpTimeNoteSearchItemVo> rows = result.getRecords().stream().map(n -> {
+            McpTimeNoteSearchItemVo row = new McpTimeNoteSearchItemVo();
+            row.setTimeNoteId(n.getId());
+            row.setTitle(n.getTitle());
+            row.setRecordTime(n.getRecordTime() == null ? null : n.getRecordTime().toString());
+            row.setContent(n.getContent());
+            return row;
+        }).collect(Collectors.toList());
+        McpTimeNotePageVo vo = new McpTimeNotePageVo();
+        vo.setTotal(result.getTotal());
+        vo.setRows(rows);
+        return vo;
+    }
+
     private McpTimeNoteSubmitVo submitVo(Long timeNoteId, String status) {
         McpTimeNoteSubmitVo vo = new McpTimeNoteSubmitVo();
         vo.setTimeNoteId(timeNoteId);
@@ -86,13 +124,21 @@ public class TimeNotesTool {
     }
 
     private LocalDate parseOrToday(String recordTime) {
-        if (recordTime == null || recordTime.isBlank()) {
-            return LocalDate.now();
+        LocalDate parsed = parseDate(recordTime);
+        return parsed == null ? LocalDate.now() : parsed;
+    }
+
+    /**
+     * 日期入参解析：可空（范围查询空=无边界）；格式错误明确报错
+     */
+    private LocalDate parseDate(String date) {
+        if (date == null || date.isBlank()) {
+            return null;
         }
         try {
-            return LocalDate.parse(recordTime.trim());
+            return LocalDate.parse(date.trim());
         } catch (DateTimeParseException e) {
-            throw new ServiceException("recordTime 格式须为 yyyy-MM-dd");
+            throw new ServiceException("日期格式须为 yyyy-MM-dd：" + date);
         }
     }
 }

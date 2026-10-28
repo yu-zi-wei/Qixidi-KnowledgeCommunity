@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文章信息业务对象 b_article_information
@@ -112,6 +113,11 @@ public class ArticleInformationBo extends BaseEntity {
      * 审核状态（1：审核中，2：审核通过，3：审核不通过,4:草稿）
      */
     private Integer auditState;
+
+    /**
+     * 审核状态多选（getArticleInfo in 查询；与 auditState 同时传时为 AND 关系）
+     */
+    private List<Integer> auditStates;
 
     /**
      * 审核时间

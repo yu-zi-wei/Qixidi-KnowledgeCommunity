@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 文章分页结果（MCP list_my_articles 返回）
+ * 文章分页结果（MCP list_my_articles / search_articles 返回）
  *
  * @author zi-wei
  */
 @Data
 @NoArgsConstructor
-public class McpArticlePageVo implements Serializable {
+public class McpArticlePageVo<T> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,5 +27,5 @@ public class McpArticlePageVo implements Serializable {
     /**
      * 当前页文章列表
      */
-    private List<McpArticleBriefVo> rows;
+    private List<T> rows;
 }

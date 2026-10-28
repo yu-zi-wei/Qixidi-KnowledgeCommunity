@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -166,6 +167,20 @@ public class TimeNotesServiceImpl implements TimeNotesService {
             timeNotesInfoVo.setIsAuthor(0);
         }
         return timeNotesInfoVo;
+    }
+
+    @Override
+    public Page<TimeNotes> searchForAgent(String uid, String title, String content,
+                                          LocalDate beginDate, LocalDate endDate, Page<TimeNotes> page) {
+        LambdaQueryWrapper<TimeNotes> lqw = new LambdaQueryWrapper<TimeNotes>()
+            .select(TimeNotes::getId, TimeNotes::getTitle, TimeNotes::getContent, TimeNotes::getRecordTime)
+            .eq(TimeNotes::getUid, uid)
+            .like(StrUtil.isNotBlank(title), TimeNotes::getTitle, title)
+            .like(StrUtil.isNotBlank(content), TimeNotes::getContent, content)
+            .ge(beginDate != null, TimeNotes::getRecordTime, beginDate)
+            .le(endDate != null, TimeNotes::getRecordTime, endDate)
+            .orderByDesc(TimeNotes::getRecordTime);
+        return timeNotesMapper.selectPage(page, lqw);
     }
 
     @Override

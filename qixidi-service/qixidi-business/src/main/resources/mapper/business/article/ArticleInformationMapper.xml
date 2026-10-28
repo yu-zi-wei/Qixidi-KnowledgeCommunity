@@ -165,6 +165,27 @@
             <if test="bo.specialId !='' and bo.specialId !=null">
                 and ai.special_id = #{bo.specialId}
             </if>
+            <if test="bo.articleAbstract !='' and bo.articleAbstract !=null">
+                and ai.article_abstract like concat('%', #{bo.articleAbstract}, '%')
+            </if>
+            <if test="bo.type != null">
+                and ai.type = #{bo.type}
+            </if>
+            <if test="bo.auditStates != null and bo.auditStates.size() > 0">
+                and ai.audit_state in
+                <foreach collection="bo.auditStates" item="auditItem" open="(" separator="," close=")">
+                    #{auditItem}
+                </foreach>
+            </if>
+            <if test="bo.nickname !='' and bo.nickname !=null">
+                and ai.user_id in (select uuid from b_user_main where nickname like concat('%', #{bo.nickname}, '%'))
+            </if>
+            <if test="bo.params.beginTime != null and bo.params.beginTime != ''">
+                and ai.update_time &gt;= #{bo.params.beginTime}
+            </if>
+            <if test="bo.params.endTime != null and bo.params.endTime != ''">
+                and ai.update_time &lt;= #{bo.params.endTime}
+            </if>
         </where>
         order by ai.update_time desc
     </select>
