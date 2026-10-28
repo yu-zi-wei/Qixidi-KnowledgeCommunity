@@ -14,6 +14,8 @@ export interface AgentApiKeyItem {
 
 export interface AgentSkillItem {
   id: number
+  /** NULL = 平台官方 skill（只读，仅查看） */
+  userId?: string | null
   name: string
   description?: string
   content: string

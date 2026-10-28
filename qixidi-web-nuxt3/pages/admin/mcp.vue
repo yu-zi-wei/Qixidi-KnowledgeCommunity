@@ -63,13 +63,14 @@
       </div>
 
       <div v-if="skillLoading" class="mcp-loading"><n-spin size="small" /></div>
-      <CommonEmptyState v-else-if="!skillList.length" description="还没有自建 skill，新建一个沉淀你的写作偏好" />
+      <CommonEmptyState v-else-if="!skillList.length" description="还没有 skill，新建一个沉淀你的写作偏好" />
       <div v-else class="mcp-skill-list">
         <div v-for="skill in skillList" :key="skill.id" class="mcp-skill-item">
           <div class="mcp-skill-main">
             <div class="mcp-key-name-row">
               <span class="mcp-key-name">{{ skill.name }}</span>
-              <n-tag size="small" :type="skill.status === 1 ? 'success' : 'default'" round>
+              <n-tag v-if="skill.userId == null" size="small" type="info" round>官方</n-tag>
+              <n-tag v-else size="small" :type="skill.status === 1 ? 'success' : 'default'" round>
                 {{ skill.status === 1 ? '启用' : '停用' }}
               </n-tag>
             </div>
@@ -79,19 +80,25 @@
             </span>
           </div>
           <div class="mcp-key-actions">
-            <n-button quaternary size="tiny" @click="openSkillEdit(skill)">
-              <template #icon><n-icon><Edit /></n-icon></template>
-              编辑
+            <n-button v-if="skill.userId == null" quaternary size="tiny" @click="openSkillView(skill)">
+              <template #icon><n-icon><Eye /></n-icon></template>
+              查看
             </n-button>
-            <n-popconfirm @positive-click="handleSkillDelete(skill.id)">
-              <template #trigger>
-                <n-button quaternary size="tiny" type="error">
-                  <template #icon><n-icon><Trash /></n-icon></template>
-                  删除
-                </n-button>
-              </template>
-              删除后 agent 将不再加载该 skill，确定删除「{{ skill.name }}」？
-            </n-popconfirm>
+            <template v-else>
+              <n-button quaternary size="tiny" @click="openSkillEdit(skill)">
+                <template #icon><n-icon><Edit /></n-icon></template>
+                编辑
+              </n-button>
+              <n-popconfirm @positive-click="handleSkillDelete(skill.id)">
+                <template #trigger>
+                  <n-button quaternary size="tiny" type="error">
+                    <template #icon><n-icon><Trash /></n-icon></template>
+                    删除
+                  </n-button>
+                </template>
+                删除后 agent 将不再加载该 skill，确定删除「{{ skill.name }}」？
+              </n-popconfirm>
+            </template>
           </div>
         </div>
       </div>
@@ -246,16 +253,17 @@
     </n-modal>
 
     <!-- skill 新建/编辑 -->
-    <n-modal v-model:show="skillFormVisible" preset="card" :title="skillEditingId ? '编辑 Skill' : '新建 Skill'" :style="mcpModalStyle">
+    <n-modal v-model:show="skillFormVisible" preset="card" :title="skillModalTitle" :style="mcpModalStyle">
       <n-form ref="skillFormRef" :model="skillForm" :rules="skillRules" label-placement="top">
         <n-form-item label="名称" path="name">
-          <n-input v-model:value="skillForm.name" placeholder="如 技术教程写作规范" :maxlength="100" show-count />
+          <n-input v-model:value="skillForm.name" :disabled="skillReadonly" placeholder="如 技术教程写作规范" :maxlength="100" show-count />
         </n-form-item>
         <n-form-item label="简介" path="description">
           <n-input
             v-model:value="skillForm.description"
             type="textarea"
             :rows="2"
+            :disabled="skillReadonly"
             placeholder="一两句话说明用途，agent 通过它决定是否加载"
             :maxlength="500"
             show-count
@@ -266,14 +274,15 @@
             v-model:value="skillForm.content"
             type="textarea"
             :rows="10"
+            :disabled="skillReadonly"
             placeholder="写入偏好、结构要求、语气示例等，agent 写作时会遵循"
           />
         </n-form-item>
       </n-form>
       <template #footer>
         <div class="mcp-modal-footer">
-          <n-button @click="skillFormVisible = false">取消</n-button>
-          <n-button type="primary" :loading="skillSubmitting" @click="handleSkillSubmit">保存</n-button>
+          <n-button @click="skillFormVisible = false">{{ skillReadonly ? '关闭' : '取消' }}</n-button>
+          <n-button v-if="!skillReadonly" type="primary" :loading="skillSubmitting" @click="handleSkillSubmit">保存</n-button>
         </div>
       </template>
     </n-modal>
@@ -281,11 +290,11 @@
 </template>
 
 <script setup lang="ts">
-import { Code, Copy, Edit, Key, Plus, Robot, ShieldLock, Trash } from '@vicons/tabler'
+import { Code, Copy, Edit, Eye, Key, Plus, Robot, ShieldLock, Trash } from '@vicons/tabler'
 import type { FormInst, FormRules } from 'naive-ui'
 import type { AgentApiKeyItem, AgentSkillItem, McpToolSummaryItem } from '~/composables/useAgentApi'
 
-definePageMeta({ layout: 'admin', middleware: ['creator', 'mcpCreator'] })
+definePageMeta({ layout: 'admin', middleware: ['creator', 'mcp-creator'] })
 
 const message = useMessage()
 const agentApi = useAgentApi()
@@ -438,6 +447,12 @@ const skillFormVisible = ref(false)
 const skillFormRef = ref<FormInst | null>(null)
 const skillEditingId = ref<number | null>(null)
 const skillSubmitting = ref(false)
+/** 官方 skill（userId 为空）只读查看：表单全禁用、不显示保存 */
+const skillReadonly = ref(false)
+const skillModalTitle = computed(() => {
+  if (skillReadonly.value) return '查看 Skill'
+  return skillEditingId.value ? '编辑 Skill' : '新建 Skill'
+})
 const skillForm = ref({ name: '', description: '', content: '' })
 const skillRules: FormRules = {
   name: { required: true, message: '请输入名称', trigger: ['blur', 'input'] },
@@ -455,13 +470,26 @@ const fetchSkillList = async () => {
 }
 
 const openSkillCreate = () => {
+  skillReadonly.value = false
   skillEditingId.value = null
   skillForm.value = { name: '', description: '', content: '' }
   skillFormVisible.value = true
 }
 
 const openSkillEdit = (skill: AgentSkillItem) => {
+  skillReadonly.value = false
   skillEditingId.value = skill.id
+  skillForm.value = {
+    name: skill.name,
+    description: skill.description || '',
+    content: skill.content
+  }
+  skillFormVisible.value = true
+}
+
+const openSkillView = (skill: AgentSkillItem) => {
+  skillReadonly.value = true
+  skillEditingId.value = null
   skillForm.value = {
     name: skill.name,
     description: skill.description || '',
