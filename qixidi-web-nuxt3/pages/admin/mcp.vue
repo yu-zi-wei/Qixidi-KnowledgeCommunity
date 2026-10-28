@@ -105,7 +105,7 @@
         <section class="mcp-section">
           <p class="mcp-overview-intro">
             栖息地 MCP 服务让 AI agent（Claude Code、Codex 等）以你的身份在栖息地读写内容：写文章、发小记、查询列表等。
-            agent 的所有操作等同于你本人登录，请像保管密码一样保管 API key，不再使用时立即吊销。
+            agent 的所有操作等同于你本人登录。
           </p>
           <template v-if="mcpInfo">
             <div class="mcp-info-grid">
@@ -306,7 +306,7 @@ const toolsLoading = ref(false)
 const mcpTools = ref<McpToolSummaryItem[]>([])
 
 const toolsTabLabel = computed(() =>
-  mcpTools.value.length ? `工具清单 (${mcpTools.value.length})` : '工具清单'
+  mcpTools.value.length ? `McpTool (${mcpTools.value.length})` : 'McpTool'
 )
 
 const fetchMcpTools = async () => {
@@ -521,7 +521,7 @@ onMounted(() => {
 
 .mcp-tabs {
   background: var(--color-surface);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-5);
   box-shadow: var(--shadow-sm);
@@ -529,7 +529,7 @@ onMounted(() => {
 
 .mcp-section {
   background: var(--color-surface);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   box-shadow: var(--shadow-sm);
@@ -588,7 +588,7 @@ onMounted(() => {
   font-size: var(--text-sm);
   color: var(--color-ink);
   background: var(--color-surface-dim);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--space-1) var(--space-2);
   overflow-wrap: anywhere;
@@ -610,7 +610,7 @@ onMounted(() => {
 
 .mcp-notice-icon {
   flex-shrink: 0;
-  margin-top: 2px;
+  align-self: center;
   color: var(--color-accent);
 }
 
@@ -628,7 +628,7 @@ onMounted(() => {
 }
 
 .mcp-snippet {
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -677,7 +677,7 @@ onMounted(() => {
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
@@ -736,7 +736,7 @@ onMounted(() => {
 
 .mcp-tool-item {
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
@@ -783,7 +783,7 @@ onMounted(() => {
   font-size: var(--text-sm);
   color: var(--color-ink);
   background: var(--color-surface-dim);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
   overflow-wrap: anywhere;
