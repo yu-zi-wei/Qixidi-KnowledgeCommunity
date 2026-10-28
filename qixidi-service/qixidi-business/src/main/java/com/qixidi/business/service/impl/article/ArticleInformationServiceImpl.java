@@ -198,14 +198,10 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         vo.setId(id);
         vo.setCreateTime(new Date());
         articleWeightAlgorithms(List.of(vo));
-        //AI 生成总结/摘要（qixidi.article.ai.enable 开关控制）
-        if (articleAiEnabled) {
-            //生成 AI 总结
-            aiSummary(id, event.getArticleTitle(), event.getArticleContent());
-            //生成 AI 摘要
-            if (event.isGenerateAbstract()) {
-                aiAbstract(id, event.getArticleTitle(), event.getArticleContent());
-            }
+        //AI 生成摘要（qixidi.article.ai.enable 开关控制）：开关打开且未手填摘要才生成，避免覆盖用户摘要
+        if (articleAiEnabled && event.isGenerateAbstract()
+                && StringUtils.isBlank(event.getArticleAbstract())) {
+            aiAbstract(id, event.getArticleTitle(), event.getArticleContent());
         }
         //文章自动审核，发送消息
         if (event.isNeedReview()) {
@@ -335,28 +331,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                     .set(ArticleInformation::getArticleAbstract, summary)
                     .eq(ArticleInformation::getId, id));
             log.info("【AI 获取摘要】:" + id + ":" + summary);
-        }
-    }
-
-    /**
-     * AI 生成总结
-     *
-     * @param id
-     * @param articleTitle
-     * @param articleContent
-     */
-    private void aiSummary(Long id, String articleTitle, String articleContent) {
-        log.info("开始【AI 生成总结】:" + id);
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("\n 文章标题：" + articleTitle);
-        stringBuffer.append("\n 文章内容：" + articleContent);
-        stringBuffer.append("\n 要求：对该文章内容生成简单的总结，只需要总结这篇文章的大概内容，不需要详细总结。要求纯文字返回，不要返回markdown格式，且不超过400个字符。");
-        String summary = aiGenerationService.generateContent(stringBuffer.toString());
-        if (summary != null) {
-            baseMapper.update(new LambdaUpdateWrapper<ArticleInformation>()
-                    .set(ArticleInformation::getArticleSummary, summary)
-                    .eq(ArticleInformation::getId, id));
-            log.info("【AI 获取总结】:" + id + ":" + summary);
         }
     }
 

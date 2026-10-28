@@ -54,30 +54,20 @@
         </div>
       </div>
 
-      <!-- AI 总结（默认折叠，与摘要共享开关） -->
-      <div v-if="showAbstract && article.articleSummary" class="ai-summary-wrapper">
-        <div class="ai-summary-header" @click="aiSummaryExpanded = !aiSummaryExpanded">
-          <div class="ai-summary-title">
-            <n-icon class="ai-icon"><Robot /></n-icon>
-            <span>AI 总结</span>
+      <!-- 文章摘要（折叠面板，摘要为空显示占位符） -->
+      <div v-if="showAbstract" class="abstract-panel-wrapper">
+        <div class="abstract-panel-header" @click="abstractExpanded = !abstractExpanded">
+          <div class="abstract-panel-title">
+            <n-icon class="abstract-panel-icon"><Robot /></n-icon>
+            <span>文章摘要</span>
           </div>
-          <n-icon class="ai-summary-toggle" :class="{ expanded: aiSummaryExpanded }">
+          <n-icon class="abstract-panel-toggle" :class="{ expanded: abstractExpanded }">
             <ChevronDown />
           </n-icon>
         </div>
-        <div v-if="aiSummaryExpanded" class="ai-summary-content">
-          {{ article.articleSummary }}
+        <div v-if="abstractExpanded" class="abstract-panel-content" :class="{ empty: !article.articleAbstract }">
+          {{ article.articleAbstract || '暂无摘要' }}
         </div>
-      </div>
-
-      <!-- 文章摘要 -->
-      <div v-if="showAbstract && article.articleAbstract" class="article-abstract-wrapper">
-        <div class="abstract-icon">
-          <Quote class="icon" />
-        </div>
-        <p class="article-abstract">
-          {{ article.articleAbstract }}
-        </p>
       </div>
 
       <!-- 文章内容 -->
@@ -106,7 +96,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Eye, Heart, ThumbUp, MessageCircle, Edit, Quote, Hash, Robot, ChevronDown } from '@vicons/tabler'
+import { Eye, Heart, ThumbUp, MessageCircle, Edit, Hash, Robot, ChevronDown } from '@vicons/tabler'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 interface LabelInfo {
@@ -128,7 +118,6 @@ interface Article {
   articleTitle: string
   articleAbstract?: string
   articleContent: string
-  articleSummary?: string
   theme?: string
   type?: number
   reprintUrl?: string
@@ -168,7 +157,7 @@ const props = withDefaults(defineProps<Props>(), {
   showAbstract: true
 })
 
-const aiSummaryExpanded = ref(false)
+const abstractExpanded = ref(false)
 
 // 内部渲染 Markdown → HTML（SSR 输出完整 HTML）
 const { renderMarkdown } = useMarkdown()
@@ -489,31 +478,8 @@ const labelItems = computed(() => {
   height: 16px;
 }
 
-/* 文章摘要 - 左侧竖线装饰 */
-.article-abstract-wrapper {
-  position: relative;
-  display: flex;
-  gap: 16px;
-  padding: 0 0 0 20px;
-  margin-bottom: 32px;
-  border-left: 2px solid var(--color-primary);
-}
-
-.abstract-icon {
-  display: none;
-}
-
-.article-abstract {
-  flex: 1;
-  font-size: 15px;
-  line-height: 1.8;
-  color: var(--color-ink-light);
-  margin: 0;
-  font-style: italic;
-}
-
-/* AI 总结 */
-.ai-summary-wrapper {
+/* 文章摘要折叠面板 */
+.abstract-panel-wrapper {
   margin-bottom: 32px;
   background: rgba(68, 138, 255, 0.06);
   border: 1px solid rgba(68, 138, 255, 0.15);
@@ -521,7 +487,7 @@ const labelItems = computed(() => {
   overflow: hidden;
 }
 
-.ai-summary-header {
+.abstract-panel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -531,11 +497,11 @@ const labelItems = computed(() => {
   transition: background var(--transition-fast);
 }
 
-.ai-summary-header:hover {
+.abstract-panel-header:hover {
   background: rgba(68, 138, 255, 0.08);
 }
 
-.ai-summary-title {
+.abstract-panel-title {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -544,25 +510,30 @@ const labelItems = computed(() => {
   color: #448aff;
 }
 
-.ai-icon {
+.abstract-panel-icon {
   font-size: 16px;
 }
 
-.ai-summary-toggle {
+.abstract-panel-toggle {
   font-size: 16px;
   color: #448aff;
   transition: transform var(--transition-base);
 }
 
-.ai-summary-toggle.expanded {
+.abstract-panel-toggle.expanded {
   transform: rotate(180deg);
 }
 
-.ai-summary-content {
+.abstract-panel-content {
   padding: 0 var(--space-4) var(--space-4);
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   color: var(--color-ink-light);
+}
+
+.abstract-panel-content.empty {
+  color: var(--color-ink-faint);
+  font-style: italic;
 }
 
 /* 文章标签 - 简洁设计 */

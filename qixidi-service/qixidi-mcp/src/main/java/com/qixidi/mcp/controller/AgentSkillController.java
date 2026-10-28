@@ -5,7 +5,7 @@ import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.mcp.domain.bo.AgentSkillBo;
+import com.qixidi.mcp.domain.bo.skill.AgentSkillBo;
 import com.qixidi.mcp.domain.entity.AgentSkill;
 import com.qixidi.mcp.service.AgentSkillService;
 import lombok.RequiredArgsConstructor;

@@ -9,7 +9,7 @@ import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.service.label.ILabelGroupingInfoService;
 import com.qixidi.business.service.label.ILabelInfoService;
 import com.qixidi.business.service.special.ISpecialInformationService;
-import com.qixidi.mcp.domain.vo.McpPublishContextVo;
+import com.qixidi.mcp.domain.vo.article.McpPublishContextVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;

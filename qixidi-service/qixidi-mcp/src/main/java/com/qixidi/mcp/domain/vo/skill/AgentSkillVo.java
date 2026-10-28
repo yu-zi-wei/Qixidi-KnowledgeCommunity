@@ -1,4 +1,4 @@
-package com.qixidi.mcp.domain.vo;
+package com.qixidi.mcp.domain.vo.skill;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

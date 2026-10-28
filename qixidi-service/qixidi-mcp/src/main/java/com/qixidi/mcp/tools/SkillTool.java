@@ -4,7 +4,8 @@ import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.mcp.domain.entity.AgentSkill;
-import com.qixidi.mcp.domain.vo.McpSkillBriefVo;
+import com.qixidi.mcp.domain.vo.skill.McpSkillBriefVo;
+import com.qixidi.mcp.domain.vo.skill.McpSkillDetailVo;
 import com.qixidi.mcp.service.AgentSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
@@ -34,7 +35,7 @@ public class SkillTool {
     }
 
     @Tool(name = "get_skill", description = "读取指定 skill 的完整正文（Markdown 写作指令、用户写作偏好或平台规范）。与 list_skills 配合：先 list 拿 id，再 get 拿内容。")
-    public AgentSkill getSkill(
+    public McpSkillDetailVo getSkill(
         @ToolParam(description = "skill id（来自 list_skills）") Long skillId
     ) {
         TripartiteUser user = LoginHelper.getTripartiteUser();
@@ -42,6 +43,12 @@ public class SkillTool {
             throw new ServiceException("登录状态无效，请检查 API key");
         }
         // 官方行或本人行可读，其余拒绝（service 层校验）
-        return agentSkillService.getForAgent(skillId, user.getUuid());
+        AgentSkill skill = agentSkillService.getForAgent(skillId, user.getUuid());
+        McpSkillDetailVo vo = new McpSkillDetailVo();
+        vo.setId(skill.getId());
+        vo.setName(skill.getName());
+        vo.setDescription(skill.getDescription());
+        vo.setContent(skill.getContent());
+        return vo;
     }
 }

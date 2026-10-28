@@ -1,10 +1,10 @@
 package com.qixidi.mcp.tools;
 
-import cn.hutool.json.JSONUtil;
 import com.light.exception.ServiceException;
 import com.qixidi.system.service.ISysOssService;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.mcp.domain.vo.image.McpUploadImageVo;
 import com.qixidi.mcp.utils.ByteArrayMultipartFile;
 import com.qixidi.system.domain.entity.SysOss;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * 图片上传 tool：agent 生成/挑选的配图经 base64 上传到站内 OSS，返回 url 供文章封面与正文引用
@@ -82,7 +80,7 @@ public class UploadImageTool {
     }
 
     @Tool(name = "upload_image", description = "上传图片（base64 编码），返回 OSS url，用于文章封面与正文配图。支持 png/jpg/jpeg/gif/webp。")
-    public String uploadImage(
+    public McpUploadImageVo uploadImage(
         @ToolParam(description = "图片内容的 base64 字符串（不含 data:image/xxx;base64, 前缀）") String base64,
         @ToolParam(description = "文件名（带后缀，如 cover.png）", required = false) String filename
     ) {
@@ -99,11 +97,11 @@ public class UploadImageTool {
         validateImage(bytes);
         String name = (filename == null || filename.isBlank()) ? "mcp-image.png" : filename.trim();
         SysOss oss = iSysOssService.upload(new ByteArrayMultipartFile("file", name, guessContentType(name), bytes));
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("url", oss.getUrl());
-        result.put("ossId", oss.getOssId());
-        result.put("fileName", oss.getOriginalName());
-        return JSONUtil.toJsonStr(result);
+        McpUploadImageVo result = new McpUploadImageVo();
+        result.setUrl(oss.getUrl());
+        result.setOssId(oss.getOssId());
+        result.setFileName(oss.getOriginalName());
+        return result;
     }
 
     private String guessContentType(String filename) {

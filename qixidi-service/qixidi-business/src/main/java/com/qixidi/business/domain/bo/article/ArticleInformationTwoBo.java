@@ -55,10 +55,6 @@ public class ArticleInformationTwoBo extends BaseEntity {
     @NotBlank(message = "请填写文章内容", groups = {AddGroup.class, EditGroup.class})
     private String articleContent;
 
-    /**
-     * 文章内容
-     */
-    private String articleSummary;
 
     /**
      * 主题

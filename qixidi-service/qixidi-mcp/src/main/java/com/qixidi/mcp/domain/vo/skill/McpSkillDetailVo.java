@@ -1,4 +1,4 @@
-package com.qixidi.mcp.domain.vo;
+package com.qixidi.mcp.domain.vo.skill;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,13 +7,13 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * skill 摘要（MCP list_skills 返回项，不含正文）
+ * skill 详情（MCP get_skill 返回，不含 userId 等内部字段）
  *
  * @author zi-wei
  */
 @Data
 @NoArgsConstructor
-public class McpSkillBriefVo implements Serializable {
+public class McpSkillDetailVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -26,7 +26,12 @@ public class McpSkillBriefVo implements Serializable {
     private String name;
 
     /**
-     * skill 简介（agent 据此判断是否 get_skill 加载全文）
+     * skill 简介
      */
     private String description;
+
+    /**
+     * skill 正文（Markdown 写作指令）
+     */
+    private String content;
 }

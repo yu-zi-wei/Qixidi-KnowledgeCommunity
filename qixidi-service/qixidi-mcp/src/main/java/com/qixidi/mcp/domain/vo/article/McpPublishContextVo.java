@@ -1,4 +1,4 @@
-package com.qixidi.mcp.domain.vo;
+package com.qixidi.mcp.domain.vo.article;
 
 import com.qixidi.business.domain.vo.label.LabelGroupingInfoVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;

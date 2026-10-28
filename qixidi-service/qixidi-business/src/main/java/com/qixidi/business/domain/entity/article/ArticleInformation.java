@@ -47,10 +47,6 @@ public class ArticleInformation {
      */
     private String articleContent;
     /**
-     * 文章总结
-     */
-    private String articleSummary;
-    /**
      * 主题
      */
     private String theme;

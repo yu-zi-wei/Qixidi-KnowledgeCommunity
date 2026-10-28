@@ -1,4 +1,4 @@
-package com.qixidi.mcp.domain.bo;
+package com.qixidi.mcp.domain.bo.skill;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

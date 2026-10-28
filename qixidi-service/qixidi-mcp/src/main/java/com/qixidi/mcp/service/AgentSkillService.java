@@ -2,9 +2,9 @@ package com.qixidi.mcp.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.light.exception.ServiceException;
-import com.qixidi.mcp.domain.bo.AgentSkillBo;
+import com.qixidi.mcp.domain.bo.skill.AgentSkillBo;
 import com.qixidi.mcp.domain.entity.AgentSkill;
-import com.qixidi.mcp.domain.vo.McpSkillBriefVo;
+import com.qixidi.mcp.domain.vo.skill.McpSkillBriefVo;
 import com.qixidi.mcp.mapper.AgentSkillMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.qixidi.mcp.mapper;
 
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.qixidi.mcp.domain.entity.AgentApiKey;
-import com.qixidi.mcp.domain.vo.AgentApiKeyVo;
+import com.qixidi.mcp.domain.vo.apiKey.AgentApiKeyVo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
