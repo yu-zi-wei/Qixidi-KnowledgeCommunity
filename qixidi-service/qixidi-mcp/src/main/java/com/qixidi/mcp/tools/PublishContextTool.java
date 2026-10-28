@@ -9,7 +9,10 @@ import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.service.label.ILabelGroupingInfoService;
 import com.qixidi.business.service.label.ILabelInfoService;
 import com.qixidi.business.service.special.ISpecialInformationService;
+import com.qixidi.mcp.domain.vo.article.McpGroupingItemVo;
+import com.qixidi.mcp.domain.vo.article.McpLabelItemVo;
 import com.qixidi.mcp.domain.vo.article.McpPublishContextVo;
+import com.qixidi.mcp.domain.vo.article.McpSpecialItemVo;
 import com.qixidi.mcp.domain.vo.special.McpSpecialSubmitVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
@@ -37,13 +40,30 @@ public class PublishContextTool {
             throw new ServiceException("登录状态无效，请检查 API key");
         }
         McpPublishContextVo vo = new McpPublishContextVo();
-        vo.setLabels(iLabelInfoService.systemLabel(null));
+        // 业务 VO → MCP 条目（id+name），剥离 isFollow/buttonLoading 等前台展示字段
+        vo.setLabels(iLabelInfoService.systemLabel(null).stream().map(l -> {
+            McpLabelItemVo item = new McpLabelItemVo();
+            item.setId(l.getId());
+            item.setName(l.getLabelName());
+            return item;
+        }).toList());
         PageQuery pageQuery = new PageQuery();
         pageQuery.setPageSize(100);
-        vo.setGroupings(iLabelGroupingInfoService.fdkGroupingList(new LabelGroupingInfoBo(), pageQuery).getRows());
+        vo.setGroupings(iLabelGroupingInfoService.fdkGroupingList(new LabelGroupingInfoBo(), pageQuery)
+            .getRows().stream().map(g -> {
+                McpGroupingItemVo item = new McpGroupingItemVo();
+                item.setId(g.getId());
+                item.setName(g.getGroupingName());
+                return item;
+            }).toList());
         SpecialInformationBo specialBo = new SpecialInformationBo();
         specialBo.setUid(user.getUuid());
-        vo.setSpecials(iSpecialInformationService.specialListUid(specialBo));
+        vo.setSpecials(iSpecialInformationService.specialListUid(specialBo).stream().map(s -> {
+            McpSpecialItemVo item = new McpSpecialItemVo();
+            item.setId(s.getId());
+            item.setName(s.getSpecialName());
+            return item;
+        }).toList());
         vo.setPenName(user.getNickname());
         return vo;
     }
