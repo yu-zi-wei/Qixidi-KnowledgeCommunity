@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,8 @@ public class ApiKeyService {
 
     private static final String CACHE_PREFIX = "mcp:apikey:";
     private static final long CACHE_TTL_DAYS = 1;
+    /** lastUsedTime 节流窗口：agent 单会话并发多次 tool call，窗口内只写一次库（时间粒度 60s 足够观测用） */
+    private static final long TOUCH_THROTTLE_SECONDS = 60;
     private static final String DEVICE_PREFIX = "mcp-";
     /** 默认有效期（天） */
     public static final long DEFAULT_VALID_DAYS = 365;
@@ -105,16 +108,25 @@ public class ApiKeyService {
     }
 
     /**
-     * 最后使用时间：尽力而为的观测字段。update(null, wrapper) 不触发实体自动填充——
-     * 填充器依赖 Sa-Token 上下文，而本方法在 Filter 阶段执行（Sa 拦截器尚未初始化上下文），
-     * 用 updateById 会抛"SaTokenContext 上下文尚未初始化"把认证拖成 401（Tomcat 线程复用时偶发）
+     * 最后使用时间：尽力而为的观测字段。
+     * 防抖：setIfAbsent 原子判重（get+set 非原子，并发下会全部穿透），60 秒窗口内并发调用只有第一个写库；
+     * update(null, wrapper) 不触发实体自动填充——填充器依赖 Sa-Token 上下文，而本方法在 Filter 阶段执行
+     * （Sa 拦截器尚未初始化上下文），用 updateById 会抛"SaTokenContext 上下文尚未初始化"把认证拖成 401
      */
     private void touchLastUsed(String keyHash) {
+        String marker = CACHE_PREFIX + "touch:" + keyHash;
+        boolean firstInWindow = RedisUtils.getClient()
+            .getBucket(marker)
+            .setIfAbsent("1", Duration.ofSeconds(TOUCH_THROTTLE_SECONDS));
+        if (!firstInWindow) {
+            return;
+        }
         try {
             apiKeyMapper.update(null, Wrappers.<AgentApiKey>lambdaUpdate()
                 .set(AgentApiKey::getLastUsedTime, new Date())
                 .eq(AgentApiKey::getKeyHash, keyHash));
         } catch (Exception e) {
+            RedisUtils.deleteObject(marker);
             log.warn("lastUsedTime 更新失败（不影响认证）: {}", e.getMessage());
         }
     }
