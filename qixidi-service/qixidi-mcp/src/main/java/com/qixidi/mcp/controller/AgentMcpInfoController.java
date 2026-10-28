@@ -1,10 +1,15 @@
 package com.qixidi.mcp.controller;
 
+import com.qixidi.mcp.domain.vo.mcp.McpToolSummaryVo;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +31,15 @@ public class AgentMcpInfoController {
 
     private final String headerName;
 
+    private final ToolCallbackProvider toolCallbackProvider;
+
     public AgentMcpInfoController(
         @Value("${qixidi.mcp.agent-info.endpoint}") String endpoint,
-        @Value("${qixidi.mcp.agent-info.header-name}") String headerName) {
+        @Value("${qixidi.mcp.agent-info.header-name}") String headerName,
+        ToolCallbackProvider toolCallbackProvider) {
         this.endpoint = endpoint;
         this.headerName = headerName;
+        this.toolCallbackProvider = toolCallbackProvider;
     }
 
     @GetMapping
@@ -48,5 +57,22 @@ public class AgentMcpInfoController {
                     + "\",\"headers\":{\"" + headerName + "\":\"<你的API Key>\"}}}}"
             )
         );
+    }
+
+    /**
+     * 当前注册的 MCP tool 清单（聚合自 ToolCallbackProvider，工具增减自动同步）
+     */
+    @GetMapping("/tools")
+    public List<McpToolSummaryVo> tools() {
+        return Arrays.stream(toolCallbackProvider.getToolCallbacks())
+            .map(callback -> {
+                var definition = callback.getToolDefinition();
+                McpToolSummaryVo vo = new McpToolSummaryVo();
+                vo.setName(definition.name());
+                vo.setDescription(definition.description());
+                return vo;
+            })
+            .sorted(Comparator.comparing(McpToolSummaryVo::getName))
+            .toList();
     }
 }
