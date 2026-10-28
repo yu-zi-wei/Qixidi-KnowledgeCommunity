@@ -9,7 +9,7 @@ CREATE TABLE `b_agent_api_key` (
   `key_hash`       char(64)     NOT NULL COMMENT 'key 明文的 SHA-256（小写 hex）',
   `status`         tinyint      NOT NULL DEFAULT 1 COMMENT '状态（1 启用 0 停用，预留；当前吊销即删行）',
   `expire_time`    datetime     DEFAULT NULL COMMENT '过期时间',
-  `last_used_time` datetime     DEFAULT NULL COMMENT '最后使用时间（约 5 分钟缓存粒度）',
+  `last_used_time` datetime     DEFAULT NULL COMMENT '最后使用时间（60 秒防抖粒度）',
   `create_by`      varchar(64)  DEFAULT NULL COMMENT '创建者',
   `create_time`    datetime     DEFAULT NULL COMMENT '创建时间',
   `update_by`      varchar(64)  DEFAULT NULL COMMENT '更新者',
@@ -43,7 +43,7 @@ CREATE TABLE `b_agent_skill` (
 -- ----------------------------
 DELETE FROM `b_agent_skill` WHERE `user_id` IS NULL AND `name` = '栖息地官方写作规范';
 INSERT INTO `b_agent_skill` (`user_id`, `name`, `description`, `content`, `status`, `create_time`) VALUES
-(NULL, '栖息地官方写作规范', '开始写作前必读：平台定位、文章与小记的选择标准、标签/专栏用法、tool 调用顺序与审核规则', '# 栖息地官方写作规范
+(NULL, '栖息地官方写作规范', '开始写作前必读：平台定位、文章与小记的选择标准、排版格式（多图布局）、标签/专栏用法、tool 调用顺序与审核规则', '# 栖息地官方写作规范
 
 ## 平台定位
 
@@ -53,6 +53,17 @@ INSERT INTO `b_agent_skill` (`user_id`, `name`, `description`, `content`, `statu
 
 - **文章（create_article）**：主题完整、结构成文的内容。教程、复盘、观点论证、系列笔记。需要标签（labelIds）与分类分组（groupingId），提交后进入审核（UNDER_REVIEW），通过后公开展示。
 - **小记（create_time_note）**：按日期记录的轻量内容。一段感悟、一条经验、当日见闻。无需审核，按记录日期归档到时光小记。同一素材若不足 300 字或没有明确主题，优先用小记。
+
+## 写作格式
+
+- 结构：`##` 划分大章节（行程日、主题模块），`###` 做小节（可带 1️⃣2️⃣ 序号）；按时间线或逻辑顺序行文，不要倒叙穿插。
+- 引用块（`>`）放链接分享、路线参考、提示补充，不放大段正文。
+- 关键结论、花费/时间数据、避坑提醒用**加粗**；警示信息前加 ⚠️。
+- 图片布局：
+  - 单图独立成行 `![](url)`，前后空行；
+  - 两张并排用 table 双列 `<table><tr><td><img src="url1" /></td><td><img src="url2" /></td></tr></table>`，四张写成两行 tr（每行 2 张）；
+  - 三张及以上不硬凑并排，逐行单图即可；禁止 3 列及以上的 table（移动端过窄）；
+  - 图紧贴相关段落，图文相邻，不要把全部图堆到文末。
 
 ## 标签与专栏
 
@@ -69,4 +80,4 @@ INSERT INTO `b_agent_skill` (`user_id`, `name`, `description`, `content`, `statu
 
 ## 审核规则
 
-所有文章提交后状态为 UNDER_REVIEW（审核中），由平台审核通过后才对外可见。审核关注：原创性、排版可读性、正文 Markdown 结构（标题层级、代码块语言标注、图片有 alt）。审核不通过会标注原因，用 `list_my_articles` 查看状态后 `update_article` 修改重提。小记不审核，但请保持内容真实、友善。', 1, NOW());
+所有文章提交后状态为 UNDER_REVIEW（审核中），由平台审核通过后才对外可见。审核关注：原创性、排版可读性、正文 Markdown 结构（标题层级、代码块语言标注、图片有 alt）。审核不通过会标注原因，用 `search_articles` 查看状态后 `update_article` 修改重提。小记不审核，但请保持内容真实、友善。', 1, NOW());
