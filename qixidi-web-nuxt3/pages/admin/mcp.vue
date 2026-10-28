@@ -203,8 +203,16 @@
       </template>
     </n-modal>
 
-    <!-- 明文 key 展示（仅一次） -->
-    <n-modal v-model:show="plaintextVisible" preset="card" title="API Key 创建成功" :style="mcpModalStyle">
+    <!-- 明文 key 展示（仅一次）：明文只展示这一次，禁遮罩/ESC/右上角 X 全部误关途径，仅 footer 按钮可关 -->
+    <n-modal
+      v-model:show="plaintextVisible"
+      preset="card"
+      title="API Key 创建成功"
+      :style="mcpModalStyle"
+      :mask-closable="false"
+      :close-on-esc="false"
+      :closable="false"
+    >
       <n-alert type="warning" :show-icon="true">
         明文 key 仅此一次展示，关闭后无法再次查看，请立即复制保存。
       </n-alert>
@@ -215,6 +223,11 @@
           复制
         </n-button>
       </div>
+      <template #footer>
+        <div class="mcp-modal-footer">
+          <n-button type="primary" @click="plaintextVisible = false">我已保存，关闭</n-button>
+        </div>
+      </template>
     </n-modal>
 
     <!-- key 改名 -->
@@ -528,11 +541,19 @@ onMounted(() => {
   box-shadow: var(--shadow-sm);
 }
 
-/* 文档区自管滚动：tab 条常驻外卡顶部，pane 内容区独立滚动 */
+/* 管理区列表上限高度：超出时列表内部滚动，防止 key/skill 过多顶出视口 */
 .mcp-manage-tabs {
   flex-shrink: 0;
 }
 
+.mcp-manage-tabs :deep(.n-tabs-pane-wrapper) {
+  flex: 1;
+  min-height: 0;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+/* 文档区自管滚动：tab 条常驻外卡顶部，pane 内容区独立滚动 */
 .mcp-doc-tabs {
   flex: 1;
   min-height: 0;
