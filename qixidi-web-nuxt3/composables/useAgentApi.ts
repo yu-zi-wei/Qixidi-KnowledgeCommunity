@@ -6,7 +6,8 @@ export interface AgentApiKeyItem {
   keyName: string
   /** 1 有效 */
   status: number
-  expireTime: string
+  /** null = 永久 */
+  expireTime: string | null
   lastUsedTime?: string
   createTime: string
 }
@@ -50,7 +51,8 @@ export const useAgentApi = () => {
   }
 
   /**
-   * 创建 API key，返回明文 { apiKey }，仅本次响应可见
+   * 创建 API key，返回明文 { apiKey }，仅本次响应可见。
+   * validDays：0=永久；不传=默认 365；>0=N 天
    */
   const createKey = (data: { keyName: string; validDays?: number }) => {
     return api.post<{ apiKey: string }>('/agent/apiKey', data)

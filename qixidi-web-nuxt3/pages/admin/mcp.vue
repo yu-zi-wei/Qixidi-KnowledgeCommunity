@@ -70,12 +70,14 @@
           <div class="mcp-key-main">
             <div class="mcp-key-name-row">
               <span class="mcp-key-name">{{ key.keyName }}</span>
-              <n-tag size="small" :type="key.status === 1 ? 'success' : 'error'" round>
-                {{ key.status === 1 ? '有效' : '已失效' }}
+              <n-tag size="small" :type="key.status === 1 && !isKeyExpired(key) ? 'success' : 'error'" round>
+                {{ key.status === 1 && !isKeyExpired(key) ? '有效' : '已失效' }}
               </n-tag>
             </div>
             <div class="mcp-key-meta">
-              <span :title="getFullDateTime(key.expireTime)">有效期至 {{ formatTime(key.expireTime) }}</span>
+              <span :title="key.expireTime ? getFullDateTime(key.expireTime) : ''">
+                {{ key.expireTime ? `有效期至 ${formatTime(key.expireTime)}` : '永久有效' }}
+              </span>
               <span :title="key.lastUsedTime ? getFullDateTime(key.lastUsedTime) : ''">
                 {{ key.lastUsedTime ? `最近使用 ${formatTime(key.lastUsedTime)}` : '从未使用' }}
               </span>
@@ -147,13 +149,26 @@
     </section>
 
     <!-- 新建 API key -->
-    <n-modal v-model:show="keyCreateVisible" preset="card" title="新建 API Key" class="mcp-modal">
+    <n-modal v-model:show="keyCreateVisible" preset="card" title="新建 API Key" :style="mcpModalStyle">
       <n-form ref="keyCreateFormRef" :model="keyCreateForm" :rules="keyCreateRules" label-placement="top">
         <n-form-item label="备注名" path="keyName">
           <n-input v-model:value="keyCreateForm.keyName" placeholder="如 workbuddy、claude-code" :maxlength="64" show-count />
         </n-form-item>
-        <n-form-item label="有效期（天）" path="validDays">
-          <n-input-number v-model:value="keyCreateForm.validDays" :min="1" :max="3650" placeholder="默认 365" class="mcp-full" />
+        <n-form-item label="有效期" path="validDays">
+          <div class="mcp-valid-days">
+            <n-switch v-model:value="keyCreateForm.permanent" size="small">
+              <template #checked>永久</template>
+              <template #unchecked>限期</template>
+            </n-switch>
+            <n-input-number
+              v-model:value="keyCreateForm.validDays"
+              :min="1"
+              :max="3650"
+              :disabled="keyCreateForm.permanent"
+              placeholder="默认 365"
+              class="mcp-full"
+            />
+          </div>
         </n-form-item>
       </n-form>
       <template #footer>
@@ -165,7 +180,7 @@
     </n-modal>
 
     <!-- 明文 key 展示（仅一次） -->
-    <n-modal v-model:show="plaintextVisible" preset="card" title="API Key 创建成功" class="mcp-modal">
+    <n-modal v-model:show="plaintextVisible" preset="card" title="API Key 创建成功" :style="mcpModalStyle">
       <n-alert type="warning" :show-icon="true">
         明文 key 仅此一次展示，关闭后无法再次查看，请立即复制保存。
       </n-alert>
@@ -179,7 +194,7 @@
     </n-modal>
 
     <!-- key 改名 -->
-    <n-modal v-model:show="keyRenameVisible" preset="card" title="重命名 Key" class="mcp-modal">
+    <n-modal v-model:show="keyRenameVisible" preset="card" title="重命名 Key" :style="mcpModalStyle">
       <n-form ref="keyRenameFormRef" :model="keyRenameForm" :rules="keyCreateRules" label-placement="top">
         <n-form-item label="备注名" path="keyName">
           <n-input v-model:value="keyRenameForm.keyName" :maxlength="64" show-count />
@@ -194,7 +209,7 @@
     </n-modal>
 
     <!-- skill 新建/编辑 -->
-    <n-modal v-model:show="skillFormVisible" preset="card" :title="skillEditingId ? '编辑 Skill' : '新建 Skill'" class="mcp-modal">
+    <n-modal v-model:show="skillFormVisible" preset="card" :title="skillEditingId ? '编辑 Skill' : '新建 Skill'" :style="mcpModalStyle">
       <n-form ref="skillFormRef" :model="skillForm" :rules="skillRules" label-placement="top">
         <n-form-item label="名称" path="name">
           <n-input v-model:value="skillForm.name" placeholder="如 技术教程写作规范" :maxlength="100" show-count />
@@ -268,7 +283,14 @@ const keyList = ref<AgentApiKeyItem[]>([])
 
 const keyCreateVisible = ref(false)
 const keyCreateFormRef = ref<FormInst | null>(null)
-const keyCreateForm = ref({ keyName: '', validDays: 365 })
+const keyCreateForm = ref({ keyName: '', permanent: false, validDays: 365 })
+
+/** n-modal teleport 到 body，scoped CSS 选不中节点，宽度只能走 inline style */
+const mcpModalStyle = { width: '560px', maxWidth: 'calc(100vw - 32px)' }
+
+/** expireTime 空 = 永久，不算过期 */
+const isKeyExpired = (key: AgentApiKeyItem) =>
+  !!key.expireTime && new Date(key.expireTime).getTime() < Date.now()
 const keyCreateRules: FormRules = {
   keyName: { required: true, message: '请输入备注名', trigger: ['blur', 'input'] }
 }
@@ -294,7 +316,7 @@ const fetchKeyList = async () => {
 }
 
 const openKeyCreate = () => {
-  keyCreateForm.value = { keyName: '', validDays: 365 }
+  keyCreateForm.value = { keyName: '', permanent: false, validDays: 365 }
   keyCreateVisible.value = true
 }
 
@@ -308,7 +330,7 @@ const handleKeyCreate = async () => {
   try {
     const result = await agentApi.createKey({
       keyName: keyCreateForm.value.keyName.trim(),
-      validDays: keyCreateForm.value.validDays
+      validDays: keyCreateForm.value.permanent ? 0 : keyCreateForm.value.validDays
     })
     keyCreateVisible.value = false
     plaintextKey.value = result.apiKey
@@ -649,9 +671,11 @@ onMounted(() => {
 }
 
 /* ---- 弹窗 ---- */
-.mcp-modal {
-  width: 560px;
-  max-width: calc(100vw - 32px);
+.mcp-valid-days {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .mcp-modal-footer {
