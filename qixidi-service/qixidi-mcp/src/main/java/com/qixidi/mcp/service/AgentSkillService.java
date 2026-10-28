@@ -53,12 +53,14 @@ public class AgentSkillService {
     }
 
     /**
-     * 用户侧：自己的 skill 列表（含停用）
+     * 用户侧列表：官方 skill（userId=NULL，只读展示）+ 自建（含停用），官方置顶。
+     * 官方行的编辑/删除由 requireOwned 天然拒绝（uuid 不等于 NULL）
      */
     public List<AgentSkill> listForUser(String uuid) {
         return skillMapper.selectList(
             Wrappers.<AgentSkill>lambdaQuery()
-                .eq(AgentSkill::getUserId, uuid)
+                .and(w -> w.isNull(AgentSkill::getUserId).or().eq(AgentSkill::getUserId, uuid))
+                .orderByAsc(AgentSkill::getUserId)
                 .orderByDesc(AgentSkill::getId));
     }
 

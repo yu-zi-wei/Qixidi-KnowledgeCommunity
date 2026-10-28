@@ -37,7 +37,7 @@ public class AgentSkillController {
     }
 
     /**
-     * 我的 skill 列表（含停用，官方 skill 不在此列——官方由平台统一分发）
+     * 我的 skill 列表：官方 skill（userId=NULL，只读）置顶 + 本人自建（含停用）
      */
     @GetMapping("/list")
     public List<AgentSkill> list() {
