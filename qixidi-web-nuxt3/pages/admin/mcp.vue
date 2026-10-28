@@ -1,7 +1,7 @@
 <template>
   <div class="admin-mcp">
     <!-- 管理区：API key / 写作 skill tab 切换 -->
-    <n-tabs type="segment" animated class="mcp-tabs">
+    <n-tabs type="segment" animated class="mcp-tabs mcp-manage-tabs">
       <n-tab-pane name="apiKey" tab="API Key">
         <section class="mcp-section">
       <div class="mcp-section-header">
@@ -100,7 +100,7 @@
     </n-tabs>
 
     <!-- 文档区：概览 / 接入指南 / 工具清单 -->
-    <n-tabs type="line" animated class="mcp-tabs">
+    <n-tabs type="line" animated class="mcp-tabs mcp-doc-tabs">
       <n-tab-pane name="overview" tab="概览">
         <section class="mcp-section">
           <p class="mcp-overview-intro">
@@ -517,6 +517,7 @@ onMounted(() => {
   flex-direction: column;
   gap: var(--space-6);
   max-width: 960px;
+  height: 100%;
 }
 
 .mcp-tabs {
@@ -525,6 +526,22 @@ onMounted(() => {
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-5);
   box-shadow: var(--shadow-sm);
+}
+
+/* 文档区自管滚动：tab 条常驻外卡顶部，pane 内容区独立滚动 */
+.mcp-manage-tabs {
+  flex-shrink: 0;
+}
+
+.mcp-doc-tabs {
+  flex: 1;
+  min-height: 0;
+}
+
+.mcp-doc-tabs :deep(.n-tabs-pane-wrapper) {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .mcp-section {
