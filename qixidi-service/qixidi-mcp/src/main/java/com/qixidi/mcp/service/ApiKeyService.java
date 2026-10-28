@@ -11,6 +11,7 @@ import com.qixidi.mcp.domain.entity.AgentApiKey;
 import com.qixidi.mcp.mapper.AgentApiKeyMapper;
 import com.qixidi.mcp.utils.ApiKeyGenerator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zi-wei
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApiKeyService {
@@ -90,10 +92,16 @@ public class ApiKeyService {
             throw new ServiceException("API key 用户信息缺失，请重新签发");
         }
         RedisUtils.setCacheObject(CACHE_PREFIX + hash, tripartiteUser, CACHE_TTL_MINUTES, TimeUnit.MINUTES);
-        AgentApiKey upd = new AgentApiKey();
-        upd.setId(entity.getId());
-        upd.setLastUsedTime(new Date());
-        apiKeyMapper.updateById(upd);
+        // 最后使用时间：尽力而为的观测字段。update(null, wrapper) 不触发实体自动填充——
+        // 填充器依赖 Sa-Token 上下文，而本方法在 Filter 阶段执行（Sa 拦截器尚未初始化上下文），
+        // 用 updateById 会抛"SaTokenContext 上下文尚未初始化"把认证拖成 401（Tomcat 线程复用时偶发）
+        try {
+            apiKeyMapper.update(null, Wrappers.<AgentApiKey>lambdaUpdate()
+                .set(AgentApiKey::getLastUsedTime, new Date())
+                .eq(AgentApiKey::getId, entity.getId()));
+        } catch (Exception e) {
+            log.warn("lastUsedTime 更新失败（不影响认证）: {}", e.getMessage());
+        }
         return tripartiteUser;
     }
 

@@ -39,6 +39,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 ### MyBatis Plus 3.5.17
 
 - `ServiceImpl`/`IService` 已删除：Service 一律 `@RequiredArgsConstructor` + final mapper 构造注入；批量写用 `BaseMapperPlus.insertBatch`（配合 @Transactional）
+- **无 Sa-Token 请求上下文的线程（Filter 阶段/定时任务/异步线程）禁止实体写（insert/updateById）**：实体写触发 MetaObjectHandler 自动填充，填充器调 StpUtil 会抛「SaTokenContext 上下文尚未初始化」（Tomcat 线程复用时偶发）。这类场景一律 `update(null, Wrappers.lambdaUpdate().set(...))`——wrapper set 不走填充
 
 ### Spring Boot 4
 
