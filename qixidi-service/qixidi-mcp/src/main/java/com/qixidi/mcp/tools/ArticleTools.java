@@ -49,7 +49,10 @@ public class ArticleTools {
         this.iArticleInformationService = iArticleInformationService;
     }
 
-    @Tool(name = "create_article", description = "创建或更新文章并提交审核（auditState=UNDER_REVIEW）。title/content/labelIds/groupingId 必传，其中 labelIds/groupingId 需先通过 get_publish_context 获取。")
+    @Tool(name = "create_article", description = """
+        创建或更新文章并提交审核（auditState=UNDER_REVIEW）。
+
+        必传：title / content / labelIds / groupingId，其中 labelIds / groupingId 先调 get_publish_context 获取。""")
     public McpArticleSubmitVo createArticle(
         @ToolParam(description = "文章内容对象") McpArticleBo bo
     ) {
@@ -84,7 +87,15 @@ public class ArticleTools {
         return submitVo(id, "UNDER_REVIEW");
     }
 
-    @Tool(name = "search_articles", description = "多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。返回 {total, rows[]}，rows 为元数据：id/title/articleAbstract/type(1 原创 2 转载)/auditState(1 审核中 2 已发布 3 审核不通过 4 草稿)/authorName/updateTime(yyyy-MM-dd HH:mm:ss)，不含正文；选中后用 get_article 查详情（仅限本人文章）。数据范围：不传 authorName 查本人全部状态（查自己的文章列表即用本工具，不传条件即可）；传 authorName 查该作者的已发布文章。")
+    @Tool(name = "search_articles", description = """
+        多条件搜索文章：关键词（匹配标题+摘要）、摘要、审核状态多选、类型、更新时间范围、作者昵称、专栏。
+
+        数据范围：
+        - 不传 authorName：查本人全部状态（查自己的文章列表即用本工具，不传条件即可）
+        - 传 authorName：查该作者的已发布文章
+
+        返回 {total, rows[]}，rows 为元数据（不含正文，选中后用 get_article 查详情，仅限本人文章）：
+        id / title / articleAbstract / type(1 原创 2 转载) / auditState(1 审核中 2 已发布 3 审核不通过 4 草稿) / authorName / updateTime(yyyy-MM-dd HH:mm:ss)""")
     public McpArticlePageVo searchArticles(
         @ToolParam(description = "查询条件对象") McpArticleQueryBo query,
         @ToolParam(description = "页码，从 1 开始，默认 1", required = false) Integer pageNum,
@@ -137,7 +148,14 @@ public class ArticleTools {
         return result;
     }
 
-    @Tool(name = "get_article", description = "获取指定文章的完整内容，仅限本人文章，用于编辑前取原文或查看详情。返回 id/title(标题)/content(Markdown 正文)/articleAbstract(摘要)/type(1 原创 2 转载)/reprintUrl(转载原文 url，原创为空)/groupingId+groupingName(分类)/labelIds+labelNames(标签)/specialId(专栏，可空)/auditState(1 审核中 2 已发布 3 审核不通过 4 草稿)/updateTime(yyyy-MM-dd HH:mm:ss)。")
+    @Tool(name = "get_article", description = """
+        获取指定文章的完整内容，仅限本人文章，用于编辑前取原文或查看详情。
+
+        返回字段：
+        - id / title（标题）/ content（Markdown 正文）/ articleAbstract（摘要）
+        - type（1 原创 2 转载）/ reprintUrl（转载原文 url，原创为空）
+        - groupingId + groupingName（分类）/ labelIds + labelNames（标签）/ specialId（专栏，可空）
+        - auditState（1 审核中 2 已发布 3 审核不通过 4 草稿）/ updateTime（yyyy-MM-dd HH:mm:ss）""")
     public McpArticleDetailVo getArticle(
         @ToolParam(description = "文章 id（来自 search_articles 或 create_article 返回值）") Long articleId
     ) {
@@ -164,7 +182,11 @@ public class ArticleTools {
         return detail;
     }
 
-    @Tool(name = "save_article_draft", description = "保存文章草稿（auditState=DRAFT，不进入审核、不触发 AI 摘要）。title/content 必传；不传 articleId 新建草稿，传 articleId 则覆盖保存已有草稿/文章。写完想直接发布用 create_article。")
+    @Tool(name = "save_article_draft", description = """
+        保存文章草稿（auditState=DRAFT，不进入审核、不触发 AI 摘要）。
+
+        title/content 必传；不传 articleId 新建草稿，传 articleId 则覆盖保存已有草稿/文章。
+        写完想直接发布用 create_article。""")
     public McpArticleSubmitVo saveArticleDraft(
         @ToolParam(description = "文章内容对象") McpArticleBo bo
     ) {

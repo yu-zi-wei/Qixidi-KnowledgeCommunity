@@ -33,7 +33,14 @@ public class PublishContextTool {
     private final ILabelGroupingInfoService iLabelGroupingInfoService;
     private final ISpecialInformationService iSpecialInformationService;
 
-    @Tool(name = "get_publish_context", description = "获取发布上下文：写作前调用，返回当前用户可选的标签(labels)、分类分组(groupings)、专栏(specials)与笔名(penName)。create_article 等工具的 labelIds/groupingId/specialId 入参取值应来自本结果。")
+    @Tool(name = "get_publish_context", description = """
+        获取发布上下文，写作前调用。
+
+        返回：
+        - labels：可选标签 / groupings：分类分组 / specials：我的专栏（条目均为 {id, name}）
+        - penName：笔名（用户昵称）
+
+        create_article 等工具的 labelIds / groupingId / specialId 入参取值应来自本结果。""")
     public McpPublishContextVo getPublishContext() {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {

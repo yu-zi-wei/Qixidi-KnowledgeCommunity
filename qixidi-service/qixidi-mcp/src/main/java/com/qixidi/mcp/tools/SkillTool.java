@@ -25,7 +25,10 @@ public class SkillTool {
 
     private final AgentSkillService agentSkillService;
 
-    @Tool(name = "list_skills", description = "列出当前可用的写作 skill（平台官方 + 当前用户自建，含启用状态），返回 id/name/description。开始写作前先调用本工具，再按需用 get_skill 读取详情。")
+    @Tool(name = "list_skills", description = """
+        列出当前可用的写作 skill（平台官方 + 当前用户自建，含启用状态），返回 id/name/description。
+
+        开始写作前先调用本工具，再按需用 get_skill 读取详情。""")
     public List<McpSkillBriefVo> listSkills() {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {
