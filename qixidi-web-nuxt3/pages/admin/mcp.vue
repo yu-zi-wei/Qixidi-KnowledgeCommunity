@@ -541,9 +541,9 @@ onMounted(() => {
   box-shadow: var(--shadow-sm);
 }
 
-/* 管理区/文档区 4:6 分配页面高度，各自 pane 内部滚动 */
+/* 管理区/文档区 5:5 分配页面高度，各自 pane 内部滚动 */
 .mcp-manage-tabs {
-  flex: 4;
+  flex: 5;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -560,7 +560,7 @@ onMounted(() => {
 
 /* 文档区自管滚动：tab 条常驻外卡顶部，pane 内容区独立滚动 */
 .mcp-doc-tabs {
-  flex: 6;
+  flex: 5;
   min-height: 0;
 }
 
@@ -713,6 +713,7 @@ onMounted(() => {
   gap: var(--space-3);
 }
 
+/* 列表项无边框：滚动区里边框线有条纹感，分组靠间距 */
 .mcp-key-item,
 .mcp-skill-item {
   display: flex;
@@ -720,8 +721,6 @@ onMounted(() => {
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
 }
 
 .mcp-key-main,
@@ -779,8 +778,6 @@ onMounted(() => {
 
 .mcp-tool-item {
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
 }
 
 .mcp-tool-name {
