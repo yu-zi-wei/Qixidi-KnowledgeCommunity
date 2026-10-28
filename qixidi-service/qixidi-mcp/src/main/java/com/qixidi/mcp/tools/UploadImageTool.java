@@ -79,10 +79,10 @@ public class UploadImageTool {
         return true;
     }
 
-    @Tool(name = "upload_image", description = "上传图片（base64 编码），返回 OSS url，用于文章封面与正文配图。支持 png/jpg/jpeg/gif/webp。")
+    @Tool(name = "upload_image", description = "上传图片（base64 编码），返回 OSS url，用于文章封面与正文配图。支持 png/jpg/jpeg/gif/webp，单图不超过 10MB。")
     public McpUploadImageVo uploadImage(
-        @ToolParam(description = "图片内容的 base64 字符串（不含 data:image/xxx;base64, 前缀）") String base64,
-        @ToolParam(description = "文件名（带后缀，如 cover.png）", required = false) String filename
+        @ToolParam(description = "图片内容的 base64 字符串（不含 data:image/xxx;base64, 前缀），解码后不超过 10MB") String base64,
+        @ToolParam(description = "文件名，带后缀（如 cover.png），后缀限 png/jpg/jpeg/gif/webp，缺省 mcp-image.png", required = false) String filename
     ) {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {

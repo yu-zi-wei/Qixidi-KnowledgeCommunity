@@ -34,13 +34,17 @@ public class TimeNotesTool {
 
     @Tool(name = "create_time_note", description = "创建一条小记（时光小记），返回 timeNoteId。recordTime 缺省为今天。")
     public McpTimeNoteSubmitVo createTimeNote(
-        @ToolParam(description = "小记标题") String title,
+        @ToolParam(description = "小记标题，必填") String title,
         @ToolParam(description = "小记正文（Markdown）") String content,
-        @ToolParam(description = "记录日期 yyyy-MM-dd，缺省为今天", required = false) String recordTime
+        @ToolParam(description = "记录日期，格式 yyyy-MM-dd，缺省为今天", required = false) String recordTime
     ) {
         TripartiteUser user = LoginHelper.getTripartiteUser();
         if (user == null) {
             throw new ServiceException("登录状态无效，请检查 API key");
+        }
+        // 前台 @NotBlank 同语义（TimeNotesBo.title），MCP 直调 Service 须自行兜底
+        if (title == null || title.isBlank()) {
+            throw new ServiceException("title 不能为空");
         }
         TimeNotesBo bo = new TimeNotesBo();
         bo.setTitle(title);

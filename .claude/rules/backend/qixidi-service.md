@@ -24,8 +24,19 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 - 场景化 ChatClient 装配集中在 `AIChatClientConfig`：`openAiChatClient`（图片解析+记忆）/ `deepSeekChatClient`（@Primary，对话）/ `generationChatClient`（无状态纯文本）
 - AI 返回内容清洗统一用 `AiTextUtils.stripMarkdownCodeBlock`（qixidi-ai/utils）
 - AI 配置走 `config.ai.*`（applicationConfig/{profile}/config.properties，yml 占位符引用）
-- MCP 工具 POJO 入参字段一律 `@ToolParam(description, required)`：字段默认 required（SpringAiSchemaModule requiredByDefault=true），可选字段必须显式 `required = false`；必填性随工具场景变化（如 create 必填/update 可选）时标 false 并把场景写进 description
-- MCP 工具直调 Service 不经过 Controller 校验：BO 上的 @NotBlank 等校验组不生效，必填项须在 tool 方法内自行校验
+
+---
+
+## MCP Tool 开发规范（qixidi-mcp）
+
+- 注册一律 `@Tool`（spring-ai-model）走现有 ToolCallbackProvider 装配；不用 `@McpTool`（纯 MCP 注解装配，工具无法同时复用给 qixidi-ai ChatClient）
+- 工具名 snake_case 动词开头（create_xxx / update_xxx / list_xxx / get_xxx / delete_xxx）；description 三要素：干什么 + 入参取值来源（来自哪个工具的返回值）+ 副作用/状态流转（如"提交后进入审核 UNDER_REVIEW"）
+- 入参与 POJO 字段一律 `@ToolParam(description, required)`：可选参数必须显式 `required = false`——POJO 字段默认 required（SpringAiSchemaModule requiredByDefault=true），不标 required 数组会全量误导调用方；必填性随场景变化（create 必填/update 可选）时标 false、场景写进 description（参考 McpArticleBo）
+- description 写明真实约束：枚举值（type：1 原创 2 转载）、长度（摘要 ≤200 字）、格式（yyyy-MM-dd）、大小（图片 ≤10MB）；无依据的约束不编造
+- ≥4 字段的大对象入参 POJO 化放 `domain/bo/{业务}/`（schema 会按参数名嵌套一层对象）；返回用专用 MCP VO（`domain/vo/{业务}/`）只含核心字段，禁直接返回业务 VO，时间格式化为字符串
+- tool 直调 Service 不经过 Controller 校验：BO 的 @NotBlank 等校验组不生效，必填项在 tool 方法内自行校验（参考 ArticleTools.checkTitleAndContent）
+- 每个 tool 入口 `LoginHelper.getTripartiteUser()` 判空；属主 uid 由 Service 层从登录态强制取，tool 层不信任入参 uid
+- 注入业务 Service 的 tool 构造器加 `@Lazy` 断 Spring AI 自动装配环（见 ArticleTools 构造器注释）
 
 ---
 
