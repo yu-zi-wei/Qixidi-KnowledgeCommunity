@@ -1,7 +1,7 @@
 <p align=center>
    <img src="./img/logo.png" alt="栖息地" width="160" height="160"/>
 </p>
-<h1 align=center>栖息地 v2.0</h1>
+<h1 align=center>栖息地</h1>
 <p align="center">
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/star.svg?theme=dark" ></img>
 <img align=center src="https://gitee.com/yu-zi-wei/qixidi/badge/fork.svg?theme=dark" ></img>
@@ -11,12 +11,9 @@
 
 栖息地是一个开源的多人知识社区博客系统，它的诞生源于一个简单的想法——拥有一个完全属于自己的知识空间。
 
-1.0 版本是基于 RuoYi 二次开发构建的，随着功能不断迭代，早期架构的局限逐渐暴露：代码耦合度高、难以维护、前端技术栈老化。与其在一个摇摇欲坠的地基上反复修补，不如推倒重来。
+这是 **AI 时代的知识社区和博客**：除了常规的创作与社交，你可以把自己的账号安全地交给 AI agent——创建一个 API key，Claude Code 等 agent 即可通过 MCP 协议以你的身份写文章、发小记、上传配图、管理内容，并遵循平台官方写作规范与你的个人写作偏好。AI 帮你写，你来审。
 
-于是 2.0 诞生了。这不是一次简单的升级，而是从零开始的全面重构——**后端 Spring Boot 4 + Java 17，前端 Nuxt 3 + Vue 3 + Naive
-UI，全程 AI 驱动开发**。
-
-> **1.0 版本**已归档至 [main-v1.0](https://gitee.com/yu-zi-wei/qixidi/tree/main-v1.0/) 分支，不再维护（bug 除外）。
+技术上，后端 Spring Boot 4 + Java 17，前端 Nuxt 3 + Vue 3 + Naive UI，全程 AI 驱动开发。
 
 ### 网站地址：https://qixidi.top/
 
@@ -35,29 +32,41 @@ UI，全程 AI 驱动开发**。
 ```text
 qixidi/
 │
-└── qixidi-service  # 项目后端plus版本（基于SpringBoot-v4 + jdk17 完成）
-    │
-    ├── qixidi-startup # 后台启动模块
-    │
-    ├── framework # 核心框架
-    │
-    ├── qixidi-auth # 认证模块
-    │
-    ├── qixidi-business # 核心业务
-    │
-    ├── qixidi-system # 基础业务（原ruoyi项目业务逻辑）
-    │
-    ├── sql  # sql文件（暂不提供，需要可加微信（请注明来意，sql是有偿的：169元/包售后）：zsh2978824265）
-    │
-├── qixid-web-nuxt3  # 项目前台（Nuxt3.js）
+├── qixidi-service  # 项目后端（Spring Boot 4 + Java 17）
+│   │
+│   ├── qixidi-startup  # 启动模块
+│   │
+│   ├── framework  # 核心框架
+│   │
+│   ├── qixidi-auth  # 认证模块（Sa-Token）
+│   │
+│   ├── qixidi-ai  # AI 能力模块（Spring AI：对话、摘要生成）
+│   │
+│   ├── qixidi-mcp  # MCP 服务模块（无状态 /mcp 端点 + API key 会话桥 + 写作 skill）
+│   │
+│   ├── qixidi-business  # 核心业务
+│   │
+│   ├── qixidi-system  # 系统管理
+│   │
+│   ├── qixidi-common  # 公共模块
+│   │
+│   └── db  # sql文件（需要可加微信（请注明来意，sql是有偿的：169元/包售后）：zsh2978824265）
 │
-└── qixidi-web-admin  # 项目后台（Vue.js）
+├── qixidi-web-nuxt3  # 门户 + 用户后台（Nuxt 3 SSR）
+│
+└── qixidi-web-admin  # 旧版管理后台（Vue 2，维护模式）
 
 ```
 
 ## 亮点特性
 
 除了常规博客功能，栖息地还有一些让你眼前一亮的特性：
+
+**AI Agent 接入（MCP）**
+
+- 标准无状态 `/mcp` 端点：Claude Code 等 agent 配置一个 API key 即可接入，创作能力全开放给 AI
+- agent 以你的身份写文章、发小记、上传配图、查改内容，产出与人工发布走同一套审核流程
+- 两级写作 skill：官方「栖息地写作规范」保证 AI 产出能被站点正确渲染，个人自建 skill 沉淀你的写作偏好，AI 越用越懂你
 
 **Markdown 编辑器内置多媒体支持**
 
@@ -92,6 +101,8 @@ qixidi/
 | 名称               | 版本     | 说明     |
 |------------------|--------|--------|
 | Spring Boot      | 4.0.1  | 基础框架   |
+| Spring AI        | 2.0.1  | AI 能力（对话/摘要） |
+| qixidi-mcp       | 自研模块  | MCP 端点 + API key 会话桥，AI agent 接入 |
 | Sa-Token         | 1.46.0 | 认证框架   |
 | MyBatis-Plus     | 3.5.17 | ORM 框架 |
 | Spring WebSocket | 7.0.2  | 长连接    |
