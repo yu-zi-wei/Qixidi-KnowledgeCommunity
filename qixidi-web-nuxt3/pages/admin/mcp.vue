@@ -75,7 +75,7 @@
               </n-tag>
             </div>
             <p v-if="skill.description" class="mcp-skill-desc">{{ skill.description }}</p>
-            <span class="mcp-key-meta" :title="getFullDateTime(skill.createTime)">
+            <span v-if="skill.userId != null" class="mcp-key-meta" :title="getFullDateTime(skill.createTime)">
               创建于 {{ formatTime(skill.createTime) }}
             </span>
           </div>
