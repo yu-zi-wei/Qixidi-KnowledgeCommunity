@@ -1,0 +1,63 @@
+/**
+ * 文章管理 API（ArticleInformationController，/system/article/information）
+ *
+ * EditGroup 必填：articleTitle / articleContent / type / groupingId
+ * → 审核操作必须回传行内已有字段，不能只传 {id, auditState}
+ */
+
+/** 文章行（ArticleInformationVo 列表用到的字段子集） */
+export interface ArticleRow {
+  id: number;
+  userId?: string;
+  articleTitle: string;
+  articleCover?: string;
+  articleAbstract?: string;
+  articleContent?: string;
+  theme?: string;
+  type?: number;
+  reprintUrl?: string;
+  state?: number;
+  updateId?: string;
+  specialId?: number;
+  groupingId?: number;
+  groupingName?: string;
+  labelId?: string;
+  labelNameList?: string[];
+  likeTimes?: number;
+  commentTimes?: number;
+  numberTimes?: number;
+  collectionTimes?: number;
+  isPublic?: number;
+  auditState?: number;
+  auditTime?: string;
+  createTime?: string;
+  updateTime?: string;
+  nickname?: string;
+  username?: string;
+  avatar?: string;
+  occupation?: string;
+}
+
+/** 文章审核状态（ArticleAuditStateEnums） */
+export const AUDIT_STATE_MAP: Record<number, { label: string; type: 'warning' | 'success' | 'error' | 'default' }> = {
+  1: { label: '审核中', type: 'warning' },
+  2: { label: '已通过', type: 'success' },
+  3: { label: '未通过', type: 'error' },
+  4: { label: '草稿', type: 'default' }
+};
+
+export const useArticleAdminApi = () => {
+  const api = useApi();
+
+  return {
+    /** 分页列表：GET /system/article/information/list */
+    getArticles: (params: Record<string, any>) =>
+      api.getPage<ArticleRow>('/system/article/information/list', params),
+
+    /** 详情：GET /system/article/information/{id} */
+    getArticle: (id: number | string) => api.get<ArticleRow>(`/system/article/information/${id}`),
+
+    /** 更新（含审核，EditGroup 必填字段需齐全）：PUT /system/article/information */
+    updateArticle: (data: Partial<ArticleRow>) => api.put<void>('/system/article/information', data)
+  };
+};

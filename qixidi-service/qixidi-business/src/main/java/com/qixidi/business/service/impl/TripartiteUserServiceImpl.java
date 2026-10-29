@@ -153,6 +153,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         lqw.eq(StringUtils.isNotBlank(bo.getEmail()), TripartiteUser::getEmail, bo.getEmail());
         lqw.eq(StringUtils.isNotBlank(bo.getGender()), TripartiteUser::getGender, bo.getGender());
         lqw.eq(StringUtils.isNotBlank(bo.getSource()), TripartiteUser::getSource, bo.getSource());
+        lqw.eq(bo.getState() != null, TripartiteUser::getState, bo.getState());
         lqw.orderByDesc(TripartiteUser::getCreateTime);
         return lqw;
     }

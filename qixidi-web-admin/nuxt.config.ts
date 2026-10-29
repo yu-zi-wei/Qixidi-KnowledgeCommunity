@@ -26,7 +26,7 @@ export default defineNuxtConfig({
         }
     },
     modules: ['nuxtjs-naive-ui', '@pinia/nuxt'],
-    css: ['~/assets/css/tailwind.scss'],
+    css: ['~/assets/css/tailwind.scss', '~/assets/css/admin-table.scss'],
     // 管理后台全 CSR：无 SEO 需求，免 SSR 水合与 Naive UI SSR 处理
     routeRules: {
         '/**': { ssr: false }

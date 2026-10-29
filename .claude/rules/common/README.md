@@ -18,6 +18,7 @@
 | 规则 | 说明 |
 |------|------|
 | [qixidi-web-nuxt3.md](../frontend/qixidi-web-nuxt3.md) | Nuxt 3、SSR/CSR、主题切换、API 调用 |
+| [qixidi-web-admin.md](../frontend/qixidi-web-admin.md) | 管理后台 2.0（全 CSR、表格列 render 样式规则、页面骨架、组件库） |
 | [design-system.md](../frontend/design-system.md) | 设计系统、CSS 变量、样式开发规范 |
 | [nuxt3-data-fetching.md](../frontend/nuxt3-data-fetching.md) | useAsyncData、无限滚动、分页状态管理 |
 | [global-component-management.md](../frontend/global-component-management.md) | 全局组件状态管理（弹窗、对话框） |

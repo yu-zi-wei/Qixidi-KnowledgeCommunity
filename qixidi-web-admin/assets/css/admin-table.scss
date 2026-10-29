@@ -1,0 +1,37 @@
+// 后台表格单元格共享样式（全局）
+// n-data-table 列 render 函数里的元素带不上页面 scoped hash，页面 scoped 样式选不中，
+// 列内共享样式统一放这里；页面专属样式放各页非 scoped 块
+
+// 弱化占位（空值 —）
+.cell-dim {
+  opacity: 0.4;
+}
+
+// 操作列按钮组
+.cell-actions {
+  display: flex;
+  gap: 2px;
+}
+
+// 作者列（头像 + 名字）
+.cell-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  .cell-author-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// 单行省略（配合列 ellipsis/tooltip 使用）
+.cell-ellipsis {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

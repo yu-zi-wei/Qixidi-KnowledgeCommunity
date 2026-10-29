@@ -204,7 +204,8 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 
 | 规则文件 | 职责 |
 |---------|------|
-| `rules/frontend/qixidi-web-nuxt3.md` | Nuxt 3 开发规范 |
+| `rules/frontend/qixidi-web-nuxt3.md` | 门户 Nuxt 3 开发规范（SSR） |
+| `rules/frontend/qixidi-web-admin.md` | 管理后台 2.0 规范（全 CSR、表格列 render 样式、页面骨架） |
 | `rules/frontend/global-component-management.md` | 全局组件状态管理 |
 
 ### 后端规则（Spring Boot）
