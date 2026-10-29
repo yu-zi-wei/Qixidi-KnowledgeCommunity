@@ -1,62 +1,24 @@
-## 开发
+# qixidi-web-admin
+
+栖息地博客的**管理后台 2.0**，基于 Nuxt 3 重写（旧版 Vue 2 + Element UI 后台已归档至 `qixidi-web-admin-1.0`，仅存档不再开发）。
+
+## 技术栈
+
+Nuxt 3 + TypeScript + Naive UI + Pinia（persistedstate）+ Tailwind 4 + @vicons/tabler
+
+与门户（qixidi-web-nuxt3）同栈，全 CSR 渲染（无 SEO 诉求），dev 通过 `/api` 代理到本地后端。
+
+## 启动
 
 ```bash
-
-# 进入项目目录
-cd aurora-ui
-
-# 安装依赖
-npm install
-
-# 建议不要直接使用 cnpm 安装依赖，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
-npm install --registry=https://registry.npmmirror.com
-
-# 启动服务
-npm run dev
-
-# 账号密码
-admin/123456
+pnpm install
+pnpm dev        # http://localhost:3000，需后端 qixidi-service 运行在 127.0.0.1:9001
 ```
 
-浏览器访问 http://localhost:81
+## 开发导航
 
-## 发布
+**需求与设计（唯一需求源）**：[docs/开发需求与设计.md](./docs/开发需求与设计.md)
 
-```bash
-## 构建测试环境
-npm run build:stage
-
-## 构建生产环境
-npm run build:prod
-
-## 构建+打包
-npm run build:prod && npm run zip
-
-## 上传dist.zip并解压
-cd /data/aurora/web/aurora-ht/
-unzip -u dist.zip
-
-# 重启nginx
-/data/app/nginx/sbin/nginx -s reload
-
-# nginx启动停止命令
-./sbin/nginx   ##命令启动
-./sbin/nginx -s stop  ## 停止命令
-
-## 用于重启
-./sbin/nginx -t   ##检查 配置是否正确
-./sbin/nginx -s reload  ## 重启
-```
-
-## 服务器启动脚本
-```shell
-#!/bin/bash
-
-cd /data/qixidi/web-admin
-unzip -o dist.zip
-
-/data/app/nginx/sbin/nginx -t
-
-/data/app/nginx/sbin/nginx -s reload
-
-```
+- 当前状态：骨架已落地（布局/守卫/请求层/占位页），P0 五个需求按文档 M1/M2 里程碑推进
+- 权限模型：登录即管理员（静态路由，无 RBAC），配套后端 sys 表瘦身方案见文档 §5
+- 开发每个页面前，先到 `qixidi-service` grep 对应 Controller 确认接口字段，禁止凭记忆扩写

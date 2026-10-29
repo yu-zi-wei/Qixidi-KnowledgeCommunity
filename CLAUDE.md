@@ -41,7 +41,8 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 |------|------|--------|------|
 | **qixidi-service** | 服务端 API | Spring Boot 4.0 + Java 17 | 活跃开发 |
 | **qixidi-web-nuxt3** | 门户网站 + 用户后台（SSR） | Nuxt 3 + Vue 3 + Naive UI | 活跃开发 |
-| **qixidi-web-admin** | 旧版管理后台 | Vue 2 + Element UI | 维护模式 |
+| **qixidi-web-admin** | 管理后台 2.0（重写中，需求见其 docs/开发需求与设计.md） | Nuxt 3 + TS + Naive UI（全 CSR） | 活跃开发 |
+| **qixidi-web-admin-1.0** | 旧版管理后台（仅存档） | Vue 2 + Element UI | 已归档 |
 
 ### 业务功能
 

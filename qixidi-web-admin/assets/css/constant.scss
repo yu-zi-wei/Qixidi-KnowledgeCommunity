@@ -1,0 +1,62 @@
+@use "sass:math";
+$ft-color-tips: rgb(210, 210, 210);
+$bg-color: #F2F3F5;
+
+$base-font-size: 16px !default;
+
+@function px-to-rem($px) {
+  @if math.is-unitless($px) {
+    $px: $px * 1px;
+  }
+  @return calc($px / $base-font-size)* 1rem;
+}
+
+$px-1320: px-to-rem(1320);
+$px-1280: px-to-rem(1280);
+$px-1150: px-to-rem(1150);
+$px-960: px-to-rem(960);
+$px-800: px-to-rem(800);
+$px-650: px-to-rem(650);
+$px-560: px-to-rem(560);
+$px-480: px-to-rem(480);
+$px-400: px-to-rem(400);
+$px-360: px-to-rem(360);
+$px-320: px-to-rem(320);
+$px-280: px-to-rem(280);
+$px-240: px-to-rem(240);
+$px-200: px-to-rem(200);
+$px-180: px-to-rem(180);
+$px-160: px-to-rem(160);
+$px-128: px-to-rem(128);
+$px-96: px-to-rem(96);
+$px-64: px-to-rem(64);
+$px-48: px-to-rem(48);
+$px-42: px-to-rem(42);
+$px-40: px-to-rem(40);
+$px-38: px-to-rem(38);
+$px-36: px-to-rem(36);
+$px-34: px-to-rem(34);
+$px-32: px-to-rem(32);
+$px-28: px-to-rem(28);
+$px-26: px-to-rem(26);
+$px-24: px-to-rem(24);
+$px-20: px-to-rem(20);
+$px-18: px-to-rem(18);
+$px-16: px-to-rem(16);
+$px-15: px-to-rem(15);
+$px-14: px-to-rem(14);
+$px-13: px-to-rem(13);
+$px-12: px-to-rem(12);
+$px-11: px-to-rem(11);
+$px-10: px-to-rem(10);
+$px-9: px-to-rem(9);
+$px-8: px-to-rem(8);
+$px-7: px-to-rem(7);
+$px-6: px-to-rem(6);
+$px-5: px-to-rem(5);
+$px-4: px-to-rem(4);
+$px-3: px-to-rem(3);
+$px-2: px-to-rem(2);
+$px-1-5: px-to-rem(1.5);
+$px-1: px-to-rem(1);
+$px-0-5: px-to-rem(0.5);
