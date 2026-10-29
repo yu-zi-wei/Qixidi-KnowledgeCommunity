@@ -172,7 +172,7 @@ function layoutSide(branches, firstEdge, side) {
     n.parent = parent;
     n.x = side === 1 ? edge : edge - n.w;
     nodes.push(n);
-    if (parent) links.push({ from: parent, to: n });
+    links.push({ from: parent, to: n }); // from = null 表示该节点是一级分支，连线接到根节点边缘
     const next = side === 1 ? edge + maxW[n.depth] + H_GAP : edge - maxW[n.depth] - H_GAP;
     (n.children || []).forEach((c) => walk(c, n, next));
   };
