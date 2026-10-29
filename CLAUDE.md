@@ -246,11 +246,11 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 qixidi-service/
 ├── qixidi-startup        # 启动模块
 ├── framework            # 框架层
-├── qixidi-system        # 系统模块
+├── qixidi-system        # 系统模块（含后台管理 Controller，URL 统一 /system/*）
 ├── qixidi-auth         # 认证模块
 ├── qixidi-mcp          # MCP 服务模块（无状态 /mcp 端点 + API key 会话桥 + /agent 管理接口）
-├── qixidi-business     # 业务模块
-│   ├── api            # Controller（backstage/frontDesk）
+├── qixidi-business     # 业务模块（system 依赖 business；前台 Controller 平铺在 api/ 下，URL 含 /frontDesk/* 等原路径）
+│   ├── api            # 前台 Controller（按业务子目录平铺）
 │   ├── domain         # entity/bo/vo/enums
 │   ├── service        # Service 层
 │   ├── mapper         # Mapper 层

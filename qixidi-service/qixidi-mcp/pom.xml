@@ -26,6 +26,11 @@
             <groupId>com.light</groupId>
             <artifactId>qixidi-business</artifactId>
         </dependency>
+        <!-- 依赖反转后 business 不再传递 system；UploadImageTool 直接用 ISysOssService -->
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-system</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.light</groupId>

@@ -2,7 +2,7 @@
  * 站点统计接口（qixidi-service StatDataInfoController，字段以 StatDataInfoVo/StatReturnDataVo 为准）
  */
 
-/** GET /business/stat/data/info —— 单日快照（b_stat_data_info 最新一条 + 标签实时计数） */
+/** GET /system/stat/data/info —— 单日快照（b_stat_data_info 最新一条 + 标签实时计数） */
 export interface StatDataInfo {
   statTime: string;
   userCount: number;
@@ -34,11 +34,11 @@ export const useStatApi = () => {
 
   return {
     /** 综合统计快照 */
-    getStatInfo: () => api.get<StatDataInfo>('/business/stat/data/info'),
+    getStatInfo: () => api.get<StatDataInfo>('/system/stat/data/info'),
     /** 近 6 个月月度序列（SQL ORDER BY stat_time DESC LIMIT 6） */
-    getTheStat: () => api.get<StatReturnItem[]>('/business/stat/data/the/info'),
+    getTheStat: () => api.get<StatReturnItem[]>('/system/stat/data/the/info'),
     /** 标签/分类维度：labelGroup=分类文章数，label=标签的文章数/关注数 */
     getLabelStat: () =>
-      api.get<{ labelGroup: StatReturnItem[]; label: StatReturnItem[] }>('/business/stat/data/label/data')
+      api.get<{ labelGroup: StatReturnItem[]; label: StatReturnItem[] }>('/system/stat/data/label/data')
   };
 };

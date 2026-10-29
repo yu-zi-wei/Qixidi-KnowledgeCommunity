@@ -54,5 +54,11 @@
             <groupId>com.light</groupId>
             <artifactId>qixidi-auth</artifactId>
         </dependency>
+
+        <!-- 后台管理 Controller 已迁入本模块，依赖 business 的 Service/Domain 层 -->
+        <dependency>
+            <groupId>com.light</groupId>
+            <artifactId>qixidi-business</artifactId>
+        </dependency>
     </dependencies>
 </project>

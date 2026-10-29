@@ -24,14 +24,14 @@ export const useAdminSpecialApi = () => {
    * 创建专辑
    */
   const createSpecial = (data: { specialName: string; specialIntroduce: string; cover: string }) => {
-    return api.post('/special/information', data)
+    return api.post('/system/special/information', data)
   }
 
   /**
    * 更新专辑
    */
   const updateSpecial = (data: { id: number; specialName: string; specialIntroduce: string; cover: string }) => {
-    return api.put('/special/information', data)
+    return api.put('/system/special/information', data)
   }
 
   /**

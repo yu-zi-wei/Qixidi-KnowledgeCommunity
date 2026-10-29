@@ -96,7 +96,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 | **Service** | 业务逻辑处理、事务控制 | 直接操作 HTTP 请求/响应 |
 | **Mapper** | 数据访问、SQL 操作 | - |
 
-目录：`api/backstage`（后台）/ `api/frontDesk`（前台）/ `service` / `mapper` / `domain`（entity/bo/vo/enums）
+目录：后台管理 Controller 在 `qixidi-system/api`（URL 统一 `/system/*`，system 依赖 business 的 Service 层）；前台 Controller 在 `qixidi-business/api`（按业务子目录平铺，无 backstage/frontDesk 层级）
 
 **绝对禁止**：Controller 直接调 Mapper、Controller 写 `lambdaQuery()`、复杂业务逻辑放 Controller。
 

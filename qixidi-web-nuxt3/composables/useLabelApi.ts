@@ -30,7 +30,7 @@ export const useLabelApi = () => {
    * 查询所有标签（编辑器用）
    */
   const getList = async (): Promise<LabelInfo[]> => {
-    const result = await api.getPage<LabelInfo>('/business/label-info/list')
+    const result = await api.getPage<LabelInfo>('/system/label-info/list')
     return result.rows || []
   }
 

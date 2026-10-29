@@ -29,10 +29,10 @@ export const useCollectionApi = () => {
 
   /**
    * 编辑收藏夹
-   * 接口：PUT /business/collection/information
+   * 接口：PUT /system/collection/information
    */
   const updateCollection = (data: CreateCollectionBo & { id: number }): Promise<void> => {
-    return api.put('/business/collection/information', data)
+    return api.put('/system/collection/information', data)
   }
 
   /**
