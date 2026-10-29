@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" viewBox="0 0 1240 728">
-<rect width="100%" height="100%" fill="#e8f0f8"/>
+<rect width="100%" height="100%" fill="#FBFAF5"/>
 <circle cx="49" cy="52" r="4.5" fill="#3E7C59"/>
-<text x="62" y="56" font-size="13.5" font-weight="700" fill="#2E3A48">接入层</text>
-<text x="118.525" y="56" font-size="11.5" fill="#5B6878">浏览器 / AI Agent 三端入口</text>
-<rect x="44" y="72" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="228.7" y="97" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">门户 + 用户后台</text>
-<text x="228.7" y="118" font-size="11.5" fill="#5B6878" text-anchor="middle">qixidi-web-nuxt3 · Nuxt 3 · SSR</text>
-<rect x="435.3333333333333" y="72" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="620.0" y="97" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">旧版管理后台</text>
-<text x="620.0" y="118" font-size="11.5" fill="#5B6878" text-anchor="middle">qixidi-web-admin · Vue 2 · 维护模式</text>
+<text x="62" y="56" font-size="13.5" font-weight="700" fill="#3A372F">接入层</text>
+<text x="118.525" y="56" font-size="11.5" fill="#6B6558">浏览器 / AI Agent 三端入口</text>
+<rect x="44" y="72" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="228.7" y="97" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">门户 + 用户后台</text>
+<text x="228.7" y="118" font-size="11.5" fill="#6B6558" text-anchor="middle">qixidi-web-nuxt3 · Nuxt 3 · SSR</text>
+<rect x="435.3333333333333" y="72" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="620.0" y="97" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">旧版管理后台</text>
+<text x="620.0" y="118" font-size="11.5" fill="#6B6558" text-anchor="middle">qixidi-web-admin · Vue 2 · 维护模式</text>
 <rect x="826.6666666666666" y="72" width="369.3333333333333" height="62" rx="9" fill="#FDF4F8" stroke="#B23A78" stroke-width="1.3"/>
 <text x="1011.3" y="97" font-size="14" font-weight="700" fill="#B23A78" text-anchor="middle">AI Agent</text>
-<text x="1011.3" y="118" font-size="11.5" fill="#5B6878" text-anchor="middle">Claude Code 等 · 以用户身份创作</text>
+<text x="1011.3" y="118" font-size="11.5" fill="#6B6558" text-anchor="middle">Claude Code 等 · 以用户身份创作</text>
 <marker id="arr0" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2F7E86"/></marker>
 <line x1="100.66666666666666" y1="134" x2="100.66666666666666" y2="206" stroke="#2F7E86" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arr0)"/>
 <text x="109.66666666666666" y="174" font-size="11" fill="#2F7E86">WS 实时推送</text>
@@ -25,51 +25,51 @@
 <line x1="1011.3333333333333" y1="134" x2="1011.3333333333333" y2="206" stroke="#B23A78" stroke-width="1.6" marker-end="url(#arr3)"/>
 <text x="1020.3333333333333" y="174" font-size="11" fill="#B23A78">MCP 协议 · API Key</text>
 <circle cx="49" cy="228" r="4.5" fill="#3E7C59"/>
-<text x="62" y="232" font-size="13.5" font-weight="700" fill="#2E3A48">应用层 · qixidi-service</text>
-<text x="253.47100000000006" y="232" font-size="11.5" fill="#5B6878">Spring Boot 4.0 · Java 17 · 模块化单体（可拆可合 · 单机即起）</text>
-<rect x="44" y="246" width="1152" height="296" rx="12" fill="#F3F7FB" stroke="#3E7C59" stroke-width="1.8"/>
-<rect x="62" y="264" width="1116" height="40" rx="8" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.2"/>
-<text x="620.0" y="289" font-size="13.5" font-weight="700" fill="#2E3A48" text-anchor="middle">framework 核心框架 —— 统一返回 · 防刷限流 · 全局日志 · Sa-Token 会话</text>
-<rect x="62" y="317" width="357.3333333333333" height="58" rx="9" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="240.7" y="340" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">qixidi-auth</text>
-<text x="240.7" y="361" font-size="11.5" fill="#5B6878" text-anchor="middle">认证鉴权 · Sa-Token · 三端登录</text>
-<rect x="441.3333333333333" y="317" width="357.3333333333333" height="58" rx="9" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="620.0" y="340" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">qixidi-ai</text>
-<text x="620.0" y="361" font-size="11.5" fill="#5B6878" text-anchor="middle">Spring AI · 对话 · 摘要生成</text>
+<text x="62" y="232" font-size="13.5" font-weight="700" fill="#3A372F">应用层 · qixidi-service</text>
+<text x="253.47100000000006" y="232" font-size="11.5" fill="#6B6558">Spring Boot 4.0 · Java 17 · 模块化单体（可拆可合 · 单机即起）</text>
+<rect x="44" y="246" width="1152" height="296" rx="12" fill="#F7F6F0" stroke="#3E7C59" stroke-width="1.8"/>
+<rect x="62" y="264" width="1116" height="40" rx="8" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.2"/>
+<text x="620.0" y="289" font-size="13.5" font-weight="700" fill="#3A372F" text-anchor="middle">framework 核心框架 —— 统一返回 · 防刷限流 · 全局日志 · Sa-Token 会话</text>
+<rect x="62" y="317" width="357.3333333333333" height="58" rx="9" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="240.7" y="340" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">qixidi-auth</text>
+<text x="240.7" y="361" font-size="11.5" fill="#6B6558" text-anchor="middle">认证鉴权 · Sa-Token · 三端登录</text>
+<rect x="441.3333333333333" y="317" width="357.3333333333333" height="58" rx="9" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="620.0" y="340" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">qixidi-ai</text>
+<text x="620.0" y="361" font-size="11.5" fill="#6B6558" text-anchor="middle">Spring AI · 对话 · 摘要生成</text>
 <rect x="820.6666666666666" y="317" width="357.3333333333333" height="58" rx="9" fill="#FDF4F8" stroke="#B23A78" stroke-width="1.3"/>
 <text x="999.3" y="340" font-size="14" font-weight="700" fill="#B23A78" text-anchor="middle">qixidi-mcp</text>
-<text x="999.3" y="361" font-size="11.5" fill="#5B6878" text-anchor="middle">MCP 端点 · API Key 会话桥</text>
-<rect x="62" y="388" width="1116" height="58" rx="8" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.2"/>
-<text x="620.0" y="412" font-size="13.5" font-weight="700" fill="#2E3A48" text-anchor="middle">qixidi-business 核心业务</text>
-<text x="620.0" y="432" font-size="11.5" fill="#5B6878" text-anchor="middle">文章 · 专栏 · 专题 · 合集 · 随笔 · 时光小记 · 相册 · 评论 · 私信 · 关注 · 搜索 · 消息 —— MyBatis-Plus</text>
-<rect x="62" y="459" width="357.3333333333333" height="58" rx="9" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="240.7" y="482" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">qixidi-system</text>
-<text x="240.7" y="503" font-size="11.5" fill="#5B6878" text-anchor="middle">系统管理 · RBAC · 菜单 · 日志</text>
-<rect x="441.3333333333333" y="459" width="357.3333333333333" height="58" rx="9" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="620.0" y="482" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">qixidi-common</text>
-<text x="620.0" y="503" font-size="11.5" fill="#5B6878" text-anchor="middle">公共 · 工具 · 常量 · 异常</text>
-<rect x="820.6666666666666" y="459" width="357.3333333333333" height="58" rx="9" fill="#F6F9FC" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="999.3" y="482" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">qixidi-startup</text>
-<text x="999.3" y="503" font-size="11.5" fill="#5B6878" text-anchor="middle">启动装配 · 单产物打包</text>
-<marker id="arr4" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8D9AAB"/></marker>
-<line x1="228.66666666666666" y1="542" x2="228.66666666666666" y2="604" stroke="#8D9AAB" stroke-width="1.6" marker-end="url(#arr4)"/>
-<text x="237.66666666666666" y="577" font-size="11" fill="#8D9AAB">MyBatis-Plus</text>
-<marker id="arr5" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8D9AAB"/></marker>
-<line x1="620" y1="542" x2="620" y2="604" stroke="#8D9AAB" stroke-width="1.6" marker-end="url(#arr5)"/>
-<text x="629" y="577" font-size="11" fill="#8D9AAB">Redisson</text>
-<marker id="arr6" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8D9AAB"/></marker>
-<line x1="1011.3333333333333" y1="542" x2="1011.3333333333333" y2="604" stroke="#8D9AAB" stroke-width="1.6" marker-end="url(#arr6)"/>
-<text x="1020.3333333333333" y="577" font-size="11" fill="#8D9AAB">OSS SDK</text>
+<text x="999.3" y="361" font-size="11.5" fill="#6B6558" text-anchor="middle">MCP 端点 · API Key 会话桥</text>
+<rect x="62" y="388" width="1116" height="58" rx="8" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.2"/>
+<text x="620.0" y="412" font-size="13.5" font-weight="700" fill="#3A372F" text-anchor="middle">qixidi-business 核心业务</text>
+<text x="620.0" y="432" font-size="11.5" fill="#6B6558" text-anchor="middle">文章 · 专栏 · 专题 · 合集 · 随笔 · 时光小记 · 相册 · 评论 · 私信 · 关注 · 搜索 · 消息 —— MyBatis-Plus</text>
+<rect x="62" y="459" width="357.3333333333333" height="58" rx="9" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="240.7" y="482" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">qixidi-system</text>
+<text x="240.7" y="503" font-size="11.5" fill="#6B6558" text-anchor="middle">系统管理 · RBAC · 菜单 · 日志</text>
+<rect x="441.3333333333333" y="459" width="357.3333333333333" height="58" rx="9" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="620.0" y="482" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">qixidi-common</text>
+<text x="620.0" y="503" font-size="11.5" fill="#6B6558" text-anchor="middle">公共 · 工具 · 常量 · 异常</text>
+<rect x="820.6666666666666" y="459" width="357.3333333333333" height="58" rx="9" fill="#FCFBF7" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="999.3" y="482" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">qixidi-startup</text>
+<text x="999.3" y="503" font-size="11.5" fill="#6B6558" text-anchor="middle">启动装配 · 单产物打包</text>
+<marker id="arr4" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9C9585"/></marker>
+<line x1="228.66666666666666" y1="542" x2="228.66666666666666" y2="604" stroke="#9C9585" stroke-width="1.6" marker-end="url(#arr4)"/>
+<text x="237.66666666666666" y="577" font-size="11" fill="#9C9585">MyBatis-Plus</text>
+<marker id="arr5" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9C9585"/></marker>
+<line x1="620" y1="542" x2="620" y2="604" stroke="#9C9585" stroke-width="1.6" marker-end="url(#arr5)"/>
+<text x="629" y="577" font-size="11" fill="#9C9585">Redisson</text>
+<marker id="arr6" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9C9585"/></marker>
+<line x1="1011.3333333333333" y1="542" x2="1011.3333333333333" y2="604" stroke="#9C9585" stroke-width="1.6" marker-end="url(#arr6)"/>
+<text x="1020.3333333333333" y="577" font-size="11" fill="#9C9585">OSS SDK</text>
 <circle cx="49" cy="584" r="4.5" fill="#B0713A"/>
-<text x="62" y="588" font-size="13.5" font-weight="700" fill="#2E3A48">数据层</text>
-<rect x="44" y="604" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="228.7" y="629" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">MySQL 8.0</text>
-<text x="228.7" y="650" font-size="11.5" fill="#5B6878" text-anchor="middle">业务数据 · 全量持久化</text>
-<rect x="435.3333333333333" y="604" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="620.0" y="629" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">Redis 6</text>
-<text x="620.0" y="650" font-size="11.5" fill="#5B6878" text-anchor="middle">会话 · 缓存 · 分布式锁</text>
-<rect x="826.6666666666666" y="604" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#C7D0DD" stroke-width="1.3"/>
-<text x="1011.3" y="629" font-size="14" font-weight="700" fill="#2E3A48" text-anchor="middle">阿里云 OSS / MinIO</text>
-<text x="1011.3" y="650" font-size="11.5" fill="#5B6878" text-anchor="middle">图片等对象存储 · 可切换</text>
-<text x="1216" y="708" font-size="11" fill="#93A2B5" text-anchor="end">qixidi · 模块化单体 · 单机可部署（MySQL + Redis + 一枚 JAR） · 2026-10</text>
+<text x="62" y="588" font-size="13.5" font-weight="700" fill="#3A372F">数据层</text>
+<rect x="44" y="604" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="228.7" y="629" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">MySQL 8.0</text>
+<text x="228.7" y="650" font-size="11.5" fill="#6B6558" text-anchor="middle">业务数据 · 全量持久化</text>
+<rect x="435.3333333333333" y="604" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="620.0" y="629" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">Redis 6</text>
+<text x="620.0" y="650" font-size="11.5" fill="#6B6558" text-anchor="middle">会话 · 缓存 · 分布式锁</text>
+<rect x="826.6666666666666" y="604" width="369.3333333333333" height="62" rx="9" fill="#FFFFFF" stroke="#CFC8B8" stroke-width="1.3"/>
+<text x="1011.3" y="629" font-size="14" font-weight="700" fill="#3A372F" text-anchor="middle">阿里云 OSS / MinIO</text>
+<text x="1011.3" y="650" font-size="11.5" fill="#6B6558" text-anchor="middle">图片等对象存储 · 可切换</text>
+<text x="1216" y="708" font-size="11" fill="#B3AC9D" text-anchor="end">qixidi · 模块化单体 · 单机可部署（MySQL + Redis + 一枚 JAR） · 2026-10</text>
 </svg>

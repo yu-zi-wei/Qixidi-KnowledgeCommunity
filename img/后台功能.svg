@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" viewBox="0 0 1100 982">
-<rect width="100%" height="100%" fill="#e8f0f8"/>
+<rect width="100%" height="100%" fill="#FBFAF5"/>
 <path d="M 616.9 491.0 C 664.9 491.0, 664.9 234.5, 712.9 234.5" fill="none" stroke="#3E7C59" stroke-width="2.4" stroke-opacity="0.85"/>
 <path d="M 778.0 234.5 C 822.1 234.5, 822.1 120.5, 866.3 120.5" fill="none" stroke="#3E7C59" stroke-width="1.7" stroke-opacity="0.85"/>
 <path d="M 778.0 234.5 C 822.1 234.5, 822.1 177.5, 866.3 177.5" fill="none" stroke="#3E7C59" stroke-width="1.7" stroke-opacity="0.85"/>
@@ -18,22 +18,22 @@
 <path d="M 794.3 746.0 C 830.3 746.0, 830.3 774.5, 866.3 774.5" fill="none" stroke="#B0713A" stroke-width="1.7" stroke-opacity="0.85"/>
 <path d="M 794.3 746.0 C 830.3 746.0, 830.3 831.5, 866.3 831.5" fill="none" stroke="#B0713A" stroke-width="1.7" stroke-opacity="0.85"/>
 <text x="712.9" y="240.0" font-size="15.5" font-weight="700" fill="#3E7C59">内容管理</text>
-<text x="866.3" y="125.0" font-size="13.5" fill="#2E3A48">文章管理</text>
-<text x="866.3" y="182.0" font-size="13.5" fill="#2E3A48">专栏管理</text>
-<text x="866.3" y="239.0" font-size="13.5" fill="#2E3A48">专题管理</text>
-<text x="866.3" y="296.0" font-size="13.5" fill="#2E3A48">合集管理</text>
-<text x="866.3" y="353.0" font-size="13.5" fill="#2E3A48">标签管理</text>
+<text x="866.3" y="125.0" font-size="13.5" fill="#3A372F">文章管理</text>
+<text x="866.3" y="182.0" font-size="13.5" fill="#3A372F">专栏管理</text>
+<text x="866.3" y="239.0" font-size="13.5" fill="#3A372F">专题管理</text>
+<text x="866.3" y="296.0" font-size="13.5" fill="#3A372F">合集管理</text>
+<text x="866.3" y="353.0" font-size="13.5" fill="#3A372F">标签管理</text>
 <text x="712.9" y="495.0" font-size="15.5" font-weight="700" fill="#4A6FA5">社区互动</text>
-<text x="866.3" y="380.0" font-size="13.5" fill="#2E3A48">评论管理</text>
-<text x="866.3" y="437.0" font-size="13.5" fill="#2E3A48">点赞管理</text>
-<text x="866.3" y="494.0" font-size="13.5" fill="#2E3A48">随笔（金句）管理</text>
-<text x="866.3" y="551.0" font-size="13.5" fill="#2E3A48">敏感词管理</text>
-<text x="866.3" y="608.0" font-size="13.5" fill="#2E3A48">意见反馈</text>
+<text x="866.3" y="380.0" font-size="13.5" fill="#3A372F">评论管理</text>
+<text x="866.3" y="437.0" font-size="13.5" fill="#3A372F">点赞管理</text>
+<text x="866.3" y="494.0" font-size="13.5" fill="#3A372F">随笔（金句）管理</text>
+<text x="866.3" y="551.0" font-size="13.5" fill="#3A372F">敏感词管理</text>
+<text x="866.3" y="608.0" font-size="13.5" fill="#3A372F">意见反馈</text>
 <text x="712.9" y="751.5" font-size="15.5" font-weight="700" fill="#B0713A">用户与消息</text>
-<text x="866.3" y="665.0" font-size="13.5" fill="#2E3A48">前台用户管理</text>
-<text x="866.3" y="722.0" font-size="13.5" fill="#2E3A48">私信会话管理</text>
-<text x="866.3" y="779.0" font-size="13.5" fill="#2E3A48">站内消息管理</text>
-<text x="866.3" y="836.0" font-size="13.5" fill="#2E3A48">搜索记录</text>
+<text x="866.3" y="665.0" font-size="13.5" fill="#3A372F">前台用户管理</text>
+<text x="866.3" y="722.0" font-size="13.5" fill="#3A372F">私信会话管理</text>
+<text x="866.3" y="779.0" font-size="13.5" fill="#3A372F">站内消息管理</text>
+<text x="866.3" y="836.0" font-size="13.5" fill="#3A372F">搜索记录</text>
 <path d="M 501.7 491.0 C 453.7 491.0, 453.7 177.5, 405.7 177.5" fill="none" stroke="#B23A78" stroke-width="2.4" stroke-opacity="0.85"/>
 <path d="M 340.6 177.5 C 304.6 177.5, 304.6 63.5, 268.6 63.5" fill="none" stroke="#B23A78" stroke-width="1.7" stroke-opacity="0.85"/>
 <path d="M 340.6 177.5 C 304.6 177.5, 304.6 120.5, 268.6 120.5" fill="none" stroke="#B23A78" stroke-width="1.7" stroke-opacity="0.85"/>
@@ -54,25 +54,25 @@
 <path d="M 340.6 803.0 C 304.6 803.0, 304.6 831.5, 268.6 831.5" fill="none" stroke="#2F7E86" stroke-width="1.7" stroke-opacity="0.85"/>
 <path d="M 340.6 803.0 C 304.6 803.0, 304.6 888.5, 268.6 888.5" fill="none" stroke="#2F7E86" stroke-width="1.7" stroke-opacity="0.85"/>
 <text x="340.6" y="183.0" font-size="15.5" font-weight="700" fill="#B23A78">站点配置</text>
-<text x="211.9" y="68.0" font-size="13.5" fill="#2E3A48">导航配置</text>
-<text x="211.9" y="125.0" font-size="13.5" fill="#2E3A48">侧栏配置</text>
-<text x="211.9" y="182.0" font-size="13.5" fill="#2E3A48">站点文件</text>
-<text x="211.9" y="239.0" font-size="13.5" fill="#2E3A48">充值配置</text>
-<text x="183.5" y="296.0" font-size="13.5" fill="#2E3A48">系统任务配置</text>
+<text x="211.9" y="68.0" font-size="13.5" fill="#3A372F">导航配置</text>
+<text x="211.9" y="125.0" font-size="13.5" fill="#3A372F">侧栏配置</text>
+<text x="211.9" y="182.0" font-size="13.5" fill="#3A372F">站点文件</text>
+<text x="211.9" y="239.0" font-size="13.5" fill="#3A372F">充值配置</text>
+<text x="183.5" y="296.0" font-size="13.5" fill="#3A372F">系统任务配置</text>
 <text x="340.6" y="495.0" font-size="15.5" font-weight="700" fill="#6B7F3A">系统管理</text>
-<text x="197.7" y="323.0" font-size="13.5" fill="#2E3A48">管理员账号</text>
-<text x="120.0" y="380.0" font-size="13.5" fill="#2E3A48">角色管理 · RBAC 权限</text>
-<text x="211.9" y="437.0" font-size="13.5" fill="#2E3A48">菜单管理</text>
-<text x="159.7" y="494.0" font-size="13.5" fill="#2E3A48">部门 / 岗位管理</text>
-<text x="159.7" y="551.0" font-size="13.5" fill="#2E3A48">字典 / 参数设置</text>
-<text x="211.9" y="608.0" font-size="13.5" fill="#2E3A48">通知公告</text>
-<text x="180.1" y="665.0" font-size="13.5" fill="#2E3A48">OSS 文件管理</text>
+<text x="197.7" y="323.0" font-size="13.5" fill="#3A372F">管理员账号</text>
+<text x="120.0" y="380.0" font-size="13.5" fill="#3A372F">角色管理 · RBAC 权限</text>
+<text x="211.9" y="437.0" font-size="13.5" fill="#3A372F">菜单管理</text>
+<text x="159.7" y="494.0" font-size="13.5" fill="#3A372F">部门 / 岗位管理</text>
+<text x="159.7" y="551.0" font-size="13.5" fill="#3A372F">字典 / 参数设置</text>
+<text x="211.9" y="608.0" font-size="13.5" fill="#3A372F">通知公告</text>
+<text x="180.1" y="665.0" font-size="13.5" fill="#3A372F">OSS 文件管理</text>
 <text x="340.6" y="808.5" font-size="15.5" font-weight="700" fill="#2F7E86">系统监控</text>
-<text x="211.9" y="722.0" font-size="13.5" fill="#2E3A48">在线用户</text>
-<text x="211.9" y="779.0" font-size="13.5" fill="#2E3A48">缓存监控</text>
-<text x="148.3" y="836.0" font-size="13.5" fill="#2E3A48">数据监控 · Druid</text>
-<text x="159.7" y="893.0" font-size="13.5" fill="#2E3A48">登录 / 操作日志</text>
+<text x="211.9" y="722.0" font-size="13.5" fill="#3A372F">在线用户</text>
+<text x="211.9" y="779.0" font-size="13.5" fill="#3A372F">缓存监控</text>
+<text x="148.3" y="836.0" font-size="13.5" fill="#3A372F">数据监控 · Druid</text>
+<text x="159.7" y="893.0" font-size="13.5" fill="#3A372F">登录 / 操作日志</text>
 <rect x="501.7" y="468" width="115.3" height="46" rx="13" fill="#3E7C59"/>
 <text x="559.3" y="497.0" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="middle">栖息地后台</text>
-<text x="1076" y="960" font-size="11" fill="#93A2B5" text-anchor="end">qixidi-web-admin · Vue 2 + Element UI · 2026-10</text>
+<text x="1076" y="960" font-size="11" fill="#B3AC9D" text-anchor="end">qixidi-web-admin · Vue 2 + Element UI · 2026-10</text>
 </svg>

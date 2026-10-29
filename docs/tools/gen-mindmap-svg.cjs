@@ -30,8 +30,8 @@ const V_GAP = { 1: 30, 2: 14 };                  // 同层兄弟间距（按父�
 const H_GAP = 72;                                 // 层间水平间距
 const ROOT_GAP = 96;                              // 根与一级分支间距
 const PAD_X = 13;                                 // 根节点内边距
-const BG = '#e8f0f8'; // 站点品牌浅底 --color-primary-light（qixidi-web-nuxt3/assets/css/main.css）
-const INK = { 2: '#2E3A48', 3: '#5B6878' };
+const BG = '#FBFAF5';
+const INK = { 2: '#3A372F', 3: '#6B6558' };
 const ROOT_FILL = '#3E7C59';
 
 /* 文字宽度估算：中文全角 ≈ 1.0em，ASCII 半角 ≈ 0.56em；×1.05 保守余量（跨平台字体差异） */
@@ -155,7 +155,7 @@ function render() {
   svg.push(parts.join('\n'));
   svg.push(`<rect x="${(midX - rootW / 2).toFixed(1)}" y="${rootCy - 23}" width="${rootW.toFixed(1)}" height="46" rx="13" fill="${ROOT_FILL}"/>`);
   svg.push(`<text x="${midX.toFixed(1)}" y="${(rootCy + 6).toFixed(1)}" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="middle">${esc(CONF.label)}</text>`);
-  svg.push(`<text x="${(canvasW - 24).toFixed(0)}" y="${(height - 22).toFixed(0)}" font-size="11" fill="#93A2B5" text-anchor="end">${esc(CONF.note)}</text>`);
+  svg.push(`<text x="${(canvasW - 24).toFixed(0)}" y="${(height - 22).toFixed(0)}" font-size="11" fill="#B3AC9D" text-anchor="end">${esc(CONF.note)}</text>`);
   svg.push('</svg>');
 
   const out = path.resolve(__dirname, `../../img/${CONF.key}.svg`);

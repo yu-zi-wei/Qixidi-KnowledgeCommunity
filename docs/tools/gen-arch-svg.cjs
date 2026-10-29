@@ -14,16 +14,16 @@ const path = require('path');
 /* ---------------- 版式 ---------------- */
 const W = 1240;
 const FONT = "'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif";
-const BG = '#e8f0f8'; // 站点品牌浅底 --color-primary-light（qixidi-web-nuxt3/assets/css/main.css）
+const BG = '#FBFAF5';
 const GREEN = '#3E7C59';   // 栖息地绿：主体与常规链路
 const BERRY = '#B23A78';   // 莓红：AI / MCP 专属（与功能脑图同义）
 const TEAL = '#2F7E86';    // 青：WebSocket 实时链路
-const INK = '#2E3A48';
-const INK2 = '#5B6878';
-const LINE_GRAY = '#8D9AAB';
+const INK = '#3A372F';
+const INK2 = '#6B6558';
+const LINE_GRAY = '#9C9585';
 const BOX_FILL = '#FFFFFF';
-const BOX_STROKE = '#C7D0DD';
-const INNER_FILL = '#F6F9FC';
+const BOX_STROKE = '#CFC8B8';
+const INNER_FILL = '#FCFBF7';
 
 function textW(s, size) {
   let w = 0;
@@ -109,7 +109,7 @@ const yAppTitle = 232;
 const yApp = 246;
 layerTitle(PAD, yAppTitle, GREEN, '应用层 · qixidi-service', 'Spring Boot 4.0 · Java 17 · 模块化单体（可拆可合 · 单机即起）');
 const appH = 296;
-S.push(`<rect x="${PAD}" y="${yApp}" width="${INNER_W}" height="${appH}" rx="12" fill="#F3F7FB" stroke="${GREEN}" stroke-width="1.8"/>`);
+S.push(`<rect x="${PAD}" y="${yApp}" width="${INNER_W}" height="${appH}" rx="12" fill="#F7F6F0" stroke="${GREEN}" stroke-width="1.8"/>`);
 
 const inX = PAD + 18;                 // 大框内边距
 const inW = INNER_W - 36;
@@ -181,7 +181,7 @@ dataBoxes.forEach((d, i) => {
 });
 
 /* 落款 */
-S.push(`<text x="${W - 24}" y="${svgH - 20}" font-size="11" fill="#93A2B5" text-anchor="end">qixidi · 模块化单体 · 单机可部署（MySQL + Redis + 一枚 JAR） · 2026-10</text>`);
+S.push(`<text x="${W - 24}" y="${svgH - 20}" font-size="11" fill="#B3AC9D" text-anchor="end">qixidi · 模块化单体 · 单机可部署（MySQL + Redis + 一枚 JAR） · 2026-10</text>`);
 
 /* ---------------- 输出 ---------------- */
 const svg = [
