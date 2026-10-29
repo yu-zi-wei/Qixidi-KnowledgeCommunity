@@ -74,7 +74,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 - 前端请求头：`Authorization: Bearer {token}`
 - Redis key 前缀 = token-name（`Authorization:`）；本机 Redis db1 与 guanmai 项目共用，**只能动 `Authorization:*`，绝不能动 `token:*`**
 - dao 是自定义 `SaTokenDaoRedisCompat`（兼容低版本 Redis 的 KEEPTTL），官方 dao 装配已 exclude，**勿删**
-- **新增存入 session 的自定义类型必须同步登记** `qixidi-auth/src/main/resources/META-INF/satoken/sa-json-type.list`（jackson3 反序列化类型白名单，每行一个类名）
+- **新增存入 session 的自定义类型必须同步登记** `qixidi-auth/src/main/resources/META-INF/satoken/sa-json-type.list`（jackson3 反序列化类型白名单，每行一个类名）；登记时把**嵌套字段类型一并登记**（含集合元素类型，如 LoginUser.roles 的 RoleDTO——只登顶层类型，登录链路回读 session 时才炸 500）
 
 ---
 
