@@ -111,6 +111,9 @@ public class WordFilter {
      * @param skip 文本距离
      */
     public int wordCount(final String text, final int skip) {
+        if (text == null || text.isEmpty()) {
+            return 0;
+        }
         int count = 0;
         char[] charset = text.toCharArray();
         for (int i = 0; i < charset.length; i++) {

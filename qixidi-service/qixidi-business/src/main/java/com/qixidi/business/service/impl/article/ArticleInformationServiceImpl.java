@@ -300,10 +300,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         if (baseMapper.updateById(update) > 0) {
             ArticleInformationVo articleInformationVo = new ArticleInformationVo();
             articleInformationVo.setId(bo.getId());
+            // 部分更新（如 MCP update_article 仅传修改字段）时未传字段为 null，事件必须带合并后的完整值
+            // ——否则异步审核 wordCount(null) NPE 被监听器吞掉，文章无声卡在审核中
+            String title = update.getArticleTitle() != null ? update.getArticleTitle() : existing.getArticleTitle();
+            String content = update.getArticleContent() != null ? update.getArticleContent() : existing.getArticleContent();
+            String articleAbstract = bo.getArticleAbstract() != null ? bo.getArticleAbstract() : existing.getArticleAbstract();
             // 发布事件，事务提交后异步执行
             eventPublisher.publishEvent(new ArticleEvent(
-                    update.getId(), update.getArticleTitle(), update.getArticleContent(),
-                    bo.getArticleAbstract(), uuid,
+                    update.getId(), title, content, articleAbstract, uuid,
                     bo.getAbstractSelect() != null && bo.getAbstractSelect(),
                     shouldReview
             ));
