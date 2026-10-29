@@ -3,12 +3,19 @@ import { createDiscreteApi } from 'naive-ui';
 const { message: discreteMessage } = createDiscreteApi(['message']);
 
 /**
+ * 会话失效判定（后端 SaTokenConfig 把拦截器里的未登录异常包装成 ServiceException，
+ * 业务码是 500 而非 401，故除 401 外还需识别固定 msg；M3 后端瘦身后可收敛为仅判 401）
+ */
+const isSessionInvalid = (error: any) =>
+  error?.statusCode === 401 || String(error?.statusMessage || '').includes('登录失效');
+
+/**
  * API 请求封装（qixidi-service 对接，与前台 qixidi-web-nuxt3 同款语义）
  *
  * 管理后台全 CSR，统一走 public.apiBase（dev 经 devProxy / 生产经 nginx 反代）
  * - 非分页 { code, msg, data }：get/post/put/delete 自动解包 data
  * - 分页 { total, rows }：getPage/postPage 原样返回
- * - 错误统一弹后端 msg；401 清会话跳登录页
+ * - 错误统一弹后端 msg；会话失效（401/登录失效）清会话跳登录页
  */
 export const useApi = () => {
   const config = useRuntimeConfig();
@@ -48,7 +55,7 @@ export const useApi = () => {
       if (import.meta.client && error.statusMessage) {
         discreteMessage.error(error.statusMessage);
       }
-      if (error.statusCode === 401) {
+      if (isSessionInvalid(error)) {
         const adminStore = useAdminStore();
         adminStore.logout();
         navigateTo('/login');

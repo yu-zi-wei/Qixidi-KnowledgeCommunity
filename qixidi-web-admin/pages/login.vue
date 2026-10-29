@@ -14,6 +14,23 @@
             @keyup.enter="handleLogin"
           />
         </n-form-item>
+        <n-form-item v-if="captchaEnabled" label="验证码" path="code">
+          <div class="captcha-row">
+            <n-input
+              v-model:value="form.code"
+              placeholder="请输入验证码"
+              @keyup.enter="handleLogin"
+            />
+            <img
+              v-if="captchaImg"
+              :src="captchaImg"
+              class="captcha-img"
+              title="点击刷新验证码"
+              alt="验证码"
+              @click="loadCaptcha"
+            />
+          </div>
+        </n-form-item>
         <n-button type="primary" block :loading="loading" @click="handleLogin">登 录</n-button>
       </n-form>
     </n-card>
@@ -29,30 +46,73 @@ definePageMeta({ layout: false });
 const formRef = ref<FormInst | null>(null);
 const loading = ref(false);
 const message = useMessage();
-const adminStore = useAdminStore();
 const router = useRouter();
+const adminStore = useAdminStore();
+const { getCaptcha, login, getAdminInfo } = useAuthApi();
 
 const form = reactive({
   username: '',
-  password: ''
+  password: '',
+  code: '',
+  uuid: ''
 });
 
-const rules: FormRules = {
+// 验证码开关由后端配置（sys_config）决定，响应缺省时按开启兜底
+const captchaEnabled = ref(false);
+const captchaImg = ref('');
+
+const rules = computed<FormRules>(() => ({
   username: { required: true, message: '请输入用户名', trigger: 'blur' },
-  password: { required: true, message: '请输入密码', trigger: 'blur' }
+  password: { required: true, message: '请输入密码', trigger: 'blur' },
+  ...(captchaEnabled.value
+    ? { code: { required: true, message: '请输入验证码', trigger: 'blur' } }
+    : {})
+}));
+
+const loadCaptcha = async () => {
+  try {
+    const data = await getCaptcha();
+    captchaEnabled.value = data?.captchaOnOff === undefined ? true : !!data.captchaOnOff;
+    form.uuid = data?.uuid || '';
+    captchaImg.value = data?.img ? `data:image/gif;base64,${data.img}` : '';
+    form.code = '';
+  } catch {
+    // useApi 已弹错；验证码拉取失败不阻塞页面，登录时后端会再校验
+  }
 };
 
-// TODO(P0-1): 对接管理员登录接口（sys 瘦身后的新认证链路，见 docs/开发需求与设计.md）
 const handleLogin = () => {
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (errors) return;
     loading.value = true;
-    setTimeout(() => {
+    try {
+      const data = await login({
+        username: form.username,
+        password: form.password,
+        code: form.code,
+        uuid: form.uuid
+      });
+      adminStore.saveToken(data.token);
+      // getInfo 返回的 roles/permissions 是 RuoYi 遗留，瘦身（M3）前忽略，只存基本信息
+      const info = await getAdminInfo();
+      adminStore.saveAdminInfo({
+        userId: info.user.userId,
+        userName: info.user.userName,
+        nickName: info.user.nickName,
+        avatar: info.user.avatar
+      });
+      message.success('登录成功');
+      router.push('/');
+    } catch {
+      // useApi 已弹后端 msg；验证码是一次性的，失败后刷新
+      if (captchaEnabled.value) loadCaptcha();
+    } finally {
       loading.value = false;
-      message.warning('登录接口待对接（P0-1），当前为骨架占位');
-    }, 400);
+    }
   });
 };
+
+onMounted(loadCaptcha);
 </script>
 
 <style scoped lang="scss">
@@ -62,5 +122,19 @@ const handleLogin = () => {
 
 .login-card {
   border-radius: 8px;
+}
+
+.captcha-row {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: center;
+}
+
+.captcha-img {
+  height: 34px;
+  cursor: pointer;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 </style>

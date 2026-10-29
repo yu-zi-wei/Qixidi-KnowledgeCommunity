@@ -98,6 +98,10 @@ const userDropdown = [
 
 const handleUserAction = (key: string) => {
   if (key === 'logout') {
+    // 尽力通知后端销毁会话（token 此刻仍在 store，读取同步），失败不阻塞本地登出
+    useAuthApi()
+      .logout()
+      .catch(() => {});
     adminStore.logout();
     router.push('/login');
   }
