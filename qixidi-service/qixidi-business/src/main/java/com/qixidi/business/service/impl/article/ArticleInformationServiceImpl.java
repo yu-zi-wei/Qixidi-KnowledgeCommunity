@@ -193,11 +193,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public void handleArticleAsync(ArticleEvent event) {
         Long id = event.getArticleId();
-        //计算文章推荐权重
-        ArticleInformationVo vo = new ArticleInformationVo();
-        vo.setId(id);
-        vo.setCreateTime(new Date());
-        articleWeightAlgorithms(List.of(vo));
+        //计算文章推荐权重（衰减按库里真实发布时间算，编辑不重置文章热度起点）
+        ArticleInformation existing = baseMapper.selectById(id);
+        if (existing != null) {
+            ArticleInformationVo vo = new ArticleInformationVo();
+            vo.setId(id);
+            vo.setCreateTime(existing.getCreateTime());
+            articleWeightAlgorithms(List.of(vo));
+        }
         //AI 生成摘要（qixidi.article.ai.enable 开关控制）：开关打开且未手填摘要才生成，避免覆盖用户摘要
         if (articleAiEnabled && event.isGenerateAbstract()
                 && StringUtils.isBlank(event.getArticleAbstract())) {
@@ -294,9 +297,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         update.setUpdateId(uuid);
         update.setUpdateTime(new Date());
         boolean shouldReview = !ArticleAuditStateEnums.DRAFT.getCode().equals(bo.getAuditState());
-        if (shouldReview) {
-            update.setCreateTime(new Date());
-        }
         if (baseMapper.updateById(update) > 0) {
             ArticleInformationVo articleInformationVo = new ArticleInformationVo();
             articleInformationVo.setId(bo.getId());
