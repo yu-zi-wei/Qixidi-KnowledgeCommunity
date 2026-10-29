@@ -1,7 +1,11 @@
-<meta name="claude:viewport-fit-sides" content="cover">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>栖息地前台功能脑图</title>
 <style>
-/* 栖息地站点设计语言：暖纸底 + 墨色 + 栖息地绿；横向脑图，节点按深度分层 */
+/* 栖息地站点设计语言：暖纸底 + 墨色 + 栖息地绿；经典双侧脑图（根居中，分支左右摊开） */
 :root {
   --bg: #FAF8F3;
   --fg: #2B2A26;
@@ -51,9 +55,7 @@ body {
 }
 
 /* ---------- 页头 ---------- */
-.page-head {
-  padding-block: 28px 16px;
-}
+.page-head { padding-block: 28px 16px; }
 .head-eyebrow {
   font-size: 12px;
   letter-spacing: 0.14em;
@@ -101,7 +103,8 @@ h1 {
   border-color: var(--accent);
   color: #FFFFFF;
 }
-:root[data-theme="dark"] .toolbar button.active, :root:not([data-theme="light"]) .toolbar button.active { color: #1F1E1B; }
+:root[data-theme="dark"] .toolbar button.active,
+:root:not([data-theme="light"]) .toolbar button.active { color: #1F1E1B; }
 .node-count {
   margin-left: auto;
   font-size: 12.5px;
@@ -109,18 +112,43 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- 脑图画布 ---------- */
-.map-scroll {
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
+/* ---------- 脑图画布：根居中，两侧分支 ---------- */
+.map-scroll { overflow-x: auto; padding-bottom: 8px; }
 .map {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* gap 22px：与根节点两侧 22px 引出线 + 分支横线 22px 首尾相接，连成 44px 连续线 */
+  gap: 22px;
   min-width: 100%;
-  padding: 18px 24px 26px 8px;
+  padding: 18px 28px 30px;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
 }
 
-/* 节点 */
+/* 顶层分支指向根的横线（每棵树一条） */
+.col > .subtree::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  border-top: 1.5px solid var(--line-strong);
+}
+.col-right > .subtree::before { left: -22px; }
+.col-left  > .subtree::before { right: -22px; }
+/* 根节点两侧的引出线 */
+.node.d0::before, .node.d0::after {
+  content: "";
+  width: 22px;
+  border-top: 1.5px solid var(--line-strong);
+  flex-shrink: 0;
+}
+
+/* ---------- 节点 ---------- */
 .node {
   font: inherit;
   font-size: 13.5px;
@@ -153,7 +181,6 @@ h1 {
   display: none;
 }
 .subtree.foldable > .node .fold-caret { display: block; }
-.subtree.collapsed > .node .fold-caret { transform: rotate(0deg); }
 .subtree:not(.collapsed) > .node .fold-caret { transform: rotate(90deg); }
 
 .node .child-badge {
@@ -166,21 +193,27 @@ h1 {
   font-variant-numeric: tabular-nums;
   display: none;
 }
-.subtree.collapsed > .node .child-badge { display: inline-block; color: var(--accent); border-color: var(--accent); }
+.subtree.collapsed > .node .child-badge {
+  display: inline-block;
+  color: var(--accent);
+  border-color: var(--accent);
+}
 
-/* 深度样式 */
+/* 根节点 */
 .node.d0 {
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 600;
   color: #FFFFFF;
   background: var(--accent);
   border-color: var(--accent);
-  padding: 10px 18px;
+  padding: 11px 20px;
   border-radius: 10px;
   box-shadow: none;
 }
-:root[data-theme="dark"] .node.d0, :root:not([data-theme="light"]) .node.d0 { color: #1F1E1B; }
+:root[data-theme="dark"] .node.d0,
+:root:not([data-theme="light"]) .node.d0 { color: #1F1E1B; }
+/* 一级分支 */
 .node.d1 {
   font-weight: 600;
   background: var(--branch-soft, var(--accent-soft));
@@ -193,28 +226,28 @@ h1 {
   flex-shrink: 0;
 }
 
-/* ---------- 树结构与连接线 ---------- */
+/* ---------- 树结构与连接线（右向） ---------- */
 .subtree { display: flex; align-items: center; position: relative; }
 .children {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 14px;
+  gap: 18px;
 }
-.children > .subtree { padding-left: 44px; }
+.children > .subtree { padding-left: 60px; }
 .subtree.collapsed > .children { display: none; }
 
-/* 横向线：每个子节点自己带一段 */
+/* 横向线：每个子节点带一段 */
 .children > .subtree::before {
   content: "";
   position: absolute;
   left: 0;
   top: 50%;
-  width: 26px;
+  width: 38px;
   height: 0;
   border-top: 1.5px solid var(--line-strong);
 }
-/* 竖线：覆盖到上一个兄弟的横线（首/末裁半） */
+/* 竖线：连到相邻兄弟（首/末裁半，独子隐藏） */
 .children > .subtree::after {
   content: "";
   position: absolute;
@@ -229,10 +262,50 @@ h1 {
 /* 父节点右侧引出线（仅展开时） */
 .subtree.foldable:not(.collapsed) > .node::after {
   content: "";
-  width: 18px;
+  width: 22px;
   height: 0;
   border-top: 1.5px solid var(--line-strong);
   flex-shrink: 0;
+}
+
+/* ---------- 左侧树：整体镜像 ---------- */
+.side-left .subtree { flex-direction: row-reverse; }
+.side-left .children > .subtree { padding-left: 0; padding-right: 60px; }
+.side-left .children > .subtree::before { left: auto; right: 0; }
+.side-left .children > .subtree::after {
+  left: auto; right: 0;
+  border-left: none;
+  border-right: 1.5px solid var(--line-strong);
+}
+/* 引出线移到节点左侧 */
+.side-left .node::after { order: -1; }
+/* 折叠箭头指向左（展开时旋为向下） */
+.side-left .node .fold-caret {
+  border-left: none;
+  border-right: 4.5px solid var(--muted);
+}
+.side-left .subtree:not(.collapsed) > .node .fold-caret { transform: rotate(-90deg); }
+
+/* ---------- 窄屏：退回单向竖排 ---------- */
+@media (max-width: 720px) {
+  .map { flex-direction: column; align-items: flex-start; gap: 30px; }
+  .col { align-items: flex-start; }
+  .col > .subtree::before { left: -22px; right: auto; }
+  .node.d0::before { display: none; }
+  .side-left .subtree { flex-direction: row; }
+  .side-left .children > .subtree { padding-right: 0; padding-left: 60px; }
+  .side-left .children > .subtree::before { right: auto; left: 0; }
+  .side-left .children > .subtree::after {
+    right: auto; left: 0;
+    border-right: none;
+    border-left: 1.5px solid var(--line-strong);
+  }
+  .side-left .node::after { order: 0; }
+  .side-left .node .fold-caret {
+    border-right: none;
+    border-left: 4.5px solid var(--muted);
+  }
+  .side-left .subtree:not(.collapsed) > .node .fold-caret { transform: rotate(90deg); }
 }
 
 /* ---------- 注脚 ---------- */
@@ -257,6 +330,8 @@ h1 {
 }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap">
+</head>
+<body>
 
 <header class="page-head">
   <div class="head-eyebrow">qixidi.top · qixidi-web-nuxt3</div>
@@ -281,7 +356,7 @@ h1 {
 </footer>
 
 <script>
-/* 脑图数据：深度 0 根 / 1 分支 / 2+ 叶；branch 为一级分支色 */
+/* 脑图数据：label / branch 一级分支色 / children */
 const TREE = {
   label: "栖息地前台",
   children: [
@@ -325,6 +400,12 @@ const TREE = {
         { label: "审核结果站内信 + WS 推送" },
       ]},
     ]},
+    { label: "账号与认证", branch: "#A5563E", soft: "rgba(165,86,62,.10)", children: [
+      { label: "登录 / 注册弹窗（页内弹不跳转）" },
+      { label: "第三方 OAuth 登录" },
+      { label: "创作者申请（含 MCP 权益引导）" },
+      { label: "个人设置" },
+    ]},
     { label: "轻内容", branch: "#8A5A8F", soft: "rgba(138,90,143,.10)", children: [
       { label: "随笔（金句）", children: [
         { label: "分类 / 作者 / 作品 / 专辑维度" },
@@ -357,12 +438,6 @@ const TREE = {
         { label: "站内信 + 实时红点推送" },
       ]},
     ]},
-    { label: "账号与认证", branch: "#A5563E", soft: "rgba(165,86,62,.10)", children: [
-      { label: "登录 / 注册弹窗（页内弹不跳转）" },
-      { label: "第三方 OAuth 登录" },
-      { label: "创作者申请（含 MCP 权益引导）" },
-      { label: "个人设置" },
-    ]},
     { label: "用户后台 /admin", branch: "#6B7F3A", soft: "rgba(107,127,58,.10)", children: [
       { label: "数据看板", children: [
         { label: "浏览 / 互动统计卡片" },
@@ -392,18 +467,18 @@ const TREE = {
   ],
 };
 
-/* 统计节点总数（不含根） */
+/* 分支分侧：右 4（内容消费与创作入口） / 左 4（内容形态与用户侧） */
+const RIGHT = TREE.children.slice(0, 4);
+const LEFT = TREE.children.slice(4);
+
 function countNodes(n) {
   let c = n.children ? n.children.length : 0;
   if (n.children) for (const k of n.children) c += countNodes(k);
   return c;
 }
 
-/* 递归渲染：depth 从 0 开始 */
-function build(data, depth) {
-  const subtree = document.createElement("div");
-  subtree.className = "subtree" + (data.children && data.children.length ? " foldable" : "");
-
+/* 渲染单个节点（不含子树） */
+function renderNode(data, depth) {
   const node = document.createElement("button");
   node.type = "button";
   node.className = "node d" + Math.min(depth, 2);
@@ -428,57 +503,78 @@ function build(data, depth) {
     badge.textContent = "+" + countNodes(data);
     node.appendChild(badge);
     node.setAttribute("aria-expanded", "true");
+  }
+  return node;
+}
 
-    node.addEventListener("click", (e) => {
-      if (e.target.closest(".node") !== node) return;
+/* 渲染一棵子树：节点 + children */
+function buildTree(data, depth) {
+  const subtree = document.createElement("div");
+  subtree.className = "subtree" + (data.children && data.children.length ? " foldable" : "");
+  subtree.appendChild(renderNode(data, depth));
+
+  if (data.children && data.children.length) {
+    subtree.querySelector(":scope > .node").addEventListener("click", () => {
       subtree.classList.toggle("collapsed");
-      node.setAttribute("aria-expanded", String(!subtree.classList.contains("collapsed")));
+      subtree.querySelector(":scope > .node")
+        .setAttribute("aria-expanded", String(!subtree.classList.contains("collapsed")));
     });
-
     const children = document.createElement("div");
     children.className = "children";
-    for (const child of data.children) children.appendChild(build(child, depth + 1));
-    subtree.appendChild(node);
+    for (const child of data.children) children.appendChild(buildTree(child, depth + 1));
     subtree.appendChild(children);
-  } else {
-    subtree.appendChild(node);
   }
   return subtree;
 }
 
+/* 组装：左列 + 根 + 右列 */
 const map = document.getElementById("map");
-map.appendChild(build(TREE, 0));
+const colLeft = document.createElement("div");
+colLeft.className = "col col-left side-left";
+const colRight = document.createElement("div");
+colRight.className = "col col-right";
+LEFT.forEach((b) => colLeft.appendChild(buildTree(b, 1)));
+RIGHT.forEach((b) => colRight.appendChild(buildTree(b, 1)));
+map.appendChild(colLeft);
+map.appendChild(renderNode(TREE, 0));
+map.appendChild(colRight);
 document.getElementById("node-count").textContent =
-  countNodes(TREE) + " 个功能点 · " + TREE.children.length + " 大分支";
+  countNodes(TREE) + " 个功能点 · " + TREE.children.length + " 大分支（左右各半）";
 
-/* 视图控制：标准 = 展开到二级；主干 = 只看一级分支；全部 = 全展开 */
-function setView(mode) {
-  const all = map.querySelectorAll(".subtree.foldable");
-  const nodes = Array.from(all);
-  nodes.forEach((s) => {
-    const d = s.dataset.depth;
-    let collapsed;
-    if (mode === "expand") collapsed = false;
-    else if (mode === "collapse") collapsed = Number(d) >= 1; /* 根保持展开，一级分支各自收起 */
-    else collapsed = Number(d) >= 2; /* 标准：二级分支可见，其下收起 */
-    s.classList.toggle("collapsed", collapsed);
-    const btn = s.querySelector(":scope > .node");
-    if (btn) btn.setAttribute("aria-expanded", String(!collapsed));
-  });
-}
-/* 渲染时记录深度（build 里没带，这里从 DOM 结构补：根下第一层 .children 的直接子树深度 1） */
+/* 深度标记（每棵顶层树从 1 起） */
 function markDepth(subtree, d) {
   subtree.dataset.depth = d;
   const ch = subtree.querySelector(":scope > .children");
   if (ch) Array.from(ch.children).forEach((c) => markDepth(c, d + 1));
 }
-markDepth(map.querySelector(".subtree"), 0);
+Array.from(colLeft.children).forEach((t) => markDepth(t, 1));
+Array.from(colRight.children).forEach((t) => markDepth(t, 1));
 
-const btns = { default: document.getElementById("btn-default"), expand: document.getElementById("btn-expand"), collapse: document.getElementById("btn-collapse") };
+/* 视图控制：标准 = 展开到二级；主干 = 只看一级分支；全部 = 全展开 */
+function setView(mode) {
+  map.querySelectorAll(".subtree.foldable").forEach((s) => {
+    const d = Number(s.dataset.depth);
+    let collapsed;
+    if (mode === "expand") collapsed = false;
+    else if (mode === "collapse") collapsed = d >= 1; /* 一级分支各自收起 */
+    else collapsed = d >= 2; /* 标准：二级分支可见，其下收起 */
+    s.classList.toggle("collapsed", collapsed);
+    const btn = s.querySelector(":scope > .node");
+    if (btn) btn.setAttribute("aria-expanded", String(!collapsed));
+  });
+}
+
+const btns = {
+  default: document.getElementById("btn-default"),
+  expand: document.getElementById("btn-expand"),
+  collapse: document.getElementById("btn-collapse"),
+};
+function setActive(b) { Object.values(btns).forEach((x) => x.classList.remove("active")); b.classList.add("active"); }
 btns.default.addEventListener("click", () => { setView("default"); setActive(btns.default); });
 btns.expand.addEventListener("click", () => { setView("expand"); setActive(btns.expand); });
 btns.collapse.addEventListener("click", () => { setView("collapse"); setActive(btns.collapse); });
-function setActive(b) { Object.values(btns).forEach((x) => x.classList.remove("active")); b.classList.add("active"); }
 
 setView("default");
 </script>
+</body>
+</html>
