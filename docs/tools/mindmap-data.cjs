@@ -117,14 +117,15 @@ module.exports = {
   },
 
   /* ---------------- 后台：按 qixidi-web-admin/src/views 目录核对，2026-10-29 ----------------
-   * 说明：lover（情侣小站：相册/清单/照片树）为私人彩蛋模块，README 未宣传，不收 */
+   * 说明：lover（情侣小站：相册/清单/照片树）为私人彩蛋模块，README 未宣传，不收；
+   * XXL-Job 定时任务已废弃、RuoYi 开发工具（表单构建/代码生成）未用，均不收 */
   admin: {
     key: '后台功能',
     label: '栖息地后台',
     note: 'qixidi-web-admin · Vue 2 + Element UI · 2026-10',
-    split: 4,
+    split: 3,
     children: [
-      // 右侧 4 分支：内容与社区业务
+      // 右侧 3 分支：业务运营
       { label: '内容管理', color: '#3E7C59', children: [
         { label: '文章管理' },
         { label: '专栏管理' },
@@ -145,6 +146,7 @@ module.exports = {
         { label: '站内消息管理' },
         { label: '搜索记录' },
       ]},
+      // 左侧 3 分支：站点配置与系统运维
       { label: '站点配置', color: '#B23A78', children: [
         { label: '导航配置' },
         { label: '侧栏配置' },
@@ -152,7 +154,6 @@ module.exports = {
         { label: '充值配置' },
         { label: '系统任务配置' },
       ]},
-      // 左侧 3 分支：系统与运维（RuoYi 体系）
       { label: '系统管理', color: '#6B7F3A', children: [
         { label: '管理员账号' },
         { label: '角色管理 · RBAC 权限' },
@@ -167,12 +168,6 @@ module.exports = {
         { label: '缓存监控' },
         { label: '数据监控 · Druid' },
         { label: '登录 / 操作日志' },
-        { label: '定时任务 · XXL-Job' },
-      ]},
-      { label: '开发工具', color: '#7A6A55', children: [
-        { label: '表单构建' },
-        { label: '代码生成' },
-        { label: '接口文档 · Swagger' },
       ]},
     ],
   },
