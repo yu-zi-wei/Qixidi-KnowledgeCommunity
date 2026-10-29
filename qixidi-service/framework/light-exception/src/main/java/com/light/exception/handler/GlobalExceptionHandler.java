@@ -20,6 +20,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -73,6 +74,19 @@ public class GlobalExceptionHandler {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',不支持'{}'请求", requestURI, e.getMethod());
         return R.fail(e.getMessage());
+    }
+
+    /**
+     * 静态资源/路径不存在（本质 404）
+     * <p>
+     * 多为浏览器自动请求 favicon、扫描器探路等客户端噪音，不属于服务端错误，
+     * 不打异常栈——此前落入 Exception 兜底被当系统异常打 ERROR 刷屏
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public R<Void> handleNoResourceFoundException(NoResourceFoundException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        log.warn("请求地址'{}',资源不存在", requestURI);
+        return R.fail(HttpStatus.HTTP_NOT_FOUND, "请求地址不存在");
     }
 
     /**
