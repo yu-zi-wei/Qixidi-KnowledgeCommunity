@@ -50,13 +50,16 @@
 <script setup lang="ts">
 import { h } from 'vue';
 import type { MenuOption } from 'naive-ui';
-import { NIcon } from 'naive-ui';
+import { darkTheme, NIcon } from 'naive-ui';
+import type { GlobalTheme } from 'naive-ui';
 import {
   Dashboard,
   FileText,
   MessageCircle,
   Users,
   Settings,
+  Adjustments,
+  Folders,
   MoonStars,
   Sun,
   Logout
@@ -67,23 +70,37 @@ const route = useRoute();
 const router = useRouter();
 const adminStore = useAdminStore();
 
-const switchTheme = inject<(style: any) => void>('switchTheme')!;
-const isDark = ref(false);
+// 主题唯一数据源在 app.vue（theme ref），这里只派生与派发，避免双份状态
+const theme = inject<Ref<GlobalTheme | null>>('theme', ref(null));
+const switchTheme = inject<(style: GlobalTheme | null) => void>('switchTheme')!;
+const isDark = computed(() => theme.value?.name === 'dark');
 const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  switchTheme(isDark.value ? darkTheme : null);
+  switchTheme(isDark.value ? null : darkTheme);
 };
 
 // 菜单图标渲染
 const renderIcon = (icon: Component) => () =>
   h(NIcon, null, { default: () => h(icon) });
 
+// 层级菜单：叶子 key 用路由（供 :value 高亮匹配），父级 key 用唯一非路由标识
 const menuOptions: MenuOption[] = [
   { label: '数据看板', key: '/', icon: renderIcon(Dashboard) },
-  { label: '文章管理', key: '/article', icon: renderIcon(FileText) },
-  { label: '评论管理', key: '/comment', icon: renderIcon(MessageCircle) },
+  {
+    label: '内容管理',
+    key: 'content',
+    icon: renderIcon(Folders),
+    children: [
+      { label: '文章管理', key: '/article', icon: renderIcon(FileText) },
+      { label: '评论管理', key: '/comment', icon: renderIcon(MessageCircle) }
+    ]
+  },
   { label: '前台用户', key: '/user', icon: renderIcon(Users) },
-  { label: '系统设置', key: '/setting', icon: renderIcon(Settings) }
+  {
+    label: '系统管理',
+    key: 'system',
+    icon: renderIcon(Settings),
+    children: [{ label: '系统设置', key: '/setting', icon: renderIcon(Adjustments) }]
+  }
 ];
 
 const activeMenu = computed(() => route.path);
