@@ -4,7 +4,8 @@
  * 用法：node docs/tools/gen-mindmap-svg.cjs
  * 输出：img/前台功能.svg
  *
- * 设计：经典双侧脑图——根居中，8 个一级分支左右各 4 摊开，
+ * 设计：经典双侧脑图——根居中，9 个一级分支（右 5 / 左 4）摊开，
+ * MCP 作为头号卖点独立成支（与 README 前言、亮点特性第一条对齐），
  * 三次贝塞尔曲线连线（XMind 风格），站点暖纸底 + 栖息地绿。
  * 纯 <text> + <path>（无 foreignObject），GitHub / Gitee README <img> 均可渲染。
  */
@@ -15,7 +16,7 @@ const path = require('path');
 const TREE = {
   label: '栖息地前台',
   children: [
-    // 右侧 4 分支：内容消费与创作入口
+    // 右侧 5 分支：内容消费 → 创作 → AI → 账号
     { label: '内容发现', color: '#3E7C59', children: [
       { label: '首页', children: [
         { label: '推荐流 · 权重排序' }, { label: '站点信息侧栏' },
@@ -55,6 +56,15 @@ const TREE = {
         { label: '命中阈值转人工 + 邮件提醒' },
         { label: '审核结果站内信 + WS 推送' },
       ]},
+    ]},
+    // README 头号卖点：AI agent 经 MCP 以用户身份创作，与人工发布同一审核流
+    { label: 'AI Agent 接入 · MCP', color: '#B23A78', children: [
+      { label: '无状态 /mcp 端点' },
+      { label: 'API Key 管理 · 创建/重命名/吊销' },
+      { label: '两级写作 Skill · 官方规范 + 个人偏好' },
+      { label: 'AI Agent 接入指引 · Claude Code 等' },
+      { label: '创作能力全开放 · 写文章/发小记/传图' },
+      { label: 'agent 产出走同一审核流程' },
     ]},
     { label: '账号与认证', color: '#A5563E', children: [
       { label: '登录 / 注册弹窗 · 页内弹不跳转' },
@@ -97,11 +107,6 @@ const TREE = {
         { label: '文章管理' }, { label: '专栏 + 专栏内容' },
         { label: '随笔 / 随笔专辑' }, { label: '时光小记' }, { label: '收藏' },
       ]},
-      { label: 'MCP 中心', children: [
-        { label: 'API Key 创建 / 重命名 / 吊销' },
-        { label: 'Skill · 官方只读 + 自建' },
-        { label: 'AI Agent 接入指引 · Claude 等' },
-      ]},
       { label: '帮助 · FAQ / 意见反馈' },
     ]},
     { label: '全局体验', color: '#7A6A55', children: [
@@ -112,8 +117,8 @@ const TREE = {
     ]},
   ],
 };
-const RIGHT = TREE.children.slice(0, 4);
-const LEFT = TREE.children.slice(4);
+const RIGHT = TREE.children.slice(0, 5);
+const LEFT = TREE.children.slice(5);
 
 /* ---------------- 版式参数 ---------------- */
 const FONT = "'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif";
