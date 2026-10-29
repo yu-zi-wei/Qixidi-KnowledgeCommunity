@@ -24,9 +24,11 @@ Gitee：https://gitee.com/yu-zi-wei/qixidi
 GitHub：https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity
 
 ### 默认账号密码（仅限本地）
+
 > 前台：123@qq.com/123456
 > 
 > 后台：admin/123456
+
 ---
 
 ## 目录结构
@@ -57,7 +59,6 @@ qixidi/
 ├── qixidi-web-nuxt3  # 门户 + 用户后台（Nuxt 3 SSR）
 │
 └── qixidi-web-admin  # 旧版管理后台（Vue 2，维护模式）
-
 ```
 
 ## 亮点特性
@@ -102,23 +103,23 @@ qixidi/
 
 ### 后端
 
-| 名称               | 版本     | 说明     |
-|------------------|--------|--------|
-| Spring Boot      | 4.0.1  | 基础框架   |
-| Spring AI        | 2.0.1  | AI 能力（对话/摘要） |
-| qixidi-mcp       | 自研模块  | MCP 端点 + API key 会话桥，AI agent 接入 |
-| Sa-Token         | 1.46.0 | 认证框架   |
-| MyBatis-Plus     | 3.5.17 | ORM 框架 |
-| Spring WebSocket | 7.0.2  | 长连接    |
-| Aliyun OSS       | 3.14.0 | 云存储    |
-| MinIO            | 8.3.8  | 对象存储   |
-| MySQL            | 8.0    | 数据库    |
-| Redis            | 6.0    | 缓存     |
+| 名称               | 版本     | 说明                               |
+| ---------------- | ------ | -------------------------------- |
+| Spring Boot      | 4.0.1  | 基础框架                             |
+| Spring AI        | 2.0.1  | AI 能力（对话/摘要）                     |
+| qixidi-mcp       | 自研模块   | MCP 端点 + API key 会话桥，AI agent 接入 |
+| Sa-Token         | 1.46.0 | 认证框架                             |
+| MyBatis-Plus     | 3.5.17 | ORM 框架                           |
+| Spring WebSocket | 7.0.2  | 长连接                              |
+| Aliyun OSS       | 3.14.0 | 云存储                              |
+| MinIO            | 8.3.8  | 对象存储                             |
+| MySQL            | 8.0    | 数据库                              |
+| Redis            | 6.0    | 缓存                               |
 
 ### 前端
 
 | 名称             | 版本   | 说明     |
-|----------------|------|--------|
+| -------------- | ---- | ------ |
 | Node.js        | v21+ | 运行环境   |
 | Nuxt           | 3.21 | SSR 框架 |
 | Vue            | 3.x  | 前端框架   |
@@ -219,7 +220,7 @@ qixidi/
 
 ## 最后
 
-问题咨询可以添加我的微信：zsh2978824265
+问题咨询可以添加我的微信（请注明来意）：zsh2978824265
 
 ![wx.png](img%2Fwx.png)
 
