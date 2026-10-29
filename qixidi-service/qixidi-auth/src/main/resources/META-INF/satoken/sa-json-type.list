@@ -4,3 +4,5 @@
 # 本项目会写入 SaSession 的自定义类型（LoginHelper.setLoginUser / setTripartiteUser）：
 com.qixidi.auth.domain.model.LoginUser
 com.qixidi.auth.domain.entity.TripartiteUser
+# LoginUser.roles 的元素类型（管理员登录链路 recordLoginInfo 自动填充回读 SaSession 时需要反序列化）
+com.light.core.core.domain.dto.RoleDTO
