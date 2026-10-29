@@ -6,6 +6,7 @@ import jakarta.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -84,8 +85,8 @@ public class WebSocketUtils {
      */
     public static void sendMessage(Session session, Object message) {
         try {
-            if (session != null && session.isOpen() && message != null) {
-                session.getAsyncRemote().sendText(JsonUtils.toJsonString(message));
+            if (session != null && message != null) {
+                sendText(session, JsonUtils.toJsonString(message));
             }
         } catch (Exception e) {
             logger.error("WebSocket发送消息失败, sessionId:{}", session != null ? session.getId() : "null", e);
@@ -128,9 +129,7 @@ public class WebSocketUtils {
         if (sessions == null || text == null) return;
         for (Session session : sessions) {
             try {
-                if (session.isOpen()) {
-                    session.getAsyncRemote().sendText(text);
-                }
+                sendText(session, text);
             } catch (Exception e) {
                 logger.error("WebSocket发送消息失败, key:{}, sessionId:{}", key, session.getId(), e);
             }
@@ -144,12 +143,26 @@ public class WebSocketUtils {
         for (Map.Entry<String, CopyOnWriteArrayList<Session>> entry : websocketMap.entrySet()) {
             for (Session session : entry.getValue()) {
                 try {
-                    if (session.isOpen()) {
-                        session.getAsyncRemote().sendText(message);
-                    }
+                    sendText(session, message);
                 } catch (Exception e) {
                     logger.error("WebSocket群发失败, key:{}, sessionId:{}", entry.getKey(), session.getId(), e);
                 }
+            }
+        }
+    }
+
+    /**
+     * 同步串行发送文本消息（全部发送路径的唯一出口）
+     * <p>
+     * 容器不允许同一 Session 并发写：getAsyncRemote 异步发送未完成时再次写入会抛
+     * IllegalStateException: The remote endpoint was in state [TEXT_FULL_WRITING]
+     * （实测：onOpen 推个人红点与其他推送并发时触发）。
+     * 统一用 basic 同步写 + 按 Session 加锁串行化；消息体小，同步阻塞可忽略。
+     */
+    private static void sendText(Session session, String text) throws IOException {
+        if (session.isOpen()) {
+            synchronized (session) {
+                session.getBasicRemote().sendText(text);
             }
         }
     }
