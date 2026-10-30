@@ -7,10 +7,10 @@
  * 侧栏 menuOptions 与 header 面包屑共用这棵树：
  * - 叶子 key 必须是路由路径（供 n-menu 高亮匹配）
  * - 父级 key 用非路由唯一标识
+ * - 一级菜单必须带子菜单（禁止纯一级叶子）；数据看板无菜单入口——首页 / 即看板页
  */
 import type { Component } from 'vue';
 import {
-  Dashboard,
   FileText,
   MessageCircle,
   Users,
@@ -32,17 +32,16 @@ export interface AdminMenuItem {
 }
 
 export const ADMIN_MENU: AdminMenuItem[] = [
-  { label: '数据看板', key: '/', icon: Dashboard },
   {
     label: '内容管理',
     key: 'content',
     icon: Folders,
     children: [
       { label: '文章管理', key: '/article', icon: FileText, perm: 'article:information:query' },
-      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' }
+      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' },
+      { label: '前台用户', key: '/user', icon: Users, perm: 'tripartiteUser:query' }
     ]
   },
-  { label: '前台用户', key: '/user', icon: Users, perm: 'tripartiteUser:query' },
   {
     label: '系统管理',
     key: 'system',
