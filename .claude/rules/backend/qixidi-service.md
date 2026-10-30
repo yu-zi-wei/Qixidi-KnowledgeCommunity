@@ -46,6 +46,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 ### Jackson 3
 
 - **属性名取字段原名**：字段首字母大写的坏命名会原样输出（Jackson 2 会兜底成小写驼峰）→ 实体字段一律小写驼峰；升级/排查时全局扫 `private\s+[\w.<>\[\],\s]+\s+[A-Z]\w*\s*;` 排雷（static/final 除外）。Lombok getter/setter 名不随字段首字母变化，改名对 Java 调用点零影响；MP 驼峰转列名 `i>0` 才加下划线，Entity 改名安全
+- **"序列化忽略 + 反序列化可注入"必须用 `@JsonProperty(access = WRITE_ONLY)` 标字段**：Jackson 2 的 getter 上 `@JsonIgnore + @JsonProperty` split 语义在 Jackson 3 失效——反序列化同样被忽略，字段静默变 null（实证 SysUser.password：建号成功但 hashpw(null) 把字面量 "null" 存库，登录必败且无任何报错）
 - `@JsonSerialize` 等 databind 注解用 `tools.jackson.databind.annotation`；`@JsonFormat/@JsonIgnore/@JsonInclude` 留在 `com.fasterxml.jackson.annotation`（两代共用，不要改）
 - 定制入口 `JsonMapperBuilderCustomizer`；自定义序列化器 `ValueSerializer<T>` / `SerializationContext`；入口类 `JsonMapper`
 - 读写不再抛受检异常，不要写 `@SneakyThrows`
@@ -130,6 +131,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 ### 数据模型事实（统计/聚合/排序前必读）
 
 - **默认 VO 已全量继承实体（2026-10-30 基线），业务字段在父类**：自定义反射/字段遍历必须沿 superclass 链收集（`getDeclaredFields` 只取当前类，父类字段静默丢失，实证月度趋势接口返回空数组）；hutool BeanUtil 走 getter 不受影响
+- **`@TableLogic` 删除值是 1 不是实体注释写的 2**：logic-delete-value 全局配置被注释走 MP 默认（0 存在/1 删除）；SysUser 等 RuoYi 实体的"0代表存在 2代表删除"注释是原版残留——手工恢复数据 `UPDATE del_flag='2'` 无效，一律 '0'/'1'
 - **`b_private_user.update_time` 是"会话最新消息时间"冗余字段**：发私信时双向两行一起刷新——私信会话列表排序直接 `ORDER BY update_time DESC`，勿关联消息表算 MAX（消息表单边存储，双向归组很重）
 - **b_browsing_history 按（uid+target）去重合并**（`ON DUPLICATE KEY UPDATE update_time`）：按天做浏览趋势必须聚合 `update_time`（聚合 create_time 会漏掉回访）
 - **详情接口（queryById）禁止用 `selectVoById` 单表查询取含 join 展示字段的 VO**：nickname/groupingName/labelNameList 等是列表 join SQL 的产物，单表查全 null；须走列表同款 `selectIndex` + `wrapper.eq("别名.id", id)` 查询（参考 ArticleInformationServiceImpl.queryById）
