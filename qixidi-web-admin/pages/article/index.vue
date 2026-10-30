@@ -1,215 +1,117 @@
 <template>
-  <div class="article-page">
-    <AdminPageHeader
-      title="文章管理"
-      description="审核社区文章内容，维护文章元信息"
-      :stats="[
-        { label: '审核中', value: pendingCount, accent: pendingCount > 0 },
-        { label: '总数', value: total }
-      ]"
-    >
-      <template #actions>
-        <n-button quaternary circle :loading="loading" @click="reload">
-          <template #icon><n-icon><Refresh /></n-icon></template>
-        </n-button>
-      </template>
-    </AdminPageHeader>
+  <AdminListPage
+    ref="listRef"
+    :search-fields="searchFields"
+    :columns="columns"
+    :fetch="getArticles"
+    row-key="id"
+    seq
+  >
+    <template #toolbar-left>
+      <n-tag size="small" :bordered="false" :type="(pendingCount ?? 0) > 0 ? 'warning' : 'default'">
+        审核中 {{ pendingCount ?? '—' }} 篇
+      </n-tag>
+    </template>
+    <template #toolbar-right>
+      <n-button quaternary size="small" :loading="pendingLoading" @click="loadPendingCount">
+        <template #icon><n-icon><Refresh /></n-icon></template>
+        刷新统计
+      </n-button>
+    </template>
+  </AdminListPage>
 
-    <n-card :bordered="false" class="table-card">
-      <div class="toolbar">
-        <n-input
-          v-model:value="keyword"
-          class="search-input"
-          round
-          clearable
-          placeholder="搜索文章标题"
-          @keyup.enter="handleSearch"
-          @clear="handleSearch"
-        >
-          <template #prefix><n-icon :component="Search" /></template>
-        </n-input>
-
-        <n-radio-group v-model:value="auditFilter" size="small" @update:value="handleSearch">
-          <n-radio-button v-for="o in auditOptions" :key="o.value ?? 'all'" :value="o.value ?? null" :label="o.label" />
-        </n-radio-group>
-      </div>
-
-      <n-spin :show="loading">
-        <n-empty v-if="!rows.length && !loading" description="暂无文章" class="list-empty" />
-        <div v-else class="admin-row-list">
-          <AdminRowCard v-for="row in rows" :key="row.id">
-            <template #media>
-              <AdminAvatar :src="row.articleCover" :name="row.articleTitle" :size="[72, 48]" shape="square" />
-            </template>
-
-            <div class="art-title-line">
-              <span class="art-title">{{ row.articleTitle }}</span>
-              <n-tag size="tiny" :bordered="false" :type="row.type === 2 ? 'warning' : 'default'">
-                {{ row.type === 2 ? '转载' : '原创' }}
-              </n-tag>
+  <!-- 文章详情抽屉：teleport 组件宽度必须 inline style -->
+  <n-drawer v-model:show="detailVisible" :width="520" placement="right">
+    <n-drawer-content :title="detail?.articleTitle || '文章详情'" closable>
+      <n-spin :show="detailLoading">
+        <div v-if="detail" class="detail-body">
+          <div class="detail-meta">
+            <div class="meta-row"><span class="meta-label">作者</span><span>{{ detail.nickname || detail.username || '—' }}</span></div>
+            <div class="meta-row"><span class="meta-label">分类</span><span>{{ detail.groupingName || '—' }}</span></div>
+            <div class="meta-row">
+              <span class="meta-label">标签</span>
+              <span>
+                <n-tag v-for="t in detail.labelNameList || []" :key="t" size="small" :bordered="false" class="detail-tag">{{ t }}</n-tag>
+                <span v-if="!detail.labelNameList?.length">—</span>
+              </span>
             </div>
-            <p class="art-abstract">{{ row.articleAbstract || '（无摘要）' }}</p>
-            <div class="row-meta">
-              <AdminAvatar :src="row.avatar" :name="row.nickname || row.username" :size="18" />
-              <span>{{ row.nickname || row.username || '—' }}</span>
-              <span class="row-meta-dot">·</span>
-              <span>{{ row.groupingName || '未分类' }}</span>
-              <n-tag v-for="t in (row.labelNameList || []).slice(0, 3)" :key="t" size="tiny" :bordered="false">{{ t }}</n-tag>
-              <span v-if="(row.labelNameList || []).length > 3" class="row-meta-dot">+{{ row.labelNameList!.length - 3 }}</span>
-              <span class="row-meta-dot">·</span>
-              <span>{{ getFullDateTime(row.createTime) }}</span>
-            </div>
-
-            <template #side>
-              <div class="art-side-top">
-                <span class="art-stat">{{ row.numberTimes ?? 0 }} 浏览</span>
-                <span class="art-stat">{{ row.likeTimes ?? 0 }} 赞</span>
-                <span class="art-stat">{{ row.commentTimes ?? 0 }} 评</span>
-                <AdminStateTag :value="row.auditState" :map="AUDIT_STATE_MAP" />
-              </div>
-              <div class="cell-actions">
-                <n-button size="tiny" quaternary @click="openDetail(row)">
-                  <template #icon><n-icon><Eye /></n-icon></template>
-                  详情
-                </n-button>
-                <template v-if="row.auditState === 1">
-                  <n-button size="tiny" quaternary type="success" :loading="auditingId === row.id" @click="doAudit(row, 2)">
-                    <template #icon><n-icon><Check /></n-icon></template>
-                    通过
-                  </n-button>
-                  <n-button size="tiny" quaternary type="error" :loading="auditingId === row.id" @click="doAudit(row, 3)">
-                    <template #icon><n-icon><X /></n-icon></template>
-                    拒绝
-                  </n-button>
-                </template>
-              </div>
-            </template>
-          </AdminRowCard>
+            <div class="meta-row"><span class="meta-label">审核状态</span><AdminStateTag :value="detail.auditState" :map="AUDIT_STATE_MAP" /></div>
+            <div class="meta-row"><span class="meta-label">发布时间</span><span>{{ getFullDateTime(detail.createTime) || '—' }}</span></div>
+            <div class="meta-row"><span class="meta-label">数据</span><span>{{ detail.numberTimes ?? 0 }} 浏览 · {{ detail.likeTimes ?? 0 }} 赞 · {{ detail.commentTimes ?? 0 }} 评论</span></div>
+            <div v-if="detail.reprintUrl" class="meta-row"><span class="meta-label">转载自</span><span class="reprint-url">{{ detail.reprintUrl }}</span></div>
+          </div>
+          <n-divider>摘要</n-divider>
+          <p class="detail-abstract">{{ detail.articleAbstract || '（无摘要）' }}</p>
         </div>
       </n-spin>
-
-      <div v-if="total" class="list-footer">
-        <span class="list-total">共 {{ total }} 篇</span>
-        <n-pagination
-          :page="pageNum"
-          :page-size="pageSize"
-          :item-count="total"
-          :page-sizes="[10, 20, 50]"
-          show-size-picker
-          @update:page="onPageChange"
-          @update:page-size="onPageSizeChange"
-        />
-      </div>
-    </n-card>
-
-    <!-- 文章详情抽屉：teleport 组件宽度必须 inline style -->
-    <n-drawer v-model:show="detailVisible" :width="520" placement="right">
-      <n-drawer-content :title="detail?.articleTitle || '文章详情'" closable>
-        <n-spin :show="detailLoading">
-          <div v-if="detail" class="detail-body">
-            <div class="detail-meta">
-              <div class="meta-row"><span class="meta-label">作者</span><span>{{ detail.nickname || detail.username || '—' }}</span></div>
-              <div class="meta-row"><span class="meta-label">分类</span><span>{{ detail.groupingName || '—' }}</span></div>
-              <div class="meta-row">
-                <span class="meta-label">标签</span>
-                <span>
-                  <n-tag v-for="t in detail.labelNameList || []" :key="t" size="small" :bordered="false" class="detail-tag">{{ t }}</n-tag>
-                  <span v-if="!detail.labelNameList?.length">—</span>
-                </span>
-              </div>
-              <div class="meta-row"><span class="meta-label">审核状态</span><AdminStateTag :value="detail.auditState" :map="AUDIT_STATE_MAP" /></div>
-              <div class="meta-row"><span class="meta-label">发布时间</span><span>{{ getFullDateTime(detail.createTime) || '—' }}</span></div>
-              <div class="meta-row"><span class="meta-label">数据</span><span>{{ detail.numberTimes ?? 0 }} 浏览 · {{ detail.likeTimes ?? 0 }} 赞 · {{ detail.commentTimes ?? 0 }} 评论</span></div>
-              <div v-if="detail.reprintUrl" class="meta-row"><span class="meta-label">转载自</span><span class="reprint-url">{{ detail.reprintUrl }}</span></div>
-            </div>
-            <n-divider>摘要</n-divider>
-            <p class="detail-abstract">{{ detail.articleAbstract || '（无摘要）' }}</p>
-          </div>
-        </n-spin>
-      </n-drawer-content>
-    </n-drawer>
-  </div>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <script setup lang="ts">
-import { Check, Eye, Refresh, Search, X } from '@vicons/tabler';
+import { h } from 'vue';
+import { NButton, NTag } from 'naive-ui';
+import type { DataTableColumns } from 'naive-ui';
+import { Refresh } from '@vicons/tabler';
 import AdminAvatar from '~/components/AdminAvatar.vue';
-import AdminPageHeader from '~/components/AdminPageHeader.vue';
-import AdminRowCard from '~/components/AdminRowCard.vue';
+import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
-import { AUDIT_STATE_MAP, useArticleAdminApi, type ArticleRow } from '~/composables/useArticleAdminApi';
+import { AUDIT_STATE_MAP, useArticleAdminApi, type ArticleRow, type GroupingRow } from '~/composables/useArticleAdminApi';
 import { getFullDateTime } from '~/utils/format';
 
 definePageMeta({ layout: 'default' });
 
 const message = useMessage();
-const { getArticles, getArticle, updateArticle } = useArticleAdminApi();
+const { getArticles, getGroupings, getArticle, updateArticle } = useArticleAdminApi();
 
-const rows = ref<ArticleRow[]>([]);
-const loading = ref(false);
-const total = ref(0);
-const pendingCount = ref<number | null>(null);
+// ---------- 搜索条件 ----------
+const groupingOptions = ref<Array<{ label: string; value: number }>>([]);
 
-const keyword = ref('');
-const auditFilter = ref<number | null>(null);
-const auditOptions: Array<{ label: string; value: number | null }> = [
-  { label: '全部', value: null },
-  { label: '审核中', value: 1 },
-  { label: '已通过', value: 2 },
-  { label: '未通过', value: 3 },
-  { label: '草稿', value: 4 }
-];
+const searchFields = computed<AdminSearchField[]>(() => [
+  { key: 'articleTitle', label: '文章标题', type: 'input', placeholder: '请输入文章标题', width: 220 },
+  { key: 'nickname', label: '作者', type: 'input', placeholder: '请输入作者昵称', width: 160 },
+  { key: 'type', label: '类型', type: 'select', width: 110, options: [
+    { label: '原创', value: 1 },
+    { label: '转载', value: 2 }
+  ] },
+  { key: 'groupingId', label: '分类', type: 'select', width: 130, placeholder: '全部分类', options: groupingOptions.value },
+  { key: 'auditStates', label: '审核状态', type: 'checkbox', options: [
+    { label: '审核中', value: 1 },
+    { label: '已通过', value: 2 },
+    { label: '未通过', value: 3 },
+    { label: '草稿', value: 4 }
+  ] }
+]);
 
-const pageNum = ref(1);
-const pageSize = ref(20);
-
-const loadList = async () => {
-  loading.value = true;
+onMounted(async () => {
   try {
-    const params: Record<string, any> = { pageNum: pageNum.value, pageSize: pageSize.value };
-    if (keyword.value.trim()) params.articleTitle = keyword.value.trim();
-    if (auditFilter.value !== null) params.auditState = auditFilter.value;
-    const res = await getArticles(params);
-    rows.value = res.rows || [];
-    total.value = res.total || 0;
-  } finally {
-    loading.value = false;
+    const res = await getGroupings();
+    groupingOptions.value = (res.rows || []).map((g: GroupingRow) => ({ label: g.groupingName, value: g.id }));
+  } catch {
+    /* useApi 已统一弹错，下拉留空即可 */
   }
-};
+  loadPendingCount();
+});
 
-/** 待审核数（轻查询：auditState=1 取 total） */
+// ---------- 待审核统计（轻查询） ----------
+const pendingCount = ref<number | null>(null);
+const pendingLoading = ref(false);
 const loadPendingCount = async () => {
+  pendingLoading.value = true;
   try {
     const res = await getArticles({ pageNum: 1, pageSize: 1, auditState: 1 });
     pendingCount.value = res.total || 0;
   } catch {
     pendingCount.value = null;
+  } finally {
+    pendingLoading.value = false;
   }
 };
 
-const handleSearch = () => {
-  pageNum.value = 1;
-  loadList();
-};
-
-const reload = () => {
-  loadList();
-  loadPendingCount();
-};
-
-const onPageChange = (page: number) => {
-  pageNum.value = page;
-  loadList();
-};
-
-const onPageSizeChange = (size: number) => {
-  pageSize.value = size;
-  pageNum.value = 1;
-  loadList();
-};
-
-/** 审核动作：EditGroup 必填字段需齐全，行内缺 content 时先取详情 */
+// ---------- 审核动作（EditGroup 必填字段需齐全，行内缺 content 时先取详情） ----------
+const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
 const auditingId = ref<number | null>(null);
+
 const doAudit = async (row: ArticleRow, auditState: number) => {
   auditingId.value = row.id;
   try {
@@ -220,7 +122,8 @@ const doAudit = async (row: ArticleRow, auditState: number) => {
     }
     await updateArticle({ ...payload, auditState });
     message.success(auditState === 2 ? '已通过审核' : '已拒绝');
-    reload();
+    await listRef.value?.refresh();
+    loadPendingCount();
   } catch {
     /* useApi 已统一弹错 */
   } finally {
@@ -228,7 +131,7 @@ const doAudit = async (row: ArticleRow, auditState: number) => {
   }
 };
 
-/** 详情抽屉 */
+// ---------- 详情抽屉 ----------
 const detailVisible = ref(false);
 const detailLoading = ref(false);
 const detail = ref<ArticleRow | null>(null);
@@ -244,70 +147,89 @@ const openDetail = async (row: ArticleRow) => {
   }
 };
 
-onMounted(() => {
-  reload();
-});
+// ---------- 表格列（render 元素样式走全局类/内聚组件，scoped 选不中） ----------
+const columns: DataTableColumns<ArticleRow> = [
+  {
+    title: '文章',
+    key: 'articleTitle',
+    minWidth: 300,
+    render: (row) =>
+      h('div', { class: 'cell-article' }, [
+        h(AdminAvatar, { src: row.articleCover, name: row.articleTitle, size: [48, 36], shape: 'square' }),
+        h('div', { class: 'cell-article-main' }, [
+          h('div', { class: 'cell-article-title' }, [
+            h('span', { class: 'cell-article-name' }, row.articleTitle),
+            h(NTag, { size: 'tiny', bordered: false, type: row.type === 2 ? 'warning' : 'default' }, { default: () => (row.type === 2 ? '转载' : '原创') })
+          ]),
+          h('div', { class: 'cell-article-abstract' }, row.articleAbstract || '（无摘要）')
+        ])
+      ])
+  },
+  {
+    title: '作者',
+    key: 'nickname',
+    width: 130,
+    render: (row) =>
+      h('div', { class: 'cell-author' }, [
+        h(AdminAvatar, { src: row.avatar, name: row.nickname || row.username, size: 24 }),
+        h('span', { class: 'cell-author-name' }, row.nickname || row.username || '—')
+      ])
+  },
+  {
+    title: '分类',
+    key: 'groupingName',
+    width: 110,
+    ellipsis: { tooltip: true },
+    render: (row) => row.groupingName || h('span', { class: 'cell-dim' }, '未分类')
+  },
+  {
+    title: '浏览 / 赞 / 评',
+    key: 'numberTimes',
+    width: 130,
+    render: (row) =>
+      h('span', { class: 'cell-stats' }, `${row.numberTimes ?? 0} / ${row.likeTimes ?? 0} / ${row.commentTimes ?? 0}`)
+  },
+  {
+    title: '审核状态',
+    key: 'auditState',
+    width: 100,
+    render: (row) => h(AdminStateTag, { value: row.auditState, map: AUDIT_STATE_MAP })
+  },
+  {
+    title: '发布时间',
+    key: 'createTime',
+    width: 150,
+    render: (row) => h('span', { class: 'cell-dim' }, getFullDateTime(row.createTime) || '—')
+  },
+  {
+    // 操作列按参考图用纯文字链接（带图标时 3 按钮约 160px+，超出列宽会被截断）
+    title: '操作',
+    key: 'actions',
+    width: 150,
+    align: 'center',
+    render: (row) =>
+      h('div', { class: 'cell-btns' }, [
+        h(NButton, { size: 'small', text: true, type: 'primary', onClick: () => openDetail(row) }, { default: () => '详情' }),
+        ...(row.auditState === 1
+          ? [
+              h(
+                NButton,
+                { size: 'small', text: true, type: 'success', loading: auditingId.value === row.id, onClick: () => doAudit(row, 2) },
+                { default: () => '通过' }
+              ),
+              h(
+                NButton,
+                { size: 'small', text: true, type: 'error', loading: auditingId.value === row.id, onClick: () => doAudit(row, 3) },
+                { default: () => '拒绝' }
+              )
+            ]
+          : [])
+      ])
+  }
+];
 </script>
 
 <style scoped lang="scss">
-.table-card {
-  border-radius: 10px;
-}
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.search-input {
-  width: 260px;
-}
-
-.list-empty {
-  padding: 48px 0;
-}
-
-.art-title-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.art-title {
-  font-size: 14px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.art-abstract {
-  margin: 0;
-  font-size: 12.5px;
-  line-height: 1.5;
-  opacity: 0.55;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.art-side-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.art-stat {
-  font-size: 12px;
-  opacity: 0.6;
-  font-variant-numeric: tabular-nums;
-}
-
 .detail-body {
   .detail-meta {
     display: flex;

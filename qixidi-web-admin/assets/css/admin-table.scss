@@ -66,3 +66,77 @@
   overflow: hidden;
 }
 
+// ===== 表格富单元格（列 render 内元素，页面 scoped 选不中，样式只能全局） =====
+
+// 文章列：封面缩略 + 标题（含类型 tag）+ 摘要
+.cell-article {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 6px 0;
+
+  .cell-article-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cell-article-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .cell-article-name {
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cell-article-abstract {
+    font-size: 12px;
+    line-height: 1.4;
+    opacity: 0.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// 作者列：小头像 + 昵称
+.cell-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  .cell-author-name {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// 数据列（浏览/赞/评 等弱化数字）
+.cell-stats {
+  font-size: 12.5px;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+// 操作列：文字链接按钮组（紧凑排布）
+.cell-btns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+

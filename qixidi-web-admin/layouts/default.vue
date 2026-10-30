@@ -25,7 +25,7 @@
 
     <n-layout>
       <n-layout-header bordered class="header flex items-center justify-between px-5" :style="{ height: '56px' }">
-        <div class="text-sm opacity-60">qixidi · 管理后台</div>
+        <AdminBreadcrumb />
         <n-space align="center">
           <n-button quaternary circle @click="toggleTheme">
             <template #icon>
@@ -52,18 +52,8 @@ import { h } from 'vue';
 import type { MenuOption } from 'naive-ui';
 import { darkTheme, NIcon } from 'naive-ui';
 import type { GlobalTheme } from 'naive-ui';
-import {
-  Dashboard,
-  FileText,
-  MessageCircle,
-  Users,
-  Settings,
-  Adjustments,
-  Folders,
-  MoonStars,
-  Sun,
-  Logout
-} from '@vicons/tabler';
+import { MoonStars, Sun, Logout } from '@vicons/tabler';
+import { ADMIN_MENU } from '~/composables/useAdminMenu';
 
 const collapsed = ref(false);
 const route = useRoute();
@@ -82,26 +72,14 @@ const toggleTheme = () => {
 const renderIcon = (icon: Component) => () =>
   h(NIcon, null, { default: () => h(icon) });
 
-// 层级菜单：叶子 key 用路由（供 :value 高亮匹配），父级 key 用唯一非路由标识
-const menuOptions: MenuOption[] = [
-  { label: '数据看板', key: '/', icon: renderIcon(Dashboard) },
-  {
-    label: '内容管理',
-    key: 'content',
-    icon: renderIcon(Folders),
-    children: [
-      { label: '文章管理', key: '/article', icon: renderIcon(FileText) },
-      { label: '评论管理', key: '/comment', icon: renderIcon(MessageCircle) }
-    ]
-  },
-  { label: '前台用户', key: '/user', icon: renderIcon(Users) },
-  {
-    label: '系统管理',
-    key: 'system',
-    icon: renderIcon(Settings),
-    children: [{ label: '系统设置', key: '/setting', icon: renderIcon(Adjustments) }]
-  }
-];
+// 菜单树来自 useAdminMenu（与面包屑同一数据源），这里只做 n-menu 形态转换
+const toMenuOption = (item: (typeof ADMIN_MENU)[number]): MenuOption => ({
+  label: item.label,
+  key: item.key,
+  icon: item.icon ? renderIcon(item.icon) : undefined,
+  children: item.children?.map(toMenuOption)
+});
+const menuOptions: MenuOption[] = ADMIN_MENU.map(toMenuOption);
 
 const activeMenu = computed(() => route.path);
 

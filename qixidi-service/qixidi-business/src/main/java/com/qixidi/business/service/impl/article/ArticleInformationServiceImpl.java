@@ -149,6 +149,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         lqw.eq(bo.getGroupingId() != null, "ai.grouping_id", bo.getGroupingId());
         lqw.eq(bo.getType() != null, "ai.type", bo.getType());
         lqw.eq(bo.getAuditState() != null, "ai.audit_state", bo.getAuditState());
+        lqw.in(CollectionUtils.isNotEmpty(bo.getAuditStates()), "ai.audit_state", bo.getAuditStates());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
                 "ai.create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
         lqw.orderByDesc("ai.create_time");

@@ -46,6 +46,13 @@ export const AUDIT_STATE_MAP: Record<number, { label: string; type: 'warning' | 
   4: { label: '草稿', type: 'default' }
 };
 
+/** 分类行（LabelGroupingInfoVo 字段子集） */
+export interface GroupingRow {
+  id: number;
+  groupingName: string;
+  state?: number;
+}
+
 export const useArticleAdminApi = () => {
   const api = useApi();
 
@@ -53,6 +60,10 @@ export const useArticleAdminApi = () => {
     /** 分页列表：GET /system/article/information/list */
     getArticles: (params: Record<string, any>) =>
       api.getPage<ArticleRow>('/system/article/information/list', params),
+
+    /** 分类全量（pageSize=100 拉取，供搜索下拉）：GET /system/groupingInfo/list */
+    getGroupings: () =>
+      api.getPage<GroupingRow>('/system/groupingInfo/list', { pageNum: 1, pageSize: 100 }),
 
     /** 详情：GET /system/article/information/{id} */
     getArticle: (id: number | string) => api.get<ArticleRow>(`/system/article/information/${id}`),
