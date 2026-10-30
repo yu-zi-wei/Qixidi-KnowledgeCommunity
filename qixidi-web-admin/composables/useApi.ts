@@ -74,11 +74,12 @@ export const useApi = () => {
   };
 
   const postPage = <T = any>(url: string, data?: Record<string, any>) => {
-    return request<PageResult<T>>(url, { method: 'POST', body: data });
+    // 无参调用也发 {} body：@RequestBody 必填，body 缺失后端报 Required request body is missing
+    return request<PageResult<T>>(url, { method: 'POST', body: data ?? {} });
   };
 
   const post = async <T = any>(url: string, data?: any) => {
-    const res = await request<R<T>>(url, { method: 'POST', body: data });
+    const res = await request<R<T>>(url, { method: 'POST', body: data ?? {} });
     return res.data;
   };
 
