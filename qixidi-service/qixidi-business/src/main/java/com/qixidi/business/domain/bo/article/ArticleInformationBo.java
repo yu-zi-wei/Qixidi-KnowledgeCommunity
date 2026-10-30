@@ -120,6 +120,16 @@ public class ArticleInformationBo extends BaseEntity {
     private List<Integer> auditStates;
 
     /**
+     * 文章类型多选（后台列表筛选，in 查询）
+     */
+    private List<Integer> types;
+
+    /**
+     * 分类 id 多选（后台列表筛选，in 查询）
+     */
+    private List<Long> groupingIds;
+
+    /**
      * 审核时间
      */
     private Date auditTime;

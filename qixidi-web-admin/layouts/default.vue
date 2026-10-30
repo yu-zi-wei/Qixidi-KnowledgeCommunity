@@ -40,7 +40,8 @@
         </n-space>
       </n-layout-header>
 
-      <n-layout-content content-style="padding: 20px;" class="content">
+      <!-- 内容区底色：浅灰衬托白卡片（dark 下用主题暗底，卡片色由 n-card 随主题自带） -->
+      <n-layout-content content-style="padding: 20px;" class="content" :style="{ background: isDark ? '#101014' : '#f5f6f8' }">
         <slot />
       </n-layout-content>
     </n-layout>

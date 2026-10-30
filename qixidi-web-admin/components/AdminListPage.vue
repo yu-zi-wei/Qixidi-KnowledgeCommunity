@@ -1,41 +1,31 @@
 <template>
   <div class="admin-list-page">
-    <!-- 搜索卡片：多条件 + 查询/重置按钮 -->
-    <n-card :bordered="false" class="alp-search-card">
+    <!-- 搜索卡片：多条件 + 查询/重置按钮（白底+细边框，衬在内容区浅灰底上） -->
+    <n-card class="alp-search-card">
       <div class="alp-search-form">
-        <template v-for="f in searchFields" :key="f.key">
-          <!-- 平铺多选框（状态筛选等） -->
-          <div v-if="f.type === 'checkbox'" class="alp-field alp-field--check">
-            <span class="alp-field-label">{{ f.label }}</span>
-            <n-checkbox-group v-model:value="formModel[f.key]">
-              <n-space :size="14" :wrap="false">
-                <n-checkbox v-for="o in f.options || []" :key="String(o.value)" :value="o.value" :label="o.label" />
-              </n-space>
-            </n-checkbox-group>
-          </div>
-
+        <!-- 字段统一「label + 控件」结构（参考图样式），下拉可配多选 -->
+        <div v-for="f in searchFields" :key="f.key" class="alp-field">
+          <span class="alp-field-label">{{ f.label }}</span>
           <n-input
-            v-else-if="f.type === 'input'"
+            v-if="f.type === 'input'"
             v-model:value="formModel[f.key]"
-            class="alp-field"
             :style="{ width: fieldWidth(f) }"
             clearable
             :placeholder="f.placeholder || `请输入${f.label}`"
             @keyup.enter="doSearch"
           />
-
           <n-select
             v-else
             v-model:value="formModel[f.key]"
-            class="alp-field"
             :style="{ width: fieldWidth(f) }"
             clearable
             :multiple="f.type === 'multiple'"
+            :max-tag-count="f.type === 'multiple' ? 'responsive' : undefined"
             :options="f.options || []"
             :placeholder="f.placeholder || `请选择${f.label}`"
             @keyup.enter="doSearch"
           />
-        </template>
+        </div>
 
         <div class="alp-search-actions">
           <n-button @click="resetSearch">重置</n-button>
@@ -48,7 +38,7 @@
     </n-card>
 
     <!-- 列表卡片：撑满剩余高度，滚动只发生在表格内部 -->
-    <n-card :bordered="false" class="alp-list-card" :content-style="LIST_CONTENT_STYLE">
+    <n-card class="alp-list-card" :content-style="LIST_CONTENT_STYLE">
       <div v-if="$slots['toolbar-left'] || $slots['toolbar-right']" class="alp-toolbar">
         <div class="alp-toolbar-left"><slot name="toolbar-left" /></div>
         <div class="alp-toolbar-right"><slot name="toolbar-right" /></div>
@@ -94,10 +84,11 @@ export interface AdminSearchField {
   /** 查询参数名（原样并入 fetch 参数） */
   key: string;
   label: string;
-  type: 'input' | 'select' | 'multiple' | 'checkbox';
+  /** input 输入框 / select 单选下拉 / multiple 多选下拉（GET 数组 key=a&key=b） */
+  type: 'input' | 'select' | 'multiple';
   options?: AdminSearchOption[];
   placeholder?: string;
-  /** 控件宽度（checkbox 组无效，自适应） */
+  /** 控件宽度（label 之外的部分）；不配则统一默认宽 160px */
   width?: number | string;
   defaultValue?: unknown;
 }
@@ -138,8 +129,8 @@ const props = withDefaults(
     selectable: false,
     seq: false,
     scrollX: undefined,
-    pageSizes: () => [10, 20, 50],
-    defaultPageSize: 20,
+    pageSizes: () => [50, 100, 200],
+    defaultPageSize: 50,
     immediate: true
   }
 );
@@ -152,10 +143,12 @@ const checkedKeys = defineModel<Array<string | number>>('checkedKeys', { default
 
 // ---------- 搜索表单 ----------
 const formModel = reactive<Record<string, any>>(
-  Object.fromEntries(props.searchFields.map((f) => [f.key, f.defaultValue ?? (f.type === 'multiple' || f.type === 'checkbox' ? [] : null)]))
+  Object.fromEntries(props.searchFields.map((f) => [f.key, f.defaultValue ?? (f.type === 'multiple' ? [] : null)]))
 );
 
-const fieldWidth = (f: AdminSearchField) => (typeof f.width === 'number' ? `${f.width}px` : f.width);
+/** 控件统一默认宽度（不配 width 即等宽，需差异化时才在字段配置里覆盖） */
+const DEFAULT_FIELD_WIDTH = '160px';
+const fieldWidth = (f: AdminSearchField) => (typeof f.width === 'number' ? `${f.width}px` : f.width || DEFAULT_FIELD_WIDTH);
 
 /** 查询条件快照：翻页沿用最近一次查询的值，输入框实时变化不影响已出结果 */
 let querySnapshot: Record<string, any> = {};
@@ -196,7 +189,7 @@ const doSearch = () => {
 
 const resetSearch = () => {
   for (const f of props.searchFields) {
-    formModel[f.key] = f.defaultValue ?? (f.type === 'multiple' || f.type === 'checkbox' ? [] : null);
+    formModel[f.key] = f.defaultValue ?? (f.type === 'multiple' ? [] : null);
   }
   doSearch();
 };
@@ -270,14 +263,12 @@ defineExpose({
   gap: 14px 16px;
 }
 
+/* 搜索字段：label 在前、控件在后（参考图样式） */
 .alp-field {
-  flex-shrink: 0;
-}
-
-.alp-field--check {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
   min-width: 0;
 }
 

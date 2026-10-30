@@ -12,12 +12,6 @@
         审核中 {{ pendingCount ?? '—' }} 篇
       </n-tag>
     </template>
-    <template #toolbar-right>
-      <n-button quaternary size="small" :loading="pendingLoading" @click="loadPendingCount">
-        <template #icon><n-icon><Refresh /></n-icon></template>
-        刷新统计
-      </n-button>
-    </template>
   </AdminListPage>
 
   <!-- 文章详情抽屉：teleport 组件宽度必须 inline style -->
@@ -37,6 +31,13 @@
             </div>
             <div class="meta-row"><span class="meta-label">审核状态</span><AdminStateTag :value="detail.auditState" :map="AUDIT_STATE_MAP" /></div>
             <div class="meta-row"><span class="meta-label">发布时间</span><span>{{ getFullDateTime(detail.createTime) || '—' }}</span></div>
+            <div class="meta-row">
+              <span class="meta-label">前台地址</span>
+              <n-button v-if="frontUrl" text type="primary" tag="a" :href="frontUrl" target="_blank" class="detail-front-url">
+                {{ frontUrl }}
+              </n-button>
+              <span v-else>—</span>
+            </div>
             <div class="meta-row"><span class="meta-label">数据</span><span>{{ detail.numberTimes ?? 0 }} 浏览 · {{ detail.likeTimes ?? 0 }} 赞 · {{ detail.commentTimes ?? 0 }} 评论</span></div>
             <div v-if="detail.reprintUrl" class="meta-row"><span class="meta-label">转载自</span><span class="reprint-url">{{ detail.reprintUrl }}</span></div>
           </div>
@@ -52,7 +53,6 @@
 import { h } from 'vue';
 import { NButton, NTag } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
-import { Refresh } from '@vicons/tabler';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
@@ -68,14 +68,14 @@ const { getArticles, getGroupings, getArticle, updateArticle } = useArticleAdmin
 const groupingOptions = ref<Array<{ label: string; value: number }>>([]);
 
 const searchFields = computed<AdminSearchField[]>(() => [
-  { key: 'articleTitle', label: '文章标题', type: 'input', placeholder: '请输入文章标题', width: 220 },
-  { key: 'nickname', label: '作者', type: 'input', placeholder: '请输入作者昵称', width: 160 },
-  { key: 'type', label: '类型', type: 'select', width: 110, options: [
+  { key: 'articleTitle', label: '文章标题', type: 'input', placeholder: '请输入文章标题' },
+  { key: 'nickname', label: '作者', type: 'input', placeholder: '请输入作者昵称' },
+  { key: 'types', label: '类型', type: 'multiple', options: [
     { label: '原创', value: 1 },
     { label: '转载', value: 2 }
   ] },
-  { key: 'groupingId', label: '分类', type: 'select', width: 130, placeholder: '全部分类', options: groupingOptions.value },
-  { key: 'auditStates', label: '审核状态', type: 'checkbox', options: [
+  { key: 'groupingIds', label: '分类', type: 'multiple', placeholder: '请选择分类', options: groupingOptions.value },
+  { key: 'auditStates', label: '审核状态', type: 'multiple', options: [
     { label: '审核中', value: 1 },
     { label: '已通过', value: 2 },
     { label: '未通过', value: 3 },
@@ -95,16 +95,12 @@ onMounted(async () => {
 
 // ---------- 待审核统计（轻查询） ----------
 const pendingCount = ref<number | null>(null);
-const pendingLoading = ref(false);
 const loadPendingCount = async () => {
-  pendingLoading.value = true;
   try {
     const res = await getArticles({ pageNum: 1, pageSize: 1, auditState: 1 });
     pendingCount.value = res.total || 0;
   } catch {
     pendingCount.value = null;
-  } finally {
-    pendingLoading.value = false;
   }
 };
 
@@ -131,17 +127,21 @@ const doAudit = async (row: ArticleRow, auditState: number) => {
   }
 };
 
-// ---------- 详情抽屉 ----------
+// ---------- 详情抽屉（一律调详情接口，禁止拿列表行数据展示） ----------
+const FRONT_ARTICLE_BASE = 'https://qixidi.top/articles';
+
 const detailVisible = ref(false);
 const detailLoading = ref(false);
 const detail = ref<ArticleRow | null>(null);
+const frontUrl = computed(() => (detail.value?.id != null ? `${FRONT_ARTICLE_BASE}/${detail.value.id}` : ''));
 const openDetail = async (row: ArticleRow) => {
   detailVisible.value = true;
   detailLoading.value = true;
+  detail.value = null; // 先清空，避免残留上一篇文章内容
   try {
     detail.value = await getArticle(row.id);
   } catch {
-    detail.value = row;
+    detail.value = null; // useApi 已弹错，失败留空态，不回退列表数据
   } finally {
     detailLoading.value = false;
   }
@@ -257,6 +257,14 @@ const columns: DataTableColumns<ArticleRow> = [
   .reprint-url {
     word-break: break-all;
     opacity: 0.7;
+  }
+
+  .detail-front-url {
+    font-size: 13px;
+    word-break: break-all;
+    text-align: left;
+    padding: 0;
+    height: auto;
   }
 
   .detail-abstract {

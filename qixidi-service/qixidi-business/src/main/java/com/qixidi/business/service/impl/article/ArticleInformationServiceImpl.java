@@ -123,7 +123,39 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      */
     @Override
     public ArticleInformationVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
+        // 走列表同款 join SQL：selectVoById 单表查询取不到作者/分类/头像等关联展示字段
+        QueryWrapper<ArticleInformation> wrapper = Wrappers.query();
+        wrapper.eq("ai.id", id);
+        List<ArticleInformationVo> records = baseMapper.selectIndex(new Page<>(1, 1), wrapper).getRecords();
+        if (records.isEmpty()) {
+            return null;
+        }
+        fillLabelNames(records);
+        return records.get(0);
+    }
+
+    /**
+     * 标签 id 串（逗号分隔）转标签名列表，填充 labelNameList
+     */
+    private void fillLabelNames(List<ArticleInformationVo> records) {
+        if (records.isEmpty()) {
+            return;
+        }
+        Map<String, String> labelMap = labelInfoMapper.selectSimpleList().stream()
+                .collect(Collectors.toMap(item -> item.getId().toString(), LabelInfoVo::getLabelName));
+        for (ArticleInformationVo item : records) {
+            if (StringUtils.isBlank(item.getLabelId())) {
+                continue;
+            }
+            List<String> names = new ArrayList<>();
+            for (String s : item.getLabelId().split(",")) {
+                String name = labelMap.get(s);
+                if (name != null) {
+                    names.add(name);
+                }
+            }
+            item.setLabelNameList(names);
+        }
     }
 
 
@@ -147,7 +179,9 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         lqw.like(StringUtils.isNotBlank(bo.getArticleTitle()), "ai.article_title", bo.getArticleTitle());
         lqw.like(StringUtils.isNotBlank(bo.getLabelId()), "ai.label_id", bo.getLabelId());
         lqw.eq(bo.getGroupingId() != null, "ai.grouping_id", bo.getGroupingId());
+        lqw.in(CollectionUtils.isNotEmpty(bo.getGroupingIds()), "ai.grouping_id", bo.getGroupingIds());
         lqw.eq(bo.getType() != null, "ai.type", bo.getType());
+        lqw.in(CollectionUtils.isNotEmpty(bo.getTypes()), "ai.type", bo.getTypes());
         lqw.eq(bo.getAuditState() != null, "ai.audit_state", bo.getAuditState());
         lqw.in(CollectionUtils.isNotEmpty(bo.getAuditStates()), "ai.audit_state", bo.getAuditStates());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
@@ -353,21 +387,8 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public TableDataInfo<ArticleInformationVo> index(ArticleInformationBo bo, PageQuery pageQuery) {
         QueryWrapper<ArticleInformation> wrapper = buildQueryWrapper(bo);
-        List<LabelInfoVo> list = labelInfoMapper.selectSimpleList();
         IPage<ArticleInformationVo> index = baseMapper.selectIndex(pageQuery.build(), wrapper);
-        Map<String, String> labelMap = list.stream().collect(Collectors.toMap(item -> item.getId().toString(), LabelInfoVo::getLabelName));
-        index.getRecords().forEach(item -> {
-            if (StringUtils.isNotBlank(item.getLabelId())) {
-                List<String> list1 = new ArrayList();
-                String[] split = item.getLabelId().split(",");
-                for (String s : split) {
-                    if (labelMap.get(s) != null) {
-                        list1.add(labelMap.get(s));
-                    }
-                }
-                item.setLabelNameList(list1);
-            }
-        });
+        fillLabelNames(index.getRecords());
         enrichWithRealTimeCounts(index.getRecords());
         return TableDataInfo.build(index);
     }
