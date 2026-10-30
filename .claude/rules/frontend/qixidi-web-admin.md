@@ -48,7 +48,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **查询快照机制**：点「查询」才取条件快照，翻页沿用快照——输入框实时变化不影响已出结果；页面无需自建任何分页/条件状态
 - **分页默认 50/页**，pageSizes `[50, 100, 200]`（AdminListPage 默认值，页面不传）
 - **🔴 详情弹出一律调详情接口**（用户定版）：禁止拿列表行数据展示详情——接口失败显示空态，不回退列表数据；抽屉打开先清空旧内容防残留上一篇
-- **外层零滚动**：`.admin-list-page{height:calc(100vh - 80px)}`（56 header + 布局 padding 12×2，改布局 padding 必须同步此 calc）+ flex 链（列表卡片 `flex:1;min-height:0` + n-card content-style 立 flex column + 表格 `flex:1;min-height:0`）——纯 CSS 无需 JS 实时计算；768px 以下降级 height:auto（移动端允许外滚）
+- **外层零滚动**：`.admin-list-page{height:calc(100vh - 88px)}`（56 header + 布局 padding 16×2，改布局 padding 必须同步此 calc）+ flex 链（列表区透明容器 `flex:1;min-height:0` + 表格 `flex:1;min-height:0`）——纯 CSS 无需 JS 实时计算；768px 以下降级 height:auto（移动端允许外滚）
 - **ref 方法**：`listRef.refresh()`（保留条件刷当前页）/ `reload()`（重置第 1 页）
 - **操作列用纯文字链接**（NButton text + .cell-btns，按钮间隙 10px）：带图标时 3 按钮宽超列宽会被截断（实证溢出 22px）
 - **行内主标题即详情入口**：标题 `is-link` 主色可点击开详情抽屉，不放独立"详情"按钮
@@ -58,7 +58,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
-- **布局底色**：内容区浅灰（light `#f5f6f8` / dark `#101014`，layouts/default.vue 绑定）衬白卡片；AdminListPage 卡片白底带默认边框
+- **视觉体系（2026-10-30 高级风定版）**：深色默认（仅显式 light 才浅色，app.vue）；近无彩色系——黑白灰骨架，蓝只做交互点缀（深 `#6c87f6` / 浅 `#2d63d6`，非 Naive 上下文用布局根注入的 `--cell-link`/`--hairline` 变量）；**去卡片化**——AdminListPage 搜索区/表格透明坐底色、hairline 分隔，不再套 n-card；底色分层：内容区 bodyColor（深 `#111113`/浅 `#f7f7f8`）+ 侧栏更深一档（深 `#0b0b0d`/浅 `#fafafa`）
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
 - 评论/用户页仍是旧行卡片模式（AdminPageHeader+AdminRowCard），**待迁移到 AdminListPage 后两个旧组件即废弃**
 

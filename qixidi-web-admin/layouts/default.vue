@@ -1,51 +1,53 @@
 <template>
-  <n-layout has-sider class="h-screen">
-    <n-layout-sider
-      bordered
-      collapse-mode="width"
-      :collapsed-width="64"
-      :width="220"
-      :collapsed="collapsed"
-      show-trigger
-      @collapse="collapsed = true"
-      @expand="collapsed = false"
-    >
-      <div class="logo flex items-center justify-center gap-2" :style="{ height: '56px' }">
-        <span v-if="!collapsed" class="font-bold text-base">栖息地后台</span>
-        <span v-else class="font-bold">栖</span>
-      </div>
-      <n-menu
-        :collapsed="collapsed"
+  <div class="app-shell" :class="isDark ? 'theme-dark' : 'theme-light'">
+    <n-layout has-sider class="h-screen">
+      <n-layout-sider
+        bordered
+        collapse-mode="width"
         :collapsed-width="64"
-        :options="menuOptions"
-        :value="activeMenu"
-        @update:value="handleMenuSelect"
-      />
-    </n-layout-sider>
+        :width="220"
+        :collapsed="collapsed"
+        show-trigger
+        @collapse="collapsed = true"
+        @expand="collapsed = false"
+      >
+        <div class="logo flex items-center justify-center gap-2" :style="{ height: '56px' }">
+          <span v-if="!collapsed" class="font-bold text-base">栖息地后台</span>
+          <span v-else class="font-bold">栖</span>
+        </div>
+        <n-menu
+          :collapsed="collapsed"
+          :collapsed-width="64"
+          :options="menuOptions"
+          :value="activeMenu"
+          @update:value="handleMenuSelect"
+        />
+      </n-layout-sider>
 
-    <n-layout>
-      <n-layout-header bordered class="header" :style="{ height: '56px' }">
-        <AdminBreadcrumb />
-        <n-space align="center">
-          <n-button quaternary circle @click="toggleTheme">
-            <template #icon>
-              <n-icon><component :is="isDark ? Sun : MoonStars" /></n-icon>
-            </template>
-          </n-button>
-          <n-dropdown :options="userDropdown" @select="handleUserAction">
-            <n-button quaternary>
-              {{ adminStore.adminInfo?.nickName || adminStore.adminInfo?.userName || '管理员' }}
+      <n-layout>
+        <n-layout-header bordered class="header" :style="{ height: '56px' }">
+          <AdminBreadcrumb />
+          <n-space align="center">
+            <n-button quaternary circle @click="toggleTheme">
+              <template #icon>
+                <n-icon><component :is="isDark ? Sun : MoonStars" /></n-icon>
+              </template>
             </n-button>
-          </n-dropdown>
-        </n-space>
-      </n-layout-header>
+            <n-dropdown :options="userDropdown" @select="handleUserAction">
+              <n-button quaternary>
+                {{ adminStore.adminInfo?.nickName || adminStore.adminInfo?.userName || '管理员' }}
+              </n-button>
+            </n-dropdown>
+          </n-space>
+        </n-layout-header>
 
-      <!-- 内容区底色：浅灰衬托白卡片（dark 下用主题暗底，卡片色由 n-card 随主题自带） -->
-      <n-layout-content content-style="padding: 12px;" class="content" :style="{ background: isDark ? '#101014' : '#f5f6f8' }">
-        <slot />
-      </n-layout-content>
+        <!-- 内容区：去卡片化，表格/区块直接坐主题底色上，hairline 分隔（app.vue token 统一配色） -->
+        <n-layout-content content-style="padding: 16px;" class="content">
+          <slot />
+        </n-layout-content>
+      </n-layout>
     </n-layout>
-  </n-layout>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -106,8 +108,30 @@ const handleUserAction = (key: string) => {
 </script>
 
 <style scoped lang="scss">
+/* 主题变量注入：非 Naive 上下文的硬编码色（admin-table.scss 等）统一取这里，
+   与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度） */
+.theme-dark {
+  --cell-link: #6c87f6;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --sider-bg: #0b0b0d;
+}
+
+.theme-light {
+  --cell-link: #2d63d6;
+  --hairline: rgba(0, 0, 0, 0.08);
+  --sider-bg: #fafafa;
+}
+
+.app-shell {
+  height: 100vh;
+
+  :deep(.n-layout-sider) {
+    background: var(--sider-bg);
+  }
+}
+
 .logo {
-  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+  border-bottom: 1px solid var(--hairline);
 }
 
 /* Tailwind 的 px/flex 类在本项目未编译生效（v3 语法 + v4 postcss 插件），布局一律这里写死 */

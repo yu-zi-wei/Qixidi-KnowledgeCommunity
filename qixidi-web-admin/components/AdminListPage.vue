@@ -1,7 +1,7 @@
 <template>
   <div class="admin-list-page">
-    <!-- 搜索卡片：多条件 + 查询/重置按钮（白底+细边框，衬在内容区浅灰底上） -->
-    <n-card class="alp-search-card">
+    <!-- 搜索区：无卡片，直接坐主题底色，hairline 与表格分界 -->
+    <div class="alp-search-card">
       <div class="alp-search-form">
         <!-- 字段统一「label + 控件」结构（参考图样式），下拉可配多选 -->
         <div v-for="f in searchFields" :key="f.key" class="alp-field">
@@ -35,10 +35,10 @@
           </n-button>
         </div>
       </div>
-    </n-card>
+    </div>
 
-    <!-- 列表卡片：撑满剩余高度，滚动只发生在表格内部 -->
-    <n-card class="alp-list-card" :content-style="LIST_CONTENT_STYLE">
+    <!-- 列表区：透明容器撑满剩余高度，滚动只发生在表格内部 -->
+    <div class="alp-list-card">
       <div v-if="$slots['toolbar-left'] || $slots['toolbar-right']" class="alp-toolbar">
         <div class="alp-toolbar-left"><slot name="toolbar-left" /></div>
         <div class="alp-toolbar-right"><slot name="toolbar-right" /></div>
@@ -69,7 +69,7 @@
           @update:page-size="onPageSizeChange"
         />
       </div>
-    </n-card>
+    </div>
   </div>
 </template>
 
@@ -135,8 +135,7 @@ const props = withDefaults(
   }
 );
 
-/** 列表卡片 content 布局：n-card 天生 flex column，content 再立 flex 列让表格撑满剩余 */
-const LIST_CONTENT_STYLE = { display: 'flex', flexDirection: 'column' as const, minHeight: 0 };
+/** 列表区布局：透明容器自带 flex 列（去卡片化后不再依赖 n-card 的 content 结构） */
 
 /** 选中行 keys（v-model:checked-keys，配合工具栏批量操作） */
 const checkedKeys = defineModel<Array<string | number>>('checkedKeys', { default: () => [] });
@@ -243,17 +242,19 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-/* 外层零滚动：高度 = 视口 - header(56) - 布局 padding(12×2)，内部 flex 分配 */
+/* 外层零滚动：高度 = 视口 - header(56) - 布局 padding(16×2)，内部 flex 分配 */
 .admin-list-page {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 88px);
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* 搜索区：透明底 + hairline 下边线与表格分界（--hairline 由布局根注入） */
 .alp-search-card {
   flex-shrink: 0;
-  border-radius: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hairline);
 }
 
 .alp-search-form {
@@ -285,11 +286,12 @@ defineExpose({
   flex-shrink: 0;
 }
 
-/* n-card 天生 flex column、content 自带 flex:1；content 内再立 flex 列让表格撑满 */
+/* 列表区：透明容器撑满剩余高度，滚动只在表格内部 */
 .alp-list-card {
   flex: 1;
   min-height: 0;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .alp-toolbar {
@@ -338,7 +340,7 @@ defineExpose({
 @media (max-width: 768px) {
   .admin-list-page {
     height: auto;
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 88px);
   }
 
   .alp-search-actions {
