@@ -17,13 +17,13 @@ import type {GlobalTheme, GlobalThemeOverrides} from 'naive-ui';
 
 const THEME_KEY = 'admin-theme';
 
-// 品牌主色蓝紫（indigo）；.is-link 等非 Naive 上下文的硬编码色（admin-table.scss）与此同步维护
+// 品牌主色：蓝为主微偏紫；.is-link 等非 Naive 上下文的硬编码色（admin-table.scss）与此同步维护
 const themeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#6366f1',
-    primaryColorHover: '#818cf8',
-    primaryColorPressed: '#4f46e5',
-    primaryColorSuppl: '#6366f1'
+    primaryColor: '#4c84f8',
+    primaryColorHover: '#6f9dfb',
+    primaryColorPressed: '#3a6ad6',
+    primaryColorSuppl: '#4c84f8'
   }
 };
 
