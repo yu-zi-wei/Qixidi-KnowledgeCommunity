@@ -23,6 +23,10 @@ const crumbs = useAdminBreadcrumbs();
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-size: 13px;
+  line-height: 16.25px; // 与 .crumb-text（13px normal）行高一致
+  // inline-flex 行内基线取内部 icon 底边而非文字基线，须按中线对齐才能与相邻文字齐平
+  vertical-align: middle;
   text-decoration: none;
   opacity: 0.75;
   transition: opacity 0.2s ease;
@@ -34,6 +38,7 @@ const crumbs = useAdminBreadcrumbs();
 
 .crumb-text {
   font-size: 13px;
+  vertical-align: middle;
   opacity: 0.55;
 
   &.crumb-current {
