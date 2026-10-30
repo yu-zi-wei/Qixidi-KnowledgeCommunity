@@ -129,6 +129,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 
 ### 数据模型事实（统计/聚合/排序前必读）
 
+- **默认 VO 已全量继承实体（2026-10-30 基线），业务字段在父类**：自定义反射/字段遍历必须沿 superclass 链收集（`getDeclaredFields` 只取当前类，父类字段静默丢失，实证月度趋势接口返回空数组）；hutool BeanUtil 走 getter 不受影响
 - **`b_private_user.update_time` 是"会话最新消息时间"冗余字段**：发私信时双向两行一起刷新——私信会话列表排序直接 `ORDER BY update_time DESC`，勿关联消息表算 MAX（消息表单边存储，双向归组很重）
 - **b_browsing_history 按（uid+target）去重合并**（`ON DUPLICATE KEY UPDATE update_time`）：按天做浏览趋势必须聚合 `update_time`（聚合 create_time 会漏掉回访）
 - **详情接口（queryById）禁止用 `selectVoById` 单表查询取含 join 展示字段的 VO**：nickname/groupingName/labelNameList 等是列表 join SQL 的产物，单表查全 null；须走列表同款 `selectIndex` + `wrapper.eq("别名.id", id)` 查询（参考 ArticleInformationServiceImpl.queryById）
