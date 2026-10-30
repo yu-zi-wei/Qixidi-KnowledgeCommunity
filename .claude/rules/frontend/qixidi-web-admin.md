@@ -38,23 +38,25 @@ columns render 函数在 NDataTable 渲染上下文执行，**页面 scoped hash
 layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 页面：<AdminListPage :search-fields :columns :fetch row-key seq?>
         ├─ 搜索卡片：字段配置驱动（input/select/checkbox 多选），右端 重置+查询 按钮
-        ├─ #toolbar-left / #toolbar-right（可选工具栏，放统计标签/刷新按钮）
+        ├─ #toolbar-left（批量操作）/ #toolbar-right（新增等入口按钮）
         ├─ n-data-table（flex-height，表体内部滚、表头固定）
-        └─ footer：共 N 条(+已选) + n-pagination（show-size-picker）
+        └─ footer：「共 N 条」靠右、紧邻 n-pagination（show-size-picker）
 ```
 
-- **菜单/面包屑单一数据源** `composables/useAdminMenu.ts`：`ADMIN_MENU` 树（叶子 key=路由路径）+ `useAdminBreadcrumbs()`；**新增菜单项改这里一处**，侧栏 n-menu 与面包屑同源自动更新
+- **菜单/面包屑单一数据源** `composables/useAdminMenu.ts`：`ADMIN_MENU` 树（叶子 key=路由路径）+ `useAdminBreadcrumbs()`；**新增菜单项改这里一处**，侧栏 n-menu 与面包屑同源自动更新；**侧栏一级菜单必须带子菜单（禁止纯一级叶子）**；数据看板无菜单入口——首页 `/` 即数据看板页面，面包屑「首页」直达
 - **AdminSearchField**：`{key, label, type: 'input'|'select'|'multiple', options?, placeholder?, width?}`；所有字段统一「label 前置 + 控件」结构；multiple 渲染多选下拉（maxTagCount responsive 折叠 tag）；控件默认等宽 200px（不配 width，需差异化才覆盖）；key 直接对应后端 BO 字段（GET 数组 `key=a&key=b` 自动绑 `List<Integer>`）
 - **查询快照机制**：点「查询」才取条件快照，翻页沿用快照——输入框实时变化不影响已出结果；页面无需自建任何分页/条件状态
 - **分页默认 50/页**，pageSizes `[50, 100, 200]`（AdminListPage 默认值，页面不传）
 - **🔴 详情弹出一律调详情接口**（用户定版）：禁止拿列表行数据展示详情——接口失败显示空态，不回退列表数据；抽屉打开先清空旧内容防残留上一篇
 - **外层零滚动**：`.admin-list-page{height:calc(100vh - 80px)}`（56 header + 布局 padding 12×2，改布局 padding 必须同步此 calc）+ flex 链（列表卡片 `flex:1;min-height:0` + n-card content-style 立 flex column + 表格 `flex:1;min-height:0`）——纯 CSS 无需 JS 实时计算；768px 以下降级 height:auto（移动端允许外滚）
 - **ref 方法**：`listRef.refresh()`（保留条件刷当前页）/ `reload()`（重置第 1 页）
-- **操作列用纯文字链接**（NButton text + .cell-btns）：带图标时 3 按钮宽超列宽会被截断（实证溢出 22px）
+- **操作列用纯文字链接**（NButton text + .cell-btns，按钮间隙 10px）：带图标时 3 按钮宽超列宽会被截断（实证溢出 22px）
+- **行内主标题即详情入口**：标题 `is-link` 主色可点击开详情抽屉，不放独立"详情"按钮
+- **文字浓度/字重定版**：正文列（标题/摘要/统计/时间）与「共 N 条」一律正常浓度（opacity 1）不做浅色弱化（`.cell-dim` 仅旧页空值占位遗留）；表头 600、行内主标题 400（已固化在 AdminListPage/admin-table.scss，页面不再写）
 - **统计轻查询**：`{pageNum:1, pageSize:1, 筛选条件}` 取 `total`，不拉全量
 - **行内操作 loading** 用 `operatingId === row.id` 匹配单行
-- **危险操作统一 `dialog.warning` 确认**（删除/冻结/解冻），确认文案写明级联影响
-- **审核等编辑操作受 EditGroup 必填约束**：PUT payload 必填字段要齐全，列表行数据缺字段（如 articleContent）先 `getArticle` 补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
+- **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
+- **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
 - **布局底色**：内容区浅灰（light `#f5f6f8` / dark `#101014`，layouts/default.vue 绑定）衬白卡片；AdminListPage 卡片白底带默认边框
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
