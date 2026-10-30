@@ -41,8 +41,8 @@
           </n-space>
         </n-layout-header>
 
-        <!-- 内容区：去卡片化，表格/区块直接坐主题底色上，hairline 分隔（app.vue token 统一配色） -->
-        <n-layout-content content-style="padding: 16px;" class="content">
+        <!-- 内容区：去卡片化，表格/区块直接坐主题底色上，hairline 分隔（app.vue token 统一配色）；左右留白略大于上下 -->
+        <n-layout-content content-style="padding: 16px 20px;" class="content">
           <slot />
         </n-layout-content>
       </n-layout>
