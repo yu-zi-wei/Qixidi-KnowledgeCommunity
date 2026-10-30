@@ -147,7 +147,7 @@ const formModel = reactive<Record<string, any>>(
 );
 
 /** 控件统一默认宽度（不配 width 即等宽，需差异化时才在字段配置里覆盖） */
-const DEFAULT_FIELD_WIDTH = '160px';
+const DEFAULT_FIELD_WIDTH = '200px';
 const fieldWidth = (f: AdminSearchField) => (typeof f.width === 'number' ? `${f.width}px` : f.width || DEFAULT_FIELD_WIDTH);
 
 /** 查询条件快照：翻页沿用最近一次查询的值，输入框实时变化不影响已出结果 */
@@ -243,12 +243,12 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-/* 外层零滚动：高度 = 视口 - header(56) - 布局 padding(20×2)，内部 flex 分配 */
+/* 外层零滚动：高度 = 视口 - header(56) - 布局 padding(12×2)，内部 flex 分配 */
 .admin-list-page {
-  height: calc(100vh - 96px);
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .alp-search-card {
@@ -302,29 +302,43 @@ defineExpose({
   padding-bottom: 12px;
 }
 
+/* 左侧批量操作 / 右侧新增编辑等，各自可放多个元素 */
+.alp-toolbar-left,
+.alp-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .alp-table {
   flex: 1;
   min-height: 0;
 }
 
+/* footer 靠右：「共 N 条」紧挨分页组件在前 */
 .alp-footer {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 16px;
   padding-top: 12px;
+}
+
+/* 表头加粗；正文列与 footer 文字一律正常浓度（不做浅色弱化） */
+.alp-table :deep(.n-data-table-th) {
+  font-weight: 600;
 }
 
 .alp-footer-total {
   font-size: 13px;
-  opacity: 0.6;
 }
 
 @media (max-width: 768px) {
   .admin-list-page {
     height: auto;
-    min-height: calc(100vh - 96px);
+    min-height: calc(100vh - 80px);
   }
 
   .alp-search-actions {

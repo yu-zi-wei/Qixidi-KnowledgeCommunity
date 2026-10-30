@@ -9,12 +9,8 @@
     seq
     selectable
   >
+    <!-- 工具栏约定：批量操作在左，新增/编辑等在右 -->
     <template #toolbar-left>
-      <n-tag size="small" :bordered="false" :type="(pendingCount ?? 0) > 0 ? 'warning' : 'default'">
-        审核中 {{ pendingCount ?? '—' }} 篇
-      </n-tag>
-    </template>
-    <template #toolbar-right>
       <n-button
         v-if="hasPerm('article:information:remove')"
         size="small"
@@ -107,31 +103,32 @@ onMounted(async () => {
   } catch {
     /* useApi 已统一弹错，下拉留空即可 */
   }
-  loadPendingCount();
 });
-
-// ---------- 待审核统计（轻查询） ----------
-const pendingCount = ref<number | null>(null);
-const loadPendingCount = async () => {
-  try {
-    const res = await getArticles({ pageNum: 1, pageSize: 1, auditState: 1 });
-    pendingCount.value = res.total || 0;
-  } catch {
-    pendingCount.value = null;
-  }
-};
 
 // ---------- 审核动作（独立 audit 接口，只传 ids + 结果，无需文章全字段） ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
 const auditingId = ref<number | null>(null);
 
-const doAudit = async (row: ArticleRow, auditState: number) => {
+// 操作列所有按钮执行前一律二次确认
+const doAudit = (row: ArticleRow, auditState: number) => {
+  const approve = auditState === 2;
+  dialog[approve ? 'info' : 'warning']({
+    title: approve ? '通过审核' : '拒绝审核',
+    content: approve
+      ? `确定通过《${row.articleTitle}》的审核吗？通过后文章将对外可见。`
+      : `确定拒绝《${row.articleTitle}》的审核吗？该文章将标记为未通过。`,
+    positiveText: approve ? '通过' : '拒绝',
+    negativeText: '取消',
+    onPositiveClick: () => auditExec(row, auditState)
+  });
+};
+
+const auditExec = async (row: ArticleRow, auditState: number) => {
   auditingId.value = row.id;
   try {
     await auditArticles([row.id], auditState);
     message.success(auditState === 2 ? '已通过审核' : '已拒绝');
     await listRef.value?.refresh();
-    loadPendingCount();
   } catch {
     /* useApi 已统一弹错 */
   } finally {
@@ -157,7 +154,6 @@ const doRemove = (row: ArticleRow) => {
         await removeArticles([row.id]);
         message.success('已删除');
         await listRef.value?.refresh();
-        loadPendingCount();
       } catch {
         /* useApi 已统一弹错 */
       } finally {
@@ -180,7 +176,6 @@ const doRemoveBatch = () => {
         await removeArticles(ids);
         message.success('已删除');
         await listRef.value?.refresh();
-        loadPendingCount();
       } catch {
         /* useApi 已统一弹错 */
       } finally {
@@ -244,7 +239,7 @@ const columns: DataTableColumns<ArticleRow> = [
     key: 'groupingName',
     width: 110,
     ellipsis: { tooltip: true },
-    render: (row) => row.groupingName || h('span', { class: 'cell-dim' }, '未分类')
+    render: (row) => row.groupingName || '未分类'
   },
   {
     title: '浏览 / 赞 / 评',
@@ -263,7 +258,7 @@ const columns: DataTableColumns<ArticleRow> = [
     title: '发布时间',
     key: 'createTime',
     width: 150,
-    render: (row) => h('span', { class: 'cell-dim' }, getFullDateTime(row.createTime) || '—')
+    render: (row) => getFullDateTime(row.createTime) || '—'
   },
   {
     // 操作列用纯文字链接（带图标时按钮易超列宽被截断）；按权限码控制可见性

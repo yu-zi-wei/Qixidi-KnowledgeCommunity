@@ -93,15 +93,14 @@
 
   .cell-article-name {
     font-size: 14px;
-    font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  // 标题可点击态（打开详情）：主色 + hover 下划线（#3b74e8 与 app.vue 主题 overrides 的 primaryColor 同步维护）
+  // 标题可点击态（打开详情）：主色 + hover 下划线（#2d63d6 与 app.vue 主题 overrides 的 primaryColor 同步维护）
   .cell-article-name.is-link {
-    color: #3b74e8;
+    color: #2d63d6;
     cursor: pointer;
 
     &:hover {
@@ -112,7 +111,6 @@
   .cell-article-abstract {
     font-size: 12px;
     line-height: 1.4;
-    opacity: 0.5;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -134,10 +132,9 @@
   }
 }
 
-// 数据列（浏览/赞/评 等弱化数字）
+// 数据列（浏览/赞/评）
 .cell-stats {
   font-size: 12.5px;
-  opacity: 0.6;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -146,7 +143,7 @@
 .cell-btns {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
   white-space: nowrap;
 }
 

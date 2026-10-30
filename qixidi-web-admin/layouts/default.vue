@@ -24,7 +24,7 @@
     </n-layout-sider>
 
     <n-layout>
-      <n-layout-header bordered class="header flex items-center justify-between px-5" :style="{ height: '56px' }">
+      <n-layout-header bordered class="header" :style="{ height: '56px' }">
         <AdminBreadcrumb />
         <n-space align="center">
           <n-button quaternary circle @click="toggleTheme">
@@ -41,7 +41,7 @@
       </n-layout-header>
 
       <!-- 内容区底色：浅灰衬托白卡片（dark 下用主题暗底，卡片色由 n-card 随主题自带） -->
-      <n-layout-content content-style="padding: 20px;" class="content" :style="{ background: isDark ? '#101014' : '#f5f6f8' }">
+      <n-layout-content content-style="padding: 12px;" class="content" :style="{ background: isDark ? '#101014' : '#f5f6f8' }">
         <slot />
       </n-layout-content>
     </n-layout>
@@ -108,6 +108,14 @@ const handleUserAction = (key: string) => {
 <style scoped lang="scss">
 .logo {
   border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+/* Tailwind 的 px/flex 类在本项目未编译生效（v3 语法 + v4 postcss 插件），布局一律这里写死 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
 }
 
 .content {

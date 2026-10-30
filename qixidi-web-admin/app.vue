@@ -20,10 +20,10 @@ const THEME_KEY = 'admin-theme';
 // 品牌主色：深蓝微偏紫；.is-link 等非 Naive 上下文的硬编码色（admin-table.scss）与此同步维护
 const themeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#3b74e8',
-    primaryColorHover: '#5e90f2',
-    primaryColorPressed: '#2d5ec2',
-    primaryColorSuppl: '#3b74e8'
+    primaryColor: '#2d63d6',
+    primaryColorHover: '#4d7fe8',
+    primaryColorPressed: '#2350ae',
+    primaryColorSuppl: '#2d63d6'
   }
 };
 

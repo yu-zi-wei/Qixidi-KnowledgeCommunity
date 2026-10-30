@@ -11,6 +11,7 @@
 - **主题唯一数据源在 app.vue**：provide `theme`/`switchTheme`，localStorage key=`admin-theme`；业务组件只 inject 派生，禁止自建主题状态
 - **pinia persist 是 localStorage**（key=`admin`），与门户（cookie）不同
 - 图标同门户规范：Tabler Icons，名字必须查 `node_modules/@vicons/tabler/es/`
+- **Tailwind 工具类从未编译生效**（tailwind.scss 是 v3 `@tailwind` 语法 + postcss 配的是 v4 `@tailwindcss/postcss` 插件，样式表不生成任何工具类，且无报错）：布局样式一律 scoped CSS 手写，禁止依赖 `px-*`/`flex` 等 Tailwind 类
 
 ## API 约定
 
@@ -43,11 +44,11 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 ```
 
 - **菜单/面包屑单一数据源** `composables/useAdminMenu.ts`：`ADMIN_MENU` 树（叶子 key=路由路径）+ `useAdminBreadcrumbs()`；**新增菜单项改这里一处**，侧栏 n-menu 与面包屑同源自动更新
-- **AdminSearchField**：`{key, label, type: 'input'|'select'|'multiple', options?, placeholder?, width?}`；所有字段统一「label 前置 + 控件」结构；multiple 渲染多选下拉（maxTagCount responsive 折叠 tag）；控件默认等宽 160px（不配 width，需差异化才覆盖）；key 直接对应后端 BO 字段（GET 数组 `key=a&key=b` 自动绑 `List<Integer>`）
+- **AdminSearchField**：`{key, label, type: 'input'|'select'|'multiple', options?, placeholder?, width?}`；所有字段统一「label 前置 + 控件」结构；multiple 渲染多选下拉（maxTagCount responsive 折叠 tag）；控件默认等宽 200px（不配 width，需差异化才覆盖）；key 直接对应后端 BO 字段（GET 数组 `key=a&key=b` 自动绑 `List<Integer>`）
 - **查询快照机制**：点「查询」才取条件快照，翻页沿用快照——输入框实时变化不影响已出结果；页面无需自建任何分页/条件状态
 - **分页默认 50/页**，pageSizes `[50, 100, 200]`（AdminListPage 默认值，页面不传）
 - **🔴 详情弹出一律调详情接口**（用户定版）：禁止拿列表行数据展示详情——接口失败显示空态，不回退列表数据；抽屉打开先清空旧内容防残留上一篇
-- **外层零滚动**：`.admin-list-page{height:calc(100vh - 96px)}`（56 header + 40 padding）+ flex 链（列表卡片 `flex:1;min-height:0` + n-card content-style 立 flex column + 表格 `flex:1;min-height:0`）——纯 CSS 无需 JS 实时计算；768px 以下降级 height:auto（移动端允许外滚）
+- **外层零滚动**：`.admin-list-page{height:calc(100vh - 80px)}`（56 header + 布局 padding 12×2，改布局 padding 必须同步此 calc）+ flex 链（列表卡片 `flex:1;min-height:0` + n-card content-style 立 flex column + 表格 `flex:1;min-height:0`）——纯 CSS 无需 JS 实时计算；768px 以下降级 height:auto（移动端允许外滚）
 - **ref 方法**：`listRef.refresh()`（保留条件刷当前页）/ `reload()`（重置第 1 页）
 - **操作列用纯文字链接**（NButton text + .cell-btns）：带图标时 3 按钮宽超列宽会被截断（实证溢出 22px）
 - **统计轻查询**：`{pageNum:1, pageSize:1, 筛选条件}` 取 `total`，不拉全量
