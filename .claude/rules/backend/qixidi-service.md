@@ -131,6 +131,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 
 - **`b_private_user.update_time` 是"会话最新消息时间"冗余字段**：发私信时双向两行一起刷新——私信会话列表排序直接 `ORDER BY update_time DESC`，勿关联消息表算 MAX（消息表单边存储，双向归组很重）
 - **b_browsing_history 按（uid+target）去重合并**（`ON DUPLICATE KEY UPDATE update_time`）：按天做浏览趋势必须聚合 `update_time`（聚合 create_time 会漏掉回访）
+- **详情接口（queryById）禁止用 `selectVoById` 单表查询取含 join 展示字段的 VO**：nickname/groupingName/labelNameList 等是列表 join SQL 的产物，单表查全 null；须走列表同款 `selectIndex` + `wrapper.eq("别名.id", id)` 查询（参考 ArticleInformationServiceImpl.queryById）
 - **用户统计走 `UserCountQueryHelper`**：新增统计字段三处同步——`CountUserWebsiteVo` 加字段 → Mapper 加 `selectXxxCountByUserIds`（XML）→ helper 加方法**并在 `allCounts()` 里 merge**
 - **`CensusVo` 是通用时间序列货币**（dateTimes/censusSum/title），趋势类接口直接复用
 - **本机 `mysql.exe` CLI 会挂起**：验证 SQL 用"`mvn clean compile` + 启动成功"代替（MyBatis 启动期绑定 XML，`Invalid bound statement` 起不来就是绑定失败）
