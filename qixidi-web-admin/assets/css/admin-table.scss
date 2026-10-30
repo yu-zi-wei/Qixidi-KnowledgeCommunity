@@ -1,33 +1,55 @@
-// 后台表格单元格共享样式（全局）
-// n-data-table 列 render 函数里的元素带不上页面 scoped hash，页面 scoped 样式选不中，
-// 列内共享样式统一放这里；页面专属样式放各页非 scoped 块
+// 后台列表共享样式（全局）
+// 1. n-data-table 列 render 函数里的元素带不上页面 scoped hash（页面 scoped 样式选不中），表格场景的列内共享样式放这里
+// 2. 行卡片（AdminRowCard）列表的跨页共享容器/底部条样式也放这里；页面专属样式放各页自己的样式块
+
+// 行卡片列表容器
+.admin-row-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// 列表底部分页条（总数 + n-pagination）
+.list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+
+  .list-total {
+    font-size: 12.5px;
+    opacity: 0.55;
+  }
+}
 
 // 弱化占位（空值 —）
 .cell-dim {
   opacity: 0.4;
 }
 
-// 操作列按钮组
+// 操作按钮组
 .cell-actions {
   display: flex;
   gap: 2px;
 }
 
-// 作者列（头像 + 名字）
-.cell-author {
+// 行卡片 meta 行（小字灰 · 分隔）
+.row-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-width: 0;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  opacity: 0.6;
 
-  .cell-author-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .row-meta-dot {
+    opacity: 0.5;
   }
 }
 
-// 单行省略（配合列 ellipsis/tooltip 使用）
+// 单行省略
 .cell-ellipsis {
   display: inline-block;
   max-width: 100%;
@@ -35,3 +57,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+// 两行截断
+.cell-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+

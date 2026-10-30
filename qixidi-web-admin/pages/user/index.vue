@@ -4,7 +4,7 @@
       title="前台用户"
       description="查看社区注册用户，管理账号可用状态"
       :stats="[
-        { label: '冻结中', value: frozenCount, accent: frozenCount > 0 },
+        { label: '冻结中', value: frozenCount, accent: (frozenCount ?? 0) > 0 },
         { label: '总数', value: total }
       ]"
     >
@@ -34,30 +34,75 @@
         </n-radio-group>
       </div>
 
-      <n-data-table
-        remote
-        :columns="columns"
-        :data="rows"
-        :loading="loading"
-        :pagination="pagination"
-        :row-key="(row: UserRow) => row.uuid"
-        :scroll-x="1020"
-        size="small"
-        striped
-      />
+      <n-spin :show="loading">
+        <n-empty v-if="!rows.length && !loading" description="暂无用户" class="list-empty" />
+        <div v-else class="admin-row-list">
+          <AdminRowCard v-for="row in rows" :key="row.uuid">
+            <template #media>
+              <AdminAvatar :src="row.avatar" :name="row.nickname || row.username" :size="[40, 40]" />
+            </template>
+
+            <div class="usr-title-line">
+              <span class="usr-nickname">{{ row.nickname || '—' }}</span>
+              <span class="usr-username">@{{ row.username || '—' }}</span>
+            </div>
+            <div class="row-meta">
+              <span v-if="row.email">{{ row.email }}</span>
+              <template v-if="row.loginIp">
+                <span class="row-meta-dot">·</span>
+                <span>IP {{ row.loginIp }}</span>
+              </template>
+              <template v-if="row.source">
+                <span class="row-meta-dot">·</span>
+                <span>{{ row.source }}</span>
+              </template>
+              <span class="row-meta-dot">·</span>
+              <span>注册于 {{ getFullDateTime(row.createTime) }}</span>
+            </div>
+
+            <template #side>
+              <AdminStateTag :value="row.state" :map="USER_STATE_MAP" />
+              <div v-if="row.state !== 2" class="cell-actions">
+                <n-button
+                  size="tiny"
+                  quaternary
+                  :type="row.state !== 1 ? 'error' : 'success'"
+                  :loading="switchingUuid === row.uuid"
+                  @click="toggleState(row)"
+                >
+                  <template #icon><n-icon><component :is="row.state !== 1 ? UserOff : UserCheck" /></n-icon></template>
+                  {{ row.state !== 1 ? '冻结' : '解冻' }}
+                </n-button>
+              </div>
+            </template>
+          </AdminRowCard>
+        </div>
+      </n-spin>
+
+      <div v-if="total" class="list-footer">
+        <span class="list-total">共 {{ total }} 人</span>
+        <n-pagination
+          :page="pageNum"
+          :page-size="pageSize"
+          :item-count="total"
+          :page-sizes="[10, 20, 50]"
+          show-size-picker
+          @update:page="onPageChange"
+          @update:page-size="onPageSizeChange"
+        />
+      </div>
     </n-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { h } from 'vue';
-import { NButton, NIcon, useDialog, useMessage } from 'naive-ui';
 import { Refresh, Search, UserCheck, UserOff } from '@vicons/tabler';
-import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
-import AdminStateTag, { type StateMeta } from '~/components/AdminStateTag.vue';
-import AdminTimeText from '~/components/AdminTimeText.vue';
+import AdminPageHeader from '~/components/AdminPageHeader.vue';
+import AdminRowCard from '~/components/AdminRowCard.vue';
+import AdminStateTag from '~/components/AdminStateTag.vue';
 import { USER_STATE_MAP, useUserAdminApi, type UserRow } from '~/composables/useUserAdminApi';
+import { getFullDateTime } from '~/utils/format';
 
 definePageMeta({ layout: 'default' });
 
@@ -79,23 +124,7 @@ const stateOptions: Array<{ label: string; value: number | null }> = [
 ];
 
 const pageNum = ref(1);
-const pageSize = ref(10);
-const pagination = computed(() => ({
-  page: pageNum.value,
-  pageSize: pageSize.value,
-  itemCount: total.value,
-  showSizePicker: true,
-  pageSizes: [10, 20, 50],
-  onChange: (page: number) => {
-    pageNum.value = page;
-    loadList();
-  },
-  onUpdatePageSize: (size: number) => {
-    pageSize.value = size;
-    pageNum.value = 1;
-    loadList();
-  }
-}));
+const pageSize = ref(20);
 
 const loadList = async () => {
   loading.value = true;
@@ -111,7 +140,7 @@ const loadList = async () => {
   }
 };
 
-/** 冻结用户数（轻查询：state=1 取 total） */
+/** 冻结用户数（轻查询：state=1 取 total；依赖后端 buildQueryWrapper 的 state 条件） */
 const loadFrozenCount = async () => {
   try {
     const res = await getUsers({ pageNum: 1, pageSize: 1, state: 1 });
@@ -129,6 +158,17 @@ const handleSearch = () => {
 const reload = () => {
   loadList();
   loadFrozenCount();
+};
+
+const onPageChange = (page: number) => {
+  pageNum.value = page;
+  loadList();
+};
+
+const onPageSizeChange = (size: number) => {
+  pageSize.value = size;
+  pageNum.value = 1;
+  loadList();
 };
 
 /** 冻结/解冻：TripartiteUserBo 无 EditGroup 约束，只传 {uuid, state} */
@@ -157,67 +197,6 @@ const toggleState = (row: UserRow) => {
   });
 };
 
-const columns: DataTableColumns<UserRow> = [
-  {
-    title: '用户',
-    key: 'nickname',
-    minWidth: 180,
-    render: (row) =>
-      h('div', { class: 'user-cell' }, [
-        h(AdminAvatar, { src: row.avatar, name: row.nickname || row.username, size: 30 }),
-        h('div', { class: 'user-names' }, [
-          h('span', { class: 'user-nickname' }, row.nickname || '—'),
-          h('span', { class: 'user-username' }, row.username || '')
-        ])
-      ])
-  },
-  { title: '来源', key: 'source', width: 90, render: (row) => row.source || h('span', { class: 'cell-dim' }, '—') },
-  {
-    title: '邮箱',
-    key: 'email',
-    width: 180,
-    ellipsis: { tooltip: true },
-    render: (row) => row.email || h('span', { class: 'cell-dim' }, '—')
-  },
-  { title: '最近登录 IP', key: 'loginIp', width: 130, render: (row) => row.loginIp || h('span', { class: 'cell-dim' }, '—') },
-  {
-    title: '注册时间',
-    key: 'createTime',
-    width: 110,
-    render: (row) => h(AdminTimeText, { time: row.createTime })
-  },
-  {
-    title: '状态',
-    key: 'state',
-    width: 90,
-    render: (row) => h(AdminStateTag, { value: row.state, map: USER_STATE_MAP as Record<string | number, StateMeta> })
-  },
-  {
-    title: '操作',
-    key: 'actions',
-    width: 110,
-    fixed: 'right',
-    render: (row) => {
-      if (row.state === 2) return h('span', { class: 'cell-dim' }, '—');
-      const freezing = row.state !== 1;
-      return h(
-        NButton,
-        {
-          size: 'tiny',
-          quaternary: true,
-          type: freezing ? 'error' : 'success',
-          loading: switchingUuid.value === row.uuid,
-          onClick: () => toggleState(row)
-        },
-        {
-          icon: () => h(NIcon, null, { default: () => h(freezing ? UserOff : UserCheck) }),
-          default: () => (freezing ? '冻结' : '解冻')
-        }
-      );
-    }
-  }
-];
-
 onMounted(() => {
   reload();
 });
@@ -240,36 +219,31 @@ onMounted(() => {
 .search-input {
   width: 260px;
 }
-</style>
 
-<!-- 列 render 函数里的元素带不上 scoped hash，列内专属样式放非 scoped 块 -->
-<style lang="scss">
-.user-cell {
+.list-empty {
+  padding: 48px 0;
+}
+
+.usr-title-line {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 8px;
   min-width: 0;
 }
 
-.user-names {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.35;
+.usr-nickname {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  .user-nickname {
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .user-username {
-    font-size: 11.5px;
-    opacity: 0.45;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.usr-username {
+  font-size: 12px;
+  opacity: 0.45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

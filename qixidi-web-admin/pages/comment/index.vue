@@ -32,24 +32,70 @@
           />
         </div>
 
-        <n-button v-if="checkedKeys.length" size="small" type="error" tertiary :loading="deleting" @click="confirmDeleteSelected">
-          <template #icon><n-icon><Trash /></n-icon></template>
-          删除所选（{{ checkedKeys.length }}）
-        </n-button>
+        <div class="toolbar-right">
+          <n-checkbox v-if="rows.length" :checked="allChecked" :indeterminate="indeterminate" @update:checked="toggleAll">
+            全选本页
+          </n-checkbox>
+          <n-button v-if="checkedKeys.length" size="small" type="error" tertiary :loading="deleting" @click="confirmDeleteSelected">
+            <template #icon><n-icon><Trash /></n-icon></template>
+            删除所选（{{ checkedKeys.length }}）
+          </n-button>
+        </div>
       </div>
 
-      <n-data-table
-        v-model:checked-row-keys="checkedKeys"
-        remote
-        :columns="columns"
-        :data="rows"
-        :loading="loading"
-        :pagination="pagination"
-        :row-key="(row: CommentRow) => row.id"
-        :scroll-x="960"
-        size="small"
-        striped
-      />
+      <n-spin :show="loading">
+        <n-empty v-if="!rows.length && !loading" description="暂无评论" class="list-empty" />
+        <div v-else class="admin-row-list">
+          <AdminRowCard v-for="row in rows" :key="row.id">
+            <template #leading>
+              <n-checkbox :checked="checkedKeys.includes(row.id)" @update:checked="(v: boolean) => toggleOne(row.id, v)" />
+            </template>
+            <template #media>
+              <AdminAvatar :src="row.commentAvatar" :name="row.commentName" :size="[40, 40]" />
+            </template>
+
+            <p class="cmt-content">{{ row.content }}</p>
+            <div class="row-meta">
+              <span class="cmt-name">{{ row.commentName || '—' }}</span>
+              <template v-if="row.targetName">
+                <span class="row-meta-dot">·</span>
+                <span>回复 @{{ row.targetName }}</span>
+              </template>
+              <span class="row-meta-dot">·</span>
+              <span>文章 #{{ row.articleId }}</span>
+              <span class="row-meta-dot">·</span>
+              <span>{{ getFullDateTime(row.createTime) }}</span>
+            </div>
+
+            <template #side>
+              <AdminStateTag :value="row.state" :map="COMMENT_STATE_MAP" />
+              <div class="cell-actions">
+                <n-button size="tiny" quaternary @click="openDetail(row)">
+                  <template #icon><n-icon><Eye /></n-icon></template>
+                  详情
+                </n-button>
+                <n-button size="tiny" quaternary type="error" @click="deleteSingle(row.id)">
+                  <template #icon><n-icon><Trash /></n-icon></template>
+                  删除
+                </n-button>
+              </div>
+            </template>
+          </AdminRowCard>
+        </div>
+      </n-spin>
+
+      <div v-if="total" class="list-footer">
+        <span class="list-total">共 {{ total }} 条</span>
+        <n-pagination
+          :page="pageNum"
+          :page-size="pageSize"
+          :item-count="total"
+          :page-sizes="[10, 20, 50]"
+          show-size-picker
+          @update:page="onPageChange"
+          @update:page-size="onPageSizeChange"
+        />
+      </div>
     </n-card>
 
     <!-- 评论详情：全文 + 元信息 -->
@@ -75,13 +121,11 @@
 </template>
 
 <script setup lang="ts">
-import { h } from 'vue';
-import { NButton, NIcon, NTooltip, useDialog, useMessage } from 'naive-ui';
 import { Eye, Refresh, Search, Trash } from '@vicons/tabler';
-import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
-import AdminStateTag, { type StateMeta } from '~/components/AdminStateTag.vue';
-import AdminTimeText from '~/components/AdminTimeText.vue';
+import AdminPageHeader from '~/components/AdminPageHeader.vue';
+import AdminRowCard from '~/components/AdminRowCard.vue';
+import AdminStateTag from '~/components/AdminStateTag.vue';
 import { COMMENT_STATE_MAP, useCommentAdminApi, type CommentRow } from '~/composables/useCommentAdminApi';
 import { getFullDateTime } from '~/utils/format';
 
@@ -100,23 +144,20 @@ const articleIdFilter = ref<number | null>(null);
 const checkedKeys = ref<Array<number | string>>([]);
 
 const pageNum = ref(1);
-const pageSize = ref(10);
-const pagination = computed(() => ({
-  page: pageNum.value,
-  pageSize: pageSize.value,
-  itemCount: total.value,
-  showSizePicker: true,
-  pageSizes: [10, 20, 50],
-  onChange: (page: number) => {
-    pageNum.value = page;
-    loadList();
-  },
-  onUpdatePageSize: (size: number) => {
-    pageSize.value = size;
-    pageNum.value = 1;
-    loadList();
-  }
-}));
+const pageSize = ref(20);
+
+const allChecked = computed(() => rows.value.length > 0 && rows.value.every((r) => checkedKeys.value.includes(r.id)));
+const indeterminate = computed(() => {
+  const n = rows.value.filter((r) => checkedKeys.value.includes(r.id)).length;
+  return n > 0 && n < rows.value.length;
+});
+const toggleAll = (v: boolean) => {
+  const ids = rows.value.map((r) => r.id);
+  checkedKeys.value = v ? Array.from(new Set([...checkedKeys.value, ...ids])) : checkedKeys.value.filter((k) => !ids.includes(k as number));
+};
+const toggleOne = (id: number | string, v: boolean) => {
+  checkedKeys.value = v ? [...checkedKeys.value, id] : checkedKeys.value.filter((k) => k !== id);
+};
 
 const loadList = async () => {
   loading.value = true;
@@ -140,6 +181,17 @@ const handleSearch = () => {
 
 const reload = () => {
   checkedKeys.value = [];
+  loadList();
+};
+
+const onPageChange = (page: number) => {
+  pageNum.value = page;
+  loadList();
+};
+
+const onPageSizeChange = (size: number) => {
+  pageSize.value = size;
+  pageNum.value = 1;
   loadList();
 };
 
@@ -190,69 +242,6 @@ const openDetail = async (row: CommentRow) => {
   }
 };
 
-const columns: DataTableColumns<CommentRow> = [
-  { type: 'selection' },
-  {
-    title: '评论人',
-    key: 'commentName',
-    width: 140,
-    render: (row) =>
-      h('div', { class: 'cell-author' }, [
-        h(AdminAvatar, { src: row.commentAvatar, name: row.commentName, size: 22 }),
-        h('span', { class: 'cell-author-name' }, row.commentName || '—')
-      ])
-  },
-  {
-    title: '内容',
-    key: 'content',
-    minWidth: 240,
-    ellipsis: { tooltip: false },
-    render: (row) =>
-      h(
-        NTooltip,
-        { trigger: 'hover', style: { maxWidth: '420px' } },
-        {
-          trigger: () => h('span', { class: 'cell-ellipsis' }, row.content),
-          default: () => row.content
-        }
-      )
-  },
-  {
-    title: '回复对象',
-    key: 'targetName',
-    width: 120,
-    render: (row) => (row.targetName ? h('span', { class: 'comment-reply-cell' }, `@${row.targetName}`) : h('span', { class: 'cell-dim' }, '—'))
-  },
-  { title: '文章', key: 'articleId', width: 90, render: (row) => h('span', { class: 'cell-dim' }, `#${row.articleId}`) },
-  {
-    title: '状态',
-    key: 'state',
-    width: 90,
-    render: (row) => h(AdminStateTag, { value: row.state, map: COMMENT_STATE_MAP as Record<string | number, StateMeta> })
-  },
-  {
-    title: '时间',
-    key: 'createTime',
-    width: 110,
-    render: (row) => h(AdminTimeText, { time: row.createTime })
-  },
-  {
-    title: '操作',
-    key: 'actions',
-    width: 140,
-    fixed: 'right',
-    render: (row) =>
-      h('div', { class: 'cell-actions' }, [
-        h(NButton, { size: 'tiny', quaternary: true, onClick: () => openDetail(row) }, { icon: () => h(NIcon, null, { default: () => h(Eye) }), default: () => '详情' }),
-        h(
-          NButton,
-          { size: 'tiny', quaternary: true, type: 'error', onClick: () => deleteSingle(row.id) },
-          { icon: () => h(NIcon, null, { default: () => h(Trash) }), default: () => '删除' }
-        )
-      ])
-  }
-];
-
 onMounted(() => {
   loadList();
 });
@@ -279,12 +268,37 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .search-input {
   width: 240px;
 }
 
 .article-input {
   width: 130px;
+}
+
+.list-empty {
+  padding: 48px 0;
+}
+
+.cmt-content {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cmt-name {
+  font-weight: 500;
+  opacity: 0.85;
 }
 
 .detail-body {
@@ -322,13 +336,5 @@ onMounted(() => {
     font-size: 12px;
     opacity: 0.55;
   }
-}
-</style>
-
-<!-- 列 render 函数里的元素带不上 scoped hash，列内专属样式放非 scoped 块 -->
-<style lang="scss">
-.comment-reply-cell {
-  font-size: 12.5px;
-  opacity: 0.75;
 }
 </style>
