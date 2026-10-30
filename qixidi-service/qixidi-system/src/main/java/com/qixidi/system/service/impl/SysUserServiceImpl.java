@@ -50,6 +50,14 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public TableDataInfo<SysUser> selectPageUserList(SysUser user, PageQuery pageQuery) {
         Page<SysUser> page = baseMapper.selectPageUserList(pageQuery.build(), this.buildQueryWrapper(user));
+        // 批量填充角色（列表页角色列展示用，一次 in 查询避免循环查库）
+        List<SysUser> records = page.getRecords();
+        if (CollUtil.isNotEmpty(records)) {
+            List<Long> userIds = records.stream().map(SysUser::getUserId).toList();
+            Map<Long, List<SysRole>> roleMap = roleMapper.selectRolesByUserIds(userIds).stream()
+                .collect(Collectors.groupingBy(SysRole::getUserId));
+            records.forEach(u -> u.setRoles(roleMap.get(u.getUserId())));
+        }
         return TableDataInfo.build(page);
     }
 

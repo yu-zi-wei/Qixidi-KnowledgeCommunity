@@ -76,4 +76,24 @@
         WHERE r.del_flag = '0' and u.user_name = #{userName}
     </select>
 
+    <resultMap type="com.qixidi.auth.domain.entity.SysRole" id="SysRoleWithUserResult" extends="SysRoleResult">
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <select id="selectRolesByUserIds" resultMap="SysRoleWithUserResult">
+        select ur.user_id,
+               r.role_id,
+               r.role_name,
+               r.role_key,
+               r.role_sort,
+               r.status
+        from sys_user_role ur
+                 join sys_role r on r.role_id = ur.role_id
+        where r.del_flag = '0'
+          and ur.user_id in
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
 </mapper>

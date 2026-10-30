@@ -15,7 +15,7 @@ export interface LoginBody {
   uuid?: string;
 }
 
-/** GET /getInfo 响应（roles/permissions 为 RuoYi 遗留，瘦身前忽略） */
+/** GET /getInfo 响应（permissions 为 RBAC 权限码集合，超管 ['*']；roles 已无消费方） */
 export interface AdminInfoData {
   user: AdminInfo & Record<string, any>;
   roles: string[];

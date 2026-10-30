@@ -14,7 +14,9 @@ export interface AdminInfo {
 export const useAdminStore = defineStore('admin', {
   state: () => ({
     token: '' as string,
-    adminInfo: null as AdminInfo | null
+    adminInfo: null as AdminInfo | null,
+    /** 登录用户权限码集合（超管为 ['*'] 通配），驱动菜单/按钮可见性（usePerm） */
+    permissions: [] as string[]
   }),
   actions: {
     saveToken(token: string) {
@@ -23,9 +25,13 @@ export const useAdminStore = defineStore('admin', {
     saveAdminInfo(info: AdminInfo) {
       this.adminInfo = info;
     },
+    savePermissions(perms: string[]) {
+      this.permissions = perms || [];
+    },
     logout() {
       this.token = '';
       this.adminInfo = null;
+      this.permissions = [];
     }
   },
   persist: process.client && {

@@ -5,7 +5,6 @@ import com.light.core.annotation.Sensitive;
 import com.light.core.constant.UserConstants;
 import com.light.core.core.domain.BaseEntity;
 import com.light.core.enums.SensitiveStrategy;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,8 +30,11 @@ public class SysUser extends BaseEntity {
 
     /**
      * 用户ID
+     *
+     * 表 user_id 无 AUTO_INCREMENT（历史数据为雪花 ID），必须显式 ASSIGN_ID：
+     * 裸 @TableId 会落全局 id-type=AUTO，insert 不带 ID 列直接报 doesn't have a default value
      */
-    @TableId(value = "user_id")
+    @TableId(value = "user_id", type = IdType.ASSIGN_ID)
     private Long userId;
 
     /**
@@ -81,19 +83,19 @@ public class SysUser extends BaseEntity {
 
     /**
      * 密码
+     *
+     * WRITE_ONLY：序列化不输出（日志/响应不泄密）、反序列化可注入（新增/重置密码接口收 body）。
+     * 原写法 getter 上 @JsonIgnore + @JsonProperty 是 Jackson 2 的 split 语义；
+     * Jackson 3 下 @JsonIgnore 同 accessor 全赢，password 反序列化被忽略 →
+     * user.getPassword()=null → hashpw(null) 把 "null" 字面量存库，账号建出来登录必失败
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField(
             insertStrategy = FieldStrategy.NOT_EMPTY,
             updateStrategy = FieldStrategy.NOT_EMPTY,
             whereStrategy = FieldStrategy.NOT_EMPTY
     )
     private String password;
-
-    @JsonIgnore
-    @JsonProperty
-    public String getPassword() {
-        return password;
-    }
 
     /**
      * 帐号状态（0正常 1停用）

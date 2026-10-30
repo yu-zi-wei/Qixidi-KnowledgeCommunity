@@ -54,7 +54,7 @@ import type { MenuOption } from 'naive-ui';
 import { darkTheme, NIcon } from 'naive-ui';
 import type { GlobalTheme } from 'naive-ui';
 import { MoonStars, Sun, Logout } from '@vicons/tabler';
-import { ADMIN_MENU } from '~/composables/useAdminMenu';
+import { useAdminFilteredMenu, type AdminMenuItem } from '~/composables/useAdminMenu';
 
 const collapsed = ref(false);
 const route = useRoute();
@@ -73,14 +73,15 @@ const toggleTheme = () => {
 const renderIcon = (icon: Component) => () =>
   h(NIcon, null, { default: () => h(icon) });
 
-// 菜单树来自 useAdminMenu（与面包屑同一数据源），这里只做 n-menu 形态转换
-const toMenuOption = (item: (typeof ADMIN_MENU)[number]): MenuOption => ({
+// 菜单树来自 useAdminMenu（与面包屑同一数据源），按登录用户权限码过滤后转 n-menu 形态
+const filteredMenu = useAdminFilteredMenu();
+const toMenuOption = (item: AdminMenuItem): MenuOption => ({
   label: item.label,
   key: item.key,
   icon: item.icon ? renderIcon(item.icon) : undefined,
   children: item.children?.map(toMenuOption)
 });
-const menuOptions: MenuOption[] = ADMIN_MENU.map(toMenuOption);
+const menuOptions = computed<MenuOption[]>(() => filteredMenu.value.map(toMenuOption));
 
 const activeMenu = computed(() => route.path);
 

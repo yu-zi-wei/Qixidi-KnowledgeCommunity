@@ -93,7 +93,7 @@ const handleLogin = () => {
         uuid: form.uuid
       });
       adminStore.saveToken(data.token);
-      // getInfo 返回的 roles/permissions 是 RuoYi 遗留，瘦身（M3）前忽略，只存基本信息
+      // permissions 是 RBAC 权限码（超管 ['*'] 通配），存入 store 驱动菜单/按钮可见性；roles 已无消费方
       const info = await getAdminInfo();
       adminStore.saveAdminInfo({
         userId: info.user.userId,
@@ -101,6 +101,7 @@ const handleLogin = () => {
         nickName: info.user.nickName,
         avatar: info.user.avatar
       });
+      adminStore.savePermissions(info.permissions || []);
       message.success('登录成功');
       router.push('/');
     } catch {

@@ -54,4 +54,12 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRoleMapper, SysRole, Sy
      */
     List<SysRole> selectRolesByUserName(String userName);
 
+    /**
+     * 批量查询多个用户的角色（userId 冗余在 SysRole.userId 上供分组）
+     *
+     * @param userIds 用户ID集合
+     * @return 角色列表（含所属用户ID）
+     */
+    List<SysRole> selectRolesByUserIds(@Param("userIds") List<Long> userIds);
+
 }

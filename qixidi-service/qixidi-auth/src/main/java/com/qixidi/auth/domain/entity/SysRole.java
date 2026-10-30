@@ -84,6 +84,12 @@ public class SysRole extends BaseEntity {
     private boolean flag = false;
 
     /**
+     * 所属用户ID（账号列表批量填充 roles 时按用户分组用，非表字段）
+     */
+    @TableField(exist = false)
+    private Long userId;
+
+    /**
      * 已分配权限码（sys_role_perm，随新增/编辑提交）
      */
     @TableField(exist = false)

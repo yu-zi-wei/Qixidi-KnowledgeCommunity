@@ -1,6 +1,9 @@
 /**
  * 后台菜单树与面包屑（单一数据源）
  *
+ * RBAC 简化模型：菜单归代码、权限归数据库——本树是菜单唯一出处，
+ * 叶子标 perm（后端 @SaCheckPermission 扫描产出的权限码）推导可见性（useAdminFilteredMenu）
+ *
  * 侧栏 menuOptions 与 header 面包屑共用这棵树：
  * - 叶子 key 必须是路由路径（供 n-menu 高亮匹配）
  * - 父级 key 用非路由唯一标识
@@ -13,7 +16,9 @@ import {
   Users,
   Settings,
   Adjustments,
-  Folders
+  Folders,
+  Shield,
+  IdBadge
 } from '@vicons/tabler';
 
 export interface AdminMenuItem {
@@ -22,6 +27,8 @@ export interface AdminMenuItem {
   key: string;
   icon?: Component;
   children?: AdminMenuItem[];
+  /** 访问所需权限码（{模块}:{实体}:{动作}）；缺省视为公开 */
+  perm?: string;
 }
 
 export const ADMIN_MENU: AdminMenuItem[] = [
@@ -31,18 +38,32 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     key: 'content',
     icon: Folders,
     children: [
-      { label: '文章管理', key: '/article', icon: FileText },
-      { label: '评论管理', key: '/comment', icon: MessageCircle }
+      { label: '文章管理', key: '/article', icon: FileText, perm: 'article:information:query' },
+      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' }
     ]
   },
-  { label: '前台用户', key: '/user', icon: Users },
+  { label: '前台用户', key: '/user', icon: Users, perm: 'tripartiteUser:query' },
   {
     label: '系统管理',
     key: 'system',
     icon: Settings,
-    children: [{ label: '系统设置', key: '/setting', icon: Adjustments }]
+    children: [
+      { label: '角色管理', key: '/system/role', icon: Shield, perm: 'role:query' },
+      { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' },
+      { label: '系统设置', key: '/setting', icon: Adjustments }
+    ]
   }
 ];
+
+/** 权限过滤后的菜单：叶子按 perm 过滤（超管 '*' 通配），子项全空的父级一并收起 */
+export const useAdminFilteredMenu = () => {
+  const { hasPerm } = usePerm();
+  const filter = (nodes: AdminMenuItem[]): AdminMenuItem[] =>
+    nodes
+      .map((n) => (n.children ? { ...n, children: filter(n.children) } : n))
+      .filter((n) => (n.children ? n.children.length > 0 : hasPerm(n.perm)));
+  return computed(() => filter(ADMIN_MENU));
+};
 
 /** 面包屑项 */
 export interface AdminCrumb {
