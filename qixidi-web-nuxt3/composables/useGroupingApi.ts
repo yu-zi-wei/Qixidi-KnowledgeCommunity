@@ -8,7 +8,7 @@ export const useGroupingApi = () => {
    * 查询所有分类
    */
   const getList = async (): Promise<GroupingInfo[]> => {
-    const result = await api.getPage<GroupingInfo>('/system/groupingInfo/list')
+    const result = await api.postPage<GroupingInfo>('/system/groupingInfo/list')
     return result.rows || []
   }
 

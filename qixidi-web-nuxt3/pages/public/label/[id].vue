@@ -129,7 +129,7 @@ const cacheKey = computed(() => `label-articles-${labelId.value}-${currentPage.v
 
 const { data: articleData, pending: articlePending } = await useAsyncData(
   cacheKey,
-  () => api.getPage<any>('/white/article/list', {
+  () => api.postPage<any>('/white/article/list', {
     pageNum: currentPage.value,
     pageSize,
     labelId: String(labelId.value),

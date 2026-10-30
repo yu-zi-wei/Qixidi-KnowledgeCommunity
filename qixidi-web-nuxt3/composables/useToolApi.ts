@@ -21,7 +21,7 @@ export const useToolApi = () => {
 
   /** 获取某个分类下的工具列表 */
   const getToolList = (parentId: number) => {
-    return api.get<ToolInfoVo[]>('/white/configure/tool/child/list', { id: parentId, isParent: 2 })
+    return api.post<ToolInfoVo[]>('/white/configure/tool/child/list', { id: parentId, isParent: 2 })
   }
 
   return { getToolCategories, getToolList }

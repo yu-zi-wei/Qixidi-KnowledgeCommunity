@@ -48,12 +48,12 @@ export const useSpecialDetailApi = () => {
 
   /** 用户专栏列表 */
   const getSpecialList = (uid: string) => {
-    return api.get<SpecialDetailVo[]>('/white/special/list', { uid })
+    return api.post<SpecialDetailVo[]>('/white/special/list', { uid })
   }
 
   /** 专栏文章列表（分页） */
   const getSpecialArticles = (params: { userId: string; specialId: number; pageNum: number; pageSize: number; articleTitle?: string; auditState?: number }) => {
-    return api.getPage<SpecialArticleVo>('/white/article/user/list', params)
+    return api.postPage<SpecialArticleVo>('/white/article/user/list', params)
   }
 
   /** 用户信息 */

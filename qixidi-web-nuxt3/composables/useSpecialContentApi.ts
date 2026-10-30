@@ -8,7 +8,7 @@ export const useSpecialContentApi = () => {
    * 获取用户文章列表（用于穿梭框左侧）
    */
   const getUserArticleList = (params: { userId: string; pageNum?: number; pageSize?: number }) => {
-    return api.getPage<{
+    return api.postPage<{
       id: number
       articleTitle: string
       articleCover?: string
@@ -21,7 +21,7 @@ export const useSpecialContentApi = () => {
    * 注意：后端返回的是 ArticleInformationVo 数组，不是 ID 数组
    */
   const getSpecialArticleIds = (specialId: number, uid: string) => {
-    return api.get<{ id: number }[]>('/white/select/special', { id: specialId, uid })
+    return api.post<{ id: number }[]>('/white/select/special', { id: specialId, uid })
   }
 
   /**

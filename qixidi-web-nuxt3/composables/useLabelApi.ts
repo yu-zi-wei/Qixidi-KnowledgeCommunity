@@ -20,7 +20,7 @@ export const useLabelApi = () => {
    * 获取标签分组列表（前台展示用）
    */
   const getGroupingList = (pageNum: number = 0, pageSize: number = 10) => {
-    return api.getPage<LabelGrouping>(
+    return api.postPage<LabelGrouping>(
       '/white/label/grouping/list',
       { pageNum, pageSize }
     )
@@ -30,7 +30,7 @@ export const useLabelApi = () => {
    * 查询所有标签（编辑器用）
    */
   const getList = async (): Promise<LabelInfo[]> => {
-    const result = await api.getPage<LabelInfo>('/system/label-info/list')
+    const result = await api.postPage<LabelInfo>('/system/label-info/list')
     return result.rows || []
   }
 

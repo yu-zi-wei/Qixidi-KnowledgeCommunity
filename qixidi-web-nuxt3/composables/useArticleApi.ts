@@ -4,7 +4,7 @@ export const useArticleApi = () => {
   const api = useApi()
 
   const getRecommendList = (pageNum: number = 1, pageSize: number = 10) => {
-    return api.getPage<ArticleInfo>(
+    return api.postPage<ArticleInfo>(
       '/white/article/recommend/list',
       { pageNum, pageSize }
     )
@@ -19,7 +19,7 @@ export const useArticleApi = () => {
     sortType?: number
     groupingId?: number
   }) => {
-    return api.getPage<ArticleInfo>('/white/article/sort', params)
+    return api.postPage<ArticleInfo>('/white/article/sort', params)
   }
 
   /**
@@ -31,7 +31,7 @@ export const useArticleApi = () => {
     pageSize?: number
     auditState?: number
   }) => {
-    return api.getPage<ArticleInfo>('/user/lately/article/list', params)
+    return api.postPage<ArticleInfo>('/user/lately/article/list', params)
   }
 
   const getFollowList = (params: {
@@ -39,7 +39,7 @@ export const useArticleApi = () => {
     pageSize?: number
     sortType?: number
   }) => {
-    return api.getPage<ArticleInfo>('/white/article/follow/list', params)
+    return api.postPage<ArticleInfo>('/white/article/follow/list', params)
   }
 
   const getCategoryList = (params: {
@@ -48,7 +48,7 @@ export const useArticleApi = () => {
     sortType?: number
     groupingId?: number
   }) => {
-    return api.getPage<ArticleInfo>('/white/article/label/list', params)
+    return api.postPage<ArticleInfo>('/white/article/label/list', params)
   }
 
   /**

@@ -149,7 +149,7 @@ const setYearRef = (key: string, el: any) => {
 // ==================== 文章数据 ====================
 const { data: articleData, pending: articlePending } = await useAsyncData(
   'article-archive',
-  () => api.getPage<ArticleArchiveGroup>('/white/article/archive', { pageNum: 1, pageSize: -1 })
+  () => api.postPage<ArticleArchiveGroup>('/white/article/archive', { pageNum: 1, pageSize: -1 })
 )
 
 // ==================== 小记数据 ====================

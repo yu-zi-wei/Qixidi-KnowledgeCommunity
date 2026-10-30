@@ -14,7 +14,7 @@ export const useBrowsingHistoryApi = () => {
 
   /** 获取浏览历史列表 */
   const getList = (params: { pageNum: number; pageSize: number; uid: string }) => {
-    return api.getPage<BrowsingHistoryVo>('/frontDesk/browsing/history/list', params)
+    return api.postPage<BrowsingHistoryVo>('/frontDesk/browsing/history/list', params)
   }
 
   return { getList }

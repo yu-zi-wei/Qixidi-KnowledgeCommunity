@@ -17,7 +17,7 @@ export const useReadingEssaysApi = () => {
     uid?: string
     content?: string
   }) => {
-    return await api.getPage<{ total: number; rows: ReadingEssaysInfo[] }>(
+    return await api.postPage<{ total: number; rows: ReadingEssaysInfo[] }>(
       '/white/dictum/info/list',
       params
     )
@@ -28,7 +28,7 @@ export const useReadingEssaysApi = () => {
    * 接口：/white/dictum/group/list
    */
   const getReadingEssaysGroups = async (params?: { pageNum?: number; pageSize?: number }) => {
-    return await api.getPage<{ total: number; rows: ReadingEssaysGroup[] }>(
+    return await api.postPage<{ total: number; rows: ReadingEssaysGroup[] }>(
       '/white/dictum/group/list',
       params || { pageNum: 1, pageSize: 100 }
     )
@@ -103,7 +103,7 @@ export const useReadingEssaysApi = () => {
    * 接口：GET /white/dictum/group/list
    */
   const getDictumGroups = async (params?: { pageNum?: number; pageSize?: number }) => {
-    return await api.getPage<{ total: number; rows: ReadingEssaysGroup[] }>(
+    return await api.postPage<{ total: number; rows: ReadingEssaysGroup[] }>(
       '/white/dictum/group/list',
       params || { pageNum: 1, pageSize: 100 }
     )
@@ -114,7 +114,7 @@ export const useReadingEssaysApi = () => {
    * 接口：GET /frontDesk/dictum/album/role/list
    */
   const getDictumAlbums = async (params?: { pageNum?: number; pageSize?: number; albumName?: string }) => {
-    return await api.getPage<{ total: number; rows: ReadingEssaysAlbum[] }>(
+    return await api.postPage<{ total: number; rows: ReadingEssaysAlbum[] }>(
       '/frontDesk/dictum/album/role/list',
       params || { pageNum: 1, pageSize: 100 }
     )
@@ -162,7 +162,7 @@ export const useReadingEssaysApi = () => {
     dictumState?: number
     content?: string
   }) => {
-    return await api.getPage<ReadingEssaysInfo>(
+    return await api.postPage<ReadingEssaysInfo>(
       '/frontDesk/dictum/info/role/list',
       params
     )

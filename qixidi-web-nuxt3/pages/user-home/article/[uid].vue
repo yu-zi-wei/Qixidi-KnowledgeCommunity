@@ -74,7 +74,7 @@ const cacheKey = computed(() => `user-home-article-${uid.value}-${currentPage.va
 
 const { data: pageData, pending } = useAsyncData(
   cacheKey,
-  () => api.getPage<any>('/white/article/user/list', {
+  () => api.postPage<any>('/white/article/user/list', {
     pageNum: currentPage.value,
     pageSize,
     userId: uid.value,

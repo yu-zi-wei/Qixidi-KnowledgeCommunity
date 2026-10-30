@@ -10,37 +10,37 @@ export const useNewsApi = () => {
 
   /** 评论消息列表（文章） */
   const getCommentList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.getPage<ArticleCommentNewsVo>('/frontDesk/news/comment/list', { pageNum, pageSize })
+    return api.postPage<ArticleCommentNewsVo>('/frontDesk/news/comment/list', { pageNum, pageSize })
   }
 
   /** 小记评论消息列表 */
   const getTimeNotesCommentList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.getPage<TimeNotesCommentNewsVo>('/frontDesk/news/comment/time-notes/list', { pageNum, pageSize })
+    return api.postPage<TimeNotesCommentNewsVo>('/frontDesk/news/comment/time-notes/list', { pageNum, pageSize })
   }
 
   /** 随笔评论消息列表 */
   const getDictumCommentList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.getPage<DictumCommentNewsVo>('/frontDesk/news/comment/dictum/list', { pageNum, pageSize })
+    return api.postPage<DictumCommentNewsVo>('/frontDesk/news/comment/dictum/list', { pageNum, pageSize })
   }
 
   /** 点赞消息列表 */
   const getFabulousList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.getPage<NewsUserInfoVo>('/frontDesk/news/fabulous/list', { pageNum, pageSize })
+    return api.postPage<NewsUserInfoVo>('/frontDesk/news/fabulous/list', { pageNum, pageSize })
   }
 
   /** 关注消息列表 */
   const getFollowList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.getPage<NewsUserInfoVo>('/frontDesk/news/follow/list', { pageNum, pageSize })
+    return api.postPage<NewsUserInfoVo>('/frontDesk/news/follow/list', { pageNum, pageSize })
   }
 
   /** 系统消息列表 */
   const getSystemList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.getPage<NewsUserInfoVo>('/frontDesk/news/system/list', { pageNum, pageSize })
+    return api.postPage<NewsUserInfoVo>('/frontDesk/news/system/list', { pageNum, pageSize })
   }
 
   /** 标记已读 */
   const markRead = (type: number) => {
-    return api.get('/frontDesk/news/news-read', { type, beenRead: 1 })
+    return api.post('/frontDesk/news/news-read', { type, beenRead: 1 })
   }
 
   return {

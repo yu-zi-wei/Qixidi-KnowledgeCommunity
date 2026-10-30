@@ -12,7 +12,7 @@ export const useAdminArticleApi = () => {
     articleTitle?: string
     auditState?: number
   }) => {
-    return api.getPage<AdminArticleItem>('/user/article/list', params)
+    return api.postPage<AdminArticleItem>('/user/article/list', params)
   }
 
   /**

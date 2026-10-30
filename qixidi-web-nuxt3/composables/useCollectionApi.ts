@@ -72,7 +72,7 @@ export const useCollectionApi = () => {
    * 接口：/white/collection/article/list
    */
   const getCollectionArticles = (params: { collectionId: number; pageNum: number; pageSize: number; articleTitle?: string }) => {
-    return api.getPage<any>('/white/collection/article/list', params)
+    return api.postPage<any>('/white/collection/article/list', params)
   }
 
   return {

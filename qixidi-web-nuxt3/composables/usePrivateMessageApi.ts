@@ -5,12 +5,12 @@ export const usePrivateMessageApi = () => {
 
   /** 私信用户列表 */
   const getUserList = (uid: string, pageNum: number = 1, pageSize: number = 50) => {
-    return api.getPage<PrivateUserVo>('/frontDesk/private/user/list', { uid, pageNum, pageSize })
+    return api.postPage<PrivateUserVo>('/frontDesk/private/user/list', { uid, pageNum, pageSize })
   }
 
   /** 私信消息列表 */
   const getMessageList = (replyTargetUid: string, pageNum: number = 1, pageSize: number = 50) => {
-    return api.getPage<PrivateNewsInfoVo>('/frontDesk/private/newsInfo/list', { replyTargetUid, pageNum, pageSize })
+    return api.postPage<PrivateNewsInfoVo>('/frontDesk/private/newsInfo/list', { replyTargetUid, pageNum, pageSize })
   }
 
   /** 标记私信已读 */

@@ -8,7 +8,7 @@ export const useDictumAlbumApi = () => {
 
   return {
     /** 获取专辑列表（分页 1,-1 查全部） */
-    getList: () => api.getPage<ReadingEssaysAlbum>('/frontDesk/dictum/album/role/list', {
+    getList: () => api.postPage<ReadingEssaysAlbum>('/frontDesk/dictum/album/role/list', {
       pageNum: 1,
       pageSize: -1
     }),

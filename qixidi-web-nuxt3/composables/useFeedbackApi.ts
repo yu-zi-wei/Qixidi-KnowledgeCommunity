@@ -7,7 +7,7 @@ export const useFeedbackApi = () => {
    * 反馈列表（白名单接口，可传 uid 只看某用户的反馈）
    */
   const getList = (params: { pageNum?: number; pageSize?: number; uid?: string; status?: number }) => {
-    return api.getPage<FeedbackVo>('/white/feedback/list', params)
+    return api.postPage<FeedbackVo>('/white/feedback/list', params)
   }
 
   /**

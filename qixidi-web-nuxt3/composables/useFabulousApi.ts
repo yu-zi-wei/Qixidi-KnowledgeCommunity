@@ -25,7 +25,7 @@ export const useFabulousApi = () => {
    * 用户点赞文章列表（分页）
    */
   const getFabulousArticleList = (uid: string, pageNum: number, pageSize: number) => {
-    return api.getPage<any>('/frontDesk/fabulous/fabulous/articleList', {
+    return api.postPage<any>('/frontDesk/fabulous/fabulous/articleList', {
       uid,
       pageNum,
       pageSize

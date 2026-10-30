@@ -11,7 +11,7 @@ export const useCommentApi = () => {
    */
   const getCommentList = async (articleId: number): Promise<ArticleCommentVo[]> => {
     // 接口实际返回 R 包装的格式，使用 get 方法自动解包
-    return await api.get<ArticleCommentVo[]>('/white/article/comment/list', { articleId })
+    return await api.post<ArticleCommentVo[]>('/white/article/comment/list', { articleId })
   }
 
   /**
