@@ -39,7 +39,7 @@ public class DictumGroupController {
     /**
      * 查询名言分组列表
      */
-    @SaCheckPermission("business:dictum:group:list")
+    @SaCheckPermission("dictum:group:list")
     @PostMapping("/list")
     public TableDataInfo<DictumGroupVo> list(@Validated(QueryGroup.class) @RequestBody DictumGroupBo bo) {
         return iDictumGroupService.queryPageList(bo, bo);
@@ -48,7 +48,7 @@ public class DictumGroupController {
     /**
      * 导出名言分组列表
      */
-    @SaCheckPermission("business:dictum:group:export")
+    @SaCheckPermission("dictum:group:export")
     @Log(title = "名言分组", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumGroupBo bo, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class DictumGroupController {
     /**
      * 获取名言分组详细信息
      */
-    @SaCheckPermission("business:dictum:group:query")
+    @SaCheckPermission("dictum:group:query")
     @GetMapping("/{id}")
     public DictumGroupVo getInfo(@PathVariable("id") Long id) {
         return iDictumGroupService.queryById(id);
@@ -68,7 +68,7 @@ public class DictumGroupController {
     /**
      * 新增名言分组
      */
-    @SaCheckPermission("business:dictum:group:add")
+    @SaCheckPermission("dictum:group:add")
     @Log(title = "名言分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -79,7 +79,7 @@ public class DictumGroupController {
     /**
      * 修改名言分组
      */
-    @SaCheckPermission("business:dictum:group:edit")
+    @SaCheckPermission("dictum:group:edit")
     @Log(title = "名言分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -90,7 +90,7 @@ public class DictumGroupController {
     /**
      * 删除名言分组
      */
-    @SaCheckPermission("business:dictum:group:remove")
+    @SaCheckPermission("dictum:group:remove")
     @Log(title = "名言分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

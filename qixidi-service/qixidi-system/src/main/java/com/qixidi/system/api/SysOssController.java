@@ -46,7 +46,7 @@ public class SysOssController {
     /**
      * 查询OSS对象存储列表
      */
-    @SaCheckPermission("system:oss:list")
+    @SaCheckPermission("oss:list")
     @PostMapping("/list")
     public TableDataInfo<SysOssVo> list(@Validated(QueryGroup.class) @RequestBody SysOssBo bo) {
         return iSysOssService.queryPageList(bo, bo);
@@ -77,7 +77,7 @@ public class SysOssController {
      * @param response
      * @throws IOException
      */
-    @SaCheckPermission("system:oss:download")
+    @SaCheckPermission("oss:download")
     @GetMapping("/download/{ossId}")
     public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
         SysOss sysOss = iSysOssService.getById(ossId);
@@ -103,7 +103,7 @@ public class SysOssController {
     /**
      * 删除OSS对象存储
      */
-    @SaCheckPermission("system:oss:remove")
+    @SaCheckPermission("oss:remove")
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")
     public void remove(@PathVariable Long[] ossIds) {

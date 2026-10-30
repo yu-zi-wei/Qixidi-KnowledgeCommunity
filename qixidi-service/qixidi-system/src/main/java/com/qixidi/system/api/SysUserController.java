@@ -42,7 +42,7 @@ public class SysUserController {
     /**
      * 获取用户列表
      */
-    @SaCheckPermission("system:user:list")
+    @SaCheckPermission("user:list")
     @PostMapping("/list")
     public TableDataInfo<SysUser> list(@RequestBody SysUser user) {
         return userService.selectPageUserList(user, user);
@@ -51,7 +51,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取详细信息
      */
-    @SaCheckPermission("system:user:query")
+    @SaCheckPermission("user:query")
     @GetMapping(value = {"/", "/{userId}"})
     public Map<String, Object> getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         Map<String, Object> ajax = new HashMap<>();
@@ -68,7 +68,7 @@ public class SysUserController {
     /**
      * 新增用户
      */
-    @SaCheckPermission("system:user:add")
+    @SaCheckPermission("user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysUser user) {
@@ -88,7 +88,7 @@ public class SysUserController {
     /**
      * 修改用户
      */
-    @SaCheckPermission("system:user:edit")
+    @SaCheckPermission("user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysUser user) {
@@ -106,7 +106,7 @@ public class SysUserController {
     /**
      * 删除用户
      */
-    @SaCheckPermission("system:user:remove")
+    @SaCheckPermission("user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
     public void remove(@PathVariable Long[] userIds) {
@@ -119,7 +119,7 @@ public class SysUserController {
     /**
      * 重置密码
      */
-    @SaCheckPermission("system:user:resetPwd")
+    @SaCheckPermission("user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
     public void resetPwd(@RequestBody SysUser user) {
@@ -131,7 +131,7 @@ public class SysUserController {
     /**
      * 状态修改
      */
-    @SaCheckPermission("system:user:edit")
+    @SaCheckPermission("user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public void changeStatus(@RequestBody SysUser user) {
@@ -142,7 +142,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取授权角色
      */
-    @SaCheckPermission("system:user:query")
+    @SaCheckPermission("user:query")
     @GetMapping("/authRole/{userId}")
     public Map<String, Object> authRole(@PathVariable("userId") Long userId) {
         SysUser user = userService.selectUserById(userId);
@@ -156,7 +156,7 @@ public class SysUserController {
     /**
      * 用户授权角色
      */
-    @SaCheckPermission("system:user:edit")
+    @SaCheckPermission("user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")
     public void insertAuthRole(Long userId, Long[] roleIds) {

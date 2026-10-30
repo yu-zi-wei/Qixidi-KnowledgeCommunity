@@ -39,7 +39,7 @@ public class UserReportController {
     /**
      * 查询用户签到列表
      */
-    @SaCheckPermission("business:user:report:list")
+    @SaCheckPermission("user:report:list")
     @PostMapping("/list")
     public TableDataInfo<UserReportVo> list(@Validated(QueryGroup.class) @RequestBody UserReportBo bo) {
         return iUserReportService.queryPageList(bo, bo);
@@ -48,7 +48,7 @@ public class UserReportController {
     /**
      * 导出用户签到列表
      */
-    @SaCheckPermission("business:user:report:export")
+    @SaCheckPermission("user:report:export")
     @Log(title = "用户签到", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated UserReportBo bo, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class UserReportController {
     /**
      * 获取用户签到详细信息
      */
-    @SaCheckPermission("business:user:report:query")
+    @SaCheckPermission("user:report:query")
     @GetMapping("/{id}")
     public UserReportVo getInfo(@PathVariable("id") Long id) {
         return iUserReportService.queryById(id);
@@ -68,7 +68,7 @@ public class UserReportController {
     /**
      * 新增用户签到
      */
-    @SaCheckPermission("business:user:report:add")
+    @SaCheckPermission("user:report:add")
     @Log(title = "用户签到", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -79,7 +79,7 @@ public class UserReportController {
     /**
      * 修改用户签到
      */
-    @SaCheckPermission("business:user:report:edit")
+    @SaCheckPermission("user:report:edit")
     @Log(title = "用户签到", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -90,7 +90,7 @@ public class UserReportController {
     /**
      * 删除用户签到
      */
-    @SaCheckPermission("business:user:report:remove")
+    @SaCheckPermission("user:report:remove")
     @Log(title = "用户签到", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

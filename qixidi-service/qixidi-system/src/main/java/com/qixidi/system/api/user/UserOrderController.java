@@ -39,7 +39,7 @@ public class UserOrderController {
     /**
      * 查询用户订单列表
      */
-    @SaCheckPermission("business:order:list")
+    @SaCheckPermission("order:list")
     @PostMapping("/list")
     public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) @RequestBody UserOrderBo bo) {
         return iUserOrderService.queryPageList(bo, bo);
@@ -48,7 +48,7 @@ public class UserOrderController {
     /**
      * 导出用户订单列表
      */
-    @SaCheckPermission("business:order:export")
+    @SaCheckPermission("order:export")
     @Log(title = "用户订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated UserOrderBo bo, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class UserOrderController {
     /**
      * 获取用户订单详细信息
      */
-    @SaCheckPermission("business:order:query")
+    @SaCheckPermission("order:query")
     @GetMapping("/{id}")
     public UserOrderVo getInfo(@PathVariable("id") Long id) {
         return iUserOrderService.queryById(id);
@@ -68,7 +68,7 @@ public class UserOrderController {
     /**
      * 新增用户订单
      */
-    @SaCheckPermission("business:order:add")
+    @SaCheckPermission("order:add")
     @Log(title = "用户订单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -79,7 +79,7 @@ public class UserOrderController {
     /**
      * 修改用户订单
      */
-    @SaCheckPermission("system:order:edit")
+    @SaCheckPermission("order:edit")
     @Log(title = "用户订单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -90,7 +90,7 @@ public class UserOrderController {
     /**
      * 删除用户订单
      */
-    @SaCheckPermission("business:order:remove")
+    @SaCheckPermission("order:remove")
     @Log(title = "用户订单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

@@ -34,7 +34,7 @@ public class SysConfigController {
     /**
      * 获取参数配置列表
      */
-    @SaCheckPermission("system:config:list")
+    @SaCheckPermission("config:list")
     @PostMapping("/list")
     public TableDataInfo<SysConfig> list(@RequestBody SysConfig config) {
         return configService.selectPageConfigList(config, config);
@@ -47,7 +47,7 @@ public class SysConfigController {
      * @param response
      */
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
-    @SaCheckPermission("system:config:export")
+    @SaCheckPermission("config:export")
     @PostMapping("/export")
     public void export(SysConfig config, HttpServletResponse response) {
         List<SysConfig> list = configService.selectConfigList(config);
@@ -57,7 +57,7 @@ public class SysConfigController {
     /**
      * 根据参数编号获取详细信息
      */
-    @SaCheckPermission("system:config:query")
+    @SaCheckPermission("config:query")
     @GetMapping(value = "/{configId}")
     public SysConfig getInfo(@PathVariable Long configId) {
         return configService.selectConfigById(configId);
@@ -74,7 +74,7 @@ public class SysConfigController {
     /**
      * 新增参数配置
      */
-    @SaCheckPermission("system:config:add")
+    @SaCheckPermission("config:add")
     @Log(title = "参数管理", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysConfig config) {
@@ -87,7 +87,7 @@ public class SysConfigController {
     /**
      * 修改参数配置
      */
-    @SaCheckPermission("system:config:edit")
+    @SaCheckPermission("config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysConfig config) {
@@ -100,7 +100,7 @@ public class SysConfigController {
     /**
      * 根据参数键名修改参数配置
      */
-    @SaCheckPermission("system:config:edit")
+    @SaCheckPermission("config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping("/updateByKey")
     public void updateByKey(@RequestBody SysConfig config) {
@@ -110,7 +110,7 @@ public class SysConfigController {
     /**
      * 删除参数配置
      */
-    @SaCheckPermission("system:config:remove")
+    @SaCheckPermission("config:remove")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
     public void remove(@PathVariable Long[] configIds) {
@@ -120,7 +120,7 @@ public class SysConfigController {
     /**
      * 刷新参数缓存
      */
-    @SaCheckPermission("system:config:remove")
+    @SaCheckPermission("config:remove")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
     public void refreshCache() {

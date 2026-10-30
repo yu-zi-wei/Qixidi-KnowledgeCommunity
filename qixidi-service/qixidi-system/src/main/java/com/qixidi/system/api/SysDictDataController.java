@@ -40,7 +40,7 @@ public class SysDictDataController {
      * @param pageQuery
      * @return
      */
-    @SaCheckPermission("system:dict:list")
+    @SaCheckPermission("dict:list")
     @PostMapping("/list")
     public TableDataInfo<SysDictData> list(@RequestBody SysDictData dictData) {
         return dictDataService.selectPageDictDataList(dictData, dictData);
@@ -53,7 +53,7 @@ public class SysDictDataController {
      * @param response
      */
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
-    @SaCheckPermission("system:dict:export")
+    @SaCheckPermission("dict:export")
     @PostMapping("/export")
     public void export(SysDictData dictData, HttpServletResponse response) {
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
@@ -63,7 +63,7 @@ public class SysDictDataController {
     /**
      * 查询字典数据详细
      */
-    @SaCheckPermission("system:dict:query")
+    @SaCheckPermission("dict:query")
     @GetMapping(value = "/{dictCode}")
     public SysDictData getInfo(@PathVariable Long dictCode) {
         return dictDataService.selectDictDataById(dictCode);
@@ -84,7 +84,7 @@ public class SysDictDataController {
     /**
      * 新增字典类型
      */
-    @SaCheckPermission("system:dict:add")
+    @SaCheckPermission("dict:add")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysDictData dict) {
@@ -94,7 +94,7 @@ public class SysDictDataController {
     /**
      * 修改保存字典类型
      */
-    @SaCheckPermission("system:dict:edit")
+    @SaCheckPermission("dict:edit")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysDictData dict) {
@@ -104,7 +104,7 @@ public class SysDictDataController {
     /**
      * 删除字典类型
      */
-    @SaCheckPermission("system:dict:remove")
+    @SaCheckPermission("dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
     public void remove(@PathVariable Long[] dictCodes) {

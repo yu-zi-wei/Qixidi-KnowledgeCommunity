@@ -30,7 +30,7 @@ public class SysRoleController {
     /**
      * 查询角色信息列表
      */
-    @SaCheckPermission("system:role:list")
+    @SaCheckPermission("role:list")
     @PostMapping("/list")
     public TableDataInfo<SysRole> list(@RequestBody SysRole role) {
         return roleService.selectPageRoleList(role, role);
@@ -39,7 +39,7 @@ public class SysRoleController {
     /**
      * 根据角色编号获取详细信息（含已分配权限码）
      */
-    @SaCheckPermission("system:role:query")
+    @SaCheckPermission("role:query")
     @GetMapping(value = "/{roleId}")
     public SysRole getInfo(@PathVariable Long roleId) {
         return roleService.selectRoleById(roleId);
@@ -48,7 +48,7 @@ public class SysRoleController {
     /**
      * 新增角色
      */
-    @SaCheckPermission("system:role:add")
+    @SaCheckPermission("role:add")
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysRole role) {
@@ -64,7 +64,7 @@ public class SysRoleController {
     /**
      * 修改保存角色（含权限码重写）
      */
-    @SaCheckPermission("system:role:edit")
+    @SaCheckPermission("role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysRole role) {
@@ -81,7 +81,7 @@ public class SysRoleController {
     /**
      * 状态修改
      */
-    @SaCheckPermission("system:role:edit")
+    @SaCheckPermission("role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public void changeStatus(@RequestBody SysRole role) {
@@ -92,7 +92,7 @@ public class SysRoleController {
     /**
      * 删除角色
      */
-    @SaCheckPermission("system:role:remove")
+    @SaCheckPermission("role:remove")
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleIds}")
     public void remove(@PathVariable Long[] roleIds) {
@@ -102,7 +102,7 @@ public class SysRoleController {
     /**
      * 获取角色选择框列表
      */
-    @SaCheckPermission("system:role:query")
+    @SaCheckPermission("role:query")
     @GetMapping("/optionselect")
     public List<SysRole> optionselect() {
         return roleService.selectRoleAll();

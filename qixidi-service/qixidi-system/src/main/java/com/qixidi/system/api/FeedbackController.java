@@ -47,7 +47,7 @@ public class FeedbackController {
     /**
      * 导出用户反馈列表
      */
-    @SaCheckPermission("business:Feedback:export")
+    @SaCheckPermission("feedback:export")
     @Log(title = "用户反馈", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated FeedbackBo bo, HttpServletResponse response) {
@@ -58,7 +58,7 @@ public class FeedbackController {
     /**
      * 获取用户反馈详细信息
      */
-    @SaCheckPermission("business:Feedback:query")
+    @SaCheckPermission("feedback:query")
     @GetMapping("/{id}")
     public FeedbackVo getInfo(@PathVariable("id") Long id) {
         return IFeedbackService.queryById(id);
@@ -67,7 +67,7 @@ public class FeedbackController {
     /**
      * 新增用户反馈
      */
-    @SaCheckPermission("business:Feedback:add")
+    @SaCheckPermission("feedback:add")
     @Log(title = "用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -78,7 +78,7 @@ public class FeedbackController {
     /**
      * 修改用户反馈
      */
-    @SaCheckPermission("system:Feedback:edit")
+    @SaCheckPermission("feedback:edit")
     @Log(title = "用户反馈", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -89,7 +89,7 @@ public class FeedbackController {
     /**
      * 删除用户反馈
      */
-    @SaCheckPermission("business:Feedback:remove")
+    @SaCheckPermission("feedback:remove")
     @Log(title = "用户反馈", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

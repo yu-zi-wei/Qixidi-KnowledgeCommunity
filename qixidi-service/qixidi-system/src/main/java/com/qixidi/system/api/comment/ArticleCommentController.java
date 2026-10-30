@@ -88,7 +88,7 @@ public class ArticleCommentController {
      * @param bo
      * @return
      */
-    @SaCheckPermission("system:comment:edit")
+    @SaCheckPermission("article:comment:edit")
     @Log(title = "文章评论", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()

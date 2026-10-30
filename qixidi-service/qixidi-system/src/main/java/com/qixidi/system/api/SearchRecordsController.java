@@ -39,7 +39,7 @@ public class SearchRecordsController {
     /**
      * 查询搜索记录列表
      */
-    @SaCheckPermission("business:search:records:list")
+    @SaCheckPermission("search:records:list")
     @PostMapping("/list")
     public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) @RequestBody SearchRecordsBo bo) {
         return iSearchRecordsService.queryPageList(bo, bo);
@@ -48,7 +48,7 @@ public class SearchRecordsController {
     /**
      * 导出搜索记录列表
      */
-    @SaCheckPermission("business:search:records:export")
+    @SaCheckPermission("search:records:export")
     @Log(title = "搜索记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated SearchRecordsBo bo, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class SearchRecordsController {
     /**
      * 获取搜索记录详细信息
      */
-    @SaCheckPermission("business:search:records:query")
+    @SaCheckPermission("search:records:query")
     @GetMapping("/{id}")
     public SearchRecordsVo getInfo(@PathVariable("id") Long id) {
         return iSearchRecordsService.queryById(id);
@@ -68,7 +68,7 @@ public class SearchRecordsController {
     /**
      * 新增搜索记录
      */
-    @SaCheckPermission("business:search:records:add")
+    @SaCheckPermission("search:records:add")
     @Log(title = "搜索记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -79,7 +79,7 @@ public class SearchRecordsController {
     /**
      * 修改搜索记录
      */
-    @SaCheckPermission("business:search:records:edit")
+    @SaCheckPermission("search:records:edit")
     @Log(title = "搜索记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -90,7 +90,7 @@ public class SearchRecordsController {
     /**
      * 删除搜索记录
      */
-    @SaCheckPermission("business:search:records:remove")
+    @SaCheckPermission("search:records:remove")
     @Log(title = "搜索记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

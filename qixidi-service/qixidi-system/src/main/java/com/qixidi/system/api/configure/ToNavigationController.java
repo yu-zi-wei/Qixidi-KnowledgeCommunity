@@ -47,7 +47,7 @@ public class ToNavigationController {
     /**
      * 导出导航栏配置列表
      */
-    @SaCheckPermission("business:navigation:export")
+    @SaCheckPermission("navigation:export")
     @Log(title = "导航栏配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToNavigationBo bo, HttpServletResponse response) {
@@ -58,7 +58,7 @@ public class ToNavigationController {
     /**
      * 获取导航栏配置详细信息
      */
-    @SaCheckPermission("business:navigation:query")
+    @SaCheckPermission("navigation:query")
     @GetMapping("/{id}")
     public ToNavigationVo getInfo(@PathVariable("id") Long id) {
         return iToNavigationService.queryById(id);
@@ -67,7 +67,7 @@ public class ToNavigationController {
     /**
      * 新增导航栏配置
      */
-    @SaCheckPermission("business:navigation:add")
+    @SaCheckPermission("navigation:add")
     @Log(title = "导航栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -78,7 +78,7 @@ public class ToNavigationController {
     /**
      * 修改导航栏配置
      */
-    @SaCheckPermission("business:navigation:edit")
+    @SaCheckPermission("navigation:edit")
     @Log(title = "导航栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -89,7 +89,7 @@ public class ToNavigationController {
     /**
      * 删除导航栏配置
      */
-    @SaCheckPermission("business:navigation:remove")
+    @SaCheckPermission("navigation:remove")
     @Log(title = "导航栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

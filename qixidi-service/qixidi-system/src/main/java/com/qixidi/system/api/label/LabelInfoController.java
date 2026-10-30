@@ -46,7 +46,7 @@ public class LabelInfoController {
     /**
      * 导出标签信息列表
      */
-    @SaCheckPermission("business:label-info:export")
+    @SaCheckPermission("labelInfo:export")
     @Log(title = "标签信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated LabelInfoBo bo, HttpServletResponse response) {
@@ -57,7 +57,7 @@ public class LabelInfoController {
     /**
      * 获取标签信息详细信息
      */
-    @SaCheckPermission("business:label-info:query")
+    @SaCheckPermission("labelInfo:query")
     @GetMapping("/{id}")
     public LabelInfoVo getInfo(@PathVariable("id") Long id) {
         return iLabelInfoService.queryById(id);
@@ -66,7 +66,7 @@ public class LabelInfoController {
     /**
      * 新增标签信息
      */
-    @SaCheckPermission("business:label-info:add")
+    @SaCheckPermission("labelInfo:add")
     @Log(title = "标签信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -77,7 +77,7 @@ public class LabelInfoController {
     /**
      * 修改标签信息
      */
-    @SaCheckPermission("business:label-info:edit")
+    @SaCheckPermission("labelInfo:edit")
     @Log(title = "标签信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -88,7 +88,7 @@ public class LabelInfoController {
     /**
      * 删除标签信息
      */
-    @SaCheckPermission("system:info:remove")
+    @SaCheckPermission("labelInfo:remove")
     @Log(title = "标签信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

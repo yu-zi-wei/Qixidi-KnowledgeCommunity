@@ -39,7 +39,7 @@ public class NewsSystemInfoController {
     /**
      * 查询系统消息列表
      */
-    @SaCheckPermission("business:news:systemInfo:list")
+    @SaCheckPermission("news:systemInfo:list")
     @PostMapping("/list")
     public TableDataInfo<NewsSystemInfoVo> list(@Validated(QueryGroup.class) @RequestBody NewsSystemInfoBo bo) {
         return iNewsSystemInfoService.queryPageList(bo, bo);
@@ -48,7 +48,7 @@ public class NewsSystemInfoController {
     /**
      * 导出系统消息列表
      */
-    @SaCheckPermission("business:news:systemInfo:export")
+    @SaCheckPermission("news:systemInfo:export")
     @Log(title = "系统消息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated NewsSystemInfoBo bo, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class NewsSystemInfoController {
     /**
      * 获取系统消息详细信息
      */
-    @SaCheckPermission("business:news:systemInfo:query")
+    @SaCheckPermission("news:systemInfo:query")
     @GetMapping("/{id}")
     public NewsSystemInfoVo getInfo(@PathVariable("id") Long id) {
         return iNewsSystemInfoService.queryById(id);
@@ -68,7 +68,7 @@ public class NewsSystemInfoController {
     /**
      * 新增系统消息
      */
-    @SaCheckPermission("business:news:systemInfo:add")
+    @SaCheckPermission("news:systemInfo:add")
     @Log(title = "系统消息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -79,7 +79,7 @@ public class NewsSystemInfoController {
     /**
      * 修改系统消息
      */
-    @SaCheckPermission("business:news:systemInfo:edit")
+    @SaCheckPermission("news:systemInfo:edit")
     @Log(title = "系统消息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -90,7 +90,7 @@ public class NewsSystemInfoController {
     /**
      * 删除系统消息
      */
-    @SaCheckPermission("business:news:systemInfo:remove")
+    @SaCheckPermission("news:systemInfo:remove")
     @Log(title = "系统消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

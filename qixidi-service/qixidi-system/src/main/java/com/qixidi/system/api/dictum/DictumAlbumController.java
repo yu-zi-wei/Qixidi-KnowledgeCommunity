@@ -39,7 +39,7 @@ public class DictumAlbumController {
     /**
      * 查询名言专辑列表
      */
-    @SaCheckPermission("business:dictum:album:list")
+    @SaCheckPermission("dictum:album:list")
     @PostMapping("/list")
     public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) @RequestBody DictumAlbumBo bo) {
         return iDictumAlbumService.queryPageList(bo, bo);
@@ -48,7 +48,7 @@ public class DictumAlbumController {
     /**
      * 导出名言专辑列表
      */
-    @SaCheckPermission("business:dictum:album:export")
+    @SaCheckPermission("dictum:album:export")
     @Log(title = "名言专辑", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumAlbumBo bo, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class DictumAlbumController {
     /**
      * 获取名言专辑详细信息
      */
-    @SaCheckPermission("business:dictum:album:query")
+    @SaCheckPermission("dictum:album:query")
     @GetMapping("/{id}")
     public DictumAlbumVo getInfo(@PathVariable("id") Long id) {
         return iDictumAlbumService.queryById(id);
@@ -68,7 +68,7 @@ public class DictumAlbumController {
     /**
      * 新增名言专辑
      */
-    @SaCheckPermission("business:dictum:album:add")
+    @SaCheckPermission("dictum:album:add")
     @Log(title = "名言专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -79,7 +79,7 @@ public class DictumAlbumController {
     /**
      * 修改名言专辑
      */
-    @SaCheckPermission("business:dictum:album:edit")
+    @SaCheckPermission("dictum:album:edit")
     @Log(title = "名言专辑", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -90,7 +90,7 @@ public class DictumAlbumController {
     /**
      * 删除名言专辑
      */
-    @SaCheckPermission("business:dictum:album:remove")
+    @SaCheckPermission("dictum:album:remove")
     @Log(title = "名言专辑", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

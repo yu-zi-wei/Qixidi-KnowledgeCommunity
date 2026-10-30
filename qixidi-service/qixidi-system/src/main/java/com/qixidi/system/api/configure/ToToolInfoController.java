@@ -38,7 +38,7 @@ public class ToToolInfoController {
     /**
      * 查询工具信息列表
      */
-    @SaCheckPermission("business:toolInfo:list")
+    @SaCheckPermission("toolInfo:list")
     @PostMapping("/list")
     public Object list(@Validated(QueryGroup.class) @RequestBody ToToolInfoBo bo) {
         return iToToolInfoService.queryPageList(bo, bo);
@@ -47,7 +47,7 @@ public class ToToolInfoController {
     /**
      * 导出工具信息列表
      */
-    @SaCheckPermission("business:toolInfo:export")
+    @SaCheckPermission("toolInfo:export")
     @Log(title = "工具信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToToolInfoBo bo, HttpServletResponse response) {
@@ -58,7 +58,7 @@ public class ToToolInfoController {
     /**
      * 获取工具信息详细信息
      */
-    @SaCheckPermission("business:toolInfo:query")
+    @SaCheckPermission("toolInfo:query")
     @GetMapping("/{id}")
     public ToToolInfoVo getInfo(@PathVariable("id") Long id) {
         return iToToolInfoService.queryById(id);
@@ -67,7 +67,7 @@ public class ToToolInfoController {
     /**
      * 新增工具信息
      */
-    @SaCheckPermission("business:toolInfo:add")
+    @SaCheckPermission("toolInfo:add")
     @Log(title = "工具信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -78,7 +78,7 @@ public class ToToolInfoController {
     /**
      * 修改工具信息
      */
-    @SaCheckPermission("business:toolInfo:edit")
+    @SaCheckPermission("toolInfo:edit")
     @Log(title = "工具信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -89,7 +89,7 @@ public class ToToolInfoController {
     /**
      * 删除工具信息
      */
-    @SaCheckPermission("business:toolInfo:remove")
+    @SaCheckPermission("toolInfo:remove")
     @Log(title = "工具信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

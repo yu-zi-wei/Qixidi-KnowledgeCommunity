@@ -38,7 +38,7 @@ public class TripartiteUserController {
     /**
      * 查询平台用户列表
      */
-    @SaCheckPermission("system:main:list")
+    @SaCheckPermission("tripartiteUser:list")
     @PostMapping("/list")
     public TableDataInfo<TripartiteUserVo> list(@Validated(QueryGroup.class) @RequestBody TripartiteUserBo bo) {
         return iTripartiteUserService.queryPageList(bo, bo);
@@ -47,7 +47,7 @@ public class TripartiteUserController {
     /**
      * 导出平台用户列表
      */
-    @SaCheckPermission("system:main:export")
+    @SaCheckPermission("tripartiteUser:export")
     @Log(title = "平台用户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated TripartiteUserBo bo, HttpServletResponse response) {
@@ -58,7 +58,7 @@ public class TripartiteUserController {
     /**
      * 获取平台用户详细信息
      */
-    @SaCheckPermission("system:main:query")
+    @SaCheckPermission("tripartiteUser:query")
     @GetMapping("/{uuid}")
     public TripartiteUserVo getInfo(@PathVariable("uuid") String uuid) {
         return iTripartiteUserService.queryById(uuid);
@@ -67,7 +67,7 @@ public class TripartiteUserController {
     /**
      * 修改平台用户
      */
-    @SaCheckPermission("system:main:edit")
+    @SaCheckPermission("tripartiteUser:edit")
     @Log(title = "更新平台用户", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()

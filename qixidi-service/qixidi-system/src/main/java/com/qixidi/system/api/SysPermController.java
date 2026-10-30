@@ -25,7 +25,7 @@ public class SysPermController {
     /**
      * 按模块分组的权限码清单（角色管理勾选树数据源）
      */
-    @SaCheckPermission("system:role:query")
+    @SaCheckPermission("role:query")
     @GetMapping("/list")
     public List<PermGroupVo> list() {
         return permissionScanner.getGroups();

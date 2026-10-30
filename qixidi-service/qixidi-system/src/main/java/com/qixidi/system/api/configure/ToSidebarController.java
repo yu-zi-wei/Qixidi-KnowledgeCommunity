@@ -47,7 +47,7 @@ public class ToSidebarController {
     /**
      * 导出侧边栏配置列表
      */
-    @SaCheckPermission("business:sidebar:export")
+    @SaCheckPermission("sidebar:export")
     @Log(title = "侧边栏配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToSidebarBo bo, HttpServletResponse response) {
@@ -58,7 +58,7 @@ public class ToSidebarController {
     /**
      * 获取侧边栏配置详细信息
      */
-    @SaCheckPermission("business:sidebar:query")
+    @SaCheckPermission("sidebar:query")
     @GetMapping("/{id}")
     public ToSidebarVo getInfo(@PathVariable("id") Long id) {
         return iToSidebarService.queryById(id);
@@ -67,7 +67,7 @@ public class ToSidebarController {
     /**
      * 新增侧边栏配置
      */
-    @SaCheckPermission("business:sidebar:add")
+    @SaCheckPermission("sidebar:add")
     @Log(title = "侧边栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -78,7 +78,7 @@ public class ToSidebarController {
     /**
      * 修改侧边栏配置
      */
-    @SaCheckPermission("business:sidebar:edit")
+    @SaCheckPermission("sidebar:edit")
     @Log(title = "侧边栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -89,7 +89,7 @@ public class ToSidebarController {
     /**
      * 删除侧边栏配置
      */
-    @SaCheckPermission("business:sidebar:remove")
+    @SaCheckPermission("sidebar:remove")
     @Log(title = "侧边栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

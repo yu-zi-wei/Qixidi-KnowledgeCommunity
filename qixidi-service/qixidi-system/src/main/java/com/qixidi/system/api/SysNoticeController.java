@@ -28,7 +28,7 @@ public class SysNoticeController {
     /**
      * 获取通知公告列表
      */
-    @SaCheckPermission("system:notice:list")
+    @SaCheckPermission("notice:list")
     @PostMapping("/list")
     public TableDataInfo<SysNotice> list(@RequestBody SysNotice notice) {
         return noticeService.selectPageNoticeList(notice, notice);
@@ -37,7 +37,7 @@ public class SysNoticeController {
     /**
      * 根据通知公告编号获取详细信息
      */
-    @SaCheckPermission("system:notice:query")
+    @SaCheckPermission("notice:query")
     @GetMapping(value = "/{noticeId}")
     public SysNotice getInfo(@PathVariable Long noticeId) {
         return noticeService.selectNoticeById(noticeId);
@@ -46,7 +46,7 @@ public class SysNoticeController {
     /**
      * 新增通知公告
      */
-    @SaCheckPermission("system:notice:add")
+    @SaCheckPermission("notice:add")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysNotice notice) {
@@ -56,7 +56,7 @@ public class SysNoticeController {
     /**
      * 修改通知公告
      */
-    @SaCheckPermission("system:notice:edit")
+    @SaCheckPermission("notice:edit")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysNotice notice) {
@@ -66,7 +66,7 @@ public class SysNoticeController {
     /**
      * 删除通知公告
      */
-    @SaCheckPermission("system:notice:remove")
+    @SaCheckPermission("notice:remove")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
     public void remove(@PathVariable Long[] noticeIds) {

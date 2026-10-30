@@ -38,7 +38,7 @@ public class SysDictTypeController {
      * @param pageQuery
      * @return
      */
-    @SaCheckPermission("system:dict:list")
+    @SaCheckPermission("dict:list")
     @PostMapping("/list")
     public TableDataInfo<SysDictType> list(@RequestBody SysDictType dictType) {
         return dictTypeService.selectPageDictTypeList(dictType, dictType);
@@ -51,7 +51,7 @@ public class SysDictTypeController {
      * @param response
      */
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
-    @SaCheckPermission("system:dict:export")
+    @SaCheckPermission("dict:export")
     @PostMapping("/export")
     public void export(SysDictType dictType, HttpServletResponse response) {
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
@@ -61,7 +61,7 @@ public class SysDictTypeController {
     /**
      * 查询字典类型详细
      */
-    @SaCheckPermission("system:dict:query")
+    @SaCheckPermission("dict:query")
     @GetMapping(value = "/{dictId}")
     public SysDictType getInfo(@PathVariable Long dictId) {
         return dictTypeService.selectDictTypeById(dictId);
@@ -70,7 +70,7 @@ public class SysDictTypeController {
     /**
      * 新增字典类型
      */
-    @SaCheckPermission("system:dict:add")
+    @SaCheckPermission("dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysDictType dict) {
@@ -83,7 +83,7 @@ public class SysDictTypeController {
     /**
      * 修改字典类型
      */
-    @SaCheckPermission("system:dict:edit")
+    @SaCheckPermission("dict:edit")
     @Log(title = "字典类型", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysDictType dict) {
@@ -96,7 +96,7 @@ public class SysDictTypeController {
     /**
      * 删除字典类型
      */
-    @SaCheckPermission("system:dict:remove")
+    @SaCheckPermission("dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")
     public void remove(@PathVariable Long[] dictIds) {
@@ -106,7 +106,7 @@ public class SysDictTypeController {
     /**
      * 刷新字典缓存
      */
-    @SaCheckPermission("system:dict:remove")
+    @SaCheckPermission("dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
     public void refreshCache() {

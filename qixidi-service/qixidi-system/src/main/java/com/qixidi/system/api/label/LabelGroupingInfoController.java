@@ -47,7 +47,7 @@ public class LabelGroupingInfoController {
     /**
      * 导出标签分组信息列表
      */
-    @SaCheckPermission("system:groupingInfo:export")
+    @SaCheckPermission("groupingInfo:export")
     @Log(title = "标签分组信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated LabelGroupingInfoBo bo, HttpServletResponse response) {
@@ -58,7 +58,7 @@ public class LabelGroupingInfoController {
     /**
      * 获取标签分组信息详细信息
      */
-    @SaCheckPermission("system:groupingInfo:query")
+    @SaCheckPermission("groupingInfo:query")
     @GetMapping("/{id}")
     public LabelGroupingInfoVo getInfo(@PathVariable("id") Long id) {
         return iLabelGroupingInfoService.queryById(id);
@@ -67,7 +67,7 @@ public class LabelGroupingInfoController {
     /**
      * 新增标签分组信息
      */
-    @SaCheckPermission("system:groupingInfo:add")
+    @SaCheckPermission("groupingInfo:add")
     @Log(title = "标签分组信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -78,7 +78,7 @@ public class LabelGroupingInfoController {
     /**
      * 修改标签分组信息
      */
-    @SaCheckPermission("system:groupingInfo:edit")
+    @SaCheckPermission("groupingInfo:edit")
     @Log(title = "标签分组信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -89,7 +89,7 @@ public class LabelGroupingInfoController {
     /**
      * 删除标签分组信息
      */
-    @SaCheckPermission("system:groupingInfo:remove")
+    @SaCheckPermission("groupingInfo:remove")
     @Log(title = "标签分组信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
