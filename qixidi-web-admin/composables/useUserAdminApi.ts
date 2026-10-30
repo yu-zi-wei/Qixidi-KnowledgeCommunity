@@ -43,7 +43,7 @@ export const useUserAdminApi = () => {
 
   return {
     /** 分页列表：GET /system/tripartite/user/list */
-    getUsers: (params: Record<string, any>) => api.getPage<UserRow>('/system/tripartite/user/list', params),
+    getUsers: (params: Record<string, any>) => api.postPage<UserRow>('/system/tripartite/user/list', params),
 
     /** 详情：GET /system/tripartite/user/{uuid} */
     getUser: (uuid: string) => api.get<UserRow>(`/system/tripartite/user/${uuid}`),

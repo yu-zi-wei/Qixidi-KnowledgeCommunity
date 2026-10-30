@@ -34,11 +34,11 @@ export const useStatApi = () => {
 
   return {
     /** 综合统计快照 */
-    getStatInfo: () => api.get<StatDataInfo>('/system/stat/data/info'),
+    getStatInfo: () => api.post<StatDataInfo>('/system/stat/data/info'),
     /** 近 6 个月月度序列（SQL ORDER BY stat_time DESC LIMIT 6） */
-    getTheStat: () => api.get<StatReturnItem[]>('/system/stat/data/the/info'),
+    getTheStat: () => api.post<StatReturnItem[]>('/system/stat/data/the/info'),
     /** 标签/分类维度：labelGroup=分类文章数，label=标签的文章数/关注数 */
     getLabelStat: () =>
-      api.get<{ labelGroup: StatReturnItem[]; label: StatReturnItem[] }>('/system/stat/data/label/data')
+      api.post<{ labelGroup: StatReturnItem[]; label: StatReturnItem[] }>('/system/stat/data/label/data')
   };
 };

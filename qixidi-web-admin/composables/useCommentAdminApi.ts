@@ -36,7 +36,7 @@ export const useCommentAdminApi = () => {
   return {
     /** 分页列表：GET /system/article/comment/list */
     getComments: (params: Record<string, any>) =>
-      api.getPage<CommentRow>('/system/article/comment/list', params),
+      api.postPage<CommentRow>('/system/article/comment/list', params),
 
     /** 详情：GET /system/article/comment/{id} */
     getComment: (id: number | string) => api.get<CommentRow>(`/system/article/comment/${id}`),

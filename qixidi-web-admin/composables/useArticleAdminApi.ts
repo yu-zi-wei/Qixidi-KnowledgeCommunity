@@ -59,11 +59,11 @@ export const useArticleAdminApi = () => {
   return {
     /** 分页列表：GET /system/article/information/list */
     getArticles: (params: Record<string, any>) =>
-      api.getPage<ArticleRow>('/system/article/information/list', params),
+      api.postPage<ArticleRow>('/system/article/information/list', params),
 
     /** 分类全量（pageSize=100 拉取，供搜索下拉）：GET /system/groupingInfo/list */
     getGroupings: () =>
-      api.getPage<GroupingRow>('/system/groupingInfo/list', { pageNum: 1, pageSize: 100 }),
+      api.postPage<GroupingRow>('/system/groupingInfo/list', { pageNum: 1, pageSize: 100 }),
 
     /** 详情：GET /system/article/information/{id} */
     getArticle: (id: number | string) => api.get<ArticleRow>(`/system/article/information/${id}`),
