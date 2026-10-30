@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme='theme' :locale='zhCN' :date-locale='dateZhCN' >
+  <n-config-provider :theme='theme' :theme-overrides='themeOverrides' :locale='zhCN' :date-locale='dateZhCN' >
     <n-message-provider>
       <n-dialog-provider>
         <NuxtLayout>
@@ -13,9 +13,19 @@
 
 <script setup lang='ts'>
 import { dateZhCN, zhCN, darkTheme } from 'naive-ui';
-import type {GlobalTheme} from 'naive-ui';
+import type {GlobalTheme, GlobalThemeOverrides} from 'naive-ui';
 
 const THEME_KEY = 'admin-theme';
+
+// 品牌主色蓝紫（indigo）；.is-link 等非 Naive 上下文的硬编码色（admin-table.scss）与此同步维护
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: '#6366f1',
+    primaryColorHover: '#818cf8',
+    primaryColorPressed: '#4f46e5',
+    primaryColorSuppl: '#6366f1'
+  }
+};
 
 // 主题唯一数据源；全 CSR，localStorage 直读直写安全
 const theme = ref<GlobalTheme | null>(null);
