@@ -99,9 +99,9 @@
     white-space: nowrap;
   }
 
-  // 标题可点击态（打开详情）：主色 + hover 下划线（#4c84f8 与 app.vue 主题 overrides 的 primaryColor 同步维护）
+  // 标题可点击态（打开详情）：主色 + hover 下划线（#3b74e8 与 app.vue 主题 overrides 的 primaryColor 同步维护）
   .cell-article-name.is-link {
-    color: #4c84f8;
+    color: #3b74e8;
     cursor: pointer;
 
     &:hover {
