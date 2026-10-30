@@ -5,7 +5,6 @@
 <mapper namespace="com.qixidi.system.mapper.SysUserMapper">
     <resultMap type="com.qixidi.auth.domain.entity.SysUser" id="SysUserResult">
         <id property="userId" column="user_id"/>
-        <result property="deptId" column="dept_id"/>
         <result property="userName" column="user_name"/>
         <result property="nickName" column="nick_name"/>
         <result property="userType" column="user_type"/>
@@ -23,18 +22,7 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
-        <association property="dept" column="dept_id" javaType="SysDept" resultMap="deptResult"/>
         <collection property="roles" javaType="java.util.List" resultMap="RoleResult"/>
-    </resultMap>
-
-    <resultMap id="deptResult" type="com.qixidi.auth.domain.entity.SysDept">
-        <id property="deptId" column="dept_id"/>
-        <result property="parentId" column="parent_id"/>
-        <result property="deptName" column="dept_name"/>
-        <result property="ancestors" column="ancestors"/>
-        <result property="orderNum" column="order_num"/>
-        <result property="leader" column="leader"/>
-        <result property="status" column="dept_status"/>
     </resultMap>
 
     <resultMap id="RoleResult" type="com.qixidi.auth.domain.entity.SysRole">
@@ -47,7 +35,6 @@
 
     <sql id="selectUserVo">
         select u.user_id,
-               u.dept_id,
                u.user_name,
                u.nick_name,
                u.user_type,
@@ -63,27 +50,18 @@
                u.create_by,
                u.create_time,
                u.remark,
-               d.dept_id,
-               d.parent_id,
-               d.ancestors,
-               d.dept_name,
-               d.order_num,
-               d.leader,
-               d.status as dept_status,
                r.role_id,
                r.role_name,
                r.role_key,
                r.role_sort,
                r.status as role_status
         from sys_user u
-                 left join sys_dept d on u.dept_id = d.dept_id
                  left join sys_user_role ur on u.user_id = ur.user_id
                  left join sys_role r on r.role_id = ur.role_id
     </sql>
 
     <select id="selectPageUserList" resultMap="SysUserResult">
         select u.user_id,
-               u.dept_id,
                u.nick_name,
                u.user_name,
                u.email,
@@ -97,17 +75,13 @@
                u.login_date,
                u.create_by,
                u.create_time,
-               u.remark,
-               d.dept_name,
-               d.leader
+               u.remark
         from sys_user u
-                 left join sys_dept d on u.dept_id = d.dept_id
             ${ew.getCustomSqlSegment}
     </select>
 
     <select id="selectUserList" resultMap="SysUserResult">
         select u.user_id,
-               u.dept_id,
                u.nick_name,
                u.user_name,
                u.email,
@@ -121,43 +95,8 @@
                u.login_date,
                u.create_by,
                u.create_time,
-               u.remark,
-               d.dept_name,
-               d.leader
+               u.remark
         from sys_user u
-                 left join sys_dept d on u.dept_id = d.dept_id
-            ${ew.getCustomSqlSegment}
-    </select>
-
-    <select id="selectAllocatedList" resultMap="SysUserResult">
-        select distinct u.user_id,
-                        u.dept_id,
-                        u.user_name,
-                        u.nick_name,
-                        u.email,
-                        u.phonenumber,
-                        u.status,
-                        u.create_time
-        from sys_user u
-                 left join sys_dept d on u.dept_id = d.dept_id
-                 left join sys_user_role ur on u.user_id = ur.user_id
-                 left join sys_role r on r.role_id = ur.role_id
-            ${ew.getCustomSqlSegment}
-    </select>
-
-    <select id="selectUnallocatedList" resultMap="SysUserResult">
-        select distinct u.user_id,
-                        u.dept_id,
-                        u.user_name,
-                        u.nick_name,
-                        u.email,
-                        u.phonenumber,
-                        u.status,
-                        u.create_time
-        from sys_user u
-                 left join sys_dept d on u.dept_id = d.dept_id
-                 left join sys_user_role ur on u.user_id = ur.user_id
-                 left join sys_role r on r.role_id = ur.role_id
             ${ew.getCustomSqlSegment}
     </select>
 

@@ -25,22 +25,6 @@ public interface ISysUserService {
     List<SysUser> selectUserList(SysUser user);
 
     /**
-     * 根据条件分页查询已分配用户角色列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    TableDataInfo<SysUser> selectAllocatedList(SysUser user, PageQuery pageQuery);
-
-    /**
-     * 根据条件分页查询未分配用户角色列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    TableDataInfo<SysUser> selectUnallocatedList(SysUser user, PageQuery pageQuery);
-
-    /**
      * 通过用户名查询用户
      *
      * @param userName 用户名
@@ -73,14 +57,6 @@ public interface ISysUserService {
     String selectUserRoleGroup(String userName);
 
     /**
-     * 根据用户ID查询用户所属岗位组
-     *
-     * @param userName 用户名
-     * @return 结果
-     */
-    String selectUserPostGroup(String userName);
-
-    /**
      * 校验用户名称是否唯一
      *
      * @param userName 用户名称
@@ -110,13 +86,6 @@ public interface ISysUserService {
      * @param user 用户信息
      */
     void checkUserAllowed(SysUser user);
-
-    /**
-     * 校验用户是否有数据权限
-     *
-     * @param userId 用户id
-     */
-    void checkUserDataScope(Long userId);
 
     /**
      * 新增用户信息

@@ -27,16 +27,6 @@ public class LoginUser implements Serializable {
     private Long userId;
 
     /**
-     * 部门ID
-     */
-    private Long deptId;
-
-    /**
-     * 部门名
-     */
-    private String deptName;
-
-    /**
      * 用户唯一标识
      */
     private String token;

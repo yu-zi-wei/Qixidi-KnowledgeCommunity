@@ -5,8 +5,6 @@ import com.qixidi.auth.domain.entity.SysRole;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.light.core.annotation.DataColumn;
-import com.light.core.annotation.DataPermission;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,9 +19,6 @@ import java.util.List;
 @Mapper
 public interface SysRoleMapper extends BaseMapperPlus<SysRoleMapper, SysRole, SysRole> {
 
-    @DataPermission({
-            @DataColumn(key = "deptName", value = "d.dept_id")
-    })
     Page<SysRole> selectPageRoleList(@Param("page") Page<SysRole> page, @Param(Constants.WRAPPER) Wrapper<SysRole> queryWrapper);
 
     /**
@@ -32,9 +27,6 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRoleMapper, SysRole, Sy
      * @param queryWrapper 查询条件
      * @return 角色数据集合信息
      */
-    @DataPermission({
-            @DataColumn(key = "deptName", value = "d.dept_id")
-    })
     List<SysRole> selectRoleList(@Param(Constants.WRAPPER) Wrapper<SysRole> queryWrapper);
 
     /**

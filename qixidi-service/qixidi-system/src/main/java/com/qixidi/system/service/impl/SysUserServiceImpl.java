@@ -13,14 +13,12 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
-import com.qixidi.auth.domain.entity.SysDept;
 import com.qixidi.auth.domain.entity.SysRole;
 import com.qixidi.auth.domain.entity.SysUser;
-import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.system.domain.entity.SysPost;
-import com.qixidi.system.domain.entity.SysUserPost;
 import com.qixidi.system.domain.entity.SysUserRole;
-import com.qixidi.system.mapper.*;
+import com.qixidi.system.mapper.SysRoleMapper;
+import com.qixidi.system.mapper.SysUserMapper;
+import com.qixidi.system.mapper.SysUserRoleMapper;
 import com.qixidi.system.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +43,9 @@ public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     private SysUserMapper baseMapper;
     @Autowired
-    private SysDeptMapper deptMapper;
-    @Autowired
     private SysRoleMapper roleMapper;
     @Autowired
-    private SysPostMapper postMapper;
-    @Autowired
     private SysUserRoleMapper userRoleMapper;
-    @Autowired
-    private SysUserPostMapper userPostMapper;
 
     @Override
     public TableDataInfo<SysUser> selectPageUserList(SysUser user, PageQuery pageQuery) {
@@ -81,52 +73,8 @@ public class SysUserServiceImpl implements ISysUserService {
                 .eq(StringUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
                 .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
                 .between(params.get("beginTime") != null && params.get("endTime") != null,
-                        "u.create_time", params.get("beginTime"), params.get("endTime"))
-                .and(ObjectUtil.isNotNull(user.getDeptId()), w -> {
-                    List<SysDept> deptList = deptMapper.selectList(new LambdaQueryWrapper<SysDept>()
-                            .select(SysDept::getDeptId));
-                    List<Long> ids = deptList.stream().map(SysDept::getDeptId).collect(Collectors.toList());
-                    ids.add(user.getDeptId());
-                    w.in("u.dept_id", ids);
-                });
+                        "u.create_time", params.get("beginTime"), params.get("endTime"));
         return wrapper;
-    }
-
-    /**
-     * 根据条件分页查询已分配用户角色列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    @Override
-    public TableDataInfo<SysUser> selectAllocatedList(SysUser user, PageQuery pageQuery) {
-        QueryWrapper<SysUser> wrapper = Wrappers.query();
-        wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)
-                .eq(ObjectUtil.isNotNull(user.getRoleId()), "r.role_id", user.getRoleId())
-                .like(StringUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
-                .eq(StringUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
-                .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber());
-        Page<SysUser> page = baseMapper.selectAllocatedList(pageQuery.build(), wrapper);
-        return TableDataInfo.build(page);
-    }
-
-    /**
-     * 根据条件分页查询未分配用户角色列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    @Override
-    public TableDataInfo<SysUser> selectUnallocatedList(SysUser user, PageQuery pageQuery) {
-        List<Long> userId = userRoleMapper.selectUserIdsByRoleId(user.getRoleId());
-        QueryWrapper<SysUser> wrapper = Wrappers.query();
-        wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)
-                .and(w -> w.ne("r.role_id", user.getRoleId()).or().isNull("r.role_id"))
-                .notIn("u.user_id", userId)
-                .like(StringUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
-                .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber());
-        Page<SysUser> page = baseMapper.selectUnallocatedList(pageQuery.build(), wrapper);
-        return TableDataInfo.build(page);
     }
 
     /**
@@ -175,21 +123,6 @@ public class SysUserServiceImpl implements ISysUserService {
             return StringUtils.EMPTY;
         }
         return list.stream().map(SysRole::getRoleName).collect(Collectors.joining(","));
-    }
-
-    /**
-     * 查询用户所属岗位组
-     *
-     * @param userName 用户名
-     * @return 结果
-     */
-    @Override
-    public String selectUserPostGroup(String userName) {
-        List<SysPost> list = postMapper.selectPostsByUserName(userName);
-        if (CollUtil.isEmpty(list)) {
-            return StringUtils.EMPTY;
-        }
-        return list.stream().map(SysPost::getPostName).collect(Collectors.joining(","));
     }
 
     /**
@@ -254,23 +187,6 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     /**
-     * 校验用户是否有数据权限
-     *
-     * @param userId 用户id
-     */
-    @Override
-    public void checkUserDataScope(Long userId) {
-        if (!LoginHelper.isAdmin()) {
-            SysUser user = new SysUser();
-            user.setUserId(userId);
-            List<SysUser> users = this.selectUserList(user);
-            if (CollUtil.isEmpty(users)) {
-                throw new ServiceException("没有权限访问用户数据！");
-            }
-        }
-    }
-
-    /**
      * 新增保存用户信息
      *
      * @param user 用户信息
@@ -284,8 +200,6 @@ public class SysUserServiceImpl implements ISysUserService {
         if (rows <= 0) {
             throw new ServiceException("新增用户失败");
         }
-        // 新增用户岗位关联
-        insertUserPost(user);
         // 新增用户与角色管理
         insertUserRole(user);
         return rows;
@@ -322,10 +236,6 @@ public class SysUserServiceImpl implements ISysUserService {
         userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
         // 新增用户与角色管理
         insertUserRole(user);
-        // 删除用户与岗位关联
-        userPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId, userId));
-        // 新增用户与岗位管理
-        insertUserPost(user);
         int rows = baseMapper.updateById(user);
         if (rows <= 0) {
             throw new ServiceException("修改用户失败");
@@ -453,28 +363,6 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     /**
-     * 新增用户岗位信息
-     *
-     * @param user 用户对象
-     */
-    public void insertUserPost(SysUser user) {
-        Long[] posts = user.getPostIds();
-        if (ObjectUtil.isNotNull(posts)) {
-            // 新增用户与岗位管理
-            List<SysUserPost> list = new ArrayList<SysUserPost>();
-            for (Long postId : posts) {
-                SysUserPost up = new SysUserPost();
-                up.setUserId(user.getUserId());
-                up.setPostId(postId);
-                list.add(up);
-            }
-            if (list.size() > 0) {
-                userPostMapper.insertBatch(list);
-            }
-        }
-    }
-
-    /**
      * 新增用户角色信息
      *
      * @param userId  用户ID
@@ -507,8 +395,6 @@ public class SysUserServiceImpl implements ISysUserService {
     public int deleteUserById(Long userId) {
         // 删除用户与角色关联
         userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
-        // 删除用户与岗位表
-        userPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId, userId));
         int rows = baseMapper.deleteById(userId);
         if (rows <= 0) {
             throw new ServiceException("删除用户失败");
@@ -527,13 +413,10 @@ public class SysUserServiceImpl implements ISysUserService {
     public int deleteUserByIds(Long[] userIds) {
         for (Long userId : userIds) {
             checkUserAllowed(new SysUser(userId));
-            checkUserDataScope(userId);
         }
         List<Long> ids = Arrays.asList(userIds);
         // 删除用户与角色关联
         userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, ids));
-        // 删除用户与岗位表
-        userPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().in(SysUserPost::getUserId, ids));
         int rows = baseMapper.deleteBatchIds(ids);
         if (rows <= 0) {
             throw new ServiceException("删除用户失败");

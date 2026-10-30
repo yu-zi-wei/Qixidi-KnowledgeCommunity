@@ -1,8 +1,6 @@
 package com.qixidi.system.mapper;
 
 import com.qixidi.auth.domain.entity.SysUser;
-import com.light.core.annotation.DataColumn;
-import com.light.core.annotation.DataPermission;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -20,10 +18,6 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper extends BaseMapperPlus<SysUserMapper, SysUser, SysUser> {
 
-    @DataPermission({
-        @DataColumn(key = "deptName", value = "d.dept_id"),
-        @DataColumn(key = "userName", value = "u.user_id")
-    })
     Page<SysUser> selectPageUserList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
 
     /**
@@ -32,35 +26,7 @@ public interface SysUserMapper extends BaseMapperPlus<SysUserMapper, SysUser, Sy
      * @param queryWrapper 查询条件
      * @return 用户信息集合信息
      */
-    @DataPermission({
-        @DataColumn(key = "deptName", value = "d.dept_id"),
-        @DataColumn(key = "userName", value = "u.user_id")
-    })
     List<SysUser> selectUserList(@Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
-
-    /**
-     * 根据条件分页查询已配用户角色列表
-     *
-     * @param queryWrapper 查询条件
-     * @return 用户信息集合信息
-     */
-    @DataPermission({
-        @DataColumn(key = "deptName", value = "d.dept_id"),
-        @DataColumn(key = "userName", value = "u.user_id")
-    })
-    Page<SysUser> selectAllocatedList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
-
-    /**
-     * 根据条件分页查询未分配用户角色列表
-     *
-     * @param queryWrapper 查询条件
-     * @return 用户信息集合信息
-     */
-    @DataPermission({
-        @DataColumn(key = "deptName", value = "d.dept_id"),
-        @DataColumn(key = "userName", value = "u.user_id")
-    })
-    Page<SysUser> selectUnallocatedList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
 
     /**
      * 通过用户名查询用户
