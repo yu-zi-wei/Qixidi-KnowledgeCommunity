@@ -47,9 +47,9 @@ public class FdFeedbackController {
     /**
      * 查询用户反馈列表-白名单
      */
-    @GetMapping("/white/feedback/list")
-    public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) FeedbackBo bo, PageQuery pageQuery) {
-        return IFeedbackService.queryPageList(bo, pageQuery);
+    @PostMapping("/white/feedback/list")
+    public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) @RequestBody FeedbackBo bo) {
+        return IFeedbackService.queryPageList(bo, bo);
     }
 
     /**

@@ -39,9 +39,9 @@ public class ToNavigationController {
     /**
      * 查询导航栏配置列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<ToNavigationVo> list(@Validated(QueryGroup.class) ToNavigationBo bo, PageQuery pageQuery) {
-        return iToNavigationService.queryPageListAdmin(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<ToNavigationVo> list(@Validated(QueryGroup.class) @RequestBody ToNavigationBo bo) {
+        return iToNavigationService.queryPageListAdmin(bo, bo);
     }
 
     /**

@@ -38,9 +38,9 @@ public class ArticleInformationController {
     /**
      * 查询文章信息列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<ArticleInformationVo> index(@Validated(QueryGroup.class) ArticleInformationBo bo, PageQuery pageQuery) {
-        return iArticleInformationService.index(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<ArticleInformationVo> index(@Validated(QueryGroup.class) @RequestBody ArticleInformationBo bo) {
+        return iArticleInformationService.index(bo, bo);
     }
 
     /**

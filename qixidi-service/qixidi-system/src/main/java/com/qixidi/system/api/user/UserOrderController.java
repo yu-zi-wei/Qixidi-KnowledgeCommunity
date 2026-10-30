@@ -40,9 +40,9 @@ public class UserOrderController {
      * 查询用户订单列表
      */
     @SaCheckPermission("business:order:list")
-    @GetMapping("/list")
-    public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) UserOrderBo bo, PageQuery pageQuery) {
-        return iUserOrderService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) @RequestBody UserOrderBo bo) {
+        return iUserOrderService.queryPageList(bo, bo);
     }
 
     /**

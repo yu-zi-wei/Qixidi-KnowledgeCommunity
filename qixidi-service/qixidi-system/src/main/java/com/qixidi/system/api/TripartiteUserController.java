@@ -39,9 +39,9 @@ public class TripartiteUserController {
      * 查询平台用户列表
      */
     @SaCheckPermission("system:main:list")
-    @GetMapping("/list")
-    public TableDataInfo<TripartiteUserVo> list(@Validated(QueryGroup.class) TripartiteUserBo bo, PageQuery pageQuery) {
-        return iTripartiteUserService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<TripartiteUserVo> list(@Validated(QueryGroup.class) @RequestBody TripartiteUserBo bo) {
+        return iTripartiteUserService.queryPageList(bo, bo);
     }
 
     /**

@@ -40,9 +40,9 @@ public class SearchRecordsController {
      * 查询搜索记录列表
      */
     @SaCheckPermission("business:search:records:list")
-    @GetMapping("/list")
-    public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) SearchRecordsBo bo, PageQuery pageQuery) {
-        return iSearchRecordsService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) @RequestBody SearchRecordsBo bo) {
+        return iSearchRecordsService.queryPageList(bo, bo);
     }
 
     /**

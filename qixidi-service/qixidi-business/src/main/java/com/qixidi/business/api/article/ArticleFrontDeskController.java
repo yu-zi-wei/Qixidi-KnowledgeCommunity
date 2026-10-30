@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,41 +37,41 @@ public class ArticleFrontDeskController {
     /**
      * 查询文章推荐列表
      */
-    @GetMapping("/article/recommend/list")
-    public TableDataInfo<ArticleInformationVo> articleRecommendList(@Validated(QueryGroup.class) ArticleInformationBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iArticleInformationService.articleRecommendList(bo, pageQuery));
+    @PostMapping("/article/recommend/list")
+    public TableDataInfo<ArticleInformationVo> articleRecommendList(@Validated(QueryGroup.class) @RequestBody ArticleInformationBo bo) {
+        return TableDataInfo.build(iArticleInformationService.articleRecommendList(bo, bo));
     }
 
     /**
      * 查询文章信息列表
      */
-    @GetMapping("/article/list")
-    public TableDataInfo<ArticleInformationVo> articleList(@Validated(QueryGroup.class) ArticleInformationBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iArticleInformationService.articleList(bo, pageQuery));
+    @PostMapping("/article/list")
+    public TableDataInfo<ArticleInformationVo> articleList(@Validated(QueryGroup.class) @RequestBody ArticleInformationBo bo) {
+        return TableDataInfo.build(iArticleInformationService.articleList(bo, bo));
     }
 
     /**
      * 查询相关文章
      *
      * @param bo
-     * @param pageQuery
+     * @param bo
      * @return
      */
-    @GetMapping("/article/related/list")
-    public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return iArticleInformationService.relatedList(bo, pageQuery);
+    @PostMapping("/article/related/list")
+    public List<ArticleInformationVo> relatedList(@RequestBody ArticleInformationBo bo) {
+        return iArticleInformationService.relatedList(bo, bo);
     }
 
     /**
      * 文章排序
      *
      * @param bo
-     * @param pageQuery
+     * @param bo
      * @return
      */
-    @GetMapping("/article/sort")
-    public TableDataInfo<ArticleInformationVo> sortIndex(SortTypeBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iArticleInformationService.sortIndex(bo, pageQuery));
+    @PostMapping("/article/sort")
+    public TableDataInfo<ArticleInformationVo> sortIndex(@RequestBody SortTypeBo bo) {
+        return TableDataInfo.build(iArticleInformationService.sortIndex(bo, bo));
     }
 
     /**
@@ -111,45 +113,45 @@ public class ArticleFrontDeskController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/article/user/list")
-    public TableDataInfo<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iArticleInformationService.getArticleInfo(bo, pageQuery));
+    @PostMapping("/article/user/list")
+    public TableDataInfo<ArticleInformationVo> getArticleInfo(@RequestBody ArticleInformationBo bo) {
+        return TableDataInfo.build(iArticleInformationService.getArticleInfo(bo, bo));
     }
 
     /**
      * 查询用户文章标题列表
      *
      * @param bo
-     * @param pageQuery
+     * @param bo
      * @return
      */
-    @GetMapping("/article/title/list")
-    public List<ArticleInformationVo> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return iArticleInformationService.getArticleInfoList(bo, pageQuery);
+    @PostMapping("/article/title/list")
+    public List<ArticleInformationVo> getArticleInfoList(@RequestBody ArticleInformationBo bo) {
+        return iArticleInformationService.getArticleInfoList(bo, bo);
     }
 
     /**
      * 查询用户关注文章列表
      *
      * @param bo
-     * @param pageQuery
+     * @param bo
      * @return
      */
-    @GetMapping("/article/follow/list")
-    public TableDataInfo<ArticleInformationVo> FollowArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iArticleInformationService.FollowArticleInfoList(bo, pageQuery));
+    @PostMapping("/article/follow/list")
+    public TableDataInfo<ArticleInformationVo> FollowArticleInfoList(@RequestBody SortTypeBo bo) {
+        return TableDataInfo.build(iArticleInformationService.FollowArticleInfoList(bo, bo));
     }
 
     /**
      * 查询标签分类文章列表
      *
      * @param bo
-     * @param pageQuery
+     * @param bo
      * @return
      */
-    @GetMapping("/article/label/list")
-    public TableDataInfo<ArticleInformationVo> LabelGArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iArticleInformationService.LabelGArticleInfoList(bo, pageQuery));
+    @PostMapping("/article/label/list")
+    public TableDataInfo<ArticleInformationVo> LabelGArticleInfoList(@RequestBody SortTypeBo bo) {
+        return TableDataInfo.build(iArticleInformationService.LabelGArticleInfoList(bo, bo));
     }
 
     /**
@@ -173,8 +175,8 @@ public class ArticleFrontDeskController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/article/archive")
-    public TableDataInfo<ArticleArchiveVo> articleArchive(PageQuery pageQuery) {
+    @PostMapping("/article/archive")
+    public TableDataInfo<ArticleArchiveVo> articleArchive(@RequestBody PageQuery pageQuery) {
         return iArticleInformationService.articleArchive(pageQuery);
     }
 }

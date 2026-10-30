@@ -48,9 +48,9 @@ public class FdFabulousRecordController {
     /**
      * 用户点赞文章列表
      */
-    @GetMapping("/fabulous/articleList")
-    public TableDataInfo<ArticleInformationVo> fabulousArticleList(@Validated UserHomeBo bo, PageQuery pageQuery) {
-        return iFabulousRecordService.fabulousList(bo, pageQuery);
+    @PostMapping("/fabulous/articleList")
+    public TableDataInfo<ArticleInformationVo> fabulousArticleList(@Validated @RequestBody UserHomeBo bo) {
+        return iFabulousRecordService.fabulousList(bo, bo);
     }
 
 }

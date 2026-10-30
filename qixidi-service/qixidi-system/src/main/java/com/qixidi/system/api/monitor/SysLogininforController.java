@@ -37,9 +37,9 @@ public class SysLogininforController {
      * @return
      */
     @SaCheckPermission("monitor:logininfor:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysLogininfor> list(SysLogininfor logininfor, PageQuery pageQuery) {
-        return logininforService.selectPageLogininforList(logininfor, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysLogininfor> list(@RequestBody SysLogininfor logininfor) {
+        return logininforService.selectPageLogininforList(logininfor, logininfor);
     }
 
     /**

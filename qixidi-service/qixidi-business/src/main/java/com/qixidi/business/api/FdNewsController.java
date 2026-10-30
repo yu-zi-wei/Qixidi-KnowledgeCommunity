@@ -48,48 +48,48 @@ public class FdNewsController {
     /**
      * 评论消息列表
      */
-    @GetMapping("/comment/list")
-    public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
+    @PostMapping("/comment/list")
+    public TableDataInfo<ArticleCommentNewsVo> commentList(@RequestBody PageQuery pageQuery) {
         return iNewsUserInfoService.commentList(pageQuery);
     }
 
     /**
      * 小记评论消息列表
      */
-    @GetMapping("/comment/time-notes/list")
-    public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery) {
+    @PostMapping("/comment/time-notes/list")
+    public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(@RequestBody PageQuery pageQuery) {
         return iNewsUserInfoService.timeNotesCommentList(pageQuery);
     }
 
     /**
      * 随笔评论消息列表
      */
-    @GetMapping("/comment/dictum/list")
-    public TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery) {
+    @PostMapping("/comment/dictum/list")
+    public TableDataInfo<DictumCommentNewsVo> dictumCommentList(@RequestBody PageQuery pageQuery) {
         return iNewsUserInfoService.dictumCommentList(pageQuery);
     }
 
     /**
      * 点赞消息列表
      */
-    @GetMapping("/fabulous/list")
-    public TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery) {
+    @PostMapping("/fabulous/list")
+    public TableDataInfo<NewsUserInfoVo> fabulousList(@RequestBody PageQuery pageQuery) {
         return iNewsUserInfoService.fabulousList(pageQuery);
     }
 
     /**
      * 关注消息列表
      */
-    @GetMapping("/follow/list")
-    public TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery) {
+    @PostMapping("/follow/list")
+    public TableDataInfo<NewsUserInfoVo> followList(@RequestBody PageQuery pageQuery) {
         return iNewsUserInfoService.followList(pageQuery);
     }
 
     /**
      * 系统消息列表
      */
-    @GetMapping("/system/list")
-    public TableDataInfo<NewsUserInfoVo> systemList(PageQuery pageQuery) {
+    @PostMapping("/system/list")
+    public TableDataInfo<NewsUserInfoVo> systemList(@RequestBody PageQuery pageQuery) {
         return iNewsUserInfoService.systemList(pageQuery);
     }
 
@@ -107,8 +107,8 @@ public class FdNewsController {
      * 消息已读
      */
     @Log(title = "用户消息", businessType = BusinessType.UPDATE)
-    @GetMapping("/news-read")
-    public void newsRead(NewsUserRecord bo) {
+    @PostMapping("/news-read")
+    public void newsRead(@RequestBody NewsUserRecord bo) {
         iNewsUserInfoService.newsRead(bo);
     }
 

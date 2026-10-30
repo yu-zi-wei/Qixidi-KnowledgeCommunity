@@ -39,9 +39,9 @@ public class PrivateUserController {
     /**
      * 查询私信记录列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<PrivateUserVo> list(@Validated(QueryGroup.class) PrivateUserBo bo, PageQuery pageQuery) {
-        return iPrivateUserService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<PrivateUserVo> list(@Validated(QueryGroup.class) @RequestBody PrivateUserBo bo) {
+        return iPrivateUserService.queryPageList(bo, bo);
     }
 
     /**

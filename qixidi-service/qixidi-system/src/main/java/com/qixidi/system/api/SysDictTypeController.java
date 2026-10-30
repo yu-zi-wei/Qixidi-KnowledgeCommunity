@@ -39,9 +39,9 @@ public class SysDictTypeController {
      * @return
      */
     @SaCheckPermission("system:dict:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysDictType> list(SysDictType dictType, PageQuery pageQuery) {
-        return dictTypeService.selectPageDictTypeList(dictType, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysDictType> list(@RequestBody SysDictType dictType) {
+        return dictTypeService.selectPageDictTypeList(dictType, dictType);
     }
 
     /**

@@ -8,6 +8,8 @@ import com.light.core.core.validate.QueryGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,8 +26,8 @@ public class FdToRechargeInfoController {
     /**
      * 查询充值信息列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<ToRechargeInfoVo> list(@Validated(QueryGroup.class) ToRechargeInfoBo bo) {
+    @PostMapping("/list")
+    public TableDataInfo<ToRechargeInfoVo> list(@Validated(QueryGroup.class) @RequestBody ToRechargeInfoBo bo) {
         return iToRechargeInfoService.list(bo);
     }
 }

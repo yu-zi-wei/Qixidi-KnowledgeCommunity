@@ -38,9 +38,9 @@ public class PrivateNewsInfoController {
     /**
      * 查询私信记录列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<PrivateNewsInfoVo> list(@Validated(QueryGroup.class) PrivateNewsInfoBo bo, PageQuery pageQuery) {
-        return iPrivateNewsInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<PrivateNewsInfoVo> list(@Validated(QueryGroup.class) @RequestBody PrivateNewsInfoBo bo) {
+        return iPrivateNewsInfoService.queryPageList(bo, bo);
     }
 
     /**

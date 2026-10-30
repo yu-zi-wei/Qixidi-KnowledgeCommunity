@@ -39,9 +39,9 @@ public class LabelGroupingInfoController {
     /**
      * 查询标签分组信息列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<LabelGroupingInfoVo> list(@Validated(QueryGroup.class) LabelGroupingInfoBo bo, PageQuery pageQuery) {
-        return iLabelGroupingInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<LabelGroupingInfoVo> list(@Validated(QueryGroup.class) @RequestBody LabelGroupingInfoBo bo) {
+        return iLabelGroupingInfoService.queryPageList(bo, bo);
     }
 
     /**

@@ -12,6 +12,8 @@ import com.qixidi.business.service.special.ISpecialInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +38,8 @@ public class UserAdminController {
      *
      * @param bo
      */
-    @GetMapping("/time/article")
-    public List<CensusVo> timeArticleCensus(CensusEntity bo) {
+    @PostMapping("/time/article")
+    public List<CensusVo> timeArticleCensus(@RequestBody CensusEntity bo) {
         return iArticleInformationService.timeArticleCensus(bo);
     }
 
@@ -46,8 +48,8 @@ public class UserAdminController {
      *
      * @param bo
      */
-    @GetMapping("/collection")
-    public List<CensusVo> timeCollectionCensus(CensusEntity bo) {
+    @PostMapping("/collection")
+    public List<CensusVo> timeCollectionCensus(@RequestBody CensusEntity bo) {
         return iCollectionInformationService.timeCollectionCensus(bo);
     }
 
@@ -56,8 +58,8 @@ public class UserAdminController {
      *
      * @param bo
      */
-    @GetMapping("/special")
-    public List<CensusVo> timeSpecialCensus(CensusEntity bo) {
+    @PostMapping("/special")
+    public List<CensusVo> timeSpecialCensus(@RequestBody CensusEntity bo) {
         return iSpecialInformationService.timeSpecialCensus(bo);
     }
 

@@ -40,9 +40,9 @@ public class DictumInfoController {
      * 查询名言信息列表
      */
     @SaCheckPermission("business:dictum:info:list")
-    @GetMapping("/list")
-    public TableDataInfo<DictumInfoVo> list(@Validated(QueryGroup.class) DictumInfoBo bo, PageQuery pageQuery) {
-        return iDictumInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<DictumInfoVo> list(@Validated(QueryGroup.class) @RequestBody DictumInfoBo bo) {
+        return iDictumInfoService.queryPageList(bo, bo);
     }
 
     /**

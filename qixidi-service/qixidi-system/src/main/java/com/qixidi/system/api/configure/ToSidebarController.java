@@ -39,9 +39,9 @@ public class ToSidebarController {
     /**
      * 查询侧边栏配置列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<ToSidebarVo> list(@Validated(QueryGroup.class) ToSidebarBo bo, PageQuery pageQuery) {
-        return iToSidebarService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<ToSidebarVo> list(@Validated(QueryGroup.class) @RequestBody ToSidebarBo bo) {
+        return iToSidebarService.queryPageList(bo, bo);
     }
 
     /**

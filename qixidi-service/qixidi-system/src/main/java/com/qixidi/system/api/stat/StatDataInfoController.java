@@ -5,6 +5,8 @@ import com.qixidi.business.service.stat.IStatDataInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,24 +24,24 @@ public class StatDataInfoController {
     /**
      * 查询网站日数据
      */
-    @GetMapping("/info")
-    public StatDataInfoVo list(StatDataInfoVo bo) {
+    @PostMapping("/info")
+    public StatDataInfoVo list(@RequestBody StatDataInfoVo bo) {
         return iStatDataInfoService.queryPageList(bo);
     }
 
     /**
      * 查询网站月统计数据
      */
-    @GetMapping("/the/info")
-    public Object theList(StatDataInfoVo bo) {
+    @PostMapping("/the/info")
+    public Object theList(@RequestBody StatDataInfoVo bo) {
         return iStatDataInfoService.theList(bo);
     }
 
     /**
      * 查询网站标签/分类统计
      */
-    @GetMapping("/label/data")
-    public Object labelDate(StatDataInfoVo bo) {
+    @PostMapping("/label/data")
+    public Object labelDate(@RequestBody StatDataInfoVo bo) {
         return iStatDataInfoService.labelDate(bo);
     }
 }

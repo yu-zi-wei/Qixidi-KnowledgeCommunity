@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,8 +37,8 @@ public class FdLabelInfoController {
     /**
      * 查询标签信息列表
      */
-    @GetMapping("/list")
-    public List<LabelInfoVo> fdLabelList(LabelInfoBo bo) {
+    @PostMapping("/list")
+    public List<LabelInfoVo> fdLabelList(@RequestBody LabelInfoBo bo) {
         return iLabelInfoService.fdLabelList(bo);
     }
 
@@ -61,9 +63,9 @@ public class FdLabelInfoController {
     /**
      * 查询标签分组信息列表
      */
-    @GetMapping("/grouping/list")
-    public TableDataInfo<LabelGroupingInfoVo> fdkGroupingList(@Validated(QueryGroup.class) LabelGroupingInfoBo bo, PageQuery pageQuery) {
-        return iLabelGroupingInfoService.fdkGroupingList(bo, pageQuery);
+    @PostMapping("/grouping/list")
+    public TableDataInfo<LabelGroupingInfoVo> fdkGroupingList(@Validated(QueryGroup.class) @RequestBody LabelGroupingInfoBo bo) {
+        return iLabelGroupingInfoService.fdkGroupingList(bo, bo);
     }
 
 }

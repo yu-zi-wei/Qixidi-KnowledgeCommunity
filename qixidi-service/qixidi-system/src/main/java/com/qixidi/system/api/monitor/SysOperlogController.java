@@ -38,9 +38,9 @@ public class SysOperlogController {
      * @return
      */
     @SaCheckPermission("monitor:operlog:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysOperLog> list(SysOperLog operLog, PageQuery pageQuery) {
-        return operLogService.selectPageOperLogList(operLog, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysOperLog> list(@RequestBody SysOperLog operLog) {
+        return operLogService.selectPageOperLogList(operLog, operLog);
     }
 
     /**

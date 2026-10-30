@@ -32,9 +32,9 @@ public class FdArticleCommentController {
     /**
      * 查询文章评论列表
      */
-    @GetMapping("/white/article/comment/list")
-    public List<ArticleCommentVo> list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
-        return iArticleCommentService.ArticleList(bo, pageQuery);
+    @PostMapping("/white/article/comment/list")
+    public List<ArticleCommentVo> list(@Validated(QueryGroup.class) @RequestBody ArticleCommentBo bo) {
+        return iArticleCommentService.ArticleList(bo, bo);
     }
 
     /**

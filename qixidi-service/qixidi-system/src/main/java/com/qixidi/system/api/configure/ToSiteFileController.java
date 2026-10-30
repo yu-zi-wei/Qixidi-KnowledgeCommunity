@@ -40,9 +40,9 @@ public class ToSiteFileController {
      * 查询网站文档列表
      */
     @SaCheckPermission("site:siteFile:list")
-    @GetMapping("/list")
-    public TableDataInfo<ToSiteFileVo> list(@Validated(QueryGroup.class) ToSiteFileBo bo, PageQuery pageQuery) {
-        return iToSiteFileService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<ToSiteFileVo> list(@Validated(QueryGroup.class) @RequestBody ToSiteFileBo bo) {
+        return iToSiteFileService.queryPageList(bo, bo);
     }
 
     /**

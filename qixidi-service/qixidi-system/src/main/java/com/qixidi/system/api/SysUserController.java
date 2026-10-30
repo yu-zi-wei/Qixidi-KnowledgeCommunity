@@ -56,9 +56,9 @@ public class SysUserController {
      * 获取用户列表
      */
     @SaCheckPermission("system:user:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysUser> list(SysUser user, PageQuery pageQuery) {
-        return userService.selectPageUserList(user, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysUser> list(@RequestBody SysUser user) {
+        return userService.selectPageUserList(user, user);
     }
 
     /**

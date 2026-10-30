@@ -27,9 +27,9 @@ public class FdPrivateUserController {
     /**
      * 查询私信用户记录表
      */
-    @GetMapping("/list")
-    public TableDataInfo<PrivateUserVo> list(@Validated(QueryGroup.class) PrivateUserBo bo, PageQuery pageQuery) {
-        return iPrivateUserService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<PrivateUserVo> list(@Validated(QueryGroup.class) @RequestBody PrivateUserBo bo) {
+        return iPrivateUserService.queryPageList(bo, bo);
     }
 
     /**

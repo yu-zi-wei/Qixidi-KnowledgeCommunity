@@ -39,9 +39,9 @@ public class ToToolInfoController {
      * 查询工具信息列表
      */
     @SaCheckPermission("business:toolInfo:list")
-    @GetMapping("/list")
-    public Object list(@Validated(QueryGroup.class) ToToolInfoBo bo, PageQuery pageQuery) {
-        return iToToolInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public Object list(@Validated(QueryGroup.class) @RequestBody ToToolInfoBo bo) {
+        return iToToolInfoService.queryPageList(bo, bo);
     }
 
     /**

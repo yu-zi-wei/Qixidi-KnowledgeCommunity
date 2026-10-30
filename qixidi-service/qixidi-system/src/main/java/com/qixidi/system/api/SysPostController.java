@@ -35,9 +35,9 @@ public class SysPostController {
      * 获取岗位列表
      */
     @SaCheckPermission("system:post:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysPost> list(SysPost post, PageQuery pageQuery) {
-        return postService.selectPagePostList(post, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysPost> list(@RequestBody SysPost post) {
+        return postService.selectPagePostList(post, post);
     }
 
     /**

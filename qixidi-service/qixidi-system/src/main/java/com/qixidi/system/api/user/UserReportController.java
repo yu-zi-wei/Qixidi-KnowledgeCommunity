@@ -40,9 +40,9 @@ public class UserReportController {
      * 查询用户签到列表
      */
     @SaCheckPermission("business:user:report:list")
-    @GetMapping("/list")
-    public TableDataInfo<UserReportVo> list(@Validated(QueryGroup.class) UserReportBo bo, PageQuery pageQuery) {
-        return iUserReportService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<UserReportVo> list(@Validated(QueryGroup.class) @RequestBody UserReportBo bo) {
+        return iUserReportService.queryPageList(bo, bo);
     }
 
     /**

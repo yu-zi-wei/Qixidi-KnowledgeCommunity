@@ -6,6 +6,7 @@ import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.light.core.core.domain.PageQuery;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 @Data
 @TableName("sys_oper_log")
 @ExcelIgnoreUnannotated
-public class SysOperLog implements Serializable {
+public class SysOperLog extends PageQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

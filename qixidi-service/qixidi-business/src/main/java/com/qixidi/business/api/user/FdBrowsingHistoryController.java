@@ -28,9 +28,9 @@ public class FdBrowsingHistoryController {
     /**
      * 查询用户浏览历史列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) BrowsingHistoryBo bo, PageQuery pageQuery) {
-        return iBrowsingHistoryService.queryPageUidList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) @RequestBody BrowsingHistoryBo bo) {
+        return iBrowsingHistoryService.queryPageUidList(bo, bo);
     }
 
     /**

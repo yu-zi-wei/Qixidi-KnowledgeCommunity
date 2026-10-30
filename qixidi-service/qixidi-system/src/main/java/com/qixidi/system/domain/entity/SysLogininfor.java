@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.light.core.core.domain.PageQuery;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Data
 @TableName("sys_logininfor")
 @ExcelIgnoreUnannotated
-public class SysLogininfor implements Serializable {
+public class SysLogininfor extends PageQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

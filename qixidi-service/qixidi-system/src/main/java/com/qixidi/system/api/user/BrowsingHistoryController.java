@@ -40,9 +40,9 @@ public class BrowsingHistoryController {
      * 查询用户浏览历史列表
      */
     @SaCheckPermission("browsing:history:list")
-    @GetMapping("/list")
-    public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) BrowsingHistoryBo bo, PageQuery pageQuery) {
-        return iBrowsingHistoryService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) @RequestBody BrowsingHistoryBo bo) {
+        return iBrowsingHistoryService.queryPageList(bo, bo);
     }
 
     /**

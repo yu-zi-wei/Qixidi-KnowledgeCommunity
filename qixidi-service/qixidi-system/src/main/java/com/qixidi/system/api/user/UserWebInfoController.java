@@ -60,8 +60,8 @@ public class UserWebInfoController {
      * @param bo
      * @return
      */
-    @GetMapping("/white/user/list")
-    public List<TripartiteUserVo> fdUserList(UserInfoBo bo) {
+    @PostMapping("/white/user/list")
+    public List<TripartiteUserVo> fdUserList(@RequestBody UserInfoBo bo) {
         return iTripartiteUserService.fdUserList(bo);
     }
 

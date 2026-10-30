@@ -65,9 +65,9 @@ public class CollectionFdkController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/white/collection/article/list")
-    public TableDataInfo<ArticleInformationVo> articleList(CollectionRecordBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(iCollectionInformationService.articleList(bo, pageQuery));
+    @PostMapping("/white/collection/article/list")
+    public TableDataInfo<ArticleInformationVo> articleList(@RequestBody CollectionRecordBo bo) {
+        return TableDataInfo.build(iCollectionInformationService.articleList(bo, bo));
     }
 
     /**

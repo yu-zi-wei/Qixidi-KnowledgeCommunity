@@ -11,12 +11,14 @@ import java.util.Map;
 
 /**
  * Entity基类
+ * <p>
+ * 继承 PageQuery：BO/查询实体随请求体携带分页参数（pageNum/pageSize 等），Controller 不再单独接收 PageQuery。
  *
  * @author Lion Li
  */
 
 @Data
-public class BaseEntity implements Serializable {
+public class BaseEntity extends PageQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

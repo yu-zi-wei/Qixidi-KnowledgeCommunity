@@ -39,9 +39,9 @@ public class ArticleCommentController {
      * 查询文章评论列表
      */
     @SaCheckPermission("article:comment:query")
-    @GetMapping("/list")
-    public TableDataInfo<ArticleCommentVo> list(@Validated(QueryGroup.class) ArticleCommentBo bo, PageQuery pageQuery) {
-        return iArticleCommentService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<ArticleCommentVo> list(@Validated(QueryGroup.class) @RequestBody ArticleCommentBo bo) {
+        return iArticleCommentService.queryPageList(bo, bo);
     }
 
     /**

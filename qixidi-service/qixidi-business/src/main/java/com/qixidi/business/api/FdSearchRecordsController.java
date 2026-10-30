@@ -9,6 +9,8 @@ import com.light.core.core.validate.QueryGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,9 +27,9 @@ public class FdSearchRecordsController {
     /**
      * 查询搜索记录列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) SearchRecordsBo bo, PageQuery pageQuery) {
-        return iSearchRecordsService.frontDeskList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) @RequestBody SearchRecordsBo bo) {
+        return iSearchRecordsService.frontDeskList(bo, bo);
     }
 
 }

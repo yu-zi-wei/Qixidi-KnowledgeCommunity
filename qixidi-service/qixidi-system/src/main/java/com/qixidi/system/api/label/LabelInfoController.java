@@ -38,9 +38,9 @@ public class LabelInfoController {
     /**
      * 查询标签信息列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<LabelInfoVo> list(@Validated(QueryGroup.class) LabelInfoBo bo, PageQuery pageQuery) {
-        return iLabelInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<LabelInfoVo> list(@Validated(QueryGroup.class) @RequestBody LabelInfoBo bo) {
+        return iLabelInfoService.queryPageList(bo, bo);
     }
 
     /**

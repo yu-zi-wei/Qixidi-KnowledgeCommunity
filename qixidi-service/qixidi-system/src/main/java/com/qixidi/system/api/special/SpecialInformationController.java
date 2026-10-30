@@ -44,17 +44,17 @@ public class SpecialInformationController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/article/list")
-    public Object getArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
-        return iSpecialInformationService.getArticleList(bo, pageQuery);
+    @PostMapping("/article/list")
+    public Object getArticleList(@RequestBody ArticleInformationBo bo) {
+        return iSpecialInformationService.getArticleList(bo, bo);
     }
 
     /**
      * 查询专栏信息列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<SpecialInformationVo> list(@Validated(QueryGroup.class) SpecialInformationBo bo, PageQuery pageQuery) {
-        return iSpecialInformationService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SpecialInformationVo> list(@Validated(QueryGroup.class) @RequestBody SpecialInformationBo bo) {
+        return iSpecialInformationService.queryPageList(bo, bo);
     }
 
     /**

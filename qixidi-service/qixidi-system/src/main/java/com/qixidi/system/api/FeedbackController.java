@@ -39,9 +39,9 @@ public class FeedbackController {
     /**
      * 查询用户反馈列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) FeedbackBo bo, PageQuery pageQuery) {
-        return IFeedbackService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<FeedbackVo> list(@Validated(QueryGroup.class) @RequestBody FeedbackBo bo) {
+        return IFeedbackService.queryPageList(bo, bo);
     }
 
     /**

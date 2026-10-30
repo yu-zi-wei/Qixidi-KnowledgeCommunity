@@ -36,8 +36,8 @@ public class SysDeptController {
      * 获取部门列表
      */
     @SaCheckPermission("system:dept:list")
-    @GetMapping("/list")
-    public List<SysDept> list(SysDept dept) {
+    @PostMapping("/list")
+    public List<SysDept> list(@RequestBody SysDept dept) {
         return deptService.selectDeptList(dept);
     }
 
@@ -66,8 +66,8 @@ public class SysDeptController {
     /**
      * 获取部门下拉树列表
      */
-    @GetMapping("/treeselect")
-    public List<Tree<Long>> treeselect(SysDept dept) {
+    @PostMapping("/treeselect")
+    public List<Tree<Long>> treeselect(@RequestBody SysDept dept) {
         List<SysDept> depts = deptService.selectDeptList(dept);
         return deptService.buildDeptTreeSelect(depts);
     }

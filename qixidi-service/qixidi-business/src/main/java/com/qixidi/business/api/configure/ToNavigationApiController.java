@@ -12,6 +12,8 @@ import com.qixidi.business.service.configure.IToSidebarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,16 +38,16 @@ public class ToNavigationApiController {
     /**
      * 查询导航栏配置列表
      */
-    @GetMapping("/navigation/list")
-    public TableDataInfo<ToNavigationVo> list(@Validated(QueryGroup.class) ToNavigationBo bo, PageQuery pageQuery) {
-        return iToNavigationService.queryPageList(bo, pageQuery);
+    @PostMapping("/navigation/list")
+    public TableDataInfo<ToNavigationVo> list(@Validated(QueryGroup.class) @RequestBody ToNavigationBo bo) {
+        return iToNavigationService.queryPageList(bo, bo);
     }
 
     /**
      * 查询侧边栏配置列表
      */
-    @GetMapping("/sidebar/list")
-    public List<ToSidebarVo> sidebarList(@Validated(QueryGroup.class) ToNavigationBo bo) {
+    @PostMapping("/sidebar/list")
+    public List<ToSidebarVo> sidebarList(@Validated(QueryGroup.class) @RequestBody ToNavigationBo bo) {
         return iToSidebarService.sidebarList(bo);
     }
 }

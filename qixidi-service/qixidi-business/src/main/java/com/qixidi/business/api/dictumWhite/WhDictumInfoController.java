@@ -46,9 +46,9 @@ public class WhDictumInfoController {
     /**
      * 查询名言信息列表（公开）
      */
-    @GetMapping("/info/list")
-    public TableDataInfo<DictumInfoVo> list(@Validated(QueryGroup.class) DictumInfoBo bo, PageQuery pageQuery) {
-        return iDictumInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/info/list")
+    public TableDataInfo<DictumInfoVo> list(@Validated(QueryGroup.class) @RequestBody DictumInfoBo bo) {
+        return iDictumInfoService.queryPageList(bo, bo);
     }
 
     /**
@@ -65,17 +65,17 @@ public class WhDictumInfoController {
     /**
      * 查询名言专辑列表(公开)
      */
-    @GetMapping("/album/list")
-    public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) DictumAlbumBo bo, PageQuery pageQuery) {
-        return iDictumAlbumService.queryPageList(bo, pageQuery);
+    @PostMapping("/album/list")
+    public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) @RequestBody DictumAlbumBo bo) {
+        return iDictumAlbumService.queryPageList(bo, bo);
     }
 
     /**
      * 查询名言分组列表(公开)
      */
-    @GetMapping("/group/list")
-    public TableDataInfo<DictumGroupVo> list(@Validated(QueryGroup.class) DictumGroupBo bo, PageQuery pageQuery) {
-        return iDictumGroupService.queryPageList(bo, pageQuery);
+    @PostMapping("/group/list")
+    public TableDataInfo<DictumGroupVo> list(@Validated(QueryGroup.class) @RequestBody DictumGroupBo bo) {
+        return iDictumGroupService.queryPageList(bo, bo);
     }
 
     /**

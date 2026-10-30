@@ -29,9 +29,9 @@ public class SysNoticeController {
      * 获取通知公告列表
      */
     @SaCheckPermission("system:notice:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysNotice> list(SysNotice notice, PageQuery pageQuery) {
-        return noticeService.selectPageNoticeList(notice, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysNotice> list(@RequestBody SysNotice notice) {
+        return noticeService.selectPageNoticeList(notice, notice);
     }
 
     /**

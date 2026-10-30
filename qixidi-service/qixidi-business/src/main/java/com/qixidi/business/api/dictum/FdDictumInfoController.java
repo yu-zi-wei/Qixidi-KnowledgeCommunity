@@ -33,10 +33,10 @@ public class FdDictumInfoController {
     /**
      * 查询名言信息列表(后台)
      */
-    @GetMapping("/role/list")
-    public TableDataInfo<DictumInfoVo> roleList(@Validated(QueryGroup.class) DictumInfoBo bo, PageQuery pageQuery) {
+    @PostMapping("/role/list")
+    public TableDataInfo<DictumInfoVo> roleList(@Validated(QueryGroup.class) @RequestBody DictumInfoBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        return iDictumInfoService.queryPageList(bo, pageQuery);
+        return iDictumInfoService.queryPageList(bo, bo);
     }
 
     /**

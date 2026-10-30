@@ -36,8 +36,8 @@ public class SysMenuController {
      * 获取菜单列表
      */
     @SaCheckPermission("system:menu:list")
-    @GetMapping("/list")
-    public List<SysMenu> list(SysMenu menu) {
+    @PostMapping("/list")
+    public List<SysMenu> list(@RequestBody SysMenu menu) {
         return menuService.selectMenuList(menu, LoginHelper.getUserId());
     }
 
@@ -53,8 +53,8 @@ public class SysMenuController {
     /**
      * 获取菜单下拉树列表
      */
-    @GetMapping("/treeselect")
-    public List<Tree<Long>> treeselect(SysMenu menu) {
+    @PostMapping("/treeselect")
+    public List<Tree<Long>> treeselect(@RequestBody SysMenu menu) {
         List<SysMenu> menus = menuService.selectMenuList(menu, LoginHelper.getUserId());
         return menuService.buildMenuTreeSelect(menus);
     }

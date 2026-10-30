@@ -41,9 +41,9 @@ public class CollectionInformationController {
      * 查询收藏夹信息列表
      */
     @SaCheckPermission("collection:information:list")
-    @GetMapping("/list")
-    public TableDataInfo<CollectionInformationVo> list(@Validated(QueryGroup.class) CollectionInformationBo bo, PageQuery pageQuery) {
-        return iCollectionInformationService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<CollectionInformationVo> list(@Validated(QueryGroup.class) @RequestBody CollectionInformationBo bo) {
+        return iCollectionInformationService.queryPageList(bo, bo);
     }
 
     /**

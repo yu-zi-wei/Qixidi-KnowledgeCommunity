@@ -35,10 +35,10 @@ public class FdDictumAlbumController {
     /**
      * 查询名言专辑列表(后台)
      */
-    @GetMapping("/role/list")
-    public TableDataInfo<DictumAlbumVo> roleList(@Validated(QueryGroup.class) DictumAlbumBo bo, PageQuery pageQuery) {
+    @PostMapping("/role/list")
+    public TableDataInfo<DictumAlbumVo> roleList(@Validated(QueryGroup.class) @RequestBody DictumAlbumBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        return iDictumAlbumService.queryPageList(bo, pageQuery);
+        return iDictumAlbumService.queryPageList(bo, bo);
     }
 
 

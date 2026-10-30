@@ -40,9 +40,9 @@ public class DictumAlbumController {
      * 查询名言专辑列表
      */
     @SaCheckPermission("business:dictum:album:list")
-    @GetMapping("/list")
-    public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) DictumAlbumBo bo, PageQuery pageQuery) {
-        return iDictumAlbumService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) @RequestBody DictumAlbumBo bo) {
+        return iDictumAlbumService.queryPageList(bo, bo);
     }
 
     /**

@@ -35,9 +35,9 @@ public class SysConfigController {
      * 获取参数配置列表
      */
     @SaCheckPermission("system:config:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysConfig> list(SysConfig config, PageQuery pageQuery) {
-        return configService.selectPageConfigList(config, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysConfig> list(@RequestBody SysConfig config) {
+        return configService.selectPageConfigList(config, config);
     }
 
     /**

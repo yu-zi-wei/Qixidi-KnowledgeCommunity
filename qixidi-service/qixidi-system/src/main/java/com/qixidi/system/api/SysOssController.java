@@ -47,9 +47,9 @@ public class SysOssController {
      * 查询OSS对象存储列表
      */
     @SaCheckPermission("system:oss:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysOssVo> list(@Validated(QueryGroup.class) SysOssBo bo, PageQuery pageQuery) {
-        return iSysOssService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysOssVo> list(@Validated(QueryGroup.class) @RequestBody SysOssBo bo) {
+        return iSysOssService.queryPageList(bo, bo);
     }
 
     /**

@@ -41,9 +41,9 @@ public class SysDictDataController {
      * @return
      */
     @SaCheckPermission("system:dict:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysDictData> list(SysDictData dictData, PageQuery pageQuery) {
-        return dictDataService.selectPageDictDataList(dictData, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysDictData> list(@RequestBody SysDictData dictData) {
+        return dictDataService.selectPageDictDataList(dictData, dictData);
     }
 
     /**

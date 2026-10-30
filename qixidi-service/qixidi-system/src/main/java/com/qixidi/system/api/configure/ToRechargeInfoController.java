@@ -40,9 +40,9 @@ public class ToRechargeInfoController {
      * 查询充值信息列表
      */
     @SaCheckPermission("business:rechargeInfo:list")
-    @GetMapping("/list")
-    public TableDataInfo<ToRechargeInfoVo> list(@Validated(QueryGroup.class) ToRechargeInfoBo bo, PageQuery pageQuery) {
-        return iToRechargeInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<ToRechargeInfoVo> list(@Validated(QueryGroup.class) @RequestBody ToRechargeInfoBo bo) {
+        return iToRechargeInfoService.queryPageList(bo, bo);
     }
 
     /**

@@ -47,9 +47,9 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:list")
-    @GetMapping("/list")
-    public TableDataInfo<SysRole> list(SysRole role, PageQuery pageQuery) {
-        return roleService.selectPageRoleList(role, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<SysRole> list(@RequestBody SysRole role) {
+        return roleService.selectPageRoleList(role, role);
     }
 
     /**
@@ -164,18 +164,18 @@ public class SysRoleController {
      * 查询已分配用户角色列表
      */
     @SaCheckPermission("system:role:list")
-    @GetMapping("/authUser/allocatedList")
-    public TableDataInfo<SysUser> allocatedList(SysUser user, PageQuery pageQuery) {
-        return userService.selectAllocatedList(user, pageQuery);
+    @PostMapping("/authUser/allocatedList")
+    public TableDataInfo<SysUser> allocatedList(@RequestBody SysUser user) {
+        return userService.selectAllocatedList(user, user);
     }
 
     /**
      * 查询未分配用户角色列表
      */
     @SaCheckPermission("system:role:list")
-    @GetMapping("/authUser/unallocatedList")
-    public TableDataInfo<SysUser> unallocatedList(SysUser user, PageQuery pageQuery) {
-        return userService.selectUnallocatedList(user, pageQuery);
+    @PostMapping("/authUser/unallocatedList")
+    public TableDataInfo<SysUser> unallocatedList(@RequestBody SysUser user) {
+        return userService.selectUnallocatedList(user, user);
     }
 
     /**

@@ -1,12 +1,13 @@
 package com.qixidi.business.domain.bo.article;
 
+import com.light.core.core.domain.PageQuery;
 import lombok.Data;
 
 /**
  * 文章排序类型Bo
  */
 @Data
-public class SortTypeBo {
+public class SortTypeBo extends PageQuery {
     /**
      * 用户id
      */

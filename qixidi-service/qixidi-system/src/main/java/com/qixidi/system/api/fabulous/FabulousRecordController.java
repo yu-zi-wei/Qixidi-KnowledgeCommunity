@@ -41,9 +41,9 @@ public class FabulousRecordController {
      * 查询点赞列表
      */
     @SaCheckPermission("fabulous:record:list")
-    @GetMapping("/list")
-    public TableDataInfo<FabulousRecordVo> list(@Validated(QueryGroup.class) FabulousRecordBo bo, PageQuery pageQuery) {
-        return iFabulousRecordService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<FabulousRecordVo> list(@Validated(QueryGroup.class) @RequestBody FabulousRecordBo bo) {
+        return iFabulousRecordService.queryPageList(bo, bo);
     }
 
     /**

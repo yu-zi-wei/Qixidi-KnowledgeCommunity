@@ -25,10 +25,10 @@ public class FdUserOrderController {
     /**
      * 查询用户订单列表
      */
-    @GetMapping("/list")
-    public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) UserOrderBo bo, PageQuery pageQuery) {
+    @PostMapping("/list")
+    public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) @RequestBody UserOrderBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        return iUserOrderService.queryPageList(bo, pageQuery);
+        return iUserOrderService.queryPageList(bo, bo);
     }
 
 

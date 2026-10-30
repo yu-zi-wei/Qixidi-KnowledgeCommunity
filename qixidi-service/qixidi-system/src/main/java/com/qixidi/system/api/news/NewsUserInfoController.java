@@ -40,9 +40,9 @@ public class NewsUserInfoController {
      * 查询用户消息列表
      */
     @SaCheckPermission("news:userInfo:list")
-    @GetMapping("/list")
-    public TableDataInfo<NewsUserInfoVo> list(@Validated(QueryGroup.class) NewsUserInfoBo bo, PageQuery pageQuery) {
-        return iNewsUserInfoService.queryPageList(bo, pageQuery);
+    @PostMapping("/list")
+    public TableDataInfo<NewsUserInfoVo> list(@Validated(QueryGroup.class) @RequestBody NewsUserInfoBo bo) {
+        return iNewsUserInfoService.queryPageList(bo, bo);
     }
 
     /**

@@ -41,10 +41,10 @@ public class ToShieldWordController {
      * 查询屏蔽池库列表
      */
     @SaCheckPermission("shield:shieldWord:list")
-    @GetMapping("/list")
-    public TableDataInfo<ToShieldWordVo> list(@Validated(QueryGroup.class) ToShieldWordBo bo, PageQuery pageQuery) {
+    @PostMapping("/list")
+    public TableDataInfo<ToShieldWordVo> list(@Validated(QueryGroup.class) @RequestBody ToShieldWordBo bo) {
 
-        return iToShieldWordService.queryPageList(bo, pageQuery);
+        return iToShieldWordService.queryPageList(bo, bo);
     }
 
     /**

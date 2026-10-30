@@ -80,27 +80,27 @@ public class UserArticleController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/article/list")
-    public TableDataInfo<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
+    @PostMapping("/article/list")
+    public TableDataInfo<ArticleInformationVo> getArticleInfo(@RequestBody ArticleInformationBo bo) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
-        return TableDataInfo.build(iArticleInformationService.getArticleInfo(bo, pageQuery));
+        return TableDataInfo.build(iArticleInformationService.getArticleInfo(bo, bo));
     }
 
     /**
      * 查询用户文章标题列表
      *
      * @param bo
-     * @param pageQuery
+     * @param bo
      * @return
      */
-    @GetMapping("/article/title/list")
-    public List<ArticleInformationVo> getArticleInfoList(ArticleInformationBo bo, PageQuery pageQuery) {
+    @PostMapping("/article/title/list")
+    public List<ArticleInformationVo> getArticleInfoList(@RequestBody ArticleInformationBo bo) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
-        return iArticleInformationService.getArticleInfoList(bo, pageQuery);
+        return iArticleInformationService.getArticleInfoList(bo, bo);
     }
 
     /**
@@ -132,12 +132,12 @@ public class UserArticleController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/lately/article/list")
-    public TableDataInfo<ArticleInformationVo> latelyArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
+    @PostMapping("/lately/article/list")
+    public TableDataInfo<ArticleInformationVo> latelyArticleList(@RequestBody ArticleInformationBo bo) {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) throw new ServiceException("登录已过期");
         bo.setUserId(uuid);
-        return iArticleInformationService.latelyArticleList(bo, pageQuery);
+        return iArticleInformationService.latelyArticleList(bo, bo);
     }
 
 }

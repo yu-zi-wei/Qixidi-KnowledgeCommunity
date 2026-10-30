@@ -32,8 +32,8 @@ public class SpecialFrkController {
     /**
      * 查询专栏信息列表
      */
-    @GetMapping("/special/list")
-    public List<SpecialInformationVo> specialListUid(SpecialInformationBo bo) {
+    @PostMapping("/special/list")
+    public List<SpecialInformationVo> specialListUid(@RequestBody SpecialInformationBo bo) {
         return iSpecialInformationService.specialListUid(bo);
     }
 
@@ -65,9 +65,9 @@ public class SpecialFrkController {
      * @param pageQuery
      * @return
      */
-    @GetMapping("/select/special")
-    public List<ArticleInformationVo> selectSpecial(SpecialInformationBo bo, PageQuery pageQuery) {
-        return iSpecialInformationService.selectSpecial(bo, pageQuery);
+    @PostMapping("/select/special")
+    public List<ArticleInformationVo> selectSpecial(@RequestBody SpecialInformationBo bo) {
+        return iSpecialInformationService.selectSpecial(bo, bo);
     }
 
     /**
