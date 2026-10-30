@@ -152,8 +152,16 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 
 | 类型 | 写法 | 前端调用 |
 |------|------|----------|
-| 非分页 | 返回 VO/List/Map 或 void → `{ code, msg, data }` | `api.get/post/put/delete`（自动解包） |
-| 分页 | 返回 `TableDataInfo` → `{ total, rows }`（Advice 放行不包装） | `api.getPage` |
+| 非分页 | 返回 VO/List/Map 或 void → `{ code, msg, data }` | `api.post/put/delete`（自动解包） |
+| 分页 | 返回 `TableDataInfo` → `{ total, rows }`（Advice 放行不包装） | `api.postPage` |
+
+### 🔴 查询接口一律 POST + @RequestBody（2026-10-30 全量改造定版）
+
+- 查询入参是对象（BO/实体/VO）一律 `@PostMapping` + `@RequestBody` 单参数；`@Validated(QueryGroup.class)` 等校验注解保留在前
+- **分页随 BO 走**：`BaseEntity extends PageQuery`（BO 继承链自带分页），Controller 禁止单独声明 `PageQuery pageQuery` 参数；Service 调用双传 `service.list(bo, bo)`
+- 查询 BO 无分页父类时补 `extends PageQuery`（勿 extends BaseEntity——日志类表无 create_time 等填充列，fill 字段会污染 INSERT）
+- 保持 GET 的只有：单简单参数接口、`@PathVariable` id/路径类接口
+- 分页字段安全机制：PageQuery 字段 `@TableField(exist=false)`（不参与列映射）+ `@JsonProperty(WRITE_ONLY)`（序列化只进不出，不污染响应）
 
 - 权限：`@SaCheckPermission("data:query")`；防重复提交：`@RepeatSubmit`
 

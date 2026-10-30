@@ -15,8 +15,9 @@
 ## API 调用规范
 
 - 后端项目位置：`D:\Project\qixidi\qixidi-service`（`grep -rn "接口路径" --include="*.java"`）
-- 响应格式：非分页 `{ code, msg, data }` 用 `api.get/post/put/delete`（自动解包）；分页 `{ total, rows }` 用 `api.getPage`
-- 参数接收：`@RequestParam`→URL / `@RequestBody`→JSON / `@RequestPart`→FormData / `@PathVariable`→路径
+- 响应格式：非分页 `{ code, msg, data }` 用 `api.post/put/delete`（自动解包）；分页 `{ total, rows }` 用 `api.postPage`（POST body 携带 BO + 分页字段）
+- **查询对象接口一律 POST**（2026-10-30 后端定版）：`api.get` 仅用于单简单参数/路径参数接口；新查询接口勿用 `api.getPage`
+- 参数接收：`@RequestBody`→JSON body（查询+分页全在 body）/ `@RequestPart`→FormData / `@PathVariable`→路径
 - API 模块放 `composables/`，命名 `useXxxApi.ts`（自动导入）
 
 ### API 错误处理（强制）
