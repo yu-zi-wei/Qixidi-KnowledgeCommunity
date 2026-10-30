@@ -60,18 +60,6 @@ public class SysMenuController {
     }
 
     /**
-     * 加载对应角色菜单列表树
-     */
-    @GetMapping(value = "/roleMenuTreeselect/{roleId}")
-    public Map<String, Object> roleMenuTreeselect(@PathVariable("roleId") Long roleId) {
-        List<SysMenu> menus = menuService.selectMenuList(LoginHelper.getUserId());
-        Map<String, Object> ajax = new HashMap<>();
-        ajax.put("checkedKeys", menuService.selectMenuListByRoleId(roleId));
-        ajax.put("menus", menuService.buildMenuTreeSelect(menus));
-        return ajax;
-    }
-
-    /**
      * 新增菜单
      */
     @SaCheckPermission("system:menu:add")

@@ -42,7 +42,6 @@
         <result property="roleName" column="role_name"/>
         <result property="roleKey" column="role_key"/>
         <result property="roleSort" column="role_sort"/>
-        <result property="dataScope" column="data_scope"/>
         <result property="status" column="role_status"/>
     </resultMap>
 
@@ -75,7 +74,6 @@
                r.role_name,
                r.role_key,
                r.role_sort,
-               r.data_scope,
                r.status as role_status
         from sys_user u
                  left join sys_dept d on u.dept_id = d.dept_id

@@ -28,14 +28,6 @@ public interface ISysDeptService {
     List<Tree<Long>> buildDeptTreeSelect(List<SysDept> depts);
 
     /**
-     * 根据角色ID查询部门树信息
-     *
-     * @param roleId 角色ID
-     * @return 选中部门列表
-     */
-    List<Long> selectDeptListByRoleId(Long roleId);
-
-    /**
      * 根据部门ID查询信息
      *
      * @param deptId 部门ID

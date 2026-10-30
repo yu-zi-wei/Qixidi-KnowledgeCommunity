@@ -83,18 +83,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
     }
 
     /**
-     * 根据角色ID查询部门树信息
-     *
-     * @param roleId 角色ID
-     * @return 选中部门列表
-     */
-    @Override
-    public List<Long> selectDeptListByRoleId(Long roleId) {
-        SysRole role = roleMapper.selectById(roleId);
-        return baseMapper.selectDeptListByRoleId(roleId, role.getDeptCheckStrictly());
-    }
-
-    /**
      * 根据部门ID查询信息
      *
      * @param deptId 部门ID

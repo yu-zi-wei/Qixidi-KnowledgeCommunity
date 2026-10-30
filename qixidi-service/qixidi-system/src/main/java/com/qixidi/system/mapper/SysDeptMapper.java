@@ -30,13 +30,4 @@ public interface SysDeptMapper extends BaseMapperPlus<SysDeptMapper, SysDept, Sy
     })
     List<SysDept> selectDeptList(@Param(Constants.WRAPPER) Wrapper<SysDept> queryWrapper);
 
-    /**
-     * 根据角色ID查询部门树信息
-     *
-     * @param roleId            角色ID
-     * @param deptCheckStrictly 部门树选择项是否关联显示
-     * @return 选中部门列表
-     */
-    List<Long> selectDeptListByRoleId(@Param("roleId") Long roleId, @Param("deptCheckStrictly") boolean deptCheckStrictly);
-
 }

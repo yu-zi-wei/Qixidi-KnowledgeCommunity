@@ -73,18 +73,6 @@ public class SysDeptController {
     }
 
     /**
-     * 加载对应角色部门列表树
-     */
-    @GetMapping(value = "/roleDeptTreeselect/{roleId}")
-    public Map<String, Object> roleDeptTreeselect(@PathVariable("roleId") Long roleId) {
-        List<SysDept> depts = deptService.selectDeptList(new SysDept());
-        Map<String, Object> ajax = new HashMap<>();
-        ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
-        ajax.put("depts", deptService.buildDeptTreeSelect(depts));
-        return ajax;
-    }
-
-    /**
      * 新增部门
      */
     @SaCheckPermission("system:dept:add")

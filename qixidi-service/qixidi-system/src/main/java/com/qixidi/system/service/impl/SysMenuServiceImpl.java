@@ -120,18 +120,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
     }
 
     /**
-     * 根据角色ID查询菜单树信息
-     *
-     * @param roleId 角色ID
-     * @return 选中菜单列表
-     */
-    @Override
-    public List<Long> selectMenuListByRoleId(Long roleId) {
-        SysRole role = roleMapper.selectById(roleId);
-        return baseMapper.selectMenuListByRoleId(roleId, role.getMenuCheckStrictly());
-    }
-
-    /**
      * 构建前端路由所需要的菜单
      *
      * @param menus 菜单列表

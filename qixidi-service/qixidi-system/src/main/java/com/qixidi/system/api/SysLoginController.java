@@ -5,17 +5,12 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.light.core.constant.Constants;
 import com.light.redission.annotation.RepeatSubmit;
 
-import com.qixidi.auth.domain.entity.SysMenu;
 import com.qixidi.auth.domain.entity.SysUser;
 import com.qixidi.auth.domain.model.LoginBody;
-import com.qixidi.auth.domain.model.SmsLoginBody;
 import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.system.domain.vo.RouterVo;
-import com.qixidi.system.service.ISysMenuService;
 import com.qixidi.system.service.ISysUserService;
 import com.qixidi.system.service.SysLoginService;
 import com.qixidi.system.service.SysPermissionService;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +33,6 @@ import java.util.Set;
 @RestController
 public class SysLoginController {
     private final SysLoginService loginService;
-    private final ISysMenuService menuService;
     private final ISysUserService userService;
     private final SysPermissionService permissionService;
 
@@ -55,21 +48,6 @@ public class SysLoginController {
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
-        ajax.put(Constants.TOKEN, token);
-        return ajax;
-    }
-
-    /**
-     * 短信登录(示例)
-     *
-     * @param smsLoginBody 登录信息
-     * @return 结果
-     */
-    @PostMapping("/smsLogin")
-    public Map<String, Object> smsLogin(@Validated @RequestBody SmsLoginBody smsLoginBody) {
-        Map<String, Object> ajax = new HashMap<>();
-        // 生成令牌
-        String token = loginService.smsLogin(smsLoginBody.getPhonenumber(), smsLoginBody.getSmsCode());
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -97,21 +75,6 @@ public class SysLoginController {
     }
 
     /**
-     * 小程序登录(示例)
-     *
-     * @param xcxCode 小程序code
-     * @return 结果
-     */
-    @PostMapping("/xcxLogin")
-    public Map<String, Object> xcxLogin(@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
-        Map<String, Object> ajax = new HashMap<>();
-        // 生成令牌
-        String token = loginService.xcxLogin(xcxCode);
-        ajax.put(Constants.TOKEN, token);
-        return ajax;
-    }
-
-    /**
      * 登出
      *
      * @return
@@ -124,18 +87,6 @@ public class SysLoginController {
             loginService.logout(LoginHelper.getUsername());
         } catch (NotLoginException e) {
         }
-    }
-
-    /**
-     * 获取路由信息
-     *
-     * @return 路由信息
-     */
-    @GetMapping("getRouters")
-    public List<RouterVo> getRouters() {
-        Long userId = LoginHelper.getUserId();
-        List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
-        return menuService.buildMenus(menus);
     }
 
 }

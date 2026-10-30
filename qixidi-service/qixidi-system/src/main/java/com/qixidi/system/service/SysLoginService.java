@@ -40,7 +40,6 @@ public class SysLoginService {
 
     private final ISysUserService userService;
     private final LogininforService asyncService;
-    private final SysPermissionService permissionService;
 
     /**
      * 登录验证
@@ -200,8 +199,6 @@ public class SysLoginService {
         loginUser.setDeptId(user.getDeptId());
         loginUser.setUsername(user.getUserName());
         loginUser.setUserType(user.getUserType());
-        loginUser.setMenuPermission(permissionService.getMenuPermission(user));
-        loginUser.setRolePermission(permissionService.getRolePermission(user));
         loginUser.setDeptName(user.getDept().getDeptName());
         List<RoleDTO> roles = BeanUtil.copyToList(user.getRoles(), RoleDTO.class);
         loginUser.setRoles(roles);

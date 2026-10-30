@@ -1,23 +1,13 @@
 package com.qixidi.system.api;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.hutool.core.util.ObjectUtil;
 import com.light.core.constant.UserConstants;
-import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
-import com.light.excel.utils.ExcelUtil;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.domain.entity.SysRole;
-import com.qixidi.auth.domain.entity.SysUser;
-import com.qixidi.auth.domain.model.LoginUser;
-import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.system.domain.entity.SysUserRole;
 import com.qixidi.system.service.ISysRoleService;
-import com.qixidi.system.service.ISysUserService;
-import com.qixidi.system.service.SysPermissionService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,15 +26,9 @@ import java.util.List;
 public class SysRoleController {
 
     private final ISysRoleService roleService;
-    private final ISysUserService userService;
-    private final SysPermissionService permissionService;
 
     /**
      * 查询角色信息列表
-     *
-     * @param role
-     * @param pageQuery
-     * @return
      */
     @SaCheckPermission("system:role:list")
     @PostMapping("/list")
@@ -53,26 +37,11 @@ public class SysRoleController {
     }
 
     /**
-     * 导出角色信息列表
-     *
-     * @param role
-     * @param response
-     */
-    @Log(title = "角色管理", businessType = BusinessType.EXPORT)
-    @SaCheckPermission("system:role:export")
-    @PostMapping("/export")
-    public void export(SysRole role, HttpServletResponse response) {
-        List<SysRole> list = roleService.selectRoleList(role);
-        ExcelUtil.exportExcel(list, "角色数据", SysRole.class, response);
-    }
-
-    /**
-     * 根据角色编号获取详细信息
+     * 根据角色编号获取详细信息（含已分配权限码）
      */
     @SaCheckPermission("system:role:query")
     @GetMapping(value = "/{roleId}")
     public SysRole getInfo(@PathVariable Long roleId) {
-        roleService.checkRoleDataScope(roleId);
         return roleService.selectRoleById(roleId);
     }
 
@@ -93,14 +62,13 @@ public class SysRoleController {
     }
 
     /**
-     * 修改保存角色
+     * 修改保存角色（含权限码重写）
      */
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysRole role) {
         roleService.checkRoleAllowed(role);
-        roleService.checkRoleDataScope(role.getRoleId());
         if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role))) {
             throw new ServiceException("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
         } else if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role))) {
@@ -108,25 +76,6 @@ public class SysRoleController {
         }
 
         roleService.updateRole(role);
-        // 更新缓存用户权限
-        LoginUser loginUser = LoginHelper.getLoginUser();
-        SysUser sysUser = userService.selectUserById(loginUser.getUserId());
-        if (ObjectUtil.isNotNull(sysUser) && !sysUser.isAdmin()) {
-            loginUser.setMenuPermission(permissionService.getMenuPermission(sysUser));
-            LoginHelper.setLoginUser(loginUser);
-        }
-    }
-
-    /**
-     * 修改保存数据权限
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
-    @PutMapping("/dataScope")
-    public void dataScope(@RequestBody SysRole role) {
-        roleService.checkRoleAllowed(role);
-        roleService.checkRoleDataScope(role.getRoleId());
-        roleService.authDataScope(role);
     }
 
     /**
@@ -137,7 +86,6 @@ public class SysRoleController {
     @PutMapping("/changeStatus")
     public void changeStatus(@RequestBody SysRole role) {
         roleService.checkRoleAllowed(role);
-        roleService.checkRoleDataScope(role.getRoleId());
         roleService.updateRoleStatus(role);
     }
 
@@ -158,54 +106,5 @@ public class SysRoleController {
     @GetMapping("/optionselect")
     public List<SysRole> optionselect() {
         return roleService.selectRoleAll();
-    }
-
-    /**
-     * 查询已分配用户角色列表
-     */
-    @SaCheckPermission("system:role:list")
-    @PostMapping("/authUser/allocatedList")
-    public TableDataInfo<SysUser> allocatedList(@RequestBody SysUser user) {
-        return userService.selectAllocatedList(user, user);
-    }
-
-    /**
-     * 查询未分配用户角色列表
-     */
-    @SaCheckPermission("system:role:list")
-    @PostMapping("/authUser/unallocatedList")
-    public TableDataInfo<SysUser> unallocatedList(@RequestBody SysUser user) {
-        return userService.selectUnallocatedList(user, user);
-    }
-
-    /**
-     * 取消授权用户
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authUser/cancel")
-    public void cancelAuthUser(@RequestBody SysUserRole userRole) {
-        roleService.deleteAuthUser(userRole);
-    }
-
-    /**
-     * 批量取消授权用户
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authUser/cancelAll")
-    public void cancelAuthUserAll(Long roleId, Long[] userIds) {
-        roleService.deleteAuthUsers(roleId, userIds);
-    }
-
-    /**
-     * 批量选择用户授权
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authUser/selectAll")
-    public void selectAuthUserAll(Long roleId, Long[] userIds) {
-        roleService.checkRoleDataScope(roleId);
-        roleService.insertAuthUsers(roleId, userIds);
     }
 }

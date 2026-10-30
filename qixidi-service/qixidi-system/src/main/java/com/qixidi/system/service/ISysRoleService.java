@@ -3,7 +3,6 @@ package com.qixidi.system.service;
 import com.qixidi.auth.domain.entity.SysRole;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.qixidi.system.domain.entity.SysUserRole;
 
 import java.util.List;
 import java.util.Set;
@@ -89,13 +88,6 @@ public interface ISysRoleService {
     void checkRoleAllowed(SysRole role);
 
     /**
-     * 校验角色是否有数据权限
-     *
-     * @param roleId 角色id
-     */
-    void checkRoleDataScope(Long roleId);
-
-    /**
      * 通过角色ID查询角色使用数量
      *
      * @param roleId 角色ID
@@ -104,7 +96,7 @@ public interface ISysRoleService {
     long countUserRoleByRoleId(Long roleId);
 
     /**
-     * 新增保存角色信息
+     * 新增保存角色信息（含 sys_role_perm 权限码写入）
      *
      * @param role 角色信息
      * @return 结果
@@ -112,7 +104,7 @@ public interface ISysRoleService {
     int insertRole(SysRole role);
 
     /**
-     * 修改保存角色信息
+     * 修改保存角色信息（含 sys_role_perm 权限码重写）
      *
      * @param role 角色信息
      * @return 结果
@@ -126,14 +118,6 @@ public interface ISysRoleService {
      * @return 结果
      */
     int updateRoleStatus(SysRole role);
-
-    /**
-     * 修改数据权限信息
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
-    int authDataScope(SysRole role);
 
     /**
      * 通过角色ID删除角色
@@ -150,30 +134,4 @@ public interface ISysRoleService {
      * @return 结果
      */
     int deleteRoleByIds(Long[] roleIds);
-
-    /**
-     * 取消授权用户角色
-     *
-     * @param userRole 用户和角色关联信息
-     * @return 结果
-     */
-    int deleteAuthUser(SysUserRole userRole);
-
-    /**
-     * 批量取消授权用户角色
-     *
-     * @param roleId  角色ID
-     * @param userIds 需要取消授权的用户数据ID
-     * @return 结果
-     */
-    int deleteAuthUsers(Long roleId, Long[] userIds);
-
-    /**
-     * 批量选择授权用户角色
-     *
-     * @param roleId  角色ID
-     * @param userIds 需要删除的用户数据ID
-     * @return 结果
-     */
-    int insertAuthUsers(Long roleId, Long[] userIds);
 }

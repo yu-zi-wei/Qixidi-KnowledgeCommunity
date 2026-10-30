@@ -65,18 +65,6 @@
         order by m.parent_id, m.order_num
     </select>
 
-    <select id="selectMenuListByRoleId" resultType="Long">
-        select m.menu_id
-        from sys_menu m
-        left join sys_role_menu rm on m.menu_id = rm.menu_id
-        where rm.role_id = #{roleId}
-        <if test="menuCheckStrictly">
-            and m.menu_id not in (select m.parent_id from sys_menu m inner join sys_role_menu rm on m.menu_id =
-            rm.menu_id and rm.role_id = #{roleId})
-        </if>
-        order by m.parent_id, m.order_num
-    </select>
-
     <select id="selectMenuPerms" resultType="String">
         select distinct m.perms
         from sys_menu m
