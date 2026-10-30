@@ -66,12 +66,14 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 
 - 父 pom 用 `${revision}`：单独 `-pl 模块` 构建必失败，必须整仓 `mvn package`
 - 验证编译结果必须 `mvn clean compile`：增量编译会复用旧 target class 造成 SUCCESS 假阳性
+- 运行中的后端实例（IDEA debug / fat jar java 进程）锁 `target/*.jar`，`mvn clean package` 报 Unable to delete/rename：改部分模块时删对应模块 target 后无 clean 增量 `mvn package`；重打 fat jar 前先停旧实例
 
 ---
 
 ## 认证体系事实（Sa-Token）
 
 - loginId 格式 `{userType}:{userId}`（`LoginHelper.JOIN_CODE`），前台 userType=`tripartite_user`；依赖 `sa-token.allow-login-id-colon: true`
+- 后台 `/system/*` 接口（sys_user 登录态）复用前台 Service 时 `LoginHelper.getTripartiteUser()` 必为 null：共用方法须判空分流——前台做角色/属主校验与 updateId 覆盖，后台跳过；终审类操作（审核/上下架）一律独立接口只 set 状态字段，禁止复用会触发前台事件（自动审核/通知）的编辑方法
 - 前端请求头：`Authorization: Bearer {token}`
 - Redis key 前缀 = token-name（`Authorization:`）；本机 Redis db1 与 guanmai 项目共用，**只能动 `Authorization:*`，绝不能动 `token:*`**
 - dao 是自定义 `SaTokenDaoRedisCompat`（兼容低版本 Redis 的 KEEPTTL），官方 dao 装配已 exclude，**勿删**
