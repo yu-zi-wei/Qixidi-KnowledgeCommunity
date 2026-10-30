@@ -1,10 +1,10 @@
 package com.qixidi.business.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import com.qixidi.business.domain.entity.SearchRecords;
 
 
 /**
@@ -15,32 +15,9 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class SearchRecordsVo {
+public class SearchRecordsVo extends SearchRecords {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @ExcelProperty(value = "id")
-    private Long id;
-
-    /**
-     * 用户id
-     */
-    @ExcelProperty(value = "用户id")
-    private String uid;
-
-    /**
-     * 内容
-     */
-    @ExcelProperty(value = "内容")
-    private String content;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
 
 }

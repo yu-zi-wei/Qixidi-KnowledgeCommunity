@@ -3,6 +3,7 @@ package com.qixidi.system.domain.vo;
 import lombok.Data;
 
 import java.util.Date;
+import com.qixidi.system.domain.entity.SysOss;
 
 /**
  * OSS对象存储视图对象 sys_oss
@@ -10,34 +11,9 @@ import java.util.Date;
  * @author Lion Li
  */
 @Data
-public class SysOssVo {
+public class SysOssVo extends SysOss {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 对象存储主键
-     */
-    private String ossId;
-
-    /**
-     * 文件名
-     */
-    private String fileName;
-
-    /**
-     * 原名
-     */
-    private String originalName;
-
-    /**
-     * 文件后缀名
-     */
-    private String fileSuffix;
-
-    /**
-     * URL地址
-     */
-    private String url;
 
     /**
      * 创建时间
@@ -48,11 +24,6 @@ public class SysOssVo {
      * 上传人
      */
     private String createBy;
-
-    /**
-     * 服务商
-     */
-    private String service;
 
 
 }

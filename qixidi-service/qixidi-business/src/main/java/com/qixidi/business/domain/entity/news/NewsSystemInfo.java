@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 /**
  * 系统消息对象 b_news_system_info
@@ -25,18 +28,23 @@ public class NewsSystemInfo {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 消息标题
      */
+    @ExcelProperty(value = "消息标题")
     private String newsTitle;
     /**
      * 消息内容
      */
+    @ExcelProperty(value = "消息内容")
     private String newsContent;
     /**
      * 是否有详情（1：无，2：有）
      */
+    @ExcelProperty(value = "是否有详情", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "1=：无，2：有")
     private Long isDetails;
     /**
      * 状态
@@ -53,10 +61,13 @@ public class NewsSystemInfo {
     /**
      * 消息类型（1：系统，2：用户）
      */
+    @ExcelProperty(value = "消息类型", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "1=：系统，2：用户")
     private Long type;
     /**
      * 失效时间
      */
+    @ExcelProperty(value = "失效时间")
     private Date lapseTime;
 
     /**

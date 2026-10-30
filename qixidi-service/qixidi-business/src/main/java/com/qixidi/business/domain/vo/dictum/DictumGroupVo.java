@@ -1,12 +1,11 @@
 package com.qixidi.business.domain.vo.dictum;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
 import lombok.Data;
 
 import java.util.Date;
+import com.qixidi.business.domain.entity.dictum.DictumGroup;
 
 
 /**
@@ -17,49 +16,14 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class DictumGroupVo {
+public class DictumGroupVo extends DictumGroup {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @ExcelProperty(value = "id")
-    private Long id;
 
     /**
      * 收录数
      */
     private Long employSum;
-
-    /**
-     * 分组名称
-     */
-    @ExcelProperty(value = "分组名称")
-    private String name;
-
-    /**
-     * 封面
-     */
-    @ExcelProperty(value = "封面")
-    private String cover;
-
-    /**
-     * 简介
-     */
-    @ExcelProperty(value = "简介")
-    private String briefIntroduction;
-
-    /**
-     * 状态（0：正常吗：已删除）
-     */
-    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "0=：正常吗：已删除")
-    private Integer state;
-
-    private Date createTime;
-
-    private Date updateTime;
 
     /**
      * 用户名称

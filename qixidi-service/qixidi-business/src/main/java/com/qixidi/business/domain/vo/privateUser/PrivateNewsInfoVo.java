@@ -1,9 +1,8 @@
 package com.qixidi.business.domain.vo.privateUser;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.light.core.core.domain.BaseEntity;
 import lombok.Data;
+import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
 
 
 /**
@@ -14,21 +13,9 @@ import lombok.Data;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class PrivateNewsInfoVo extends BaseEntity {
+public class PrivateNewsInfoVo extends PrivateNewsInfo {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @ExcelProperty(value = "id")
-    private Long id;
-
-    /**
-     * 用户id
-     */
-    @ExcelProperty(value = "用户id")
-    private String uid;
 
     /**
      * 用户名称
@@ -39,28 +26,6 @@ public class PrivateNewsInfoVo extends BaseEntity {
      */
     private String userAvatar;
 
-    /**
-     * 消息内容
-     */
-    @ExcelProperty(value = "消息内容")
-    private String newsComment;
-
-    /**
-     * 目标uid
-     */
-    @ExcelProperty(value = "目标uid")
-    private String replyTargetUid;
-
-    /**
-     * 标识（与上一条消息时间间隔0：20分钟以内，1：超过20分钟）
-     */
-    private Integer timeMark;
-
-
-    /**
-     * 是否已读（1：未读，2：已读）
-     */
-    private Integer beenRead;
 
 }
 

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -24,26 +26,32 @@ public class ToSiteFile {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 标题
      */
+    @ExcelProperty(value = "标题")
     private String title;
     /**
      * 内容
      */
+    @ExcelProperty(value = "md内容")
     private String content;
     /**
      * 创建人
      */
+    @ExcelProperty(value = "创建人")
     private Long uid;
     /**
      * 状态（0：正常，1：已失效）
      */
+    @ExcelDictFormat(readConverterExp = "0=：正常，1：已失效")
     private Integer state;
     /**
      * 类型
      */
+    @ExcelProperty(value = "类型")
     private String type;
     /**
      * 创建时间

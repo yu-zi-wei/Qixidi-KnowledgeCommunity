@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 /**
@@ -24,18 +26,23 @@ public class UserReport {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * uid
      */
+    @ExcelProperty(value = "uid")
     private String uid;
     /**
      * 签到时间
      */
+    @ExcelProperty(value = "签到时间")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date reportTime;
     /**
      * 获得a币数量
      */
+    @ExcelProperty(value = "获得a币数量")
     private Long aCurrency;
 
 }

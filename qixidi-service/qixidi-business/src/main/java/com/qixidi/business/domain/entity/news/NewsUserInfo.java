@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -29,6 +32,7 @@ public class NewsUserInfo {
     /**
      * 消息内容
      */
+    @ExcelProperty(value = "消息内容")
     private String newsContent;
     /**
      * 消息类型（1：评论消息，2：点赞消息，3：关注消息，4系统消息）
@@ -62,14 +66,18 @@ public class NewsUserInfo {
     /**
      * 是否已读（0：未读，1：已读）
      */
+    @ExcelProperty(value = "是否已读", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：未读，1：已读")
     private Integer beenRead;
     /**
      * 发送者id
      */
+    @ExcelProperty(value = "发送者id")
     private String senderId;
     /**
      * 接收者id
      */
+    @ExcelProperty(value = "接收者id")
     private String recipientId;
 
     /**

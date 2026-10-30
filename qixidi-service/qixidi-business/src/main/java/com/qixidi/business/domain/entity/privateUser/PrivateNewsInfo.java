@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
 
 
 /**
@@ -24,21 +25,25 @@ public class PrivateNewsInfo {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
 
     /**
      * 用户id
      */
+    @ExcelProperty(value = "用户id")
     private String uid;
 
     /**
      * 消息内容
      */
+    @ExcelProperty(value = "消息内容")
     private String newsComment;
 
     /**
      * 目标uid
      */
+    @ExcelProperty(value = "目标uid")
     private String replyTargetUid;
 
     /**

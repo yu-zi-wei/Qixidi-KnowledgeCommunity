@@ -3,13 +3,11 @@ package com.qixidi.business.domain.vo.news;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
+import com.qixidi.business.domain.entity.news.NewsUserInfo;
 
 
 /**
@@ -20,7 +18,7 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class NewsUserInfoVo {
+public class NewsUserInfoVo extends NewsUserInfo {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,23 +38,6 @@ public class NewsUserInfoVo {
     @ExcelProperty(value = "消息标题")
     private String newsTitle;
 
-    @ExcelProperty(value = "消息内容")
-    private String newsContent;
-
-    private Integer type;
-
-    /**
-     * 是否已读（0：未读，1：已读）
-     */
-    @ExcelProperty(value = "是否已读", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "0=：未读，1：已读")
-    private Integer beenRead;
-
-    /**
-     * 发送者id
-     */
-    @ExcelProperty(value = "发送者id")
-    private String senderId;
     /**
      * 发送者名称
      */
@@ -66,16 +47,5 @@ public class NewsUserInfoVo {
      * 发送者头像
      */
     private String senderAvatar;
-
-    /**
-     * 接收者id
-     */
-    @ExcelProperty(value = "接收者id")
-    private String recipientId;
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
 
 }

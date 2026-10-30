@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
 
 
 /**
@@ -24,18 +25,22 @@ public class Feedback {
      *id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "")
     private Long id;
     /**
      * 用户id
      */
+    @ExcelProperty(value = "用户id")
     private String uid;
     /**
      * 用户名称
      */
+    @ExcelProperty(value = "用户名称")
     private String nickname;
     /**
      * 反馈内容
      */
+    @ExcelProperty(value = "反馈内容")
     private String feedbackContent;
     /**
      * 反馈时间

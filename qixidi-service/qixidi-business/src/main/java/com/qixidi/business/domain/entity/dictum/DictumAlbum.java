@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -24,26 +27,33 @@ public class DictumAlbum {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * uid
      */
+    @ExcelProperty(value = "uid")
     private String uid;
     /**
      * 专辑名称
      */
+    @ExcelProperty(value = "专辑名称")
     private String name;
     /**
      * 封面
      */
+    @ExcelProperty(value = "封面")
     private String cover;
     /**
      * 简介
      */
+    @ExcelProperty(value = "简介")
     private String briefIntroduction;
     /**
      * 专辑状态（1：公开，2：私有，3：关注可看）
      */
+    @ExcelProperty(value = "专辑状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "1=：公开，2：私有，3：关注可看")
     private Long albumState;
 
     /**
@@ -54,6 +64,8 @@ public class DictumAlbum {
     /**
      * 状态（0：正常吗：已删除）
      */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：正常吗：已删除")
     private Integer state;
 
     /**

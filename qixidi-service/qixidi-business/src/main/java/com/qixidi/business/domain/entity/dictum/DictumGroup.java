@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -25,23 +28,29 @@ public class DictumGroup {
      * id
      */
     @TableId(value = "id")
+    @ExcelProperty(value = "id")
     private Long id;
     ;
     /**
      * 分组名称
      */
+    @ExcelProperty(value = "分组名称")
     private String name;
     /**
      * 封面
      */
+    @ExcelProperty(value = "封面")
     private String cover;
     /**
      * 简介
      */
+    @ExcelProperty(value = "简介")
     private String briefIntroduction;
     /**
      * 状态（0：正常吗：已删除）
      */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：正常吗：已删除")
     private Integer state;
 
     private Date createTime;

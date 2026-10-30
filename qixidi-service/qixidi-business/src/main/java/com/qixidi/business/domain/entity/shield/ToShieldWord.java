@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -25,22 +28,29 @@ public class ToShieldWord {
      *
      */
     @TableId(value = "id")
+    @ExcelProperty(value = "")
     private Long id;
     /**
      * 屏蔽字
      */
+    @ExcelProperty(value = "屏蔽字")
     private String keyword;
     /**
      * 类型（1：文章，2：评论）
      */
+    @ExcelProperty(value = "类型", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "1=：文章，2：评论")
     private Long type;
     /**
      * 屏蔽词权重
      */
+    @ExcelProperty(value = "屏蔽词权重")
     private Long weight;
     /**
      * 状态（0：正常，1：已失效）
      */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：正常，1：已失效")
     private Long state;
 
     /**

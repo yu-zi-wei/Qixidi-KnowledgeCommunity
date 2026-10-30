@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -24,10 +27,12 @@ public class FabulousRecord {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 用户id
      */
+    @ExcelProperty(value = "用户id")
     private String uid;
     /**
      * 目标id
@@ -36,6 +41,7 @@ public class FabulousRecord {
     /**
      * 类型id
      */
+    @ExcelProperty(value = "对应的作品或评论的id")
     private Long typeId;
     /**
      * 目标Uid
@@ -44,14 +50,19 @@ public class FabulousRecord {
     /**
      * 点赞类型（1：文章，2：问答，3：回答，4：评论，5：回复）
      */
+    @ExcelProperty(value = "点赞类型", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "1=：文章，2：问答，3：回答，4：评论，5：回复")
     private Integer type;
     /**
      * 状态（0：点赞有效，1：取消点赞）
      */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：点赞有效，1：取消点赞")
     private Integer state;
 
     /**
      * 创建时间
      */
+    @ExcelProperty(value = "创建时间", converter = ExcelDictConvert.class)
     private Date createTime;
 }

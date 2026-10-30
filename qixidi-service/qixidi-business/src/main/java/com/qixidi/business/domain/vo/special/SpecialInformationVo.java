@@ -2,11 +2,11 @@ package com.qixidi.business.domain.vo.special;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
 import lombok.Data;
 
 import java.util.Date;
+import com.qixidi.business.domain.entity.special.SpecialInformation;
 
 
 /**
@@ -17,43 +17,9 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class SpecialInformationVo {
+public class SpecialInformationVo extends SpecialInformation {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 专栏id
-     */
-    @ExcelProperty(value = "专栏id")
-    private Long id;
-
-    /**
-     * 专栏名称
-     */
-    @ExcelProperty(value = "专栏名称")
-    private String specialName;
-
-    /**
-     * 专栏简介
-     */
-    @ExcelProperty(value = "专栏简介")
-    private String specialIntroduce;
-    /**
-     * 封面
-     */
-    private String cover;
-    /**
-     * 专栏状态（0：正常，1：未启用）
-     */
-    @ExcelProperty(value = "专栏状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "0=：正常，1：未启用")
-    private Integer state;
-
-    /**
-     * 用户id
-     */
-    @ExcelProperty(value = "用户id")
-    private String uid;
 
     /**
      * 用户名称
@@ -61,21 +27,6 @@ public class SpecialInformationVo {
     @ExcelProperty(value = "用户名称")
     private String username;
 
-    /**
-     * 修改者id
-     */
-    @ExcelProperty(value = "修改者id")
-    private String updateId;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
     /**
      * 收录数
      */

@@ -1,10 +1,10 @@
 package com.qixidi.business.domain.vo.privateUser;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import com.qixidi.business.domain.entity.privateUser.PrivateUser;
 
 
 /**
@@ -15,32 +15,9 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class PrivateUserVo {
+public class PrivateUserVo extends PrivateUser {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @ExcelProperty(value = "id")
-    private Long id;
-
-    /**
-     * 用户id
-     */
-    @ExcelProperty(value = "用户id")
-    private String uid;
-
-    /**
-     * 目标用户id
-     */
-    @ExcelProperty(value = "目标用户id")
-    private String targetUid;
-
-    /**
-     * 最后一条聊天数据
-     */
-    private String lastNews;
 
     /**
      * 未读消息条数
@@ -63,8 +40,5 @@ public class PrivateUserVo {
     private String targetOccupation;
 
 
-    private Date createTime;
-
-    private Date updateTime;
 }
 

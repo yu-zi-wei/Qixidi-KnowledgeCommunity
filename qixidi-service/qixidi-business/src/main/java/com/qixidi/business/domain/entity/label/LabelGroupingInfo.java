@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import com.light.excel.convert.ExcelDictConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -24,10 +27,12 @@ public class LabelGroupingInfo {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 分组名称
      */
+    @ExcelProperty(value = "分组名称")
     private String groupingName;
 
     /**
@@ -37,10 +42,13 @@ public class LabelGroupingInfo {
     /**
      * 状态（0：正常，1：已删除）
      */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "0=：正常，1：已删除")
     private Integer state;
     /**
      * 描述
      */
+    @ExcelProperty(value = "描述")
     private String groupingDescribe;
 
     /**

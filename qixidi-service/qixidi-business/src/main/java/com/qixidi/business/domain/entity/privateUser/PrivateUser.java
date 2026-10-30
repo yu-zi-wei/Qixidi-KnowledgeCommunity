@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
 
 
 /**
@@ -26,14 +27,17 @@ public class PrivateUser {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 用户id
      */
+    @ExcelProperty(value = "用户id")
     private String uid;
     /**
      * 目标用户id
      */
+    @ExcelProperty(value = "目标用户id")
     private String targetUid;
 
     /**

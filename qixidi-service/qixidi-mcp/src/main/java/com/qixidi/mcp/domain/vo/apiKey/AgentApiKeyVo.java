@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import com.qixidi.mcp.domain.entity.AgentApiKey;
 
 /**
  * API key 视图（不回显 keyHash 与任何 key 明文）
@@ -18,28 +19,6 @@ public class AgentApiKeyVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private Long id;
-
-    /**
-     * 备注名
-     */
-    private String keyName;
-
-    /**
-     * 状态（1 启用 0 停用）
-     */
-    private Integer status;
-
-    /**
-     * 过期时间
-     */
-    private Date expireTime;
-
-    /**
-     * 最后使用时间
-     */
-    private Date lastUsedTime;
 
     /**
      * 创建时间

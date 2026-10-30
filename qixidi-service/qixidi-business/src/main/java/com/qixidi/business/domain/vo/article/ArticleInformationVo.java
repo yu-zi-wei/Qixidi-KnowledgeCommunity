@@ -3,13 +3,13 @@ package com.qixidi.business.domain.vo.article;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
 
 
 
@@ -21,86 +21,9 @@ import java.util.List;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class ArticleInformationVo {
+public class ArticleInformationVo extends ArticleInformation {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 文章id
-     */
-    @ExcelProperty(value = "文章id")
-    private Long id;
-
-    /**
-     * 作者id
-     */
-    @ExcelProperty(value = "作者id")
-    private String userId;
-
-    /**
-     * 文章标题
-     */
-    @ExcelProperty(value = "文章标题")
-    private String articleTitle;
-
-    /**
-     * 文章封面
-     */
-    @ExcelProperty(value = "文章封面")
-    private String articleCover;
-
-    /**
-     * 文章摘要
-     */
-    @ExcelProperty(value = "文章摘要")
-    private String articleAbstract;
-
-    /**
-     * 文章内容
-     */
-    @ExcelProperty(value = "文章内容")
-    private String articleContent;
-    /**
-     * 主题
-     */
-    @ExcelProperty(value = "主题")
-    private String theme;
-
-    /**
-     * 文章类型（1：原创，2：转载）
-     */
-    @ExcelDictFormat(readConverterExp = "1=：原创，2：转载")
-    private Integer type;
-
-    /**
-     * 转载地址
-     */
-    @ExcelProperty(value = "转载地址")
-    private String reprintUrl;
-
-    /**
-     * 文章状态（0：正常，1：已删除）
-     */
-    @ExcelDictFormat(readConverterExp = "0=：正常，1：已删除")
-    private Integer state;
-
-    /**
-     * 修改者id
-     */
-    @ExcelProperty(value = "修改者id")
-    private String updateId;
-
-    /**
-     * 专栏id
-     */
-    @ExcelProperty(value = "专栏id")
-    private Long specialId;
-
-    /**
-     * 分类id
-     */
-    @ExcelProperty(value = "分类d")
-    private Long groupingId;
 
     /**
      * 分类名称
@@ -108,12 +31,6 @@ public class ArticleInformationVo {
     @ExcelProperty(value = "分类名称")
     private String groupingName;
 
-    /**
-     * 标签（多个以逗号隔开）
-     */
-    @ExcelProperty(value = "标签", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "多=个以逗号隔开")
-    private String labelId;
     /**
      * 标签列表
      */
@@ -166,41 +83,6 @@ public class ArticleInformationVo {
      */
     @ExcelProperty(value = "收藏次数")
     private Integer collectionTimes = 0;
-
-    /**
-     * 浏览次数
-     */
-    @ExcelProperty(value = "浏览次数")
-    private Long numberTimes = 0L;
-
-    /**
-     * 是否公开（1：公开，2：不公开）
-     */
-    @ExcelDictFormat(readConverterExp = "1=：公开，2：不公开")
-    private Integer isPublic;
-
-    /**
-     * 审核状态（1：审核中，2：审核通过，3：审核不通过,4:草稿）
-     */
-    @ExcelDictFormat(readConverterExp = "1=：审核中，2：审核通过，3：审核不通过，4:草稿")
-    private Integer auditState;
-
-    /**
-     * 审核时间
-     */
-    @ExcelProperty(value = "审核时间")
-    private Date auditTime;
-
-    @ExcelProperty(value = "修改时间")
-    private Date updateTime;
-
-    @ExcelProperty(value = "创建时间")
-    private Date createTime;
-
-    /**
-     * 热度权重
-     */
-    private Long heatWeight = 0L;
 
     /**
      * 用户信息

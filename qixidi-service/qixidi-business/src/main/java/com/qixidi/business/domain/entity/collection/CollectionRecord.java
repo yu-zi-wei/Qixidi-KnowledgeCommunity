@@ -5,6 +5,8 @@ import com.qixidi.business.domain.enums.CollectionTypeEnums;
 import lombok.Data;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 /**
  * 文章收藏关联对象 b_collection_record
@@ -22,16 +24,19 @@ public class CollectionRecord {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
 
     /**
      * 目标id
      */
+    @ExcelProperty(value = "目标id")
     private Long targetId;
 
     /**
      * 收藏夹id
      */
+    @ExcelProperty(value = "收藏夹id")
     private Long collectionId;
 
     /**
@@ -39,16 +44,19 @@ public class CollectionRecord {
      *
      * @see CollectionTypeEnums
      */
+    @ExcelProperty(value = "收藏类型")
     private Integer type;
 
     /**
      * 状态（0：正常，1：已删除）
      */
+    @ExcelDictFormat(readConverterExp = "0=：正常，1：已删除")
     private Integer state;
 
     /**
      * 创建者id
      */
+    @ExcelProperty(value = "创建者id")
     private String uid;
 
     /**

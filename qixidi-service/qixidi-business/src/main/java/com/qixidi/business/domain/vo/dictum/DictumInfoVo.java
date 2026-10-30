@@ -3,12 +3,12 @@ package com.qixidi.business.domain.vo.dictum;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
-import com.light.core.annotation.ExcelDictFormat;
 import com.light.excel.convert.ExcelDictConvert;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
 
 
 /**
@@ -19,27 +19,9 @@ import java.util.List;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class DictumInfoVo {
+public class DictumInfoVo extends DictumInfo {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @ExcelProperty(value = "id")
-    private Long id;
-
-    /**
-     * 用户id
-     */
-    @ExcelProperty(value = "用户id")
-    private String uid;
-
-    /**
-     * 内容
-     */
-    @ExcelProperty(value = "内容")
-    private String content;
 
     /**
      * 内容
@@ -48,20 +30,9 @@ public class DictumInfoVo {
     private String contentMd;
 
     /**
-     * 分类id
-     */
-    @ExcelProperty(value = "分类id")
-    private Long groupId;
-
-    /**
      * 分类名称
      */
     private String groupName;
-
-    /**
-     * 专辑id
-     */
-    private Long albumId;
 
     /**
      * 专辑名称
@@ -69,56 +40,16 @@ public class DictumInfoVo {
     private String albumName;
 
     /**
-     * 作者
-     */
-    private String author;
-
-    /**
-     * 作品名称
-     */
-    private String worksName;
-
-    /**
-     * 标签（多个以逗号隔开）
-     */
-    @ExcelProperty(value = "标签", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "多=个以逗号隔开")
-    private String label;
-
-    /**
      * 标签列表
      */
     private List<String> labelList;
 
     /**
-     * 图片（多个以逗号隔开）
-     */
-    @ExcelProperty(value = "图片", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "多=个以逗号隔开")
-    private String picture;
-    /**
      * 图片列表
      */
     private List<String> pictureList;
 
-    /**
-     * 名言状态（1：公开，1：私有，3：关注可看）
-     */
-    @ExcelProperty(value = "名言状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "1=：公开，1：私有，3：关注可看")
-    private Integer dictumState;
 
-    /**
-     * 状态（0，正常，2：以删除）
-     */
-    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "0=，正常，2：以删除")
-    private Integer state;
-
-
-    private Date createTime;
-
-    private Date updateTime;
     /**
      * 名言总数
      */

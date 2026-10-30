@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import com.alibaba.excel.annotation.ExcelProperty;
 
 
 /**
@@ -22,30 +23,37 @@ public class StatTheData {
      *
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "")
     private Long id;
     /**
      * 统计月份
      */
+    @ExcelProperty(value = "统计月份")
     private String statTime;
     /**
      * 用户总数
      */
+    @ExcelProperty(value = "用户总数")
     private Long userCount;
     /**
      * 在线用户总数
      */
+    @ExcelProperty(value = "在线用户总数")
     private Long onlineUserCount;
     /**
      * 文章总数
      */
+    @ExcelProperty(value = "文章总数")
     private Long articleCount;
     /**
      * 专栏总数
      */
+    @ExcelProperty(value = "专栏总数")
     private Long specialCount;
     /**
      * 收藏夹总数
      */
+    @ExcelProperty(value = "收藏夹总数")
     private Long favoritesCount;
 
     /**

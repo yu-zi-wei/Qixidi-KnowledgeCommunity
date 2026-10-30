@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 /**
  * 文章评论对象 b_article_comment
@@ -23,47 +25,58 @@ public class ArticleComment {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 文章id
      */
+    @ExcelProperty(value = "文章id")
     private Long articleId;
     /**
      * 文章用户id
      */
+    @ExcelProperty(value = "文章用户id")
     private String uid;
     /**
      * 父级评论id
      */
+    @ExcelProperty(value = "父级评论id")
     private Long parentId;
     /**
      * 评论等级（1：一级，2：二级，3：三级及以下）
      */
+    @ExcelDictFormat(readConverterExp = "1：一级，2：二级，3：三级及以下")
     private Integer commentGrade;
     /**
      * 目标id
      */
+    @ExcelProperty(value = "目标id")
     private String targetId;
     /**
      * 目标用户id
      */
+    @ExcelProperty(value = "目标用户id")
     private String targetUid;
     /**
      * 评论人id
      */
+    @ExcelProperty(value = "评论人id")
     private String commentUid;
     /**
      * 评论内容
      */
+    @ExcelProperty(value = "评论内容")
     private String content;
     /**
      * 评论类型（1：文章，2：评论）
      */
+    @ExcelDictFormat(readConverterExp = "1=：文章，2：评论")
     private Integer type;
     /**
      * 评论状态（0：正常，1：已删除）
      */
     @TableField("`state`")
+    @ExcelDictFormat(readConverterExp = "0=：正常，1：已删除")
     private Integer state;
 
     /**

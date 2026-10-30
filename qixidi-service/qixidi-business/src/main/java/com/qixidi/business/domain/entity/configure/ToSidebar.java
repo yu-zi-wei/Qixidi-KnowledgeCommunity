@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -23,6 +25,7 @@ public class ToSidebar {
      * id
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ExcelProperty(value = "id")
     private Long id;
     /**
      * 父级路由地址
@@ -31,10 +34,12 @@ public class ToSidebar {
     /**
      * 侧边栏名称
      */
+    @ExcelProperty(value = "侧边栏名称")
     private String sidebarName;
     /**
      * 图标
      */
+    @ExcelProperty(value = "图标")
     private String sidebarIcon;
 
     /**
@@ -46,6 +51,7 @@ public class ToSidebar {
      * 排序
      */
     @TableField("`order`")
+    @ExcelProperty(value = "排序")
     private Long order;
 
     /**
@@ -55,17 +61,21 @@ public class ToSidebar {
     /**
      * 路由地址
      */
+    @ExcelProperty(value = "路由地址")
     private String route;
     /**
      * 是否有下拉（0：没有，1：有）'
      */
+    @ExcelDictFormat(readConverterExp = "0=：没有，1：有")
     private Integer isList;
     /**
      * 状态（0：有效1：无效）
      */
     @TableField("`status`")
+    @ExcelDictFormat(readConverterExp = "0=：有效1：无效")
     private Integer status;
 
+    @ExcelDictFormat(readConverterExp = "1=：主页路由2：用户页面路由")
     private Integer type;
 
 }
