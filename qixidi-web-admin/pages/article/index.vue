@@ -1,16 +1,31 @@
 <template>
   <AdminListPage
     ref="listRef"
+    v-model:checked-keys="checkedKeys"
     :search-fields="searchFields"
     :columns="columns"
     :fetch="getArticles"
     row-key="id"
     seq
+    selectable
   >
     <template #toolbar-left>
       <n-tag size="small" :bordered="false" :type="(pendingCount ?? 0) > 0 ? 'warning' : 'default'">
         审核中 {{ pendingCount ?? '—' }} 篇
       </n-tag>
+    </template>
+    <template #toolbar-right>
+      <n-button
+        v-if="hasPerm('article:information:remove')"
+        size="small"
+        type="error"
+        secondary
+        :disabled="!checkedKeys.length"
+        :loading="batchRemoving"
+        @click="doRemoveBatch"
+      >
+        删除所选（{{ checkedKeys.length }}）
+      </n-button>
     </template>
   </AdminListPage>
 
@@ -62,7 +77,9 @@ import { getFullDateTime } from '~/utils/format';
 definePageMeta({ layout: 'default' });
 
 const message = useMessage();
-const { getArticles, getGroupings, getArticle, updateArticle } = useArticleAdminApi();
+const dialog = useDialog();
+const { hasPerm } = usePerm();
+const { getArticles, getGroupings, getArticle, auditArticles, removeArticles } = useArticleAdminApi();
 
 // ---------- 搜索条件 ----------
 const groupingOptions = ref<Array<{ label: string; value: number }>>([]);
@@ -104,19 +121,14 @@ const loadPendingCount = async () => {
   }
 };
 
-// ---------- 审核动作（EditGroup 必填字段需齐全，行内缺 content 时先取详情） ----------
+// ---------- 审核动作（独立 audit 接口，只传 ids + 结果，无需文章全字段） ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
 const auditingId = ref<number | null>(null);
 
 const doAudit = async (row: ArticleRow, auditState: number) => {
   auditingId.value = row.id;
   try {
-    let payload: Partial<ArticleRow> = { ...row };
-    if (!payload.articleContent) {
-      const detail = await getArticle(row.id);
-      payload = { ...payload, ...detail };
-    }
-    await updateArticle({ ...payload, auditState });
+    await auditArticles([row.id], auditState);
     message.success(auditState === 2 ? '已通过审核' : '已拒绝');
     await listRef.value?.refresh();
     loadPendingCount();
@@ -125,6 +137,57 @@ const doAudit = async (row: ArticleRow, auditState: number) => {
   } finally {
     auditingId.value = null;
   }
+};
+
+// ---------- 删除（物理删除，不可恢复） ----------
+const removingId = ref<number | null>(null);
+const batchRemoving = ref(false);
+// AdminListPage defineModel 双向绑定的选中 keys（loadList 后组件侧自动清空）
+const checkedKeys = ref<Array<string | number>>([]);
+
+const doRemove = (row: ArticleRow) => {
+  dialog.warning({
+    title: '删除文章',
+    content: `确定删除《${row.articleTitle}》吗？删除后不可恢复。`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      removingId.value = row.id;
+      try {
+        await removeArticles([row.id]);
+        message.success('已删除');
+        await listRef.value?.refresh();
+        loadPendingCount();
+      } catch {
+        /* useApi 已统一弹错 */
+      } finally {
+        removingId.value = null;
+      }
+    }
+  });
+};
+
+const doRemoveBatch = () => {
+  const ids = checkedKeys.value as number[];
+  dialog.warning({
+    title: '批量删除文章',
+    content: `确定删除所选 ${ids.length} 篇文章吗？删除后不可恢复。`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      batchRemoving.value = true;
+      try {
+        await removeArticles(ids);
+        message.success('已删除');
+        await listRef.value?.refresh();
+        loadPendingCount();
+      } catch {
+        /* useApi 已统一弹错 */
+      } finally {
+        batchRemoving.value = false;
+      }
+    }
+  });
 };
 
 // ---------- 详情抽屉（一律调详情接口，禁止拿列表行数据展示） ----------
@@ -158,7 +221,8 @@ const columns: DataTableColumns<ArticleRow> = [
         h(AdminAvatar, { src: row.articleCover, name: row.articleTitle, size: [48, 36], shape: 'square' }),
         h('div', { class: 'cell-article-main' }, [
           h('div', { class: 'cell-article-title' }, [
-            h('span', { class: 'cell-article-name' }, row.articleTitle),
+            // 标题即详情入口（详情按钮已取消），样式类在 admin-table.scss
+            h('span', { class: 'cell-article-name is-link', onClick: () => openDetail(row), title: '查看详情' }, row.articleTitle),
             h(NTag, { size: 'tiny', bordered: false, type: row.type === 2 ? 'warning' : 'default' }, { default: () => (row.type === 2 ? '转载' : '原创') })
           ]),
           h('div', { class: 'cell-article-abstract' }, row.articleAbstract || '（无摘要）')
@@ -202,29 +266,38 @@ const columns: DataTableColumns<ArticleRow> = [
     render: (row) => h('span', { class: 'cell-dim' }, getFullDateTime(row.createTime) || '—')
   },
   {
-    // 操作列按参考图用纯文字链接（带图标时 3 按钮约 160px+，超出列宽会被截断）
+    // 操作列用纯文字链接（带图标时按钮易超列宽被截断）；按权限码控制可见性
     title: '操作',
     key: 'actions',
-    width: 150,
+    width: 130,
     align: 'center',
-    render: (row) =>
-      h('div', { class: 'cell-btns' }, [
-        h(NButton, { size: 'small', text: true, type: 'primary', onClick: () => openDetail(row) }, { default: () => '详情' }),
-        ...(row.auditState === 1
-          ? [
-              h(
-                NButton,
-                { size: 'small', text: true, type: 'success', loading: auditingId.value === row.id, onClick: () => doAudit(row, 2) },
-                { default: () => '通过' }
-              ),
-              h(
-                NButton,
-                { size: 'small', text: true, type: 'error', loading: auditingId.value === row.id, onClick: () => doAudit(row, 3) },
-                { default: () => '拒绝' }
-              )
-            ]
-          : [])
-      ])
+    render: (row) => {
+      const btns = [];
+      if (row.auditState === 1 && hasPerm('article:information:edit')) {
+        btns.push(
+          h(
+            NButton,
+            { size: 'small', text: true, type: 'success', loading: auditingId.value === row.id, onClick: () => doAudit(row, 2) },
+            { default: () => '通过' }
+          ),
+          h(
+            NButton,
+            { size: 'small', text: true, type: 'error', loading: auditingId.value === row.id, onClick: () => doAudit(row, 3) },
+            { default: () => '拒绝' }
+          )
+        );
+      }
+      if (hasPerm('article:information:remove')) {
+        btns.push(
+          h(
+            NButton,
+            { size: 'small', text: true, type: 'error', loading: removingId.value === row.id, onClick: () => doRemove(row) },
+            { default: () => '删除' }
+          )
+        );
+      }
+      return h('div', { class: 'cell-btns' }, btns);
+    }
   }
 ];
 </script>

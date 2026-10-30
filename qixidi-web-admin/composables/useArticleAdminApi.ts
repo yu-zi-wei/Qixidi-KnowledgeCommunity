@@ -1,8 +1,5 @@
 /**
  * 文章管理 API（ArticleInformationController，/system/article/information）
- *
- * EditGroup 必填：articleTitle / articleContent / type / groupingId
- * → 审核操作必须回传行内已有字段，不能只传 {id, auditState}
  */
 
 /** 文章行（ArticleInformationVo 列表用到的字段子集） */
@@ -68,7 +65,12 @@ export const useArticleAdminApi = () => {
     /** 详情：GET /system/article/information/{id} */
     getArticle: (id: number | string) => api.get<ArticleRow>(`/system/article/information/${id}`),
 
-    /** 更新（含审核，EditGroup 必填字段需齐全）：PUT /system/article/information */
-    updateArticle: (data: Partial<ArticleRow>) => api.put<void>('/system/article/information', data)
+    /** 审核（终审：auditState 2 通过 / 3 拒绝，支持批量）：PUT /system/article/information/audit */
+    auditArticles: (ids: Array<number | string>, auditState: number) =>
+      api.put<void>('/system/article/information/audit', { ids, auditState }),
+
+    /** 批量删除（路径参数逗号分隔）：DELETE /system/article/information/{id1,id2} */
+    removeArticles: (ids: Array<number | string>) =>
+      api.request<void>(`/system/article/information/${ids.join(',')}`, { method: 'DELETE' })
   };
 };

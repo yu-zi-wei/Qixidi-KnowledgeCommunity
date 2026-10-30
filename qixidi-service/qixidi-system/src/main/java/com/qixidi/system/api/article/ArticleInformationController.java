@@ -10,6 +10,7 @@ import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
 
+import com.qixidi.business.domain.bo.article.ArticleAuditBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.service.article.IArticleInformationService;
@@ -72,6 +73,17 @@ public class ArticleInformationController {
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
         iArticleInformationService.updateByBo(bo);
+    }
+
+    /**
+     * 文章审核（后台终审：通过/拒绝）——独立于编辑，无需文章全字段
+     */
+    @SaCheckPermission("article:information:edit")
+    @Log(title = "文章信息审核", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PutMapping("/audit")
+    public void audit(@Validated @RequestBody ArticleAuditBo bo) {
+        iArticleInformationService.audit(bo);
     }
 
     /**

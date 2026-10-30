@@ -7,6 +7,7 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.event.ArticleEvent;
+import com.qixidi.business.domain.bo.article.ArticleAuditBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
@@ -61,6 +62,13 @@ public interface IArticleInformationService {
      * @return 结果
      */
     ArticleInformationVo updateByBo(ArticleInformationBo bo);
+
+    /**
+     * 后台终审（通过/拒绝）：仅更新审核状态与时间，不触碰文章内容与其他字段
+     *
+     * @param bo 审核入参（ids + auditState）
+     */
+    void audit(ArticleAuditBo bo);
 
     /**
      * 校验并批量删除文章信息信息

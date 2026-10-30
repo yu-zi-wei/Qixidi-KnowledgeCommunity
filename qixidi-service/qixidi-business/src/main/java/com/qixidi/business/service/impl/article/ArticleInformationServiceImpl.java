@@ -35,6 +35,7 @@ import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.event.ArticleEvent;
+import com.qixidi.business.domain.bo.article.ArticleAuditBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
@@ -131,7 +132,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
             return null;
         }
         fillLabelNames(records);
-        return records.get(0);
+        // 列表 SQL 不查大字段 article_content（分页性能），详情场景补一次主键单查：
+        // 后台审核"先取详情补全再 PUT"依赖完整 content（EditGroup 必填），缺它编辑必被校验拦下
+        ArticleInformationVo vo = records.get(0);
+        ArticleInformation entity = baseMapper.selectById(id);
+        if (entity != null) {
+            vo.setArticleContent(entity.getArticleContent());
+        }
+        return vo;
     }
 
     /**
@@ -320,35 +328,56 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Transactional(rollbackFor = Exception.class)
     public ArticleInformationVo updateByBo(ArticleInformationBo bo) {
         ArticleInformation update = BeanUtil.toBean(bo, ArticleInformation.class);
-        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
-        String uuid = tripartiteUser.getUuid();
-        if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
-            throw new ServiceException(MsgEnums.NOT_CREATOR);
-        }
         ArticleInformation existing = baseMapper.selectById(bo.getId());
+        // 后台 sys_user 审核（无前台会话）时 getTripartiteUser() 为 null：跳过前台创作者角色校验、不覆盖 updateId
+        TripartiteUser tripartiteUser = LoginHelper.getTripartiteUser();
+        if (tripartiteUser != null) {
+            if (!UserRoleEnums.getAdvancedRoleList().contains(tripartiteUser.getRoleId())) {
+                throw new ServiceException(MsgEnums.NOT_CREATOR);
+            }
+            update.setUpdateId(tripartiteUser.getUuid());
+        }
         if (existing != null) {
             checkOwnership(existing.getUserId());
         }
-        update.setUpdateId(uuid);
         update.setUpdateTime(new Date());
         boolean shouldReview = !ArticleAuditStateEnums.DRAFT.getCode().equals(bo.getAuditState());
         if (baseMapper.updateById(update) > 0) {
             ArticleInformationVo articleInformationVo = new ArticleInformationVo();
             articleInformationVo.setId(bo.getId());
-            // 部分更新（如 MCP update_article 仅传修改字段）时未传字段为 null，事件必须带合并后的完整值
-            // ——否则异步审核 wordCount(null) NPE 被监听器吞掉，文章无声卡在审核中
-            String title = update.getArticleTitle() != null ? update.getArticleTitle() : existing.getArticleTitle();
-            String content = update.getArticleContent() != null ? update.getArticleContent() : existing.getArticleContent();
-            String articleAbstract = bo.getArticleAbstract() != null ? bo.getArticleAbstract() : existing.getArticleAbstract();
-            // 发布事件，事务提交后异步执行
-            eventPublisher.publishEvent(new ArticleEvent(
-                    update.getId(), title, content, articleAbstract, uuid,
-                    bo.getAbstractSelect() != null && bo.getAbstractSelect(),
-                    shouldReview
-            ));
+            // 自动审核事件仅前台链路：后台 PUT 是终审动作（通过/拒绝），异步自动审核会把"拒绝"翻回"通过"
+            if (tripartiteUser != null && shouldReview) {
+                // 部分更新（如 MCP update_article 仅传修改字段）时未传字段为 null，事件必须带合并后的完整值
+                // ——否则异步审核 wordCount(null) NPE 被监听器吞掉，文章无声卡在审核中
+                String title = update.getArticleTitle() != null ? update.getArticleTitle() : existing.getArticleTitle();
+                String content = update.getArticleContent() != null ? update.getArticleContent() : existing.getArticleContent();
+                String articleAbstract = bo.getArticleAbstract() != null ? bo.getArticleAbstract() : existing.getArticleAbstract();
+                eventPublisher.publishEvent(new ArticleEvent(
+                        update.getId(), title, content, articleAbstract, tripartiteUser.getUuid(),
+                        bo.getAbstractSelect() != null && bo.getAbstractSelect(),
+                        shouldReview
+                ));
+            }
             return articleInformationVo;
         }
         return new ArticleInformationVo();
+    }
+
+    /**
+     * 后台终审（通过/拒绝）：仅更新审核状态与时间，不触碰文章内容与其他字段；
+     * 与前台编辑链路完全隔离，无创作者角色校验、不触发自动审核事件
+     */
+    @Override
+    public void audit(ArticleAuditBo bo) {
+        Integer state = bo.getAuditState();
+        if (!ArticleAuditStateEnums.APPROV.getCode().equals(state)
+                && !ArticleAuditStateEnums.FAILED_TO_PASS_REVIEW.getCode().equals(state)) {
+            throw new ServiceException("审核结果仅允许 通过(2)/拒绝(3)");
+        }
+        baseMapper.update(null, Wrappers.lambdaUpdate(ArticleInformation.class)
+                .set(ArticleInformation::getAuditState, state)
+                .set(ArticleInformation::getAuditTime, new Date())
+                .in(ArticleInformation::getId, bo.getIds()));
     }
 
     /**
