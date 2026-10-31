@@ -1,105 +1,53 @@
 <template>
-  <div class="user-page">
-    <AdminPageHeader
-      title="前台用户"
-      description="查看社区注册用户，管理账号可用状态"
-      :stats="[
-        { label: '冻结中', value: frozenCount, accent: (frozenCount ?? 0) > 0 },
-        { label: '总数', value: total }
-      ]"
-    >
-      <template #actions>
-        <n-button quaternary circle :loading="loading" @click="reload">
-          <template #icon><n-icon><Refresh /></n-icon></template>
-        </n-button>
-      </template>
-    </AdminPageHeader>
+  <AdminListPage ref="listRef" :search-fields="searchFields" :columns="columns" :fetch="getUsers" row-key="uuid" seq />
 
-    <n-card :bordered="false" class="table-card">
-      <div class="toolbar">
-        <n-input
-          v-model:value="keyword"
-          class="search-input"
-          round
-          clearable
-          placeholder="搜索昵称 / 用户名"
-          @keyup.enter="handleSearch"
-          @clear="handleSearch"
-        >
-          <template #prefix><n-icon :component="Search" /></template>
-        </n-input>
-
-        <n-radio-group v-model:value="stateFilter" size="small" @update:value="handleSearch">
-          <n-radio-button v-for="o in stateOptions" :key="o.value ?? 'all'" :value="o.value ?? null" :label="o.label" />
-        </n-radio-group>
-      </div>
-
-      <n-spin :show="loading">
-        <n-empty v-if="!rows.length && !loading" description="暂无用户" class="list-empty" />
-        <div v-else class="admin-row-list">
-          <AdminRowCard v-for="row in rows" :key="row.uuid">
-            <template #media>
-              <AdminAvatar :src="row.avatar" :name="row.nickname || row.username" :size="[40, 40]" />
-            </template>
-
-            <div class="usr-title-line">
-              <span class="usr-nickname">{{ row.nickname || '—' }}</span>
-              <span class="usr-username">@{{ row.username || '—' }}</span>
+  <!-- 用户详情抽屉：一律调详情接口，先清空防残留（teleport 组件宽度必须 inline style） -->
+  <n-drawer v-model:show="detailVisible" :width="480" placement="right">
+    <n-drawer-content :title="detail?.nickname || detail?.username || '用户详情'" closable>
+      <n-spin :show="detailLoading">
+        <div v-if="detail" class="detail-body">
+          <div class="detail-head">
+            <AdminAvatar :src="detail.avatar" :name="detail.nickname || detail.username" :size="48" />
+            <div class="detail-head-main">
+              <div class="detail-name">{{ detail.nickname || '—' }}</div>
+              <div class="detail-username">@{{ detail.username || '—' }}</div>
             </div>
-            <div class="row-meta">
-              <span v-if="row.email">{{ row.email }}</span>
-              <template v-if="row.loginIp">
-                <span class="row-meta-dot">·</span>
-                <span>IP {{ row.loginIp }}</span>
-              </template>
-              <template v-if="row.source">
-                <span class="row-meta-dot">·</span>
-                <span>{{ row.source }}</span>
-              </template>
-              <span class="row-meta-dot">·</span>
-              <span>注册于 {{ getFullDateTime(row.createTime) }}</span>
-            </div>
+            <AdminStateTag :value="detail.state" :map="USER_STATE_MAP" />
+          </div>
 
-            <template #side>
-              <AdminStateTag :value="row.state" :map="USER_STATE_MAP" />
-              <div v-if="row.state !== 2" class="cell-actions">
-                <n-button
-                  size="tiny"
-                  quaternary
-                  :type="row.state !== 1 ? 'error' : 'success'"
-                  :loading="switchingUuid === row.uuid"
-                  @click="toggleState(row)"
-                >
-                  <template #icon><n-icon><component :is="row.state !== 1 ? UserOff : UserCheck" /></n-icon></template>
-                  {{ row.state !== 1 ? '冻结' : '解冻' }}
-                </n-button>
-              </div>
-            </template>
-          </AdminRowCard>
+          <div class="detail-meta">
+            <div class="meta-row"><span class="meta-label">邮箱</span><span>{{ detail.email || '—' }}</span></div>
+            <div class="meta-row"><span class="meta-label">手机</span><span>{{ detail.phone || '—' }}</span></div>
+            <div class="meta-row"><span class="meta-label">来源</span><span>{{ detail.source || '—' }}</span></div>
+            <div class="meta-row"><span class="meta-label">登录 IP</span><span>{{ detail.loginIp || '—' }}</span></div>
+            <div class="meta-row"><span class="meta-label">注册时间</span><span>{{ getFullDateTime(detail.createTime) || '—' }}</span></div>
+          </div>
+
+          <n-divider>社区数据</n-divider>
+          <div class="detail-stats">
+            <div class="stat-item"><span class="stat-num">{{ detail.fabulousCount ?? 0 }}</span><span class="stat-label">获赞</span></div>
+            <div class="stat-item"><span class="stat-num">{{ detail.collectionCount ?? 0 }}</span><span class="stat-label">收藏</span></div>
+            <div class="stat-item"><span class="stat-num">{{ detail.followCount ?? 0 }}</span><span class="stat-label">关注</span></div>
+            <div class="stat-item"><span class="stat-num">{{ detail.fansFollowCount ?? 0 }}</span><span class="stat-label">粉丝</span></div>
+            <div class="stat-item"><span class="stat-num">{{ detail.commentCount ?? 0 }}</span><span class="stat-label">评论</span></div>
+          </div>
+
+          <template v-if="detail.introduce">
+            <n-divider>个人介绍</n-divider>
+            <p class="detail-introduce">{{ detail.introduce }}</p>
+          </template>
         </div>
       </n-spin>
-
-      <div v-if="total" class="list-footer">
-        <span class="list-total">共 {{ total }} 人</span>
-        <n-pagination
-          :page="pageNum"
-          :page-size="pageSize"
-          :item-count="total"
-          :page-sizes="[10, 20, 50]"
-          show-size-picker
-          @update:page="onPageChange"
-          @update:page-size="onPageSizeChange"
-        />
-      </div>
-    </n-card>
-  </div>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <script setup lang="ts">
-import { Refresh, Search, UserCheck, UserOff } from '@vicons/tabler';
+import { h } from 'vue';
+import { NButton } from 'naive-ui';
+import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
-import AdminPageHeader from '~/components/AdminPageHeader.vue';
-import AdminRowCard from '~/components/AdminRowCard.vue';
+import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
 import { USER_STATE_MAP, useUserAdminApi, type UserRow } from '~/composables/useUserAdminApi';
 import { getFullDateTime } from '~/utils/format';
@@ -108,70 +56,22 @@ definePageMeta({ layout: 'default' });
 
 const message = useMessage();
 const dialog = useDialog();
-const { getUsers, updateUser } = useUserAdminApi();
+const { getUsers, getUser, updateUser } = useUserAdminApi();
 
-const rows = ref<UserRow[]>([]);
-const loading = ref(false);
-const total = ref(0);
-const frozenCount = ref<number | null>(null);
-
-const keyword = ref('');
-const stateFilter = ref<number | null>(null);
-const stateOptions: Array<{ label: string; value: number | null }> = [
-  { label: '全部', value: null },
-  { label: '正常', value: 0 },
-  { label: '已冻结', value: 1 }
+// ---------- 搜索（nickname/username 后端 like；state 单值 eq） ----------
+const searchFields: AdminSearchField[] = [
+  { key: 'nickname', label: '昵称', type: 'input', placeholder: '请输入昵称关键词' },
+  { key: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名关键词' },
+  { key: 'state', label: '状态', type: 'select', width: 140, options: [
+    { label: '正常', value: 0 },
+    { label: '已冻结', value: 1 },
+    { label: '已删除', value: 2 }
+  ] }
 ];
 
-const pageNum = ref(1);
-const pageSize = ref(20);
+const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
 
-const loadList = async () => {
-  loading.value = true;
-  try {
-    const params: Record<string, any> = { pageNum: pageNum.value, pageSize: pageSize.value };
-    if (keyword.value.trim()) params.nickname = keyword.value.trim();
-    if (stateFilter.value !== null) params.state = stateFilter.value;
-    const res = await getUsers(params);
-    rows.value = res.rows || [];
-    total.value = res.total || 0;
-  } finally {
-    loading.value = false;
-  }
-};
-
-/** 冻结用户数（轻查询：state=1 取 total；依赖后端 buildQueryWrapper 的 state 条件） */
-const loadFrozenCount = async () => {
-  try {
-    const res = await getUsers({ pageNum: 1, pageSize: 1, state: 1 });
-    frozenCount.value = res.total || 0;
-  } catch {
-    frozenCount.value = null;
-  }
-};
-
-const handleSearch = () => {
-  pageNum.value = 1;
-  loadList();
-};
-
-const reload = () => {
-  loadList();
-  loadFrozenCount();
-};
-
-const onPageChange = (page: number) => {
-  pageNum.value = page;
-  loadList();
-};
-
-const onPageSizeChange = (size: number) => {
-  pageSize.value = size;
-  pageNum.value = 1;
-  loadList();
-};
-
-/** 冻结/解冻：TripartiteUserBo 无 EditGroup 约束，只传 {uuid, state} */
+// ---------- 冻结/解冻（TripartiteUserBo 无 EditGroup 约束，只传 {uuid, state}） ----------
 const switchingUuid = ref<string | null>(null);
 const toggleState = (row: UserRow) => {
   const freezing = row.state !== 1;
@@ -187,7 +87,7 @@ const toggleState = (row: UserRow) => {
       try {
         await updateUser({ uuid: row.uuid, state: freezing ? 1 : 0 });
         message.success(freezing ? '已冻结' : '已解冻');
-        reload();
+        await listRef.value?.refresh();
       } catch {
         /* useApi 已统一弹错 */
       } finally {
@@ -197,53 +97,178 @@ const toggleState = (row: UserRow) => {
   });
 };
 
-onMounted(() => {
-  reload();
-});
+// ---------- 详情抽屉（昵称点击打开） ----------
+const detailVisible = ref(false);
+const detailLoading = ref(false);
+const detail = ref<UserRow | null>(null);
+const openDetail = async (row: UserRow) => {
+  detailVisible.value = true;
+  detailLoading.value = true;
+  detail.value = null; // 先清空，避免残留上一个用户内容
+  try {
+    detail.value = await getUser(row.uuid);
+  } catch {
+    detail.value = null; // useApi 已弹错，失败留空态，不回退列表数据
+  } finally {
+    detailLoading.value = false;
+  }
+};
+
+// ---------- 表格列（render 元素样式走全局类/内聚组件，scoped 选不中） ----------
+const columns: DataTableColumns<UserRow> = [
+  {
+    title: '用户',
+    key: 'nickname',
+    minWidth: 200,
+    render: (row) =>
+      h('div', { class: 'cell-user' }, [
+        h(AdminAvatar, { src: row.avatar, name: row.nickname || row.username, size: 32 }),
+        h('div', { class: 'cell-user-main' }, [
+          // 昵称即详情入口；样式类在 admin-table.scss
+          h('span', { class: 'cell-user-name is-link', onClick: () => openDetail(row), title: '查看详情' }, row.nickname || '—'),
+          row.username ? h('span', { class: 'cell-user-username' }, `@${row.username}`) : null
+        ])
+      ])
+  },
+  {
+    title: '邮箱',
+    key: 'email',
+    width: 170,
+    ellipsis: { tooltip: true },
+    render: (row) => row.email || '—'
+  },
+  {
+    title: '来源',
+    key: 'source',
+    width: 90,
+    ellipsis: { tooltip: true },
+    render: (row) => row.source || '—'
+  },
+  {
+    // 表头紧凑无空格防折行（180px 内装不下带空格版本）
+    title: '获赞/关注/粉丝/评论',
+    key: 'fabulousCount',
+    width: 180,
+    render: (row) =>
+      h('span', { class: 'cell-stats' }, `${row.fabulousCount ?? 0} / ${row.followCount ?? 0} / ${row.fansFollowCount ?? 0} / ${row.commentCount ?? 0}`)
+  },
+  {
+    title: '状态',
+    key: 'state',
+    width: 90,
+    render: (row) => h(AdminStateTag, { value: row.state, map: USER_STATE_MAP })
+  },
+  {
+    title: '注册时间',
+    key: 'createTime',
+    width: 150,
+    render: (row) => getFullDateTime(row.createTime) || '—'
+  },
+  {
+    title: '操作',
+    key: 'actions',
+    width: 80,
+    align: 'center',
+    fixed: 'right',
+    render: (row) => {
+      if (row.state === 2) return h('span', { style: 'font-size: 12px; opacity: 0.4;' }, '—');
+      const freezing = row.state !== 1;
+      return h('div', { class: 'cell-btns' }, [
+        h(
+          NButton,
+          {
+            size: 'small',
+            text: true,
+            type: freezing ? 'error' : 'success',
+            loading: switchingUuid.value === row.uuid,
+            onClick: () => toggleState(row)
+          },
+          { default: () => (freezing ? '冻结' : '解冻') }
+        )
+      ]);
+    }
+  }
+];
 </script>
 
 <style scoped lang="scss">
-.table-card {
-  border-radius: 10px;
-}
+.detail-body {
+  .detail-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
+  .detail-head-main {
+    flex: 1;
+    min-width: 0;
+  }
 
-.search-input {
-  width: 260px;
-}
+  .detail-name {
+    font-weight: 600;
+  }
 
-.list-empty {
-  padding: 48px 0;
-}
+  .detail-username {
+    font-size: 12px;
+    opacity: 0.5;
+  }
 
-.usr-title-line {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  min-width: 0;
-}
+  .detail-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
 
-.usr-nickname {
-  font-size: 14px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  .meta-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 13px;
+  }
 
-.usr-username {
-  font-size: 12px;
-  opacity: 0.45;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  .meta-label {
+    width: 60px;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .detail-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 56px;
+    padding: 10px 8px;
+    // 抽屉 teleport 到 body，布局根主题变量不可用；中性半透明灰双主题通用
+    background: rgba(127, 127, 127, 0.08);
+    border-radius: 8px;
+  }
+
+  .stat-num {
+    font-size: 16px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    opacity: 0.55;
+  }
+
+  .detail-introduce {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    opacity: 0.85;
+  }
 }
 </style>

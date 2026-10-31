@@ -1,130 +1,59 @@
 <template>
-  <div class="comment-page">
-    <AdminPageHeader title="评论管理" description="巡查社区评论，处理违规内容" :stats="[{ label: '总数', value: total }]">
-      <template #actions>
-        <n-button quaternary circle :loading="loading" @click="reload">
-          <template #icon><n-icon><Refresh /></n-icon></template>
-        </n-button>
-      </template>
-    </AdminPageHeader>
+  <AdminListPage
+    ref="listRef"
+    v-model:checked-keys="checkedKeys"
+    :search-fields="searchFields"
+    :columns="columns"
+    :fetch="fetch"
+    row-key="id"
+    seq
+    selectable
+  >
+    <template #toolbar-left>
+      <n-button
+        size="small"
+        type="error"
+        secondary
+        :disabled="!checkedKeys.length"
+        :loading="batchDeleting"
+        @click="doDeleteBatch"
+      >
+        删除所选（{{ checkedKeys.length }}）
+      </n-button>
+    </template>
+  </AdminListPage>
 
-    <n-card :bordered="false" class="table-card">
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <n-input
-            v-model:value="keyword"
-            class="search-input"
-            round
-            clearable
-            placeholder="搜索评论内容"
-            @keyup.enter="handleSearch"
-            @clear="handleSearch"
-          >
-            <template #prefix><n-icon :component="Search" /></template>
-          </n-input>
-          <n-input-number
-            v-model:value="articleIdFilter"
-            class="article-input"
-            clearable
-            :show-button="false"
-            placeholder="文章 ID"
-            @update:value="handleSearch"
-          />
-        </div>
-
-        <div class="toolbar-right">
-          <n-checkbox v-if="rows.length" :checked="allChecked" :indeterminate="indeterminate" @update:checked="toggleAll">
-            全选本页
-          </n-checkbox>
-          <n-button v-if="checkedKeys.length" size="small" type="error" tertiary :loading="deleting" @click="confirmDeleteSelected">
-            <template #icon><n-icon><Trash /></n-icon></template>
-            删除所选（{{ checkedKeys.length }}）
-          </n-button>
-        </div>
-      </div>
-
-      <n-spin :show="loading">
-        <n-empty v-if="!rows.length && !loading" description="暂无评论" class="list-empty" />
-        <div v-else class="admin-row-list">
-          <AdminRowCard v-for="row in rows" :key="row.id">
-            <template #leading>
-              <n-checkbox :checked="checkedKeys.includes(row.id)" @update:checked="(v: boolean) => toggleOne(row.id, v)" />
-            </template>
-            <template #media>
-              <AdminAvatar :src="row.commentAvatar" :name="row.commentName" :size="[40, 40]" />
-            </template>
-
-            <p class="cmt-content">{{ row.content }}</p>
-            <div class="row-meta">
-              <span class="cmt-name">{{ row.commentName || '—' }}</span>
-              <template v-if="row.targetName">
-                <span class="row-meta-dot">·</span>
-                <span>回复 @{{ row.targetName }}</span>
-              </template>
-              <span class="row-meta-dot">·</span>
-              <span>文章 #{{ row.articleId }}</span>
-              <span class="row-meta-dot">·</span>
-              <span>{{ getFullDateTime(row.createTime) }}</span>
+  <!-- 评论详情抽屉：一律调详情接口，先清空防残留（teleport 组件宽度必须 inline style） -->
+  <n-drawer v-model:show="detailVisible" :width="480" placement="right">
+    <n-drawer-content :title="detail?.commentName || '评论详情'" closable>
+      <n-spin :show="detailLoading">
+        <div v-if="detail" class="detail-body">
+          <div class="detail-head">
+            <AdminAvatar :src="detail.commentAvatar" :name="detail.commentName" :size="40" />
+            <div class="detail-head-main">
+              <div class="detail-name">{{ detail.commentName || '—' }}</div>
+              <div class="detail-time">{{ getFullDateTime(detail.createTime) }}</div>
             </div>
-
-            <template #side>
-              <AdminStateTag :value="row.state" :map="COMMENT_STATE_MAP" />
-              <div class="cell-actions">
-                <n-button size="tiny" quaternary @click="openDetail(row)">
-                  <template #icon><n-icon><Eye /></n-icon></template>
-                  详情
-                </n-button>
-                <n-button size="tiny" quaternary type="error" @click="deleteSingle(row.id)">
-                  <template #icon><n-icon><Trash /></n-icon></template>
-                  删除
-                </n-button>
-              </div>
-            </template>
-          </AdminRowCard>
+            <AdminStateTag :value="detail.state" :map="COMMENT_STATE_MAP" class="detail-state" />
+          </div>
+          <n-divider />
+          <p class="detail-content">{{ detail.content }}</p>
+          <div class="detail-meta">
+            <span>文章 #{{ detail.articleId }}</span>
+            <span v-if="detail.targetName">回复 @{{ detail.targetName }}</span>
+          </div>
         </div>
       </n-spin>
-
-      <div v-if="total" class="list-footer">
-        <span class="list-total">共 {{ total }} 条</span>
-        <n-pagination
-          :page="pageNum"
-          :page-size="pageSize"
-          :item-count="total"
-          :page-sizes="[10, 20, 50]"
-          show-size-picker
-          @update:page="onPageChange"
-          @update:page-size="onPageSizeChange"
-        />
-      </div>
-    </n-card>
-
-    <!-- 评论详情：全文 + 元信息 -->
-    <n-modal v-model:show="detailVisible" preset="card" title="评论详情" :style="{ width: '520px' }">
-      <div v-if="detail" class="detail-body">
-        <div class="detail-head">
-          <AdminAvatar :src="detail.commentAvatar" :name="detail.commentName" :size="40" class="detail-avatar" />
-          <div>
-            <div class="detail-name">{{ detail.commentName || '—' }}</div>
-            <div class="detail-time">{{ getFullDateTime(detail.createTime) }}</div>
-          </div>
-          <AdminStateTag :value="detail.state" :map="COMMENT_STATE_MAP" class="detail-state" />
-        </div>
-        <n-divider />
-        <p class="detail-content">{{ detail.content }}</p>
-        <div class="detail-meta">
-          <span>文章 #{{ detail.articleId }}</span>
-          <span v-if="detail.targetName">回复 @{{ detail.targetName }}</span>
-        </div>
-      </div>
-    </n-modal>
-  </div>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <script setup lang="ts">
-import { Eye, Refresh, Search, Trash } from '@vicons/tabler';
+import { h } from 'vue';
+import { NButton } from 'naive-ui';
+import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
-import AdminPageHeader from '~/components/AdminPageHeader.vue';
-import AdminRowCard from '~/components/AdminRowCard.vue';
+import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
 import { COMMENT_STATE_MAP, useCommentAdminApi, type CommentRow } from '~/composables/useCommentAdminApi';
 import { getFullDateTime } from '~/utils/format';
@@ -135,177 +64,160 @@ const message = useMessage();
 const dialog = useDialog();
 const { getComments, getComment, deleteComments } = useCommentAdminApi();
 
-const rows = ref<CommentRow[]>([]);
-const loading = ref(false);
-const total = ref(0);
+// ---------- 搜索（content 后端 like；articleId 输入是字符串，fetch 里转数字） ----------
+const searchFields: AdminSearchField[] = [
+  { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
+  { key: 'articleId', label: '文章 ID', type: 'input', placeholder: '请输入数字 ID', width: 140 },
+  { key: 'state', label: '状态', type: 'select', width: 140, options: [
+    { label: '正常', value: 0 },
+    { label: '已删除', value: 1 }
+  ] }
+];
 
-const keyword = ref('');
-const articleIdFilter = ref<number | null>(null);
-const checkedKeys = ref<Array<number | string>>([]);
-
-const pageNum = ref(1);
-const pageSize = ref(20);
-
-const allChecked = computed(() => rows.value.length > 0 && rows.value.every((r) => checkedKeys.value.includes(r.id)));
-const indeterminate = computed(() => {
-  const n = rows.value.filter((r) => checkedKeys.value.includes(r.id)).length;
-  return n > 0 && n < rows.value.length;
-});
-const toggleAll = (v: boolean) => {
-  const ids = rows.value.map((r) => r.id);
-  checkedKeys.value = v ? Array.from(new Set([...checkedKeys.value, ...ids])) : checkedKeys.value.filter((k) => !ids.includes(k as number));
-};
-const toggleOne = (id: number | string, v: boolean) => {
-  checkedKeys.value = v ? [...checkedKeys.value, id] : checkedKeys.value.filter((k) => k !== id);
-};
-
-const loadList = async () => {
-  loading.value = true;
-  try {
-    const params: Record<string, any> = { pageNum: pageNum.value, pageSize: pageSize.value };
-    if (keyword.value.trim()) params.content = keyword.value.trim();
-    if (articleIdFilter.value) params.articleId = articleIdFilter.value;
-    const res = await getComments(params);
-    rows.value = res.rows || [];
-    total.value = res.total || 0;
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleSearch = () => {
-  pageNum.value = 1;
-  checkedKeys.value = [];
-  loadList();
-};
-
-const reload = () => {
-  checkedKeys.value = [];
-  loadList();
-};
-
-const onPageChange = (page: number) => {
-  pageNum.value = page;
-  loadList();
-};
-
-const onPageSizeChange = (size: number) => {
-  pageSize.value = size;
-  pageNum.value = 1;
-  loadList();
-};
-
-/** 批量/单条删除共用（路径参数逗号分隔）；级联影响统一走 dialog 确认 */
-const deleting = ref(false);
-const runDelete = async (ids: Array<number | string>) => {
-  deleting.value = true;
-  try {
-    await deleteComments(ids);
-    message.success(`已删除 ${ids.length} 条评论`);
-    reload();
-  } catch {
-    /* useApi 已统一弹错 */
-  } finally {
-    deleting.value = false;
-  }
-};
-
-const confirmDeleteSelected = () => {
-  dialog.warning({
-    title: '批量删除评论',
-    content: `删除后其子评论将一并不可见，确认删除选中的 ${checkedKeys.value.length} 条评论？`,
-    positiveText: '删除',
-    negativeText: '取消',
-    onPositiveClick: () => runDelete(checkedKeys.value)
+const fetch = (params: Record<string, any>) =>
+  getComments({
+    ...params,
+    articleId: params.articleId != null && params.articleId !== '' ? Number(params.articleId) : undefined
   });
+
+// ---------- 删除（物理级联：子评论一并不可见；批量/单条共用） ----------
+const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+const checkedKeys = ref<Array<string | number>>([]);
+const deletingId = ref<number | null>(null);
+const batchDeleting = ref(false);
+
+const runDelete = async (ids: Array<string | number>) => {
+  await deleteComments(ids);
+  message.success(`已删除 ${ids.length} 条评论`);
+  await listRef.value?.refresh();
 };
 
-const deleteSingle = (id: number | string) => {
+const doDelete = (row: CommentRow) => {
   dialog.warning({
     title: '删除评论',
     content: '删除后其子评论将一并不可见，确认删除这条评论？',
     positiveText: '删除',
     negativeText: '取消',
-    onPositiveClick: () => runDelete([id])
+    onPositiveClick: async () => {
+      deletingId.value = row.id;
+      try {
+        await runDelete([row.id]);
+      } catch {
+        /* useApi 已统一弹错 */
+      } finally {
+        deletingId.value = null;
+      }
+    }
   });
 };
 
+const doDeleteBatch = () => {
+  const ids = [...checkedKeys.value];
+  dialog.warning({
+    title: '批量删除评论',
+    content: `删除后其子评论将一并不可见，确认删除选中的 ${ids.length} 条评论？`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      batchDeleting.value = true;
+      try {
+        await runDelete(ids);
+      } catch {
+        /* useApi 已统一弹错 */
+      } finally {
+        batchDeleting.value = false;
+      }
+    }
+  });
+};
+
+// ---------- 详情抽屉（内容列点击打开） ----------
 const detailVisible = ref(false);
+const detailLoading = ref(false);
 const detail = ref<CommentRow | null>(null);
 const openDetail = async (row: CommentRow) => {
   detailVisible.value = true;
-  detail.value = row;
+  detailLoading.value = true;
+  detail.value = null; // 先清空，避免残留上一条内容
   try {
     detail.value = await getComment(row.id);
   } catch {
-    /* 保留行数据兜底 */
+    detail.value = null; // useApi 已弹错，失败留空态，不回退列表数据
+  } finally {
+    detailLoading.value = false;
   }
 };
 
-onMounted(() => {
-  loadList();
-});
+// ---------- 表格列（render 元素样式走全局类/内聚组件，scoped 选不中） ----------
+const columns: DataTableColumns<CommentRow> = [
+  {
+    title: '评论内容',
+    key: 'content',
+    minWidth: 300,
+    render: (row) =>
+      h('div', { class: 'cell-comment' }, [
+        // 内容即详情入口，两行截断；样式类在 admin-table.scss
+        h('div', { class: 'cell-comment-content cell-clamp-2 is-link', onClick: () => openDetail(row), title: '查看详情' }, row.content),
+        row.targetName ? h('div', { class: 'cell-comment-sub' }, `回复 @${row.targetName}`) : null
+      ])
+  },
+  {
+    title: '评论人',
+    key: 'commentName',
+    width: 130,
+    render: (row) =>
+      h('div', { class: 'cell-author' }, [
+        h(AdminAvatar, { src: row.commentAvatar, name: row.commentName, size: 24 }),
+        h('span', { class: 'cell-author-name' }, row.commentName || '—')
+      ])
+  },
+  {
+    title: '文章',
+    key: 'articleId',
+    width: 90,
+    render: (row) => `#${row.articleId}`
+  },
+  {
+    title: '状态',
+    key: 'state',
+    width: 90,
+    render: (row) => h(AdminStateTag, { value: row.state, map: COMMENT_STATE_MAP })
+  },
+  {
+    title: '发布时间',
+    key: 'createTime',
+    width: 150,
+    render: (row) => getFullDateTime(row.createTime) || '—'
+  },
+  {
+    title: '操作',
+    key: 'actions',
+    width: 80,
+    align: 'center',
+    fixed: 'right',
+    render: (row) =>
+      h('div', { class: 'cell-btns' }, [
+        h(
+          NButton,
+          { size: 'small', text: true, type: 'error', loading: deletingId.value === row.id, onClick: () => doDelete(row) },
+          { default: () => '删除' }
+        )
+      ])
+  }
+];
 </script>
 
 <style scoped lang="scss">
-.table-card {
-  border-radius: 10px;
-}
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.toolbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.toolbar-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.search-input {
-  width: 240px;
-}
-
-.article-input {
-  width: 130px;
-}
-
-.list-empty {
-  padding: 48px 0;
-}
-
-.cmt-content {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.cmt-name {
-  font-weight: 500;
-  opacity: 0.85;
-}
-
 .detail-body {
   .detail-head {
     display: flex;
     align-items: center;
     gap: 12px;
+  }
+
+  .detail-head-main {
+    flex: 1;
+    min-width: 0;
   }
 
   .detail-name {
@@ -315,10 +227,6 @@ onMounted(() => {
   .detail-time {
     font-size: 12px;
     opacity: 0.5;
-  }
-
-  .detail-state {
-    margin-left: auto;
   }
 
   .detail-content {

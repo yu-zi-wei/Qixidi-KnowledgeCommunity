@@ -61,7 +61,6 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
 - **视觉体系（2026-10-31 极简书签风定版，取代 10-30 高级风）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏 #F3F1EA，区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 细边框 + `--panel-shadow` 轻投影浮起感，圆角 10px）；墨绿（纸墨意象，冷暖互补）只做交互点缀（浅 `#3D7A5C` / 深 `#6FBF9A`，非 Naive 上下文用布局根注入的 `--cell-link` 变量，与 app.vue primaryColor 同源）；全局 6px 暖灰细滚动条（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式保留黑白灰骨架（纸片 #1a1a1e），投影/滚动条变量随主题切换
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
-- 评论/用户页仍是旧行卡片模式（AdminPageHeader+AdminRowCard），**待迁移到 AdminListPage 后两个旧组件即废弃**
 
 ## 组件库（components/）
 
@@ -71,7 +70,6 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 | **AdminBreadcrumb** | 顶栏面包屑（自动按路由生成） | 无 props，数据源 useAdminMenu |
 | AdminStateTag | 状态标签（圆点+文字） | `{value, map: Record<状态值, {label, type}>}` |
 | AdminAvatar | 头像/封面（裂图兜底首字） | `{src?, name?, size: number|[w,h], shape?: 'circle'|'square'}` |
-| AdminPageHeader / AdminRowCard | ⚠️ 旧行卡片模式遗留，仅评论/用户页引用，迁移后删除 | — |
 
 AdminListPage 双 script 块（普通块 export 类型 + setup 块实现），页面 import 类型用 `import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue'`。
 

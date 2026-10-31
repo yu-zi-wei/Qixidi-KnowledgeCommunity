@@ -108,7 +108,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         lqw.eq(bo.getCommentGrade() != null, ArticleComment::getCommentGrade, bo.getCommentGrade());
         lqw.eq(bo.getTargetId() != null, ArticleComment::getTargetId, bo.getTargetId());
         lqw.eq(StringUtils.isNotBlank(bo.getCommentUid()), ArticleComment::getCommentUid, bo.getCommentUid());
-        lqw.eq(StringUtils.isNotBlank(bo.getContent()), ArticleComment::getContent, bo.getContent());
+        lqw.like(StringUtils.isNotBlank(bo.getContent()), ArticleComment::getContent, bo.getContent());
         lqw.eq(bo.getType() != null, ArticleComment::getType, bo.getType());
         lqw.eq(bo.getState() != null, ArticleComment::getState, bo.getState());
         return lqw;

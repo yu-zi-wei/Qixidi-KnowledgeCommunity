@@ -1,52 +1,9 @@
 // 后台列表共享样式（全局）
-// 1. n-data-table 列 render 函数里的元素带不上页面 scoped hash（页面 scoped 样式选不中），表格场景的列内共享样式放这里
-// 2. 行卡片（AdminRowCard）列表的跨页共享容器/底部条样式也放这里；页面专属样式放各页自己的样式块
-
-// 行卡片列表容器
-.admin-row-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-// 列表底部分页条（总数 + n-pagination）
-.list-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-
-  .list-total {
-    font-size: 12.5px;
-    opacity: 0.55;
-  }
-}
+// n-data-table 列 render 函数里的元素带不上页面 scoped hash（页面 scoped 样式选不中），表格场景的列内共享样式放这里；页面专属样式放各页自己的样式块
 
 // 弱化占位（空值 —）
 .cell-dim {
   opacity: 0.4;
-}
-
-// 操作按钮组
-.cell-actions {
-  display: flex;
-  gap: 2px;
-}
-
-// 行卡片 meta 行（小字灰 · 分隔）
-.row-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  font-size: 12px;
-  opacity: 0.6;
-
-  .row-meta-dot {
-    opacity: 0.5;
-  }
 }
 
 // 单行省略
@@ -98,22 +55,23 @@
     white-space: nowrap;
   }
 
-  // 标题可点击态（打开详情）：交互点缀墨绿 + hover 下划线（--cell-link 由布局根按主题注入，与 app.vue primaryColor 同源）
-  .cell-article-name.is-link {
-    color: var(--cell-link, #3D7A5C);
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
   .cell-article-abstract {
     font-size: 12px;
     line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+// 可点击主文本（开详情抽屉）：交互点缀墨绿 + hover 下划线
+// （--cell-link 由布局根按主题注入，与 app.vue primaryColor 同源）
+.is-link {
+  color: var(--cell-link, #3D7A5C);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
   }
 }
 
@@ -126,6 +84,60 @@
 
   .cell-author-name {
     font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// 评论列：内容（两行截断，可点击开详情）+ 回复对象小字
+.cell-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 0;
+
+  .cell-comment-content {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .cell-comment-sub {
+    font-size: 12px;
+    opacity: 0.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// 用户列：头像 + 昵称（可点击开详情）+ @用户名 小字
+.cell-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 0;
+
+  .cell-user-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cell-user-name {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cell-user-username {
+    font-size: 12px;
+    opacity: 0.5;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
