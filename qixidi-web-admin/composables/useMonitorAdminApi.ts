@@ -1,6 +1,7 @@
 /**
  * 监控审计 API（qixidi-system monitor 包）
- * 操作日志 /monitor/operlog + 登录日志 /monitor/logininfor，均为只读列表 + 删除/清空
+ * 操作日志 /monitor/operlog + 后台登录日志 /monitor/logininfor + 前台登录日志 /monitor/signLog，
+ * 均为只读列表 + 删除/清空
  */
 
 /** 操作日志行（SysOperLog 全量字段，无单查接口——详情直接用行数据） */
@@ -68,6 +69,24 @@ export const LOGIN_STATUS_MAP: Record<string, { label: string; type: 'success' |
   '1': { label: '失败', type: 'error' }
 };
 
+/** 前台登录日志行（b_sign_log / SignLog 全量字段） */
+export interface SignLogRow {
+  id: number;
+  uid?: string;
+  userName?: string;
+  ipAddress?: string;
+  location?: string;
+  createTime?: string;
+  /** 0 登录 1 登出 */
+  type?: number;
+}
+
+/** 前台日志类型：0 登录 / 1 登出 */
+export const SIGN_LOG_TYPE_MAP: Record<number, { label: string; type: 'success' | 'info' }> = {
+  0: { label: '登录', type: 'success' },
+  1: { label: '登出', type: 'info' }
+};
+
 export const useMonitorAdminApi = () => {
   const api = useApi();
 
@@ -90,6 +109,16 @@ export const useMonitorAdminApi = () => {
       api.request<void>(`/monitor/logininfor/${ids.join(',')}`, { method: 'DELETE' }),
 
     /** 清空登录日志：DELETE /monitor/logininfor/clean */
-    cleanLogininfors: () => api.request<void>('/monitor/logininfor/clean', { method: 'DELETE' })
+    cleanLogininfors: () => api.request<void>('/monitor/logininfor/clean', { method: 'DELETE' }),
+
+    /** 前台登录日志分页：POST /monitor/signLog/list（默认 id desc） */
+    getSignLogs: (params: Record<string, any>) => api.postPage<SignLogRow>('/monitor/signLog/list', params),
+
+    /** 批量删除前台登录日志：DELETE /monitor/signLog/{ids} */
+    deleteSignLogs: (ids: (number | string)[]) =>
+      api.request<void>(`/monitor/signLog/${ids.join(',')}`, { method: 'DELETE' }),
+
+    /** 清空前台登录日志：DELETE /monitor/signLog/clean */
+    cleanSignLogs: () => api.request<void>('/monitor/signLog/clean', { method: 'DELETE' })
   };
 };

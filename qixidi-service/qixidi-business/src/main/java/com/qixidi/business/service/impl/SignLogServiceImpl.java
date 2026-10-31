@@ -1,8 +1,13 @@
 package com.qixidi.business.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.ServletUtils;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.ip.AddressUtils;
+import com.qixidi.business.domain.bo.user.SignLogBo;
 import com.qixidi.business.domain.entity.user.SignLog;
 import com.qixidi.business.mapper.user.SignLogMapper;
 import com.qixidi.business.service.ISignLogService;
@@ -12,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -45,6 +51,27 @@ public class SignLogServiceImpl implements ISignLogService {
         } catch (Exception e) {
             log.error("记录前台登录日志失败：uid={}, userName={}, logout={}", uid, userName, logout, e);
         }
+    }
+
+    @Override
+    public TableDataInfo<SignLog> queryPageList(SignLogBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<SignLog> lqw = new LambdaQueryWrapper<SignLog>()
+            .like(StringUtils.isNotBlank(bo.getUserName()), SignLog::getUserName, bo.getUserName())
+            .like(StringUtils.isNotBlank(bo.getIpAddress()), SignLog::getIpAddress, bo.getIpAddress())
+            .eq(bo.getType() != null, SignLog::getType, bo.getType())
+            .orderByDesc(SignLog::getId);
+        Page<SignLog> page = baseMapper.selectPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(page);
+    }
+
+    @Override
+    public void deleteSignLogByIds(Long[] ids) {
+        baseMapper.deleteBatchIds(Arrays.asList(ids));
+    }
+
+    @Override
+    public void cleanSignLog() {
+        baseMapper.cleanTable();
     }
 
 }

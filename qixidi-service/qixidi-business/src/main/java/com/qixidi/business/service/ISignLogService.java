@@ -1,5 +1,10 @@
 package com.qixidi.business.service;
 
+import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
+import com.qixidi.business.domain.bo.user.SignLogBo;
+import com.qixidi.business.domain.entity.user.SignLog;
+
 /**
  * 前台登录日志 Service 接口
  *
@@ -19,5 +24,20 @@ public interface ISignLogService {
      * @param logout   true 登出 / false 登录
      */
     void recordSignLog(String uid, String userName, boolean logout);
+
+    /**
+     * 分页查询前台登录日志（userName/ipAddress 模糊、type 精确，id 倒序）
+     */
+    TableDataInfo<SignLog> queryPageList(SignLogBo bo, PageQuery pageQuery);
+
+    /**
+     * 批量删除前台登录日志
+     */
+    void deleteSignLogByIds(Long[] ids);
+
+    /**
+     * 清空前台登录日志
+     */
+    void cleanSignLog();
 
 }
