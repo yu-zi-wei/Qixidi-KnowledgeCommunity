@@ -6,7 +6,10 @@
 /** 操作日志行（SysOperLog 全量字段，无单查接口——详情直接用行数据） */
 export interface OperLogRow {
   operId: number;
+  /** 操作功能（如"新增"、"合并"） */
   title?: string;
+  /** 操作模块（类上 @LogModule；存量旧行为空，展示时兜底用 title） */
+  module?: string;
   /** 业务类型（BusinessType.ordinal）：0 其它 1 新增 2 修改 3 删除 4 授权 5 导出 6 导入 7 强退 8 生成代码 9 清空 */
   businessType?: number;
   method?: string;

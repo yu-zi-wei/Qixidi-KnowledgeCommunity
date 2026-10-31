@@ -34,7 +34,8 @@
         </div>
 
         <div class="detail-meta">
-          <div class="meta-row"><span class="meta-label">操作模块</span><span>{{ detail.title || '—' }}</span></div>
+          <div class="meta-row"><span class="meta-label">操作模块</span><span>{{ detail.module || detail.title || '—' }}</span></div>
+          <div class="meta-row"><span class="meta-label">操作功能</span><span>{{ detail.title || '—' }}</span></div>
           <div class="meta-row"><span class="meta-label">操作人员</span><span>{{ detail.operName || '—' }}</span></div>
           <div class="meta-row"><span class="meta-label">请求方式</span><span>{{ detail.requestMethod || '—' }}</span></div>
           <div class="meta-row"><span class="meta-label">操作 IP</span><span>{{ detail.operIp || '—' }}{{ detail.operLocation ? `（${detail.operLocation}）` : '' }}</span></div>
@@ -79,9 +80,10 @@ const message = useMessage();
 const dialog = useDialog();
 const { getOperLogs, deleteOperLogs, cleanOperLogs } = useMonitorAdminApi();
 
-// ---------- 搜索（title/operName 后端 like；businessType/status eq） ----------
+// ---------- 搜索（module/title/operName 后端 like；businessType/status eq） ----------
 const searchFields: AdminSearchField[] = [
-  { key: 'title', label: '操作模块', type: 'input', placeholder: '请输入模块关键词' },
+  { key: 'module', label: '操作模块', type: 'input', placeholder: '请输入模块关键词' },
+  { key: 'title', label: '操作功能', type: 'input', placeholder: '请输入功能关键词' },
   { key: 'operName', label: '操作人员', type: 'input', placeholder: '请输入人员账号' },
   { key: 'businessType', label: '业务类型', type: 'select', options: [
     { label: '新增', value: 1 },
@@ -191,15 +193,21 @@ const formatJson = (text: string) => {
 // ---------- 表格列（render 元素样式走全局类/内聚组件，scoped 选不中） ----------
 const columns: DataTableColumns<OperLogRow> = [
   {
+    // 模块即详情入口；过渡期旧行 module 为空时兜底显示 title（旧值即模块名）
     title: '操作模块',
-    key: 'title',
-    minWidth: 160,
+    key: 'module',
+    minWidth: 140,
     render: (row) =>
       h('div', { class: 'cell-comment' }, [
-        // 模块即详情入口，两行截断；样式类在 admin-table.scss
-        h('div', { class: 'cell-comment-content cell-clamp-2 is-link', onClick: () => openDetail(row), title: '查看详情' }, row.title || '—'),
+        h('div', { class: 'cell-comment-content cell-clamp-2 is-link', onClick: () => openDetail(row), title: '查看详情' }, row.module || row.title || '—'),
         h('div', { class: 'cell-comment-sub' }, row.operUrl || '')
       ])
+  },
+  {
+    title: '操作功能',
+    key: 'title',
+    width: 100,
+    render: (row) => row.title || '—'
   },
   {
     title: '业务类型',
