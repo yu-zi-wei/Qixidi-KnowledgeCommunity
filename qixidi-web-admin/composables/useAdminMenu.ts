@@ -15,7 +15,6 @@ import {
   MessageCircle,
   Users,
   Settings,
-  Adjustments,
   Notebook,
   Feather,
   Folders,
@@ -97,7 +96,6 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     children: [
       { label: '角色管理', key: '/system/role', icon: Shield, perm: 'role:query' },
       { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' },
-      { label: '系统设置', key: '/setting', icon: Adjustments },
       { label: 'OSS 文件', key: '/oss', icon: Photo, perm: 'oss:list' }
     ]
   }
