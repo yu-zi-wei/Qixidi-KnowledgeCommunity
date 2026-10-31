@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 
 /**
  * 名言信息业务对象 b_dictum_info
@@ -105,6 +107,14 @@ public class DictumInfoBo extends BaseEntity {
      * 位置
      */
     private String location;
+
+    /**
+     * 以下为后台列表页多选筛选项（in 查询）
+     */
+    private List<Long> groupIds;
+    private List<Long> albumIds;
+    private List<Integer> dictumStates;
+    private List<Integer> states;
 
 }
 

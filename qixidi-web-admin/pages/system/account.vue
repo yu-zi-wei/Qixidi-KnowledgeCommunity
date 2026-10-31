@@ -119,9 +119,9 @@ const searchFields = computed<AdminSearchField[]>(() => [
   { key: 'userName', label: '登录账号', type: 'input' },
   { key: 'phonenumber', label: '手机号码', type: 'input' },
   {
-    key: 'status',
+    key: 'statuses',
     label: '状态',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '正常', value: '0' },
       { label: '停用', value: '1' }

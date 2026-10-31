@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 
 /**
  * 标签信息业务对象 b_label_info
@@ -74,6 +76,16 @@ public class LabelInfoBo extends BaseEntity {
      * 文章数
      */
     private Integer articleNumber;
+
+    /**
+     * 所属分类多选筛选（in 查询，后台列表页）
+     */
+    private List<Long> labelGroupingIds;
+
+    /**
+     * 状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> states;
 
 }
 

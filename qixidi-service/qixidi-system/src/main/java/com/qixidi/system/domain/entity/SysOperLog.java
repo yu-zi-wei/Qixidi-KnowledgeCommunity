@@ -13,6 +13,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -127,6 +128,12 @@ public class SysOperLog extends PageQuery implements Serializable {
     @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
     @ExcelDictFormat(dictType = "sys_common_status")
     private Integer status;
+
+    /**
+     * 操作状态多选筛选（in 查询，后台列表页）
+     */
+    @TableField(exist = false)
+    private List<Integer> statuses;
 
     /**
      * 错误消息

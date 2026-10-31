@@ -1,5 +1,6 @@
 package com.qixidi.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -99,6 +100,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService, Logininf
         LambdaQueryWrapper<SysLogininfor> lqw = new LambdaQueryWrapper<SysLogininfor>()
                 .like(StringUtils.isNotBlank(logininfor.getIpaddr()), SysLogininfor::getIpaddr, logininfor.getIpaddr())
                 .eq(StringUtils.isNotBlank(logininfor.getStatus()), SysLogininfor::getStatus, logininfor.getStatus())
+                .in(CollUtil.isNotEmpty(logininfor.getStatuses()), SysLogininfor::getStatus, logininfor.getStatuses())
                 .like(StringUtils.isNotBlank(logininfor.getUserName()), SysLogininfor::getUserName, logininfor.getUserName())
                 .between(params.get("beginTime") != null && params.get("endTime") != null,
                         SysLogininfor::getLoginTime, params.get("beginTime"), params.get("endTime"));

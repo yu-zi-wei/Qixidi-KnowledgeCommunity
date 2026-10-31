@@ -14,6 +14,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +48,12 @@ public class SysLogininfor extends PageQuery implements Serializable {
     @ExcelProperty(value = "登录状态", converter = ExcelDictConvert.class)
     @ExcelDictFormat(dictType = "sys_common_status")
     private String status;
+
+    /**
+     * 登录状态多选筛选（in 查询，后台列表页）
+     */
+    @TableField(exist = false)
+    private List<String> statuses;
 
     /**
      * 登录IP地址

@@ -1,6 +1,7 @@
 package com.qixidi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.dto.OperLogDTO;
@@ -64,6 +65,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService, OperLogService
             })
             .eq(operLog.getStatus() != null,
                 SysOperLog::getStatus, operLog.getStatus())
+            .in(CollUtil.isNotEmpty(operLog.getStatuses()), SysOperLog::getStatus, operLog.getStatuses())
             .like(StringUtils.isNotBlank(operLog.getOperName()), SysOperLog::getOperName, operLog.getOperName())
             .between(params.get("beginTime") != null && params.get("endTime") != null,
                 SysOperLog::getOperTime, params.get("beginTime"), params.get("endTime"));

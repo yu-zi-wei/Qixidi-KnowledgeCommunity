@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
+import cn.hutool.core.collection.CollUtil;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -88,6 +90,7 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
         lqw.eq(StringUtils.isNotBlank(bo.getBriefIntroduction()), DictumAlbum::getBriefIntroduction, bo.getBriefIntroduction());
         lqw.eq(bo.getAlbumState() != null, DictumAlbum::getAlbumState, bo.getAlbumState());
         lqw.eq(bo.getState() != null, DictumAlbum::getState, bo.getState());
+        lqw.in(CollUtil.isNotEmpty(bo.getAlbumStates()), DictumAlbum::getAlbumState, bo.getAlbumStates());
         return lqw;
     }
 

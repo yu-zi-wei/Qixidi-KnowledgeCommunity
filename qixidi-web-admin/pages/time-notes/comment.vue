@@ -49,9 +49,9 @@ const searchFields: AdminSearchField[] = [
   { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
   { key: 'timeNotesId', label: '小记 ID', type: 'input', placeholder: '请输入数字 ID' },
   {
-    key: 'status',
+    key: 'statuses',
     label: '状态',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '正常', value: 0 },
       { label: '已删除', value: 1 }

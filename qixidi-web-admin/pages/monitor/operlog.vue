@@ -85,7 +85,7 @@ const searchFields: AdminSearchField[] = [
   { key: 'module', label: '操作模块', type: 'input', placeholder: '请输入模块关键词' },
   { key: 'title', label: '操作功能', type: 'input', placeholder: '请输入功能关键词' },
   { key: 'operName', label: '操作人员', type: 'input', placeholder: '请输入人员账号' },
-  { key: 'businessType', label: '业务类型', type: 'select', options: [
+  { key: 'businessTypes', label: '业务类型', type: 'multiple', options: [
     { label: '新增', value: 1 },
     { label: '修改', value: 2 },
     { label: '删除', value: 3 },
@@ -94,7 +94,7 @@ const searchFields: AdminSearchField[] = [
     { label: '强退', value: 7 },
     { label: '清空', value: 9 }
   ] },
-  { key: 'status', label: '操作状态', type: 'select', options: [
+  { key: 'statuses', label: '操作状态', type: 'multiple', options: [
     { label: '正常', value: 0 },
     { label: '异常', value: 1 }
   ] }

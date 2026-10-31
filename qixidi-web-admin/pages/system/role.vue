@@ -96,9 +96,9 @@ const searchFields = computed<AdminSearchField[]>(() => [
   { key: 'roleName', label: '角色名称', type: 'input' },
   { key: 'roleKey', label: '权限字符', type: 'input' },
   {
-    key: 'status',
+    key: 'statuses',
     label: '状态',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '正常', value: '0' },
       { label: '停用', value: '1' }

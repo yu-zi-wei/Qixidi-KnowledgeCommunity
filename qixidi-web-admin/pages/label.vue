@@ -96,20 +96,20 @@ const message = useMessage();
 const dialog = useDialog();
 const { getLabels, getLabel, addLabel, updateLabel, deleteLabels, mergeLabel, getGroupings } = useLabelAdminApi();
 
-// ---------- 搜索（labelName like / labelGroupingId eq / state eq） ----------
+// ---------- 搜索（labelName like / labelGroupingIds in / states in） ----------
 const groupingOptions = ref<SelectOption[]>([]);
 const searchFields = ref<AdminSearchField[]>([
   { key: 'labelName', label: '标签名称', type: 'input', placeholder: '请输入名称关键词' },
   {
-    key: 'labelGroupingId',
+    key: 'labelGroupingIds',
     label: '所属分类',
-    type: 'select',
+    type: 'multiple',
     options: groupingOptions
   },
   {
-    key: 'state',
+    key: 'states',
     label: '状态',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '正常', value: 0 },
       { label: '已删除', value: 1 }

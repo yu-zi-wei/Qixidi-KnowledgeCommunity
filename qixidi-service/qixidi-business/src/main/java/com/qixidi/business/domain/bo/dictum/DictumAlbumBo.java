@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 
 /**
  * 名言专辑业务对象 b_dictum_album
@@ -58,6 +60,11 @@ public class DictumAlbumBo extends BaseEntity {
      * 状态（0：正常吗：已删除）
      */
     private Integer state;
+
+    /**
+     * 可见性多选筛选（in 查询，后台列表页）
+     */
+    private List<Long> albumStates;
 
 
 }

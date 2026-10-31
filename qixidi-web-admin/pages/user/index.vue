@@ -81,11 +81,11 @@ const message = useMessage();
 const dialog = useDialog();
 const { getUsers, getUser, updateUser } = useUserAdminApi();
 
-// ---------- 搜索（nickname/username 后端 like；state 单值 eq） ----------
+// ---------- 搜索（nickname/username 后端 like；states in） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'nickname', label: '昵称', type: 'input', placeholder: '请输入昵称关键词' },
   { key: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名关键词' },
-  { key: 'state', label: '状态', type: 'select', options: [
+  { key: 'states', label: '状态', type: 'multiple', options: [
     { label: '正常', value: 0 },
     { label: '已冻结', value: 1 },
     { label: '已删除', value: 2 }

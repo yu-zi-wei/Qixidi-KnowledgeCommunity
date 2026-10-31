@@ -79,6 +79,7 @@ public class SysUserServiceImpl implements ISysUserService {
                 .eq(ObjectUtil.isNotNull(user.getUserId()), "u.user_id", user.getUserId())
                 .like(StringUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
                 .eq(StringUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
+                .in(CollUtil.isNotEmpty(user.getStatuses()), "u.status", user.getStatuses())
                 .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
                 .between(params.get("beginTime") != null && params.get("endTime") != null,
                         "u.create_time", params.get("beginTime"), params.get("endTime"));

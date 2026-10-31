@@ -4,6 +4,8 @@ import com.light.core.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 平台用户业务对象 tripartite_user
  *
@@ -111,4 +113,9 @@ public class TripartiteUserBo extends BaseEntity {
      * @see com.qixidi.auth.domain.enums.UserRoleEnums
      */
     private Long roleId;
+
+    /**
+     * 用户状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> states;
 }

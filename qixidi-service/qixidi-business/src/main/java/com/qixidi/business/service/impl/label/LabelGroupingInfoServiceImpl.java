@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
+import cn.hutool.core.collection.CollUtil;
+
 import java.util.List;
 import java.util.Map;
 
@@ -81,6 +83,7 @@ public class LabelGroupingInfoServiceImpl implements ILabelGroupingInfoService {
         LambdaQueryWrapper<LabelGroupingInfo> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getGroupingName()), LabelGroupingInfo::getGroupingName, bo.getGroupingName());
         lqw.eq(bo.getState() != null, LabelGroupingInfo::getState, bo.getState());
+        lqw.in(CollUtil.isNotEmpty(bo.getStates()), LabelGroupingInfo::getState, bo.getStates());
         lqw.eq(StringUtils.isNotBlank(bo.getGroupingDescribe()), LabelGroupingInfo::getGroupingDescribe, bo.getGroupingDescribe());
         return lqw;
     }

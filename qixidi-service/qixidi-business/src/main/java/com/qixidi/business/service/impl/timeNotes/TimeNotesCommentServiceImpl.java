@@ -176,6 +176,7 @@ public class TimeNotesCommentServiceImpl implements TimeNotesCommentService {
                 .eq(bo.getTimeNotesId() != null, TimeNotesComment::getTimeNotesId, bo.getTimeNotesId())
                 .like(StringUtils.isNotBlank(bo.getContent()), TimeNotesComment::getContent, bo.getContent())
                 .eq(bo.getStatus() != null, TimeNotesComment::getStatus, bo.getStatus())
+                .in(CollectionUtil.isNotEmpty(bo.getStatuses()), TimeNotesComment::getStatus, bo.getStatuses())
                 .orderByDesc(TimeNotesComment::getCreateTime));
         List<TimeNotesCommentVo> records = page.getRecords();
         if (CollectionUtil.isEmpty(records)) {

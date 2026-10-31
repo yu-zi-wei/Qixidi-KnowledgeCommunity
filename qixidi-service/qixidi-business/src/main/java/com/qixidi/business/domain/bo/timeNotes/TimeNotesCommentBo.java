@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 /**
  * 时光小记评论业务对象
  *
@@ -76,5 +78,10 @@ public class TimeNotesCommentBo extends BaseEntity {
      * 评论状态（0：正常，1：已删除）
      */
     private Integer status;
+
+    /**
+     * 评论状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> statuses;
 
 }

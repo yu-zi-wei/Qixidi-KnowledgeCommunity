@@ -67,6 +67,12 @@ public class SysRole extends BaseEntity {
     private String status;
 
     /**
+     * 角色状态多选筛选（in 查询，后台列表页）
+     */
+    @TableField(exist = false)
+    private List<String> statuses;
+
+    /**
      * 删除标志（0代表存在 2代表删除）
      */
     @TableLogic

@@ -19,8 +19,8 @@
             v-model:value="formModel[f.key]"
             :style="{ width: fieldWidth(f) }"
             clearable
-            :multiple="f.type === 'multiple'"
-            :max-tag-count="f.type === 'multiple' ? 'responsive' : undefined"
+            multiple
+            max-tag-count="responsive"
             :options="f.options || []"
             :placeholder="f.placeholder || `请选择${f.label}`"
             @keyup.enter="doSearch"
@@ -85,8 +85,8 @@ export interface AdminSearchField {
   /** 查询参数名（原样并入 fetch 参数） */
   key: string;
   label: string;
-  /** input 输入框 / select 单选下拉 / multiple 多选下拉（GET 数组 key=a&key=b） */
-  type: 'input' | 'select' | 'multiple';
+  /** input 输入框 / multiple 多选下拉（GET 数组 key=a&key=b，后端 BO List 字段 + in 条件） */
+  type: 'input' | 'multiple';
   options?: AdminSearchOption[];
   placeholder?: string;
   /** 控件宽度（label 之外的部分）；不配则统一默认宽 160px */
@@ -143,7 +143,7 @@ const checkedKeys = defineModel<Array<string | number>>('checkedKeys', { default
 
 // ---------- 搜索表单 ----------
 const formModel = reactive<Record<string, any>>(
-  Object.fromEntries(props.searchFields.map((f) => [f.key, f.defaultValue ?? (f.type === 'multiple' ? [] : null)]))
+  Object.fromEntries(props.searchFields.map((f) => [f.key, f.defaultValue ?? (f.type === 'input' ? null : [])]))
 );
 
 /** 控件统一默认宽度（不配 width 即等宽，需差异化时才在字段配置里覆盖） */

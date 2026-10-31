@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 
 /**
  * 标签分组信息业务对象 b_label_grouping_info
@@ -46,6 +48,11 @@ public class LabelGroupingInfoBo extends BaseEntity {
      */
     @NotBlank(message = "描述不能为空", groups = {AddGroup.class, EditGroup.class})
     private String groupingDescribe;
+
+    /**
+     * 状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> states;
 
 
 }

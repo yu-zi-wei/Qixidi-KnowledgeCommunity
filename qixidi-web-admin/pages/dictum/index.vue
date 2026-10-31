@@ -72,15 +72,15 @@ const initialGroupId = toId(route.query.groupId);
 const initialAlbumId = toId(route.query.albumId);
 const listKey = computed(() => `${route.query.groupId ?? ''}-${route.query.albumId ?? ''}`);
 
-// ---------- 搜索（后端 wrapper：groupId/albumId/dictumState/state 均 eq） ----------
+// ---------- 搜索（后端 wrapper：groupIds/albumIds/dictumStates/states 均 in） ----------
 // computed 让分组/专辑 options 在异步拉取完成后响应更新（defaultValue 只在挂载初始化时生效）
 const searchFields = computed<AdminSearchField[]>(() => [
-  { key: 'groupId', label: '分组', type: 'select', defaultValue: initialGroupId, options: groupOptions.value },
-  { key: 'albumId', label: '专辑', type: 'select', defaultValue: initialAlbumId, options: albumOptions.value },
+  { key: 'groupIds', label: '分组', type: 'multiple', defaultValue: initialGroupId != null ? [initialGroupId] : undefined, options: groupOptions.value },
+  { key: 'albumIds', label: '专辑', type: 'multiple', defaultValue: initialAlbumId != null ? [initialAlbumId] : undefined, options: albumOptions.value },
   {
-    key: 'dictumState',
+    key: 'dictumStates',
     label: '可见性',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '公开', value: 1 },
       { label: '私有', value: 2 },
@@ -88,9 +88,9 @@ const searchFields = computed<AdminSearchField[]>(() => [
     ]
   },
   {
-    key: 'state',
+    key: 'states',
     label: '状态',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '正常', value: 0 },
       { label: '已删除', value: 2 }

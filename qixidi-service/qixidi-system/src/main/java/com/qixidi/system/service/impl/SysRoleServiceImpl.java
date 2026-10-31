@@ -1,5 +1,6 @@
 package com.qixidi.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -66,6 +67,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             .eq(ObjectUtil.isNotNull(role.getRoleId()), "r.role_id", role.getRoleId())
             .like(StringUtils.isNotBlank(role.getRoleName()), "r.role_name", role.getRoleName())
             .eq(StringUtils.isNotBlank(role.getStatus()), "r.status", role.getStatus())
+            .in(CollUtil.isNotEmpty(role.getStatuses()), "r.status", role.getStatuses())
             .like(StringUtils.isNotBlank(role.getRoleKey()), "r.role_key", role.getRoleKey())
             .between(params.get("beginTime") != null && params.get("endTime") != null,
                 "r.create_time", params.get("beginTime"), params.get("endTime"))

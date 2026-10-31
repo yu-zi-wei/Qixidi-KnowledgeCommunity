@@ -2,6 +2,7 @@ package com.qixidi.business.service.impl.label;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -94,6 +95,8 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
         lqw.eq(StringUtils.isNotBlank(bo.getLabelDescribe()), LabelInfo::getLabelDescribe, bo.getLabelDescribe());
         lqw.eq(StringUtils.isNotBlank(bo.getLabelCover()), LabelInfo::getLabelCover, bo.getLabelCover());
         lqw.eq(bo.getState() != null, LabelInfo::getState, bo.getState());
+        lqw.in(CollUtil.isNotEmpty(bo.getLabelGroupingIds()), LabelInfo::getLabelGroupingId, bo.getLabelGroupingIds());
+        lqw.in(CollUtil.isNotEmpty(bo.getStates()), LabelInfo::getState, bo.getStates());
         return lqw;
     }
 

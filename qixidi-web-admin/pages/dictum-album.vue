@@ -51,13 +51,13 @@ const goDictumList = (albumId: number) => {
   router.push({ path: '/dictum', query: { albumId } });
 };
 
-// ---------- 搜索（name 后端 like；albumState eq） ----------
+// ---------- 搜索（name 后端 like；albumStates in） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'name', label: '专辑名称', type: 'input', placeholder: '请输入关键词' },
   {
-    key: 'albumState',
+    key: 'albumStates',
     label: '可见性',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '公开', value: 1 },
       { label: '私有', value: 2 },

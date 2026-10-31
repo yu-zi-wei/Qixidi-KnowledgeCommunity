@@ -142,6 +142,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         lqw.like(StringUtils.isNotBlank(bo.getContent()), "ac.content", bo.getContent());
         lqw.eq(bo.getType() != null, "ac.type", bo.getType());
         lqw.eq(bo.getState() != null, "ac.state", bo.getState());
+        lqw.in(CollectionUtil.isNotEmpty(bo.getStates()), "ac.state", bo.getStates());
         lqw.orderByDesc("ac.create_time");
         return lqw;
     }

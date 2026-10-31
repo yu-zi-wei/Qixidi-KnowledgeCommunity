@@ -194,7 +194,7 @@ const {
 const frontSearchFields: AdminSearchField[] = [
   { key: 'userName', label: '用户名', type: 'input', placeholder: '请输入用户名关键词' },
   { key: 'ipAddress', label: '登录 IP', type: 'input', placeholder: '请输入 IP 关键词' },
-  { key: 'type', label: '日志类型', type: 'select', options: [
+  { key: 'types', label: '日志类型', type: 'multiple', options: [
     { label: '登录', value: 0 },
     { label: '登出', value: 1 }
   ] }
@@ -278,7 +278,7 @@ const {
 const backSearchFields: AdminSearchField[] = [
   { key: 'userName', label: '登录账号', type: 'input', placeholder: '请输入账号关键词' },
   { key: 'ipaddr', label: '登录 IP', type: 'input', placeholder: '请输入 IP 关键词' },
-  { key: 'status', label: '登录状态', type: 'select', options: [
+  { key: 'statuses', label: '登录状态', type: 'multiple', options: [
     { label: '成功', value: '0' },
     { label: '失败', value: '1' }
   ] }

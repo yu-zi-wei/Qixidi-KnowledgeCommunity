@@ -1,6 +1,7 @@
 package com.qixidi.business.service.impl.dictum;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
@@ -168,6 +169,10 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         lqw.eq(bo.getAlbumId() != null, DictumInfo::getAlbumId, bo.getAlbumId());
         lqw.eq(bo.getDictumState() != null, DictumInfo::getDictumState, bo.getDictumState());
         lqw.eq(bo.getState() != null, DictumInfo::getState, bo.getState());
+        lqw.in(CollUtil.isNotEmpty(bo.getGroupIds()), DictumInfo::getGroupId, bo.getGroupIds());
+        lqw.in(CollUtil.isNotEmpty(bo.getAlbumIds()), DictumInfo::getAlbumId, bo.getAlbumIds());
+        lqw.in(CollUtil.isNotEmpty(bo.getDictumStates()), DictumInfo::getDictumState, bo.getDictumStates());
+        lqw.in(CollUtil.isNotEmpty(bo.getStates()), DictumInfo::getState, bo.getStates());
         return lqw;
     }
 

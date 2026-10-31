@@ -93,13 +93,13 @@ const message = useMessage();
 const dialog = useDialog();
 const { getGroupings, getGrouping, addGrouping, updateGrouping, deleteGroupings, mergeGrouping } = useLabelAdminApi();
 
-// ---------- 搜索（groupingName like / state eq） ----------
+// ---------- 搜索（groupingName like / states in） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'groupingName', label: '分类名称', type: 'input', placeholder: '请输入名称关键词' },
   {
-    key: 'state',
+    key: 'states',
     label: '状态',
-    type: 'select',
+    type: 'multiple',
     options: [
       { label: '正常', value: 0 },
       { label: '已删除', value: 1 }

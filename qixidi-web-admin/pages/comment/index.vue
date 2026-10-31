@@ -68,7 +68,7 @@ const { getComments, getComment, deleteComments } = useCommentAdminApi();
 const searchFields: AdminSearchField[] = [
   { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
   { key: 'articleId', label: '文章 ID', type: 'input', placeholder: '请输入数字 ID' },
-  { key: 'state', label: '状态', type: 'select', options: [
+  { key: 'states', label: '状态', type: 'multiple', options: [
     { label: '正常', value: 0 },
     { label: '已删除', value: 1 }
   ] }

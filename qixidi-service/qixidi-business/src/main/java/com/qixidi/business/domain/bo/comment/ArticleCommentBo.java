@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 /**
  * 文章评论业务对象 b_article_comment
  *
@@ -86,5 +88,10 @@ public class ArticleCommentBo extends BaseEntity {
      * 评论状态（0：正常，1：已删除）
      */
     private Integer state;
+
+    /**
+     * 评论状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> states;
 
 }

@@ -1,5 +1,6 @@
 package com.qixidi.business.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 前台登录日志 Service 实现
@@ -58,7 +60,7 @@ public class SignLogServiceImpl implements ISignLogService {
         LambdaQueryWrapper<SignLog> lqw = new LambdaQueryWrapper<SignLog>()
             .like(StringUtils.isNotBlank(bo.getUserName()), SignLog::getUserName, bo.getUserName())
             .like(StringUtils.isNotBlank(bo.getIpAddress()), SignLog::getIpAddress, bo.getIpAddress())
-            .eq(bo.getType() != null, SignLog::getType, bo.getType())
+            .in(CollUtil.isNotEmpty(bo.getTypes()), SignLog::getType, bo.getTypes())
             .orderByDesc(SignLog::getId);
         Page<SignLog> page = baseMapper.selectPage(pageQuery.build(), lqw);
         return TableDataInfo.build(page);
