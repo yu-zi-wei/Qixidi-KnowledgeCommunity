@@ -1,9 +1,11 @@
 package com.qixidi.mcp.tools;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.auth.helper.OperLogRecorder;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.service.TimeNotesService;
@@ -36,9 +38,11 @@ public class TimeNotesTool {
      * Spring AI 自动装配环），见 ArticleTools 构造器注释
      */
     private final TimeNotesService timeNotesService;
+    private final OperLogRecorder operLogRecorder;
 
-    public TimeNotesTool(@Lazy TimeNotesService timeNotesService) {
+    public TimeNotesTool(@Lazy TimeNotesService timeNotesService, OperLogRecorder operLogRecorder) {
         this.timeNotesService = timeNotesService;
+        this.operLogRecorder = operLogRecorder;
     }
 
     @Tool(name = "create_time_note", description = "创建一条小记（时光小记），返回 timeNoteId。recordTime 缺省为今天。")
@@ -61,6 +65,8 @@ public class TimeNotesTool {
         bo.setRecordTime(parseOrToday(recordTime));
         // uid 由 service 层强制取当前登录用户，tool 层不传
         Long id = timeNotesService.add(bo);
+        operLogRecorder.record("MCP小记", "创建小记", BusinessType.INSERT,
+            user.getUsername(), "id=" + id + ", title=" + title, null);
         return submitVo(id, "created");
     }
 
@@ -84,6 +90,8 @@ public class TimeNotesTool {
         }
         // service 层已做角色与属主校验（Task 5），非本人小记抛"无权操作他人内容"
         timeNotesService.update(bo);
+        operLogRecorder.record("MCP小记", "更新小记", BusinessType.UPDATE,
+            user.getUsername(), "id=" + timeNoteId + ", title=" + title, null);
         return submitVo(timeNoteId, "updated");
     }
 

@@ -1,6 +1,8 @@
 package com.qixidi.mcp.tools;
 
+import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
+import com.qixidi.auth.helper.OperLogRecorder;
 import com.qixidi.system.service.ISysOssService;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
@@ -29,6 +31,7 @@ public class UploadImageTool {
     private static final int MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
     private final ISysOssService iSysOssService;
+    private final OperLogRecorder operLogRecorder;
 
     /**
      * 上传前置校验：大小上限 + 图片魔数嗅探（png/jpg/gif/webp）
@@ -97,6 +100,8 @@ public class UploadImageTool {
         validateImage(bytes);
         String name = (filename == null || filename.isBlank()) ? "mcp-image.png" : filename.trim();
         SysOss oss = iSysOssService.upload(new ByteArrayMultipartFile("file", name, guessContentType(name), bytes));
+        operLogRecorder.record("MCP文件", "上传图片", BusinessType.INSERT,
+            user.getUsername(), "fileName=" + name + ", ossId=" + oss.getOssId(), null);
         McpUploadImageVo result = new McpUploadImageVo();
         result.setUrl(oss.getUrl());
         result.setOssId(oss.getOssId());

@@ -3,9 +3,11 @@ package com.qixidi.mcp.tools;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
+import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.auth.helper.OperLogRecorder;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
@@ -44,9 +46,11 @@ public class ArticleTools {
      * BeanCurrentlyInCreationException
      */
     private final IArticleInformationService iArticleInformationService;
+    private final OperLogRecorder operLogRecorder;
 
-    public ArticleTools(@Lazy IArticleInformationService iArticleInformationService) {
+    public ArticleTools(@Lazy IArticleInformationService iArticleInformationService, OperLogRecorder operLogRecorder) {
         this.iArticleInformationService = iArticleInformationService;
+        this.operLogRecorder = operLogRecorder;
     }
 
     @Tool(name = "create_article", description = """
@@ -84,6 +88,8 @@ public class ArticleTools {
                 throw new ServiceException("文章创建失败");
             }
         }
+        operLogRecorder.record("MCP文章", "创建文章", BusinessType.INSERT,
+            user.getUsername(), "id=" + id + ", title=" + bo.getTitle(), null);
         return submitVo(id, "UNDER_REVIEW");
     }
 
@@ -211,6 +217,8 @@ public class ArticleTools {
         if (vo == null || vo.getId() == null || vo.getId() <= 0) {
             throw new ServiceException("草稿保存失败");
         }
+        operLogRecorder.record("MCP文章", "保存文章草稿", BusinessType.INSERT,
+            user.getUsername(), "id=" + vo.getId() + ", title=" + bo.getTitle(), null);
         return submitVo(vo.getId(), "DRAFT");
     }
 
@@ -229,6 +237,8 @@ public class ArticleTools {
         // 与前台编辑同语义：更新提交后重新进入审核
         info.setAuditState(ArticleAuditStateEnums.UNDER_REVIEW.getCode());
         iArticleInformationService.updateByBo(info);
+        operLogRecorder.record("MCP文章", "更新文章", BusinessType.UPDATE,
+            user.getUsername(), "id=" + bo.getArticleId() + ", title=" + bo.getTitle(), null);
         return submitVo(bo.getArticleId(), "UNDER_REVIEW");
     }
 
@@ -242,6 +252,8 @@ public class ArticleTools {
         }
         // Service 层已做属主校验，非本人文章抛"无权操作他人内容"
         int rows = iArticleInformationService.delete(articleId);
+        operLogRecorder.record("MCP文章", "删除文章", BusinessType.DELETE,
+            user.getUsername(), "id=" + articleId, null);
         McpArticleDeleteVo result = new McpArticleDeleteVo();
         result.setArticleId(articleId);
         result.setDeleted(rows > 0);

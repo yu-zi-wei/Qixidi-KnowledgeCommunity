@@ -1,9 +1,11 @@
 package com.qixidi.mcp.tools;
 
 import com.light.core.core.domain.PageQuery;
+import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.auth.helper.OperLogRecorder;
 import com.qixidi.business.domain.bo.label.LabelGroupingInfoBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.service.label.ILabelGroupingInfoService;
@@ -32,6 +34,7 @@ public class PublishContextTool {
     private final ILabelInfoService iLabelInfoService;
     private final ILabelGroupingInfoService iLabelGroupingInfoService;
     private final ISpecialInformationService iSpecialInformationService;
+    private final OperLogRecorder operLogRecorder;
 
     @Tool(name = "get_publish_context", description = """
         获取发布上下文，写作前调用。
@@ -103,6 +106,8 @@ public class PublishContextTool {
         McpSpecialSubmitVo vo = new McpSpecialSubmitVo();
         vo.setSpecialId(bo.getId());
         vo.setName(bo.getSpecialName());
+        operLogRecorder.record("MCP专栏", "创建专栏", BusinessType.INSERT,
+            user.getUsername(), "id=" + bo.getId() + ", name=" + bo.getSpecialName(), null);
         return vo;
     }
 }
