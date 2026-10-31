@@ -21,7 +21,14 @@ import {
   Folders,
   Book2,
   Shield,
-  IdBadge
+  IdBadge,
+  Activity,
+  History,
+  ReportAnalytics,
+  Photo,
+  ShieldLock,
+  Tags,
+  Bookmarks
 } from '@vicons/tabler';
 
 export interface AdminMenuItem {
@@ -41,7 +48,9 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     icon: FileText,
     children: [
       { label: '文章列表', key: '/article', icon: FileText, perm: 'article:information:query' },
-      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' }
+      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' },
+      { label: '标签管理', key: '/label', icon: Tags, perm: 'labelInfo:query' },
+      { label: '标签分类', key: '/grouping', icon: Bookmarks, perm: 'groupingInfo:query' }
     ]
   },
   {
@@ -72,13 +81,24 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     ]
   },
   {
+    label: '监控审计',
+    key: 'monitor',
+    icon: Activity,
+    children: [
+      { label: '操作日志', key: '/monitor/operlog', icon: History, perm: 'monitor:operlog:list' },
+      { label: '登录日志', key: '/monitor/logininfor', icon: ReportAnalytics, perm: 'monitor:logininfor:list' },
+      { label: 'IP 黑名单', key: '/monitor/black-list', icon: ShieldLock, perm: 'blackList:list' }
+    ]
+  },
+  {
     label: '系统管理',
     key: 'system',
     icon: Settings,
     children: [
       { label: '角色管理', key: '/system/role', icon: Shield, perm: 'role:query' },
       { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' },
-      { label: '系统设置', key: '/setting', icon: Adjustments }
+      { label: '系统设置', key: '/setting', icon: Adjustments },
+      { label: 'OSS 文件', key: '/oss', icon: Photo, perm: 'oss:list' }
     ]
   }
 ];
