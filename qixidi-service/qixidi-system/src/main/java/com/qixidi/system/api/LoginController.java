@@ -5,10 +5,13 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.light.core.config.justAuth.JustAuthConfig;
 import com.light.core.constant.Constants;
+import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.light.webSocket.utils.WebSocketUtils;
 
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.model.LoginUserMain;
 import com.qixidi.auth.domain.model.PhoneBinding;
@@ -18,7 +21,7 @@ import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.domain.vo.user.UserLoginStatusVo;
 import com.qixidi.business.domain.vo.user.UserSimpleInfoVo;
 import com.qixidi.business.service.ITripartiteUserService;
-import com.qixidi.system.service.SysLoginService;
+import com.qixidi.business.service.ISignLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -45,10 +48,11 @@ import java.util.Set;
 @Validated
 @RequiredArgsConstructor
 @RestController
+@LogModule("账号安全")
 public class LoginController {
     private final JustAuthConfig justAuthConfig;
-    private final SysLoginService loginService;
     private final ITripartiteUserService iTripartiteUserService;
+    private final ISignLogService iSignLogService;
 
     /**
      * 密码登录
@@ -89,6 +93,7 @@ public class LoginController {
      *
      * @return
      */
+    @Log(title = "注销用户账号", businessType = BusinessType.DELETE)
     @RepeatSubmit()
     @GetMapping("/oauth/account/cancellation")
     public void accountCancellation() {
@@ -136,10 +141,12 @@ public class LoginController {
         try {
             String tripartiteUuid = LoginHelper.getTripartiteUuid();
             if (tripartiteUuid != null) {
+                String username = LoginHelper.getTripartiteUsername();
                 //断开WebSocket连接
                 WebSocketUtils.removeLinks(tripartiteUuid);
                 StpUtil.logout();
-                loginService.logout(LoginHelper.getTripartiteUsername());
+                // 前台登出记 b_sign_log（与前台登录对称）；此前误写后台 sys_logininfor
+                iSignLogService.recordSignLog(tripartiteUuid, username, true);
             }
         } catch (NotLoginException e) {
         }
@@ -237,6 +244,7 @@ public class LoginController {
      *
      * @throws IOException
      */
+    @Log(title = "重置用户密码", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/oauth/reset/password")
     public void resetPassword(@Validated @RequestBody RegisterUserMain registerUserMain) {

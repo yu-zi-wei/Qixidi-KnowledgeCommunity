@@ -61,6 +61,7 @@ import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.mapper.user.UserInformationMapper;
+import com.qixidi.business.service.ISignLogService;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.common.domain.enums.StatusEnums;
@@ -105,6 +106,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     private final WeiBoPlatformConfig weiBoPlatformConfig;
     private final ZhiFuBaoPlatformConfig zhiFuBaoPlatformConfig;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
+    private final ISignLogService iSignLogService;
 
     /**
      * 查询平台用户
@@ -272,8 +274,10 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
             }
             //记录用户信息，登录
             LoginHelper.tripartiteLoginByDevice(tripartiteUser, DeviceType.PC);
+            iSignLogService.recordSignLog(tripartiteUser.getUuid(), tripartiteUser.getUsername(), false);
         } else {
             LoginHelper.tripartiteLoginByDevice(uuidInfo, DeviceType.PC);
+            iSignLogService.recordSignLog(uuidInfo.getUuid(), uuidInfo.getUsername(), false);
         }
     }
 
@@ -310,6 +314,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
 
         //记录用户信息，登录
         LoginHelper.tripartiteLoginByDevice(tripartiteUsers, DeviceType.PC);
+        iSignLogService.recordSignLog(tripartiteUsers.getUuid(), tripartiteUsers.getUsername(), false);
     }
 
     @Override
