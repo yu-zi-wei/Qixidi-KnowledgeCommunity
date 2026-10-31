@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
                                                        HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',不支持'{}'请求", requestURI, e.getMethod());
-        return R.fail(e.getMessage());
+        return R.fail("请求方式不支持");
     }
 
     /**
@@ -101,6 +101,8 @@ public class GlobalExceptionHandler {
 
     /**
      * Mybatis系统异常 通用处理
+     * <p>
+     * 原始 message 含 mapper 类名、SQL 细节等内部实现，透给前端属信息泄露——统一返回通用文案
      */
     @ExceptionHandler(MyBatisSystemException.class)
     public R<Void> handleCannotFindDataSourceException(MyBatisSystemException e, HttpServletRequest request) {
@@ -111,7 +113,7 @@ public class GlobalExceptionHandler {
             return R.fail("未找到数据源，请联系管理员确认");
         }
         log.error("请求地址'{}', Mybatis系统异常", requestURI, e);
-        return R.fail(message);
+        return R.fail(DEFAULT_ERROR);
     }
 
     /**
