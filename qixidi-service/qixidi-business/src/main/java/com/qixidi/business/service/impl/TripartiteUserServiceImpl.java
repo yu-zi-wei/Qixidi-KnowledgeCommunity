@@ -3,6 +3,7 @@ package com.qixidi.business.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
@@ -116,7 +117,49 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
      */
     @Override
     public TripartiteUserVo queryById(String uuid) {
-        return getWebsiteInfo(uuid);
+        // 后台详情（/system/tripartite/user/{uuid}）与门户 getInfo 共用：
+        // 单表查 b_user_main 全字段（含 source/loginIp/createTime/state）。
+        // 不可复用 selectWebInfo——那是门户主页 SQL，SELECT 无这三列且 state=0 过滤会漏冻结用户
+        TripartiteUserVo vo = baseMapper.selectVoById(uuid);
+        if (vo == null) {
+            return null;
+        }
+        // 个人简介在 b_user_information 表，补查
+        UserInformation info = userInformationMapper.selectOne(new LambdaQueryWrapper<UserInformation>()
+            .eq(UserInformation::getUuid, uuid));
+        if (info != null) {
+            vo.setIntroduce(info.getIntroduce());
+        }
+        fillUserCounts(vo, uuid);
+        return vo;
+    }
+
+    /**
+     * 组装用户各类内容统计（详情/主页查询共用）
+     */
+    private void fillUserCounts(TripartiteUserVo vo, String uuid) {
+        List<String> uuids = List.of(uuid);
+        Map<String, Integer> articleCounts = userCountQueryHelper.articleCount(uuids);
+        Map<String, Integer> followCounts = userCountQueryHelper.followCount(uuids);
+        Map<String, Integer> fansCounts = userCountQueryHelper.fansCount(uuids);
+        Map<String, Integer> commentCounts = userCountQueryHelper.commentCount(uuids);
+        Map<String, Integer> fansCommentCounts = userCountQueryHelper.fansCommentCount(uuids);
+        Map<String, Integer> collectionCounts = userCountQueryHelper.collectionCount(uuids);
+        Map<String, Integer> specialCounts = userCountQueryHelper.specialCount(uuids);
+        Map<String, Integer> albumCounts = userCountQueryHelper.albumCount(uuids);
+        Map<String, Integer> dictumCounts = userCountQueryHelper.dictumCount(uuids);
+        Map<String, Integer> timeNotesCounts = userCountQueryHelper.timeNotesCount(uuids);
+
+        vo.setArticleCount(articleCounts.getOrDefault(uuid, 0));
+        vo.setFollowCount(followCounts.getOrDefault(uuid, 0));
+        vo.setFansFollowCount(fansCounts.getOrDefault(uuid, 0));
+        vo.setCommentCount(commentCounts.getOrDefault(uuid, 0));
+        vo.setFansCommentCount(fansCommentCounts.getOrDefault(uuid, 0));
+        vo.setCollectionCount(collectionCounts.getOrDefault(uuid, 0));
+        vo.setSpecialColumnCount(specialCounts.getOrDefault(uuid, 0));
+        vo.setAlbumCount(albumCounts.getOrDefault(uuid, 0));
+        vo.setDictumCount(dictumCounts.getOrDefault(uuid, 0));
+        vo.setTimeNotesCount(timeNotesCounts.getOrDefault(uuid, 0));
     }
 
     /**
@@ -156,6 +199,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         lqw.eq(StringUtils.isNotBlank(bo.getGender()), TripartiteUser::getGender, bo.getGender());
         lqw.eq(StringUtils.isNotBlank(bo.getSource()), TripartiteUser::getSource, bo.getSource());
         lqw.eq(bo.getState() != null, TripartiteUser::getState, bo.getState());
+        lqw.in(CollUtil.isNotEmpty(bo.getStates()), TripartiteUser::getState, bo.getStates());
         lqw.orderByDesc(TripartiteUser::getCreateTime);
         return lqw;
     }
@@ -425,29 +469,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         TripartiteUserVo tripartiteUserVo = baseMapper.selectWebInfo(uuid);
         if (tripartiteUserVo == null) return null;
 
-        // 查询统计数据
-        List<String> uuids = List.of(uuid);
-        Map<String, Integer> articleCounts = userCountQueryHelper.articleCount(uuids);
-        Map<String, Integer> followCounts = userCountQueryHelper.followCount(uuids);
-        Map<String, Integer> fansCounts = userCountQueryHelper.fansCount(uuids);
-        Map<String, Integer> commentCounts = userCountQueryHelper.commentCount(uuids);
-        Map<String, Integer> fansCommentCounts = userCountQueryHelper.fansCommentCount(uuids);
-        Map<String, Integer> collectionCounts = userCountQueryHelper.collectionCount(uuids);
-        Map<String, Integer> specialCounts = userCountQueryHelper.specialCount(uuids);
-        Map<String, Integer> albumCounts = userCountQueryHelper.albumCount(uuids);
-        Map<String, Integer> dictumCounts = userCountQueryHelper.dictumCount(uuids);
-        Map<String, Integer> timeNotesCounts = userCountQueryHelper.timeNotesCount(uuids);
-
-        tripartiteUserVo.setArticleCount(articleCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setFollowCount(followCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setFansFollowCount(fansCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setCommentCount(commentCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setFansCommentCount(fansCommentCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setCollectionCount(collectionCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setSpecialColumnCount(specialCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setAlbumCount(albumCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setDictumCount(dictumCounts.getOrDefault(uuid, 0));
-        tripartiteUserVo.setTimeNotesCount(timeNotesCounts.getOrDefault(uuid, 0));
+        // 统计数据
+        fillUserCounts(tripartiteUserVo, uuid);
 
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new LambdaQueryWrapper<UserFollow>()
