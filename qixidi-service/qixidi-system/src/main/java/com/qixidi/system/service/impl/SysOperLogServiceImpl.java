@@ -139,6 +139,6 @@ public class SysOperLogServiceImpl implements ISysOperLogService, OperLogService
      */
     @Override
     public void cleanOperLog() {
-        baseMapper.delete(new LambdaQueryWrapper<>());
+        baseMapper.cleanTable();
     }
 }

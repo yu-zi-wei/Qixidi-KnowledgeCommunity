@@ -155,6 +155,6 @@ public class SysLogininforServiceImpl implements ISysLogininforService, Logininf
      */
     @Override
     public void cleanLogininfor() {
-        baseMapper.delete(new LambdaQueryWrapper<>());
+        baseMapper.cleanTable();
     }
 }
