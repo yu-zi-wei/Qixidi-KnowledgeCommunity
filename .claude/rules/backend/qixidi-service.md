@@ -38,6 +38,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 - tool 直调 Service 不经过 Controller 校验：BO 的 @NotBlank 等校验组不生效，必填项在 tool 方法内自行校验（参考 ArticleTools.checkTitleAndContent）
 - 每个 tool 入口 `LoginHelper.getTripartiteUser()` 判空；属主 uid 由 Service 层从登录态强制取，tool 层不信任入参 uid
 - 注入业务 Service 的 tool 构造器加 `@Lazy` 断 Spring AI 自动装配环（见 ArticleTools 构造器注释）
+- **写操作 tool（增/删/改）必须手动调 `OperLogRecorder.record(module, title, businessType, operName, operParam, e)`**（qixidi-auth/helper）：@Log AOP 只拦 Controller，tool 不走 HTTP 链不记日志；module 统一 "MCPxx" 前缀（如 MCP文章/MCP小记）
 
 ---
 
