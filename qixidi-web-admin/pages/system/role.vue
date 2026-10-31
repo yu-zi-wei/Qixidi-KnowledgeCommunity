@@ -114,8 +114,8 @@ const operatingId = ref<number | null>(null);
 const isSuperRole = (row: RoleRow) => row.roleId === 1;
 
 const columns: DataTableColumns<RoleRow> = [
-  { title: '角色名称', key: 'roleName', width: 140, ellipsis: { tooltip: true } },
-  { title: '权限字符', key: 'roleKey', width: 140, ellipsis: { tooltip: true } },
+  { title: '角色名称', key: 'roleName', minWidth: 140, ellipsis: { tooltip: true } },
+  { title: '权限字符', key: 'roleKey', minWidth: 140, ellipsis: { tooltip: true } },
   { title: '排序', key: 'roleSort', width: 70, align: 'center' },
   { title: '状态', key: 'status', width: 90, render: (row) => h(AdminStateTag, { value: row.status, map: ROLE_STATUS_MAP }) },
   { title: '备注', key: 'remark', minWidth: 140, ellipsis: { tooltip: true }, render: (row) => row.remark || h('span', { class: 'cell-dim' }, '—') },

@@ -206,7 +206,7 @@ const columns: DataTableColumns<OperLogRow> = [
   {
     title: '操作功能',
     key: 'title',
-    width: 100,
+    minWidth: 100,
     render: (row) => row.title || '—'
   },
   {
@@ -218,7 +218,7 @@ const columns: DataTableColumns<OperLogRow> = [
   {
     title: '操作人员',
     key: 'operName',
-    width: 110,
+    minWidth: 110,
     ellipsis: { tooltip: true },
     render: (row) => row.operName || '—'
   },
@@ -239,7 +239,7 @@ const columns: DataTableColumns<OperLogRow> = [
   {
     title: '操作地点',
     key: 'operLocation',
-    width: 130,
+    minWidth: 130,
     ellipsis: { tooltip: true },
     render: (row) => row.operLocation || '—'
   },

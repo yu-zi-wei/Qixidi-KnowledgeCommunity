@@ -279,7 +279,7 @@ const columns: DataTableColumns<LabelRow> = [
   {
     title: '所属分类',
     key: 'groupingName',
-    width: 140,
+    minWidth: 140,
     render: (row) => row.groupingName || h('span', { class: 'cell-dim' }, '—')
   },
   {

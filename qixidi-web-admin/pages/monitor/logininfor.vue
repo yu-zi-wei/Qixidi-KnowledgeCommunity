@@ -128,7 +128,7 @@ const columns: DataTableColumns<LogininforRow> = [
   {
     title: '登录账号',
     key: 'userName',
-    width: 130,
+    minWidth: 130,
     ellipsis: { tooltip: true },
     render: (row) => row.userName || '—'
   },
@@ -141,21 +141,21 @@ const columns: DataTableColumns<LogininforRow> = [
   {
     title: '登录地点',
     key: 'loginLocation',
-    width: 150,
+    minWidth: 150,
     ellipsis: { tooltip: true },
     render: (row) => row.loginLocation || '—'
   },
   {
     title: '浏览器',
     key: 'browser',
-    width: 110,
+    minWidth: 110,
     ellipsis: { tooltip: true },
     render: (row) => row.browser || '—'
   },
   {
     title: '操作系统',
     key: 'os',
-    width: 130,
+    minWidth: 130,
     ellipsis: { tooltip: true },
     render: (row) => row.os || '—'
   },

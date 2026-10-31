@@ -183,7 +183,7 @@ const columns: DataTableColumns<UserRow> = [
   {
     title: '邮箱',
     key: 'email',
-    width: 170,
+    minWidth: 170,
     ellipsis: { tooltip: true },
     render: (row) => row.email || '—'
   },
@@ -205,7 +205,7 @@ const columns: DataTableColumns<UserRow> = [
   {
     title: '角色',
     key: 'roleId',
-    width: 90,
+    minWidth: 90,
     render: (row) => h(AdminStateTag, { value: row.roleId ?? 1, map: USER_ROLE_MAP })
   },
   {

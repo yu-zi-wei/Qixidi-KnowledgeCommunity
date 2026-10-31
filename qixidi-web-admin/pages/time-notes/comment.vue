@@ -131,7 +131,7 @@ const columns: DataTableColumns<TimeNotesCommentRow> = [
   {
     title: '评论人',
     key: 'nickname',
-    width: 130,
+    minWidth: 130,
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname, size: 24 }),
@@ -141,7 +141,7 @@ const columns: DataTableColumns<TimeNotesCommentRow> = [
   {
     title: '所在小记',
     key: 'timeNotesTitle',
-    width: 160,
+    minWidth: 160,
     render: (row) =>
       h(
         'a',

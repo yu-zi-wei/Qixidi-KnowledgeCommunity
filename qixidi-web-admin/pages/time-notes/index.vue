@@ -158,7 +158,7 @@ const columns: DataTableColumns<TimeNotesRow> = [
   {
     title: '作者',
     key: 'nickname',
-    width: 130,
+    minWidth: 130,
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname, size: 24 }),

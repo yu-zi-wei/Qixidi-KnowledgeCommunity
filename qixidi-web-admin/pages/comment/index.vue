@@ -164,7 +164,7 @@ const columns: DataTableColumns<CommentRow> = [
   {
     title: '评论人',
     key: 'commentName',
-    width: 130,
+    minWidth: 130,
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.commentAvatar, name: row.commentName, size: 24 }),
@@ -174,7 +174,7 @@ const columns: DataTableColumns<CommentRow> = [
   {
     title: '所在文章',
     key: 'articleName',
-    width: 160,
+    minWidth: 160,
     render: (row) =>
       h(
         'a',

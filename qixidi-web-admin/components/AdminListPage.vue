@@ -223,18 +223,22 @@ const tableColumns = computed<DataTableColumns<any>>(() => {
   return [...cols, ...props.columns];
 });
 
-/** 默认横向滚动宽度：列宽合计（含前置选择/序号列），小屏容器更窄时表格内部横向滚动而非压缩列 */
+/** 默认横向滚动宽度：列宽合计（含前置选择/序号列），小屏容器更窄时表格内部横向滚动而非压缩列。
+ *  含 minWidth 自适应列时不传——scroll-x 会把表格总宽钉死在合计值，容器更宽时 minWidth 列无法拉伸填满（实测留白 300px+）；
+ *  此时小屏保护由列自身 minWidth 承担（表格容器 overflow-x 出滚动条） */
 const autoScrollX = computed<number | undefined>(() => {
   let sum = 0;
+  let hasFlex = false;
   for (const col of tableColumns.value as any[]) {
     if (col.type === 'selection') {
       sum += 50; // Naive 选择列无 width 定义，按渲染实际宽度估
       continue;
     }
+    if (typeof col.width !== 'number' && typeof col.minWidth === 'number') hasFlex = true;
     const w = col.width ?? col.minWidth;
     if (typeof w === 'number') sum += w;
   }
-  return sum > 0 ? sum : undefined;
+  return sum > 0 && !hasFlex ? sum : undefined;
 });
 
 onMounted(() => {

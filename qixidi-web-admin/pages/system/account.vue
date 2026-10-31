@@ -137,14 +137,14 @@ const operatingId = ref<number | null>(null);
 const isSuperAccount = (row: AccountRow) => row.userId === 1;
 
 const columns: DataTableColumns<AccountRow> = [
-  { title: '登录账号', key: 'userName', width: 130, ellipsis: { tooltip: true } },
-  { title: '昵称', key: 'nickName', width: 120, ellipsis: { tooltip: true }, render: (row) => row.nickName || h('span', { class: 'cell-dim' }, '—') },
-  { title: '手机号码', key: 'phonenumber', width: 130, render: (row) => row.phonenumber || h('span', { class: 'cell-dim' }, '—') },
+  { title: '登录账号', key: 'userName', minWidth: 130, ellipsis: { tooltip: true } },
+  { title: '昵称', key: 'nickName', minWidth: 120, ellipsis: { tooltip: true }, render: (row) => row.nickName || h('span', { class: 'cell-dim' }, '—') },
+  { title: '手机号码', key: 'phonenumber', minWidth: 130, render: (row) => row.phonenumber || h('span', { class: 'cell-dim' }, '—') },
   { title: '邮箱', key: 'email', minWidth: 160, ellipsis: { tooltip: true }, render: (row) => row.email || h('span', { class: 'cell-dim' }, '—') },
   {
     title: '角色',
     key: 'roles',
-    width: 150,
+    minWidth: 150,
     render: (row) =>
       row.roles?.length
         ? h('div', { class: 'account-role-tags' }, row.roles.map((r) => h(NTag, { size: 'small', bordered: false }, { default: () => r.roleName })))

@@ -171,19 +171,19 @@ const columns: DataTableColumns<DictumRow> = [
   {
     title: '分组',
     key: 'groupName',
-    width: 110,
+    minWidth: 110,
     render: (row) => row.groupName || '—'
   },
   {
     title: '专辑',
     key: 'albumName',
-    width: 110,
+    minWidth: 110,
     render: (row) => row.albumName || '—'
   },
   {
     title: '作者',
     key: 'nickname',
-    width: 130,
+    minWidth: 130,
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname, size: 24 }),

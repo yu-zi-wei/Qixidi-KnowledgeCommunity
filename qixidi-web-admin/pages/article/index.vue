@@ -227,7 +227,7 @@ const columns: DataTableColumns<ArticleRow> = [
   {
     title: '作者',
     key: 'nickname',
-    width: 130,
+    minWidth: 130,
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname || row.username, size: 24 }),
@@ -237,7 +237,7 @@ const columns: DataTableColumns<ArticleRow> = [
   {
     title: '分类',
     key: 'groupingName',
-    width: 110,
+    minWidth: 110,
     ellipsis: { tooltip: true },
     render: (row) => row.groupingName || '未分类'
   },

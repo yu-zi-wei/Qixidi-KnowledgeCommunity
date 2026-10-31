@@ -195,7 +195,7 @@ const columns: DataTableColumns<BlackListRow> = [
   {
     title: '归属地',
     key: 'homePlace',
-    width: 150,
+    minWidth: 150,
     ellipsis: { tooltip: true },
     render: (row) => row.homePlace || '—'
   },
