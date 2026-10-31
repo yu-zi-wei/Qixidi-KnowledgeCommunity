@@ -98,9 +98,9 @@
     white-space: nowrap;
   }
 
-  // 标题可点击态（打开详情）：交互点缀蓝 + hover 下划线（--cell-link 由布局根按主题注入，与 app.vue primaryColor 同源）
+  // 标题可点击态（打开详情）：交互点缀墨绿 + hover 下划线（--cell-link 由布局根按主题注入，与 app.vue primaryColor 同源）
   .cell-article-name.is-link {
-    color: var(--cell-link, #2d63d6);
+    color: var(--cell-link, #3D7A5C);
     cursor: pointer;
 
     &:hover {

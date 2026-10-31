@@ -59,7 +59,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
-- **视觉体系（2026-10-31 极简书签风定版，取代 10-30 高级风）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏 #F3F1EA，区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 细边框 + `--panel-shadow` 轻投影浮起感，圆角 10px）；蓝只做交互点缀（深 `#6c87f6` / 浅 `#2d63d6`，非 Naive 上下文用布局根注入的 `--cell-link` 变量）；全局 6px 暖灰细滚动条（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式保留黑白灰骨架（纸片 #1a1a1e），投影/滚动条变量随主题切换
+- **视觉体系（2026-10-31 极简书签风定版，取代 10-30 高级风）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏 #F3F1EA，区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 细边框 + `--panel-shadow` 轻投影浮起感，圆角 10px）；墨绿（纸墨意象，冷暖互补）只做交互点缀（浅 `#3D7A5C` / 深 `#6FBF9A`，非 Naive 上下文用布局根注入的 `--cell-link` 变量，与 app.vue primaryColor 同源）；全局 6px 暖灰细滚动条（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式保留黑白灰骨架（纸片 #1a1a1e），投影/滚动条变量随主题切换
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
 - 评论/用户页仍是旧行卡片模式（AdminPageHeader+AdminRowCard），**待迁移到 AdminListPage 后两个旧组件即废弃**
 

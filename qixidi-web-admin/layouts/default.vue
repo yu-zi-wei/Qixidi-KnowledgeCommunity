@@ -112,7 +112,7 @@ const handleUserAction = (key: string) => {
    与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度）。
    书签风浅色：侧栏 #F3F1EA 分层、纸片 #FFFFFF + 暖灰 hairline */
 .theme-dark {
-  --cell-link: #6c87f6;
+  --cell-link: #6FBF9A;
   --hairline: rgba(255, 255, 255, 0.08);
   --sider-bg: #0b0b0d;
   --panel-bg: #1a1a1e;
@@ -122,7 +122,7 @@ const handleUserAction = (key: string) => {
 }
 
 .theme-light {
-  --cell-link: #2d63d6;
+  --cell-link: #3D7A5C;
   --hairline: #E8E4D9;
   --sider-bg: #F3F1EA;
   --panel-bg: #ffffff;

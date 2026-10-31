@@ -20,16 +20,16 @@ const THEME_KEY = 'admin-theme';
 /**
  * 极简书签风（2026-10-31 定版）：暖纸底色系——内容区 #FAF9F6、侧栏 #F3F1EA
  * （布局根注入 --sider-bg），区块是白纸片卡片（细暖灰边框、无阴影）；
- * 蓝色只做交互点缀（链接/选中态/焦点/唯一主按钮）。深色模式保留黑白灰骨架。
- * 非 Naive 上下文的硬编码色（admin-table.scss 的 .is-link 等）用布局根注入的
- * --cell-link / --hairline 变量，与此处 primaryColor 保持同源。
+ * 墨绿（纸墨意象）只做交互点缀（链接/选中态/焦点/唯一主按钮），与暖纸底冷暖互补。
+ * 深色模式保留黑白灰骨架。非 Naive 上下文的硬编码色（admin-table.scss 的 .is-link 等）
+ * 用布局根注入的 --cell-link / --hairline 变量，与此处 primaryColor 保持同源。
  */
 const lightOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#2d63d6',
-    primaryColorHover: '#4d7fe8',
-    primaryColorPressed: '#2350ae',
-    primaryColorSuppl: '#2d63d6',
+    primaryColor: '#3D7A5C',
+    primaryColorHover: '#4A9070',
+    primaryColorPressed: '#31624A',
+    primaryColorSuppl: '#3D7A5C',
     bodyColor: '#FAF9F6',
     cardColor: '#ffffff',
     borderColor: '#E8E4D9',
@@ -53,10 +53,10 @@ const lightOverrides: GlobalThemeOverrides = {
 
 const darkOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#6c87f6',
-    primaryColorHover: '#84a1f9',
-    primaryColorPressed: '#5570e0',
-    primaryColorSuppl: '#6c87f6',
+    primaryColor: '#6FBF9A',
+    primaryColorHover: '#86D0AF',
+    primaryColorPressed: '#58A57F',
+    primaryColorSuppl: '#6FBF9A',
     bodyColor: '#111113',
     cardColor: '#1a1a1e',
     modalColor: '#1e1e24',
