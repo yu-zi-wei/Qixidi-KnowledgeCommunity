@@ -58,7 +58,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
-- **视觉体系（2026-10-30 高级风定版）**：深色默认（仅显式 light 才浅色，app.vue）；近无彩色系——黑白灰骨架，蓝只做交互点缀（深 `#6c87f6` / 浅 `#2d63d6`，非 Naive 上下文用布局根注入的 `--cell-link`/`--hairline` 变量）；**去卡片化**——AdminListPage 搜索区/表格透明坐底色、hairline 分隔，不再套 n-card；底色分层：内容区 bodyColor（深 `#111113`/浅 `#f7f7f8`）+ 侧栏更深一档（深 `#0b0b0d`/浅 `#fafafa`）
+- **视觉体系（2026-10-31 极简书签风定版，取代 10-30 高级风）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏 #F3F1EA，区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 细边框 + `--panel-shadow` 轻投影浮起感，圆角 10px）；蓝只做交互点缀（深 `#6c87f6` / 浅 `#2d63d6`，非 Naive 上下文用布局根注入的 `--cell-link` 变量）；全局 6px 暖灰细滚动条（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式保留黑白灰骨架（纸片 #1a1a1e），投影/滚动条变量随主题切换
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
 - 评论/用户页仍是旧行卡片模式（AdminPageHeader+AdminRowCard），**待迁移到 AdminListPage 后两个旧组件即废弃**
 
@@ -66,7 +66,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 
 | 组件 | 用途 | 关键 props / slots |
 |------|------|-----------|
-| **AdminListPage** | **通用列表页骨架（搜索+表格+分页+零滚动）** | `{searchFields, columns, fetch, rowKey?, seq?, selectable?, scrollX?}` + `#toolbar-left/#toolbar-right`，defineExpose `refresh/reload` |
+| **AdminListPage** | **通用列表页骨架（搜索+表格+分页+零滚动）** | `{searchFields, columns, fetch, rowKey?, seq?, selectable?, scrollX?}`（scrollX 缺省自动按列宽合计，小屏表格内横向滚动）+ `#toolbar-left/#toolbar-right`，defineExpose `refresh/reload` |
 | **AdminBreadcrumb** | 顶栏面包屑（自动按路由生成） | 无 props，数据源 useAdminMenu |
 | AdminStateTag | 状态标签（圆点+文字） | `{value, map: Record<状态值, {label, type}>}` |
 | AdminAvatar | 头像/封面（裂图兜底首字） | `{src?, name?, size: number|[w,h], shape?: 'circle'|'square'}` |
