@@ -51,7 +51,7 @@ public class TimeNotesAdminController {
      * 删除小记（逻辑删 + 相册清理）
      */
     @SaCheckPermission("timeNotes:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除小记", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         timeNotesService.deleteByIds(Arrays.asList(ids));

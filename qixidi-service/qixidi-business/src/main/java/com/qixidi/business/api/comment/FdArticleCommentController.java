@@ -42,7 +42,7 @@ public class FdArticleCommentController {
     /**
      * 新增文章评论
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/article/comment/insert")
     public Long add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
@@ -52,7 +52,7 @@ public class FdArticleCommentController {
     /**
      * 删除文章评论
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除文章评论", businessType = BusinessType.DELETE)
     @PostMapping("/article/delete/comment")
     public void remove(@RequestBody ArticleCommentBo bo) {
         iArticleCommentService.deleteWithValidById(bo);

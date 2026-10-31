@@ -53,7 +53,7 @@ public class ToShieldWordController {
      * 导出屏蔽词库列表
      */
     @SaCheckPermission("shield:shieldWord:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出屏蔽词", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToShieldWordBo bo, HttpServletResponse response) {
         List<ToShieldWordVo> list = iToShieldWordService.queryList(bo);
@@ -73,7 +73,7 @@ public class ToShieldWordController {
      * 新增屏蔽词库
      */
     @SaCheckPermission("shield:shieldWord:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增屏蔽词", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody ToShieldWordBo bo) {
@@ -84,7 +84,7 @@ public class ToShieldWordController {
      * 修改屏蔽池库
      */
     @SaCheckPermission("shield:shieldWord:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改屏蔽词", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ToShieldWordBo bo) {
@@ -95,7 +95,7 @@ public class ToShieldWordController {
      * 删除屏蔽词库
      */
     @SaCheckPermission("shield:shieldWord:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除屏蔽词", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iToShieldWordService.deleteWithValidByIds(Arrays.asList(ids), true);

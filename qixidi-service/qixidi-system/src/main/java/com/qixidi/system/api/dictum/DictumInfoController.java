@@ -51,7 +51,7 @@ public class DictumInfoController {
      * 导出名言信息列表
      */
     @SaCheckPermission("dictum:info:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出名言信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumInfoBo bo, HttpServletResponse response) {
         List<DictumInfoVo> list = iDictumInfoService.queryList(bo);
@@ -71,7 +71,7 @@ public class DictumInfoController {
      * 新增名言信息
      */
     @SaCheckPermission("dictum:info:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
@@ -82,7 +82,7 @@ public class DictumInfoController {
      * 修改名言信息
      */
     @SaCheckPermission("dictum:info:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改名言信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
@@ -93,7 +93,7 @@ public class DictumInfoController {
      * 删除名言信息
      */
     @SaCheckPermission("dictum:info:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iDictumInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

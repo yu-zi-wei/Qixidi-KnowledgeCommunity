@@ -98,7 +98,7 @@ public class FdNewsController {
     /**
      * 新增消息
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增用户消息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody NewsUserInfoBo bo) {
@@ -108,7 +108,7 @@ public class FdNewsController {
     /**
      * 消息已读
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改用户消息", businessType = BusinessType.UPDATE)
     @PostMapping("/news-read")
     public void newsRead(@RequestBody NewsUserRecord bo) {
         iNewsUserInfoService.newsRead(bo);
@@ -117,7 +117,7 @@ public class FdNewsController {
     /**
      * 删除消息
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除用户消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iNewsUserInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

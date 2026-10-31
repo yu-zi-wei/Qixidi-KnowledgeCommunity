@@ -30,7 +30,7 @@ public class FdFabulousRecordController {
     /**
      * 点赞
      */
-    @Log(title = "点赞", businessType = BusinessType.INSERT)
+    @Log(title = "点赞文章", businessType = BusinessType.INSERT)
     @PostMapping("/spot")
     public Integer spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
         iFabulousRecordService.spotFabulous(bo);

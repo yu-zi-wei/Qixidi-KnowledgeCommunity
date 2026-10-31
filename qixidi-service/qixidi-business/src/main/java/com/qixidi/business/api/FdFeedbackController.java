@@ -65,7 +65,7 @@ public class FdFeedbackController {
     /**
      * 新增用户反馈
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/add")
     public void add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
@@ -75,7 +75,7 @@ public class FdFeedbackController {
     /**
      * 更新用户反馈
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/update")
     public void update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {

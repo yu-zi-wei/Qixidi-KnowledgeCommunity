@@ -49,7 +49,7 @@ public class PrivateUserController {
     /**
      * 导出私信记录列表
      */
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出私信记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated PrivateUserBo bo, HttpServletResponse response) {
         List<PrivateUserVo> list = iPrivateUserService.queryList(bo);
@@ -67,7 +67,7 @@ public class PrivateUserController {
     /**
      * 新增私信记录
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增私信记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody PrivateUserBo bo) {
@@ -77,7 +77,7 @@ public class PrivateUserController {
     /**
      * 修改私信记录
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改私信记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody PrivateUserBo bo) {
@@ -88,7 +88,7 @@ public class PrivateUserController {
      * 删除私信记录
      */
     @SaCheckPermission("private:user:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除私信记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iPrivateUserService.deleteWithValidByIds(Arrays.asList(ids), true);

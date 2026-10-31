@@ -52,7 +52,7 @@ public class FdDictumInfoController {
     /**
      * 新增名言信息
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
@@ -66,7 +66,7 @@ public class FdDictumInfoController {
     /**
      * 批量新增名言信息（一次发布多条，分类/作者等元信息共享）
      */
-    @Log(title = "批量新增", businessType = BusinessType.INSERT)
+    @Log(title = "批量新增名言信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/batch")
     public void addBatch(@Validated(AddGroup.class) @RequestBody DictumBatchBo bo) {
@@ -76,7 +76,7 @@ public class FdDictumInfoController {
     /**
      * 修改名言信息
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改名言信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
@@ -86,7 +86,7 @@ public class FdDictumInfoController {
     /**
      * 删除名言信息
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}/{groupId}")
     public void remove(@PathVariable Long id, @PathVariable Long groupId) {
         iDictumInfoService.deleteWithValidById(id, groupId);

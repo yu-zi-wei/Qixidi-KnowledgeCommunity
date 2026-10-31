@@ -49,7 +49,7 @@ public class SysBlackListAdminController {
      * 手动加黑（ip 与 uid 至少一项；归属地按 ip 反查）
      */
     @SaCheckPermission("blackList:add")
-    @Log(title = "加黑", businessType = BusinessType.INSERT)
+    @Log(title = "加黑IP", businessType = BusinessType.INSERT)
     @RepeatSubmit
     @PostMapping
     public void add(@RequestBody SysBlackListBo bo) {
@@ -70,7 +70,7 @@ public class SysBlackListAdminController {
      * 批量移出黑名单
      */
     @SaCheckPermission("blackList:remove")
-    @Log(title = "移出", businessType = BusinessType.DELETE)
+    @Log(title = "移出IP黑名单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         if (blackListService.deleteByIds(Arrays.asList(ids)) <= 0) {

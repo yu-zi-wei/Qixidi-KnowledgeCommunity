@@ -51,7 +51,7 @@ public class UserOrderController {
      * 导出用户订单列表
      */
     @SaCheckPermission("order:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出用户订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated UserOrderBo bo, HttpServletResponse response) {
         List<UserOrderVo> list = iUserOrderService.queryList(bo);
@@ -71,7 +71,7 @@ public class UserOrderController {
      * 新增用户订单
      */
     @SaCheckPermission("order:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增用户订单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody UserOrderBo bo) {
@@ -82,7 +82,7 @@ public class UserOrderController {
      * 修改用户订单
      */
     @SaCheckPermission("order:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改用户订单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody UserOrderBo bo) {
@@ -93,7 +93,7 @@ public class UserOrderController {
      * 删除用户订单
      */
     @SaCheckPermission("order:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除用户订单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iUserOrderService.deleteWithValidByIds(Arrays.asList(ids), true);

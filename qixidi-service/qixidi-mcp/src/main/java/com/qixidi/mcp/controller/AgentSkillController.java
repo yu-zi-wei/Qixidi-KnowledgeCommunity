@@ -31,7 +31,7 @@ public class AgentSkillController {
 
     private final AgentSkillService agentSkillService;
 
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增agent skill", businessType = BusinessType.INSERT)
     @PostMapping
     public AgentSkill create(@Validated @RequestBody AgentSkillBo bo) {
         TripartiteUser user = requireCreator();
@@ -47,14 +47,14 @@ public class AgentSkillController {
         return agentSkillService.listForUser(user.getUuid());
     }
 
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改agent skill", businessType = BusinessType.UPDATE)
     @PutMapping("/{id}")
     public void update(@PathVariable Long id, @Validated @RequestBody AgentSkillBo bo) {
         TripartiteUser user = requireCreator();
         agentSkillService.updateForUser(id, user.getUuid(), bo);
     }
 
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除agent skill", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         TripartiteUser user = requireCreator();

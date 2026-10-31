@@ -50,7 +50,7 @@ public class ArticleCommentController {
      * 导出文章评论列表
      */
     @SaCheckPermission("article:comment:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出文章评论", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ArticleCommentBo bo, HttpServletResponse response) {
         List<ArticleCommentVo> list = iArticleCommentService.queryList(bo);
@@ -77,7 +77,7 @@ public class ArticleCommentController {
      * @throws Exception
      */
     @SaCheckPermission("article:comment:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public Long add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
@@ -91,7 +91,7 @@ public class ArticleCommentController {
      * @return
      */
     @SaCheckPermission("article:comment:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改文章评论", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ArticleCommentBo bo) {
@@ -104,7 +104,7 @@ public class ArticleCommentController {
      * @param ids
      * @return
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除文章评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iArticleCommentService.deleteWithValidByIds(Arrays.asList(ids), true);

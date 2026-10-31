@@ -51,7 +51,7 @@ public class BrowsingHistoryController {
      * 导出用户浏览历史列表
      */
     @SaCheckPermission("browsing:history:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出用户浏览历史", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated BrowsingHistoryBo bo, HttpServletResponse response) {
         List<BrowsingHistoryVo> list = iBrowsingHistoryService.queryList(bo);
@@ -71,7 +71,7 @@ public class BrowsingHistoryController {
      * 新增用户浏览历史
      */
     @SaCheckPermission("browsing:history:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增用户浏览历史", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody BrowsingHistoryBo bo) {
@@ -82,7 +82,7 @@ public class BrowsingHistoryController {
      * 修改用户浏览历史
      */
     @SaCheckPermission("browsing:history:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改用户浏览历史", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody BrowsingHistoryBo bo) {
@@ -93,7 +93,7 @@ public class BrowsingHistoryController {
      * 删除用户浏览历史
      */
     @SaCheckPermission("browsing:history:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除用户浏览历史", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iBrowsingHistoryService.deleteWithValidByIds(Arrays.asList(ids), true);

@@ -51,7 +51,7 @@ public class SysOperlogController {
      * @param operLog
      * @param response
      */
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出操作日志", businessType = BusinessType.EXPORT)
     @SaCheckPermission("monitor:operlog:export")
     @PostMapping("/export")
     public void export(SysOperLog operLog, HttpServletResponse response) {
@@ -65,7 +65,7 @@ public class SysOperlogController {
      * @param operIds
      * @return
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除操作日志", businessType = BusinessType.DELETE)
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/{operIds}")
     public void remove(@PathVariable Long[] operIds) {
@@ -79,7 +79,7 @@ public class SysOperlogController {
      *
      * @return
      */
-    @Log(title = "清空", businessType = BusinessType.CLEAN)
+    @Log(title = "清空操作日志", businessType = BusinessType.CLEAN)
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/clean")
     public void clean() {

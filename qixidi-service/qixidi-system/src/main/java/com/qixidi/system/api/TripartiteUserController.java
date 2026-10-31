@@ -50,7 +50,7 @@ public class TripartiteUserController {
      * 导出平台用户列表
      */
     @SaCheckPermission("tripartiteUser:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出平台用户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated TripartiteUserBo bo, HttpServletResponse response) {
         List<TripartiteUserVo> list = iTripartiteUserService.queryList(bo);
@@ -70,7 +70,7 @@ public class TripartiteUserController {
      * 修改平台用户
      */
     @SaCheckPermission("tripartiteUser:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改平台用户", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody TripartiteUserBo bo) {

@@ -55,7 +55,7 @@ public class FdDictumAlbumController {
     /**
      * 新增名言专辑
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增名言专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public Long add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -66,7 +66,7 @@ public class FdDictumAlbumController {
     /**
      * 修改名言专辑
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改名言专辑", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -76,7 +76,7 @@ public class FdDictumAlbumController {
     /**
      * 删除名言专辑
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除名言专辑", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public void remove(@PathVariable Long id) throws Exception {
         if (!iDictumAlbumService.deleteWithValidById(id)) throw new ServiceException("删除名言失败");

@@ -43,7 +43,7 @@ public class FdPrivateNewsInfoController {
     /**
      * 新增私信记录
      */
-    @Log(title = "发送", businessType = BusinessType.INSERT)
+    @Log(title = "发送私信", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
@@ -63,7 +63,7 @@ public class FdPrivateNewsInfoController {
     /**
      * 删除私信记录
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除私信记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

@@ -31,7 +31,7 @@ public class UserFollowController {
     /**
      * 新增关注
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增关注", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/add")
     public Integer add(@Validated(AddGroup.class) @RequestBody UserFollowBo bo) {

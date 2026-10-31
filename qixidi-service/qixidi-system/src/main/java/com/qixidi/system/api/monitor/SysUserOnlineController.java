@@ -73,7 +73,7 @@ public class SysUserOnlineController {
      * 强退用户
      */
     @SaCheckPermission("monitor:online:forceLogout")
-    @Log(title = "强退", businessType = BusinessType.FORCE)
+    @Log(title = "强退在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")
     public void forceLogout(@PathVariable String tokenId) {
         try {

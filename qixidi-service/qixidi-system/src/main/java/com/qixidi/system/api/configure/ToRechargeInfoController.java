@@ -51,7 +51,7 @@ public class ToRechargeInfoController {
      * 导出充值信息列表
      */
     @SaCheckPermission("rechargeInfo:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出充值信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToRechargeInfoBo bo, HttpServletResponse response) {
         List<ToRechargeInfoVo> list = iToRechargeInfoService.queryList(bo);
@@ -71,7 +71,7 @@ public class ToRechargeInfoController {
      * 新增充值信息
      */
     @SaCheckPermission("rechargeInfo:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增充值信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody ToRechargeInfoBo bo) {
@@ -82,7 +82,7 @@ public class ToRechargeInfoController {
      * 修改充值信息
      */
     @SaCheckPermission("rechargeInfo:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改充值信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ToRechargeInfoBo bo) {
@@ -93,7 +93,7 @@ public class ToRechargeInfoController {
      * 删除充值信息
      */
     @SaCheckPermission("rechargeInfo:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除充值信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iToRechargeInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

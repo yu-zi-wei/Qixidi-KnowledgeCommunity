@@ -51,7 +51,7 @@ public class DictumGroupController {
      * 导出名言分组列表
      */
     @SaCheckPermission("dictum:group:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出名言分组", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumGroupBo bo, HttpServletResponse response) {
         List<DictumGroupVo> list = iDictumGroupService.queryList(bo);
@@ -71,7 +71,7 @@ public class DictumGroupController {
      * 新增名言分组
      */
     @SaCheckPermission("dictum:group:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增名言分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
@@ -82,7 +82,7 @@ public class DictumGroupController {
      * 修改名言分组
      */
     @SaCheckPermission("dictum:group:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改名言分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
@@ -93,7 +93,7 @@ public class DictumGroupController {
      * 删除名言分组
      */
     @SaCheckPermission("dictum:group:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除名言分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true);

@@ -41,7 +41,7 @@ public class FdDictumGroupController {
     /**
      * 新增名言分组
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增名言分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
@@ -51,7 +51,7 @@ public class FdDictumGroupController {
     /**
      * 修改名言分组
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改名言分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
@@ -61,7 +61,7 @@ public class FdDictumGroupController {
     /**
      * 删除名言分组
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除名言分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         if (!iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true))

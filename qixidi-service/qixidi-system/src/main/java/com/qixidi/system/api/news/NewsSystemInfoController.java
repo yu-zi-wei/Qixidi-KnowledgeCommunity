@@ -51,7 +51,7 @@ public class NewsSystemInfoController {
      * 导出系统消息列表
      */
     @SaCheckPermission("news:systemInfo:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出系统消息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated NewsSystemInfoBo bo, HttpServletResponse response) {
         List<NewsSystemInfoVo> list = iNewsSystemInfoService.queryList(bo);
@@ -71,7 +71,7 @@ public class NewsSystemInfoController {
      * 新增系统消息
      */
     @SaCheckPermission("news:systemInfo:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增系统消息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody NewsSystemInfoBo bo) {
@@ -82,7 +82,7 @@ public class NewsSystemInfoController {
      * 修改系统消息
      */
     @SaCheckPermission("news:systemInfo:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改系统消息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody NewsSystemInfoBo bo) {
@@ -93,7 +93,7 @@ public class NewsSystemInfoController {
      * 删除系统消息
      */
     @SaCheckPermission("news:systemInfo:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除系统消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iNewsSystemInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

@@ -52,7 +52,7 @@ public class CollectionInformationController {
      * 导出收藏夹信息列表
      */
     @SaCheckPermission("collection:information:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出收藏夹信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated CollectionInformationBo bo, HttpServletResponse response) {
         List<CollectionInformationVo> list = iCollectionInformationService.queryList(bo);
@@ -71,7 +71,7 @@ public class CollectionInformationController {
     /**
      * 新增收藏夹信息
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增收藏夹信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
@@ -84,7 +84,7 @@ public class CollectionInformationController {
      * @param bo
      * @return
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改收藏夹信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody CollectionInformationBo bo) {
@@ -97,7 +97,7 @@ public class CollectionInformationController {
      * @param ids
      * @return
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除收藏夹信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iCollectionInformationService.deleteWithValidByIds(Arrays.asList(ids), true);

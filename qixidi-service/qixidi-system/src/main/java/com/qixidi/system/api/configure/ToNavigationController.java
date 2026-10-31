@@ -50,7 +50,7 @@ public class ToNavigationController {
      * 导出导航栏配置列表
      */
     @SaCheckPermission("navigation:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出导航栏配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToNavigationBo bo, HttpServletResponse response) {
         List<ToNavigationVo> list = iToNavigationService.queryList(bo);
@@ -70,7 +70,7 @@ public class ToNavigationController {
      * 新增导航栏配置
      */
     @SaCheckPermission("navigation:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增导航栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody ToNavigationBo bo) {
@@ -81,7 +81,7 @@ public class ToNavigationController {
      * 修改导航栏配置
      */
     @SaCheckPermission("navigation:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改导航栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ToNavigationBo bo) {
@@ -92,7 +92,7 @@ public class ToNavigationController {
      * 删除导航栏配置
      */
     @SaCheckPermission("navigation:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除导航栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iToNavigationService.deleteWithValidByIds(Arrays.asList(ids), true);

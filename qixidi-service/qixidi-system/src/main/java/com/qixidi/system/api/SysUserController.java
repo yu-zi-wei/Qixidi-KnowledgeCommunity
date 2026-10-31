@@ -71,7 +71,7 @@ public class SysUserController {
      * 新增用户
      */
     @SaCheckPermission("user:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增用户", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysUser user) {
         if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName()))) {
@@ -91,7 +91,7 @@ public class SysUserController {
      * 修改用户
      */
     @SaCheckPermission("user:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改用户", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysUser user) {
         userService.checkUserAllowed(user);
@@ -109,7 +109,7 @@ public class SysUserController {
      * 删除用户
      */
     @SaCheckPermission("user:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除用户", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
     public void remove(@PathVariable Long[] userIds) {
         if (ArrayUtil.contains(userIds, LoginHelper.getUserId())) {
@@ -122,7 +122,7 @@ public class SysUserController {
      * 重置密码
      */
     @SaCheckPermission("user:resetPwd")
-    @Log(title = "重置密码", businessType = BusinessType.UPDATE)
+    @Log(title = "重置用户密码", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
     public void resetPwd(@RequestBody SysUser user) {
         userService.checkUserAllowed(user);
@@ -134,7 +134,7 @@ public class SysUserController {
      * 状态修改
      */
     @SaCheckPermission("user:edit")
-    @Log(title = "修改状态", businessType = BusinessType.UPDATE)
+    @Log(title = "修改用户状态", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public void changeStatus(@RequestBody SysUser user) {
         userService.checkUserAllowed(user);
@@ -159,7 +159,7 @@ public class SysUserController {
      * 用户授权角色
      */
     @SaCheckPermission("user:edit")
-    @Log(title = "授权", businessType = BusinessType.GRANT)
+    @Log(title = "授权用户", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")
     public void insertAuthRole(Long userId, Long[] roleIds) {
         userService.insertUserAuth(userId, roleIds);

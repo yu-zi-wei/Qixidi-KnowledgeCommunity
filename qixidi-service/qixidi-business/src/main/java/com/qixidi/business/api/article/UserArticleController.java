@@ -38,7 +38,7 @@ public class UserArticleController {
     /**
      * 新增文章信息
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增文章信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/insert/article")
     public ArticleInformationVo add(@Validated(AddGroup.class) @RequestBody ArticleInformationBo bo) {
@@ -56,7 +56,7 @@ public class UserArticleController {
     /**
      * 更新文章信息
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改文章信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/article")
     public ArticleInformationVo edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {

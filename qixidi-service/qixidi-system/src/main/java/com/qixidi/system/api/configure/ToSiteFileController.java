@@ -51,7 +51,7 @@ public class ToSiteFileController {
      * 导出网站文档列表
      */
     @SaCheckPermission("site:siteFile:export")
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出网站文档", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToSiteFileBo bo, HttpServletResponse response) {
         List<ToSiteFileVo> list = iToSiteFileService.queryList(bo);
@@ -71,7 +71,7 @@ public class ToSiteFileController {
      * 新增网站文档
      */
     @SaCheckPermission("site:siteFile:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增网站文档", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody ToSiteFileBo bo) {
@@ -82,7 +82,7 @@ public class ToSiteFileController {
      * 修改网站文档
      */
     @SaCheckPermission("site:siteFile:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改网站文档", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ToSiteFileBo bo) {
@@ -93,7 +93,7 @@ public class ToSiteFileController {
      * 删除网站文档
      */
     @SaCheckPermission("site:siteFile:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除网站文档", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iToSiteFileService.deleteWithValidByIds(Arrays.asList(ids), true);

@@ -86,7 +86,7 @@ public class CollectionFdkController {
     /**
      * 新增收藏夹信息
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增收藏夹", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/add/collection")
     public void addCollection(@Validated(AddGroup.class) @RequestBody CollectionInformationBo bo) {
@@ -96,7 +96,7 @@ public class CollectionFdkController {
     /**
      * 删除收藏夹信息
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除收藏夹", businessType = BusinessType.DELETE)
     @DeleteMapping("/frontDesk/delete/collection/{id}")
     public void removeCollection(@PathVariable Long id) {
         iCollectionInformationService.removeCollection(id);
@@ -108,7 +108,7 @@ public class CollectionFdkController {
      * @param bo
      * @return
      */
-    @Log(title = "添加文章", businessType = BusinessType.INSERT)
+    @Log(title = "添加收藏夹文章", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/add/collection/data")
     public void collectionArticle(@Validated(AddGroup.class) @RequestBody CollectionRecordBo bo) {
@@ -121,7 +121,7 @@ public class CollectionFdkController {
      * @param bo
      * @return
      */
-    @Log(title = "转移文章", businessType = BusinessType.INSERT)
+    @Log(title = "转移收藏夹文章", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PutMapping("/frontDesk/update/collection/data")
     public void collectionUpdate(@RequestBody CollectionRecordBo bo) {
@@ -134,7 +134,7 @@ public class CollectionFdkController {
      * @param articleId
      * @return
      */
-    @Log(title = "移除文章", businessType = BusinessType.INSERT)
+    @Log(title = "移除收藏夹文章", businessType = BusinessType.INSERT)
     @GetMapping("/frontDesk/delete/collection/data/{articleId}")
     public void deleteCollectionArticle(@PathVariable("articleId") Long articleId) {
         iCollectionInformationService.deleteCollectionArticle(articleId);

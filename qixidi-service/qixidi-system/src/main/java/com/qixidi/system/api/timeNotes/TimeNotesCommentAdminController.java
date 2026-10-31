@@ -41,7 +41,7 @@ public class TimeNotesCommentAdminController {
      * 批量删除小记评论（软删 + 通知记录清理）
      */
     @SaCheckPermission("timeNotes:comment:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除小记评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         timeNotesCommentService.adminDelete(Arrays.asList(ids));

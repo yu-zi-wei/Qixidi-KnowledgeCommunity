@@ -48,7 +48,7 @@ public class SysConfigController {
      * @param config
      * @param response
      */
-    @Log(title = "导出", businessType = BusinessType.EXPORT)
+    @Log(title = "导出参数", businessType = BusinessType.EXPORT)
     @SaCheckPermission("config:export")
     @PostMapping("/export")
     public void export(SysConfig config, HttpServletResponse response) {
@@ -77,7 +77,7 @@ public class SysConfigController {
      * 新增参数配置
      */
     @SaCheckPermission("config:add")
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增参数", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
@@ -90,7 +90,7 @@ public class SysConfigController {
      * 修改参数配置
      */
     @SaCheckPermission("config:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改参数", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
@@ -103,7 +103,7 @@ public class SysConfigController {
      * 根据参数键名修改参数配置
      */
     @SaCheckPermission("config:edit")
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改参数", businessType = BusinessType.UPDATE)
     @PutMapping("/updateByKey")
     public void updateByKey(@RequestBody SysConfig config) {
         configService.updateConfig(config);
@@ -113,7 +113,7 @@ public class SysConfigController {
      * 删除参数配置
      */
     @SaCheckPermission("config:remove")
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除参数", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
     public void remove(@PathVariable Long[] configIds) {
         configService.deleteConfigByIds(configIds);
@@ -123,7 +123,7 @@ public class SysConfigController {
      * 刷新参数缓存
      */
     @SaCheckPermission("config:remove")
-    @Log(title = "清空", businessType = BusinessType.CLEAN)
+    @Log(title = "清空参数", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
     public void refreshCache() {
         configService.resetConfigCache();

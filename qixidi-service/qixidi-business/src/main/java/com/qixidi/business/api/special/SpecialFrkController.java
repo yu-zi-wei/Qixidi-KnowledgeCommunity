@@ -52,7 +52,7 @@ public class SpecialFrkController {
     /**
      * 新增专栏信息（写文章页发布设置内创建）
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增专栏信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/aut/special")
     public Long add(@Validated(AddGroup.class) @RequestBody SpecialInformationBo bo) {

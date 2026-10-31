@@ -36,7 +36,7 @@ public class AgentApiKeyController {
     /**
      * 创建 API key，明文仅本次响应返回一次
      */
-    @Log(title = "新增", businessType = BusinessType.INSERT)
+    @Log(title = "新增agent API key", businessType = BusinessType.INSERT)
     @PostMapping
     public Map<String, String> create(@Validated @RequestBody AgentKeyBo bo) {
         TripartiteUser user = requireCreator();
@@ -58,7 +58,7 @@ public class AgentApiKeyController {
     /**
      * 改名（启停预留，当前吊销即删行）
      */
-    @Log(title = "修改", businessType = BusinessType.UPDATE)
+    @Log(title = "修改agent API key", businessType = BusinessType.UPDATE)
     @PutMapping("/{id}")
     public void rename(@PathVariable Long id, @Validated @RequestBody AgentKeyBo bo) {
         TripartiteUser user = requireCreator();
@@ -68,7 +68,7 @@ public class AgentApiKeyController {
     /**
      * 吊销（删行 + Sa-Token 会话登出，之后该 key 调 MCP 立即 401）
      */
-    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @Log(title = "删除agent API key", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public void revoke(@PathVariable Long id) {
         TripartiteUser user = requireCreator();
