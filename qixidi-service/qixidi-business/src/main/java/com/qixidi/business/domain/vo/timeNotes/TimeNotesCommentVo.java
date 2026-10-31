@@ -20,6 +20,10 @@ public class TimeNotesCommentVo extends TimeNotesComment {
      */
     private List<TimeNotesCommentVo> children;
     /**
+     * 所在小记标题（后台列表批量填充展示字段）
+     */
+    private String timeNotesTitle;
+    /**
      * 评论用户名
      */
     private String username;

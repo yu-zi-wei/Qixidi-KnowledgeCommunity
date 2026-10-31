@@ -7,16 +7,19 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesCommentBo;
+import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.entity.timeNotes.TimeNotesComment;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.timeNotes.TimeNotesCommentVo;
+import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.timeNotes.TimeNotesCommentMapper;
@@ -58,6 +61,8 @@ public class TimeNotesCommentServiceImpl implements TimeNotesCommentService {
     private TripartiteUserMapper tripartiteUserMapper;
     @Autowired
     private NewsUserRecordMapper newsUserRecordMapper;
+    @Autowired
+    private TimeNotesMapper timeNotesMapper;
 
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
@@ -161,6 +166,55 @@ public class TimeNotesCommentServiceImpl implements TimeNotesCommentService {
             }
         }
         return TableDataInfo.build(records);
+    }
+
+    @Override
+    public TableDataInfo<TimeNotesCommentVo> adminQueryPageList(TimeNotesCommentBo bo, PageQuery pageQuery) {
+        // 后台平铺全量（一级+二级都出），不筛 status 除非显式传条件
+        IPage<TimeNotesCommentVo> page = timeNotesCommentMapper.selectVoPage(pageQuery.build(),
+            new LambdaQueryWrapper<TimeNotesComment>()
+                .eq(bo.getTimeNotesId() != null, TimeNotesComment::getTimeNotesId, bo.getTimeNotesId())
+                .like(StringUtils.isNotBlank(bo.getContent()), TimeNotesComment::getContent, bo.getContent())
+                .eq(bo.getStatus() != null, TimeNotesComment::getStatus, bo.getStatus())
+                .orderByDesc(TimeNotesComment::getCreateTime));
+        List<TimeNotesCommentVo> records = page.getRecords();
+        if (CollectionUtil.isEmpty(records)) {
+            return TableDataInfo.build(page);
+        }
+
+        // 批量填充：评论人/回复对象 + 所在小记标题（禁循环查库）
+        Set<String> uids = new HashSet<>();
+        Set<Long> noteIds = new HashSet<>();
+        for (TimeNotesCommentVo record : records) {
+            uids.add(record.getCommentUid());
+            if (record.getTargetUid() != null) uids.add(record.getTargetUid());
+            noteIds.add(record.getTimeNotesId());
+        }
+        Map<String, TripartiteUser> userMap = tripartiteUserMapper.selectList(new LambdaQueryWrapper<TripartiteUser>()
+                .in(TripartiteUser::getUuid, uids)).stream()
+            .collect(Collectors.toMap(TripartiteUser::getUuid, item -> item));
+        Map<Long, TimeNotes> noteMap = timeNotesMapper.selectBatchIds(noteIds).stream()
+            .collect(Collectors.toMap(TimeNotes::getId, item -> item));
+        for (TimeNotesCommentVo record : records) {
+            fillUserInfo(userMap.get(record.getCommentUid()), record, false);
+            fillUserInfo(userMap.get(record.getTargetUid()), record, true);
+            TimeNotes note = noteMap.get(record.getTimeNotesId());
+            if (note != null) {
+                record.setTimeNotesTitle(note.getTitle());
+            }
+        }
+        return TableDataInfo.build(page);
+    }
+
+    @Override
+    public void adminDelete(List<Long> ids) {
+        timeNotesCommentMapper.update(null, new LambdaUpdateWrapper<TimeNotesComment>()
+            .in(TimeNotesComment::getId, ids)
+            .set(TimeNotesComment::getStatus, StatusEnums.DELETE.getCode()));
+        //同步删除该评论产生的通知记录（同 delete：news_id 存评论 id，各业务评论表独立自增会撞车，必须限定 type）
+        newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+            .eq(NewsUserRecord::getType, NewsType.TIME_NOTES_COMMENT_NEWS.getCode())
+            .in(NewsUserRecord::getNewsId, ids));
     }
 
     /**

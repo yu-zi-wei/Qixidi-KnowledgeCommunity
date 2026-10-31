@@ -165,6 +165,7 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         lqw.eq(StringUtils.isNotBlank(bo.getUid()), DictumInfo::getUid, bo.getUid());
         lqw.eq(StringUtils.isNotBlank(bo.getContent()), DictumInfo::getContent, bo.getContent());
         lqw.eq(bo.getGroupId() != null, DictumInfo::getGroupId, bo.getGroupId());
+        lqw.eq(bo.getAlbumId() != null, DictumInfo::getAlbumId, bo.getAlbumId());
         lqw.eq(bo.getDictumState() != null, DictumInfo::getDictumState, bo.getDictumState());
         lqw.eq(bo.getState() != null, DictumInfo::getState, bo.getState());
         return lqw;
