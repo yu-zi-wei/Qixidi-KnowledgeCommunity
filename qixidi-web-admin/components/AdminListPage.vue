@@ -48,6 +48,7 @@
         v-model:checked-row-keys="checkedKeys"
         class="alp-table"
         flex-height
+        size="small"
         :columns="tableColumns"
         :data="rows"
         :loading="loading"
