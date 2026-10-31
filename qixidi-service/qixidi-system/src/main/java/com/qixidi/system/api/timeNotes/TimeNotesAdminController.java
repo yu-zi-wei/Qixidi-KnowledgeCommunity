@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.vo.TimeNotesAdminVo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/time/notes")
+@LogModule("小记管理")
 public class TimeNotesAdminController {
 
     private final TimeNotesService timeNotesService;
@@ -49,7 +51,7 @@ public class TimeNotesAdminController {
      * 删除小记（逻辑删 + 相册清理）
      */
     @SaCheckPermission("timeNotes:remove")
-    @Log(title = "小记管理", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         timeNotesService.deleteByIds(Arrays.asList(ids));

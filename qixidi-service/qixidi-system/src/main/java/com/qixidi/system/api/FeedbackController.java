@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.FeedbackBo;
 import com.qixidi.business.domain.vo.FeedbackVo;
 import com.qixidi.business.service.IFeedbackService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/feedback")
+@LogModule("用户反馈")
 public class FeedbackController {
 
     private final IFeedbackService IFeedbackService;
@@ -48,7 +50,7 @@ public class FeedbackController {
      * 导出用户反馈列表
      */
     @SaCheckPermission("feedback:export")
-    @Log(title = "用户反馈", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated FeedbackBo bo, HttpServletResponse response) {
         List<FeedbackVo> list = IFeedbackService.queryList(bo);
@@ -68,7 +70,7 @@ public class FeedbackController {
      * 新增用户反馈
      */
     @SaCheckPermission("feedback:add")
-    @Log(title = "用户反馈", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
@@ -79,7 +81,7 @@ public class FeedbackController {
      * 修改用户反馈
      */
     @SaCheckPermission("feedback:edit")
-    @Log(title = "用户反馈", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
@@ -90,7 +92,7 @@ public class FeedbackController {
      * 删除用户反馈
      */
     @SaCheckPermission("feedback:remove")
-    @Log(title = "用户反馈", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         IFeedbackService.deleteWithValidByIds(Arrays.asList(ids), true);

@@ -9,6 +9,7 @@ import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
+@LogModule("文章信息")
 public class UserArticleController {
 
     private final IArticleInformationService iArticleInformationService;
@@ -36,7 +38,7 @@ public class UserArticleController {
     /**
      * 新增文章信息
      */
-    @Log(title = "文章信息（新增文章信息）", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/insert/article")
     public ArticleInformationVo add(@Validated(AddGroup.class) @RequestBody ArticleInformationBo bo) {
@@ -54,7 +56,7 @@ public class UserArticleController {
     /**
      * 更新文章信息
      */
-    @Log(title = "文章信息（更新文章信息）", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/article")
     public ArticleInformationVo edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
@@ -65,7 +67,7 @@ public class UserArticleController {
     /**
      * 保存草稿
      */
-    @Log(title = "文章信息（保存草稿）", businessType = BusinessType.UPDATE)
+    @Log(title = "保存草稿", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/save/draft")
     public ArticleInformationVo saveDraft(@Validated(EditGroup.class) @RequestBody ArticleInformationTwoBo bo) {

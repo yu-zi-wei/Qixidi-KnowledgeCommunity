@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -33,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/fabulous/record")
+@LogModule("点赞")
 public class FabulousRecordController {
 
     private final IFabulousRecordService iFabulousRecordService;
@@ -50,7 +52,7 @@ public class FabulousRecordController {
      * 导出点赞列表
      */
     @SaCheckPermission("fabulous:record:export")
-    @Log(title = "点赞", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated FabulousRecordBo bo, HttpServletResponse response) {
         List<FabulousRecordVo> list = iFabulousRecordService.queryList(bo);
@@ -70,7 +72,7 @@ public class FabulousRecordController {
      * 新增点赞
      */
     @SaCheckPermission("fabulous:record:add")
-    @Log(title = "点赞", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
@@ -81,7 +83,7 @@ public class FabulousRecordController {
      * 修改点赞
      */
     @SaCheckPermission("fabulous:record:edit")
-    @Log(title = "点赞", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody FabulousRecordBo bo) {
@@ -92,7 +94,7 @@ public class FabulousRecordController {
      * 删除点赞
      */
     @SaCheckPermission("fabulous:record:remove")
-    @Log(title = "点赞", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iFabulousRecordService.deleteWithValidByIds(Arrays.asList(ids), true);

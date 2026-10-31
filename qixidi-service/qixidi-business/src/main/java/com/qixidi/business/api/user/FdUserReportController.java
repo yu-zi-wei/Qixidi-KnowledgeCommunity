@@ -4,6 +4,7 @@ import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.user.UserReportBo;
 import com.qixidi.business.service.user.IUserReportService;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/user/report")
+@LogModule("用户签到")
 public class FdUserReportController {
 
     private final IUserReportService iUserReportService;
@@ -35,7 +37,7 @@ public class FdUserReportController {
     /**
      * 新增用户签到
      */
-    @Log(title = "用户签到", businessType = BusinessType.INSERT)
+    @Log(title = "签到", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody UserReportBo bo) throws Exception {

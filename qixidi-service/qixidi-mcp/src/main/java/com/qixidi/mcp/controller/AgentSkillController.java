@@ -4,6 +4,7 @@ import com.light.core.enums.BusinessType;
 import com.light.core.enums.MsgEnums;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
@@ -25,11 +26,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/agent/skill")
+@LogModule("agent skill")
 public class AgentSkillController {
 
     private final AgentSkillService agentSkillService;
 
-    @Log(title = "agent skill", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @PostMapping
     public AgentSkill create(@Validated @RequestBody AgentSkillBo bo) {
         TripartiteUser user = requireCreator();
@@ -45,14 +47,14 @@ public class AgentSkillController {
         return agentSkillService.listForUser(user.getUuid());
     }
 
-    @Log(title = "agent skill", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @PutMapping("/{id}")
     public void update(@PathVariable Long id, @Validated @RequestBody AgentSkillBo bo) {
         TripartiteUser user = requireCreator();
         agentSkillService.updateForUser(id, user.getUuid(), bo);
     }
 
-    @Log(title = "agent skill", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         TripartiteUser user = requireCreator();

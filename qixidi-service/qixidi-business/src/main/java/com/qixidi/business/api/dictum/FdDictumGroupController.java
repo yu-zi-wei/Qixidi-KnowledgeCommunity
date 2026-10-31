@@ -7,6 +7,7 @@ import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.dictum.DictumGroupBo;
 import com.qixidi.business.domain.vo.dictum.DictumGroupVo;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/group")
+@LogModule("名言分组")
 public class FdDictumGroupController {
 
     private final IDictumGroupService iDictumGroupService;
@@ -39,7 +41,7 @@ public class FdDictumGroupController {
     /**
      * 新增名言分组
      */
-    @Log(title = "名言分组", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
@@ -49,7 +51,7 @@ public class FdDictumGroupController {
     /**
      * 修改名言分组
      */
-    @Log(title = "名言分组", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
@@ -59,7 +61,7 @@ public class FdDictumGroupController {
     /**
      * 删除名言分组
      */
-    @Log(title = "名言分组", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         if (!iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true))

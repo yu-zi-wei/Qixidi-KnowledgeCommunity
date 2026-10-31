@@ -6,6 +6,7 @@ import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserBindBo;
@@ -35,6 +36,7 @@ import java.util.Map;
 @Validated
 @RequiredArgsConstructor
 @RestController
+@LogModule("用户信息")
 public class UserWebInfoController {
 
     private final ITripartiteUserService iTripartiteUserService;
@@ -105,7 +107,7 @@ public class UserWebInfoController {
      * @param req
      * @return
      */
-    @Log(title = "用户头像", businessType = BusinessType.UPDATE)
+    @Log(title = "修改头像", businessType = BusinessType.UPDATE)
     @PostMapping("/update/user/avatar")
     public Map<String, Object> avatar(MultipartHttpServletRequest multipartHttpServletRequest, HttpServletRequest req) {
         Map<String, Object> ajax = new HashMap<>();
@@ -128,7 +130,7 @@ public class UserWebInfoController {
     /**
      * 修改用户信息
      */
-    @Log(title = "用户信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改资料", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/user/info")
     public void edit(@Validated(EditGroup.class) @RequestBody UserInfoBo bo) {
@@ -141,7 +143,7 @@ public class UserWebInfoController {
      * @param bo
      * @return
      */
-    @Log(title = "修改邮箱手机号", businessType = BusinessType.UPDATE)
+    @Log(title = "修改联系方式", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/update/user/email")
     public void bindEmail(@Validated(EditGroup.class) @RequestBody UserBindBo bo) {

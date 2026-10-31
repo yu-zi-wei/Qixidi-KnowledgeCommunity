@@ -7,6 +7,7 @@ import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping()
+@LogModule("文章评论")
 public class FdArticleCommentController {
 
     private final IArticleCommentService iArticleCommentService;
@@ -40,7 +42,7 @@ public class FdArticleCommentController {
     /**
      * 新增文章评论
      */
-    @Log(title = "文章评论", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/article/comment/insert")
     public Long add(@Validated(AddGroup.class) @RequestBody ArticleCommentBo bo) throws Exception {
@@ -50,7 +52,7 @@ public class FdArticleCommentController {
     /**
      * 删除文章评论
      */
-    @Log(title = "文章评论", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @PostMapping("/article/delete/comment")
     public void remove(@RequestBody ArticleCommentBo bo) {
         iArticleCommentService.deleteWithValidById(bo);

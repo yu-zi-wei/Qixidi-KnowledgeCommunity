@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.label.LabelMergeBo;
 import com.qixidi.business.domain.vo.label.LabelGroupingInfoVo;
 import com.qixidi.business.service.label.ILabelGroupingInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -33,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/groupingInfo")
+@LogModule("标签分组信息")
 public class LabelGroupingInfoController {
 
     private final ILabelGroupingInfoService iLabelGroupingInfoService;
@@ -49,7 +51,7 @@ public class LabelGroupingInfoController {
      * 导出标签分组信息列表
      */
     @SaCheckPermission("groupingInfo:export")
-    @Log(title = "标签分组信息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated LabelGroupingInfoBo bo, HttpServletResponse response) {
         List<LabelGroupingInfoVo> list = iLabelGroupingInfoService.queryList(bo);
@@ -69,7 +71,7 @@ public class LabelGroupingInfoController {
      * 新增标签分组信息
      */
     @SaCheckPermission("groupingInfo:add")
-    @Log(title = "标签分组信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody LabelGroupingInfoBo bo) {
@@ -80,7 +82,7 @@ public class LabelGroupingInfoController {
      * 修改标签分组信息
      */
     @SaCheckPermission("groupingInfo:edit")
-    @Log(title = "标签分组信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody LabelGroupingInfoBo bo) {
@@ -91,7 +93,7 @@ public class LabelGroupingInfoController {
      * 合并标签分组：源分组下的标签与文章归属迁移至目标分组后删除源分组
      */
     @SaCheckPermission("groupingInfo:merge")
-    @Log(title = "标签分组信息", businessType = BusinessType.UPDATE)
+    @Log(title = "合并", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/merge")
     public void merge(@Validated @RequestBody LabelMergeBo bo) {
@@ -102,7 +104,7 @@ public class LabelGroupingInfoController {
      * 删除标签分组信息
      */
     @SaCheckPermission("groupingInfo:remove")
-    @Log(title = "标签分组信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iLabelGroupingInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

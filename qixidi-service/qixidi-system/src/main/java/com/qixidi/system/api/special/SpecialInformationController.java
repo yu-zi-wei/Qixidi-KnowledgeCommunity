@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
 import com.qixidi.business.service.special.ISpecialInformationService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -33,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/special/information")
+@LogModule("专栏信息")
 public class SpecialInformationController {
 
     private final ISpecialInformationService iSpecialInformationService;
@@ -61,7 +63,7 @@ public class SpecialInformationController {
      * 导出专栏信息列表
      */
     @SaCheckPermission("special:information:export")
-    @Log(title = "专栏信息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated SpecialInformationBo bo, HttpServletResponse response) {
         List<SpecialInformationVo> list = iSpecialInformationService.queryList(bo);
@@ -80,7 +82,7 @@ public class SpecialInformationController {
     /**
      * 新增专栏信息
      */
-    @Log(title = "专栏信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody SpecialInformationBo bo) {
@@ -90,7 +92,7 @@ public class SpecialInformationController {
     /**
      * 修改专栏信息
      */
-    @Log(title = "专栏信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody SpecialInformationBo bo) {
@@ -100,7 +102,7 @@ public class SpecialInformationController {
     /**
      * 删除专栏信息
      */
-    @Log(title = "专栏信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iSpecialInformationService.deleteWithValidByIds(Arrays.asList(ids), true);

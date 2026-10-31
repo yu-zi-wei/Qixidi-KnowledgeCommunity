@@ -8,6 +8,7 @@ import com.light.core.utils.ip.AddressUtils;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.bo.SysBlackListBo;
 import com.qixidi.auth.domain.entity.SysBlackList;
 import com.qixidi.auth.manager.SysBlackListManager;
@@ -30,6 +31,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/black")
+@LogModule("IP黑名单")
 public class SysBlackListAdminController {
 
     private final SysBlackListService blackListService;
@@ -47,7 +49,7 @@ public class SysBlackListAdminController {
      * 手动加黑（ip 与 uid 至少一项；归属地按 ip 反查）
      */
     @SaCheckPermission("blackList:add")
-    @Log(title = "IP黑名单", businessType = BusinessType.INSERT)
+    @Log(title = "加黑", businessType = BusinessType.INSERT)
     @RepeatSubmit
     @PostMapping
     public void add(@RequestBody SysBlackListBo bo) {
@@ -68,7 +70,7 @@ public class SysBlackListAdminController {
      * 批量移出黑名单
      */
     @SaCheckPermission("blackList:remove")
-    @Log(title = "IP黑名单", businessType = BusinessType.DELETE)
+    @Log(title = "移出", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         if (blackListService.deleteByIds(Arrays.asList(ids)) <= 0) {

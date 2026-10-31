@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.user.UserReportBo;
 import com.qixidi.business.domain.vo.user.UserReportVo;
 import com.qixidi.business.service.user.IUserReportService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/user/report")
+@LogModule("用户签到")
 public class UserReportController {
 
     private final IUserReportService iUserReportService;
@@ -49,7 +51,7 @@ public class UserReportController {
      * 导出用户签到列表
      */
     @SaCheckPermission("user:report:export")
-    @Log(title = "用户签到", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated UserReportBo bo, HttpServletResponse response) {
         List<UserReportVo> list = iUserReportService.queryList(bo);
@@ -69,7 +71,7 @@ public class UserReportController {
      * 新增用户签到
      */
     @SaCheckPermission("user:report:add")
-    @Log(title = "用户签到", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody UserReportBo bo) throws Exception {
@@ -80,7 +82,7 @@ public class UserReportController {
      * 修改用户签到
      */
     @SaCheckPermission("user:report:edit")
-    @Log(title = "用户签到", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody UserReportBo bo) {
@@ -91,7 +93,7 @@ public class UserReportController {
      * 删除用户签到
      */
     @SaCheckPermission("user:report:remove")
-    @Log(title = "用户签到", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iUserReportService.deleteWithValidByIds(Arrays.asList(ids), true);

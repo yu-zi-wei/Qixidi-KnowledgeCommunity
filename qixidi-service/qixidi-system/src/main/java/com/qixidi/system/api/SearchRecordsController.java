@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.SearchRecordsBo;
 import com.qixidi.business.domain.vo.SearchRecordsVo;
 import com.qixidi.business.service.ISearchRecordsService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/search/records")
+@LogModule("搜索记录")
 public class SearchRecordsController {
 
     private final ISearchRecordsService iSearchRecordsService;
@@ -49,7 +51,7 @@ public class SearchRecordsController {
      * 导出搜索记录列表
      */
     @SaCheckPermission("search:records:export")
-    @Log(title = "搜索记录", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated SearchRecordsBo bo, HttpServletResponse response) {
         List<SearchRecordsVo> list = iSearchRecordsService.queryList(bo);
@@ -69,7 +71,7 @@ public class SearchRecordsController {
      * 新增搜索记录
      */
     @SaCheckPermission("search:records:add")
-    @Log(title = "搜索记录", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody SearchRecordsBo bo) {
@@ -80,7 +82,7 @@ public class SearchRecordsController {
      * 修改搜索记录
      */
     @SaCheckPermission("search:records:edit")
-    @Log(title = "搜索记录", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody SearchRecordsBo bo) {
@@ -91,7 +93,7 @@ public class SearchRecordsController {
      * 删除搜索记录
      */
     @SaCheckPermission("search:records:remove")
-    @Log(title = "搜索记录", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iSearchRecordsService.deleteWithValidByIds(Arrays.asList(ids), true);

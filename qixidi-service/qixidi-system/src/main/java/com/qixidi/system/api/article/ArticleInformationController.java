@@ -9,6 +9,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.article.ArticleAuditBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/article/information")
+@LogModule("文章信息")
 public class ArticleInformationController {
 
     private final IArticleInformationService iArticleInformationService;
@@ -48,7 +50,7 @@ public class ArticleInformationController {
      * 导出文章信息列表
      */
     @SaCheckPermission("article:information:export")
-    @Log(title = "文章信息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ArticleInformationBo bo, HttpServletResponse response) {
         List<ArticleInformationVo> list = iArticleInformationService.queryList(bo);
@@ -68,7 +70,7 @@ public class ArticleInformationController {
      * 修改文章信息
      */
     @SaCheckPermission("article:information:edit")
-    @Log(title = "文章信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ArticleInformationBo bo) {
@@ -79,7 +81,7 @@ public class ArticleInformationController {
      * 文章审核（后台终审：通过/拒绝）——独立于编辑，无需文章全字段
      */
     @SaCheckPermission("article:information:edit")
-    @Log(title = "文章信息审核", businessType = BusinessType.UPDATE)
+    @Log(title = "审核", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/audit")
     public void audit(@Validated @RequestBody ArticleAuditBo bo) {
@@ -90,7 +92,7 @@ public class ArticleInformationController {
      * 删除文章信息
      */
     @SaCheckPermission("article:information:remove")
-    @Log(title = "文章信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iArticleInformationService.deleteWithValidByIds(Arrays.asList(ids), true);

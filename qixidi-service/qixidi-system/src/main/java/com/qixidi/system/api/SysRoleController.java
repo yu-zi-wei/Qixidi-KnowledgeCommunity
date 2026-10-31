@@ -6,6 +6,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.SysRole;
 import com.qixidi.system.service.ISysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/role")
+@LogModule("角色管理")
 public class SysRoleController {
 
     private final ISysRoleService roleService;
@@ -49,7 +51,7 @@ public class SysRoleController {
      * 新增角色
      */
     @SaCheckPermission("role:add")
-    @Log(title = "角色管理", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysRole role) {
         if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role))) {
@@ -65,7 +67,7 @@ public class SysRoleController {
      * 修改保存角色（含权限码重写）
      */
     @SaCheckPermission("role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysRole role) {
         roleService.checkRoleAllowed(role);
@@ -82,7 +84,7 @@ public class SysRoleController {
      * 状态修改
      */
     @SaCheckPermission("role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
+    @Log(title = "修改状态", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public void changeStatus(@RequestBody SysRole role) {
         roleService.checkRoleAllowed(role);
@@ -93,7 +95,7 @@ public class SysRoleController {
      * 删除角色
      */
     @SaCheckPermission("role:remove")
-    @Log(title = "角色管理", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleIds}")
     public void remove(@PathVariable Long[] roleIds) {
         roleService.deleteRoleByIds(roleIds);

@@ -6,6 +6,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.entity.SysLogininfor;
 import com.qixidi.system.service.ISysLogininforService;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/logininfor")
+@LogModule("登录日志")
 public class SysLogininforController {
 
     private final ISysLogininforService logininforService;
@@ -48,7 +50,7 @@ public class SysLogininforController {
      * @param logininfor
      * @param response
      */
-    @Log(title = "登录日志", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @SaCheckPermission("monitor:logininfor:export")
     @PostMapping("/export")
     public void export(SysLogininfor logininfor, HttpServletResponse response) {
@@ -63,7 +65,7 @@ public class SysLogininforController {
      * @return
      */
     @SaCheckPermission("monitor:logininfor:remove")
-    @Log(title = "登录日志", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
     public void remove(@PathVariable Long[] infoIds) {
         logininforService.deleteLogininforByIds(infoIds);
@@ -74,7 +76,7 @@ public class SysLogininforController {
      * @return
      */
     @SaCheckPermission("monitor:logininfor:remove")
-    @Log(title = "登录日志", businessType = BusinessType.CLEAN)
+    @Log(title = "清空", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
     public void clean() {
         logininforService.cleanLogininfor();

@@ -6,6 +6,7 @@ import com.light.core.enums.BusinessType;
 import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.SysUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.system.domain.entity.SysOss;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/user/profile")
+@LogModule("个人信息")
 public class SysProfileController {
 
     private final ISysUserService userService;
@@ -48,7 +50,7 @@ public class SysProfileController {
     /**
      * 修改用户
      */
-    @Log(title = "个人信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改资料", businessType = BusinessType.UPDATE)
     @PutMapping
     public void updateProfile(@RequestBody SysUser user) {
         if (StringUtils.isNotEmpty(user.getPhonenumber())
@@ -74,7 +76,7 @@ public class SysProfileController {
      * @param newPassword
      * @return
      */
-    @Log(title = "个人信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改密码", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
     public void updatePwd(String oldPassword, String newPassword) {
         SysUser user = userService.selectUserById(LoginHelper.getUserId());
@@ -94,7 +96,7 @@ public class SysProfileController {
     /**
      * 头像上传
      */
-    @Log(title = "用户头像", businessType = BusinessType.UPDATE)
+    @Log(title = "修改头像", businessType = BusinessType.UPDATE)
     @PostMapping("/avatar")
     public Map<String, Object> avatar(@RequestPart("avatarfile") MultipartFile file) {
         if (file.isEmpty()) {

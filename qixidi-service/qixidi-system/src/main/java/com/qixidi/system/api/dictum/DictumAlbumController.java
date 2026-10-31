@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
 import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.qixidi.business.service.dictum.IDictumAlbumService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dictum/album")
+@LogModule("名言专辑")
 public class DictumAlbumController {
 
     private final IDictumAlbumService iDictumAlbumService;
@@ -49,7 +51,7 @@ public class DictumAlbumController {
      * 导出名言专辑列表
      */
     @SaCheckPermission("dictum:album:export")
-    @Log(title = "名言专辑", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumAlbumBo bo, HttpServletResponse response) {
         List<DictumAlbumVo> list = iDictumAlbumService.queryList(bo);
@@ -69,7 +71,7 @@ public class DictumAlbumController {
      * 新增名言专辑
      */
     @SaCheckPermission("dictum:album:add")
-    @Log(title = "名言专辑", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -80,7 +82,7 @@ public class DictumAlbumController {
      * 修改名言专辑
      */
     @SaCheckPermission("dictum:album:edit")
-    @Log(title = "名言专辑", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -91,7 +93,7 @@ public class DictumAlbumController {
      * 删除名言专辑
      */
     @SaCheckPermission("dictum:album:remove")
-    @Log(title = "名言专辑", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iDictumAlbumService.deleteWithValidByIds(Arrays.asList(ids), true);

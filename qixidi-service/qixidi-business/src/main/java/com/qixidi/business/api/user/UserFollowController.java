@@ -4,6 +4,7 @@ import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.user.UserFollowBo;
 import com.qixidi.business.service.user.IUserFollowService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user/follow")
+@LogModule("关注")
 public class UserFollowController {
 
     private final IUserFollowService iUserFollowService;
@@ -29,7 +31,7 @@ public class UserFollowController {
     /**
      * 新增关注
      */
-    @Log(title = "新增关注", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/add")
     public Integer add(@Validated(AddGroup.class) @RequestBody UserFollowBo bo) {

@@ -9,6 +9,7 @@ import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/info")
+@LogModule("名言信息")
 public class FdDictumInfoController {
 
     private final IDictumInfoService iDictumInfoService;
@@ -50,7 +52,7 @@ public class FdDictumInfoController {
     /**
      * 新增名言信息
      */
-    @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
@@ -64,7 +66,7 @@ public class FdDictumInfoController {
     /**
      * 批量新增名言信息（一次发布多条，分类/作者等元信息共享）
      */
-    @Log(title = "批量新增名言信息", businessType = BusinessType.INSERT)
+    @Log(title = "批量新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/batch")
     public void addBatch(@Validated(AddGroup.class) @RequestBody DictumBatchBo bo) {
@@ -74,7 +76,7 @@ public class FdDictumInfoController {
     /**
      * 修改名言信息
      */
-    @Log(title = "更新名言信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
@@ -84,7 +86,7 @@ public class FdDictumInfoController {
     /**
      * 删除名言信息
      */
-    @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}/{groupId}")
     public void remove(@PathVariable Long id, @PathVariable Long groupId) {
         iDictumInfoService.deleteWithValidById(id, groupId);

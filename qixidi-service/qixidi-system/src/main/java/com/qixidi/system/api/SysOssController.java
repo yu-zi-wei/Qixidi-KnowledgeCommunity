@@ -13,6 +13,7 @@ import com.light.core.enums.BusinessType;
 import com.light.core.utils.file.FileUtils;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.bo.SysOssBo;
 import com.qixidi.system.domain.entity.SysOss;
@@ -39,6 +40,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/oss")
+@LogModule("OSS对象存储")
 public class SysOssController {
 
     private final ISysOssService iSysOssService;
@@ -55,7 +57,7 @@ public class SysOssController {
     /**
      * 上传OSS对象存储
      */
-    @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @PostMapping("/upload")
     public Map<String, String> upload(@RequestPart("file") MultipartFile file) {
         if (ObjectUtil.isNull(file)) {
@@ -104,7 +106,7 @@ public class SysOssController {
      * 删除OSS对象存储
      */
     @SaCheckPermission("oss:remove")
-    @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")
     public void remove(@PathVariable Long[] ossIds) {
         if (!iSysOssService.deleteWithValidByIds(Arrays.asList(ossIds), true)) {

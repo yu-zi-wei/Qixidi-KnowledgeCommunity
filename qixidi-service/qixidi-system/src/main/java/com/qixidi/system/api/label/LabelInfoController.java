@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.label.LabelInfoBo;
 import com.qixidi.business.domain.bo.label.LabelMergeBo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/label-info")
+@LogModule("标签信息")
 public class LabelInfoController {
 
     private final ILabelInfoService iLabelInfoService;
@@ -48,7 +50,7 @@ public class LabelInfoController {
      * 导出标签信息列表
      */
     @SaCheckPermission("labelInfo:export")
-    @Log(title = "标签信息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated LabelInfoBo bo, HttpServletResponse response) {
         List<LabelInfoVo> list = iLabelInfoService.queryList(bo);
@@ -68,7 +70,7 @@ public class LabelInfoController {
      * 新增标签信息
      */
     @SaCheckPermission("labelInfo:add")
-    @Log(title = "标签信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody LabelInfoBo bo) {
@@ -79,7 +81,7 @@ public class LabelInfoController {
      * 修改标签信息
      */
     @SaCheckPermission("labelInfo:edit")
-    @Log(title = "标签信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody LabelInfoBo bo) {
@@ -90,7 +92,7 @@ public class LabelInfoController {
      * 合并标签：源标签的文章挂载与关注迁移至目标标签后删除源标签
      */
     @SaCheckPermission("labelInfo:merge")
-    @Log(title = "标签信息", businessType = BusinessType.UPDATE)
+    @Log(title = "合并", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/merge")
     public void merge(@Validated @RequestBody LabelMergeBo bo) {
@@ -101,7 +103,7 @@ public class LabelInfoController {
      * 删除标签信息
      */
     @SaCheckPermission("labelInfo:remove")
-    @Log(title = "标签信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iLabelInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

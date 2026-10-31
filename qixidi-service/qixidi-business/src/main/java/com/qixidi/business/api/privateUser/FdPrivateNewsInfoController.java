@@ -7,6 +7,7 @@ import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/private/newsInfo")
+@LogModule("私信记录")
 public class FdPrivateNewsInfoController {
 
 
@@ -41,7 +43,7 @@ public class FdPrivateNewsInfoController {
     /**
      * 新增私信记录
      */
-    @Log(title = "私信记录", businessType = BusinessType.INSERT)
+    @Log(title = "发送", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
@@ -61,7 +63,7 @@ public class FdPrivateNewsInfoController {
     /**
      * 删除私信记录
      */
-    @Log(title = "私信记录", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

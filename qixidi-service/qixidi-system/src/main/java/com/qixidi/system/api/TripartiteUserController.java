@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
@@ -31,6 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/tripartite/user")
+@LogModule("平台用户")
 public class TripartiteUserController {
 
     private final ITripartiteUserService iTripartiteUserService;
@@ -48,7 +50,7 @@ public class TripartiteUserController {
      * 导出平台用户列表
      */
     @SaCheckPermission("tripartiteUser:export")
-    @Log(title = "平台用户", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated TripartiteUserBo bo, HttpServletResponse response) {
         List<TripartiteUserVo> list = iTripartiteUserService.queryList(bo);
@@ -68,7 +70,7 @@ public class TripartiteUserController {
      * 修改平台用户
      */
     @SaCheckPermission("tripartiteUser:edit")
-    @Log(title = "更新平台用户", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody TripartiteUserBo bo) {

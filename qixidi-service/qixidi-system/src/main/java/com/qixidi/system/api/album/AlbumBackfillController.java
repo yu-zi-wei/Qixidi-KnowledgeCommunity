@@ -3,6 +3,7 @@ package com.qixidi.system.api.album;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.service.album.IAlbumService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/album")
+@LogModule("时光相册")
 public class AlbumBackfillController {
 
     private final IAlbumService albumService;

@@ -4,6 +4,7 @@ import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -31,6 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/private/newsInfo")
+@LogModule("私信记录")
 public class PrivateNewsInfoController {
 
     private final IPrivateNewsInfoService iPrivateNewsInfoService;
@@ -46,7 +48,7 @@ public class PrivateNewsInfoController {
     /**
      * 导出私信记录列表
      */
-    @Log(title = "私信记录", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated PrivateNewsInfoBo bo, HttpServletResponse response) {
         List<PrivateNewsInfoVo> list = iPrivateNewsInfoService.queryList(bo);
@@ -64,7 +66,7 @@ public class PrivateNewsInfoController {
     /**
      * 新增私信记录
      */
-    @Log(title = "私信记录", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody PrivateNewsInfoBo bo) {
@@ -74,7 +76,7 @@ public class PrivateNewsInfoController {
     /**
      * 修改私信记录
      */
-    @Log(title = "私信记录", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody PrivateNewsInfoBo bo) {
@@ -84,7 +86,7 @@ public class PrivateNewsInfoController {
     /**
      * 删除私信记录
      */
-    @Log(title = "私信记录", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

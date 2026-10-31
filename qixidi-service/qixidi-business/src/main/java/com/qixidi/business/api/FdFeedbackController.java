@@ -6,6 +6,7 @@ import com.qixidi.business.domain.vo.FeedbackStatusSumVo;
 import com.qixidi.business.domain.vo.FeedbackVo;
 import com.qixidi.business.service.IFeedbackService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
+@LogModule("用户反馈")
 public class FdFeedbackController {
 
     private final IFeedbackService IFeedbackService;
@@ -63,7 +65,7 @@ public class FdFeedbackController {
     /**
      * 新增用户反馈
      */
-    @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/add")
     public void add(@Validated(AddGroup.class) @RequestBody FeedbackBo bo) {
@@ -73,7 +75,7 @@ public class FdFeedbackController {
     /**
      * 更新用户反馈
      */
-    @Log(title = "更新用户反馈", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/update")
     public void update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {

@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
 import com.qixidi.business.domain.vo.configure.ToToolInfoVo;
 import com.qixidi.business.service.configure.IToToolInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -31,6 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/toolInfo")
+@LogModule("工具信息")
 public class ToToolInfoController {
 
     private final IToToolInfoService iToToolInfoService;
@@ -48,7 +50,7 @@ public class ToToolInfoController {
      * 导出工具信息列表
      */
     @SaCheckPermission("toolInfo:export")
-    @Log(title = "工具信息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToToolInfoBo bo, HttpServletResponse response) {
         List<ToToolInfoVo> list = iToToolInfoService.queryList(bo);
@@ -68,7 +70,7 @@ public class ToToolInfoController {
      * 新增工具信息
      */
     @SaCheckPermission("toolInfo:add")
-    @Log(title = "工具信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody ToToolInfoBo bo) {
@@ -79,7 +81,7 @@ public class ToToolInfoController {
      * 修改工具信息
      */
     @SaCheckPermission("toolInfo:edit")
-    @Log(title = "工具信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ToToolInfoBo bo) {
@@ -90,7 +92,7 @@ public class ToToolInfoController {
      * 删除工具信息
      */
     @SaCheckPermission("toolInfo:remove")
-    @Log(title = "工具信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iToToolInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

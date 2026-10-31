@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/news")
+@LogModule("用户消息")
 public class NewsUserInfoController {
 
     private final INewsUserInfoService iNewsUserInfoService;
@@ -49,7 +51,7 @@ public class NewsUserInfoController {
      * 导出用户消息列表
      */
     @SaCheckPermission("news:userInfo:export")
-    @Log(title = "用户消息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated NewsUserInfoBo bo, HttpServletResponse response) {
         List<NewsUserInfoVo> list = iNewsUserInfoService.queryList(bo);
@@ -69,7 +71,7 @@ public class NewsUserInfoController {
      * 新增用户消息
      */
     @SaCheckPermission("news:userInfo:add")
-    @Log(title = "用户消息", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody NewsUserInfoBo bo) {
@@ -80,7 +82,7 @@ public class NewsUserInfoController {
      * 修改用户消息
      */
     @SaCheckPermission("news:userInfo:edit")
-    @Log(title = "用户消息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody NewsUserInfoBo bo) {
@@ -91,7 +93,7 @@ public class NewsUserInfoController {
      * 删除用户消息
      */
     @SaCheckPermission("news:userInfo:remove")
-    @Log(title = "用户消息", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iNewsUserInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

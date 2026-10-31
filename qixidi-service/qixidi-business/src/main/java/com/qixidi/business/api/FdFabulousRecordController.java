@@ -5,6 +5,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/fabulous")
+@LogModule("点赞")
 public class FdFabulousRecordController {
 
     private final IFabulousRecordService iFabulousRecordService;

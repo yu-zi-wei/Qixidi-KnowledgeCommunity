@@ -8,6 +8,7 @@ import com.light.core.core.domain.dto.UserOnlineDTO;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.entity.SysUserOnline;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/online")
+@LogModule("在线用户")
 public class SysUserOnlineController {
 
     /**
@@ -71,7 +73,7 @@ public class SysUserOnlineController {
      * 强退用户
      */
     @SaCheckPermission("monitor:online:forceLogout")
-    @Log(title = "在线用户", businessType = BusinessType.FORCE)
+    @Log(title = "强退", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")
     public void forceLogout(@PathVariable String tokenId) {
         try {

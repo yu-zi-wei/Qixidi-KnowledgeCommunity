@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.configure.ToSidebarBo;
 import com.qixidi.business.domain.vo.configure.ToSidebarVo;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/configure/sidebar")
+@LogModule("侧边栏配置")
 public class ToSidebarController {
 
     private final IToSidebarService iToSidebarService;
@@ -48,7 +50,7 @@ public class ToSidebarController {
      * 导出侧边栏配置列表
      */
     @SaCheckPermission("sidebar:export")
-    @Log(title = "侧边栏配置", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated ToSidebarBo bo, HttpServletResponse response) {
         List<ToSidebarVo> list = iToSidebarService.queryList(bo);
@@ -68,7 +70,7 @@ public class ToSidebarController {
      * 新增侧边栏配置
      */
     @SaCheckPermission("sidebar:add")
-    @Log(title = "侧边栏配置", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody ToSidebarBo bo) {
@@ -79,7 +81,7 @@ public class ToSidebarController {
      * 修改侧边栏配置
      */
     @SaCheckPermission("sidebar:edit")
-    @Log(title = "侧边栏配置", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody ToSidebarBo bo) {
@@ -90,7 +92,7 @@ public class ToSidebarController {
      * 删除侧边栏配置
      */
     @SaCheckPermission("sidebar:remove")
-    @Log(title = "侧边栏配置", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iToSidebarService.deleteWithValidByIds(Arrays.asList(ids), true);

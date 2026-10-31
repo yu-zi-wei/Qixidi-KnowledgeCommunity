@@ -8,6 +8,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.entity.SysConfig;
 import com.qixidi.system.service.ISysConfigService;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/config")
+@LogModule("参数管理")
 public class SysConfigController {
 
     private final ISysConfigService configService;
@@ -46,7 +48,7 @@ public class SysConfigController {
      * @param config
      * @param response
      */
-    @Log(title = "参数管理", businessType = BusinessType.EXPORT)
+    @Log(title = "导出", businessType = BusinessType.EXPORT)
     @SaCheckPermission("config:export")
     @PostMapping("/export")
     public void export(SysConfig config, HttpServletResponse response) {
@@ -75,7 +77,7 @@ public class SysConfigController {
      * 新增参数配置
      */
     @SaCheckPermission("config:add")
-    @Log(title = "参数管理", businessType = BusinessType.INSERT)
+    @Log(title = "新增", businessType = BusinessType.INSERT)
     @PostMapping
     public void add(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
@@ -88,7 +90,7 @@ public class SysConfigController {
      * 修改参数配置
      */
     @SaCheckPermission("config:edit")
-    @Log(title = "参数管理", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
@@ -101,7 +103,7 @@ public class SysConfigController {
      * 根据参数键名修改参数配置
      */
     @SaCheckPermission("config:edit")
-    @Log(title = "参数管理", businessType = BusinessType.UPDATE)
+    @Log(title = "修改", businessType = BusinessType.UPDATE)
     @PutMapping("/updateByKey")
     public void updateByKey(@RequestBody SysConfig config) {
         configService.updateConfig(config);
@@ -111,7 +113,7 @@ public class SysConfigController {
      * 删除参数配置
      */
     @SaCheckPermission("config:remove")
-    @Log(title = "参数管理", businessType = BusinessType.DELETE)
+    @Log(title = "删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
     public void remove(@PathVariable Long[] configIds) {
         configService.deleteConfigByIds(configIds);
@@ -121,7 +123,7 @@ public class SysConfigController {
      * 刷新参数缓存
      */
     @SaCheckPermission("config:remove")
-    @Log(title = "参数管理", businessType = BusinessType.CLEAN)
+    @Log(title = "清空", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
     public void refreshCache() {
         configService.resetConfigCache();
