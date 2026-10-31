@@ -156,6 +156,12 @@
   white-space: nowrap;
 }
 
+// 等宽字体（IP/UID/参数键名等代码型字段的 render 与 teleport 场景共享）
+.cell-mono {
+  font-family: ui-monospace, SFMono-Regular, 'Cascadia Mono', Consolas, monospace;
+  font-size: 12.5px;
+}
+
 // ===== 全局细滚动条（书签风） =====
 // 暖灰小圆头，双主题取布局根注入的 --scrollbar-thumb（layouts/default.vue）；
 // Naive 表格内部滚动/侧栏/弹窗滚动条统一收敛到此
