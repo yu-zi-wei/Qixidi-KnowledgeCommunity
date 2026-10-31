@@ -58,7 +58,6 @@ const searchFields: AdminSearchField[] = [
     key: 'albumState',
     label: '可见性',
     type: 'select',
-    width: 140,
     options: [
       { label: '公开', value: 1 },
       { label: '私有', value: 2 },

@@ -44,7 +44,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 ```
 
 - **菜单/面包屑单一数据源** `composables/useAdminMenu.ts`：`ADMIN_MENU` 树（叶子 key=路由路径）+ `useAdminBreadcrumbs()`；**新增菜单项改这里一处**，侧栏 n-menu 与面包屑同源自动更新；**侧栏一级菜单必须带子菜单（禁止纯一级叶子）**；数据看板无菜单入口——首页 `/` 即数据看板页面，面包屑「首页」直达
-- **AdminSearchField**：`{key, label, type: 'input'|'select'|'multiple', options?, placeholder?, width?}`；所有字段统一「label 前置 + 控件」结构；multiple 渲染多选下拉（maxTagCount responsive 折叠 tag）；控件默认等宽 200px（不配 width，需差异化才覆盖）；key 直接对应后端 BO 字段（GET 数组 `key=a&key=b` 自动绑 `List<Integer>`）
+- **AdminSearchField**：`{key, label, type: 'input'|'select'|'multiple', options?, placeholder?, defaultValue?}`；所有字段统一「label 前置 + 控件」结构；multiple 渲染多选下拉（maxTagCount responsive 折叠 tag）；**控件宽度一律走默认 200px，禁止配 width 单独覆盖**（页面各自配宽会破坏全站搜索控件等宽）；key 直接对应后端 BO 字段（GET 数组 `key=a&key=b` 自动绑 `List<Integer>`）
 - **查询快照机制**：点「查询」才取条件快照，翻页沿用快照——输入框实时变化不影响已出结果；页面无需自建任何分页/条件状态
 - **分页默认 50/页**，pageSizes `[50, 100, 200]`（AdminListPage 默认值，页面不传）
 - **🔴 详情弹出一律调详情接口**（用户定版）：禁止拿列表行数据展示详情——接口失败显示空态，不回退列表数据；抽屉打开先清空旧内容防残留上一篇

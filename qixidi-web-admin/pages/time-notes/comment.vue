@@ -47,12 +47,11 @@ const { getTimeNotesCommentList, deleteTimeNotesComments } = useTimeNotesAdminAp
 // ---------- 搜索（content 后端 like；timeNotesId 输入是字符串，fetch 里转数字） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
-  { key: 'timeNotesId', label: '小记 ID', type: 'input', placeholder: '请输入数字 ID', width: 140 },
+  { key: 'timeNotesId', label: '小记 ID', type: 'input', placeholder: '请输入数字 ID' },
   {
     key: 'status',
     label: '状态',
     type: 'select',
-    width: 140,
     options: [
       { label: '正常', value: 0 },
       { label: '已删除', value: 1 }

@@ -85,7 +85,7 @@ const { getUsers, getUser, updateUser } = useUserAdminApi();
 const searchFields: AdminSearchField[] = [
   { key: 'nickname', label: '昵称', type: 'input', placeholder: '请输入昵称关键词' },
   { key: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名关键词' },
-  { key: 'state', label: '状态', type: 'select', width: 140, options: [
+  { key: 'state', label: '状态', type: 'select', options: [
     { label: '正常', value: 0 },
     { label: '已冻结', value: 1 },
     { label: '已删除', value: 2 }

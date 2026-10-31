@@ -67,8 +67,8 @@ const { getComments, getComment, deleteComments } = useCommentAdminApi();
 // ---------- 搜索（content 后端 like；articleId 输入是字符串，fetch 里转数字） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
-  { key: 'articleId', label: '文章 ID', type: 'input', placeholder: '请输入数字 ID', width: 140 },
-  { key: 'state', label: '状态', type: 'select', width: 140, options: [
+  { key: 'articleId', label: '文章 ID', type: 'input', placeholder: '请输入数字 ID' },
+  { key: 'state', label: '状态', type: 'select', options: [
     { label: '正常', value: 0 },
     { label: '已删除', value: 1 }
   ] }
