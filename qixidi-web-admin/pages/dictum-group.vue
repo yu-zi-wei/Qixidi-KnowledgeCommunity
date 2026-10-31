@@ -36,7 +36,13 @@ definePageMeta({ layout: 'default' });
 
 const message = useMessage();
 const dialog = useDialog();
+const router = useRouter();
 const { getDictumGroupList, deleteDictumGroups } = useDictumAdminApi();
+
+/** 收录数点击 → 随笔列表按该分组筛选 */
+const goDictumList = (groupId: number) => {
+  router.push({ path: '/dictum', query: { groupId } });
+};
 
 // ---------- 搜索（name 后端 like） ----------
 const searchFields: AdminSearchField[] = [
@@ -118,7 +124,13 @@ const columns: DataTableColumns<DictumGroupRow> = [
     key: 'employSum',
     width: 90,
     align: 'right',
-    render: (row) => h('span', { class: 'cell-stats' }, String(row.employSum ?? 0))
+    // 点击跳随笔列表并按该分组筛选（is-link 主色可点击样式在 admin-table.scss）
+    render: (row) =>
+      h(
+        'span',
+        { class: 'cell-stats is-link', onClick: () => goDictumList(row.id), title: '查看该分组下的随笔' },
+        String(row.employSum ?? 0)
+      )
   },
   {
     title: '创建时间',

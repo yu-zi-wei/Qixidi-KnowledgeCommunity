@@ -22,6 +22,32 @@
       </n-button>
     </template>
   </AdminListPage>
+
+  <!-- 小记详情抽屉：一律调详情接口，先清空防残留（teleport 组件宽度必须 inline style） -->
+  <n-drawer v-model:show="detailVisible" :width="480" placement="right">
+    <n-drawer-content :title="detail?.title || '小记详情'" closable>
+      <n-spin :show="detailLoading">
+        <div v-if="detail" class="detail-body">
+          <div class="detail-head">
+            <AdminAvatar :src="detail.avatar" :name="detail.nickname" :size="40" />
+            <div class="detail-head-main">
+              <div class="detail-name">{{ detail.nickname || '—' }}</div>
+              <div class="detail-time">记录于 {{ detail.recordTime || '—' }}</div>
+            </div>
+          </div>
+          <n-divider />
+          <p class="detail-content">{{ detail.content || '（无内容）' }}</p>
+          <div class="detail-meta">
+            <a
+              class="detail-link"
+              :href="`https://qixidi.top/time-notes/${detail.id}`"
+              target="_blank"
+            >在前台查看 →</a>
+          </div>
+        </div>
+      </n-spin>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <script setup lang="ts">
@@ -36,7 +62,7 @@ definePageMeta({ layout: 'default' });
 
 const message = useMessage();
 const dialog = useDialog();
-const { getTimeNotesList, deleteTimeNotes } = useTimeNotesAdminApi();
+const { getTimeNotesList, getTimeNote, deleteTimeNotes } = useTimeNotesAdminApi();
 
 // ---------- 搜索（title 后端 like） ----------
 const searchFields: AdminSearchField[] = [
@@ -96,6 +122,25 @@ const doDeleteBatch = () => {
   });
 };
 
+// ---------- 详情抽屉（标题点击打开；接口不含作者信息，作者行用行数据补充） ----------
+const detailVisible = ref(false);
+const detailLoading = ref(false);
+const detail = ref<TimeNotesRow | null>(null);
+const openDetail = async (row: TimeNotesRow) => {
+  detailVisible.value = true;
+  detailLoading.value = true;
+  detail.value = null; // 先清空，避免残留上一条内容
+  try {
+    const info = await getTimeNote(row.id);
+    // 详情接口（TimeNotesInfoVo）不返回作者昵称头像，用列表行数据补充展示
+    detail.value = { ...info, nickname: row.nickname, avatar: row.avatar };
+  } catch {
+    detail.value = null; // useApi 已弹错，失败留空态，不回退列表数据
+  } finally {
+    detailLoading.value = false;
+  }
+};
+
 // ---------- 表格列（render 元素样式走全局类/内聚组件，scoped 选不中） ----------
 const columns: DataTableColumns<TimeNotesRow> = [
   {
@@ -103,12 +148,12 @@ const columns: DataTableColumns<TimeNotesRow> = [
     key: 'title',
     minWidth: 320,
     render: (row) =>
-      h('div', { class: 'cell-comment' }, [
-        h('div', { class: 'cell-comment-content' }, row.title || '（无标题）'),
-        row.content
-          ? h('div', { class: 'cell-comment-sub cell-clamp-2', style: 'white-space:normal;line-height:1.5;' }, row.content)
-          : null
-      ])
+      // 标题即详情入口；列表不展示内容，内容看详情抽屉
+      h(
+        'span',
+        { class: 'cell-ellipsis is-link', onClick: () => openDetail(row), title: '查看详情' },
+        row.title || '（无标题）'
+      )
   },
   {
     title: '作者',
@@ -143,3 +188,46 @@ const columns: DataTableColumns<TimeNotesRow> = [
   }
 ];
 </script>
+
+<style scoped lang="scss">
+.detail-body {
+  .detail-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .detail-head-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .detail-name {
+    font-weight: 600;
+  }
+
+  .detail-time {
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  .detail-content {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .detail-meta {
+    margin-top: 16px;
+  }
+
+  // teleport 抽屉内主题变量不可用，用布局根注入的链接色变量兜底中性蓝
+  .detail-link {
+    color: var(--cell-link, #3d7a5c);
+    font-size: 13px;
+    text-decoration: none;
+  }
+}
+</style>

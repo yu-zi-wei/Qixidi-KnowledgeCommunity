@@ -20,6 +20,8 @@ export interface UserRow {
   source?: string;
   userType?: string;
   state?: number;
+  /** 角色（1 普通用户 / 2 创作者 / 3 管理员，UserRoleEnums） */
+  roleId?: number;
   loginIp?: string;
   grade?: string;
   empirical?: number;
@@ -36,6 +38,13 @@ export const USER_STATE_MAP: Record<number, { label: string; type: 'success' | '
   0: { label: '正常', type: 'success' },
   1: { label: '已冻结', type: 'warning' },
   2: { label: '已删除', type: 'error' }
+};
+
+/** 用户角色（UserRoleEnums）：1 普通用户 / 2 创作者 / 3 管理员 */
+export const USER_ROLE_MAP: Record<number, { label: string; type: 'default' | 'info' | 'warning' }> = {
+  1: { label: '普通用户', type: 'default' },
+  2: { label: '创作者', type: 'info' },
+  3: { label: '管理员', type: 'warning' }
 };
 
 export const useUserAdminApi = () => {

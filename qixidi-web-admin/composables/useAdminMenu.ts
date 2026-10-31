@@ -49,7 +49,8 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     key: 'time-notes-mgmt',
     icon: Notebook,
     children: [
-      { label: '小记列表', key: '/time-notes', icon: Notebook, perm: 'timeNotes:query' }
+      { label: '小记列表', key: '/time-notes', icon: Notebook, perm: 'timeNotes:query' },
+      { label: '小记评论', key: '/time-notes/comment', icon: MessageCircle, perm: 'timeNotes:comment:query' }
     ]
   },
   {
@@ -59,7 +60,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     children: [
       { label: '随笔列表', key: '/dictum', icon: Feather, perm: 'dictum:info:list' },
       { label: '随笔分组', key: '/dictum-group', icon: Folders, perm: 'dictum:group:list' },
-      { label: '随笔相册', key: '/dictum-album', icon: Book2, perm: 'dictum:album:list' }
+      { label: '随笔专辑', key: '/dictum-album', icon: Book2, perm: 'dictum:album:list' }
     ]
   },
   {

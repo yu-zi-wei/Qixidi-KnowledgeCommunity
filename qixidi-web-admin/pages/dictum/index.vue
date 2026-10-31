@@ -2,6 +2,7 @@
   <AdminListPage
     ref="listRef"
     v-model:checked-keys="checkedKeys"
+    :key="listKey"
     :search-fields="searchFields"
     :columns="columns"
     :fetch="fetch"
@@ -35,6 +36,8 @@ import {
   DICTUM_STATE_MAP,
   DICTUM_VISIBLE_MAP,
   useDictumAdminApi,
+  type DictumAlbumRow,
+  type DictumGroupRow,
   type DictumRow
 } from '~/composables/useDictumAdminApi';
 import { getFullDateTime } from '~/utils/format';
@@ -43,10 +46,37 @@ definePageMeta({ layout: 'default' });
 
 const message = useMessage();
 const dialog = useDialog();
-const { getDictumList, deleteDictums } = useDictumAdminApi();
+const route = useRoute();
+const { getDictumList, getDictumGroupList, getDictumAlbumList, deleteDictums } = useDictumAdminApi();
 
-// ---------- 搜索（后端 wrapper：dictumState/state 均 eq） ----------
-const searchFields: AdminSearchField[] = [
+// ---------- 分组/专辑下拉选项（全量拉取，量小） ----------
+const groupOptions = ref<Array<{ label: string; value: number }>>([]);
+const albumOptions = ref<Array<{ label: string; value: number }>>([]);
+onMounted(async () => {
+  try {
+    const [groups, albums] = await Promise.all([
+      getDictumGroupList({ pageNum: 1, pageSize: 500 }),
+      getDictumAlbumList({ pageNum: 1, pageSize: 500 })
+    ]);
+    groupOptions.value = (groups.rows || []).map((g: DictumGroupRow) => ({ label: g.name, value: g.id }));
+    albumOptions.value = (albums.rows || []).map((a: DictumAlbumRow) => ({ label: a.name, value: a.id }));
+  } catch {
+    /* useApi 已统一弹错，选项留空不影响主列表 */
+  }
+});
+
+// ---------- URL 条件注入：分组/专辑页收录数跳转带 query，作为对应下拉初始值 ----------
+// query 变化时 :key 重建 AdminListPage（defaultValue 重新生效，翻页状态归零属预期）
+const toId = (v: unknown) => (v != null && v !== '' && !Number.isNaN(Number(v)) ? Number(v) : null);
+const initialGroupId = toId(route.query.groupId);
+const initialAlbumId = toId(route.query.albumId);
+const listKey = computed(() => `${route.query.groupId ?? ''}-${route.query.albumId ?? ''}`);
+
+// ---------- 搜索（后端 wrapper：groupId/albumId/dictumState/state 均 eq） ----------
+// computed 让分组/专辑 options 在异步拉取完成后响应更新（defaultValue 只在挂载初始化时生效）
+const searchFields = computed<AdminSearchField[]>(() => [
+  { key: 'groupId', label: '分组', type: 'select', width: 160, defaultValue: initialGroupId, options: groupOptions.value },
+  { key: 'albumId', label: '专辑', type: 'select', width: 160, defaultValue: initialAlbumId, options: albumOptions.value },
   {
     key: 'dictumState',
     label: '可见性',
@@ -68,7 +98,7 @@ const searchFields: AdminSearchField[] = [
       { label: '已删除', value: 2 }
     ]
   }
-];
+]);
 
 const fetch = (params: Record<string, any>) => getDictumList(params);
 
@@ -147,7 +177,7 @@ const columns: DataTableColumns<DictumRow> = [
     render: (row) => row.groupName || '—'
   },
   {
-    title: '相册',
+    title: '专辑',
     key: 'albumName',
     width: 110,
     render: (row) => row.albumName || '—'

@@ -43,11 +43,17 @@ definePageMeta({ layout: 'default' });
 
 const message = useMessage();
 const dialog = useDialog();
+const router = useRouter();
 const { getDictumAlbumList, deleteDictumAlbums } = useDictumAdminApi();
+
+/** 收录数点击 → 随笔列表按该专辑筛选 */
+const goDictumList = (albumId: number) => {
+  router.push({ path: '/dictum', query: { albumId } });
+};
 
 // ---------- 搜索（name 后端 like；albumState eq） ----------
 const searchFields: AdminSearchField[] = [
-  { key: 'name', label: '相册名称', type: 'input', placeholder: '请输入关键词' },
+  { key: 'name', label: '专辑名称', type: 'input', placeholder: '请输入关键词' },
   {
     key: 'albumState',
     label: '可见性',
@@ -71,14 +77,14 @@ const batchDeleting = ref(false);
 
 const runDelete = async (ids: Array<string | number>) => {
   await deleteDictumAlbums(ids);
-  message.success(`已删除 ${ids.length} 个相册`);
+  message.success(`已删除 ${ids.length} 个专辑`);
   await listRef.value?.refresh();
 };
 
 const doDelete = (row: DictumAlbumRow) => {
   dialog.warning({
-    title: '删除相册',
-    content: '删除后不可恢复，该相册下的随笔将失去相册归属，确认删除？',
+    title: '删除专辑',
+    content: '删除后不可恢复，该专辑下的随笔将失去专辑归属，确认删除？',
     positiveText: '删除',
     negativeText: '取消',
     onPositiveClick: async () => {
@@ -97,8 +103,8 @@ const doDelete = (row: DictumAlbumRow) => {
 const doDeleteBatch = () => {
   const ids = [...checkedKeys.value];
   dialog.warning({
-    title: '批量删除相册',
-    content: `删除后不可恢复，该相册下的随笔将失去相册归属，确认删除选中的 ${ids.length} 个相册？`,
+    title: '批量删除专辑',
+    content: `删除后不可恢复，该专辑下的随笔将失去专辑归属，确认删除选中的 ${ids.length} 个专辑？`,
     positiveText: '删除',
     negativeText: '取消',
     onPositiveClick: async () => {
@@ -117,7 +123,7 @@ const doDeleteBatch = () => {
 // ---------- 表格列（render 元素样式走全局类/内聚组件，scoped 选不中） ----------
 const columns: DataTableColumns<DictumAlbumRow> = [
   {
-    title: '相册',
+    title: '专辑',
     key: 'name',
     minWidth: 200,
     render: (row) =>
@@ -154,7 +160,13 @@ const columns: DataTableColumns<DictumAlbumRow> = [
     key: 'employSum',
     width: 70,
     align: 'right',
-    render: (row) => h('span', { class: 'cell-stats' }, String(row.employSum ?? 0))
+    // 点击跳随笔列表并按该专辑筛选
+    render: (row) =>
+      h(
+        'span',
+        { class: 'cell-stats is-link', onClick: () => goDictumList(row.id), title: '查看该专辑收录的随笔' },
+        String(row.employSum ?? 0)
+      )
   },
   {
     title: '点赞',
