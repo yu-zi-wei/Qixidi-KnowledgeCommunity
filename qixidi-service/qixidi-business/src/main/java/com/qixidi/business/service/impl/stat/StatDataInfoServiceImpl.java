@@ -67,9 +67,12 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
         statTheDataVos.forEach(item -> {
             for (StatDataEnums statDataEnums : StatDataEnumsList) {
                 Map<String, Object> classMap = ClassUtils.reflect(item);
-                if (classMap.containsKey(statDataEnums.getCode())) {
+                //reflect 把 null 字段也放进 map（containsKey 恒真）；历史行计数列可能为 NULL
+                //（早期 INSERT 裸值落库），null 直接跳过该点，防止 toString() NPE
+                Object value = classMap.get(statDataEnums.getCode());
+                if (value != null) {
                     StatReturnDataVo statReturnDataVo = new StatReturnDataVo(statDataEnums.getValue(), item.getStatTime(),
-                            Long.valueOf(classMap.get(statDataEnums.getCode()).toString()));
+                            Long.valueOf(value.toString()));
                     statReturnDataVos.add(statReturnDataVo);
                 }
             }
