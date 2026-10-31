@@ -17,7 +17,7 @@
 
 - 后台接口统一 `/system/*` 前缀（Controller 在 qixidi-system 模块）；`useApi` 语义同门户：分页 `api.postPage`（POST body 携带 BO + 分页字段，`{total,rows}`），其余 `api.post/put/delete` 自动解包——**查询对象接口一律 POST**（2026-10-30 后端定版），`api.get` 仅用于单简单参数/路径参数接口；错误 useApi 统一弹，页面 catch 留空
 - **批量删除是路径参数逗号分隔**：`DELETE /system/article/comment/{id1,id2}`，用 `api.request` 拼路径，不是 query/body
-- **会话失效返回 code 500 + "用户登录失效"**（SaTokenConfig 包装所致，非 401），useApi 已双判定处理
+- **会话失效返回 code 401**（2026-10-31 M3 改造：SaTokenConfig 去掉包装，NotLoginException 走 GlobalExceptionHandler 401 映射；此前是 code 500 + "用户登录失效"），useApi 401 分支已激活，msg 含"登录失效"兜底仍在
 - API 模块放 `composables/useXxxAdminApi.ts`，行类型 + 状态映射（`XXX_STATE_MAP`）与请求同文件导出
 
 ## 🔴 n-data-table 列 render 元素 scoped CSS 选不中
