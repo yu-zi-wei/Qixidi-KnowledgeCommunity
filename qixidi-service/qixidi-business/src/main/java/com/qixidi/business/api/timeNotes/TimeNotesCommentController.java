@@ -1,5 +1,8 @@
 package com.qixidi.business.api.timeNotes;
 
+import com.light.core.enums.BusinessType;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesCommentBo;
 import com.qixidi.business.domain.vo.timeNotes.TimeNotesCommentVo;
 import com.qixidi.business.service.timeNotes.TimeNotesCommentService;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/time/notes/comment")
+@LogModule("小记评论")
 public class TimeNotesCommentController {
 
     private final TimeNotesCommentService timeNotesCommentService;
@@ -31,6 +35,7 @@ public class TimeNotesCommentController {
      * @param bo 评论信息
      * @return 新增后的评论（含真实 id）
      */
+    @Log(title = "新增小记评论", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     public TimeNotesCommentVo add(@Validated @RequestBody TimeNotesCommentBo bo) {
         return timeNotesCommentService.add(bo);
@@ -41,6 +46,7 @@ public class TimeNotesCommentController {
      *
      * @param id 评论 id
      */
+    @Log(title = "删除小记评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         timeNotesCommentService.delete(id);

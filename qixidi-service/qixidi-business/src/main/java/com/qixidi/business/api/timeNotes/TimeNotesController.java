@@ -2,7 +2,10 @@ package com.qixidi.business.api.timeNotes;
 
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
+import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/time/notes")
+@LogModule("时光小记")
 public class TimeNotesController {
 
     private final TimeNotesService timeNotesService;
@@ -32,6 +36,7 @@ public class TimeNotesController {
      *
      * @param bo
      */
+    @Log(title = "新增时光小记", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     public Integer add(@RequestBody @Validated TimeNotesBo bo) {
         timeNotesService.add(bo);
@@ -43,6 +48,7 @@ public class TimeNotesController {
      *
      * @param bo
      */
+    @Log(title = "更新时光小记", businessType = BusinessType.UPDATE)
     @PostMapping("/update")
     public Integer update(@RequestBody @Validated TimeNotesBo bo) {
         timeNotesService.update(bo);
@@ -54,6 +60,7 @@ public class TimeNotesController {
      *
      * @param id
      */
+    @Log(title = "删除时光小记", businessType = BusinessType.DELETE)
     @GetMapping("/delete/{id}")
     public Integer delete(@PathVariable("id") Long id) {
         timeNotesService.delete(id);

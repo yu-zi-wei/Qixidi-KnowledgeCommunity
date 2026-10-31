@@ -122,6 +122,7 @@ public class UserArticleController {
      * @param id
      * @return
      */
+    @Log(title = "删除文章信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/delete/article/{id}")
     public void delete(@NotNull(message = "文章id不能为空") @PathVariable("id") Long id) {
         iArticleInformationService.delete(id);

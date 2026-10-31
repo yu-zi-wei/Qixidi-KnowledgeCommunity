@@ -75,7 +75,7 @@ public class FdFeedbackController {
     /**
      * 更新用户反馈
      */
-    @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
+    @Log(title = "更新用户反馈", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/frontDesk/feedback/update")
     public void update(@Validated(EditGroup.class) @RequestBody FeedbackBo bo) {
@@ -85,6 +85,7 @@ public class FdFeedbackController {
     /**
      * 修改用户反馈状态
      */
+    @Log(title = "更新反馈状态", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @GetMapping("/frontDesk/feedback/update/status/{id}/{status}")
     public void updateStatus(@PathVariable Long id, @PathVariable Integer status) {
@@ -94,6 +95,7 @@ public class FdFeedbackController {
     /**
      * 删除用户反馈
      */
+    @Log(title = "删除用户反馈", businessType = BusinessType.DELETE)
     @RepeatSubmit()
     @DeleteMapping("/frontDesk/feedback/delete/{ids}")
     public void delete(@PathVariable Long[] ids) {

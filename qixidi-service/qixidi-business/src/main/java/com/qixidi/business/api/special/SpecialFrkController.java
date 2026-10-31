@@ -80,6 +80,7 @@ public class SpecialFrkController {
      * @param uid
      * @return
      */
+    @Log(title = "更新专栏文章", businessType = BusinessType.UPDATE)
     @PostMapping("/update/special/{id}/{uid}")
     public void updateSpecial(@RequestBody List<String> ids,
                               @NotNull(message = "专栏id不能为空") @PathVariable("id") Long id,
@@ -98,6 +99,7 @@ public class SpecialFrkController {
     /**
      * 删除专栏信息
      */
+    @Log(title = "删除专栏信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/delete/special/{id}")
     public void remove(@PathVariable Long id) throws Exception {
         iSpecialInformationService.remove(id, true);

@@ -9,6 +9,9 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
+import com.light.core.enums.BusinessType;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/browsing/history")
+@LogModule("用户浏览历史")
 public class FdBrowsingHistoryController {
 
     private final IBrowsingHistoryService iBrowsingHistoryService;
@@ -52,6 +56,7 @@ public class FdBrowsingHistoryController {
     /**
      * 删除用户浏览历史
      */
+    @Log(title = "删除浏览历史", businessType = BusinessType.DELETE)
     @SaCheckPermission("browsing:history:remove")
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

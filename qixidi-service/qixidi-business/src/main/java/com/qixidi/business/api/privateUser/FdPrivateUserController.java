@@ -3,7 +3,10 @@ package com.qixidi.business.api.privateUser;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.QueryGroup;
+import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.privateUser.PrivateUserBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/private/user")
+@LogModule("私信会话")
 public class FdPrivateUserController {
 
     private final IPrivateUserService iPrivateUserService;
@@ -35,6 +39,7 @@ public class FdPrivateUserController {
     /**
      * 新增私信用户记录表
      */
+    @Log(title = "发起私信会话", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @GetMapping("add/{targetUid}")
     public void add(@NotEmpty(message = "目标id不能为空") @PathVariable("targetUid") String targetUid) {
@@ -44,6 +49,7 @@ public class FdPrivateUserController {
     /**
      * 删除私信用户
      */
+    @Log(title = "删除私信会话", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public void remove(@PathVariable String id) {
         iPrivateUserService.deleteById(id);
@@ -52,6 +58,7 @@ public class FdPrivateUserController {
     /**
      * 删除所有私信用户
      */
+    @Log(title = "清空私信会话", businessType = BusinessType.CLEAN)
     @DeleteMapping("/all")
     public void remove() {
         iPrivateUserService.deleteAll();

@@ -1,5 +1,8 @@
 package com.qixidi.system.api;
 
+import com.light.core.enums.BusinessType;
+import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.vo.SystemTaskConfigVo;
 import com.qixidi.business.service.SystemTaskConfigService;
 import com.qixidi.business.task.ArticleTask;
@@ -22,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/task")
+@LogModule("系统任务")
 public class SystemTaskController {
 
     private final SystemTaskConfigService systemTaskConfigService;
@@ -45,6 +49,7 @@ public class SystemTaskController {
      *
      * @return
      */
+    @Log(title = "计算文章权重任务", businessType = BusinessType.OTHER)
     @GetMapping("/calculating_article_weights")
     public void calculatingArticleWeights() {
         articleTask.ArticleCalculateWeight();
@@ -56,6 +61,7 @@ public class SystemTaskController {
      *
      * @return
      */
+    @Log(title = "计算热门数据任务", businessType = BusinessType.OTHER)
     @GetMapping("/calculating_hot_data")
     public void calculatingHotData() {
         dictumTask.countPopularAuthors();
@@ -66,6 +72,7 @@ public class SystemTaskController {
      *
      * @return
      */
+    @Log(title = "同步标签数据任务", businessType = BusinessType.OTHER)
     @GetMapping("/synchronize_label_information_data")
     public void synchronizeLabelInformationData() {
         labelTask.syncLabel();
@@ -76,6 +83,7 @@ public class SystemTaskController {
      *
      * @return
      */
+    @Log(title = "更新网站每日数据", businessType = BusinessType.OTHER)
     @GetMapping("/update_website_daily_data")
     public void updateWebsiteDailyData() {
         statTask.StatInfoUpdate();
@@ -86,6 +94,7 @@ public class SystemTaskController {
      *
      * @return
      */
+    @Log(title = "更新网站每月数据", businessType = BusinessType.OTHER)
     @GetMapping("/update_website_monthly_data")
     public void updateWebsiteMonthlyData() {
         statTask.StatTheInfoUpdate();
