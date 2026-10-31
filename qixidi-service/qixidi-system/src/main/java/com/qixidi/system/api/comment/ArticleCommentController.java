@@ -36,12 +36,12 @@ public class ArticleCommentController {
     private final IArticleCommentService iArticleCommentService;
 
     /**
-     * 查询文章评论列表
+     * 查询文章评论列表（join 评论人/文章标题展示字段）
      */
     @SaCheckPermission("article:comment:query")
     @PostMapping("/list")
     public TableDataInfo<ArticleCommentVo> list(@Validated(QueryGroup.class) @RequestBody ArticleCommentBo bo) {
-        return iArticleCommentService.queryPageList(bo, bo);
+        return iArticleCommentService.adminQueryPageList(bo, bo);
     }
 
     /**
@@ -64,7 +64,7 @@ public class ArticleCommentController {
     @SaCheckPermission("article:comment:query")
     @GetMapping("/{id}")
     public ArticleCommentVo getInfo(@PathVariable("id") Long id) {
-        return iArticleCommentService.queryById(id);
+        return iArticleCommentService.adminQueryById(id);
     }
 
     /**

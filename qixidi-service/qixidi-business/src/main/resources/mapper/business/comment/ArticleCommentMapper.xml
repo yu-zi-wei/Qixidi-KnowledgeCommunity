@@ -3,6 +3,27 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.comment.ArticleCommentMapper">
+
+    <!-- 后台列表 join 查询：评论人/被回复人昵称头像（b_user_main）+ 所在文章标题 -->
+    <sql id="ArticleCommentVo">
+        select ac.id, ac.article_id, ac.uid, ac.parent_id, ac.comment_grade, ac.target_id, ac.target_uid,
+               ac.comment_uid, ac.content, ac.type, ac.state, ac.create_time, ac.update_time,
+               um.nickname  as commentName,
+               um.avatar    as commentAvatar,
+               um2.nickname as targetName,
+               um2.avatar   as targetAvatar,
+               ai.article_title as articleName
+        from b_article_comment as ac
+                 left join b_user_main as um on ac.comment_uid = um.uuid
+                 left join b_user_main as um2 on ac.target_uid = um2.uuid
+                 left join b_article_information as ai on ac.article_id = ai.id
+    </sql>
+
+    <select id="selectCommentIndex" resultType="com.qixidi.business.domain.vo.comment.ArticleCommentVo">
+        <include refid="ArticleCommentVo"/>
+        ${ew.getCustomSqlSegment}
+    </select>
+
     <select id="selectBasicsLis" resultType="com.qixidi.business.domain.vo.comment.ArticleCommentVo">
         select *
         from b_article_information ;

@@ -1,10 +1,12 @@
 package com.qixidi.business.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
+import com.qixidi.business.domain.vo.TimeNotesAdminVo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 
@@ -32,4 +34,14 @@ public interface TimeNotesService {
      */
     Page<TimeNotes> searchForAgent(String uid, String title, String content,
                                    LocalDate beginDate, LocalDate endDate, Page<TimeNotes> page);
+
+    /**
+     * 后台管理列表：全量用户（不限定登录态 uid），标题模糊 + uid 精确可选，fill 作者昵称/头像
+     */
+    TableDataInfo<TimeNotesAdminVo> adminQueryPageList(TimeNotesSearchBo bo, PageQuery pageQuery);
+
+    /**
+     * 后台批量删除（逻辑删 + 相册清理；后台链路无前台会话，跳过属主校验）
+     */
+    void deleteByIds(java.util.List<Long> ids);
 }

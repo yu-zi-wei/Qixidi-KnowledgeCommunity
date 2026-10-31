@@ -4,6 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -111,6 +113,36 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         lqw.like(StringUtils.isNotBlank(bo.getContent()), ArticleComment::getContent, bo.getContent());
         lqw.eq(bo.getType() != null, ArticleComment::getType, bo.getType());
         lqw.eq(bo.getState() != null, ArticleComment::getState, bo.getState());
+        return lqw;
+    }
+
+    @Override
+    public TableDataInfo<ArticleCommentVo> adminQueryPageList(ArticleCommentBo bo, PageQuery pageQuery) {
+        IPage<ArticleCommentVo> result = baseMapper.selectCommentIndex(pageQuery.build(), buildAdminQueryWrapper(bo));
+        return TableDataInfo.build(result);
+    }
+
+    @Override
+    public ArticleCommentVo adminQueryById(Long id) {
+        // 走列表同款 join SQL：selectVoById 单表查询取不到评论人/文章标题等关联展示字段
+        QueryWrapper<ArticleComment> wrapper = buildAdminQueryWrapper(new ArticleCommentBo());
+        wrapper.eq("ac.id", id);
+        List<ArticleCommentVo> records = baseMapper.selectCommentIndex(new Page<>(1, 1), wrapper).getRecords();
+        return records.isEmpty() ? null : records.get(0);
+    }
+
+    /**
+     * 后台 join 查询条件（selectCommentIndex 多表场景，列名带 ac. 前缀）
+     */
+    private QueryWrapper<ArticleComment> buildAdminQueryWrapper(ArticleCommentBo bo) {
+        QueryWrapper<ArticleComment> lqw = Wrappers.query();
+        lqw.eq(bo.getArticleId() != null, "ac.article_id", bo.getArticleId());
+        lqw.eq(bo.getCommentGrade() != null, "ac.comment_grade", bo.getCommentGrade());
+        lqw.eq(StringUtils.isNotBlank(bo.getCommentUid()), "ac.comment_uid", bo.getCommentUid());
+        lqw.like(StringUtils.isNotBlank(bo.getContent()), "ac.content", bo.getContent());
+        lqw.eq(bo.getType() != null, "ac.type", bo.getType());
+        lqw.eq(bo.getState() != null, "ac.state", bo.getState());
+        lqw.orderByDesc("ac.create_time");
         return lqw;
     }
 

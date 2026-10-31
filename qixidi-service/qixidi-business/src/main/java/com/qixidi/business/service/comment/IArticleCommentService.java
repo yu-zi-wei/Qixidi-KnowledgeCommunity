@@ -41,6 +41,16 @@ public interface IArticleCommentService {
     List<ArticleCommentVo> queryList(ArticleCommentBo bo);
 
     /**
+     * 后台列表查询：join 评论人昵称/头像 + 所在文章标题（前台共用的 queryPageList 单表查询，不动）
+     */
+    TableDataInfo<ArticleCommentVo> adminQueryPageList(ArticleCommentBo bo, PageQuery pageQuery);
+
+    /**
+     * 后台详情查询：join 同列表（单表查询取不到关联展示字段）
+     */
+    ArticleCommentVo adminQueryById(Long id);
+
+    /**
      * 修改文章评论
      *
      * @param bo 文章评论

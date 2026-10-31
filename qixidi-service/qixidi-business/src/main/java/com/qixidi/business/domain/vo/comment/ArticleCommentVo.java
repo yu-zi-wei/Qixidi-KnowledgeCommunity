@@ -32,6 +32,11 @@ public class ArticleCommentVo extends ArticleComment {
     private String targetName;
 
     /**
+     * 所在文章标题（后台列表 join 展示字段）
+     */
+    private String articleName;
+
+    /**
      * 评论人用户名称
      */
     private String commentName;

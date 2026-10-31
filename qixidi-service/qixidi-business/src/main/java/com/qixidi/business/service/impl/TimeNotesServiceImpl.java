@@ -17,11 +17,14 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
+import com.qixidi.business.domain.vo.TimeNotesAdminVo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
+import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.service.TimeNotesService;
 import com.qixidi.business.service.album.IAlbumService;
+import com.light.core.core.domain.PageQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author zi-wei
@@ -45,6 +52,7 @@ import java.util.Map;
 public class TimeNotesServiceImpl implements TimeNotesService {
 
     private final TimeNotesMapper timeNotesMapper;
+    private final TripartiteUserMapper tripartiteUserMapper;
     private final IAlbumService albumService;
 
     @Transactional(rollbackFor = Exception.class)
@@ -200,5 +208,61 @@ public class TimeNotesServiceImpl implements TimeNotesService {
             }
         }
         return TableDataInfo.build(timeNotesPage);
+    }
+
+    @Override
+    public TableDataInfo<TimeNotesAdminVo> adminQueryPageList(TimeNotesSearchBo bo, PageQuery pageQuery) {
+        // SearchBo.uid 是 Long 遗留类型，实际小记 uid 为 uuid 字符串，非空时转换匹配
+        String uidCond = bo.getUid() != null ? String.valueOf(bo.getUid()) : null;
+        Page<TimeNotes> page = timeNotesMapper.selectPage(pageQuery.build(), new LambdaQueryWrapper<TimeNotes>()
+                .like(StrUtil.isNotBlank(bo.getTitle()), TimeNotes::getTitle, bo.getTitle())
+                .eq(uidCond != null, TimeNotes::getUid, uidCond)
+                .orderByDesc(TimeNotes::getRecordTime));
+        List<TimeNotes> records = page.getRecords();
+        TableDataInfo<TimeNotesAdminVo> tableDataInfo = new TableDataInfo<>();
+        if (CollectionUtil.isEmpty(records)) {
+            return tableDataInfo;
+        }
+        // 批量 fill 作者昵称/头像
+        Set<String> uids = records.stream().map(TimeNotes::getUid).filter(Objects::nonNull).collect(Collectors.toSet());
+        Map<String, TripartiteUser> userMap = uids.isEmpty() ? Map.of()
+                : tripartiteUserMapper.selectBatchIds(uids).stream()
+                        .collect(Collectors.toMap(TripartiteUser::getUuid, Function.identity(), (a, b) -> a));
+        List<TimeNotesAdminVo> rows = new ArrayList<>();
+        for (TimeNotes item : records) {
+            TimeNotesAdminVo vo = new TimeNotesAdminVo();
+            vo.setId(item.getId());
+            vo.setTitle(item.getTitle());
+            vo.setContent(item.getContent());
+            vo.setUid(item.getUid());
+            vo.setRecordTime(item.getRecordTime());
+            TripartiteUser user = userMap.get(item.getUid());
+            if (user != null) {
+                vo.setNickname(user.getNickname());
+                vo.setAvatar(user.getAvatar());
+            }
+            rows.add(vo);
+        }
+        tableDataInfo.setTotal(page.getTotal());
+        tableDataInfo.setCode(HttpStatus.HTTP_OK);
+        tableDataInfo.setRows(rows);
+        return tableDataInfo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByIds(List<Long> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return;
+        }
+        timeNotesMapper.deleteByIds(ids);
+        // 相册清理走单条链路（quietly 不影响主流程；removeBySource 无批量接口）
+        for (Long id : ids) {
+            try {
+                albumService.removeBySource(IAlbumService.SOURCE_TIME_NOTES, id);
+            } catch (Exception e) {
+                log.warn("删除小记相册记录失败, noteId={}: {}", id, e.getMessage());
+            }
+        }
     }
 }
