@@ -136,6 +136,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 - **`@TableLogic` 删除值是 1 不是实体注释写的 2**：logic-delete-value 全局配置被注释走 MP 默认（0 存在/1 删除）；SysUser 等 RuoYi 实体的"0代表存在 2代表删除"注释是原版残留——手工恢复数据 `UPDATE del_flag='2'` 无效，一律 '0'/'1'
 - **`b_private_user.update_time` 是"会话最新消息时间"冗余字段**：发私信时双向两行一起刷新——私信会话列表排序直接 `ORDER BY update_time DESC`，勿关联消息表算 MAX（消息表单边存储，双向归组很重）
 - **b_browsing_history 按（uid+target）去重合并**（`ON DUPLICATE KEY UPDATE update_time`）：按天做浏览趋势必须聚合 `update_time`（聚合 create_time 会漏掉回访）
+- **`b_article_information.label_id` 是逗号分隔标签 id 串（grouping_id 才是单值）**：按标签统计/筛选/迁移一律 `FIND_IN_SET(id, label_id)` 精确匹配（like '%id%' 会误伤 1↔12）；标签/分组的 articleNumber/followNumber/entriesNumber 是 LabelTask 定时重算的冗余计数，写操作不维护
 - **详情接口（queryById）禁止用 `selectVoById` 单表查询取含 join 展示字段的 VO**：nickname/groupingName/labelNameList 等是列表 join SQL 的产物，单表查全 null；须走列表同款 `selectIndex` + `wrapper.eq("别名.id", id)` 查询（参考 ArticleInformationServiceImpl.queryById）
 - **用户统计走 `UserCountQueryHelper`**：新增统计字段三处同步——`CountUserWebsiteVo` 加字段 → Mapper 加 `selectXxxCountByUserIds`（XML）→ helper 加方法**并在 `allCounts()` 里 merge**
 - **`CensusVo` 是通用时间序列货币**（dateTimes/censusSum/title），趋势类接口直接复用

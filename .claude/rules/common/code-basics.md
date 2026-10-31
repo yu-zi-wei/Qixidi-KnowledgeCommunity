@@ -201,7 +201,7 @@
 
 新创建的文件不会被 Git 自动追踪，容易被遗漏。使用 Write 工具创建新文件后，紧跟执行 `git add .`，确保新文件纳入暂存区。
 
-**分批 commit 前必须 `git status` 确认暂存区无遗留**：早先 `git add` 过的文件会留在暂存区，后续 `git commit` 不带路径参数会把它们全部带上，产生 message 与内容不符的混合提交。发现遗留先 `git restore --staged <file>` 移出再提交。
+**分批 commit 前必须 `git status` 确认暂存区无遗留**：早先 `git add` 过的文件会留在暂存区，后续 `git commit` 不带路径参数会把它们全部带上，产生 message 与内容不符的混合提交。分批提交一律 `git commit -m msg -- <paths>` 显式带路径（不受暂存区其它内容影响），仍须 status 复核提交清单。
 
 ---
 
