@@ -121,6 +121,10 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 // ✅ mapper.selectBatchIds(ids) 或 in 查询
 ```
 
+### DDL 与数据迁移脚本必须落 repo
+
+**凡执行的 DDL / 存量数据迁移，必须同步写成 SQL 脚本放进 `qixidi-service/db/`**——只在本地执行不留档，新环境发布会缺变更直接报错。脚本按序分段并幂等（重复执行不产生二次影响，或注释注明执行前提），文件名表意（参考 `db/sys_oper_log_module.sql`）。
+
 ### Mapper 继承
 
 三泛型 `<M, T, V>`：M=Mapper 自身、T=实体、V=默认 VO：
