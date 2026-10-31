@@ -51,6 +51,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **外层零滚动**：`.admin-list-page{height:calc(100vh - 88px)}`（56 header + 布局 padding 16×2，改布局 padding 必须同步此 calc）+ flex 链（列表区透明容器 `flex:1;min-height:0` + 表格 `flex:1;min-height:0`）——纯 CSS 无需 JS 实时计算；768px 以下降级 height:auto（移动端允许外滚）
 - **ref 方法**：`listRef.refresh()`（保留条件刷当前页）/ `reload()`（重置第 1 页）
 - **操作列用纯文字链接**（NButton text + .cell-btns，按钮间隙 10px）：带图标时 3 按钮宽超列宽会被截断（实证溢出 22px）
+- **🔴 列加 `fixed: 'right'` 时表格底色必须实色**（app.vue 全局 thColor/tdColor 已设纸片色 #ffffff/#1a1a1e，勿改回 transparent）：fixed 列 sticky 定位下透明背景会透出横向滚动中的下层内容
 - **行内主标题即详情入口**：标题 `is-link` 主色可点击开详情抽屉，不放独立"详情"按钮
 - **文字浓度/字重定版**：正文列（标题/摘要/统计/时间）与「共 N 条」一律正常浓度（opacity 1）不做浅色弱化（`.cell-dim` 仅旧页空值占位遗留）；表头 600、行内主标题 400（已固化在 AdminListPage/admin-table.scss，页面不再写）
 - **统计轻查询**：`{pageNum:1, pageSize:1, 筛选条件}` 取 `total`，不拉全量
