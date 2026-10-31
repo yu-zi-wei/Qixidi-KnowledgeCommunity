@@ -67,7 +67,8 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     children: [
       { label: '随笔列表', key: '/dictum', icon: Feather, perm: 'dictum:info:list' },
       { label: '随笔分组', key: '/dictum-group', icon: Folders, perm: 'dictum:group:list' },
-      { label: '随笔专辑', key: '/dictum-album', icon: Book2, perm: 'dictum:album:list' }
+      { label: '随笔专辑', key: '/dictum-album', icon: Book2, perm: 'dictum:album:list' },
+      { label: '随笔评论', key: '/dictum/comment', icon: MessageCircle, perm: 'dictum:comment:query' }
     ]
   },
   {

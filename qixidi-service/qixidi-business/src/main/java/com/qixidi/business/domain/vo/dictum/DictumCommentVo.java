@@ -43,4 +43,8 @@ public class DictumCommentVo extends DictumComment {
      * 目标评论用户头像
      */
     private String targetAvatar;
+    /**
+     * 所在随笔内容（后台列表展示用）
+     */
+    private String dictumContent;
 }

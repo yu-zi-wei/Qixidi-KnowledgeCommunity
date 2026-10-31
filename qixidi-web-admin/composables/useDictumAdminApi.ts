@@ -1,5 +1,5 @@
 /**
- * 随笔管理 API（DictumInfo/Group/AlbumController，/system/dictum/*）
+ * 随笔管理 API（DictumInfo/Group/Album/CommentAdminController，/system/dictum/*）
  * 列表 + 删除最小闭环；新增/编辑走前台用户端，后台不提供
  */
 
@@ -60,6 +60,34 @@ export interface DictumAlbumRow {
   createTime?: string;
 }
 
+/** 随笔评论行（DictumCommentVo；nickname/avatar/targetNickname/dictumContent 为批量填充展示字段） */
+export interface DictumCommentRow {
+  id: number;
+  /** 所在随笔 id */
+  dictumId: number;
+  /** 所在随笔内容（列表批量填充展示字段） */
+  dictumContent?: string;
+  /** 随笔作者 uid */
+  uid?: string;
+  parentId?: number;
+  /** 评论等级（1 一级 / 2 二级 / 3 三级及以下） */
+  commentGrade?: number;
+  targetId?: number;
+  targetUid?: string;
+  commentUid?: string;
+  content: string;
+  /** 评论类型（1 名言 / 2 评论） */
+  type?: number;
+  /** 评论状态（0 正常 / 1 已删除） */
+  status?: number;
+  createTime?: string;
+  /** 评论人（批量填充） */
+  nickname?: string;
+  avatar?: string;
+  /** 回复对象（批量填充） */
+  targetNickname?: string;
+}
+
 /** 可见性（dictumState/albumState 共用） */
 export const DICTUM_VISIBLE_MAP: Record<number, { label: string; type: 'success' | 'info' | 'warning' }> = {
   1: { label: '公开', type: 'success' },
@@ -71,6 +99,12 @@ export const DICTUM_VISIBLE_MAP: Record<number, { label: string; type: 'success'
 export const DICTUM_STATE_MAP: Record<number, { label: string; type: 'success' | 'error' }> = {
   0: { label: '正常', type: 'success' },
   2: { label: '已删除', type: 'error' }
+};
+
+/** 随笔评论 status：0 正常 / 1 已删除（实体注释） */
+export const DICTUM_COMMENT_STATUS_MAP: Record<number, { label: string; type: 'success' | 'error' }> = {
+  0: { label: '正常', type: 'success' },
+  1: { label: '已删除', type: 'error' }
 };
 
 export const useDictumAdminApi = () => {
@@ -102,6 +136,15 @@ export const useDictumAdminApi = () => {
 
     /** 批量删除：DELETE /system/dictum/album/{ids} */
     deleteDictumAlbums: (ids: (number | string)[]) =>
-      api.request<void>(`/system/dictum/album/${ids.join(',')}`, { method: 'DELETE' })
+      api.request<void>(`/system/dictum/album/${ids.join(',')}`, { method: 'DELETE' }),
+
+    // ---------- 随笔评论（/system/dictum/comment） ----------
+    /** 评论分页列表：POST /system/dictum/comment/list */
+    getDictumCommentList: (params: Record<string, any>) =>
+      api.postPage<DictumCommentRow>('/system/dictum/comment/list', params),
+
+    /** 评论批量删除（路径参数逗号分隔）：DELETE /system/dictum/comment/{ids} */
+    deleteDictumComments: (ids: (number | string)[]) =>
+      api.request<void>(`/system/dictum/comment/${ids.join(',')}`, { method: 'DELETE' })
   };
 };

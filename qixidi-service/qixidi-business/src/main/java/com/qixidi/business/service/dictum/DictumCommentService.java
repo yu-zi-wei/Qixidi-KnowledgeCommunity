@@ -5,6 +5,8 @@ import com.qixidi.business.domain.vo.dictum.DictumCommentVo;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 
+import java.util.List;
+
 /**
  * @author zi-wei
  * @create 2024/12/17 14:15
@@ -36,4 +38,20 @@ public interface DictumCommentService {
      * @return 评论列表
      */
     TableDataInfo<DictumCommentVo> commentListStr(String id, PageQuery pageQuery);
+
+    /**
+     * 后台分页查询评论（全量平铺，一二级都出，跳过前台"仅正常状态"限制）
+     *
+     * @param bo         查询条件（内容模糊 / 随笔 id / 状态多选）
+     * @param pageQuery 分页参数
+     * @return 评论分页列表（含用户信息与所在随笔内容）
+     */
+    TableDataInfo<DictumCommentVo> adminQueryPageList(DictumCommentBo bo, PageQuery pageQuery);
+
+    /**
+     * 后台批量删除评论（软删 + 通知记录清理，跳过"仅本人"限制）
+     *
+     * @param ids 评论 id 集合
+     */
+    void adminDelete(List<Long> ids);
 }

@@ -4,14 +4,17 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.qixidi.business.domain.bo.dictum.DictumCommentBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.dictum.DictumCommentVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
+import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.qixidi.business.service.dictum.DictumCommentService;
 import com.light.core.core.domain.PageQuery;
+import com.light.core.utils.StringUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.domain.entity.TripartiteUser;
@@ -43,6 +46,8 @@ public class DictumCommentServiceImpl implements DictumCommentService {
     private TripartiteUserMapper tripartiteUserMapper;
     @Autowired
     private NewsUserRecordMapper newsUserRecordMapper;
+    @Autowired
+    private DictumInfoMapper dictumInfoMapper;
 
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
@@ -181,5 +186,55 @@ public class DictumCommentServiceImpl implements DictumCommentService {
     public TableDataInfo<DictumCommentVo> commentListStr(String id, PageQuery pageQuery) {
         // 将字符串转换为 Long，调用原有的 commentList 方法
         return commentList(Long.parseLong(id), pageQuery);
+    }
+
+    @Override
+    public TableDataInfo<DictumCommentVo> adminQueryPageList(DictumCommentBo bo, PageQuery pageQuery) {
+        // 后台平铺全量（一级+二级都出），不筛 status 除非显式传条件
+        IPage<DictumCommentVo> page = dictumCommentMapper.selectVoPage(pageQuery.build(),
+            new LambdaQueryWrapper<DictumComment>()
+                .eq(bo.getDictumId() != null, DictumComment::getDictumId, bo.getDictumId())
+                .like(StringUtils.isNotBlank(bo.getContent()), DictumComment::getContent, bo.getContent())
+                .eq(bo.getStatus() != null, DictumComment::getStatus, bo.getStatus())
+                .in(CollectionUtil.isNotEmpty(bo.getStatuses()), DictumComment::getStatus, bo.getStatuses())
+                .orderByDesc(DictumComment::getCreateTime));
+        List<DictumCommentVo> records = page.getRecords();
+        if (CollectionUtil.isEmpty(records)) {
+            return TableDataInfo.build(page);
+        }
+
+        // 批量填充：评论人/回复对象 + 所在随笔内容（禁循环查库）
+        Set<String> uids = new HashSet<>();
+        Set<Long> dictumIds = new HashSet<>();
+        for (DictumCommentVo record : records) {
+            uids.add(record.getCommentUid());
+            if (record.getTargetUid() != null) uids.add(record.getTargetUid());
+            dictumIds.add(record.getDictumId());
+        }
+        Map<String, TripartiteUser> userMap = tripartiteUserMapper.selectList(new LambdaQueryWrapper<TripartiteUser>()
+                .in(TripartiteUser::getUuid, uids)).stream()
+            .collect(Collectors.toMap(TripartiteUser::getUuid, item -> item));
+        Map<Long, DictumInfo> dictumMap = dictumInfoMapper.selectBatchIds(dictumIds).stream()
+            .collect(Collectors.toMap(DictumInfo::getId, item -> item));
+        for (DictumCommentVo record : records) {
+            fillUserInfo(userMap.get(record.getCommentUid()), record, false);
+            fillUserInfo(userMap.get(record.getTargetUid()), record, true);
+            DictumInfo dictumInfo = dictumMap.get(record.getDictumId());
+            if (dictumInfo != null) {
+                record.setDictumContent(dictumInfo.getContent());
+            }
+        }
+        return TableDataInfo.build(page);
+    }
+
+    @Override
+    public void adminDelete(List<Long> ids) {
+        dictumCommentMapper.update(null, new LambdaUpdateWrapper<DictumComment>()
+            .in(DictumComment::getId, ids)
+            .set(DictumComment::getStatus, StatusEnums.DELETE.getCode()));
+        //同步删除该评论产生的通知记录（同 delete：news_id 存评论 id，各业务评论表独立自增会撞车，必须限定 type）
+        newsUserRecordMapper.delete(new LambdaQueryWrapper<NewsUserRecord>()
+            .eq(NewsUserRecord::getType, NewsType.DICTUM_COMMENT_NEWS.getCode())
+            .in(NewsUserRecord::getNewsId, ids));
     }
 }
