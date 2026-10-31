@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 public class SysRegisterService {
 
     private final ISysUserService userService;
-    private final ISysConfigService configService;
     private final LogininforService asyncService;
 
     /**
@@ -37,12 +36,6 @@ public class SysRegisterService {
         String password = registerBody.getPassword();
         // 校验用户类型是否存在
         String userType = UserTypeEnums.getUserType(registerBody.getUserType()).getUserType();
-
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
-        // 验证码开关
-//        if (captchaOnOff) {
-//            validateCaptcha(username, registerBody.getCode(), registerBody.getUuid(), request);
-//        }
 
         if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(username))) {
             throw new ServiceException(String.format("保存用户 %s 失败，注册账号已存在", username));

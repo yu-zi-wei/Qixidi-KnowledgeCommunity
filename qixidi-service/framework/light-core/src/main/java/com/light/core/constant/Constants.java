@@ -112,10 +112,5 @@ public interface Constants {
      */
     String LOGIN_USER_KEY = "login_user_key";
 
-    /**
-     * 参数管理 cache key
-     */
-    String SYS_CONFIG_KEY = "sys_config:";
-
 }
 

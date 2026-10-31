@@ -52,11 +52,6 @@ public class SysLoginService {
      */
     public String login(String username, String password, String code, String uuid) {
         HttpServletRequest request = ServletUtils.getRequest();
-//        boolean captchaOnOff = configService.selectCaptchaOnOff();
-        // 验证码开关
-//        if (captchaOnOff) {
-//            validateCaptcha(username, code, uuid, request);
-//        }
         SysUser user = loadUserByUsername(username);
         checkLogin(LoginTypeEnums.PASSWORD, username, () -> !BCrypt.checkpw(password, user.getPassword()));
         // 此处可根据登录用户的数据不同 自行创建 loginUser

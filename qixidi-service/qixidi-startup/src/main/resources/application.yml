@@ -14,7 +14,8 @@ light:
   cacheLazy: false
 
 captcha:
-  # 页面 <参数设置> 可开启关闭 验证码校验
+  # 验证码开关（原 sys_config sys.account.captchaOnOff，已 yml 化）
+  enabled: false
   # 验证码类型 math 数组计算 char 字符验证
   type: MATH
   # line 线段干扰 circle 圆圈干扰 shear 扭曲干扰
@@ -23,6 +24,10 @@ captcha:
   numberLength: 1
   # 字符验证码长度
   charLength: 4
+
+# 后台注册开关（原 sys_config sys.account.registerUser，已 yml 化）
+sys:
+  register-enabled: false
 
 server:
   port: 9001

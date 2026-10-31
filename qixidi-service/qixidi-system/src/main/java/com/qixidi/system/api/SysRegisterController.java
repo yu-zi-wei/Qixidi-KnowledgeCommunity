@@ -3,9 +3,9 @@ package com.qixidi.system.api;
 import com.light.exception.ServiceException;
 
 import com.qixidi.auth.domain.model.RegisterBody;
-import com.qixidi.system.service.ISysConfigService;
 import com.qixidi.system.service.SysRegisterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysRegisterController {
 
     private final SysRegisterService registerService;
-    private final ISysConfigService configService;
+
+    /**
+     * 后台注册开关（原 sys_config sys.account.registerUser，已 yml 化）
+     */
+    @Value("${sys.register-enabled:false}")
+    private boolean registerEnabled;
 
     /**
      * 后台用户注册
@@ -32,7 +37,7 @@ public class SysRegisterController {
      */
     @PostMapping("/admin/register")
     public void register(@Validated @RequestBody RegisterBody user) {
-        if (!("true".equals(configService.selectConfigByKey("sys.account.registerUser")))) {
+        if (!registerEnabled) {
             throw new ServiceException("当前系统没有开启注册功能");
         }
         registerService.register(user);

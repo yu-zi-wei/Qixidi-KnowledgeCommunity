@@ -11,7 +11,6 @@ import com.light.core.utils.StringUtils;
 import com.light.core.utils.reflect.ReflectUtils;
 import com.light.core.utils.spring.SpringUtils;
 import com.light.redission.utils.RedisUtils;
-import com.qixidi.system.service.ISysConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 public class CaptchaController {
 
     private final CaptchaProperties captchaProperties;
-    private final ISysConfigService configService;
 
     /**
      * 生成验证码
@@ -38,7 +36,7 @@ public class CaptchaController {
     @GetMapping("/captchaImage")
     public Map<String, Object> getCode() {
         Map<String, Object> ajax = new HashMap<>();
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
+        boolean captchaOnOff = captchaProperties.isEnabled();
         ajax.put("captchaOnOff", captchaOnOff);
         if (!captchaOnOff) {
             return ajax;
