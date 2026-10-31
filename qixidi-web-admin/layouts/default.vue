@@ -109,17 +109,26 @@ const handleUserAction = (key: string) => {
 
 <style scoped lang="scss">
 /* 主题变量注入：非 Naive 上下文的硬编码色（admin-table.scss 等）统一取这里，
-   与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度） */
+   与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度）。
+   书签风浅色：侧栏 #F3F1EA 分层、纸片 #FFFFFF + 暖灰 hairline */
 .theme-dark {
   --cell-link: #6c87f6;
   --hairline: rgba(255, 255, 255, 0.08);
   --sider-bg: #0b0b0d;
+  --panel-bg: #1a1a1e;
+  --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.18);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.32);
 }
 
 .theme-light {
   --cell-link: #2d63d6;
-  --hairline: rgba(0, 0, 0, 0.08);
-  --sider-bg: #fafafa;
+  --hairline: #E8E4D9;
+  --sider-bg: #F3F1EA;
+  --panel-bg: #ffffff;
+  --panel-shadow: 0 1px 3px rgba(180, 170, 150, 0.18);
+  --scrollbar-thumb: #c9c3b4;
+  --scrollbar-thumb-hover: #b5ae9c;
 }
 
 .app-shell {

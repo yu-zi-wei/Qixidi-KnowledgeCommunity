@@ -63,8 +63,9 @@ const fallbackFontSize = computed(() => Math.round(Math.min(width.value, height.
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(128, 128, 128, 0.14);
-  color: rgba(128, 128, 128, 0.9);
+  /* 书签风暖灰兜底（中性偏暖，白纸片与深色纸片上都成立） */
+  background: rgba(140, 134, 120, 0.18);
+  color: #8d877a;
   font-weight: 600;
   user-select: none;
 }

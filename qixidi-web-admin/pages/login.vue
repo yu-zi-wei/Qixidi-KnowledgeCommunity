@@ -117,12 +117,15 @@ onMounted(loadCaptcha);
 </script>
 
 <style scoped lang="scss">
+/* 书签风：暖纸底 + 白纸片卡片（同内容区/纸片体系） */
 .login-page {
-  background: #f2f3f5;
+  background: #FAF9F6;
 }
 
 .login-card {
-  border-radius: 8px;
+  border-radius: 10px;
+  border: 1px solid #E8E4D9;
+  box-shadow: 0 1px 3px rgba(180, 170, 150, 0.18);
 }
 
 .captcha-row {

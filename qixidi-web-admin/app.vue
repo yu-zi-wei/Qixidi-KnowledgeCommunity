@@ -18,9 +18,9 @@ import type {GlobalTheme, GlobalThemeOverrides} from 'naive-ui';
 const THEME_KEY = 'admin-theme';
 
 /**
- * 高级风 · 近无彩色系（2026-10-30 定版）：黑白灰做骨架，蓝色只做交互点缀
- * （链接/选中态/焦点/唯一主按钮），数据可视化与语义色（成功/危险）不受限。
- * 表格/菜单透明底 + hairline 分隔，去卡片化——内容即界面。
+ * 极简书签风（2026-10-31 定版）：暖纸底色系——内容区 #FAF9F6、侧栏 #F3F1EA
+ * （布局根注入 --sider-bg），区块是白纸片卡片（细暖灰边框、无阴影）；
+ * 蓝色只做交互点缀（链接/选中态/焦点/唯一主按钮）。深色模式保留黑白灰骨架。
  * 非 Naive 上下文的硬编码色（admin-table.scss 的 .is-link 等）用布局根注入的
  * --cell-link / --hairline 变量，与此处 primaryColor 保持同源。
  */
@@ -30,23 +30,23 @@ const lightOverrides: GlobalThemeOverrides = {
     primaryColorHover: '#4d7fe8',
     primaryColorPressed: '#2350ae',
     primaryColorSuppl: '#2d63d6',
-    bodyColor: '#f7f7f8',
+    bodyColor: '#FAF9F6',
     cardColor: '#ffffff',
-    borderColor: 'rgba(0, 0, 0, 0.08)',
-    dividerColor: 'rgba(0, 0, 0, 0.08)'
+    borderColor: '#E8E4D9',
+    dividerColor: '#E8E4D9'
   },
   DataTable: {
     thColor: 'transparent',
     tdColor: 'transparent',
     thColorHover: 'transparent',
-    tdColorHover: 'rgba(0, 0, 0, 0.03)',
-    borderColor: 'rgba(0, 0, 0, 0.08)',
-    thTextColor: 'rgba(0, 0, 0, 0.5)'
+    tdColorHover: '#F6F4ED',
+    borderColor: '#E8E4D9',
+    thTextColor: 'rgba(60, 55, 45, 0.55)'
   },
   Menu: {
-    itemColorActive: 'rgba(0, 0, 0, 0.05)',
-    itemColorActiveHover: 'rgba(0, 0, 0, 0.07)',
-    itemColorHover: 'rgba(0, 0, 0, 0.04)'
+    itemColorActive: '#ECE8DD',
+    itemColorActiveHover: '#E6E1D3',
+    itemColorHover: 'rgba(60, 55, 45, 0.05)'
   }
 };
 
@@ -83,9 +83,9 @@ const darkOverrides: GlobalThemeOverrides = {
   }
 };
 
-// 主题唯一数据源；全 CSR，localStorage 直读直写安全。深色为默认主题（仅显式 light 才浅色）
+// 主题唯一数据源；全 CSR，localStorage 直读直写安全。书签风为默认（仅显式 dark 才深色）
 const theme = ref<GlobalTheme | null>(null);
-if (import.meta.client && localStorage.getItem(THEME_KEY) !== 'light') {
+if (import.meta.client && localStorage.getItem(THEME_KEY) === 'dark') {
   theme.value = darkTheme;
 }
 provide('theme', theme);

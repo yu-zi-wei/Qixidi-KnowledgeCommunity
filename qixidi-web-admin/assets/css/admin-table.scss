@@ -147,3 +147,24 @@
   white-space: nowrap;
 }
 
+// ===== 全局细滚动条（书签风） =====
+// 暖灰小圆头，双主题取布局根注入的 --scrollbar-thumb（layouts/default.vue）；
+// Naive 表格内部滚动/侧栏/弹窗滚动条统一收敛到此
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #c9c3b4);
+  border-radius: 3px;
+
+  &:hover {
+    background: var(--scrollbar-thumb-hover, #b5ae9c);
+  }
+}
+

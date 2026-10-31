@@ -1,6 +1,6 @@
 <template>
   <div class="admin-list-page">
-    <!-- 搜索区：无卡片，直接坐主题底色，hairline 与表格分界 -->
+    <!-- 搜索区：书签纸片（--panel-bg + 暖灰细边框，--hairline 由布局根注入） -->
     <div class="alp-search-card">
       <div class="alp-search-form">
         <!-- 字段统一「label + 控件」结构（参考图样式），下拉可配多选 -->
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <!-- 列表区：透明容器撑满剩余高度，滚动只发生在表格内部 -->
+    <!-- 列表区：书签纸片撑满剩余高度，滚动只发生在表格内部 -->
     <div class="alp-list-card">
       <div v-if="$slots['toolbar-left'] || $slots['toolbar-right']" class="alp-toolbar">
         <div class="alp-toolbar-left"><slot name="toolbar-left" /></div>
@@ -52,7 +52,7 @@
         :data="rows"
         :loading="loading"
         :row-key="rowKeyFn"
-        :scroll-x="scrollX"
+        :scroll-x="scrollX ?? autoScrollX"
       />
 
       <div class="alp-footer">
@@ -117,7 +117,7 @@ const props = withDefaults(
     selectable?: boolean;
     /** 显示序号列（跨页连续） */
     seq?: boolean;
-    /** 表格横向滚动宽度（列多时传） */
+    /** 表格横向滚动宽度；不传则自动按列宽（width/minWidth）合计，容器更窄时表格内部出横向滚动条 */
     scrollX?: number;
     pageSizes?: number[];
     defaultPageSize?: number;
@@ -222,6 +222,20 @@ const tableColumns = computed<DataTableColumns<any>>(() => {
   return [...cols, ...props.columns];
 });
 
+/** 默认横向滚动宽度：列宽合计（含前置选择/序号列），小屏容器更窄时表格内部横向滚动而非压缩列 */
+const autoScrollX = computed<number | undefined>(() => {
+  let sum = 0;
+  for (const col of tableColumns.value as any[]) {
+    if (col.type === 'selection') {
+      sum += 50; // Naive 选择列无 width 定义，按渲染实际宽度估
+      continue;
+    }
+    const w = col.width ?? col.minWidth;
+    if (typeof w === 'number') sum += w;
+  }
+  return sum > 0 ? sum : undefined;
+});
+
 onMounted(() => {
   if (props.immediate) {
     takeSnapshot();
@@ -250,11 +264,14 @@ defineExpose({
   gap: 12px;
 }
 
-/* 搜索区：透明底 + hairline 下边线与表格分界（--hairline 由布局根注入） */
+/* 搜索区：书签纸片（--panel-bg 白纸 + 暖灰细边框 + 轻投影模拟纸片浮起） */
 .alp-search-card {
   flex-shrink: 0;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--hairline);
+  padding: 14px 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  box-shadow: var(--panel-shadow, 0 1px 3px rgba(180, 170, 150, 0.18));
 }
 
 .alp-search-form {
@@ -286,12 +303,17 @@ defineExpose({
   flex-shrink: 0;
 }
 
-/* 列表区：透明容器撑满剩余高度，滚动只在表格内部 */
+/* 列表区：书签纸片撑满剩余高度，滚动只在表格内部 */
 .alp-list-card {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
+  padding: 12px 16px 14px;
+  background: var(--panel-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  box-shadow: var(--panel-shadow, 0 1px 3px rgba(180, 170, 150, 0.18));
 }
 
 .alp-toolbar {
