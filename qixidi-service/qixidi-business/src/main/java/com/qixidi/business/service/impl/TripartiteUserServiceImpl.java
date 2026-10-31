@@ -191,7 +191,8 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         boolean b = baseMapper.updateById(update) > 0;
 
         if (b) {
-            if (!update.getRoleId().equals(tripartiteUser.getRoleId())) {
+            // roleId 为 null 表示本次未修改角色（如冻结/解冻只传 uuid+state），不触发角色变更通知
+            if (update.getRoleId() != null && !update.getRoleId().equals(tripartiteUser.getRoleId())) {
                 String uuid = tripartiteUser.getUuid();
                 if (StrUtil.isNotBlank(tripartiteUser.getEmail())) {
                     StringBuffer mags = new StringBuffer();
