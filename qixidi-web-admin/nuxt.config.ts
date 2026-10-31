@@ -34,7 +34,8 @@ export default defineNuxtConfig({
     nitro: {
         devProxy: {
             '/api': {
-                target: 'http://127.0.0.1:9001',
+                // 验证新后端代码时用 NUXT_DEV_API_TARGET 指向 9002 验证实例，避免动 9001 常驻实例
+                target: process.env.NUXT_DEV_API_TARGET || 'http://127.0.0.1:9001',
                 changeOrigin: true
             }
         }

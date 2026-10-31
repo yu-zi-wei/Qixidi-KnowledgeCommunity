@@ -7,6 +7,8 @@
 export interface CommentRow {
   id: number;
   articleId: number;
+  /** 所在文章标题（列表 join 展示字段） */
+  articleName?: string;
   uid: string;
   parentId?: number;
   commentGrade?: number;

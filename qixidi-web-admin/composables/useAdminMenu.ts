@@ -16,7 +16,10 @@ import {
   Users,
   Settings,
   Adjustments,
+  Notebook,
+  Feather,
   Folders,
+  Book2,
   Shield,
   IdBadge
 } from '@vicons/tabler';
@@ -33,13 +36,38 @@ export interface AdminMenuItem {
 
 export const ADMIN_MENU: AdminMenuItem[] = [
   {
-    label: '内容管理',
-    key: 'content',
-    icon: Folders,
+    label: '文章管理',
+    key: 'article-mgmt',
+    icon: FileText,
     children: [
-      { label: '文章管理', key: '/article', icon: FileText, perm: 'article:information:query' },
-      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' },
-      { label: '前台用户', key: '/user', icon: Users, perm: 'tripartiteUser:query' }
+      { label: '文章列表', key: '/article', icon: FileText, perm: 'article:information:query' },
+      { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' }
+    ]
+  },
+  {
+    label: '小记管理',
+    key: 'time-notes-mgmt',
+    icon: Notebook,
+    children: [
+      { label: '小记列表', key: '/time-notes', icon: Notebook, perm: 'timeNotes:query' }
+    ]
+  },
+  {
+    label: '随笔管理',
+    key: 'dictum-mgmt',
+    icon: Feather,
+    children: [
+      { label: '随笔列表', key: '/dictum', icon: Feather, perm: 'dictum:info:list' },
+      { label: '随笔分组', key: '/dictum-group', icon: Folders, perm: 'dictum:group:list' },
+      { label: '随笔相册', key: '/dictum-album', icon: Book2, perm: 'dictum:album:list' }
+    ]
+  },
+  {
+    label: '前台用户',
+    key: 'user-mgmt',
+    icon: Users,
+    children: [
+      { label: '用户列表', key: '/user', icon: Users, perm: 'tripartiteUser:query' }
     ]
   },
   {

@@ -39,7 +39,7 @@
           <n-divider />
           <p class="detail-content">{{ detail.content }}</p>
           <div class="detail-meta">
-            <span>文章 #{{ detail.articleId }}</span>
+            <span>所在文章：{{ detail.articleName || '—' }}（#{{ detail.articleId }}）</span>
             <span v-if="detail.targetName">回复 @{{ detail.targetName }}</span>
           </div>
         </div>
@@ -172,10 +172,20 @@ const columns: DataTableColumns<CommentRow> = [
       ])
   },
   {
-    title: '文章',
-    key: 'articleId',
-    width: 90,
-    render: (row) => `#${row.articleId}`
+    title: '所在文章',
+    key: 'articleName',
+    width: 160,
+    render: (row) =>
+      h(
+        'a',
+        {
+          class: 'cell-ellipsis is-link',
+          href: `https://qixidi.top/articles/${row.articleId}`,
+          target: '_blank',
+          title: row.articleName || `文章 #${row.articleId}`
+        },
+        row.articleName || `#${row.articleId}`
+      )
   },
   {
     title: '状态',
