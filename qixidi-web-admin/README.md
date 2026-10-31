@@ -1,6 +1,6 @@
 # qixidi-web-admin
 
-栖息地博客的**管理后台 2.0**，基于 Nuxt 3 重写（旧版 Vue 2 + Element UI 后台已归档至 `qixidi-web-admin-1.0`，仅存档不再开发）。
+栖息地博客的**管理后台 2.0**，基于 Nuxt 3 重写（旧版 Vue 2 + Element UI 后台已下线删除，git 历史可溯）。
 
 ## 技术栈
 
@@ -38,6 +38,7 @@ pnpm build
 cd /data/qixidi/web-admin
 unzip -o dist.zip
 /data/app/nginx/sbin/nginx -t
+/data/app/nginx/sbin/nginx -s reload
 ```
 
 - `unzip -o` 覆盖解压；旧 hash 文件会残留但无害，追求干净可先清空目录再解压

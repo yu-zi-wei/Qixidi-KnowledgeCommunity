@@ -58,9 +58,7 @@ qixidi/
 │
 ├── qixidi-web-nuxt3  # 门户 + 用户后台（Nuxt 3 SSR）
 │
-├── qixidi-web-admin  # 管理后台 2.0（Nuxt 3 + Naive UI，重写中）
-│
-└── qixidi-web-admin-1.0  # 旧版管理后台（Vue 2，已归档不再开发）
+└── qixidi-web-admin  # 管理后台（Nuxt 3 + Naive UI，全 CSR 静态部署）
 ```
 
 ## 亮点特性
