@@ -221,6 +221,32 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 StpUtil.kickout(UserTypeEnums.SYS_USER.getUserType() + ":" + uuid);
                 StpUtil.kickout(UserTypeEnums.TRIPARTITE_USER.getUserType() + ":" + uuid);
             }
+            // 状态变更（冻结/解冻）邮件通知：两封文案不同；冻结时立即踢下线（已登录会话不能再继续使用）
+            Integer newState = update.getState();
+            if (newState != null && !newState.equals(tripartiteUser.getState())
+                    && StrUtil.isNotBlank(tripartiteUser.getEmail())) {
+                String uuid = tripartiteUser.getUuid();
+                if (UserStatusEnums.DISABLE.getIntegerCode().equals(newState)) {
+                    StringBuffer mags = new StringBuffer();
+                    mags.append("<div style=\"text-align: left\">");
+                    mags.append("<p>您的账号已被冻结！</p>");
+                    mags.append("<p>冻结期间您将无法登录栖息地</p>");
+                    mags.append("<p>如有疑问请回复本邮件或到反馈专区留言</p>");
+                    mags.append("<p>冻结时间：" + DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss") + "</p>");
+                    mags.append("</div>");
+                    MailUtils.sendHtml(tripartiteUser.getEmail(), "栖息地-账号冻结通知", mags.toString());
+                    StpUtil.kickout(UserTypeEnums.SYS_USER.getUserType() + ":" + uuid);
+                    StpUtil.kickout(UserTypeEnums.TRIPARTITE_USER.getUserType() + ":" + uuid);
+                } else if (UserStatusEnums.OK.getIntegerCode().equals(newState)) {
+                    StringBuffer mags = new StringBuffer();
+                    mags.append("<div style=\"text-align: left\">");
+                    mags.append("<p>您的账号已解除冻结！</p>");
+                    mags.append("<p>现在可以正常登录栖息地了，欢迎回来～</p>");
+                    mags.append("<p>解冻时间：" + DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss") + "</p>");
+                    mags.append("</div>");
+                    MailUtils.sendHtml(tripartiteUser.getEmail(), "栖息地-账号解冻通知", mags.toString());
+                }
+            }
         }
         return b;
     }
