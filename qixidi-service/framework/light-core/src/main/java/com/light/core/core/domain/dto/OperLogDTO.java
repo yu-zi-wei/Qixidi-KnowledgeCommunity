@@ -22,9 +22,14 @@ public class OperLogDTO implements Serializable {
     private Long operId;
 
     /**
-     * 操作模块
+     * 操作功能
      */
     private String title;
+
+    /**
+     * 操作模块（类上 @LogModule 标识）
+     */
+    private String module;
 
     /**
      * 业务类型（0其它 1新增 2修改 3删除）

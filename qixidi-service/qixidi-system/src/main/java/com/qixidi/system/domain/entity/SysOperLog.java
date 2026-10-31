@@ -36,10 +36,16 @@ public class SysOperLog extends PageQuery implements Serializable {
     private Long operId;
 
     /**
-     * 操作模块
+     * 操作功能（如"新增"、"合并"）
+     */
+    @ExcelProperty(value = "操作功能")
+    private String title;
+
+    /**
+     * 操作模块（类上 @LogModule 标识，如"标签管理"）
      */
     @ExcelProperty(value = "操作模块")
-    private String title;
+    private String module;
 
     /**
      * 业务类型（0其它 1新增 2修改 3删除）

@@ -2,6 +2,7 @@ package com.qixidi.auth.aspectj;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.LogModule;
 import com.light.core.core.domain.dto.OperLogDTO;
 import com.light.core.core.service.OperLogService;
 import com.light.core.enums.BusinessStatus;
@@ -101,8 +102,13 @@ public class LogAspect {
     public void getControllerMethodDescription(JoinPoint joinPoint, Log log, OperLogDTO operLog, Object jsonResult) throws Exception {
         // 设置action动作
         operLog.setBusinessType(log.businessType().ordinal());
-        // 设置标题
+        // 设置标题（操作功能）
         operLog.setTitle(log.title());
+        // 设置模块（类上 @LogModule，未标注的旧调用点为空，前端兜底显示 title）
+        LogModule logModule = joinPoint.getTarget().getClass().getAnnotation(LogModule.class);
+        if (logModule != null) {
+            operLog.setModule(logModule.value());
+        }
         // 设置操作人类别
         operLog.setOperatorType(log.operatorType().ordinal());
         // 是否需要保存request，参数和值

@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface Log {
     /**
-     * 模块
+     * 操作功能（如"新增"、"编辑"、"合并"；模块名由类上 @LogModule 标识）
      */
     String title() default "";
 
