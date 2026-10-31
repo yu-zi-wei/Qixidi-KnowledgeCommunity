@@ -146,7 +146,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 
 ## 日志与异常
 
-- 新增/更新/删除必须加 `@Log(module = "...", businessType = BusinessType.INSERT)` 
+- 操作日志注解体系（sys_oper_log.module 列）：Controller **类上**标 `@LogModule("模块名")`，方法上 `@Log(title = "操作名+对象", businessType = BusinessType.XXX)`——title 必须详细（"合并标签信息"/"上传文件"），禁止光秃秃的"新增/修改"；模块名直拼不自然的取自然对象名（参数管理→参数、用户管理→用户、OSS对象存储→文件且 upload 用"上传文件"）
 - 异常用 `BusinessException("...")`；禁止返回 null 表示错误、禁止抛 `RuntimeException`
 - 参数校验：`@Validated @RequestBody DataBo` + 校验分组（AddGroup/EditGroup）
 
