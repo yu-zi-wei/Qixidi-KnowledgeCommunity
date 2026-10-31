@@ -66,6 +66,14 @@ public interface ILabelInfoService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
+    /**
+     * 合并标签：源标签的文章挂载与关注迁移至目标标签后删除源标签（计数由定时任务重算）
+     *
+     * @param sourceId 源标签 id（合并后删除）
+     * @param targetId 目标标签 id（合并后保留）
+     */
+    void mergeLabel(Long sourceId, Long targetId);
+
     List<LabelInfoVo> fdLabelList(LabelInfoBo bo);
 
     LabelInfoVo fdLabelInfo(Long id);

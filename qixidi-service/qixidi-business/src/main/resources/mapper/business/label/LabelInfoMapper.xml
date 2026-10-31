@@ -29,6 +29,7 @@
     <select id="selectVoPages" resultType="com.qixidi.business.domain.vo.label.LabelInfoVo">
         SELECT
         li.id,
+        li.label_grouping_id,
         li.label_name,
         li.label_describe,
         li.label_cover,
@@ -44,8 +45,11 @@
             <if test="bo.state!=null and bo.state!=''">
                 and li.state=#{bo.state}
             </if>
-            <if test="bo.labelName!=null and bo.groupingName!=''">
+            <if test="bo.labelName!=null and bo.labelName!=''">
                 and li.label_name like concat('%' ,#{bo.labelName},'%')
+            </if>
+            <if test="bo.labelGroupingId!=null">
+                and li.label_grouping_id=#{bo.labelGroupingId}
             </if>
             <if test="bo.groupingName!=null and bo.groupingName!=''">
                 and lgi.grouping_name like concat('%' ,#{bo.groupingName},'%')

@@ -11,6 +11,7 @@ import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.business.domain.bo.label.LabelInfoBo;
+import com.qixidi.business.domain.bo.label.LabelMergeBo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.service.label.ILabelInfoService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -83,6 +84,17 @@ public class LabelInfoController {
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody LabelInfoBo bo) {
         iLabelInfoService.updateByBo(bo);
+    }
+
+    /**
+     * 合并标签：源标签的文章挂载与关注迁移至目标标签后删除源标签
+     */
+    @SaCheckPermission("labelInfo:merge")
+    @Log(title = "标签信息", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PostMapping("/merge")
+    public void merge(@Validated @RequestBody LabelMergeBo bo) {
+        iLabelInfoService.mergeLabel(bo.getSourceId(), bo.getTargetId());
     }
 
     /**

@@ -65,6 +65,14 @@ public interface ILabelGroupingInfoService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
+    /**
+     * 合并标签分组：源分组下的标签与文章归属迁移至目标分组后删除源分组（entriesNumber 由定时任务重算）
+     *
+     * @param sourceId 源分组 id（合并后删除）
+     * @param targetId 目标分组 id（合并后保留）
+     */
+    void mergeGrouping(Long sourceId, Long targetId);
+
     TableDataInfo<LabelGroupingInfoVo> fdkGroupingList(LabelGroupingInfoBo bo, PageQuery pageQuery);
 
 }

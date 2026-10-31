@@ -2,6 +2,7 @@ package com.qixidi.system.api.label;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.qixidi.business.domain.bo.label.LabelGroupingInfoBo;
+import com.qixidi.business.domain.bo.label.LabelMergeBo;
 import com.qixidi.business.domain.vo.label.LabelGroupingInfoVo;
 import com.qixidi.business.service.label.ILabelGroupingInfoService;
 import com.qixidi.auth.annotation.Log;
@@ -84,6 +85,17 @@ public class LabelGroupingInfoController {
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody LabelGroupingInfoBo bo) {
         iLabelGroupingInfoService.updateByBo(bo);
+    }
+
+    /**
+     * 合并标签分组：源分组下的标签与文章归属迁移至目标分组后删除源分组
+     */
+    @SaCheckPermission("groupingInfo:merge")
+    @Log(title = "标签分组信息", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PostMapping("/merge")
+    public void merge(@Validated @RequestBody LabelMergeBo bo) {
+        iLabelGroupingInfoService.mergeGrouping(bo.getSourceId(), bo.getTargetId());
     }
 
     /**

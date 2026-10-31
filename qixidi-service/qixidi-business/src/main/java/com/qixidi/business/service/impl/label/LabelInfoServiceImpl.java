@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.EscapeUtil;
+import com.light.exception.ServiceException;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.label.LabelInfoBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
@@ -28,6 +29,7 @@ import com.qixidi.business.mapper.user.UserFollowMapper;
 import com.qixidi.business.service.label.ILabelInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -227,6 +229,48 @@ public class LabelInfoServiceImpl implements ILabelInfoService {
             }
         });
         return list;
+    }
+
+    /**
+     * 合并标签：源标签的文章挂载与关注迁移至目标标签后删除源标签（articleNumber/followNumber 由 LabelTask 定时重算）
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void mergeLabel(Long sourceId, Long targetId) {
+        if (sourceId.equals(targetId)) {
+            throw new ServiceException("源标签与目标标签不能相同");
+        }
+        if (baseMapper.selectById(sourceId) == null || baseMapper.selectById(targetId) == null) {
+            throw new ServiceException("源标签或目标标签不存在");
+        }
+        // 文章迁移：label_id 为逗号分隔 id 串，FIND_IN_SET 精确匹配防误伤（1 不匹配 12）
+        // 已挂目标标签的文章仅移除源 id；未挂的将源 id 替换为目标 id，替换天然去重
+        articleInformationMapper.update(null, Wrappers.lambdaUpdate(ArticleInformation.class)
+            .setSql("label_id = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', label_id, ','), CONCAT(',', {0}, ','), ','))", sourceId)
+            .apply("FIND_IN_SET({0}, label_id) > 0 AND FIND_IN_SET({1}, label_id) > 0", sourceId, targetId));
+        articleInformationMapper.update(null, Wrappers.lambdaUpdate(ArticleInformation.class)
+            .setSql("label_id = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', label_id, ','), CONCAT(',', {0}, ','), CONCAT(',', {1}, ',')))", sourceId, targetId)
+            .apply("FIND_IN_SET({0}, label_id) > 0 AND FIND_IN_SET({1}, label_id) = 0", sourceId, targetId));
+        // 关注迁移：已关注目标标签的用户删其对源标签的关注（防 uid+目标重复），其余改挂目标标签
+        List<UserFollow> srcFollows = userFollowMapper.selectList(Wrappers.lambdaQuery(UserFollow.class)
+            .eq(UserFollow::getTargetId, String.valueOf(sourceId))
+            .eq(UserFollow::getType, UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
+        if (!srcFollows.isEmpty()) {
+            List<Long> bothIds = userFollowMapper.selectList(Wrappers.lambdaQuery(UserFollow.class)
+                .in(UserFollow::getUid, srcFollows.stream().map(UserFollow::getUid).toList())
+                .eq(UserFollow::getTargetId, String.valueOf(targetId))
+                .eq(UserFollow::getType, UserFollowTypeEnums.LABEL_FOLLOW.getCode()))
+                .stream().map(UserFollow::getId).toList();
+            if (!bothIds.isEmpty()) {
+                userFollowMapper.deleteByIds(bothIds);
+            }
+            userFollowMapper.update(null, Wrappers.lambdaUpdate(UserFollow.class)
+                .set(UserFollow::getTargetId, String.valueOf(targetId))
+                .eq(UserFollow::getTargetId, String.valueOf(sourceId))
+                .eq(UserFollow::getType, UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
+        }
+        // 物理删除源标签（与 deleteWithValidByIds 行为一致，实体无 @TableLogic）
+        baseMapper.deleteById(sourceId);
     }
 }
 
