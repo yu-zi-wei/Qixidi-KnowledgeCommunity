@@ -187,7 +187,7 @@ xss:
   # 过滤开关
   enabled: false
   # 排除链接（多个用逗号分隔）
-  excludes: /system/notice,/business/article/*
+  excludes: /business/article/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 

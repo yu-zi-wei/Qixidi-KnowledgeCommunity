@@ -117,10 +117,5 @@ public interface Constants {
      */
     String SYS_CONFIG_KEY = "sys_config:";
 
-    /**
-     * 字典管理 cache key
-     */
-    String SYS_DICT_KEY = "sys_dict:";
-
 }
 

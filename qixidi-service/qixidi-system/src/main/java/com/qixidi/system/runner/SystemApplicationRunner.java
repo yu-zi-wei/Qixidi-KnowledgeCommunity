@@ -2,7 +2,6 @@ package com.qixidi.system.runner;
 
 import com.light.core.config.LightConfig;
 import com.qixidi.system.service.ISysConfigService;
-import com.qixidi.system.service.ISysDictTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -21,8 +20,6 @@ public class SystemApplicationRunner implements ApplicationRunner {
 
     private final LightConfig ruoyiConfig;
     private final ISysConfigService configService;
-    private final ISysDictTypeService dictTypeService;
-
 
     @Override
     public void run(ApplicationArguments args) {
@@ -31,9 +28,6 @@ public class SystemApplicationRunner implements ApplicationRunner {
         }
         configService.loadingConfigCache();
         log.info("加载参数缓存数据成功");
-
-        dictTypeService.loadingDictCache();
-        log.info("加载字典缓存数据成功");
 
     }
 
