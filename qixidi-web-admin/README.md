@@ -24,13 +24,11 @@ pnpm dev        # http://localhost:3000，需后端 qixidi-service 运行在 127
 ```powershell
 # 🔴 先停掉本地 dev server——dev 与 generate 共用 .nuxt 目录，
 #    dev 运行中打包会产出损坏构建物（部署后整站 500），强制规则
-pnpm generate                                   # 产物在 .output/public
-
-# 压缩产物为 dist.zip（压 public 目录内的内容，不带 public 这一层目录）
-Compress-Archive -Path .output\public\* -DestinationPath dist.zip -Force
+pnpm build
+# = nuxt cleanup + nuxt generate + 压缩产物，dist.zip 输出在项目外 ../dist.zip
 ```
 
-依赖有变更时先 `pnpm install`。
+依赖有变更时先 `pnpm install`。手动等价：`pnpm generate` 产物在 `.output/public`，压缩时**压 public 目录内的内容**（不带 public 这一层），否则解压后多套一层目录、线上 JS/CSS 全 404。
 
 ### 2. 上传与服务器部署
 
