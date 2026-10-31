@@ -81,6 +81,7 @@ AdminListPage 双 script 块（普通块 export 类型 + setup 块实现），�
 - 同门户方式（puppeteer-core + Edge 无头，脚本存 `%TEMP%\qixidi-pptr\`）
 - **nuxi dev 只监听 ::1**（IPv6 localhost）：无头脚本访问 dev 页面必须用 `http://localhost:端口`，写 `127.0.0.1` 必拒连（Get-NetTCPConnection 可见监听地址为 `::1`）
 - **admin 页登录用 UI 表单**（本地 dev 凭据 ziwei/ziwei123，验证码开关默认关）；也可 localStorage 注入 `{token}`（key=`admin`）后刷新
+- **无 `window.__vue_app__`（那是门户内嵌 admin 页的通道）**：登录态断言读 `JSON.parse(localStorage.admin).token`，页面导航一律 URL goto
 - 全 CSR 应用 URL goto 与客户端导航渲染等价，验证不必模拟菜单点击
 - 布局/视觉改动跑量测断言（getBoundingClientRect/裂图 naturalWidth/横向溢出），不要只截图
 
