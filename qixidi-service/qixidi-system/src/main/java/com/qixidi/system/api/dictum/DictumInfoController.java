@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 名言信息Controller
+ * 随笔信息Controller
  *
  * @author aurora
  * @date 2023-04-24
@@ -33,13 +33,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dictum/info")
-@LogModule("名言信息")
+@LogModule("随笔信息")
 public class DictumInfoController {
 
     private final IDictumInfoService iDictumInfoService;
 
     /**
-     * 查询名言信息列表
+     * 查询随笔信息列表
      */
     @SaCheckPermission("dictum:info:list")
     @PostMapping("/list")
@@ -48,18 +48,18 @@ public class DictumInfoController {
     }
 
     /**
-     * 导出名言信息列表
+     * 导出随笔信息列表
      */
     @SaCheckPermission("dictum:info:export")
-    @Log(title = "导出名言信息", businessType = BusinessType.EXPORT)
+    @Log(title = "导出随笔信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumInfoBo bo, HttpServletResponse response) {
         List<DictumInfoVo> list = iDictumInfoService.queryList(bo);
-        ExcelUtil.exportExcel(list, "名言信息", DictumInfoVo.class, response);
+        ExcelUtil.exportExcel(list, "随笔信息", DictumInfoVo.class, response);
     }
 
     /**
-     * 获取名言信息详细信息
+     * 获取随笔信息详细信息
      */
     @SaCheckPermission("dictum:info:query")
     @GetMapping("/{id}")
@@ -68,10 +68,10 @@ public class DictumInfoController {
     }
 
     /**
-     * 新增名言信息
+     * 新增随笔信息
      */
     @SaCheckPermission("dictum:info:add")
-    @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增随笔信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
@@ -79,10 +79,10 @@ public class DictumInfoController {
     }
 
     /**
-     * 修改名言信息
+     * 修改随笔信息
      */
     @SaCheckPermission("dictum:info:edit")
-    @Log(title = "修改名言信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改随笔信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
@@ -90,10 +90,10 @@ public class DictumInfoController {
     }
 
     /**
-     * 删除名言信息
+     * 删除随笔信息
      */
     @SaCheckPermission("dictum:info:remove")
-    @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除随笔信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iDictumInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

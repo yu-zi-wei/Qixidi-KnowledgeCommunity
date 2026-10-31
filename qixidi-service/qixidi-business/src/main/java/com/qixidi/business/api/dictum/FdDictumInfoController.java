@@ -21,19 +21,19 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 【前台】名言信息管理
+ * 【前台】随笔信息管理
  */
 @Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/info")
-@LogModule("名言信息")
+@LogModule("随笔信息")
 public class FdDictumInfoController {
 
     private final IDictumInfoService iDictumInfoService;
 
     /**
-     * 查询名言信息列表(后台)
+     * 查询随笔信息列表(后台)
      */
     @PostMapping("/role/list")
     public TableDataInfo<DictumInfoVo> roleList(@Validated(QueryGroup.class) @RequestBody DictumInfoBo bo) {
@@ -42,7 +42,7 @@ public class FdDictumInfoController {
     }
 
     /**
-     * 获取名言信息详细信息
+     * 获取随笔信息详细信息
      */
     @GetMapping("/{id}")
     public DictumInfoVo getInfo(@PathVariable("id") Long id) {
@@ -50,9 +50,9 @@ public class FdDictumInfoController {
     }
 
     /**
-     * 新增名言信息
+     * 新增随笔信息
      */
-    @Log(title = "新增名言信息", businessType = BusinessType.INSERT)
+    @Log(title = "新增随笔信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumInfoBo bo) {
@@ -64,9 +64,9 @@ public class FdDictumInfoController {
     }
 
     /**
-     * 批量新增名言信息（一次发布多条，分类/作者等元信息共享）
+     * 批量新增随笔信息（一次发布多条，分类/作者等元信息共享）
      */
-    @Log(title = "批量新增名言信息", businessType = BusinessType.INSERT)
+    @Log(title = "批量新增随笔信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/batch")
     public void addBatch(@Validated(AddGroup.class) @RequestBody DictumBatchBo bo) {
@@ -74,9 +74,9 @@ public class FdDictumInfoController {
     }
 
     /**
-     * 修改名言信息
+     * 修改随笔信息
      */
-    @Log(title = "修改名言信息", businessType = BusinessType.UPDATE)
+    @Log(title = "修改随笔信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumInfoBo bo) {
@@ -84,9 +84,9 @@ public class FdDictumInfoController {
     }
 
     /**
-     * 删除名言信息
+     * 删除随笔信息
      */
-    @Log(title = "删除名言信息", businessType = BusinessType.DELETE)
+    @Log(title = "删除随笔信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}/{groupId}")
     public void remove(@PathVariable Long id, @PathVariable Long groupId) {
         iDictumInfoService.deleteWithValidById(id, groupId);

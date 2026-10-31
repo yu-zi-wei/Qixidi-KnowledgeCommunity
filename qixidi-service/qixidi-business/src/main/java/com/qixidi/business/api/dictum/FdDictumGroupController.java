@@ -19,19 +19,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 
 /**
- * 【前台】名言分组管理
+ * 【前台】随笔分组管理
  */
 @Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/frontDesk/dictum/group")
-@LogModule("名言分组")
+@LogModule("随笔分组")
 public class FdDictumGroupController {
 
     private final IDictumGroupService iDictumGroupService;
 
     /**
-     * 获取名言分组详细信息
+     * 获取随笔分组详细信息
      */
     @GetMapping("/{id}")
     public DictumGroupVo getInfo(@PathVariable("id") Long id) {
@@ -39,32 +39,32 @@ public class FdDictumGroupController {
     }
 
     /**
-     * 新增名言分组
+     * 新增随笔分组
      */
-    @Log(title = "新增名言分组", businessType = BusinessType.INSERT)
+    @Log(title = "新增随笔分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
-        if (!iDictumGroupService.insertByBo(bo)) throw new ServiceException("新增名言分组失败");
+        if (!iDictumGroupService.insertByBo(bo)) throw new ServiceException("新增随笔分组失败");
     }
 
     /**
-     * 修改名言分组
+     * 修改随笔分组
      */
-    @Log(title = "修改名言分组", businessType = BusinessType.UPDATE)
+    @Log(title = "修改随笔分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
-        if (!iDictumGroupService.updateByBo(bo)) throw new ServiceException("更新名言分组失败");
+        if (!iDictumGroupService.updateByBo(bo)) throw new ServiceException("更新随笔分组失败");
     }
 
     /**
-     * 删除名言分组
+     * 删除随笔分组
      */
-    @Log(title = "删除名言分组", businessType = BusinessType.DELETE)
+    @Log(title = "删除随笔分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         if (!iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true))
-            throw new ServiceException("删除名言分组失败");
+            throw new ServiceException("删除随笔分组失败");
     }
 }

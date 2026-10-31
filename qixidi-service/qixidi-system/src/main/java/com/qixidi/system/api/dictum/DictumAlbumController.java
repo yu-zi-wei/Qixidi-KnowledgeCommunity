@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 名言专辑管理
+ * 随笔专辑管理
  *
  * @author aurora
  * @date 2023-04-24
@@ -33,13 +33,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dictum/album")
-@LogModule("名言专辑")
+@LogModule("随笔专辑")
 public class DictumAlbumController {
 
     private final IDictumAlbumService iDictumAlbumService;
 
     /**
-     * 查询名言专辑列表
+     * 查询随笔专辑列表
      */
     @SaCheckPermission("dictum:album:list")
     @PostMapping("/list")
@@ -48,18 +48,18 @@ public class DictumAlbumController {
     }
 
     /**
-     * 导出名言专辑列表
+     * 导出随笔专辑列表
      */
     @SaCheckPermission("dictum:album:export")
-    @Log(title = "导出名言专辑", businessType = BusinessType.EXPORT)
+    @Log(title = "导出随笔专辑", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumAlbumBo bo, HttpServletResponse response) {
         List<DictumAlbumVo> list = iDictumAlbumService.queryList(bo);
-        ExcelUtil.exportExcel(list, "名言专辑", DictumAlbumVo.class, response);
+        ExcelUtil.exportExcel(list, "随笔专辑", DictumAlbumVo.class, response);
     }
 
     /**
-     * 获取名言专辑详细信息
+     * 获取随笔专辑详细信息
      */
     @SaCheckPermission("dictum:album:query")
     @GetMapping("/{id}")
@@ -68,10 +68,10 @@ public class DictumAlbumController {
     }
 
     /**
-     * 新增名言专辑
+     * 新增随笔专辑
      */
     @SaCheckPermission("dictum:album:add")
-    @Log(title = "新增名言专辑", businessType = BusinessType.INSERT)
+    @Log(title = "新增随笔专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -79,10 +79,10 @@ public class DictumAlbumController {
     }
 
     /**
-     * 修改名言专辑
+     * 修改随笔专辑
      */
     @SaCheckPermission("dictum:album:edit")
-    @Log(title = "修改名言专辑", businessType = BusinessType.UPDATE)
+    @Log(title = "修改随笔专辑", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -90,10 +90,10 @@ public class DictumAlbumController {
     }
 
     /**
-     * 删除名言专辑
+     * 删除随笔专辑
      */
     @SaCheckPermission("dictum:album:remove")
-    @Log(title = "删除名言专辑", businessType = BusinessType.DELETE)
+    @Log(title = "删除随笔专辑", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iDictumAlbumService.deleteWithValidByIds(Arrays.asList(ids), true);

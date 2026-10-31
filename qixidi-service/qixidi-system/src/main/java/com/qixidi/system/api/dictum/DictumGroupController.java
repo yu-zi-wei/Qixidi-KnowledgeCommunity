@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 名言分组管理
+ * 随笔分组管理
  *
  * @author aurora
  * @date 2023-04-24
@@ -33,13 +33,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dictum/group")
-@LogModule("名言分组")
+@LogModule("随笔分组")
 public class DictumGroupController {
 
     private final IDictumGroupService iDictumGroupService;
 
     /**
-     * 查询名言分组列表
+     * 查询随笔分组列表
      */
     @SaCheckPermission("dictum:group:list")
     @PostMapping("/list")
@@ -48,18 +48,18 @@ public class DictumGroupController {
     }
 
     /**
-     * 导出名言分组列表
+     * 导出随笔分组列表
      */
     @SaCheckPermission("dictum:group:export")
-    @Log(title = "导出名言分组", businessType = BusinessType.EXPORT)
+    @Log(title = "导出随笔分组", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@Validated DictumGroupBo bo, HttpServletResponse response) {
         List<DictumGroupVo> list = iDictumGroupService.queryList(bo);
-        ExcelUtil.exportExcel(list, "名言分组", DictumGroupVo.class, response);
+        ExcelUtil.exportExcel(list, "随笔分组", DictumGroupVo.class, response);
     }
 
     /**
-     * 获取名言分组详细信息
+     * 获取随笔分组详细信息
      */
     @SaCheckPermission("dictum:group:query")
     @GetMapping("/{id}")
@@ -68,10 +68,10 @@ public class DictumGroupController {
     }
 
     /**
-     * 新增名言分组
+     * 新增随笔分组
      */
     @SaCheckPermission("dictum:group:add")
-    @Log(title = "新增名言分组", businessType = BusinessType.INSERT)
+    @Log(title = "新增随笔分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public void add(@Validated(AddGroup.class) @RequestBody DictumGroupBo bo) {
@@ -79,10 +79,10 @@ public class DictumGroupController {
     }
 
     /**
-     * 修改名言分组
+     * 修改随笔分组
      */
     @SaCheckPermission("dictum:group:edit")
-    @Log(title = "修改名言分组", businessType = BusinessType.UPDATE)
+    @Log(title = "修改随笔分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody DictumGroupBo bo) {
@@ -90,10 +90,10 @@ public class DictumGroupController {
     }
 
     /**
-     * 删除名言分组
+     * 删除随笔分组
      */
     @SaCheckPermission("dictum:group:remove")
-    @Log(title = "删除名言分组", businessType = BusinessType.DELETE)
+    @Log(title = "删除随笔分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iDictumGroupService.deleteWithValidByIds(Arrays.asList(ids), true);
