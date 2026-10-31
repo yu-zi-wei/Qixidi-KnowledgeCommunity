@@ -264,12 +264,11 @@ defineExpose({
   gap: 12px;
 }
 
-/* 搜索区：书签纸片（--panel-bg 白纸 + 暖灰细边框 + 轻投影模拟纸片浮起） */
+/* 搜索区：书签纸片（无边框，靠底色明度差 + 轻投影分层） */
 .alp-search-card {
   flex-shrink: 0;
   padding: 14px 16px;
   background: var(--panel-bg);
-  border: 1px solid var(--hairline);
   border-radius: 10px;
   box-shadow: var(--panel-shadow, 0 1px 3px rgba(180, 170, 150, 0.18));
 }
@@ -303,7 +302,7 @@ defineExpose({
   flex-shrink: 0;
 }
 
-/* 列表区：书签纸片撑满剩余高度，滚动只在表格内部 */
+/* 列表区：书签纸片撑满剩余高度，滚动只在表格内部（无边框，同搜索区） */
 .alp-list-card {
   flex: 1;
   min-height: 0;
@@ -311,7 +310,6 @@ defineExpose({
   flex-direction: column;
   padding: 12px 16px 14px;
   background: var(--panel-bg);
-  border: 1px solid var(--hairline);
   border-radius: 10px;
   box-shadow: var(--panel-shadow, 0 1px 3px rgba(180, 170, 150, 0.18));
 }

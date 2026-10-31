@@ -157,6 +157,7 @@ const columns: DataTableColumns<AccountRow> = [
     key: 'actions',
     width: 170,
     align: 'center',
+    fixed: 'right',
     render: (row) =>
       isSuperAccount(row)
         ? h('span', { class: 'cell-dim' }, '超管内置')

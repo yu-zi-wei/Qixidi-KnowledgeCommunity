@@ -124,7 +124,6 @@ onMounted(loadCaptcha);
 
 .login-card {
   border-radius: 10px;
-  border: 1px solid #E8E4D9;
   box-shadow: 0 1px 3px rgba(180, 170, 150, 0.18);
 }
 

@@ -36,9 +36,10 @@ const lightOverrides: GlobalThemeOverrides = {
     dividerColor: '#E8E4D9'
   },
   DataTable: {
-    thColor: 'transparent',
-    tdColor: 'transparent',
-    thColorHover: 'transparent',
+    // 纸片实色（=cardColor）：fixed 操作列 sticky 定位下透明背景会透出滚动内容
+    thColor: '#ffffff',
+    tdColor: '#ffffff',
+    thColorHover: '#ffffff',
     tdColorHover: '#F6F4ED',
     borderColor: '#E8E4D9',
     thTextColor: 'rgba(60, 55, 45, 0.55)'
@@ -65,9 +66,10 @@ const darkOverrides: GlobalThemeOverrides = {
     inputColor: 'rgba(255, 255, 255, 0.05)'
   },
   DataTable: {
-    thColor: 'transparent',
-    tdColor: 'transparent',
-    thColorHover: 'transparent',
+    // 纸片实色（=cardColor）：fixed 操作列 sticky 定位下透明背景会透出滚动内容
+    thColor: '#1a1a1e',
+    tdColor: '#1a1a1e',
+    thColorHover: '#1a1a1e',
     tdColorHover: 'rgba(255, 255, 255, 0.04)',
     borderColor: 'rgba(255, 255, 255, 0.08)',
     thTextColor: 'rgba(255, 255, 255, 0.5)'

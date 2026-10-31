@@ -261,11 +261,12 @@ const columns: DataTableColumns<ArticleRow> = [
     render: (row) => getFullDateTime(row.createTime) || '—'
   },
   {
-    // 操作列用纯文字链接（带图标时按钮易超列宽被截断）；按权限码控制可见性
+    // 操作列用纯文字链接（带图标时按钮易超列宽被截断）；fixed 随横向滚动常驻右侧
     title: '操作',
     key: 'actions',
     width: 130,
     align: 'center',
+    fixed: 'right',
     render: (row) => {
       const btns = [];
       if (row.auditState === 1 && hasPerm('article:information:edit')) {

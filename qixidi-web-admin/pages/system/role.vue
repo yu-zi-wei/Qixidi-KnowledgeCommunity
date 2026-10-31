@@ -125,6 +125,7 @@ const columns: DataTableColumns<RoleRow> = [
     key: 'actions',
     width: 120,
     align: 'center',
+    fixed: 'right',
     render: (row) =>
       isSuperRole(row)
         ? h('span', { class: 'cell-dim' }, '超管内置')
