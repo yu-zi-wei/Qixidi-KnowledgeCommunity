@@ -1,38 +1,26 @@
 package com.qixidi.system.api;
 
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.http.HttpException;
-import cn.hutool.http.HttpUtil;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
-import com.light.core.utils.file.FileUtils;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.annotation.LogModule;
-
-import com.qixidi.system.domain.bo.SysOssBo;
-import com.qixidi.system.domain.entity.SysOss;
-import com.qixidi.system.domain.vo.SysOssVo;
+import com.qixidi.system.domain.vo.SysOssUploadVo;
 import com.qixidi.system.service.ISysOssService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 文件上传管理
+ * 文件上传（门户编辑器配图 / 前后台头像 / MCP 上传共用入口；sys_oss 表及其管理接口已废弃）
  *
  * @author Lion Li
  */
@@ -40,22 +28,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/oss")
-@LogModule("OSS对象存储")
+@LogModule("文件")
 public class SysOssController {
 
     private final ISysOssService iSysOssService;
 
     /**
-     * 查询OSS对象存储列表
-     */
-    @SaCheckPermission("oss:list")
-    @PostMapping("/list")
-    public TableDataInfo<SysOssVo> list(@Validated(QueryGroup.class) @RequestBody SysOssBo bo) {
-        return iSysOssService.queryPageList(bo, bo);
-    }
-
-    /**
-     * 上传OSS对象存储
+     * 上传文件到云存储
      */
     @Log(title = "上传文件", businessType = BusinessType.INSERT)
     @PostMapping("/upload")
@@ -63,55 +42,12 @@ public class SysOssController {
         if (ObjectUtil.isNull(file)) {
             throw new ServiceException("上传文件不能为空");
         }
-        SysOss oss = iSysOssService.upload(file);
+        SysOssUploadVo oss = iSysOssService.upload(file);
         Map<String, String> map = new HashMap<>();
         map.put("url", oss.getUrl());
         map.put("fileName", oss.getOriginalName());
-        map.put("ossId", oss.getOssId().toString());
-        //封装最终返回参数
+        map.put("ossId", oss.getOssId());
         return map;
-    }
-
-    /**
-     * 下载OSS对象存储
-     *
-     * @param ossId
-     * @param response
-     * @throws IOException
-     */
-    @SaCheckPermission("oss:download")
-    @GetMapping("/download/{ossId}")
-    public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
-        SysOss sysOss = iSysOssService.getById(ossId);
-        if (ObjectUtil.isNull(sysOss)) {
-            throw new ServiceException("文件数据不存在!");
-        }
-        response.reset();
-        FileUtils.setAttachmentResponseHeader(response, sysOss.getOriginalName());
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
-        long data;
-        try {
-            data = HttpUtil.download(sysOss.getUrl(), response.getOutputStream(), false);
-        } catch (HttpException e) {
-            if (e.getMessage().contains("403")) {
-                throw new ServiceException("无读取权限, 请在对应的OSS开启'公有读'权限!");
-            } else {
-                throw new ServiceException(e.getMessage());
-            }
-        }
-        response.setContentLength(Convert.toInt(data));
-    }
-
-    /**
-     * 删除OSS对象存储
-     */
-    @SaCheckPermission("oss:remove")
-    @Log(title = "删除文件", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ossIds}")
-    public void remove(@PathVariable Long[] ossIds) {
-        if (!iSysOssService.deleteWithValidByIds(Arrays.asList(ossIds), true)) {
-            throw new ServiceException("删除失败");
-        }
     }
 
 }

@@ -9,7 +9,7 @@ import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.SysUser;
 import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.system.domain.entity.SysOss;
+import com.qixidi.system.domain.vo.SysOssUploadVo;
 import com.qixidi.system.service.ISysOssService;
 import com.qixidi.system.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
@@ -103,7 +103,7 @@ public class SysProfileController {
             throw new ServiceException("上传图片异常，请联系管理员");
         }
         Map<String, Object> ajax = new HashMap<>();
-        SysOss oss = iSysOssService.upload(file);
+        SysOssUploadVo oss = iSysOssService.upload(file);
         String avatar = oss.getUrl();
         if (userService.updateUserAvatar(LoginHelper.getUsername(), avatar)) {
             ajax.put("imgUrl", avatar);

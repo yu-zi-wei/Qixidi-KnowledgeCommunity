@@ -24,7 +24,6 @@ import {
   Activity,
   History,
   ReportAnalytics,
-  Photo,
   ShieldLock,
   Tags,
   Bookmarks
@@ -95,8 +94,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     icon: Settings,
     children: [
       { label: '角色管理', key: '/system/role', icon: Shield, perm: 'role:query' },
-      { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' },
-      { label: 'OSS 文件', key: '/oss', icon: Photo, perm: 'oss:list' }
+      { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' }
     ]
   }
 ];

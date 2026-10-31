@@ -8,7 +8,7 @@ import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.mcp.domain.vo.image.McpUploadImageVo;
 import com.qixidi.mcp.utils.ByteArrayMultipartFile;
-import com.qixidi.system.domain.entity.SysOss;
+import com.qixidi.system.domain.vo.SysOssUploadVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -99,7 +99,7 @@ public class UploadImageTool {
         }
         validateImage(bytes);
         String name = (filename == null || filename.isBlank()) ? "mcp-image.png" : filename.trim();
-        SysOss oss = iSysOssService.upload(new ByteArrayMultipartFile("file", name, guessContentType(name), bytes));
+        SysOssUploadVo oss = iSysOssService.upload(new ByteArrayMultipartFile("file", name, guessContentType(name), bytes));
         operLogRecorder.record("MCP文件", "上传图片", BusinessType.INSERT,
             user.getUsername(), "fileName=" + name + ", ossId=" + oss.getOssId(), null);
         McpUploadImageVo result = new McpUploadImageVo();

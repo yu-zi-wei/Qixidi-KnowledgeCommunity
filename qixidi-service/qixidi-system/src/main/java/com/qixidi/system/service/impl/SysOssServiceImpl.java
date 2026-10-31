@@ -1,22 +1,11 @@
 package com.qixidi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.constant.CloudStorageProvider;
-import com.light.core.core.domain.PageQuery;
-import com.light.core.core.page.TableDataInfo;
-import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
-import com.light.minio.domain.dto.MinioDto;
 import com.light.minio.service.MinioService;
-import com.light.oss.domain.dto.OssDto;
 import com.light.oss.service.OssService;
-import com.qixidi.system.domain.bo.SysOssBo;
-import com.qixidi.system.domain.entity.SysOss;
-import com.qixidi.system.domain.vo.SysOssVo;
-import com.qixidi.system.mapper.SysOssMapper;
+import com.qixidi.system.domain.vo.SysOssUploadVo;
 import com.qixidi.system.service.ISysOssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collection;
-import java.util.Map;
-
 /**
- * 文件上传 服务层实现
+ * 文件上传 服务层实现：分流 MinIO / 阿里云 OSS，返回云对象信息（不落库，sys_oss 表已废弃）
  *
  * @author Lion Li
  */
@@ -37,60 +23,23 @@ import java.util.Map;
 @Slf4j
 public class SysOssServiceImpl implements ISysOssService {
 
-    private final SysOssMapper baseMapper;
-    private final OssService ossService;
     private final MinioService minioService;
+    private final OssService ossService;
 
     @Value("${qixidi.storage.provider}")
     private String storageProvider;
 
     @Override
-    public TableDataInfo<SysOssVo> queryPageList(SysOssBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<SysOss> lqw = buildQueryWrapper(bo);
-        lqw.orderByDesc(SysOss::getCreateTime);
-        Page<SysOssVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        return TableDataInfo.build(result);
-    }
-
-    private LambdaQueryWrapper<SysOss> buildQueryWrapper(SysOssBo bo) {
-        Map<String, Object> params = bo.getParams();
-        LambdaQueryWrapper<SysOss> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getOriginalName()), SysOss::getOriginalName, bo.getOriginalName());
-        lqw.eq(StringUtils.isNotBlank(bo.getFileSuffix()), SysOss::getFileSuffix, bo.getFileSuffix());
-        lqw.eq(StringUtils.isNotBlank(bo.getUrl()), SysOss::getUrl, bo.getUrl());
-        lqw.like(StringUtils.isNotBlank(bo.getFileName()), SysOss::getFileName, bo.getFileName());
-        lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-                SysOss::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
-        lqw.eq(StringUtils.isNotBlank(bo.getCreateBy()), SysOss::getCreateBy, bo.getCreateBy());
-        lqw.eq(StringUtils.isNotBlank(bo.getService()), SysOss::getService, bo.getService());
-        return lqw;
-    }
-
-    @Override
-    public SysOss getById(Long ossId) {
-        return baseMapper.selectById(ossId);
-    }
-
-    @Override
-    public SysOss upload(MultipartFile file) {
-        SysOss sysOss = new SysOss();
+    public SysOssUploadVo upload(MultipartFile file) {
+        SysOssUploadVo vo;
         if (CloudStorageProvider.MINIO.equals(storageProvider)) {
-            MinioDto upload = minioService.upload(file);
-            sysOss = BeanUtil.copyProperties(upload, SysOss.class);
+            vo = BeanUtil.copyProperties(minioService.upload(file), SysOssUploadVo.class);
         } else if (CloudStorageProvider.OSS.equals(storageProvider)) {
-            OssDto ossDto = ossService.upload(file);
-            sysOss = BeanUtil.copyProperties(ossDto, SysOss.class);
+            vo = BeanUtil.copyProperties(ossService.upload(file), SysOssUploadVo.class);
         } else {
             throw new ServiceException("暂不支持该存储服务");
         }
-        // 保存文件信息
-//        baseMapper.insert(sysOss);
-        return sysOss;
-    }
-
-    @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return baseMapper.deleteBatchIds(ids) > 0;
+        return vo;
     }
 
 }

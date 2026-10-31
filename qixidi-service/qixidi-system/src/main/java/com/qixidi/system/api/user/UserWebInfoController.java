@@ -15,7 +15,7 @@ import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.user.IUserFollowService;
-import com.qixidi.system.domain.entity.SysOss;
+import com.qixidi.system.domain.vo.SysOssUploadVo;
 import com.qixidi.system.service.ISysOssService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
@@ -119,7 +119,7 @@ public class UserWebInfoController {
         if (file.isEmpty()) {
             throw new ServiceException("头像修改失败，可到反馈专区留言！");
         }
-        SysOss oss = iSysOssService.upload(file);
+        SysOssUploadVo oss = iSysOssService.upload(file);
         String avatar = oss.getUrl();
         if (iTripartiteUserService.updateUserAvatar(uuid, avatar)) {
             ajax.put("imgUrl", avatar);
