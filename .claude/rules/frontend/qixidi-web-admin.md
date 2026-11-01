@@ -65,8 +65,8 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
-- **视觉体系（2026-11-01 修订：品牌紫 + 米白侧栏）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏米白 #EDEAE1（深一档分层），区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 暖灰细边框 + `--panel-shadow` 轻投影，圆角 10px）；品牌紫（栖鸟 logo 同源）只做交互点缀——浅 `#534AB7`（hover #6860D4 / pressed #423A9E）/ 深色亮紫 `#968BEA`，非 Naive 上下文用布局根注入的 `--cell-link`/`--logo-bg` 变量（与 app.vue primaryColor 同源）；菜单选中 #E3DFF5、滚动条 #b3aad6（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式骨架不变（纸片 #1a1a1e、侧栏紫黑 #0F0D17）
-- **栖鸟 logo**：AdminLogo 组件（内联 SVG，底色 `--logo-bg` 随主题）；favicon.ico 是同构位图（PIL 超采样脚本生成，改图形需两处同步）；login 页 layout:false 不套布局，页面根自注入 `--logo-bg`
+- **视觉体系（2026-11-01 三次修订：正蓝 + 米白侧栏）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏米白 #EDEAE1（深一档分层），区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 暖灰细边框 + `--panel-shadow` 轻投影，圆角 10px）；品牌正蓝只做交互点缀——浅 `#1E66C4`（hover #3D7AD9 / pressed #17529E）/ 深色亮蓝 `#6EA8E8`，非 Naive 上下文用布局根注入的 `--cell-link`/`--logo-bg` 变量（与 app.vue primaryColor 同源）；菜单选中 #DBE7F7（activeHover #CFDCF5）、td hover #EDF3FB、滚动条 #a9c0e3（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式骨架不变（纸片 #1a1a1e、侧栏蓝黑 #0E1521）
+- **树形 logo**：AdminLogo 组件（前台 public/images/logo.svg 同款树形内联 SVG：树冠+白色半透明枝干+根部圆点；树冠/圆点 class `logo-tree` 取 `--logo-bg` 随主题）；favicon.ico 是同构位图（PIL 贝塞尔采样超采样脚本生成，改图形需两处同步）；login 页 layout:false 不套布局，页面根自注入 `--logo-bg`
 - **列表用户/作者列一律可点开用户详情**：挂 `<UserDetailDrawer ref="userDrawerRef" />`，昵称 `is-link` + `onClick: () => userDrawerRef.value?.open(uid)`；uid 缺省的行不可点（无 is-link）；**注意评论行 commentUid 才是评论人（uid 是被评内容作者）**
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
 
@@ -78,7 +78,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 | **AdminBreadcrumb** | 顶栏面包屑（自动按路由生成） | 无 props，数据源 useAdminMenu |
 | AdminStateTag | 状态标签（圆点+文字） | `{value, map: Record<状态值, {label, type}>}` |
 | AdminAvatar | 头像/封面（裂图兜底首字） | `{src?, name?, size: number|[w,h], shape?: 'circle'|'square'}` |
-| AdminLogo | 栖鸟 logo（紫色圆角方块+白鸟） | `{size?: number}`，底色走 `--logo-bg` |
+| AdminLogo | 前台同款树形 logo（蓝色版，树冠走 `--logo-bg`） | `{size?: number}`，底色走 `--logo-bg` |
 | **UserDetailDrawer** | **用户详情抽屉（列表用户/作者列点击入口）** | defineExpose `open(uuid)`，内部调 `/system/tripartite/user/{uuid}` |
 
 AdminListPage 双 script 块（普通块 export 类型 + setup 块实现），页面 import 类型用 `import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue'`。
