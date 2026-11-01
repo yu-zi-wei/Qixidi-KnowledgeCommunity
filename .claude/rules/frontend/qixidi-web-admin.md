@@ -95,6 +95,7 @@ AdminListPage 双 script 块（普通块 export 类型 + setup 块实现），�
 - 布局/视觉改动跑量测断言（getBoundingClientRect/裂图 naturalWidth/横向溢出），不要只截图
 - 双 tab 页两 pane 常驻 DOM（display-directive=show）：DOM 断言必须过滤 `offsetParent !== null`，否则隐藏 pane 同名元素（如表头「操作」列）造成假阳性
 - 统计表格数据行须按 `.n-data-table-tr` 内含 `.n-data-table-td` 区分：Naive UI 表头也是 tr，空结果时行数 1 实为表头
+- **n-menu 选中背景画在 `.n-menu-item-content--selected` 的 `::before` 伪元素上**：量测选中色必须 `getComputedStyle(el, '::before').backgroundColor`，读元素自身 backgroundColor 恒为透明（误报）
 - localStorage 注入登录态必须先 goto 到应用 origin 再 evaluate：about:blank 上访问 localStorage 报 SecurityError
 
 ---
