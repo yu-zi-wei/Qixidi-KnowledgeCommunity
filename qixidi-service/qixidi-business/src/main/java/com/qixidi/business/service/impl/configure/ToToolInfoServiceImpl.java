@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
+import com.light.exception.ServiceException;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
 import com.qixidi.business.domain.entity.configure.ToToolInfo;
@@ -78,8 +79,29 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
         lqw.eq(bo.getState() != null, ToToolInfo::getState, bo.getState());
         lqw.in(bo.getStates() != null && !bo.getStates().isEmpty(), ToToolInfo::getState, bo.getStates());
         lqw.in(bo.getIsParents() != null && !bo.getIsParents().isEmpty(), ToToolInfo::getIsParent, bo.getIsParents());
+        lqw.in(bo.getParentIds() != null && !bo.getParentIds().isEmpty(), ToToolInfo::getParentId, bo.getParentIds());
         lqw.orderByDesc(ToToolInfo::getCreateTime);
         return lqw;
+    }
+
+    /**
+     * 目录/子级分流校验与归一：目录（isParent=1）无地址（置空串，null 会被非 null 更新策略忽略）；子级（isParent=2）必须填写地址与所属目录
+     */
+    private void validateAndNormalize(ToToolInfoBo bo) {
+        if (bo.getIsParent() == null) {
+            throw new ServiceException("层级（是否为父级）不能为空");
+        }
+        if (bo.getIsParent() == 1) {
+            bo.setParentId(null);
+            bo.setToolUrl("");
+            return;
+        }
+        if (StringUtils.isBlank(bo.getToolUrl())) {
+            throw new ServiceException("子级工具必须填写工具地址");
+        }
+        if (bo.getParentId() == null) {
+            throw new ServiceException("子级工具必须选择所属目录");
+        }
     }
 
     /**
@@ -90,6 +112,7 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
      */
     @Override
     public Boolean insertByBo(ToToolInfoBo bo) {
+        validateAndNormalize(bo);
         ToToolInfo add = BeanUtil.toBean(bo, ToToolInfo.class);
         add.setCreateBy(LoginHelper.getUsername());
         add.setCreateTime(new Date());
@@ -109,18 +132,33 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
      */
     @Override
     public Boolean updateByBo(ToToolInfoBo bo) {
+        validateAndNormalize(bo);
         ToToolInfo update = BeanUtil.toBean(bo, ToToolInfo.class);
         return baseMapper.updateById(update) > 0;
     }
 
     /**
-     * 批量删除工具信息
+     * 批量删除工具信息：目录（isParent=1）下仍有子级时禁止删除，避免前台出现孤儿工具
      *
      * @param ids 需要删除的工具信息主键
      * @return 结果
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+        if (isValid) {
+            List<ToToolInfo> rows = baseMapper.selectBatchIds(ids);
+            List<Long> catalogIds = rows.stream()
+                .filter(r -> r.getIsParent() != null && r.getIsParent() == 1)
+                .map(ToToolInfo::getId)
+                .toList();
+            if (!catalogIds.isEmpty()) {
+                Long childCount = baseMapper.selectCount(
+                    Wrappers.lambdaQuery(ToToolInfo.class).in(ToToolInfo::getParentId, catalogIds));
+                if (childCount > 0) {
+                    throw new ServiceException("所选目录下仍有工具，请先移除或删除目录下的工具");
+                }
+            }
+        }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 

@@ -55,9 +55,8 @@ public class ToToolInfoBo extends BaseEntity {
     private Integer isParent;
 
     /**
-     * 工具地址
+     * 工具地址（仅子级工具必填，目录不需要——Service 层按 isParent 校验）
      */
-    @NotBlank(message = "工具地址不能为空", groups = {AddGroup.class, EditGroup.class})
     private String toolUrl;
 
     /**
@@ -85,6 +84,11 @@ public class ToToolInfoBo extends BaseEntity {
      * 层级多选筛选（in 查询，后台列表页）
      */
     private List<Integer> isParents;
+
+    /**
+     * 所属目录多选筛选（in 查询，后台工具 tab）
+     */
+    private List<Long> parentIds;
     /**
      * 创建人
      */
