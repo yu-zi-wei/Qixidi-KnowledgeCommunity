@@ -144,6 +144,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 - **b_browsing_history 按（uid+target）去重合并**（`ON DUPLICATE KEY UPDATE update_time`）：按天做浏览趋势必须聚合 `update_time`（聚合 create_time 会漏掉回访）
 - **`b_article_information.label_id` 是逗号分隔标签 id 串（grouping_id 才是单值）**：按标签统计/筛选/迁移一律 `FIND_IN_SET(id, label_id)` 精确匹配（like '%id%' 会误伤 1↔12）；标签/分组的 articleNumber/followNumber/entriesNumber 是 LabelTask 定时重算的冗余计数，写操作不维护
 - **详情接口（queryById）禁止用 `selectVoById` 单表查询取含 join 展示字段的 VO**：nickname/groupingName/labelNameList 等是列表 join SQL 的产物，单表查全 null；须走列表同款 `selectIndex` + `wrapper.eq("别名.id", id)` 查询（参考 ArticleInformationServiceImpl.queryById）
+- **join 列表（selectUserName/selectIndex 等自定义 XML）的 QueryWrapper 条件列必须带主表别名**（如 `si.state`）：join 两侧同名列（state/uid/create_time）裸写列名会歧义 500，且只在传该筛选条件时才炸
 - **用户统计走 `UserCountQueryHelper`**：新增统计字段三处同步——`CountUserWebsiteVo` 加字段 → Mapper 加 `selectXxxCountByUserIds`（XML）→ helper 加方法**并在 `allCounts()` 里 merge**
 - **`CensusVo` 是通用时间序列货币**（dateTimes/censusSum/title），趋势类接口直接复用
 - **本机 `mysql.exe` CLI 会挂起**：验证 SQL 用"`mvn clean compile` + 启动成功"代替（MyBatis 启动期绑定 XML，`Invalid bound statement` 起不来就是绑定失败）
