@@ -17,6 +17,7 @@ import com.light.core.utils.EscapeUtil;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
+import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
@@ -24,9 +25,11 @@ import com.qixidi.business.domain.enums.CollectionTypeEnums;
 import com.qixidi.business.domain.enums.CommonStatusEnums;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionRecordMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.collection.ICollectionInformationService;
 import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +56,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     private final CollectionRecordMapper collectionRecordMapper;
     private final ArticleInformationServiceImpl articleInformationService;
     private final ArticleInformationMapper articleInformationMapper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
      * 查询收藏夹信息
@@ -78,9 +82,51 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     @Override
     public TableDataInfo<CollectionInformationVo> queryPageList(CollectionInformationBo bo, PageQuery pageQuery) {
         QueryWrapper<CollectionInformation> lqw = buildQueryWrappers(bo);
+        // 创建者昵称搜索：用户域查 uuid 后 in（等价原 join um.nickname like）
+        if (StringUtils.isNotBlank(bo.getUsername())) {
+            List<String> uuids = uidsByNickname(bo.getUsername());
+            if (uuids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            lqw.in("ci.uid", uuids);
+        }
         Page<CollectionInformationVo> result = baseMapper.selectUserName(pageQuery.build(), lqw);
+        fillOwnerDisplay(result.getRecords());
         enrichWithIncludedCount(result.getRecords());
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 按昵称查用户 uuid 集合（原 join um.nickname like 条件的等价替代，走用户域接口）
+     */
+    private List<String> uidsByNickname(String nickname) {
+        TripartiteUserBo userBo = new TripartiteUserBo();
+        userBo.setNickname(nickname);
+        return tripartiteUserService.queryList(userBo).stream()
+                .map(TripartiteUserVo::getUuid)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 组装创建者昵称（键 uid，展示字段 username）
+     */
+    private void fillOwnerDisplay(List<CollectionInformationVo> records) {
+        List<String> uids = records.stream()
+                .map(CollectionInformationVo::getUid)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo owner = users.get(r.getUid());
+            if (owner != null) {
+                r.setUsername(owner.getNickname());
+            }
+        });
     }
 
     /**
@@ -110,7 +156,6 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         Map<String, Object> params = bo.getParams();
         QueryWrapper<CollectionInformation> lqw = Wrappers.query();
         lqw.like(StringUtils.isNotBlank(bo.getCollectionName()), "collection_name", bo.getCollectionName());
-        lqw.like(StringUtils.isNotBlank(bo.getUsername()), "um.nickname", bo.getUsername());
         lqw.eq(bo.getState() != null, "ci.state", bo.getState());
         lqw.like(bo.getUid() != null, "uid", bo.getUid());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
@@ -191,7 +236,32 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
     @Override
     public Page<ArticleInformationVo> articleList(CollectionRecordBo bo, PageQuery pageQuery) {
         bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
-        return baseMapper.articleList(bo, pageQuery.build());
+        Page<ArticleInformationVo> page = baseMapper.articleList(bo, pageQuery.build());
+        fillAuthorDisplay(page.getRecords());
+        return page;
+    }
+
+    /**
+     * 组装文章作者用户名/昵称（键 userId，原 SQL join b_user_main 的展示字段）
+     */
+    private void fillAuthorDisplay(List<ArticleInformationVo> records) {
+        List<String> uids = records.stream()
+                .map(ArticleInformationVo::getUserId)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo author = users.get(r.getUserId());
+            if (author != null) {
+                r.setUsername(author.getUsername());
+                r.setNickname(author.getNickname());
+            }
+        });
     }
 
     @Override

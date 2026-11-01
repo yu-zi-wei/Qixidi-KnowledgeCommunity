@@ -16,7 +16,9 @@ import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.business.domain.bo.news.NewsSystemInfoBo;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.news.INewsSystemInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 系统消息Service业务层处理
@@ -36,15 +40,17 @@ import java.util.List;
 public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
 
     private final NewsSystemInfoMapper baseMapper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
-     * 查询系统消息（join 接收人昵称，queryById 禁止单表 selectVoById：展示字段是 join 产物）
+     * 查询系统消息（接收人昵称头像由 Service 组装，queryById 禁止单表 selectVoById）
      */
     @Override
     public NewsSystemInfoVo queryById(Long id) {
         QueryWrapper<NewsSystemInfo> wrapper = Wrappers.query();
         wrapper.eq("nsi.id", id);
         List<NewsSystemInfoVo> records = baseMapper.selectSystemPage(Page.of(1, 1), wrapper).getRecords();
+        fillRecipientDisplay(records);
         return records.isEmpty() ? null : records.get(0);
     }
 
@@ -58,6 +64,7 @@ public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
     public TableDataInfo<NewsSystemInfoVo> queryPageList(NewsSystemInfoBo bo, PageQuery pageQuery) {
         QueryWrapper<NewsSystemInfo> wrapper = buildQueryWrapper(bo);
         IPage<NewsSystemInfoVo> result = baseMapper.selectSystemPage(pageQuery.build(), wrapper);
+        fillRecipientDisplay(result.getRecords());
         return TableDataInfo.build(result);
     }
 
@@ -69,11 +76,39 @@ public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
      */
     @Override
     public List<NewsSystemInfoVo> queryList(NewsSystemInfoBo bo) {
-        return baseMapper.selectSystemPage(Page.of(1, -1), buildQueryWrapper(bo)).getRecords();
+        List<NewsSystemInfoVo> records = baseMapper.selectSystemPage(Page.of(1, -1), buildQueryWrapper(bo)).getRecords();
+        fillRecipientDisplay(records);
+        return records;
     }
 
     /**
-     * 列表筛选（join b_user_main 的 SQL，条件列必须带 nsi 别名）
+     * 组装指定人发（is_mass_air=2）的接收人昵称头像（键 uid，群发行 uid 为空自然跳过）
+     */
+    private void fillRecipientDisplay(List<NewsSystemInfoVo> records) {
+        if (CollectionUtils.isEmpty(records)) {
+            return;
+        }
+        List<String> uids = records.stream()
+                .map(NewsSystemInfoVo::getUid)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo recipient = users.get(r.getUid());
+            if (recipient != null) {
+                r.setRecipientName(recipient.getNickname());
+                r.setRecipientAvatar(recipient.getAvatar());
+            }
+        });
+    }
+
+    /**
+     * 列表筛选（selectSystemPage 的 SQL，条件列统一带 nsi 别名）
      */
     private QueryWrapper<NewsSystemInfo> buildQueryWrapper(NewsSystemInfoBo bo) {
         QueryWrapper<NewsSystemInfo> wrapper = Wrappers.query();

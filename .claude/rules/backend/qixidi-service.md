@@ -129,8 +129,12 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 
 ### SQL 保持简单、禁止跨业务域连表
 
-- **Mapper 的 SQL 只查本域表**：跨业务域的展示字段（评论正文、目标标题等）不在 SQL 里 join 他域业务表，由 Service 层按 id 批量查询（`selectBatchIds`，禁止循环查库）后组装——参考 `NewsUserInfoServiceImpl.fillCommentContent`
-- 维表性质的 `b_user_main`（昵称/头像）暂除外；存量跨域 join 的 SQL（前台消息/评论列表等）待逐步按此整改
+- **Mapper 的 SQL 只查本域表**：跨业务域的展示字段（评论正文、目标标题、用户昵称/头像等）不在 SQL 里 join 他域表，由 Service 层批量查询（禁止循环查库）后组装——参考 `NewsUserInfoServiceImpl.fillCommentContent`
+- **用户表 b_user_main 已全量去 join（2026-11-01 定版，11 个 XML 20 条 SQL 改完）**：用户域唯一入口 `ITripartiteUserService.getUserByUid/getUserByUids`（批量收集 uid + toMap(uuid) + forEach set 的 fillXxx 组装模式）；原 join 的三类语义等价替换：
+  - 展示字段 → Service 层组装（如上）
+  - `um.state=0` 过滤 → `aliveUserMap()`（queryList state=0 → Map）传 Mapper `@Param("aliveUids")` foreach in；**aliveUids 为空必须先短路返回空页**（`TableDataInfo.build(new Page<>(pageNum, pageSize))`，禁止先分页后过滤）
+  - `um.nickname like` 搜索 → `uidsByNickname()`（queryList nickname like 取 uuid）→ wrapper `in("主表别名.uid", uuids)` + 空集合短路空页
+- 新增跨域展示需求一律 Service 组装，禁止新增跨域 join SQL
 
 ### Mapper 继承
 

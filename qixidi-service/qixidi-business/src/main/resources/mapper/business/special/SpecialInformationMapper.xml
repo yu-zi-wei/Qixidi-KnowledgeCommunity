@@ -3,6 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.special.SpecialInformationMapper">
+    <!-- 创建者昵称由 Service 层按 uid 调用户域接口组装 -->
     <select id="selectUserName" resultType="com.qixidi.business.domain.vo.special.SpecialInformationVo">
         select si.id,
                si.special_name,
@@ -11,10 +12,8 @@
                si.uid,
                si.create_time,
                si.update_id,
-               si.update_time,
-               um.nickname as username
+               si.update_time
         from b_special_information as si
-                 inner join b_user_main as um on si.uid = um.uuid
             ${ew.getCustomSqlSegment}
     </select>
 

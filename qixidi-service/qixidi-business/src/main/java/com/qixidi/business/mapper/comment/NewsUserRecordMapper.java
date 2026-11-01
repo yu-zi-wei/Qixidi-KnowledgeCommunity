@@ -26,7 +26,7 @@ import java.util.List;
 public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
 
     /**
-     * 后台管理分页（join b_user_main 取发送者/接收者昵称头像，筛选条件见 NewsUserRecordBo，列名须带 nur 别名）
+     * 后台管理分页（发送者/接收者展示字段由 Service 层组装，筛选条件见 NewsUserRecordBo，列名须带 nur 别名）
      */
     IPage<NewsUserRecordVo> selectSystemPage(Page<NewsUserRecord> page, @Param(Constants.WRAPPER) QueryWrapper<NewsUserRecord> wrapper);
 
@@ -39,9 +39,17 @@ public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
 
     IPage<DictumCommentNewsVo> selectDictumCommentNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
 
-    IPage<NewsUserInfoVo> selectFollowNews(@Param("uid") String uuid, @Param("type") Integer type, Page<NewsUserRecord> build);
+    /**
+     * 关注消息分页（aliveUids=存活用户集合，等价原 join um.state=0 过滤；发送者展示字段由 Service 组装）
+     */
+    IPage<NewsUserInfoVo> selectFollowNews(@Param("uid") String uuid, @Param("type") Integer type,
+                                           @Param("aliveUids") List<String> aliveUids, Page<NewsUserRecord> build);
 
-    IPage<NewsUserInfoVo> selectFabulousNews(@Param("uid") String uuid, @Param("type") Integer type, Page<NewsUserRecord> build);
+    /**
+     * 点赞消息分页（aliveUids=存活用户集合，等价原 join um.state=0 过滤；发送者展示字段由 Service 组装）
+     */
+    IPage<NewsUserInfoVo> selectFabulousNews(@Param("uid") String uuid, @Param("type") Integer type,
+                                              @Param("aliveUids") List<String> aliveUids, Page<NewsUserRecord> build);
 
     /**
      * 按天统计互动趋势（title 区分序列：fabulous=获赞 comment=评论，评论子类型 6/7 并入评论）

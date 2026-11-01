@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
@@ -16,6 +17,7 @@ import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
+import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.news.NewsSystemRead;
@@ -30,6 +32,7 @@ import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
@@ -37,11 +40,13 @@ import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemReadMapper;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.mapper.timeNotes.TimeNotesCommentMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -62,9 +67,10 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     private final ArticleCommentMapper articleCommentMapper;
     private final DictumCommentMapper dictumCommentMapper;
     private final TimeNotesCommentMapper timeNotesCommentMapper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
-     * 后台管理：用户消息记录分页（b_news_user_record join 发送者/接收者，筛选列必须带 nur 别名）
+     * 后台管理：用户消息记录分页（b_news_user_record 单表查询，发送者/接收者展示字段由 Service 组装，筛选列必须带 nur 别名）
      */
     @Override
     public TableDataInfo<NewsUserRecordVo> recordPage(NewsUserRecordBo bo, PageQuery pageQuery) {
@@ -72,14 +78,23 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         wrapper.in(CollectionUtils.isNotEmpty(bo.getTypes()), "nur.type", bo.getTypes());
         if (StringUtils.isNotBlank(bo.getUsername())) {
             String keyword = bo.getUsername().trim();
-            wrapper.and(w -> w.like("us.nickname", keyword)
-                .or().like("us.username", keyword)
-                .or().like("ur.nickname", keyword)
-                .or().like("ur.username", keyword));
+            // 发送者/接收者按昵称或用户名匹配：用户域查出 uuid 集合后 in（等价原 join us/ur 两侧 like 的 OR 语义）
+            Set<String> matched = new HashSet<>();
+            TripartiteUserBo userBo = new TripartiteUserBo();
+            userBo.setUsername(keyword);
+            tripartiteUserService.queryList(userBo).forEach(u -> matched.add(u.getUuid()));
+            userBo.setUsername(null);
+            userBo.setNickname(keyword);
+            tripartiteUserService.queryList(userBo).forEach(u -> matched.add(u.getUuid()));
+            if (matched.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            wrapper.and(w -> w.in("nur.target_uid", matched).or().in("nur.uid", matched));
         }
         wrapper.orderByDesc("nur.create_time");
         IPage<NewsUserRecordVo> result = newsUserRecordMapper.selectSystemPage(pageQuery.build(), wrapper);
         fillCommentContent(result.getRecords());
+        fillRecordUserDisplay(result.getRecords());
         return TableDataInfo.build(result);
     }
 
@@ -124,6 +139,74 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         return batchQuery.apply(ids).stream()
             .filter(c -> StringUtils.isNotBlank(contentGetter.apply(c)))
             .collect(Collectors.toMap(idGetter, contentGetter, (a, b) -> a));
+    }
+
+    /**
+     * 组装后台用户消息的发送者/接收者昵称头像（键 senderUid/recipientUid）
+     */
+    private void fillRecordUserDisplay(List<NewsUserRecordVo> records) {
+        Set<String> uids = new HashSet<>();
+        records.forEach(r -> {
+            if (StringUtils.isNotBlank(r.getSenderUid())) {
+                uids.add(r.getSenderUid());
+            }
+            if (StringUtils.isNotBlank(r.getRecipientUid())) {
+                uids.add(r.getRecipientUid());
+            }
+        });
+        Map<String, TripartiteUserVo> users = userMap(uids);
+        records.forEach(r -> {
+            TripartiteUserVo sender = users.get(r.getSenderUid());
+            if (sender != null) {
+                r.setSenderName(sender.getNickname());
+                r.setSenderAvatar(sender.getAvatar());
+            }
+            TripartiteUserVo recipient = users.get(r.getRecipientUid());
+            if (recipient != null) {
+                r.setRecipientName(recipient.getNickname());
+                r.setRecipientAvatar(recipient.getAvatar());
+            }
+        });
+    }
+
+    /**
+     * 组装评论消息的评论人昵称头像（键 commentUid；三个评论消息 VO 字段同名但无公共父类，展示字段写入由调用方传入）
+     */
+    private <T> void fillCommenterDisplay(List<T> records, Function<T, String> commentUidGetter,
+                                          BiConsumer<T, TripartiteUserVo> displaySetter) {
+        List<String> uids = records.stream()
+            .map(commentUidGetter)
+            .filter(StringUtils::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, TripartiteUserVo> users = userMap(uids);
+        records.forEach(r -> {
+            TripartiteUserVo u = users.get(commentUidGetter.apply(r));
+            if (u != null) {
+                displaySetter.accept(r, u);
+            }
+        });
+    }
+
+    /**
+     * 存活用户 Map（uuid -> 用户，state=0）
+     */
+    private Map<String, TripartiteUserVo> aliveUserMap() {
+        TripartiteUserBo bo = new TripartiteUserBo();
+        bo.setState(0);
+        return tripartiteUserService.queryList(bo).stream()
+            .collect(Collectors.toMap(TripartiteUserVo::getUuid, Function.identity(), (a, b) -> a));
+    }
+
+    /**
+     * 用户展示字段 Map（uuid -> 用户），跨业务域展示字段组装统一走用户域 getUserByUids
+     */
+    private Map<String, TripartiteUserVo> userMap(Collection<String> uids) {
+        if (CollectionUtils.isEmpty(uids)) {
+            return Collections.emptyMap();
+        }
+        return tripartiteUserService.getUserByUids(uids).stream()
+            .collect(Collectors.toMap(TripartiteUserVo::getUuid, Function.identity(), (a, b) -> a));
     }
 
     /**
@@ -232,6 +315,8 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         IPage<ArticleCommentNewsVo> page = newsUserRecordMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), pageQuery.build());
+        fillCommenterDisplay(page.getRecords(), ArticleCommentNewsVo::getCommentUid,
+            (r, u) -> { r.setCommentName(u.getNickname()); r.setCommentAvatar(u.getAvatar()); });
         return TableDataInfo.build(page);
     }
 
@@ -239,6 +324,8 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         IPage<TimeNotesCommentNewsVo> page = newsUserRecordMapper.selectTimeNotesCommentNews(uuid, NewsType.TIME_NOTES_COMMENT_NEWS.getCode(), pageQuery.build());
+        fillCommenterDisplay(page.getRecords(), TimeNotesCommentNewsVo::getCommentUid,
+            (r, u) -> { r.setCommentName(u.getNickname()); r.setCommentAvatar(u.getAvatar()); });
         return TableDataInfo.build(page);
     }
 
@@ -246,20 +333,41 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         IPage<DictumCommentNewsVo> page = newsUserRecordMapper.selectDictumCommentNews(uuid, NewsType.DICTUM_COMMENT_NEWS.getCode(), pageQuery.build());
+        fillCommenterDisplay(page.getRecords(), DictumCommentNewsVo::getCommentUid,
+            (r, u) -> { r.setCommentName(u.getNickname()); r.setCommentAvatar(u.getAvatar()); });
         return TableDataInfo.build(page);
     }
 
     @Override
     public TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = newsUserRecordMapper.selectFabulousNews(uuid, NewsType.FABULOUS_NEWS.getCode(), pageQuery.build());
-        return TableDataInfo.build(page);
+        return listSenderNews(uuid, NewsType.FABULOUS_NEWS.getCode(), pageQuery);
     }
 
     @Override
     public TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = newsUserRecordMapper.selectFollowNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery.build());
+        return listSenderNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery);
+    }
+
+    /**
+     * 点赞/关注消息分页：存活用户集合既作过滤参数（等价原 join um.state=0，被冻结/注销用户的消息不展示）也承载发送者展示字段
+     */
+    private TableDataInfo<NewsUserInfoVo> listSenderNews(String uid, Integer type, PageQuery pageQuery) {
+        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        if (aliveUsers.isEmpty()) {
+            return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+        }
+        IPage<NewsUserInfoVo> page = type.equals(NewsType.FABULOUS_NEWS.getCode())
+            ? newsUserRecordMapper.selectFabulousNews(uid, type, new ArrayList<>(aliveUsers.keySet()), pageQuery.build())
+            : newsUserRecordMapper.selectFollowNews(uid, type, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
+        page.getRecords().forEach(r -> {
+            TripartiteUserVo sender = aliveUsers.get(r.getSenderId());
+            if (sender != null) {
+                r.setSenderName(sender.getNickname());
+                r.setSenderAvatar(sender.getAvatar());
+            }
+        });
         return TableDataInfo.build(page);
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
 @Mapper
 public interface DictumInfoMapper extends BaseMapperPlus<DictumInfoMapper, DictumInfo, DictumInfoVo> {
 
-    IPage<DictumInfoVo> selectVoPageXml(@Param("bo") DictumInfoBo bo, Page<Object> build);
+    IPage<DictumInfoVo> selectVoPageXml(@Param("bo") DictumInfoBo bo, @Param("aliveUids") List<String> aliveUids, Page<Object> build);
 
     @Select("select label from b_dictum_info where label is not null and label!='' and `state`=0")
     List<DictumInfoVo> selectAuthorLabel();

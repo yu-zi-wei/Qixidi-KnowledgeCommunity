@@ -19,7 +19,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface DictumAlbumMapper extends BaseMapperPlus<DictumAlbumMapper, DictumAlbum, DictumAlbumVo> {
 
-    IPage<DictumAlbumVo> selectVoPageXml(@Param("bo") DictumAlbumBo bo, Page<Object> build);
+    IPage<DictumAlbumVo> selectVoPageXml(@Param("bo") DictumAlbumBo bo, @Param("aliveUids") java.util.List<String> aliveUids, Page<Object> build);
 
     java.util.List<CountUserWebsiteVo> selectAlbumCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 }

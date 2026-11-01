@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 用户消息记录视图对象 b_news_user_record（后台管理：发送者/接收者名称为 join 产物）
+ * 用户消息记录视图对象 b_news_user_record（发送者/接收者展示字段由 Service 层调用户域接口组装）
  *
  * @author ziwei
  * @date 2026年11月01日
@@ -46,7 +46,17 @@ public class NewsUserRecordVo {
     private Date createTime;
 
     /**
-     * 发送者昵称（target_uid join b_user_main）
+     * 发送者 uid（b_news_user_record.target_uid，Service 层按它组装展示字段）
+     */
+    private String senderUid;
+
+    /**
+     * 接收者 uid（b_news_user_record.uid，Service 层按它组装展示字段）
+     */
+    private String recipientUid;
+
+    /**
+     * 发送者昵称（Service 层组装）
      */
     private String senderName;
 
@@ -56,7 +66,7 @@ public class NewsUserRecordVo {
     private String senderAvatar;
 
     /**
-     * 接收者昵称（uid join b_user_main）
+     * 接收者昵称（Service 层组装）
      */
     private String recipientName;
 

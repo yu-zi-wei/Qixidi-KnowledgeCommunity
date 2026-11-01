@@ -36,6 +36,7 @@ import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.comment.IArticleCommentService;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
@@ -65,6 +66,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     private final ToShieldWordMapper toShieldWordMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
      * 查询文章评论
@@ -119,16 +121,53 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     @Override
     public TableDataInfo<ArticleCommentVo> adminQueryPageList(ArticleCommentBo bo, PageQuery pageQuery) {
         IPage<ArticleCommentVo> result = baseMapper.selectCommentIndex(pageQuery.build(), buildAdminQueryWrapper(bo));
+        fillUserDisplay(result.getRecords());
         return TableDataInfo.build(result);
     }
 
     @Override
     public ArticleCommentVo adminQueryById(Long id) {
-        // 走列表同款 join SQL：selectVoById 单表查询取不到评论人/文章标题等关联展示字段
+        // 走列表同款 SQL：selectVoById 单表查询取不到文章标题等关联展示字段
         QueryWrapper<ArticleComment> wrapper = buildAdminQueryWrapper(new ArticleCommentBo());
         wrapper.eq("ac.id", id);
         List<ArticleCommentVo> records = baseMapper.selectCommentIndex(new Page<>(1, 1), wrapper).getRecords();
+        fillUserDisplay(records);
         return records.isEmpty() ? null : records.get(0);
+    }
+
+    /**
+     * 组装评论人/被回复人昵称头像（键 commentUid/targetUid，跨业务域展示字段统一走用户域接口）
+     */
+    private void fillUserDisplay(List<ArticleCommentVo> records) {
+        if (CollectionUtils.isEmpty(records)) {
+            return;
+        }
+        Set<String> uids = new HashSet<>();
+        records.forEach(r -> {
+            if (StringUtils.isNotBlank(r.getCommentUid())) {
+                uids.add(r.getCommentUid());
+            }
+            if (StringUtils.isNotBlank(r.getTargetUid())) {
+                uids.add(r.getTargetUid());
+            }
+        });
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+            .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo commenter = users.get(r.getCommentUid());
+            if (commenter != null) {
+                r.setCommentName(commenter.getNickname());
+                r.setCommentAvatar(commenter.getAvatar());
+            }
+            TripartiteUserVo target = users.get(r.getTargetUid());
+            if (target != null) {
+                r.setTargetName(target.getNickname());
+                r.setTargetAvatar(target.getAvatar());
+            }
+        });
     }
 
     /**

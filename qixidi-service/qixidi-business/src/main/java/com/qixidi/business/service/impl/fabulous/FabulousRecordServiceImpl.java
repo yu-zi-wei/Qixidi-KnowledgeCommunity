@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
@@ -21,8 +22,10 @@ import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import jakarta.annotation.Resource;
@@ -32,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 /**
  * 点赞Service业务层处理
@@ -48,6 +52,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
     private final FabulousRecordMapper baseMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final ArticleInformationServiceImpl articleInformationService;
+    private final ITripartiteUserService tripartiteUserService;
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
 
@@ -212,6 +217,35 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
 
     @Override
     public TableDataInfo<ArticleInformationVo> fabulousList(UserHomeBo bo, PageQuery pageQuery) {
-        return TableDataInfo.build(baseMapper.fabulousArticleList(bo, pageQuery.build()));
+        IPage<ArticleInformationVo> page = baseMapper.fabulousArticleList(bo, pageQuery.build());
+        fillAuthorDisplay(page.getRecords());
+        return TableDataInfo.build(page);
+    }
+
+    /**
+     * 组装文章作者昵称/头像/职业（键 userId，原 SQL join b_user_main 的展示字段）
+     */
+    private void fillAuthorDisplay(List<ArticleInformationVo> records) {
+        if (records == null || records.isEmpty()) {
+            return;
+        }
+        List<String> uids = records.stream()
+                .map(ArticleInformationVo::getUserId)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .toList();
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo author = users.get(r.getUserId());
+            if (author != null) {
+                r.setNickname(author.getNickname());
+                r.setAvatar(author.getAvatar());
+                r.setOccupation(author.getOccupation());
+            }
+        });
     }
 }

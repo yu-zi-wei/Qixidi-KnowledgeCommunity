@@ -19,14 +19,11 @@
         ai.number_times,
         ai.audit_state,
         ai.audit_time,
-        um.username,
-        um.nickname,
         cr.collection_id,
         cr.id as collectionRecordId,
         cr.create_time
         FROM b_collection_record AS cr
         LEFT JOIN b_article_information AS ai ON cr.target_id = ai.id
-        LEFT join b_user_main as um on ai.user_id = um.uuid
         <where>
             cr.state=0
             and ai.state=0
@@ -40,6 +37,7 @@
         order by cr.create_time desc
     </select>
 
+    <!-- 创建者昵称由 Service 层按 uid 调用户域接口组装 -->
     <select id="selectUserName" resultType="com.qixidi.business.domain.vo.collection.CollectionInformationVo">
         select ci.id,
                ci.collection_name,
@@ -48,10 +46,8 @@
                ci.uid,
                ci.create_time,
                ci.update_id,
-               ci.update_time,
-               um.nickname as username
+               ci.update_time
         from b_collection_information as ci
-                 inner join b_user_main as um on ci.uid = um.uuid
             ${ew.getCustomSqlSegment}
     </select>
 

@@ -15,6 +15,8 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <!-- aliveUids=存活作者集合（Service 查用户域 state=0 传入，等价原 join um.state=0 过滤）；
+         作者昵称/头像/职业/地域/角色由 Service 层按 uid 组装 -->
     <select id="selectVoPageXml" resultType="com.qixidi.business.domain.vo.dictum.DictumAlbumVo">
         select da.id,
         da.uid,
@@ -23,18 +25,12 @@
         da.brief_introduction,
         da.album_state,
         da.create_time,
-        da.update_time,
-        um.nickname,
-        um.avatar,
-        um.occupation,
-        um.location,
-        um.role_id
+        da.update_time
         from b_dictum_album as da
-        left join b_user_main as um
-        on da.uid = um.uuid
         <where>
             da.state=0
-            and um.state=0
+            and da.uid in
+            <foreach collection="aliveUids" item="aliveItem" open="(" separator="," close=")">#{aliveItem}</foreach>
             <if test="bo.albumState !=null and bo.albumState!=''">
                 and da.album_state=#{bo.albumState}
             </if>

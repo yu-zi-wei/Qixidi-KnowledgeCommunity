@@ -135,6 +135,29 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     /**
+     * 按 uid 查用户基本信息（昵称/头像等展示字段，单表轻查，不分状态）
+     */
+    @Override
+    public TripartiteUserVo getUserByUid(String uid) {
+        if (uid == null || uid.isEmpty()) {
+            return null;
+        }
+        return baseMapper.selectVoById(uid);
+    }
+
+    /**
+     * 按 uid 集合批量查用户基本信息（跨业务域展示字段组装唯一入口，不分页、不分状态）
+     */
+    @Override
+    public List<TripartiteUserVo> getUserByUids(Collection<String> uids) {
+        if (uids == null || uids.isEmpty()) {
+            return List.of();
+        }
+        return baseMapper.selectVoList(new LambdaQueryWrapper<TripartiteUser>()
+            .in(TripartiteUser::getUuid, uids));
+    }
+
+    /**
      * 组装用户各类内容统计（详情/主页查询共用）
      */
     private void fillUserCounts(TripartiteUserVo vo, String uuid) {

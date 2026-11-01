@@ -18,6 +18,7 @@ import com.light.exception.ServiceException;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.special.SpecialInformationBo;
+import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.special.SpecialInformation;
 import com.qixidi.business.domain.enums.CommonStatusEnums;
@@ -26,9 +27,11 @@ import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.domain.vo.SubmissionCensusVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.special.SpecialInformationMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.count.UserCountQueryHelper;
 import com.qixidi.business.service.special.ISpecialInformationService;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +62,7 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     private final ArticleInformationMapper articleInformationMapper;
     private final UserCountQueryHelper userCountQueryHelper;
     private final TimeNotesMapper timeNotesMapper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
      * 查询专栏信息
@@ -84,9 +88,76 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     @Override
     public TableDataInfo<SpecialInformationVo> queryPageList(SpecialInformationBo bo, PageQuery pageQuery) {
         QueryWrapper<SpecialInformation> lqw = buildQueryWrappers(bo);
+        // 创建者昵称搜索：用户域查 uuid 后 in（等价原 join um.nickname like）
+        if (StringUtils.isNotBlank(bo.getUsername())) {
+            List<String> uuids = uidsByNickname(bo.getUsername());
+            if (uuids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            lqw.in("si.uid", uuids);
+        }
         Page<SpecialInformationVo> result = baseMapper.selectUserName(pageQuery.build(), lqw);
+        fillUserDisplay(result.getRecords());
         enrichWithIncludedCount(result.getRecords());
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 按昵称查用户 uuid 集合（原 join um.nickname like 条件的等价替代，走用户域接口）
+     */
+    private List<String> uidsByNickname(String nickname) {
+        TripartiteUserBo userBo = new TripartiteUserBo();
+        userBo.setNickname(nickname);
+        return tripartiteUserService.queryList(userBo).stream()
+                .map(TripartiteUserVo::getUuid)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 组装文章作者用户名/昵称/头像/职业（键 userId，原 SQL join b_user_main 的展示字段）
+     */
+    private void fillAuthorDisplay(List<ArticleInformationVo> records) {
+        List<String> uids = records.stream()
+                .map(ArticleInformationVo::getUserId)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo author = users.get(r.getUserId());
+            if (author != null) {
+                r.setUsername(author.getUsername());
+                r.setNickname(author.getNickname());
+                r.setAvatar(author.getAvatar());
+                r.setOccupation(author.getOccupation());
+            }
+        });
+    }
+
+    /**
+     * 组装创建者昵称（键 uid，展示字段 username）
+     */
+    private void fillUserDisplay(List<SpecialInformationVo> records) {
+        List<String> uids = records.stream()
+                .map(SpecialInformationVo::getUid)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo owner = users.get(r.getUid());
+            if (owner != null) {
+                r.setUsername(owner.getNickname());
+            }
+        });
     }
 
     /**
@@ -117,7 +188,6 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         Map<String, Object> params = bo.getParams();
         QueryWrapper<SpecialInformation> lqw = Wrappers.query();
         lqw.like(StringUtils.isNotBlank(bo.getSpecialName()), "special_name", bo.getSpecialName());
-        lqw.like(StringUtils.isNotBlank(bo.getUsername()), "um.nickname", bo.getUsername());
         lqw.eq(StringUtils.isNotBlank(bo.getSpecialIntroduce()), "special_introduce", bo.getSpecialIntroduce());
         lqw.eq(bo.getState() != null, "si.state", bo.getState());
         lqw.in(CollectionUtils.isNotEmpty(bo.getStates()), "si.state", bo.getStates());
@@ -245,7 +315,16 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
     @Override
     public Page<ArticleInformationVo> getArticleList(ArticleInformationBo bo, PageQuery pageQuery) {
         bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
-        Page<ArticleInformationVo> articleInfo = articleInformationMapper.getArticleInfo(bo, pageQuery.build());
+        // 作者昵称搜索：用户域查 uuid 后 in（等价原 SQL 对 b_user_main 的子查询）
+        List<String> nicknameUids = null;
+        if (StringUtils.isNotBlank(bo.getNickname())) {
+            nicknameUids = uidsByNickname(bo.getNickname());
+            if (nicknameUids.isEmpty()) {
+                return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+            }
+        }
+        Page<ArticleInformationVo> articleInfo = articleInformationMapper.getArticleInfo(bo, nicknameUids, pageQuery.build());
+        fillAuthorDisplay(articleInfo.getRecords());
         return articleInfo;
     }
 

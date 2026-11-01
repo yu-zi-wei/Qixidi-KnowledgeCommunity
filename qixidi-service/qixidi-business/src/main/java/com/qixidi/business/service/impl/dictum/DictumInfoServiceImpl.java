@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.light.core.core.domain.PageQuery;
@@ -17,6 +18,7 @@ import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
+import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
@@ -26,6 +28,7 @@ import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.dictum.IDictumInfoService;
 import com.qixidi.common.domain.enums.StatusEnums;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +54,7 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     private final DictumAlbumMapper dictumAlbumMapper;
     private final DictumGroupMapper dictumGroupMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
+    private final ITripartiteUserService tripartiteUserService;
     @Autowired
     private DictumCommentMapper dictumCommentMapper;
 
@@ -116,15 +121,16 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         bo.setLabel(EscapeUtil.escapeChar(bo.getLabel()));
         bo.setContent(EscapeUtil.escapeChar(bo.getContent()));
         bo.setAlbumName(EscapeUtil.escapeChar(bo.getAlbumName()));
-        IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, pageQuery.build());
+        // 存活作者过滤（等价原 join um.state=0）；作者展示字段由用户域数据组装
+        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        if (aliveUsers.isEmpty()) {
+            return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+        }
+        IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
         List<DictumInfoVo> records = result.getRecords();
         if (ObjectUtils.isEmpty(records)) return TableDataInfo.build();
         List<Long> ids = new ArrayList<>();
-        Set<String> uids = new HashSet<>();
-        records.forEach(item -> {
-            ids.add(item.getId());
-            uids.add(item.getUid());
-        });
+        records.forEach(item -> ids.add(item.getId()));
         List<DictumComment> dictumComments = dictumCommentMapper.selectList(new LambdaQueryWrapper<DictumComment>()
                 .select(DictumComment::getId, DictumComment::getDictumId)
                 .in(DictumComment::getDictumId, ids)
@@ -133,6 +139,14 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         Map<Long, Long> sumMap = dictumComments.stream().collect(Collectors.groupingBy(DictumComment::getDictumId, Collectors.counting()));
 
         records.forEach(item -> {
+            TripartiteUserVo author = aliveUsers.get(item.getUid());
+            if (author != null) {
+                item.setNickname(author.getNickname());
+                item.setAvatar(author.getAvatar());
+                item.setOccupation(author.getOccupation());
+                item.setLocation(author.getLocation());
+                item.setRoleId(author.getRoleId());
+            }
             if (StringUtils.isNotEmpty(item.getLabel())) {
                 List<String> labelList = Arrays.asList(item.getLabel().split(","));
                 item.setLabelList(labelList);
@@ -147,6 +161,16 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
             }
         });
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 存活用户 Map（键 uuid，等价原 SQL join um.state=0 的过滤集，兼作展示字段数据源）
+     */
+    private Map<String, TripartiteUserVo> aliveUserMap() {
+        TripartiteUserBo bo = new TripartiteUserBo();
+        bo.setState(0);
+        return tripartiteUserService.queryList(bo).stream()
+            .collect(Collectors.toMap(TripartiteUserVo::getUuid, Function.identity(), (a, b) -> a));
     }
 
     /**

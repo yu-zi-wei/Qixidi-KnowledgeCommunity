@@ -23,6 +23,7 @@
         <result property="auditState" column="audit_state"/>
         <result property="auditTime" column="audit_time"/>
     </resultMap>
+    <!-- 作者昵称/头像等展示字段由 Service 层按 user_id 调用户域接口组装（SQL 不跨用户域连表）；分组名为本域维表 join -->
     <sql id="ArticleInformationVo">
         select ai.id,
                ai.user_id,
@@ -38,13 +39,8 @@
                ai.number_times,
                ai.audit_state,
                ai.audit_time,
-               lgi.grouping_name,
-               um.username,
-               um.nickname,
-               um.avatar,
-               um.occupation
+               lgi.grouping_name
         from b_article_information as ai
-                 left join b_user_main as um on ai.user_id = um.uuid
                  left join b_label_grouping_info as lgi on lgi.id = ai.grouping_id
     </sql>
     <select id="selectIndex" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
@@ -101,6 +97,7 @@
         ai.heat_weight desc,
         ai.create_time desc
     </select>
+    <!-- 作者展示字段（含 roleId）由 Service 层组装 -->
     <select id="details" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         select ai.id,
                ai.user_id,
@@ -118,14 +115,8 @@
                ai.grouping_id,
                ai.number_times,
                ai.audit_state,
-               ai.audit_time,
-               um.username,
-               um.nickname,
-               um.avatar,
-               um.occupation,
-               um.role_id
+               ai.audit_time
         from b_article_information as ai
-                 left join b_user_main as um on ai.user_id = um.uuid
         where ai.id = #{id}
     </select>
 
@@ -178,7 +169,9 @@
                 </foreach>
             </if>
             <if test="bo.nickname !='' and bo.nickname !=null">
-                and ai.user_id in (select uuid from b_user_main where nickname like concat('%', #{bo.nickname}, '%'))
+                <!-- 昵称搜索改 Service 层查用户域转 uuid 集合（原为子查询 b_user_main） -->
+                and ai.user_id in
+                <foreach collection="nicknameUids" item="uidItem" open="(" separator="," close=")">#{uidItem}</foreach>
             </if>
             <if test="bo.params.beginTime != null and bo.params.beginTime != ''">
                 and ai.update_time &gt;= #{bo.params.beginTime}
@@ -344,6 +337,8 @@
         GROUP BY user_id
     </select>
 
+    <!-- aliveUids=存活作者集合（Service 查用户域 state=0 传入，等价原 join um.state=0 过滤：冻结/注销作者的文章不展示）；
+         作者展示字段由 Service 层组装 -->
     <select id="FollowArticleInfoList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         SELECT uf.uid,
         uf.target_id,
@@ -360,19 +355,15 @@
         ai.grouping_id,
         ai.number_times,
         ai.audit_state,
-        ai.audit_time,
-        um.username,
-        um.nickname,
-        um.avatar,
-        um.occupation
+        ai.audit_time
         FROM b_user_follow AS uf
         LEFT JOIN b_article_information AS ai ON ai.user_id = uf.target_id
-        LEFT JOIN b_user_main AS um ON ai.user_id = um.uuid
         WHERE uf.uid = #{bo.uid}
         AND uf.type = 1
         AND uf.state = 0
         AND ai.state = 0
-        AND um.state = 0
+        AND ai.user_id in
+        <foreach collection="aliveUids" item="aliveItem" open="(" separator="," close=")">#{aliveItem}</foreach>
         AND ai.audit_state = 2
         <if test="bo.sortType==1">
             order by ai.heat_weight desc
@@ -385,7 +376,8 @@
     <select id="LabelGArticleInfoList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         <include refid="ArticleInformationVo"/>
         WHERE ai.state = 0
-        AND um.state = 0
+        AND ai.user_id in
+        <foreach collection="aliveUids" item="aliveItem" open="(" separator="," close=")">#{aliveItem}</foreach>
         AND ai.audit_state = 2
         and ai.platform_type =1
         and grouping_id = #{bo.groupingId}

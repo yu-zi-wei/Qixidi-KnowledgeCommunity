@@ -3,17 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper">
+    <!-- 发送者昵称/头像由 Service 层按 uid 调用户域接口组装 -->
     <select id="selectListXml" resultType="com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo">
         SELECT pni.id,
                pni.uid,
                pni.news_comment,
                pni.create_time,
-               pni.time_mark,
-               um.nickname,
-               um.avatar as userAvatar,
-               pni.create_time
+               pni.time_mark
         FROM b_private_news_info AS pni
-                 LEFT JOIN b_user_main AS um ON pni.uid = um.uuid
         WHERE pni.uid = #{bo.uid}
             AND pni.reply_target_uid = #{bo.replyTargetUid}
            OR pni.uid = #{bo.replyTargetUid}
@@ -21,7 +18,7 @@
         ORDER BY pni.create_time
     </select>
 
-    <!-- 后台全站私信消息分页：双方昵称/头像 join 展示，uid/replyTargetUid 可选，内容模糊 -->
+    <!-- 后台全站私信消息分页：双方昵称/头像由 Service 层组装，uid/replyTargetUid 可选，内容模糊 -->
     <select id="selectAdminList" resultType="com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo">
         SELECT pni.id,
                pni.uid,
@@ -29,14 +26,8 @@
                pni.news_comment,
                pni.been_read,
                pni.time_mark,
-               pni.create_time,
-               u1.nickname   as nickname,
-               u1.avatar     as userAvatar,
-               u2.nickname   as targetName,
-               u2.avatar     as targetAvatar
+               pni.create_time
         FROM b_private_news_info AS pni
-                 LEFT JOIN b_user_main AS u1 ON pni.uid = u1.uuid
-                 LEFT JOIN b_user_main AS u2 ON pni.reply_target_uid = u2.uuid
         <where>
             <if test="bo.uid != null and bo.uid != ''">
                 AND pni.uid = #{bo.uid}

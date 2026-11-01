@@ -4,8 +4,9 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.comment.NewsUserRecordMapper">
 
-    <!-- 后台用户消息管理分页：发送者=target_uid、接收者=uid，筛选列必须带 nur 别名（join 两侧同名列歧义）。
-         content 是冗余字段仅点赞写入（被赞对象标题），评论正文由 Service 层按 news_id 批量查评论表回填（SQL 不跨业务域连表） -->
+    <!-- 后台用户消息管理分页：发送者=target_uid、接收者=uid，筛选列必须带 nur 别名。
+         content 是冗余字段仅点赞写入（被赞对象标题），评论正文由 Service 层按 news_id 批量查评论表回填；
+         发送者/接收者昵称头像由 Service 层按 senderUid/recipientUid 调用户域接口组装（SQL 不跨业务域连表） -->
     <select id="selectSystemPage" resultType="com.qixidi.business.domain.vo.news.NewsUserRecordVo">
         SELECT nur.id,
                nur.type,
@@ -13,13 +14,9 @@
                nur.content,
                nur.been_read,
                nur.create_time,
-               us.nickname AS senderName,
-               us.avatar   AS senderAvatar,
-               ur.nickname AS recipientName,
-               ur.avatar   AS recipientAvatar
+               nur.target_uid AS senderUid,
+               nur.uid        AS recipientUid
         FROM b_news_user_record nur
-                 LEFT JOIN b_user_main us ON nur.target_uid = us.uuid
-                 LEFT JOIN b_user_main ur ON nur.uid = ur.uuid
         ${ew.getCustomSqlSegment}
     </select>
 
@@ -36,13 +33,10 @@
                ac.type          as type,
                ai.article_title AS articleTitle,
                nur.been_read    as beenRead,
-               nur.create_time  as createTime,
-               um.nickname      AS commentName,
-               um.avatar        AS commentAvatar
+               nur.create_time  as createTime
         FROM b_news_user_record AS nur
                  LEFT JOIN b_article_comment AS ac ON nur.news_id = ac.id
                  LEFT JOIN b_article_information AS ai ON ai.id = ac.article_id
-                 LEFT JOIN b_user_main AS um ON ac.comment_uid = um.uuid
         where ac.state = 0
           and nur.type = #{type}
           and nur.uid = #{uid}
@@ -62,13 +56,10 @@
                tc.type           as type,
                tn.title          AS title,
                nur.been_read     as beenRead,
-               nur.create_time   as createTime,
-               um.nickname       AS commentName,
-               um.avatar         AS commentAvatar
+               nur.create_time   as createTime
         FROM b_news_user_record AS nur
                  LEFT JOIN b_time_notes_comment AS tc ON nur.news_id = tc.id
                  LEFT JOIN b_time_notes AS tn ON tn.id = tc.time_notes_id
-                 LEFT JOIN b_user_main AS um ON tc.comment_uid = um.uuid
         where tc.status = 0
           and nur.type = #{type}
           and nur.uid = #{uid}
@@ -88,31 +79,28 @@
                dc.type           as type,
                di.content        AS worksContent,
                nur.been_read     as beenRead,
-               nur.create_time   as createTime,
-               um.nickname       AS commentName,
-               um.avatar         AS commentAvatar
+               nur.create_time   as createTime
         FROM b_news_user_record AS nur
                  LEFT JOIN b_dictum_comment AS dc ON nur.news_id = dc.id
                  LEFT JOIN b_dictum_info AS di ON di.id = dc.dictum_id
-                 LEFT JOIN b_user_main AS um ON dc.comment_uid = um.uuid
         where dc.status = 0
           and nur.type = #{type}
           and nur.uid = #{uid}
         ORDER BY nur.create_time DESC
     </select>
 
+    <!-- aliveUids=存活用户集合（Service 查用户域 state=0 传入，等价原 join um.state=0 过滤：被冻结/注销用户的消息不展示）；
+         发送者昵称头像由 Service 层按 senderId 组装 -->
     <select id="selectFollowNews" resultType="com.qixidi.business.domain.vo.news.NewsUserInfoVo">
         SELECT nur.id          as newsId,
                nur.type        as type,
                nur.uid         as recipientId,
                nur.been_read   as beenRead,
                nur.create_time as createTime,
-               um.uuid         as senderId,
-               um.nickname     AS senderName,
-               um.avatar       AS senderAvatar
+               nur.target_uid  as senderId
         from b_news_user_record AS nur
-                 LEFT JOIN b_user_main AS um ON nur.target_uid = um.uuid
-        where um.state = 0
+        where nur.target_uid in
+        <foreach collection="aliveUids" item="item" open="(" separator="," close=")">#{item}</foreach>
           and nur.type = #{type}
           and nur.uid = #{uid}
         ORDER BY nur.create_time DESC
@@ -126,12 +114,10 @@
                nur.content     as newsContent,
                nur.target_id   as targetId,
                nur.create_time as createTime,
-               um.uuid         as senderId,
-               um.nickname     AS senderName,
-               um.avatar       AS senderAvatar
+               nur.target_uid  as senderId
         from b_news_user_record AS nur
-                 LEFT JOIN b_user_main AS um ON nur.target_uid = um.uuid
-        where um.state = 0
+        where nur.target_uid in
+        <foreach collection="aliveUids" item="item" open="(" separator="," close=")">#{item}</foreach>
           and nur.type = #{type}
           and nur.uid = #{uid}
         ORDER BY nur.create_time DESC

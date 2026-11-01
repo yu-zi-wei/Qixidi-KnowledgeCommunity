@@ -17,8 +17,10 @@ import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
 import com.qixidi.business.domain.entity.privateUser.PrivateUser;
 import com.qixidi.business.domain.enums.PrivateNewsInfoEnums;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.privateUser.IPrivateUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
 
     private final PrivateUserMapper baseMapper;
     private final PrivateNewsInfoMapper privateNewsInfoMapper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
      * 查询私信记录列表
@@ -52,6 +55,7 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
     public TableDataInfo<PrivateUserVo> queryPageList(PrivateUserBo bo, PageQuery pageQuery) {
         Page<PrivateUserVo> result = baseMapper.selectListXml(bo, pageQuery.build());
         if (CollectionUtils.isEmpty(result.getRecords())) return TableDataInfo.build(result);
+        fillTargetDisplay(result.getRecords());
         // 获取未读数据 条数
         List<PrivateUserVo> beenReadList = privateNewsInfoMapper.selectBeenReadList(bo.getUid(), result.getRecords());
         if (CollectionUtils.isEmpty(beenReadList)) return TableDataInfo.build(result);
@@ -62,6 +66,28 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
             }
         });
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 组装会话对方昵称/头像/职业（键 targetUid，跨业务域展示字段统一走用户域接口）
+     */
+    private void fillTargetDisplay(List<PrivateUserVo> records) {
+        List<String> uids = records.stream()
+                .map(PrivateUserVo::getTargetUid)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) return;
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(item -> {
+            TripartiteUserVo target = users.get(item.getTargetUid());
+            if (target != null) {
+                item.setTargetName(target.getNickname());
+                item.setTargetAvatar(target.getAvatar());
+                item.setTargetOccupation(target.getOccupation());
+            }
+        });
     }
 
     @Override

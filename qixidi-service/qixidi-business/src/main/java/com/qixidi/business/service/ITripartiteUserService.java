@@ -38,6 +38,22 @@ public interface ITripartiteUserService {
     TripartiteUserVo queryById(String uuid);
 
     /**
+     * 按 uid 查用户基本信息（昵称/头像等展示字段，单表轻查，不分状态）
+     *
+     * @param uid 用户 uuid
+     * @return 用户（不存在返回 null）
+     */
+    TripartiteUserVo getUserByUid(String uid);
+
+    /**
+     * 按 uid 集合批量查用户基本信息（跨业务域展示字段组装唯一入口，不分页、不分状态）
+     *
+     * @param uids 用户 uuid 集合
+     * @return 用户列表（uid 悬空的不在结果里）
+     */
+    List<TripartiteUserVo> getUserByUids(Collection<String> uids);
+
+    /**
      * 查询平台用户列表
      *
      * @return 平台用户集合

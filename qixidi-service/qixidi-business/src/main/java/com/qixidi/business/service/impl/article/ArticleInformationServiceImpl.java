@@ -39,6 +39,7 @@ import com.qixidi.business.domain.bo.article.ArticleAuditBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.ArticleInformationTwoBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
+import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.SearchRecords;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
@@ -53,6 +54,7 @@ import com.qixidi.business.domain.enums.article.ArticleUpdateTypeEnums;
 import com.qixidi.business.domain.vo.article.ArticleArchiveVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.label.LabelInfoVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.SearchRecordsMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionRecordMapper;
@@ -61,6 +63,7 @@ import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.article.IArticleInformationService;
 import com.qixidi.business.service.count.ArticleCountQueryHelper;
 import com.qixidi.business.service.count.UserCountQueryHelper;
@@ -115,6 +118,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final AiGenerationService aiGenerationService;
     private final ArticleCountQueryHelper articleCountQueryHelper;
     private final UserCountQueryHelper userCountQueryHelper;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
      * 查询文章信息
@@ -124,13 +128,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      */
     @Override
     public ArticleInformationVo queryById(Long id) {
-        // 走列表同款 join SQL：selectVoById 单表查询取不到作者/分类/头像等关联展示字段
+        // 走列表同款 SQL：selectVoById 单表查询取不到分组名等关联展示字段（作者展示字段由 Service 组装）
         QueryWrapper<ArticleInformation> wrapper = Wrappers.query();
         wrapper.eq("ai.id", id);
         List<ArticleInformationVo> records = baseMapper.selectIndex(new Page<>(1, 1), wrapper).getRecords();
         if (records.isEmpty()) {
             return null;
         }
+        fillAuthorInfo(records);
         fillLabelNames(records);
         // 列表 SQL 不查大字段 article_content（分页性能），详情场景补一次主键单查：
         // 后台审核"先取详情补全再 PUT"依赖完整 content（EditGroup 必填），缺它编辑必被校验拦下
@@ -183,7 +188,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         Map<String, Object> params = bo.getParams();
         QueryWrapper<ArticleInformation> lqw = Wrappers.query();
         lqw.le("ai.type", 10);
-        lqw.like(StringUtils.isNotBlank(bo.getNickname()), "um.nickname", bo.getNickname());
         lqw.like(StringUtils.isNotBlank(bo.getArticleTitle()), "ai.article_title", bo.getArticleTitle());
         lqw.like(StringUtils.isNotBlank(bo.getLabelId()), "ai.label_id", bo.getLabelId());
         lqw.eq(bo.getGroupingId() != null, "ai.grouping_id", bo.getGroupingId());
@@ -416,7 +420,16 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public TableDataInfo<ArticleInformationVo> index(ArticleInformationBo bo, PageQuery pageQuery) {
         QueryWrapper<ArticleInformation> wrapper = buildQueryWrapper(bo);
+        // 作者昵称搜索：用户域查 uuid 后 in（等价原 join um.nickname like）
+        if (StringUtils.isNotBlank(bo.getNickname())) {
+            List<String> uuids = uidsByNickname(bo.getNickname());
+            if (uuids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            wrapper.in("ai.user_id", uuids);
+        }
         IPage<ArticleInformationVo> index = baseMapper.selectIndex(pageQuery.build(), wrapper);
+        fillAuthorInfo(index.getRecords());
         fillLabelNames(index.getRecords());
         enrichWithRealTimeCounts(index.getRecords());
         return TableDataInfo.build(index);
@@ -425,6 +438,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public IPage<ArticleInformationVo> sortIndex(SortTypeBo bo, PageQuery pageQuery) {
         IPage<ArticleInformationVo> page = baseMapper.selectTypeSort(bo, pageQuery.build());
+        fillAuthorInfo(page.getRecords());
         enrichWithRealTimeCounts(page.getRecords());
         return page;
     }
@@ -451,6 +465,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         }
         bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         IPage<ArticleInformationVo> page = baseMapper.articleList(bo, pageQuery.build());
+        fillAuthorInfo(page.getRecords());
         enrichWithRealTimeCounts(page.getRecords());
         return page;
     }
@@ -470,6 +485,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         Set<Object> labelSet = RedisUtils.getZset(String.format(RedisBusinessKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), 0, 10);
         String result = StringUtils.join(labelSet, ", ");
         IPage<ArticleInformationVo> page = baseMapper.articleRecommendList(bo, result, pageQuery.build());
+        fillAuthorInfo(page.getRecords());
         enrichWithRealTimeCounts(page.getRecords());
         return page;
     }
@@ -523,6 +539,15 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public ArticleInformationVo details(Long id) {
         ArticleInformationVo details = baseMapper.details(id);
         if (details == null) throw new ServiceException("文章不存在");
+        // 作者展示字段（含 roleId，原 SQL join b_user_main 的产物）
+        TripartiteUserVo author = tripartiteUserService.getUserByUid(details.getUserId());
+        if (author != null) {
+            details.setUsername(author.getUsername());
+            details.setNickname(author.getNickname());
+            details.setAvatar(author.getAvatar());
+            details.setOccupation(author.getOccupation());
+            details.setRoleId(author.getRoleId().intValue());
+        }
         String uuid1 = LoginHelper.getTripartiteUuid();
         UserFollow userFollow = userFollowMapper.selectOne(new LambdaQueryWrapper<UserFollow>()
                 .eq(UserFollow::getTargetId, details.getUserId())
@@ -597,6 +622,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     public List<ArticleInformationVo> relatedList(ArticleInformationBo bo, PageQuery pageQuery) {
         bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
         List<ArticleInformationVo> list = baseMapper.relatedList(bo, pageQuery);
+        fillAuthorInfo(list);
         enrichWithRealTimeCounts(list);
         return list;
     }
@@ -629,7 +655,16 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     @Override
     public Page<ArticleInformationVo> getArticleInfo(ArticleInformationBo bo, PageQuery pageQuery) {
         bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
-        Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, pageQuery.build());
+        // 作者昵称搜索：用户域查 uuid 后 in（等价原 SQL 对 b_user_main 的子查询）
+        List<String> nicknameUids = null;
+        if (StringUtils.isNotBlank(bo.getNickname())) {
+            nicknameUids = uidsByNickname(bo.getNickname());
+            if (nicknameUids.isEmpty()) {
+                return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+            }
+        }
+        Page<ArticleInformationVo> articleInfo = baseMapper.getArticleInfo(bo, nicknameUids, pageQuery.build());
+        fillAuthorInfo(articleInfo.getRecords());
         enrichWithRealTimeCounts(articleInfo.getRecords());
         return articleInfo;
     }
@@ -744,16 +779,86 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         String uuid = LoginHelper.getTripartiteUuid();
         if (ObjectUtils.isEmpty(uuid)) return null;
         bo.setUid(uuid);
-        Page<ArticleInformationVo> page = baseMapper.FollowArticleInfoList(bo, pageQuery.build());
-        enrichWithRealTimeCounts(page.getRecords());
-        return page;
+        return listAliveAuthorPage(bo, pageQuery, true);
     }
 
     @Override
     public Page<ArticleInformationVo> LabelGArticleInfoList(SortTypeBo bo, PageQuery pageQuery) {
-        Page<ArticleInformationVo> page = baseMapper.LabelGArticleInfoList(bo, pageQuery.build());
+        return listAliveAuthorPage(bo, pageQuery, false);
+    }
+
+    /**
+     * 关注/分组文章流：存活作者集合既作过滤参数（等价原 join um.state=0，冻结/注销作者的文章不展示）
+     * 也承载作者展示字段，免二次批量查
+     */
+    private Page<ArticleInformationVo> listAliveAuthorPage(SortTypeBo bo, PageQuery pageQuery, boolean follow) {
+        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        if (aliveUsers.isEmpty()) {
+            return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+        }
+        List<String> aliveUids = new ArrayList<>(aliveUsers.keySet());
+        Page<ArticleInformationVo> page = follow
+                ? baseMapper.FollowArticleInfoList(bo, aliveUids, pageQuery.build())
+                : baseMapper.LabelGArticleInfoList(bo, aliveUids, pageQuery.build());
+        fillAuthorInfo(page.getRecords(), aliveUsers);
         enrichWithRealTimeCounts(page.getRecords());
         return page;
+    }
+
+    /**
+     * 存活用户 Map（uuid -> 用户，state=0）
+     */
+    private Map<String, TripartiteUserVo> aliveUserMap() {
+        TripartiteUserBo userBo = new TripartiteUserBo();
+        userBo.setState(0);
+        return tripartiteUserService.queryList(userBo).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+    }
+
+    /**
+     * 按昵称查用户 uuid 集合（原 join/子查询 b_user_main nickname like 条件的等价替代，走用户域接口）
+     */
+    private List<String> uidsByNickname(String nickname) {
+        TripartiteUserBo userBo = new TripartiteUserBo();
+        userBo.setNickname(nickname);
+        return tripartiteUserService.queryList(userBo).stream()
+                .map(TripartiteUserVo::getUuid)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 组装作者展示字段：username/nickname/avatar/occupation（键 userId）
+     */
+    private void fillAuthorInfo(List<ArticleInformationVo> records) {
+        if (CollectionUtils.isEmpty(records)) {
+            return;
+        }
+        List<String> uids = records.stream()
+                .map(ArticleInformationVo::getUserId)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+        if (uids.isEmpty()) {
+            return;
+        }
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        fillAuthorInfo(records, users);
+    }
+
+    /**
+     * 组装作者展示字段（users 为调用方已备好的用户 Map，免二次批量查）
+     */
+    private void fillAuthorInfo(List<ArticleInformationVo> records, Map<String, TripartiteUserVo> users) {
+        records.forEach(r -> {
+            TripartiteUserVo author = users.get(r.getUserId());
+            if (author != null) {
+                r.setUsername(author.getUsername());
+                r.setNickname(author.getNickname());
+                r.setAvatar(author.getAvatar());
+                r.setOccupation(author.getOccupation());
+            }
+        });
     }
 
     /**

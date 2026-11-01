@@ -21,8 +21,10 @@ import com.qixidi.business.domain.entity.privateUser.PrivateNewsInfo;
 import com.qixidi.business.domain.entity.privateUser.PrivateUser;
 import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.domain.vo.privateUser.PrivateUserVo;
+import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateUserMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
 import com.qixidi.business.service.privateUser.IPrivateUserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 私信记录Service业务层处理
@@ -46,6 +49,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     private final PrivateNewsInfoMapper baseMapper;
     private final PrivateUserMapper privateUserMapper;
     private final IPrivateUserService iPrivateUserService;
+    private final ITripartiteUserService tripartiteUserService;
 
     /**
      * 查询私信记录
@@ -68,16 +72,45 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     public TableDataInfo<PrivateNewsInfoVo> queryPageList(PrivateNewsInfoBo bo, PageQuery pageQuery) {
         bo.setUid(LoginHelper.getTripartiteUuid());
         Page<PrivateNewsInfoVo> result = baseMapper.selectListXml(bo, pageQuery.build());
+        fillUserDisplay(result.getRecords());
         return TableDataInfo.build(result);
     }
 
     /**
-     * 后台全站私信消息分页：走 selectAdminList（双方昵称/头像 join），不覆盖入参 uid
+     * 后台全站私信消息分页：走 selectAdminList（双方昵称/头像由 Service 组装），不覆盖入参 uid
      */
     @Override
     public TableDataInfo<PrivateNewsInfoVo> adminQueryPageList(PrivateNewsInfoBo bo, PageQuery pageQuery) {
         Page<PrivateNewsInfoVo> result = baseMapper.selectAdminList(bo, pageQuery.build());
+        fillUserDisplay(result.getRecords());
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 组装消息双方展示字段：发送方（键 uid）填昵称/头像，接收方（键 replyTargetUid）填对方昵称/头像
+     */
+    private void fillUserDisplay(List<PrivateNewsInfoVo> records) {
+        if (records == null || records.isEmpty()) return;
+        Set<String> uids = new HashSet<>();
+        records.forEach(r -> {
+            if (StringUtils.isNotBlank(r.getUid())) uids.add(r.getUid());
+            if (StringUtils.isNotBlank(r.getReplyTargetUid())) uids.add(r.getReplyTargetUid());
+        });
+        if (uids.isEmpty()) return;
+        Map<String, TripartiteUserVo> users = tripartiteUserService.getUserByUids(uids).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+        records.forEach(r -> {
+            TripartiteUserVo sender = users.get(r.getUid());
+            if (sender != null) {
+                r.setNickname(sender.getNickname());
+                r.setUserAvatar(sender.getAvatar());
+            }
+            TripartiteUserVo target = users.get(r.getReplyTargetUid());
+            if (target != null) {
+                r.setTargetName(target.getNickname());
+                r.setTargetAvatar(target.getAvatar());
+            }
+        });
     }
 
     /**
@@ -142,6 +175,7 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
             pageQuery.setPageNum(0);
             pageQuery.setPageSize(1024);
             Page<PrivateNewsInfoVo> result = baseMapper.selectListXml(bo, pageQuery.build());
+            fillUserDisplay(result.getRecords());
             PrivateUserBo privateUserBo = new PrivateUserBo();
             privateUserBo.setUid(add.getReplyTargetUid());
 

@@ -42,7 +42,12 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     @Select("select id,user_id,article_title,audit_state,update_time from b_article_information where id=#{id}")
     ArticleInformationVo basicInfo(@Param("id") Long id);
 
-    Page<ArticleInformationVo> getArticleInfo(@Param("bo") ArticleInformationBo bo, Page<ArticleInformation> build);
+    /**
+     * 昵称搜索：nicknameUids 为 Service 查用户域（nickname like）转出的 uuid 集合，bo.nickname 非空时必传
+     */
+    Page<ArticleInformationVo> getArticleInfo(@Param("bo") ArticleInformationBo bo,
+                                              @Param("nicknameUids") List<String> nicknameUids,
+                                              Page<ArticleInformation> build);
 
     Integer updateAdd(@Param("id") Long articleId, @Param("code") Integer code);
 
@@ -84,9 +89,19 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     @Select("select audit_state,is_public from b_article_information where id=#{id} and state=0")
     ArticleInformationVo selectAuditStatus(@Param("id") Long id);
 
-    Page<ArticleInformationVo> FollowArticleInfoList(@Param("bo") SortTypeBo bo, Page<ArticleInformation> build);
+    /**
+     * 关注文章流（aliveUids=存活作者集合，等价原 join um.state=0 过滤；作者展示字段由 Service 组装）
+     */
+    Page<ArticleInformationVo> FollowArticleInfoList(@Param("bo") SortTypeBo bo,
+                                                     @Param("aliveUids") List<String> aliveUids,
+                                                     Page<ArticleInformation> build);
 
-    Page<ArticleInformationVo> LabelGArticleInfoList(@Param("bo") SortTypeBo bo, Page<ArticleInformation> build);
+    /**
+     * 分组文章流（aliveUids=存活作者集合，等价原 join um.state=0 过滤；作者展示字段由 Service 组装）
+     */
+    Page<ArticleInformationVo> LabelGArticleInfoList(@Param("bo") SortTypeBo bo,
+                                                     @Param("aliveUids") List<String> aliveUids,
+                                                     Page<ArticleInformation> build);
 
     @Select("select label_id from b_article_information where audit_state=2 and state=0 and platform_type=1 and label_id is not null and label_id!=''")
     List<String> selectLabel();

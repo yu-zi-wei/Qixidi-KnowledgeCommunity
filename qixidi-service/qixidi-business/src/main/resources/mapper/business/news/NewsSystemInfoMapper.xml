@@ -54,8 +54,8 @@
         order by create_time desc
     </select>
 
-    <!-- 后台系统消息管理分页：join b_user_main 取指定人发（is_mass_air=2）的接收人昵称头像（维表 join），
-         筛选列必须带 nsi 别名（join 两侧 state/create_time 同名列歧义） -->
+    <!-- 后台系统消息管理分页：指定人发（is_mass_air=2）的接收人昵称头像由 Service 层按 uid 调用户域接口组装，
+         筛选列必须带 nsi 别名（多表场景遗留习惯，防同名列歧义） -->
     <select id="selectSystemPage" resultType="com.qixidi.business.domain.vo.news.NewsSystemInfoVo">
         SELECT nsi.id,
                nsi.news_title,
@@ -66,11 +66,8 @@
                nsi.uid,
                nsi.type,
                nsi.lapse_time,
-               nsi.create_time,
-               um.nickname AS recipientName,
-               um.avatar   AS recipientAvatar
+               nsi.create_time
         FROM b_news_system_info nsi
-                 LEFT JOIN b_user_main um ON nsi.uid = um.uuid
         ${ew.getCustomSqlSegment}
     </select>
 </mapper>
