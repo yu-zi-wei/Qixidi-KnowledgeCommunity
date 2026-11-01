@@ -17,34 +17,4 @@
         <!-- update_time 即最新消息时间（发消息时 updatePrivateNews 双向刷新），其次按会话创建时间 -->
         ORDER BY pu.update_time DESC, pu.create_time DESC
     </select>
-
-    <!-- 后台全站会话分页：双方昵称/头像 join 展示，uid/targetUid 可选，lastNews 模糊 -->
-    <select id="selectAdminList" resultType="com.qixidi.business.domain.vo.privateUser.PrivateUserVo">
-        SELECT pu.id,
-               pu.uid,
-               pu.target_uid,
-               pu.last_news,
-               pu.create_time,
-               pu.update_time,
-               u1.nickname   as uidName,
-               u1.avatar     as uidAvatar,
-               u2.nickname   as targetName,
-               u2.avatar     as targetAvatar,
-               u2.occupation as targetOccupation
-        FROM b_private_user AS pu
-                 LEFT JOIN b_user_main AS u1 ON pu.uid = u1.uuid
-                 LEFT JOIN b_user_main AS u2 ON pu.target_uid = u2.uuid
-        <where>
-            <if test="bo.uid != null and bo.uid != ''">
-                AND pu.uid = #{bo.uid}
-            </if>
-            <if test="bo.targetUid != null and bo.targetUid != ''">
-                AND pu.target_uid = #{bo.targetUid}
-            </if>
-            <if test="bo.lastNewsLike != null and bo.lastNewsLike != ''">
-                AND pu.last_news like concat('%', #{bo.lastNewsLike}, '%')
-            </if>
-        </where>
-        ORDER BY pu.update_time DESC, pu.create_time DESC
-    </select>
 </mapper>

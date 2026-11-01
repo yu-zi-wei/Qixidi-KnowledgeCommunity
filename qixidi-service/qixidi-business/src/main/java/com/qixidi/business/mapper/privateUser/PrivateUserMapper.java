@@ -18,9 +18,4 @@ import org.apache.ibatis.annotations.Param;
 public interface PrivateUserMapper extends BaseMapperPlus<PrivateUserMapper, PrivateUser, PrivateUserVo> {
 
     Page<PrivateUserVo> selectListXml(@Param("bo") PrivateUserBo bo, Page<Object> build);
-
-    /**
-     * 后台全站会话分页（双方昵称/头像 join 展示，uid/targetUid 可选筛选，lastNews 模糊）
-     */
-    Page<PrivateUserVo> selectAdminList(@Param("bo") PrivateUserBo bo, Page<Object> build);
 }

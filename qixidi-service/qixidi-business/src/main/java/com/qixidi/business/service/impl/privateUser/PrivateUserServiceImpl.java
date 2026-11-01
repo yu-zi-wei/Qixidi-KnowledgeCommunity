@@ -1,12 +1,10 @@
 package com.qixidi.business.service.impl.privateUser;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
@@ -26,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,17 +41,6 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
 
     private final PrivateUserMapper baseMapper;
     private final PrivateNewsInfoMapper privateNewsInfoMapper;
-
-    /**
-     * 查询私信记录
-     *
-     * @param id 私信记录主键
-     * @return 私信记录
-     */
-    @Override
-    public PrivateUserVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
-    }
 
     /**
      * 查询私信记录列表
@@ -76,74 +62,6 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
             }
         });
         return TableDataInfo.build(result);
-    }
-
-    /**
-     * 后台全站会话分页：走 selectAdminList（双方昵称/头像 join），不依赖前台登录态
-     */
-    @Override
-    public TableDataInfo<PrivateUserVo> adminQueryPageList(PrivateUserBo bo, PageQuery pageQuery) {
-        Page<PrivateUserVo> result = baseMapper.selectAdminList(bo, pageQuery.build());
-        return TableDataInfo.build(result);
-    }
-
-    /**
-     * 查询私信记录列表
-     *
-     * @param bo 私信记录
-     * @return 私信记录
-     */
-    @Override
-    public List<PrivateUserVo> queryList(PrivateUserBo bo) {
-        LambdaQueryWrapper<PrivateUser> lqw = buildQueryWrapper(bo);
-        return baseMapper.selectVoList(lqw);
-    }
-
-    private LambdaQueryWrapper<PrivateUser> buildQueryWrapper(PrivateUserBo bo) {
-        Map<String, Object> params = bo.getParams();
-        LambdaQueryWrapper<PrivateUser> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getUid()), PrivateUser::getUid, bo.getUid());
-        lqw.eq(StringUtils.isNotBlank(bo.getTargetUid()), PrivateUser::getTargetUid, bo.getTargetUid());
-        return lqw;
-    }
-
-    /**
-     * 新增私信记录
-     *
-     * @param bo 私信记录
-     * @return 结果
-     */
-    @Override
-    public Boolean insertByBo(PrivateUserBo bo) {
-        PrivateUser add = BeanUtil.toBean(bo, PrivateUser.class);
-        boolean flag = baseMapper.insert(add) > 0;
-        if (flag) {
-            bo.setId(add.getId());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改私信记录
-     *
-     * @param bo 私信记录
-     * @return 结果
-     */
-    @Override
-    public Boolean updateByBo(PrivateUserBo bo) {
-        PrivateUser update = BeanUtil.toBean(bo, PrivateUser.class);
-        return baseMapper.updateById(update) > 0;
-    }
-
-    /**
-     * 批量删除私信记录
-     *
-     * @param ids 需要删除的私信记录主键
-     * @return 结果
-     */
-    @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return baseMapper.deleteBatchIds(ids) > 0;
     }
 
     @Override
