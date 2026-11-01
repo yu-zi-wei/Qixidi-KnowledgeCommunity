@@ -64,7 +64,7 @@ public class DictumAlbumController {
     /**
      * 获取随笔专辑详细信息
      */
-    @PermName("随笔专辑-查询")
+    @PermName("随笔专辑-详情")
     @SaCheckPermission("dictum:album:query")
     @GetMapping("/{id}")
     public DictumAlbumVo getInfo(@PathVariable("id") Long id) {

@@ -38,6 +38,20 @@ import java.util.TreeSet;
 public class PermissionScanner implements SmartInitializingSingleton {
 
     /**
+     * 动作词根 → 组内展示顺序（读操作在前：列表 → 详情，写操作随后）。未登记词根排最后（按码字典序）
+     */
+    private static final Map<String, Integer> ACTION_ORDER = Map.ofEntries(
+            Map.entry("list", 0),
+            Map.entry("query", 1),
+            Map.entry("add", 2),
+            Map.entry("edit", 3),
+            Map.entry("remove", 4),
+            Map.entry("export", 5),
+            Map.entry("merge", 6),
+            Map.entry("forceLogout", 7),
+            Map.entry("resetPwd", 8));
+
+    /**
      * 模块首段 → 分组中文标题（口径与后台侧栏菜单一致）。新增模块时同步登记
      */
     private static final Map<String, String> MODULE_LABELS = Map.ofEntries(
@@ -132,7 +146,7 @@ public class PermissionScanner implements SmartInitializingSingleton {
         Map<String, Set<String>> byModule = new LinkedHashMap<>();
         permLabels.forEach((perm, label) -> {
             String module = perm.split(":")[0];
-            byModule.computeIfAbsent(module, k -> new TreeSet<>()).add(perm);
+            byModule.computeIfAbsent(module, k -> new TreeSet<>(PermissionScanner::comparePerm)).add(perm);
         });
         groups = byModule.entrySet().stream()
                 .map(e -> new PermGroupVo(e.getKey(),
@@ -159,6 +173,20 @@ public class PermissionScanner implements SmartInitializingSingleton {
                 mergeLabel(code, null);
             }
         }
+    }
+
+    /**
+     * 组内排序：按末段动作优先级（ACTION_ORDER），未登记词根排最后；次级按码字典序
+     */
+    private static int comparePerm(String a, String b) {
+        int oa = ACTION_ORDER.getOrDefault(actionOf(a), 99);
+        int ob = ACTION_ORDER.getOrDefault(actionOf(b), 99);
+        return oa != ob ? Integer.compare(oa, ob) : a.compareTo(b);
+    }
+
+    private static String actionOf(String perm) {
+        int idx = perm.lastIndexOf(':');
+        return idx > 0 ? perm.substring(idx + 1) : perm;
     }
 
     /**

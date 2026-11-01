@@ -66,7 +66,7 @@ public class ToShieldWordController {
     /**
      * 获取屏蔽词库详细信息
      */
-    @PermName("屏蔽词-查询")
+    @PermName("屏蔽词-详情")
     @SaCheckPermission("shield:shieldWord:query")
     @GetMapping("/{id}")
     public ToShieldWordVo getInfo(@PathVariable("id") Long id) {

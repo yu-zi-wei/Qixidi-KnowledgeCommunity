@@ -62,7 +62,7 @@ public class LabelInfoController {
     /**
      * 获取标签信息详细信息
      */
-    @PermName("标签-查询")
+    @PermName("标签-详情")
     @SaCheckPermission("labelInfo:query")
     @GetMapping("/{id}")
     public LabelInfoVo getInfo(@PathVariable("id") Long id) {

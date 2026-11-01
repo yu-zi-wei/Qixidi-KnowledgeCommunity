@@ -42,7 +42,7 @@ public class PrivateNewsInfoController {
     /**
      * 查询私信消息列表（后台全站视角，双方昵称/头像 join 展示）
      */
-    @PermName("私信消息-查询")
+    @PermName("私信消息-列表")
     @SaCheckPermission("private:news:query")
     @PostMapping("/list")
     public TableDataInfo<PrivateNewsInfoVo> list(@Validated(QueryGroup.class) @RequestBody PrivateNewsInfoBo bo) {

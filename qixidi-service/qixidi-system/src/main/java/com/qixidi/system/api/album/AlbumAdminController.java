@@ -36,7 +36,7 @@ public class AlbumAdminController {
     /**
      * 相册图片分页（归属用户昵称/头像 join 展示，支持 uid/来源/月份筛选）
      */
-    @PermName("时光相册-查询")
+    @PermName("时光相册-列表")
     @SaCheckPermission("album:query")
     @PostMapping("/list")
     public TableDataInfo<AlbumVo> list(@RequestBody AlbumSearchBo bo) {

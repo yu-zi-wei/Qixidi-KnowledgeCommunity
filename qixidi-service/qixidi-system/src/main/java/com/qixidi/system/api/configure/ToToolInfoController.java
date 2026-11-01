@@ -64,7 +64,7 @@ public class ToToolInfoController {
     /**
      * 获取工具信息详细信息
      */
-    @PermName("推荐工具-查询")
+    @PermName("推荐工具-详情")
     @SaCheckPermission("toolInfo:query")
     @GetMapping("/{id}")
     public ToToolInfoVo getInfo(@PathVariable("id") Long id) {

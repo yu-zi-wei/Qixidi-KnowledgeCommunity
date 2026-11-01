@@ -26,7 +26,7 @@ public class SysPermController {
     /**
      * 按模块分组的权限码清单（角色管理勾选树数据源）
      */
-    @PermName("角色-查询")
+    @PermName("角色-详情")
     @SaCheckPermission("role:query")
     @GetMapping("/list")
     public List<PermGroupVo> list() {

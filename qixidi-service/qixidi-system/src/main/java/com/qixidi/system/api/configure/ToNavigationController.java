@@ -62,7 +62,7 @@ public class ToNavigationController {
     /**
      * 获取导航栏配置详细信息
      */
-    @PermName("导航菜单-查询")
+    @PermName("导航菜单-详情")
     @SaCheckPermission("navigation:query")
     @GetMapping("/{id}")
     public ToNavigationVo getInfo(@PathVariable("id") Long id) {

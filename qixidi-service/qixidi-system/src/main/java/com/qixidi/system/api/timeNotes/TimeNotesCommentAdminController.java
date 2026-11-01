@@ -32,7 +32,7 @@ public class TimeNotesCommentAdminController {
     /**
      * 查询小记评论列表（全量，内容模糊 / 小记 id / 状态筛选）
      */
-    @PermName("小记评论-查询")
+    @PermName("小记评论-列表")
     @SaCheckPermission("timeNotes:comment:query")
     @PostMapping("/list")
     public TableDataInfo<TimeNotesCommentVo> list(@RequestBody TimeNotesCommentBo bo) {

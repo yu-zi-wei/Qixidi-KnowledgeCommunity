@@ -63,7 +63,7 @@ public class TripartiteUserController {
     /**
      * 获取平台用户详细信息
      */
-    @PermName("前台用户-查询")
+    @PermName("前台用户-详情")
     @SaCheckPermission("tripartiteUser:query")
     @GetMapping("/{uuid}")
     public TripartiteUserVo getInfo(@PathVariable("uuid") String uuid) {

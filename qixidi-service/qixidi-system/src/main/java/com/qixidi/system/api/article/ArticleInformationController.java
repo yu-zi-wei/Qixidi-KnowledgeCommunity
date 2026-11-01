@@ -62,7 +62,7 @@ public class ArticleInformationController {
     /**
      * 获取文章信息详细信息
      */
-    @PermName("文章-查询")
+    @PermName("文章-详情")
     @SaCheckPermission("article:information:query")
     @GetMapping("/{id}")
     public ArticleInformationVo getInfo(@PathVariable("id") Long id) {

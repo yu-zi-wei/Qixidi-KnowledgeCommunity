@@ -62,7 +62,7 @@ public class FeedbackController {
     /**
      * 获取用户反馈详细信息
      */
-    @PermName("用户反馈-查询")
+    @PermName("用户反馈-详情")
     @SaCheckPermission("feedback:query")
     @GetMapping("/{id}")
     public FeedbackVo getInfo(@PathVariable("id") Long id) {

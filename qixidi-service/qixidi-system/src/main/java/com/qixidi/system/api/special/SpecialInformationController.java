@@ -75,7 +75,7 @@ public class SpecialInformationController {
     /**
      * 获取专栏信息详细信息
      */
-    @PermName("专栏-查询")
+    @PermName("专栏-详情")
     @SaCheckPermission("special:information:query")
     @GetMapping("/{id}")
     public SpecialInformationVo getInfo(@PathVariable("id") Long id) {

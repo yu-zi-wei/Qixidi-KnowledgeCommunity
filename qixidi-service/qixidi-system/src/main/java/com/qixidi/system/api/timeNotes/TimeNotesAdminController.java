@@ -33,7 +33,7 @@ public class TimeNotesAdminController {
     /**
      * 查询小记列表（全量用户，标题模糊）
      */
-    @PermName("小记-查询")
+    @PermName("小记-列表")
     @SaCheckPermission("timeNotes:query")
     @PostMapping("/list")
     public TableDataInfo<TimeNotesAdminVo> list(@RequestBody TimeNotesSearchBo bo) {
@@ -43,7 +43,7 @@ public class TimeNotesAdminController {
     /**
      * 获取小记详细信息
      */
-    @PermName("小记-查询")
+    @PermName("小记-列表")
     @SaCheckPermission("timeNotes:query")
     @GetMapping("/{id}")
     public TimeNotesInfoVo getInfo(@PathVariable("id") Long id) {

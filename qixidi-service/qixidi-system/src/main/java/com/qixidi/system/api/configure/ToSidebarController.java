@@ -62,7 +62,7 @@ public class ToSidebarController {
     /**
      * 获取侧边栏配置详细信息
      */
-    @PermName("侧边栏推荐-查询")
+    @PermName("侧边栏推荐-详情")
     @SaCheckPermission("sidebar:query")
     @GetMapping("/{id}")
     public ToSidebarVo getInfo(@PathVariable("id") Long id) {

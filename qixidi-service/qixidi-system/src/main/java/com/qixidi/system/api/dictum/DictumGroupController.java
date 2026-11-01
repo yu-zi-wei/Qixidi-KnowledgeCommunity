@@ -64,7 +64,7 @@ public class DictumGroupController {
     /**
      * 获取随笔分组详细信息
      */
-    @PermName("随笔分组-查询")
+    @PermName("随笔分组-详情")
     @SaCheckPermission("dictum:group:query")
     @GetMapping("/{id}")
     public DictumGroupVo getInfo(@PathVariable("id") Long id) {

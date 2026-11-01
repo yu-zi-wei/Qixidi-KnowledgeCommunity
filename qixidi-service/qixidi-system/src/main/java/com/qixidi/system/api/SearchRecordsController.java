@@ -64,7 +64,7 @@ public class SearchRecordsController {
     /**
      * 获取搜索记录详细信息
      */
-    @PermName("搜索记录-查询")
+    @PermName("搜索记录-详情")
     @SaCheckPermission("search:records:query")
     @GetMapping("/{id}")
     public SearchRecordsVo getInfo(@PathVariable("id") Long id) {

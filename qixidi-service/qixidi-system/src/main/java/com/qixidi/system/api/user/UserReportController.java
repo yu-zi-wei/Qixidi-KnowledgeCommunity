@@ -64,7 +64,7 @@ public class UserReportController {
     /**
      * 获取用户签到详细信息
      */
-    @PermName("用户举报-查询")
+    @PermName("用户举报-详情")
     @SaCheckPermission("user:report:query")
     @GetMapping("/{id}")
     public UserReportVo getInfo(@PathVariable("id") Long id) {

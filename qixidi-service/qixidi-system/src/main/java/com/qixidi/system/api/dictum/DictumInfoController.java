@@ -64,7 +64,7 @@ public class DictumInfoController {
     /**
      * 获取随笔信息详细信息
      */
-    @PermName("随笔-查询")
+    @PermName("随笔-详情")
     @SaCheckPermission("dictum:info:query")
     @GetMapping("/{id}")
     public DictumInfoVo getInfo(@PathVariable("id") Long id) {

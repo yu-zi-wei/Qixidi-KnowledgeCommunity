@@ -65,7 +65,7 @@ public class FabulousRecordController {
     /**
      * 获取点赞详细信息
      */
-    @PermName("点赞记录-查询")
+    @PermName("点赞记录-详情")
     @SaCheckPermission("fabulous:record:query")
     @GetMapping("/{id}")
     public FabulousRecordVo getInfo(@PathVariable("id") Long id) {

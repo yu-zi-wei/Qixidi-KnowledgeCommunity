@@ -64,7 +64,7 @@ public class UserOrderController {
     /**
      * 获取用户订单详细信息
      */
-    @PermName("订单-查询")
+    @PermName("订单-详情")
     @SaCheckPermission("order:query")
     @GetMapping("/{id}")
     public UserOrderVo getInfo(@PathVariable("id") Long id) {

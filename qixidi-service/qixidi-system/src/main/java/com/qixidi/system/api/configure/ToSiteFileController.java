@@ -64,7 +64,7 @@ public class ToSiteFileController {
     /**
      * 获取网站文档详细信息
      */
-    @PermName("站点文件-查询")
+    @PermName("站点文件-详情")
     @SaCheckPermission("site:siteFile:query")
     @GetMapping("/{id}")
     public ToSiteFileVo getInfo(@PathVariable("id") Long id) {

@@ -55,7 +55,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取详细信息
      */
-    @PermName("后台账号-查询")
+    @PermName("后台账号-详情")
     @SaCheckPermission("user:query")
     @GetMapping(value = {"/", "/{userId}"})
     public Map<String, Object> getInfo(@PathVariable(value = "userId", required = false) Long userId) {
@@ -152,7 +152,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取授权角色
      */
-    @PermName("后台账号-查询")
+    @PermName("后台账号-详情")
     @SaCheckPermission("user:query")
     @GetMapping("/authRole/{userId}")
     public Map<String, Object> authRole(@PathVariable("userId") Long userId) {

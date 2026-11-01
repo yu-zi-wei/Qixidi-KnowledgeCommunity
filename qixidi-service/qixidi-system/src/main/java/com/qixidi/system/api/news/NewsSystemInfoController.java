@@ -64,7 +64,7 @@ public class NewsSystemInfoController {
     /**
      * 获取系统消息详细信息
      */
-    @PermName("系统消息-查询")
+    @PermName("系统消息-详情")
     @SaCheckPermission("news:systemInfo:query")
     @GetMapping("/{id}")
     public NewsSystemInfoVo getInfo(@PathVariable("id") Long id) {

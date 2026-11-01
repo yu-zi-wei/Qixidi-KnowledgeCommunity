@@ -32,7 +32,7 @@ public class DictumCommentAdminController {
     /**
      * 查询随笔评论列表（全量，内容模糊 / 随笔 id / 状态筛选）
      */
-    @PermName("随笔评论-查询")
+    @PermName("随笔评论-列表")
     @SaCheckPermission("dictum:comment:query")
     @PostMapping("/list")
     public TableDataInfo<DictumCommentVo> list(@RequestBody DictumCommentBo bo) {

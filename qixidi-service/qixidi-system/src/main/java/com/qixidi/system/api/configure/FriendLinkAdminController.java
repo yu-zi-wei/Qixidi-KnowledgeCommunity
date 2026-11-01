@@ -43,7 +43,7 @@ public class FriendLinkAdminController {
     /**
      * 友链分页列表（名称模糊 + 状态多选筛选）
      */
-    @PermName("友情链接-查询")
+    @PermName("友情链接-列表")
     @SaCheckPermission("friendLink:query")
     @PostMapping("/list")
     public TableDataInfo<FriendLinkVo> list(@Validated(QueryGroup.class) @RequestBody FriendLinkBo bo) {
@@ -53,7 +53,7 @@ public class FriendLinkAdminController {
     /**
      * 友链详情
      */
-    @PermName("友情链接-查询")
+    @PermName("友情链接-列表")
     @SaCheckPermission("friendLink:query")
     @GetMapping("/{id}")
     public FriendLinkVo getInfo(@PathVariable("id") Long id) {

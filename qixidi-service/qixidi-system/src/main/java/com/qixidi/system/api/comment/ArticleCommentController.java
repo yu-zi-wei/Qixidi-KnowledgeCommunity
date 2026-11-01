@@ -41,7 +41,7 @@ public class ArticleCommentController {
     /**
      * 查询文章评论列表（join 评论人/文章标题展示字段）
      */
-    @PermName("文章评论-查询")
+    @PermName("文章评论-列表")
     @SaCheckPermission("article:comment:query")
     @PostMapping("/list")
     public TableDataInfo<ArticleCommentVo> list(@Validated(QueryGroup.class) @RequestBody ArticleCommentBo bo) {
@@ -66,7 +66,7 @@ public class ArticleCommentController {
      * @param id
      * @return
      */
-    @PermName("文章评论-查询")
+    @PermName("文章评论-列表")
     @SaCheckPermission("article:comment:query")
     @GetMapping("/{id}")
     public ArticleCommentVo getInfo(@PathVariable("id") Long id) {

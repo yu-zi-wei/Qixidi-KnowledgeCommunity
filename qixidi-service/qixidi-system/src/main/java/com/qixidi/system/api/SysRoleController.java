@@ -43,7 +43,7 @@ public class SysRoleController {
     /**
      * 根据角色编号获取详细信息（含已分配权限码）
      */
-    @PermName("角色-查询")
+    @PermName("角色-详情")
     @SaCheckPermission("role:query")
     @GetMapping(value = "/{roleId}")
     public SysRole getInfo(@PathVariable Long roleId) {
@@ -111,7 +111,7 @@ public class SysRoleController {
     /**
      * 获取角色选择框列表
      */
-    @PermName("角色-查询")
+    @PermName("角色-详情")
     @SaCheckPermission("role:query")
     @GetMapping("/optionselect")
     public List<SysRole> optionselect() {

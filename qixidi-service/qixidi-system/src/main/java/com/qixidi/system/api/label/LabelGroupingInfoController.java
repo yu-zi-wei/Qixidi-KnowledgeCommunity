@@ -63,7 +63,7 @@ public class LabelGroupingInfoController {
     /**
      * 获取标签分组信息详细信息
      */
-    @PermName("标签分类-查询")
+    @PermName("标签分类-详情")
     @SaCheckPermission("groupingInfo:query")
     @GetMapping("/{id}")
     public LabelGroupingInfoVo getInfo(@PathVariable("id") Long id) {

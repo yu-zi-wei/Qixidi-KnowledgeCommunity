@@ -64,7 +64,7 @@ public class ToRechargeInfoController {
     /**
      * 获取充值信息详细信息
      */
-    @PermName("充值记录-查询")
+    @PermName("充值记录-详情")
     @SaCheckPermission("rechargeInfo:query")
     @GetMapping("/{id}")
     public ToRechargeInfoVo getInfo(@PathVariable("id") Long id) {

@@ -64,7 +64,7 @@ public class BrowsingHistoryController {
     /**
      * 获取用户浏览历史详细信息
      */
-    @PermName("浏览记录-查询")
+    @PermName("浏览记录-详情")
     @SaCheckPermission("browsing:history:query")
     @GetMapping("/{id}")
     public BrowsingHistoryVo getInfo(@PathVariable("id") Long id) {

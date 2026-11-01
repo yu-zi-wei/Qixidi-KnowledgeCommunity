@@ -65,7 +65,7 @@ public class CollectionInformationController {
     /**
      * 获取收藏夹信息详细信息
      */
-    @PermName("收藏-查询")
+    @PermName("收藏-详情")
     @SaCheckPermission("collection:information:query")
     @GetMapping("/{id}")
     public CollectionInformationVo getInfo(@PathVariable("id") Long id) {
