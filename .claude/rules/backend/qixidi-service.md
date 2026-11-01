@@ -127,6 +127,11 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 
 **凡执行的 DDL / 存量数据迁移，必须同步写成 SQL 脚本放进 `qixidi-service/db/`**——只在本地执行不留档，新环境发布会缺变更直接报错。脚本按序分段并幂等（重复执行不产生二次影响，或注释注明执行前提），文件名表意（参考 `db/sys_oper_log_module.sql`）。
 
+### SQL 保持简单、禁止跨业务域连表
+
+- **Mapper 的 SQL 只查本域表**：跨业务域的展示字段（评论正文、目标标题等）不在 SQL 里 join 他域业务表，由 Service 层按 id 批量查询（`selectBatchIds`，禁止循环查库）后组装——参考 `NewsUserInfoServiceImpl.fillCommentContent`
+- 维表性质的 `b_user_main`（昵称/头像）暂除外；存量跨域 join 的 SQL（前台消息/评论列表等）待逐步按此整改
+
 ### Mapper 继承
 
 三泛型 `<M, T, V>`：M=Mapper 自身、T=实体、V=默认 VO：

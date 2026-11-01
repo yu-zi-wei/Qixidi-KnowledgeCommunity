@@ -26,7 +26,12 @@ public class NewsUserRecordVo {
     private Integer type;
 
     /**
-     * 消息内容
+     * 关联对象id（评论类型指向对应评论表，Service 层回填正文用）
+     */
+    private Long newsId;
+
+    /**
+     * 消息内容（点赞为被赞对象标题；评论正文由 Service 层回填）
      */
     private String content;
 

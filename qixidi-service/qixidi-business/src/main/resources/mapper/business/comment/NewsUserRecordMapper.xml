@@ -4,10 +4,12 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.comment.NewsUserRecordMapper">
 
-    <!-- 后台用户消息管理分页：发送者=target_uid、接收者=uid，筛选列必须带 nur 别名（join 两侧同名列歧义） -->
+    <!-- 后台用户消息管理分页：发送者=target_uid、接收者=uid，筛选列必须带 nur 别名（join 两侧同名列歧义）。
+         content 是冗余字段仅点赞写入（被赞对象标题），评论正文由 Service 层按 news_id 批量查评论表回填（SQL 不跨业务域连表） -->
     <select id="selectSystemPage" resultType="com.qixidi.business.domain.vo.news.NewsUserRecordVo">
         SELECT nur.id,
                nur.type,
+               nur.news_id,
                nur.content,
                nur.been_read,
                nur.create_time,

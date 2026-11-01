@@ -16,8 +16,11 @@ import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
+import com.qixidi.business.domain.entity.comment.ArticleComment;
+import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.news.NewsSystemRead;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.entity.timeNotes.TimeNotesComment;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
@@ -27,15 +30,19 @@ import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
+import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
+import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemReadMapper;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
+import com.qixidi.business.mapper.timeNotes.TimeNotesCommentMapper;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +59,9 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     private final NewsSystemReadMapper newsSystemReadMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final PrivateNewsInfoMapper privateNewsInfoMapper;
+    private final ArticleCommentMapper articleCommentMapper;
+    private final DictumCommentMapper dictumCommentMapper;
+    private final TimeNotesCommentMapper timeNotesCommentMapper;
 
     /**
      * 后台管理：用户消息记录分页（b_news_user_record join 发送者/接收者，筛选列必须带 nur 别名）
@@ -69,7 +79,51 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         }
         wrapper.orderByDesc("nur.create_time");
         IPage<NewsUserRecordVo> result = newsUserRecordMapper.selectSystemPage(pageQuery.build(), wrapper);
+        fillCommentContent(result.getRecords());
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 回填评论正文：content 是冗余字段仅点赞写入被赞对象标题；评论正文按类型批量查对应评论表在业务层组装
+     * （SQL 不跨业务域连表），源评论已删除的行正文为空（前端空值占位）
+     */
+    private void fillCommentContent(List<NewsUserRecordVo> records) {
+        Map<Integer, Map<Long, String>> commentContents = new HashMap<>();
+        commentContents.put(NewsType.COMMENT_NEWS.getCode(),
+            queryContents(newsIdsOfType(records, NewsType.COMMENT_NEWS.getCode()),
+                articleCommentMapper::selectBatchIds, ArticleComment::getId, ArticleComment::getContent));
+        commentContents.put(NewsType.DICTUM_COMMENT_NEWS.getCode(),
+            queryContents(newsIdsOfType(records, NewsType.DICTUM_COMMENT_NEWS.getCode()),
+                dictumCommentMapper::selectBatchIds, DictumComment::getId, DictumComment::getContent));
+        commentContents.put(NewsType.TIME_NOTES_COMMENT_NEWS.getCode(),
+            queryContents(newsIdsOfType(records, NewsType.TIME_NOTES_COMMENT_NEWS.getCode()),
+                timeNotesCommentMapper::selectBatchIds, TimeNotesComment::getId, TimeNotesComment::getContent));
+        records.forEach(r -> {
+            Map<Long, String> contents = commentContents.get(r.getType());
+            if (contents != null && r.getNewsId() != null && contents.containsKey(r.getNewsId())) {
+                r.setContent(contents.get(r.getNewsId()));
+            }
+        });
+    }
+
+    private List<Long> newsIdsOfType(List<NewsUserRecordVo> records, Integer type) {
+        return records.stream()
+            .filter(r -> type.equals(r.getType()) && r.getNewsId() != null)
+            .map(NewsUserRecordVo::getNewsId)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * 批量查评论表转 id->正文 映射（正文空的评论不参与映射，避免 toMap 空值）
+     */
+    private <T> Map<Long, String> queryContents(List<Long> ids, Function<List<Long>, List<T>> batchQuery,
+                                                Function<T, Long> idGetter, Function<T, String> contentGetter) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyMap();
+        }
+        return batchQuery.apply(ids).stream()
+            .filter(c -> StringUtils.isNotBlank(contentGetter.apply(c)))
+            .collect(Collectors.toMap(idGetter, contentGetter, (a, b) -> a));
     }
 
     /**
