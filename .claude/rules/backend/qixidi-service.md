@@ -85,6 +85,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 ### 权限码中文名（@PermName 声明式）
 
 - `@SaCheckPermission` 无名称参数（1.46 实证仅 type/value/mode/orRole，全有鉴权语义），权限中文名一律标伴生注解：`@PermName("文章评论-新增")` 紧贴 `@SaCheckPermission("article:comment:add")` 同方法声明（注解在 qixidi-auth/annotation）。PermissionScanner 读它渲染角色权限树；未标注回退权限码原值；同码多方法文案不一致时启动打 WARN 保留首个
+- list/query 动作文案统一（禁「查询」）：`:list` 码写「xx-列表」；`:query` 码——对象有 `:list` 码写「xx-详情」（getInfo 语义），无 `:list` 码且方法为列表型（list/postList/POST /list）写「xx-列表」。组内顺序由 `PermissionScanner.ACTION_ORDER` 控制（列表→详情→新增→编辑→删除→导出），新增动作词根须登记 ACTION_ORDER
 - 权限清单刻意不落库（扫描器是唯一权威源）；模块分组标题中文在 `PermissionScanner.MODULE_LABELS` 登记（口径与 useAdminMenu.ts 菜单一致），新增模块时同步
 
 ---
