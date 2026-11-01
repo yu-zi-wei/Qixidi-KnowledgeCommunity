@@ -80,6 +80,4 @@ public interface IArticleCommentService {
     boolean deleteWithValidById(ArticleCommentBo bo);
 
     Object getComment(Long id);
-
-    Long fillArticleGetCount(Long id);
 }

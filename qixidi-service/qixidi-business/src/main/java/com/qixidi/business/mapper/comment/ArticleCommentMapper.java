@@ -29,8 +29,6 @@ public interface ArticleCommentMapper extends BaseMapperPlus<ArticleCommentMappe
      */
     IPage<ArticleCommentVo> selectCommentIndex(Page<ArticleComment> build, @Param(Constants.WRAPPER) QueryWrapper<ArticleComment> wrapper);
 
-    List<ArticleCommentVo> selectBasicsLis(@Param("ids") Collection<Long> ids);
-
     List<CountUserWebsiteVo> selectCommentCountByUserIds(@Param("uuids") Collection<String> uuids);
 
     List<ArticleCountVo> selectCommentCountByArticleIds(@Param("articleIds") Collection<Long> articleIds);

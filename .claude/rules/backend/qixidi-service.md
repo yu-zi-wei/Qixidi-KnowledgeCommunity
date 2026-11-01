@@ -150,7 +150,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 
 ### 数据模型事实（统计/聚合/排序前必读）
 
-- **前台用户「在线」唯一权威源是 `WebSocketUtils`**（websocketMap，key=userId 用户级，多标签页不重复计数；isOnline 判定即 containsKey，同源）。`SseEmitterUtil` 是另一套 SSE 长连接（勿用于在线判定），`online_tokens:` Redis 机制已半废弃（SysUserOnlineController 大段注释）——统计/在线数/踢人一律走 WebSocketUtils
+- **前台用户「在线」唯一权威源是 `WebSocketUtils`**（websocketMap，key=userId 用户级，多标签页不重复计数；isOnline 判定即 containsKey，同源）。`online_tokens:` Redis 机制已半废弃（SysUserOnlineController 大段注释）——统计/在线数/踢人一律走 WebSocketUtils
 - **默认 VO 已全量继承实体（2026-10-30 基线），业务字段在父类**：自定义反射/字段遍历必须沿 superclass 链收集（`getDeclaredFields` 只取当前类，父类字段静默丢失，实证月度趋势接口返回空数组）；hutool BeanUtil 走 getter 不受影响
 - **`@TableLogic` 删除值是 1 不是实体注释写的 2**：logic-delete-value 全局配置被注释走 MP 默认（0 存在/1 删除）；SysUser 等 RuoYi 实体的"0代表存在 2代表删除"注释是原版残留——手工恢复数据 `UPDATE del_flag='2'` 无效，一律 '0'/'1'
 - **`b_private_user.update_time` 是"会话最新消息时间"冗余字段**：发私信时双向两行一起刷新——私信会话列表排序直接 `ORDER BY update_time DESC`，勿关联消息表算 MAX（消息表单边存储，双向归组很重）

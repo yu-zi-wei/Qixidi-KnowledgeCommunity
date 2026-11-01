@@ -18,8 +18,6 @@ import java.util.List;
  */
 public interface BrowsingHistoryMapper extends BaseMapperPlus<BrowsingHistoryMapper, BrowsingHistory, BrowsingHistoryVo> {
 
-    BrowsingHistoryVo selectIsTime(@Param("uuid") String uuid, @Param("targetType") Integer targetType, @Param("targetId") Long targetId, @Param("hour") String hour);
-
     int insertOrUpdates(@Param("add") BrowsingHistory add);
 
     /**

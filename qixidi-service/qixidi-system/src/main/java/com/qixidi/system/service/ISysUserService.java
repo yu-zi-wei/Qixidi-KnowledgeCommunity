@@ -4,8 +4,6 @@ import com.qixidi.auth.domain.entity.SysUser;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 
-import java.util.List;
-
 /**
  * 用户 业务层
  *
@@ -15,14 +13,6 @@ public interface ISysUserService {
 
 
     TableDataInfo<SysUser> selectPageUserList(SysUser user, PageQuery pageQuery);
-
-    /**
-     * 根据条件分页查询用户列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    List<SysUser> selectUserList(SysUser user);
 
     /**
      * 通过用户名查询用户
@@ -160,14 +150,6 @@ public interface ISysUserService {
      * @return 结果
      */
     int resetUserPwd(String userName, String password);
-
-    /**
-     * 通过用户ID删除用户
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    int deleteUserById(Long userId);
 
     /**
      * 批量删除用户信息

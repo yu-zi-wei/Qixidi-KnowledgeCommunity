@@ -193,16 +193,6 @@
         where id=#{id}
     </update>
 
-    <update id="updateDelete">
-        update b_article_information
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="code==4">
-                number_times=number_times-1
-            </if>
-        </trim>
-        where id=#{id}
-    </update>
-
     <select id="selectVoByIds" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         select id,
                user_id,
@@ -230,16 +220,6 @@
         <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
             #{item}
         </foreach>
-    </update>
-
-    <update id="updateDeleteNumber">
-        update b_article_information
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="code==4">
-                number_times=number_times-#{size}
-            </if>
-        </trim>
-        where id=#{articleId}
     </update>
 
     <select id="selected" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
@@ -280,20 +260,6 @@
         <where>
             state =0
             and substring( `create_time`, 1, 4)=#{bo.year}
-        </where>
-    </select>
-
-    <select id="articleCensus" resultType="com.qixidi.business.domain.vo.article.ArticleCensusVo">
-        SELECT
-        id,
-        article_title,
-        special_id,
-        create_time
-        FROM
-        b_article_information
-        <where>
-            state =0
-            and user_id=#{bo.uid} and special_id!=null
         </where>
     </select>
 

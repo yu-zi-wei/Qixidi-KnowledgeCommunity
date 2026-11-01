@@ -12,7 +12,6 @@ import com.qixidi.business.domain.bo.article.ArticleInformationBo;
 import com.qixidi.business.domain.bo.article.SortTypeBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
-import com.qixidi.business.domain.vo.article.ArticleCensusVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -51,12 +50,6 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
 
     Integer updateAdd(@Param("id") Long articleId, @Param("code") Integer code);
 
-//    Integer updateAddList(@Param("ids") List<Long> articleId, @Param("code") Integer code);
-
-    Integer updateDelete(@Param("id") Long articleId, @Param("code") Integer code);
-
-//    Integer updateDeleteList(@Param("ids") List<Long> articleId, @Param("code") Integer code);
-
     ArticleInformationVo selectVoByIds(@Param("id") Long id);
 
     @Select("select id,user_id,article_title,update_time from b_article_information where user_id=#{bo.userId} and state=0 ")
@@ -68,15 +61,11 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
             "where user_id=#{uid} and special_id=#{id} and state=0")
     List<ArticleInformationVo> selectSpecial(@Param("id") Long id, @Param("uid") String uid);
 
-    Integer updateDeleteNumber(@Param("articleId") Long articleId, @Param("code") Integer code, @Param("size") int size);
-
     List<ArticleInformationVo> selected();
 
     List<CensusVo> selectCensusMonth(@Param("bo") CensusEntity bo);
 
     List<CensusVo> selectCensusYear(@Param("bo") CensusEntity bo);
-
-    List<ArticleCensusVo> articleCensus(@Param("bo") CensusEntity bo);
 
     List<ArticleInformationVo> selectData(@Param("id") Long id, @Param("size") Long size);
 
@@ -85,9 +74,6 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     List<CountUserWebsiteVo> selectArticleCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
 
     List<CountUserWebsiteVo> selectViewCountByUserIds(@Param("uuids") java.util.Collection<String> uuids);
-
-    @Select("select audit_state,is_public from b_article_information where id=#{id} and state=0")
-    ArticleInformationVo selectAuditStatus(@Param("id") Long id);
 
     /**
      * 关注文章流（authorUids=关注且存活的作者集合，Service 求交传入，等价原 join b_user_follow/b_user_main 过滤；

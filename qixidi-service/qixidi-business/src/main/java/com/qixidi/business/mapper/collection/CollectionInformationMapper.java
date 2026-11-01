@@ -25,10 +25,6 @@ public interface CollectionInformationMapper extends BaseMapperPlus<CollectionIn
 
     Page<CollectionInformationVo> selectUserName(Page<Object> build, @Param(Constants.WRAPPER) QueryWrapper<CollectionInformation> lqw);
 
-    List<CollectionInformationVo> selectCensus(@Param("bo") CensusEntity bo);
-
     List<CensusVo> timeCollectionCensus(@Param("bo") CensusEntity bo);
-
-//    CollectionInformationVo selectInfo(Log id);
 }
 

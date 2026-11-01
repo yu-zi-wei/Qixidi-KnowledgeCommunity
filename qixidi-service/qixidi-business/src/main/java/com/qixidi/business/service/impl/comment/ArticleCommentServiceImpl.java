@@ -396,12 +396,5 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         if (ObjectUtils.isEmpty(newsUserRecord)) throw new ServiceException(MsgEnums.COMMENT_DELETED);
         return newsUserRecord;
     }
-
-    @Override
-    public Long fillArticleGetCount(Long id) {
-        return baseMapper.selectCount(new LambdaQueryWrapper<ArticleComment>()
-                .eq(ArticleComment::getArticleId, id)
-                .eq(ArticleComment::getState, StatusEnums.NORMAL.getCode()));
-    }
 }
 

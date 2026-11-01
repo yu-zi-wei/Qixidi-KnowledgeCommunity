@@ -19,13 +19,6 @@
             ${ew.getCustomSqlSegment}
     </select>
 
-    <select id="selectCensus" resultType="com.qixidi.business.domain.vo.collection.CollectionInformationVo">
-        select id, collection_name, create_time, uid
-        from b_collection_information
-        where state = 0
-          and uid = #{bo.uid}
-    </select>
-
     <select id="timeCollectionCensus" resultType="com.light.core.core.domain.vo.CensusVo">
         SELECT ci.collection_name as title,
                ci.create_time     as dateTime,

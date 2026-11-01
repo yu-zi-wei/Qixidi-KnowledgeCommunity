@@ -49,17 +49,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
         return TableDataInfo.build(page);
     }
 
-    /**
-     * 根据条件分页查询角色数据
-     *
-     * @param role 角色信息
-     * @return 角色数据集合信息
-     */
-    @Override
-    public List<SysRole> selectRoleList(SysRole role) {
-        return baseMapper.selectRoleList(this.buildQueryWrapper(role));
-    }
-
     private Wrapper<SysRole> buildQueryWrapper(SysRole role) {
         Map<String, Object> params = role.getParams();
         QueryWrapper<SysRole> wrapper = Wrappers.query();
@@ -121,18 +110,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public List<SysRole> selectRoleAll() {
-        return this.selectRoleList(new SysRole());
-    }
-
-    /**
-     * 根据用户ID获取角色选择框列表
-     *
-     * @param userId 用户ID
-     * @return 选中角色ID列表
-     */
-    @Override
-    public List<Long> selectRoleListByUserId(Long userId) {
-        return baseMapper.selectRoleListByUserId(userId);
+        return baseMapper.selectRoleList(this.buildQueryWrapper(new SysRole()));
     }
 
     /**
@@ -277,24 +255,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
         if (!rolePermMapper.insertBatch(list)) {
             throw new ServiceException("保存角色权限失败");
         }
-    }
-
-    /**
-     * 通过角色ID删除角色
-     *
-     * @param roleId 角色ID
-     * @return 结果
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int deleteRoleById(Long roleId) {
-        // 删除角色与权限码关联
-        rolePermMapper.deleteByRoleId(roleId);
-        int rows = baseMapper.deleteById(roleId);
-        if (rows <= 0) {
-            throw new ServiceException("删除角色失败");
-        }
-        return rows;
     }
 
     /**

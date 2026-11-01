@@ -61,17 +61,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return TableDataInfo.build(page);
     }
 
-    /**
-     * 根据条件分页查询用户列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    @Override
-    public List<SysUser> selectUserList(SysUser user) {
-        return baseMapper.selectUserList(this.buildQueryWrapper(user));
-    }
-
     private Wrapper<SysUser> buildQueryWrapper(SysUser user) {
         Map<String, Object> params = user.getParams();
         QueryWrapper<SysUser> wrapper = Wrappers.query();
@@ -391,24 +380,6 @@ public class SysUserServiceImpl implements ISysUserService {
                 userRoleMapper.insertBatch(list);
             }
         }
-    }
-
-    /**
-     * 通过用户ID删除用户
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int deleteUserById(Long userId) {
-        // 删除用户与角色关联
-        userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
-        int rows = baseMapper.deleteById(userId);
-        if (rows <= 0) {
-            throw new ServiceException("删除用户失败");
-        }
-        return rows;
     }
 
     /**

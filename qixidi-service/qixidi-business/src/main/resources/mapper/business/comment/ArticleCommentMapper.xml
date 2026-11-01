@@ -17,11 +17,6 @@
         ${ew.getCustomSqlSegment}
     </select>
 
-    <select id="selectBasicsLis" resultType="com.qixidi.business.domain.vo.comment.ArticleCommentVo">
-        select *
-        from b_article_information ;
-    </select>
-
     <select id="selectCommentCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
         SELECT comment_uid AS uuid, COUNT(*) AS commentCount
         FROM b_article_comment
