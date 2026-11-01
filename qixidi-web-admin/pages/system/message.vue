@@ -66,6 +66,9 @@
       <template v-if="detail">
         <div class="message-detail-meta">
           <AdminStateTag :value="detail.state" :map="MESSAGE_STATE_MAP" />
+          <AdminStateTag :value="detail.type" :map="MESSAGE_TYPE_MAP" />
+          <AdminStateTag :value="detail.isMassAir" :map="MESSAGE_MASS_MAP" />
+          <span v-if="detail.isMassAir === 2">接收人：{{ detail.recipientName || detail.uid || '—' }}</span>
           <span>{{ getFullDateTime(detail.createTime) }}</span>
         </div>
         <h4 class="message-detail-title">{{ detail.newsTitle }}</h4>
@@ -77,9 +80,31 @@
     <!-- 新增/编辑抽屉：teleport 组件宽度必须 inline style -->
     <n-drawer v-model:show="formVisible" :width="520" placement="right">      <n-drawer-content :title="editingId ? '编辑系统消息' : '发送系统消息'" closable>
         <n-alert type="info" :bordered="false" class="message-tip">
-          保存后立即对全体用户生效，在线用户会收到新消息提醒。
+          {{
+            form.isMassAir === 2
+              ? '保存后仅对指定用户生效，对方在线会立即收到新消息提醒。'
+              : '保存后立即对全体用户生效，在线用户会收到新消息提醒。'
+          }}
         </n-alert>
         <n-form ref="formRef" :model="form" :rules="rules" label-placement="top">
+          <n-form-item label="发送方式" path="isMassAir">
+            <n-radio-group v-model:value="form.isMassAir">
+              <n-radio :value="1">群发（全体用户）</n-radio>
+              <n-radio :value="2">指定用户</n-radio>
+            </n-radio-group>
+          </n-form-item>
+          <n-form-item v-if="form.isMassAir === 2" label="接收用户" path="uid">
+            <n-select
+              v-model:value="form.uid"
+              filterable
+              remote
+              clearable
+              placeholder="输入用户名或昵称搜索"
+              :options="userOptions"
+              :loading="userSearching"
+              @search="searchUsers"
+            />
+          </n-form-item>
           <n-form-item label="标题" path="newsTitle">
             <n-input v-model:value="form.newsTitle" placeholder="请输入消息标题" :maxlength="100" />
           </n-form-item>
@@ -113,7 +138,9 @@ import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage
 import AdminStateTag from '~/components/AdminStateTag.vue';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import {
+  MESSAGE_MASS_MAP,
   MESSAGE_STATE_MAP,
+  MESSAGE_TYPE_MAP,
   USER_NEWS_READ_MAP,
   USER_NEWS_TYPE_MAP,
   useSystemAdminApi,
@@ -136,6 +163,7 @@ const {
   getUserNewsList,
   deleteUserNews
 } = useSystemAdminApi();
+const { getUsers } = useUserAdminApi();
 
 const activeTab = ref('system');
 
@@ -147,6 +175,15 @@ const systemChecked = ref<Array<string | number>>([]);
 const searchFields: AdminSearchField[] = [
   { key: 'newsTitle', label: '标题', type: 'input', placeholder: '请输入标题关键词' },
   {
+    key: 'isMassAirs',
+    label: '发送方式',
+    type: 'multiple',
+    options: [
+      { label: '群发', value: 1 },
+      { label: '指定人', value: 2 }
+    ]
+  },
+  {
     key: 'states',
     label: '状态',
     type: 'multiple',
@@ -157,10 +194,7 @@ const searchFields: AdminSearchField[] = [
   }
 ];
 
-const fetchList = (params: Record<string, any>) => {
-  const { states, ...rest } = params;
-  return getSystemMessageList({ ...rest, state: states?.[0] });
-};
+const fetchList = (params: Record<string, any>) => getSystemMessageList(params);
 
 // ---------- 删除 ----------
 const deletingId = ref<number | null>(null);
@@ -260,14 +294,35 @@ const columns: DataTableColumns<SystemMessageRow> = [
   {
     title: '内容',
     key: 'newsContent',
-    minWidth: 260,
+    minWidth: 220,
     render: (row) =>
       h('span', { class: 'cell-ellipsis', title: row.newsContent }, row.newsContent || '—')
   },
   {
+    title: '类型',
+    key: 'type',
+    width: 80,
+    render: (row) => h(AdminStateTag, { value: row.type, map: MESSAGE_TYPE_MAP })
+  },
+  {
+    title: '发送方式',
+    key: 'isMassAir',
+    width: 90,
+    render: (row) => h(AdminStateTag, { value: row.isMassAir, map: MESSAGE_MASS_MAP })
+  },
+  {
+    title: '接收人',
+    key: 'recipientName',
+    width: 130,
+    render: (row) =>
+      row.isMassAir === 2
+        ? renderUser(row.recipientName, row.recipientAvatar)
+        : h('span', { class: 'cell-dim' }, '全体用户')
+  },
+  {
     title: '状态',
     key: 'state',
-    width: 100,
+    width: 90,
     render: (row) => h(AdminStateTag, { value: row.state, map: MESSAGE_STATE_MAP })
   },
   {
@@ -337,25 +392,77 @@ const formRef = ref<FormInst | null>(null);
 
 const form = reactive({
   newsTitle: '',
-  newsContent: ''
+  newsContent: '',
+  /** 发送方式（1：群发，2：指定人发），可选——后端空时默认群发 */
+  isMassAir: 1 as number,
+  /** 指定人发的接收用户 uuid */
+  uid: null as string | null
 });
 
 const rules: FormRules = {
   newsTitle: { required: true, message: '请输入消息标题', trigger: 'blur' },
-  newsContent: { required: true, message: '请输入消息内容', trigger: 'blur' }
+  newsContent: { required: true, message: '请输入消息内容', trigger: 'blur' },
+  uid: {
+    validator: (_rule, value) => {
+      if (form.isMassAir === 2 && !value) return new Error('请选择接收用户');
+      return true;
+    },
+    trigger: ['blur', 'change']
+  }
+};
+
+// ---------- 接收用户远程搜索（用户名/昵称各搜一路合并去重） ----------
+const userOptions = ref<Array<{ label: string; value: string }>>([]);
+const userSearching = ref(false);
+let searchSeq = 0;
+
+const searchUsers = async (keyword: string) => {
+  if (!keyword?.trim()) {
+    userOptions.value = [];
+    return;
+  }
+  const seq = ++searchSeq;
+  userSearching.value = true;
+  try {
+    const [byName, byNick] = await Promise.all([
+      getUsers({ username: keyword, pageNum: 1, pageSize: 20 }),
+      getUsers({ nickname: keyword, pageNum: 1, pageSize: 20 })
+    ]);
+    if (seq !== searchSeq) return; // 已有更新的搜索，丢弃过期响应
+    const merged = new Map<string, { label: string; value: string }>();
+    [...(byName.rows || []), ...(byNick.rows || [])].forEach((u) => {
+      if (u.state === 2) return; // 已删除用户不可选
+      merged.set(u.uuid, {
+        label: `${u.nickname || u.username}（${u.username || '-'}）`,
+        value: u.uuid
+      });
+    });
+    userOptions.value = [...merged.values()];
+  } catch {
+    /* useApi 已统一弹错 */
+  } finally {
+    if (seq === searchSeq) userSearching.value = false;
+  }
 };
 
 const openForm = async (row?: SystemMessageRow) => {
   editingId.value = row?.id ?? null;
-  Object.assign(form, { newsTitle: '', newsContent: '' });
+  Object.assign(form, { newsTitle: '', newsContent: '', isMassAir: 1, uid: null });
+  userOptions.value = [];
   formVisible.value = true;
   if (row) {
     try {
       const d = await getSystemMessage(row.id!);
       Object.assign(form, {
         newsTitle: d.newsTitle || '',
-        newsContent: d.newsContent || ''
+        newsContent: d.newsContent || '',
+        isMassAir: d.isMassAir ?? 1,
+        uid: d.isMassAir === 2 ? d.uid || null : null
       });
+      if (form.uid) {
+        // 回填当前接收人，保证选择器直接显示昵称
+        userOptions.value = [{ label: d.recipientName || form.uid, value: form.uid }];
+      }
     } catch {
       /* useApi 已统一弹错 */
     }
@@ -365,21 +472,27 @@ const openForm = async (row?: SystemMessageRow) => {
 const handleSave = () => {
   formRef.value?.validate((errors) => {
     if (errors) return;
+    const designated = form.isMassAir === 2;
     dialog.info({
       title: '发布确认',
       content: editingId.value
-        ? '保存后立即对全体用户生效，确认提交？'
-        : '发布后立即对全体用户可见并推送提醒，确认发布？',
+        ? designated
+          ? '保存后消息仅对指定用户生效，确认提交？'
+          : '保存后立即对全体用户生效，确认提交？'
+        : designated
+          ? '发布后仅指定用户可见并推送提醒，确认发布？'
+          : '发布后立即对全体用户可见并推送提醒，确认发布？',
       positiveText: '确认',
       negativeText: '取消',
       onPositiveClick: async () => {
         saving.value = true;
         try {
-          // 后端固化群发：type=2 广播 / isDetails=1 无详情页（BO AddGroup 必填项）
+          // type/isDetails 由后端兜底（前台消费只认 type=2、isDetails 默认无详情）
           const body = {
-            ...form,
-            type: 2,
-            isDetails: 1,
+            newsTitle: form.newsTitle,
+            newsContent: form.newsContent,
+            isMassAir: form.isMassAir,
+            ...(designated ? { uid: form.uid } : {}),
             ...(editingId.value ? { id: editingId.value } : {})
           };
           if (editingId.value) {
@@ -387,7 +500,9 @@ const handleSave = () => {
           } else {
             await addSystemMessage(body);
           }
-          message.success(editingId.value ? '已保存并生效' : '已发布，全体用户可见');
+          message.success(
+            editingId.value ? '已保存并生效' : designated ? '已发布，指定用户可见' : '已发布，全体用户可见'
+          );
           formVisible.value = false;
           await systemListRef.value?.refresh();
         } catch {

@@ -1,14 +1,14 @@
 package com.qixidi.business.domain.bo.news;
 
 import com.light.core.core.domain.BaseEntity;
-import com.light.core.core.validate.AddGroup;
-import com.light.core.core.validate.EditGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import com.light.core.core.validate.AddGroup;
+import com.light.core.core.validate.EditGroup;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 系统消息业务对象 b_news_system_info
@@ -16,7 +16,6 @@ import java.util.Date;
  * @author aurora
  * @date 2023-04-23
  */
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class NewsSystemInfoBo extends BaseEntity {
@@ -39,28 +38,28 @@ public class NewsSystemInfoBo extends BaseEntity {
     private String newsContent;
 
     /**
-     * 是否有详情（1：无，2：有）
+     * 是否有详情（1：无，2：有）；可选，空时 Service 默认 1（门户无消费）
      */
-    @NotNull(message = "是否有详情（1：无，2：有）不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long isDetails;
 
     /**
      * 状态
      */
     private Long state;
+
     /**
-     * 是否群发（1：群发，2：指定人发）
+     * 是否群发（1：群发，2：指定人发）；可选，空时 Service 默认 1 群发；指定人发须传 uid
      */
     private Long isMassAir;
+
     /**
-     * uid
+     * 指定人发的接收人 uuid（isMassAir=2 时必填）
      */
     private String uid;
 
     /**
-     * 消息类型（1：系统，2：用户）
+     * 消息类型（1：系统，2：用户）；可选，Service 固化 2（前台消费链路只认 type=2）
      */
-    @NotNull(message = "消息类型（1：系统，2：用户）不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long type;
 
     /**
@@ -68,6 +67,14 @@ public class NewsSystemInfoBo extends BaseEntity {
      */
     private Date lapseTime;
 
+    /**
+     * 发送方式多选筛选（列表查询用）
+     */
+    private List<Long> isMassAirs;
+
+    /**
+     * 状态多选筛选（列表查询用）
+     */
+    private List<Long> states;
 
 }
-

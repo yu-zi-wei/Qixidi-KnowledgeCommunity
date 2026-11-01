@@ -4,7 +4,9 @@ import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,5 +29,10 @@ public interface NewsSystemInfoMapper extends BaseMapperPlus<NewsSystemInfoMappe
 
     @Select("select id from b_news_system_info where state=0 and type=2")
     List<NewsSystemInfoVo> selectBase();
+
+    /**
+     * 后台管理分页（join b_user_main 取指定人发的接收人昵称头像，筛选条件见 NewsSystemInfoBo，列名须带 nsi 别名）
+     */
+    IPage<NewsSystemInfoVo> selectSystemPage(Page<NewsSystemInfoVo> page, @Param(Constants.WRAPPER) QueryWrapper<NewsSystemInfo> wrapper);
 }
 

@@ -32,9 +32,19 @@ export interface SystemMessageRow {
   id?: number;
   newsTitle?: string;
   newsContent?: string;
+  /** 是否有详情（1：无，2：有） */
   isDetails?: number;
-  /** 发送方式（1：群发，2：指定） */
+  /** 发送方式（1：群发，2：指定人发） */
   isMassAir?: number;
+  /** 指定人发的接收人 uuid（群发为 null） */
+  uid?: string;
+  /** 接收人昵称/头像（uid join b_user_main，群发为 null） */
+  recipientName?: string;
+  recipientAvatar?: string;
+  /** 消息类型（1：系统，2：用户；后台发送一律 2——前台消费链路只认 2） */
+  type?: number;
+  /** 失效时间 */
+  lapseTime?: string;
   /** 状态（0：生效，1：已失效） */
   state?: number;
   createTime?: string;
@@ -43,6 +53,18 @@ export interface SystemMessageRow {
 export const MESSAGE_STATE_MAP: Record<number, { label: string; type: 'success' | 'default' }> = {
   0: { label: '生效中', type: 'success' },
   1: { label: '已失效', type: 'default' }
+};
+
+/** 系统消息类型（1：系统，2：用户） */
+export const MESSAGE_TYPE_MAP: Record<number, { label: string; type: 'info' | 'success' }> = {
+  1: { label: '系统', type: 'info' },
+  2: { label: '用户', type: 'success' }
+};
+
+/** 发送方式（1：群发，2：指定人发） */
+export const MESSAGE_MASS_MAP: Record<number, { label: string; type: 'warning' | 'info' }> = {
+  1: { label: '群发', type: 'warning' },
+  2: { label: '指定人', type: 'info' }
 };
 
 /** 用户消息记录行（NewsUserRecordVo，b_news_user_record：用户间互动产生的消息） */
@@ -104,7 +126,7 @@ export const useSystemAdminApi = () => {
       api.postPage<SystemMessageRow>('/system/news/systemInfo/list', params),
     /** 系统消息详情：GET /system/news/systemInfo/{id} */
     getSystemMessage: (id: number) => api.get<SystemMessageRow>(`/system/news/systemInfo/${id}`),
-    /** 新增系统消息（群发，保存即全员可见）：POST /system/news/systemInfo */
+    /** 新增系统消息（isMassAir 可选默认群发，指定人发须带 uid）：POST /system/news/systemInfo */
     addSystemMessage: (data: Record<string, any>) =>
       api.post<void>('/system/news/systemInfo', data),
     /** 修改系统消息：PUT /system/news/systemInfo */
