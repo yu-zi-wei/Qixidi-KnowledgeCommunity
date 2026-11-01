@@ -45,6 +45,39 @@ export const MESSAGE_STATE_MAP: Record<number, { label: string; type: 'success' 
   1: { label: '已失效', type: 'default' }
 };
 
+/** 用户消息记录行（NewsUserRecordVo，b_news_user_record：用户间互动产生的消息） */
+export interface UserNewsRow {
+  id?: number;
+  /** 消息类型（1：评论，2：点赞，3：关注，6：随笔评论，7：小记评论） */
+  type?: number;
+  content?: string;
+  /** 已读状态（0：未读，1：已读） */
+  beenRead?: number;
+  createTime?: string;
+  /** 发送者昵称/头像（target_uid join b_user_main） */
+  senderName?: string;
+  senderAvatar?: string;
+  /** 接收者昵称/头像（uid join b_user_main） */
+  recipientName?: string;
+  recipientAvatar?: string;
+}
+
+export const USER_NEWS_TYPE_MAP: Record<
+  number,
+  { label: string; type: 'info' | 'success' | 'warning' | 'error' | 'default' }
+> = {
+  1: { label: '评论', type: 'info' },
+  2: { label: '点赞', type: 'success' },
+  3: { label: '关注', type: 'warning' },
+  6: { label: '随笔评论', type: 'error' },
+  7: { label: '小记评论', type: 'default' }
+};
+
+export const USER_NEWS_READ_MAP: Record<number, { label: string; type: 'info' | 'default' }> = {
+  0: { label: '未读', type: 'info' },
+  1: { label: '已读', type: 'default' }
+};
+
 export const useSystemAdminApi = () => {
   const api = useApi();
 
@@ -82,6 +115,14 @@ export const useSystemAdminApi = () => {
       api.put<void>('/system/news/systemInfo/state', { id, state }),
     /** 删除系统消息：DELETE /system/news/systemInfo/{id1,id2} */
     deleteSystemMessages: (ids: Array<string | number>) =>
-      api.request<void>(`/system/news/systemInfo/${ids.join(',')}`, { method: 'DELETE' })
+      api.request<void>(`/system/news/systemInfo/${ids.join(',')}`, { method: 'DELETE' }),
+
+    // ---------- 用户消息（b_news_user_record） ----------
+    /** 用户消息分页（types 多选 + username 模糊）：POST /system/news/record/list */
+    getUserNewsList: (params: Record<string, any>) =>
+      api.postPage<UserNewsRow>('/system/news/record/list', params),
+    /** 删除用户消息：DELETE /system/news/record/{id1,id2} */
+    deleteUserNews: (ids: Array<string | number>) =>
+      api.request<void>(`/system/news/record/${ids.join(',')}`, { method: 'DELETE' })
   };
 };

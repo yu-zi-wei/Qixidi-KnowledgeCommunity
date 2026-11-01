@@ -1,31 +1,65 @@
 <template>
   <div class="message-page">
-    <AdminListPage
-      ref="listRef"
-      v-model:checked-keys="checked"
-      :search-fields="searchFields"
-      :columns="columns"
-      :fetch="fetchList"
-      row-key="id"
-      seq
-      selectable
-    >
-      <template #toolbar-left>
-        <n-button
-          size="small"
-          type="error"
-          secondary
-          :disabled="!checked.length"
-          :loading="batchDeleting"
-          @click="doDeleteBatch"
+    <n-tabs v-model:value="activeTab" type="line" class="message-tabs">
+      <!-- display-directive 必须写在 n-tab-pane 上（写在 n-tabs 上无效）：两个 pane 常驻 v-show 切换，
+           各自 AdminListPage 实例独立；否则切 tab 时 pane 被无 key 就地复用，fetch prop 换了但数据不重拉 -->
+      <n-tab-pane name="system" tab="系统消息" display-directive="show">
+        <AdminListPage
+          ref="systemListRef"
+          v-model:checked-keys="systemChecked"
+          :search-fields="searchFields"
+          :columns="columns"
+          :fetch="fetchList"
+          row-key="id"
+          seq
+          selectable
+          fill
         >
-          删除所选（{{ checked.length }}）
-        </n-button>
-      </template>
-      <template #toolbar-right>
-        <n-button type="primary" @click="openForm()">发新消息</n-button>
-      </template>
-    </AdminListPage>
+          <template #toolbar-left>
+            <n-button
+              size="small"
+              type="error"
+              secondary
+              :disabled="!systemChecked.length"
+              :loading="batchDeleting"
+              @click="doDeleteBatch"
+            >
+              删除所选（{{ systemChecked.length }}）
+            </n-button>
+          </template>
+          <template #toolbar-right>
+            <n-button type="primary" @click="openForm()">发新消息</n-button>
+          </template>
+        </AdminListPage>
+      </n-tab-pane>
+
+      <n-tab-pane name="user" tab="用户消息" display-directive="show">
+        <AdminListPage
+          ref="userListRef"
+          v-model:checked-keys="userChecked"
+          :search-fields="userSearchFields"
+          :columns="userColumns"
+          :fetch="fetchUserList"
+          row-key="id"
+          seq
+          selectable
+          fill
+        >
+          <template #toolbar-left>
+            <n-button
+              size="small"
+              type="error"
+              secondary
+              :disabled="!userChecked.length"
+              :loading="userBatchDeleting"
+              @click="doDeleteUserBatch"
+            >
+              删除所选（{{ userChecked.length }}）
+            </n-button>
+          </template>
+        </AdminListPage>
+      </n-tab-pane>
+    </n-tabs>
 
     <!-- 详情弹窗：teleport 组件宽度必须 inline style -->
     <n-modal v-model:show="detailVisible" :style="{ width: '560px' }" preset="card" title="消息详情">
@@ -77,10 +111,14 @@ import { NButton } from 'naive-ui';
 import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
+import AdminAvatar from '~/components/AdminAvatar.vue';
 import {
   MESSAGE_STATE_MAP,
+  USER_NEWS_READ_MAP,
+  USER_NEWS_TYPE_MAP,
   useSystemAdminApi,
-  type SystemMessageRow
+  type SystemMessageRow,
+  type UserNewsRow
 } from '~/composables/useSystemAdminApi';
 import { getFullDateTime } from '~/utils/format';
 
@@ -94,11 +132,16 @@ const {
   addSystemMessage,
   editSystemMessage,
   updateMessageState,
-  deleteSystemMessages
+  deleteSystemMessages,
+  getUserNewsList,
+  deleteUserNews
 } = useSystemAdminApi();
 
-const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
-const checked = ref<Array<string | number>>([]);
+const activeTab = ref('system');
+
+// ==================== 系统消息 tab ====================
+const systemListRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+const systemChecked = ref<Array<string | number>>([]);
 
 // ---------- 搜索 ----------
 const searchFields: AdminSearchField[] = [
@@ -126,7 +169,7 @@ const batchDeleting = ref(false);
 const runDelete = async (ids: Array<string | number>) => {
   await deleteSystemMessages(ids);
   message.success(`已删除 ${ids.length} 条系统消息`);
-  await listRef.value?.refresh();
+  await systemListRef.value?.refresh();
 };
 
 const doDelete = (row: SystemMessageRow) => {
@@ -149,7 +192,7 @@ const doDelete = (row: SystemMessageRow) => {
 };
 
 const doDeleteBatch = () => {
-  const ids = [...checked.value];
+  const ids = [...systemChecked.value];
   dialog.warning({
     title: '批量删除',
     content: `删除后所选 ${ids.length} 条系统消息立即从所有用户的消息列表移除且不可恢复，确认删除？`,
@@ -159,7 +202,7 @@ const doDeleteBatch = () => {
       batchDeleting.value = true;
       try {
         await runDelete(ids);
-        checked.value = [];
+        systemChecked.value = [];
       } catch {
         /* useApi 已统一弹错 */
       } finally {
@@ -192,7 +235,7 @@ const doToggleState = (row: SystemMessageRow) => {
     try {
       await updateMessageState(row.id!, toFail ? 1 : 0);
       message.success(toFail ? '已失效' : '已恢复');
-      await listRef.value?.refresh();
+      await systemListRef.value?.refresh();
     } catch {
       /* useApi 已统一弹错 */
     } finally {
@@ -346,7 +389,7 @@ const handleSave = () => {
           }
           message.success(editingId.value ? '已保存并生效' : '已发布，全体用户可见');
           formVisible.value = false;
-          await listRef.value?.refresh();
+          await systemListRef.value?.refresh();
         } catch {
           /* useApi 已统一弹错 */
         } finally {
@@ -356,11 +399,168 @@ const handleSave = () => {
     });
   });
 };
+
+// ==================== 用户消息 tab（b_news_user_record，用户间互动消息） ====================
+const userListRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+const userChecked = ref<Array<string | number>>([]);
+
+const userSearchFields: AdminSearchField[] = [
+  {
+    key: 'types',
+    label: '类型',
+    type: 'multiple',
+    options: Object.entries(USER_NEWS_TYPE_MAP).map(([value, meta]) => ({
+      label: meta.label,
+      value: Number(value)
+    }))
+  },
+  {
+    key: 'username',
+    label: '用户名',
+    type: 'input',
+    placeholder: '发送者/接收者昵称或用户名'
+  }
+];
+
+const fetchUserList = (params: Record<string, any>) => getUserNewsList(params);
+
+// ---------- 删除 ----------
+const userDeletingId = ref<number | null>(null);
+const userBatchDeleting = ref(false);
+
+const runUserDelete = async (ids: Array<string | number>) => {
+  await deleteUserNews(ids);
+  message.success(`已删除 ${ids.length} 条用户消息`);
+  await userListRef.value?.refresh();
+};
+
+const doDeleteUser = (row: UserNewsRow) => {
+  dialog.warning({
+    title: '删除确认',
+    content: `删除后该消息从接收者的消息列表移除且不可恢复，确认删除？`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      userDeletingId.value = row.id!;
+      try {
+        await runUserDelete([row.id!]);
+      } catch {
+        /* useApi 已统一弹错 */
+      } finally {
+        userDeletingId.value = null;
+      }
+    }
+  });
+};
+
+const doDeleteUserBatch = () => {
+  const ids = [...userChecked.value];
+  dialog.warning({
+    title: '批量删除',
+    content: `删除后所选 ${ids.length} 条用户消息从对应接收者的消息列表移除且不可恢复，确认删除？`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      userBatchDeleting.value = true;
+      try {
+        await runUserDelete(ids);
+        userChecked.value = [];
+      } catch {
+        /* useApi 已统一弹错 */
+      } finally {
+        userBatchDeleting.value = false;
+      }
+    }
+  });
+};
+
+const renderUser = (name?: string, avatar?: string) =>
+  h('div', { class: 'cell-author' }, [
+    h(AdminAvatar, { src: avatar, name: name || '?', size: 24 }),
+    h('span', { class: 'cell-author-name' }, name || '—')
+  ]);
+
+const userColumns: DataTableColumns<UserNewsRow> = [
+  {
+    title: '发送者',
+    key: 'senderName',
+    minWidth: 130,
+    render: (row) => renderUser(row.senderName, row.senderAvatar)
+  },
+  {
+    title: '接收者',
+    key: 'recipientName',
+    minWidth: 130,
+    render: (row) => renderUser(row.recipientName, row.recipientAvatar)
+  },
+  {
+    title: '类型',
+    key: 'type',
+    width: 100,
+    render: (row) => h(AdminStateTag, { value: row.type, map: USER_NEWS_TYPE_MAP })
+  },
+  {
+    title: '消息内容',
+    key: 'content',
+    minWidth: 240,
+    render: (row) => h('span', { class: 'cell-ellipsis', title: row.content }, row.content || '—')
+  },
+  {
+    title: '已读',
+    key: 'beenRead',
+    width: 90,
+    render: (row) => h(AdminStateTag, { value: row.beenRead, map: USER_NEWS_READ_MAP })
+  },
+  {
+    title: '创建时间',
+    key: 'createTime',
+    width: 160,
+    render: (row) => getFullDateTime(row.createTime) || '—'
+  },
+  {
+    title: '操作',
+    key: 'actions',
+    width: 90,
+    align: 'center',
+    fixed: 'right',
+    render: (row) =>
+      h(
+        NButton,
+        {
+          size: 'small',
+          text: true,
+          type: 'error',
+          loading: userDeletingId.value === row.id,
+          onClick: () => doDeleteUser(row)
+        },
+        { default: () => '删除' }
+      )
+  }
+];
 </script>
 
 <style scoped lang="scss">
+/* 双 tab 零滚动布局（同 tool 页骨架）：tab 头占一行，两个 pane 各自撑满剩余高度 */
 .message-page {
   height: calc(100vh - 88px);
+  display: flex;
+  flex-direction: column;
+}
+
+.message-tabs {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 非 animated 时 pane 直挂 tabs 根下，直接约束 pane（见 qixidi-web-admin 规范） */
+.message-tabs :deep(.n-tab-pane) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
 }
 
 .message-tip {
