@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.user.BrowsingHistoryBo;
 import com.qixidi.business.domain.vo.user.BrowsingHistoryVo;
 import com.qixidi.business.service.IBrowsingHistoryService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class BrowsingHistoryController {
     /**
      * 查询用户浏览历史列表
      */
+    @PermName("浏览记录-列表")
     @SaCheckPermission("browsing:history:list")
     @PostMapping("/list")
     public TableDataInfo<BrowsingHistoryVo> list(@Validated(QueryGroup.class) @RequestBody BrowsingHistoryBo bo) {
@@ -50,6 +52,7 @@ public class BrowsingHistoryController {
     /**
      * 导出用户浏览历史列表
      */
+    @PermName("浏览记录-导出")
     @SaCheckPermission("browsing:history:export")
     @Log(title = "导出用户浏览历史", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class BrowsingHistoryController {
     /**
      * 获取用户浏览历史详细信息
      */
+    @PermName("浏览记录-查询")
     @SaCheckPermission("browsing:history:query")
     @GetMapping("/{id}")
     public BrowsingHistoryVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class BrowsingHistoryController {
     /**
      * 新增用户浏览历史
      */
+    @PermName("浏览记录-新增")
     @SaCheckPermission("browsing:history:add")
     @Log(title = "新增用户浏览历史", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class BrowsingHistoryController {
     /**
      * 修改用户浏览历史
      */
+    @PermName("浏览记录-编辑")
     @SaCheckPermission("browsing:history:edit")
     @Log(title = "修改用户浏览历史", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class BrowsingHistoryController {
     /**
      * 删除用户浏览历史
      */
+    @PermName("浏览记录-删除")
     @SaCheckPermission("browsing:history:remove")
     @Log(title = "删除用户浏览历史", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

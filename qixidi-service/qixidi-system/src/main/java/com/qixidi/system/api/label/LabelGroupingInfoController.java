@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.label.LabelMergeBo;
 import com.qixidi.business.domain.vo.label.LabelGroupingInfoVo;
 import com.qixidi.business.service.label.ILabelGroupingInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -50,6 +51,7 @@ public class LabelGroupingInfoController {
     /**
      * 导出标签分组信息列表
      */
+    @PermName("标签分类-导出")
     @SaCheckPermission("groupingInfo:export")
     @Log(title = "导出标签分组信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +63,7 @@ public class LabelGroupingInfoController {
     /**
      * 获取标签分组信息详细信息
      */
+    @PermName("标签分类-查询")
     @SaCheckPermission("groupingInfo:query")
     @GetMapping("/{id}")
     public LabelGroupingInfoVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +73,7 @@ public class LabelGroupingInfoController {
     /**
      * 新增标签分组信息
      */
+    @PermName("标签分类-新增")
     @SaCheckPermission("groupingInfo:add")
     @Log(title = "新增标签分组信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +85,7 @@ public class LabelGroupingInfoController {
     /**
      * 修改标签分组信息
      */
+    @PermName("标签分类-编辑")
     @SaCheckPermission("groupingInfo:edit")
     @Log(title = "修改标签分组信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +97,7 @@ public class LabelGroupingInfoController {
     /**
      * 合并标签分组：源分组下的标签与文章归属迁移至目标分组后删除源分组
      */
+    @PermName("标签分类-合并")
     @SaCheckPermission("groupingInfo:merge")
     @Log(title = "合并标签分组信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -103,6 +109,7 @@ public class LabelGroupingInfoController {
     /**
      * 删除标签分组信息
      */
+    @PermName("标签分类-删除")
     @SaCheckPermission("groupingInfo:remove")
     @Log(title = "删除标签分组信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

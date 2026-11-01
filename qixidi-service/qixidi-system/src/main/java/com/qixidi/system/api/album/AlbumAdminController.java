@@ -5,6 +5,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.album.AlbumSearchBo;
 import com.qixidi.business.domain.vo.album.AlbumVo;
@@ -35,6 +36,7 @@ public class AlbumAdminController {
     /**
      * 相册图片分页（归属用户昵称/头像 join 展示，支持 uid/来源/月份筛选）
      */
+    @PermName("时光相册-查询")
     @SaCheckPermission("album:query")
     @PostMapping("/list")
     public TableDataInfo<AlbumVo> list(@RequestBody AlbumSearchBo bo) {
@@ -44,6 +46,7 @@ public class AlbumAdminController {
     /**
      * 批量删除相册图片（移出相册；来源内容再编辑/回填时会按内容重新解析入库）
      */
+    @PermName("时光相册-删除")
     @SaCheckPermission("album:remove")
     @Log(title = "删除相册图片", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

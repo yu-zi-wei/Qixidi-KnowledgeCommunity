@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.configure.ToNavigationBo;
 import com.qixidi.business.domain.vo.configure.ToNavigationVo;
 import com.qixidi.business.service.configure.IToNavigationService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -49,6 +50,7 @@ public class ToNavigationController {
     /**
      * 导出导航栏配置列表
      */
+    @PermName("导航菜单-导出")
     @SaCheckPermission("navigation:export")
     @Log(title = "导出导航栏配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -60,6 +62,7 @@ public class ToNavigationController {
     /**
      * 获取导航栏配置详细信息
      */
+    @PermName("导航菜单-查询")
     @SaCheckPermission("navigation:query")
     @GetMapping("/{id}")
     public ToNavigationVo getInfo(@PathVariable("id") Long id) {
@@ -69,6 +72,7 @@ public class ToNavigationController {
     /**
      * 新增导航栏配置
      */
+    @PermName("导航菜单-新增")
     @SaCheckPermission("navigation:add")
     @Log(title = "新增导航栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -80,6 +84,7 @@ public class ToNavigationController {
     /**
      * 修改导航栏配置
      */
+    @PermName("导航菜单-编辑")
     @SaCheckPermission("navigation:edit")
     @Log(title = "修改导航栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -91,6 +96,7 @@ public class ToNavigationController {
     /**
      * 删除导航栏配置
      */
+    @PermName("导航菜单-删除")
     @SaCheckPermission("navigation:remove")
     @Log(title = "删除导航栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

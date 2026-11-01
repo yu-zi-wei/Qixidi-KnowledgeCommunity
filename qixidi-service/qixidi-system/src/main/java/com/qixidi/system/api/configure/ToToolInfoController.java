@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
 import com.qixidi.business.domain.vo.configure.ToToolInfoVo;
 import com.qixidi.business.service.configure.IToToolInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class ToToolInfoController {
     /**
      * 查询工具信息列表
      */
+    @PermName("推荐工具-列表")
     @SaCheckPermission("toolInfo:list")
     @PostMapping("/list")
     public TableDataInfo<ToToolInfoVo> list(@Validated(QueryGroup.class) @RequestBody ToToolInfoBo bo) {
@@ -50,6 +52,7 @@ public class ToToolInfoController {
     /**
      * 导出工具信息列表
      */
+    @PermName("推荐工具-导出")
     @SaCheckPermission("toolInfo:export")
     @Log(title = "导出工具信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class ToToolInfoController {
     /**
      * 获取工具信息详细信息
      */
+    @PermName("推荐工具-查询")
     @SaCheckPermission("toolInfo:query")
     @GetMapping("/{id}")
     public ToToolInfoVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class ToToolInfoController {
     /**
      * 新增工具信息
      */
+    @PermName("推荐工具-新增")
     @SaCheckPermission("toolInfo:add")
     @Log(title = "新增工具信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class ToToolInfoController {
     /**
      * 修改工具信息
      */
+    @PermName("推荐工具-编辑")
     @SaCheckPermission("toolInfo:edit")
     @Log(title = "修改工具信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class ToToolInfoController {
     /**
      * 删除工具信息
      */
+    @PermName("推荐工具-删除")
     @SaCheckPermission("toolInfo:remove")
     @Log(title = "删除工具信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

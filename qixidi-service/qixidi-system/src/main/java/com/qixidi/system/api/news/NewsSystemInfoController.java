@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.news.NewsSystemInfoBo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
 import com.qixidi.business.service.news.INewsSystemInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class NewsSystemInfoController {
     /**
      * 查询系统消息列表
      */
+    @PermName("系统消息-列表")
     @SaCheckPermission("news:systemInfo:list")
     @PostMapping("/list")
     public TableDataInfo<NewsSystemInfoVo> list(@Validated(QueryGroup.class) @RequestBody NewsSystemInfoBo bo) {
@@ -50,6 +52,7 @@ public class NewsSystemInfoController {
     /**
      * 导出系统消息列表
      */
+    @PermName("系统消息-导出")
     @SaCheckPermission("news:systemInfo:export")
     @Log(title = "导出系统消息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class NewsSystemInfoController {
     /**
      * 获取系统消息详细信息
      */
+    @PermName("系统消息-查询")
     @SaCheckPermission("news:systemInfo:query")
     @GetMapping("/{id}")
     public NewsSystemInfoVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class NewsSystemInfoController {
     /**
      * 新增系统消息
      */
+    @PermName("系统消息-新增")
     @SaCheckPermission("news:systemInfo:add")
     @Log(title = "新增系统消息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class NewsSystemInfoController {
     /**
      * 修改系统消息
      */
+    @PermName("系统消息-编辑")
     @SaCheckPermission("news:systemInfo:edit")
     @Log(title = "修改系统消息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class NewsSystemInfoController {
     /**
      * 失效/恢复系统消息（终审操作：只切 state，生效消息前台立即隐藏/恢复）
      */
+    @PermName("系统消息-编辑")
     @SaCheckPermission("news:systemInfo:edit")
     @Log(title = "失效或恢复系统消息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -103,6 +110,7 @@ public class NewsSystemInfoController {
     /**
      * 删除系统消息
      */
+    @PermName("系统消息-删除")
     @SaCheckPermission("news:systemInfo:remove")
     @Log(title = "删除系统消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
 import com.qixidi.business.domain.vo.dictum.DictumAlbumVo;
 import com.qixidi.business.service.dictum.IDictumAlbumService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class DictumAlbumController {
     /**
      * 查询随笔专辑列表
      */
+    @PermName("随笔专辑-列表")
     @SaCheckPermission("dictum:album:list")
     @PostMapping("/list")
     public TableDataInfo<DictumAlbumVo> list(@Validated(QueryGroup.class) @RequestBody DictumAlbumBo bo) {
@@ -50,6 +52,7 @@ public class DictumAlbumController {
     /**
      * 导出随笔专辑列表
      */
+    @PermName("随笔专辑-导出")
     @SaCheckPermission("dictum:album:export")
     @Log(title = "导出随笔专辑", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class DictumAlbumController {
     /**
      * 获取随笔专辑详细信息
      */
+    @PermName("随笔专辑-查询")
     @SaCheckPermission("dictum:album:query")
     @GetMapping("/{id}")
     public DictumAlbumVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class DictumAlbumController {
     /**
      * 新增随笔专辑
      */
+    @PermName("随笔专辑-新增")
     @SaCheckPermission("dictum:album:add")
     @Log(title = "新增随笔专辑", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class DictumAlbumController {
     /**
      * 修改随笔专辑
      */
+    @PermName("随笔专辑-编辑")
     @SaCheckPermission("dictum:album:edit")
     @Log(title = "修改随笔专辑", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class DictumAlbumController {
     /**
      * 删除随笔专辑
      */
+    @PermName("随笔专辑-删除")
     @SaCheckPermission("dictum:album:remove")
     @Log(title = "删除随笔专辑", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

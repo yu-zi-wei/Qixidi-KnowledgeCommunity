@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.SearchRecordsBo;
 import com.qixidi.business.domain.vo.SearchRecordsVo;
 import com.qixidi.business.service.ISearchRecordsService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class SearchRecordsController {
     /**
      * 查询搜索记录列表
      */
+    @PermName("搜索记录-列表")
     @SaCheckPermission("search:records:list")
     @PostMapping("/list")
     public TableDataInfo<SearchRecordsVo> list(@Validated(QueryGroup.class) @RequestBody SearchRecordsBo bo) {
@@ -50,6 +52,7 @@ public class SearchRecordsController {
     /**
      * 导出搜索记录列表
      */
+    @PermName("搜索记录-导出")
     @SaCheckPermission("search:records:export")
     @Log(title = "导出搜索记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class SearchRecordsController {
     /**
      * 获取搜索记录详细信息
      */
+    @PermName("搜索记录-查询")
     @SaCheckPermission("search:records:query")
     @GetMapping("/{id}")
     public SearchRecordsVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class SearchRecordsController {
     /**
      * 新增搜索记录
      */
+    @PermName("搜索记录-新增")
     @SaCheckPermission("search:records:add")
     @Log(title = "新增搜索记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class SearchRecordsController {
     /**
      * 修改搜索记录
      */
+    @PermName("搜索记录-编辑")
     @SaCheckPermission("search:records:edit")
     @Log(title = "修改搜索记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class SearchRecordsController {
     /**
      * 删除搜索记录
      */
+    @PermName("搜索记录-删除")
     @SaCheckPermission("search:records:remove")
     @Log(title = "删除搜索记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

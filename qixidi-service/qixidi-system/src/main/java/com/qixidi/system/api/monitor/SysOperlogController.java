@@ -7,6 +7,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.entity.SysOperLog;
@@ -39,6 +40,7 @@ public class SysOperlogController {
      * @param pageQuery
      * @return
      */
+    @PermName("操作日志-列表")
     @SaCheckPermission("monitor:operlog:list")
     @PostMapping("/list")
     public TableDataInfo<SysOperLog> list(@RequestBody SysOperLog operLog) {
@@ -52,6 +54,7 @@ public class SysOperlogController {
      * @param response
      */
     @Log(title = "导出操作日志", businessType = BusinessType.EXPORT)
+    @PermName("操作日志-导出")
     @SaCheckPermission("monitor:operlog:export")
     @PostMapping("/export")
     public void export(SysOperLog operLog, HttpServletResponse response) {
@@ -66,6 +69,7 @@ public class SysOperlogController {
      * @return
      */
     @Log(title = "删除操作日志", businessType = BusinessType.DELETE)
+    @PermName("操作日志-删除")
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/{operIds}")
     public void remove(@PathVariable Long[] operIds) {
@@ -80,6 +84,7 @@ public class SysOperlogController {
      * @return
      */
     @Log(title = "清空操作日志", businessType = BusinessType.CLEAN)
+    @PermName("操作日志-删除")
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/clean")
     public void clean() {

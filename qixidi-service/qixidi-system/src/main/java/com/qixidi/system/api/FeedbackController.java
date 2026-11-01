@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.FeedbackBo;
 import com.qixidi.business.domain.vo.FeedbackVo;
 import com.qixidi.business.service.IFeedbackService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -49,6 +50,7 @@ public class FeedbackController {
     /**
      * 导出用户反馈列表
      */
+    @PermName("用户反馈-导出")
     @SaCheckPermission("feedback:export")
     @Log(title = "导出用户反馈", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -60,6 +62,7 @@ public class FeedbackController {
     /**
      * 获取用户反馈详细信息
      */
+    @PermName("用户反馈-查询")
     @SaCheckPermission("feedback:query")
     @GetMapping("/{id}")
     public FeedbackVo getInfo(@PathVariable("id") Long id) {
@@ -69,6 +72,7 @@ public class FeedbackController {
     /**
      * 新增用户反馈
      */
+    @PermName("用户反馈-新增")
     @SaCheckPermission("feedback:add")
     @Log(title = "新增用户反馈", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -80,6 +84,7 @@ public class FeedbackController {
     /**
      * 修改用户反馈
      */
+    @PermName("用户反馈-编辑")
     @SaCheckPermission("feedback:edit")
     @Log(title = "修改用户反馈", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -91,6 +96,7 @@ public class FeedbackController {
     /**
      * 删除用户反馈
      */
+    @PermName("用户反馈-删除")
     @SaCheckPermission("feedback:remove")
     @Log(title = "删除用户反馈", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

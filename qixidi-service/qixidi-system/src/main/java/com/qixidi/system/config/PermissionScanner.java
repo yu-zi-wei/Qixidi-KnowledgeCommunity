@@ -1,6 +1,7 @@
 package com.qixidi.system.config;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.system.domain.vo.PermGroupVo;
 import com.qixidi.system.domain.vo.PermItemVo;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -25,6 +27,9 @@ import java.util.TreeSet;
  * - /system/perm/list 输出给前端角色管理的勾选树
  * - 角色分配界面只能勾到清单内的码，与代码永不脱节
  *
+ * 权限中文名来自同方法 @PermName 注解（声明式，就近维护）；
+ * 未标注回退权限码原值（英文原段一眼可辨，倒逼补标注）
+ *
  * @author ziwei
  */
 @Slf4j
@@ -33,21 +38,7 @@ import java.util.TreeSet;
 public class PermissionScanner implements SmartInitializingSingleton {
 
     /**
-     * 动作词根 → 中文（权限码末段）。新增动作词根时同步登记，未登记回退英文原段
-     */
-    private static final Map<String, String> ACTION_LABELS = Map.ofEntries(
-            Map.entry("add", "新增"),
-            Map.entry("edit", "编辑"),
-            Map.entry("remove", "删除"),
-            Map.entry("list", "列表"),
-            Map.entry("query", "查询"),
-            Map.entry("export", "导出"),
-            Map.entry("merge", "合并"),
-            Map.entry("forceLogout", "强制下线"),
-            Map.entry("resetPwd", "重置密码"));
-
-    /**
-     * 模块首段 → 分组中文标题（口径与后台侧栏菜单一致）
+     * 模块首段 → 分组中文标题（口径与后台侧栏菜单一致）。新增模块时同步登记
      */
     private static final Map<String, String> MODULE_LABELS = Map.ofEntries(
             Map.entry("album", "时光相册"),
@@ -77,6 +68,11 @@ public class PermissionScanner implements SmartInitializingSingleton {
             Map.entry("toolInfo", "工具管理"),
             Map.entry("tripartiteUser", "前台用户"),
             Map.entry("user", "后台账号"));
+
+    /**
+     * 权限码 → 中文名。初始化后只读；未标 @PermName 的码值为码本身（回退展示）
+     */
+    private final Map<String, String> permLabels = new TreeMap<>();
 
     /**
      * 对象前缀（权限码去掉末段）→ 中文对象名。新增业务对象权限码时同步登记，未登记回退模块名/英文原段
@@ -130,45 +126,52 @@ public class PermissionScanner implements SmartInitializingSingleton {
 
     @Override
     public void afterSingletonsInstantiated() {
-        Set<String> perms = new TreeSet<>();
         handlerMapping.getHandlerMethods().forEach((info, handlerMethod) -> {
-            collectFromMethod(handlerMethod, perms);
+            collectFromMethod(handlerMethod);
         });
         Map<String, Set<String>> byModule = new LinkedHashMap<>();
-        for (String perm : perms) {
+        permLabels.forEach((perm, label) -> {
             String module = perm.split(":")[0];
             byModule.computeIfAbsent(module, k -> new TreeSet<>()).add(perm);
-        }
+        });
         groups = byModule.entrySet().stream()
                 .map(e -> new PermGroupVo(e.getKey(),
                         MODULE_LABELS.getOrDefault(e.getKey(), e.getKey()),
-                        e.getValue().stream().map(PermissionScanner::toPermItem).toList()))
+                        e.getValue().stream().map(code -> new PermItemVo(code, permLabels.get(code))).toList()))
                 .sorted(Comparator.comparing(PermGroupVo::getModule))
                 .toList();
-        log.info("权限码注册完成：{} 个模块 / {} 个权限码", groups.size(), perms.size());
+        log.info("权限码注册完成：{} 个模块 / {} 个权限码", groups.size(), permLabels.size());
     }
 
-    /**
-     * 权限码 → 中文条目：对象前缀 + 动作词根拼「对象-动作」（如 article:comment:remove → 文章评论-删除）；
-     * 未登记词根回退英文原段，新权限码缺词一眼可辨
-     */
-    private static PermItemVo toPermItem(String perm) {
-        int idx = perm.lastIndexOf(':');
-        String object = idx > 0 ? perm.substring(0, idx) : perm;
-        String action = idx > 0 ? perm.substring(idx + 1) : perm;
-        String label = OBJECT_LABELS.getOrDefault(object, MODULE_LABELS.getOrDefault(object, object))
-                + "-" + ACTION_LABELS.getOrDefault(action, action);
-        return new PermItemVo(perm, label);
-    }
-
-    private void collectFromMethod(HandlerMethod handlerMethod, Set<String> perms) {
+    private void collectFromMethod(HandlerMethod handlerMethod) {
         SaCheckPermission methodPerm = handlerMethod.getMethodAnnotation(SaCheckPermission.class);
         if (methodPerm != null) {
-            perms.addAll(List.of(methodPerm.value()));
+            PermName permName = handlerMethod.getMethodAnnotation(PermName.class);
+            String label = permName == null || permName.value().isEmpty() ? null : permName.value();
+            for (String code : methodPerm.value()) {
+                mergeLabel(code, label);
+            }
         }
         SaCheckPermission classPerm = AnnotatedElementUtils.findMergedAnnotation(handlerMethod.getBeanType(), SaCheckPermission.class);
         if (classPerm != null) {
-            perms.addAll(List.of(classPerm.value()));
+            for (String code : classPerm.value()) {
+                // 类级注解无 @PermName 伴生，回退码本身
+                mergeLabel(code, null);
+            }
+        }
+    }
+
+    /**
+     * 同码多方法：首个非空中文名生效；回退值（裸码）可被真实中文名覆盖；不同中文名打 WARN 保留首个
+     */
+    private void mergeLabel(String code, String label) {
+        String existing = permLabels.get(code);
+        if (label == null || label.isEmpty()) {
+            permLabels.putIfAbsent(code, code);
+        } else if (existing == null || existing.equals(code)) {
+            permLabels.put(code, label);
+        } else if (!existing.equals(label)) {
+            log.warn("权限码 {} 的 @PermName 文案不一致，保留首个：{} / {}", code, existing, label);
         }
     }
 

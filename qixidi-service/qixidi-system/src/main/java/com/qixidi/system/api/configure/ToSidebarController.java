@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.configure.ToSidebarBo;
@@ -49,6 +50,7 @@ public class ToSidebarController {
     /**
      * 导出侧边栏配置列表
      */
+    @PermName("侧边栏推荐-导出")
     @SaCheckPermission("sidebar:export")
     @Log(title = "导出侧边栏配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -60,6 +62,7 @@ public class ToSidebarController {
     /**
      * 获取侧边栏配置详细信息
      */
+    @PermName("侧边栏推荐-查询")
     @SaCheckPermission("sidebar:query")
     @GetMapping("/{id}")
     public ToSidebarVo getInfo(@PathVariable("id") Long id) {
@@ -69,6 +72,7 @@ public class ToSidebarController {
     /**
      * 新增侧边栏配置
      */
+    @PermName("侧边栏推荐-新增")
     @SaCheckPermission("sidebar:add")
     @Log(title = "新增侧边栏配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -80,6 +84,7 @@ public class ToSidebarController {
     /**
      * 修改侧边栏配置
      */
+    @PermName("侧边栏推荐-编辑")
     @SaCheckPermission("sidebar:edit")
     @Log(title = "修改侧边栏配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -91,6 +96,7 @@ public class ToSidebarController {
     /**
      * 删除侧边栏配置
      */
+    @PermName("侧边栏推荐-删除")
     @SaCheckPermission("sidebar:remove")
     @Log(title = "删除侧边栏配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

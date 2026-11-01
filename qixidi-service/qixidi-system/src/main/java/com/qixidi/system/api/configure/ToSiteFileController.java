@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.configure.ToSiteFileBo;
 import com.qixidi.business.domain.vo.configure.ToSiteFileVo;
 import com.qixidi.business.service.configure.IToSiteFileService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class ToSiteFileController {
     /**
      * 查询网站文档列表
      */
+    @PermName("站点文件-列表")
     @SaCheckPermission("site:siteFile:list")
     @PostMapping("/list")
     public TableDataInfo<ToSiteFileVo> list(@Validated(QueryGroup.class) @RequestBody ToSiteFileBo bo) {
@@ -50,6 +52,7 @@ public class ToSiteFileController {
     /**
      * 导出网站文档列表
      */
+    @PermName("站点文件-导出")
     @SaCheckPermission("site:siteFile:export")
     @Log(title = "导出网站文档", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class ToSiteFileController {
     /**
      * 获取网站文档详细信息
      */
+    @PermName("站点文件-查询")
     @SaCheckPermission("site:siteFile:query")
     @GetMapping("/{id}")
     public ToSiteFileVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class ToSiteFileController {
     /**
      * 新增网站文档
      */
+    @PermName("站点文件-新增")
     @SaCheckPermission("site:siteFile:add")
     @Log(title = "新增网站文档", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class ToSiteFileController {
     /**
      * 修改网站文档
      */
+    @PermName("站点文件-编辑")
     @SaCheckPermission("site:siteFile:edit")
     @Log(title = "修改网站文档", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class ToSiteFileController {
     /**
      * 删除网站文档
      */
+    @PermName("站点文件-删除")
     @SaCheckPermission("site:siteFile:remove")
     @Log(title = "删除网站文档", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.configure.ToRechargeInfoBo;
 import com.qixidi.business.domain.vo.configure.ToRechargeInfoVo;
 import com.qixidi.business.service.configure.IToRechargeInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class ToRechargeInfoController {
     /**
      * 查询充值信息列表
      */
+    @PermName("充值记录-列表")
     @SaCheckPermission("rechargeInfo:list")
     @PostMapping("/list")
     public TableDataInfo<ToRechargeInfoVo> list(@Validated(QueryGroup.class) @RequestBody ToRechargeInfoBo bo) {
@@ -50,6 +52,7 @@ public class ToRechargeInfoController {
     /**
      * 导出充值信息列表
      */
+    @PermName("充值记录-导出")
     @SaCheckPermission("rechargeInfo:export")
     @Log(title = "导出充值信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class ToRechargeInfoController {
     /**
      * 获取充值信息详细信息
      */
+    @PermName("充值记录-查询")
     @SaCheckPermission("rechargeInfo:query")
     @GetMapping("/{id}")
     public ToRechargeInfoVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class ToRechargeInfoController {
     /**
      * 新增充值信息
      */
+    @PermName("充值记录-新增")
     @SaCheckPermission("rechargeInfo:add")
     @Log(title = "新增充值信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class ToRechargeInfoController {
     /**
      * 修改充值信息
      */
+    @PermName("充值记录-编辑")
     @SaCheckPermission("rechargeInfo:edit")
     @Log(title = "修改充值信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class ToRechargeInfoController {
     /**
      * 删除充值信息
      */
+    @PermName("充值记录-删除")
     @SaCheckPermission("rechargeInfo:remove")
     @Log(title = "删除充值信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

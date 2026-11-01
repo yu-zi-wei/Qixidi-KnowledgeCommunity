@@ -11,6 +11,7 @@ import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -57,6 +58,7 @@ public class FdBrowsingHistoryController {
      * 删除用户浏览历史
      */
     @Log(title = "删除浏览历史", businessType = BusinessType.DELETE)
+    @PermName("浏览记录-删除")
     @SaCheckPermission("browsing:history:remove")
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {

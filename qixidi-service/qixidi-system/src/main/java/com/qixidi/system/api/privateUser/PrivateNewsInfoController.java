@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class PrivateNewsInfoController {
     /**
      * 查询私信消息列表（后台全站视角，双方昵称/头像 join 展示）
      */
+    @PermName("私信消息-查询")
     @SaCheckPermission("private:news:query")
     @PostMapping("/list")
     public TableDataInfo<PrivateNewsInfoVo> list(@Validated(QueryGroup.class) @RequestBody PrivateNewsInfoBo bo) {
@@ -88,6 +90,7 @@ public class PrivateNewsInfoController {
     /**
      * 删除私信记录
      */
+    @PermName("私信消息-删除")
     @SaCheckPermission("private:news:remove")
     @Log(title = "删除私信消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

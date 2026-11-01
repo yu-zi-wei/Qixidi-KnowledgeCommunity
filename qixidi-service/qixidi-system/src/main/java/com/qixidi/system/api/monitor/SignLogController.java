@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.user.SignLogBo;
@@ -31,6 +32,7 @@ public class SignLogController {
     /**
      * 分页查询前台登录日志
      */
+    @PermName("签到日志-列表")
     @SaCheckPermission("monitor:signLog:list")
     @PostMapping("/list")
     public TableDataInfo<SignLog> list(@RequestBody SignLogBo bo) {
@@ -40,6 +42,7 @@ public class SignLogController {
     /**
      * 删除前台登录日志
      */
+    @PermName("签到日志-删除")
     @SaCheckPermission("monitor:signLog:remove")
     @Log(title = "删除前台登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
@@ -50,6 +53,7 @@ public class SignLogController {
     /**
      * 清空前台登录日志
      */
+    @PermName("签到日志-删除")
     @SaCheckPermission("monitor:signLog:remove")
     @Log(title = "清空前台登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")

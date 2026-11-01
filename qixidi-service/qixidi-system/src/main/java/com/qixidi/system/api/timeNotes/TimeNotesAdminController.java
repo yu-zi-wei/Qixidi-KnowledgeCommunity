@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.vo.TimeNotesAdminVo;
@@ -32,6 +33,7 @@ public class TimeNotesAdminController {
     /**
      * 查询小记列表（全量用户，标题模糊）
      */
+    @PermName("小记-查询")
     @SaCheckPermission("timeNotes:query")
     @PostMapping("/list")
     public TableDataInfo<TimeNotesAdminVo> list(@RequestBody TimeNotesSearchBo bo) {
@@ -41,6 +43,7 @@ public class TimeNotesAdminController {
     /**
      * 获取小记详细信息
      */
+    @PermName("小记-查询")
     @SaCheckPermission("timeNotes:query")
     @GetMapping("/{id}")
     public TimeNotesInfoVo getInfo(@PathVariable("id") Long id) {
@@ -50,6 +53,7 @@ public class TimeNotesAdminController {
     /**
      * 删除小记（逻辑删 + 相册清理）
      */
+    @PermName("小记-删除")
     @SaCheckPermission("timeNotes:remove")
     @Log(title = "删除小记", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

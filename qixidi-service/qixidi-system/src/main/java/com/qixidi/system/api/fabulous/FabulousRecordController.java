@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -42,6 +43,7 @@ public class FabulousRecordController {
     /**
      * 查询点赞列表
      */
+    @PermName("点赞记录-列表")
     @SaCheckPermission("fabulous:record:list")
     @PostMapping("/list")
     public TableDataInfo<FabulousRecordVo> list(@Validated(QueryGroup.class) @RequestBody FabulousRecordBo bo) {
@@ -51,6 +53,7 @@ public class FabulousRecordController {
     /**
      * 导出点赞列表
      */
+    @PermName("点赞记录-导出")
     @SaCheckPermission("fabulous:record:export")
     @Log(title = "导出点赞", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +65,7 @@ public class FabulousRecordController {
     /**
      * 获取点赞详细信息
      */
+    @PermName("点赞记录-查询")
     @SaCheckPermission("fabulous:record:query")
     @GetMapping("/{id}")
     public FabulousRecordVo getInfo(@PathVariable("id") Long id) {
@@ -71,6 +75,7 @@ public class FabulousRecordController {
     /**
      * 新增点赞
      */
+    @PermName("点赞记录-新增")
     @SaCheckPermission("fabulous:record:add")
     @Log(title = "新增点赞", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -82,6 +87,7 @@ public class FabulousRecordController {
     /**
      * 修改点赞
      */
+    @PermName("点赞记录-编辑")
     @SaCheckPermission("fabulous:record:edit")
     @Log(title = "修改点赞", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -93,6 +99,7 @@ public class FabulousRecordController {
     /**
      * 删除点赞
      */
+    @PermName("点赞记录-删除")
     @SaCheckPermission("fabulous:record:remove")
     @Log(title = "删除点赞", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

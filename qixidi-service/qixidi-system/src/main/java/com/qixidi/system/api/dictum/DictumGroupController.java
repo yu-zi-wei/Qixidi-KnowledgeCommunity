@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.dictum.DictumGroupBo;
 import com.qixidi.business.domain.vo.dictum.DictumGroupVo;
 import com.qixidi.business.service.dictum.IDictumGroupService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class DictumGroupController {
     /**
      * 查询随笔分组列表
      */
+    @PermName("随笔分组-列表")
     @SaCheckPermission("dictum:group:list")
     @PostMapping("/list")
     public TableDataInfo<DictumGroupVo> list(@Validated(QueryGroup.class) @RequestBody DictumGroupBo bo) {
@@ -50,6 +52,7 @@ public class DictumGroupController {
     /**
      * 导出随笔分组列表
      */
+    @PermName("随笔分组-导出")
     @SaCheckPermission("dictum:group:export")
     @Log(title = "导出随笔分组", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class DictumGroupController {
     /**
      * 获取随笔分组详细信息
      */
+    @PermName("随笔分组-查询")
     @SaCheckPermission("dictum:group:query")
     @GetMapping("/{id}")
     public DictumGroupVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class DictumGroupController {
     /**
      * 新增随笔分组
      */
+    @PermName("随笔分组-新增")
     @SaCheckPermission("dictum:group:add")
     @Log(title = "新增随笔分组", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class DictumGroupController {
     /**
      * 修改随笔分组
      */
+    @PermName("随笔分组-编辑")
     @SaCheckPermission("dictum:group:edit")
     @Log(title = "修改随笔分组", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class DictumGroupController {
     /**
      * 删除随笔分组
      */
+    @PermName("随笔分组-删除")
     @SaCheckPermission("dictum:group:remove")
     @Log(title = "删除随笔分组", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesCommentBo;
 import com.qixidi.business.domain.vo.timeNotes.TimeNotesCommentVo;
@@ -31,6 +32,7 @@ public class TimeNotesCommentAdminController {
     /**
      * 查询小记评论列表（全量，内容模糊 / 小记 id / 状态筛选）
      */
+    @PermName("小记评论-查询")
     @SaCheckPermission("timeNotes:comment:query")
     @PostMapping("/list")
     public TableDataInfo<TimeNotesCommentVo> list(@RequestBody TimeNotesCommentBo bo) {
@@ -40,6 +42,7 @@ public class TimeNotesCommentAdminController {
     /**
      * 批量删除小记评论（软删 + 通知记录清理）
      */
+    @PermName("小记评论-删除")
     @SaCheckPermission("timeNotes:comment:remove")
     @Log(title = "删除小记评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

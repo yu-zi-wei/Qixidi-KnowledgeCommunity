@@ -1,6 +1,7 @@
 package com.qixidi.system.api.monitor;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.qixidi.auth.annotation.PermName;
 import com.light.core.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.RedisServerCommands;
@@ -32,6 +33,7 @@ public class CacheController {
      * @return
      * @throws Exception
      */
+    @PermName("缓存监控-列表")
     @SaCheckPermission("monitor:cache:list")
     @GetMapping()
     public Map<String, Object> getInfo() throws Exception {

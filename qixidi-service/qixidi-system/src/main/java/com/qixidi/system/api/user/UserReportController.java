@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.user.UserReportBo;
 import com.qixidi.business.domain.vo.user.UserReportVo;
 import com.qixidi.business.service.user.IUserReportService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class UserReportController {
     /**
      * 查询用户签到列表
      */
+    @PermName("用户举报-列表")
     @SaCheckPermission("user:report:list")
     @PostMapping("/list")
     public TableDataInfo<UserReportVo> list(@Validated(QueryGroup.class) @RequestBody UserReportBo bo) {
@@ -50,6 +52,7 @@ public class UserReportController {
     /**
      * 导出用户签到列表
      */
+    @PermName("用户举报-导出")
     @SaCheckPermission("user:report:export")
     @Log(title = "导出用户签到", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class UserReportController {
     /**
      * 获取用户签到详细信息
      */
+    @PermName("用户举报-查询")
     @SaCheckPermission("user:report:query")
     @GetMapping("/{id}")
     public UserReportVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class UserReportController {
     /**
      * 新增用户签到
      */
+    @PermName("用户举报-新增")
     @SaCheckPermission("user:report:add")
     @Log(title = "新增用户签到", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class UserReportController {
     /**
      * 修改用户签到
      */
+    @PermName("用户举报-编辑")
     @SaCheckPermission("user:report:edit")
     @Log(title = "修改用户签到", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class UserReportController {
     /**
      * 删除用户签到
      */
+    @PermName("用户举报-删除")
     @SaCheckPermission("user:report:remove")
     @Log(title = "删除用户签到", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

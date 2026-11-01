@@ -9,6 +9,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.article.ArticleAuditBo;
@@ -49,6 +50,7 @@ public class ArticleInformationController {
     /**
      * 导出文章信息列表
      */
+    @PermName("文章-导出")
     @SaCheckPermission("article:information:export")
     @Log(title = "导出文章信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -60,6 +62,7 @@ public class ArticleInformationController {
     /**
      * 获取文章信息详细信息
      */
+    @PermName("文章-查询")
     @SaCheckPermission("article:information:query")
     @GetMapping("/{id}")
     public ArticleInformationVo getInfo(@PathVariable("id") Long id) {
@@ -69,6 +72,7 @@ public class ArticleInformationController {
     /**
      * 修改文章信息
      */
+    @PermName("文章-编辑")
     @SaCheckPermission("article:information:edit")
     @Log(title = "修改文章信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -80,6 +84,7 @@ public class ArticleInformationController {
     /**
      * 文章审核（后台终审：通过/拒绝）——独立于编辑，无需文章全字段
      */
+    @PermName("文章-编辑")
     @SaCheckPermission("article:information:edit")
     @Log(title = "审核文章信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -91,6 +96,7 @@ public class ArticleInformationController {
     /**
      * 删除文章信息
      */
+    @PermName("文章-删除")
     @SaCheckPermission("article:information:remove")
     @Log(title = "删除文章信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

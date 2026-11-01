@@ -6,6 +6,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.entity.SysRole;
 import com.qixidi.system.service.ISysRoleService;
@@ -32,6 +33,7 @@ public class SysRoleController {
     /**
      * 查询角色信息列表
      */
+    @PermName("角色-列表")
     @SaCheckPermission("role:list")
     @PostMapping("/list")
     public TableDataInfo<SysRole> list(@RequestBody SysRole role) {
@@ -41,6 +43,7 @@ public class SysRoleController {
     /**
      * 根据角色编号获取详细信息（含已分配权限码）
      */
+    @PermName("角色-查询")
     @SaCheckPermission("role:query")
     @GetMapping(value = "/{roleId}")
     public SysRole getInfo(@PathVariable Long roleId) {
@@ -50,6 +53,7 @@ public class SysRoleController {
     /**
      * 新增角色
      */
+    @PermName("角色-新增")
     @SaCheckPermission("role:add")
     @Log(title = "新增角色", businessType = BusinessType.INSERT)
     @PostMapping
@@ -66,6 +70,7 @@ public class SysRoleController {
     /**
      * 修改保存角色（含权限码重写）
      */
+    @PermName("角色-编辑")
     @SaCheckPermission("role:edit")
     @Log(title = "修改角色", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -83,6 +88,7 @@ public class SysRoleController {
     /**
      * 状态修改
      */
+    @PermName("角色-编辑")
     @SaCheckPermission("role:edit")
     @Log(title = "修改角色状态", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
@@ -94,6 +100,7 @@ public class SysRoleController {
     /**
      * 删除角色
      */
+    @PermName("角色-删除")
     @SaCheckPermission("role:remove")
     @Log(title = "删除角色", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleIds}")
@@ -104,6 +111,7 @@ public class SysRoleController {
     /**
      * 获取角色选择框列表
      */
+    @PermName("角色-查询")
     @SaCheckPermission("role:query")
     @GetMapping("/optionselect")
     public List<SysRole> optionselect() {

@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
@@ -40,6 +41,7 @@ public class TripartiteUserController {
     /**
      * 查询平台用户列表
      */
+    @PermName("前台用户-列表")
     @SaCheckPermission("tripartiteUser:list")
     @PostMapping("/list")
     public TableDataInfo<TripartiteUserVo> list(@Validated(QueryGroup.class) @RequestBody TripartiteUserBo bo) {
@@ -49,6 +51,7 @@ public class TripartiteUserController {
     /**
      * 导出平台用户列表
      */
+    @PermName("前台用户-导出")
     @SaCheckPermission("tripartiteUser:export")
     @Log(title = "导出平台用户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -60,6 +63,7 @@ public class TripartiteUserController {
     /**
      * 获取平台用户详细信息
      */
+    @PermName("前台用户-查询")
     @SaCheckPermission("tripartiteUser:query")
     @GetMapping("/{uuid}")
     public TripartiteUserVo getInfo(@PathVariable("uuid") String uuid) {
@@ -69,6 +73,7 @@ public class TripartiteUserController {
     /**
      * 修改平台用户
      */
+    @PermName("前台用户-编辑")
     @SaCheckPermission("tripartiteUser:edit")
     @Log(title = "修改平台用户", businessType = BusinessType.UPDATE)
     @RepeatSubmit()

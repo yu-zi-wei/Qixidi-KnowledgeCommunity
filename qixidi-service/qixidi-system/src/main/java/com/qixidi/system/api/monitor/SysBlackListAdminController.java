@@ -8,6 +8,7 @@ import com.light.core.utils.ip.AddressUtils;
 import com.light.exception.ServiceException;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.auth.domain.bo.SysBlackListBo;
 import com.qixidi.auth.domain.entity.SysBlackList;
@@ -39,6 +40,7 @@ public class SysBlackListAdminController {
     /**
      * 分页查询黑名单
      */
+    @PermName("IP 黑名单-列表")
     @SaCheckPermission("blackList:list")
     @PostMapping("/list")
     public TableDataInfo<SysBlackList> list(@RequestBody SysBlackListBo bo) {
@@ -48,6 +50,7 @@ public class SysBlackListAdminController {
     /**
      * 手动加黑（ip 与 uid 至少一项；归属地按 ip 反查）
      */
+    @PermName("IP 黑名单-新增")
     @SaCheckPermission("blackList:add")
     @Log(title = "加黑IP", businessType = BusinessType.INSERT)
     @RepeatSubmit
@@ -69,6 +72,7 @@ public class SysBlackListAdminController {
     /**
      * 批量移出黑名单
      */
+    @PermName("IP 黑名单-删除")
     @SaCheckPermission("blackList:remove")
     @Log(title = "移出IP黑名单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

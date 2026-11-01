@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.core.utils.StringUtils;
 import com.light.exception.ServiceException;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.auth.domain.entity.SysRole;
@@ -44,6 +45,7 @@ public class SysUserController {
     /**
      * 获取用户列表
      */
+    @PermName("后台账号-列表")
     @SaCheckPermission("user:list")
     @PostMapping("/list")
     public TableDataInfo<SysUser> list(@RequestBody SysUser user) {
@@ -53,6 +55,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取详细信息
      */
+    @PermName("后台账号-查询")
     @SaCheckPermission("user:query")
     @GetMapping(value = {"/", "/{userId}"})
     public Map<String, Object> getInfo(@PathVariable(value = "userId", required = false) Long userId) {
@@ -70,6 +73,7 @@ public class SysUserController {
     /**
      * 新增用户
      */
+    @PermName("后台账号-新增")
     @SaCheckPermission("user:add")
     @Log(title = "新增用户", businessType = BusinessType.INSERT)
     @PostMapping
@@ -90,6 +94,7 @@ public class SysUserController {
     /**
      * 修改用户
      */
+    @PermName("后台账号-编辑")
     @SaCheckPermission("user:edit")
     @Log(title = "修改用户", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -108,6 +113,7 @@ public class SysUserController {
     /**
      * 删除用户
      */
+    @PermName("后台账号-删除")
     @SaCheckPermission("user:remove")
     @Log(title = "删除用户", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
@@ -121,6 +127,7 @@ public class SysUserController {
     /**
      * 重置密码
      */
+    @PermName("后台账号-重置密码")
     @SaCheckPermission("user:resetPwd")
     @Log(title = "重置用户密码", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
@@ -133,6 +140,7 @@ public class SysUserController {
     /**
      * 状态修改
      */
+    @PermName("后台账号-编辑")
     @SaCheckPermission("user:edit")
     @Log(title = "修改用户状态", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
@@ -144,6 +152,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取授权角色
      */
+    @PermName("后台账号-查询")
     @SaCheckPermission("user:query")
     @GetMapping("/authRole/{userId}")
     public Map<String, Object> authRole(@PathVariable("userId") Long userId) {
@@ -158,6 +167,7 @@ public class SysUserController {
     /**
      * 用户授权角色
      */
+    @PermName("后台账号-编辑")
     @SaCheckPermission("user:edit")
     @Log(title = "授权用户", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")

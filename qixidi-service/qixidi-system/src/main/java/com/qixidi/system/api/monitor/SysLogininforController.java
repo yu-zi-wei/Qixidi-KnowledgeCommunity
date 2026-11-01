@@ -6,6 +6,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.entity.SysLogininfor;
@@ -38,6 +39,7 @@ public class SysLogininforController {
      * @param pageQuery
      * @return
      */
+    @PermName("登录日志-列表")
     @SaCheckPermission("monitor:logininfor:list")
     @PostMapping("/list")
     public TableDataInfo<SysLogininfor> list(@RequestBody SysLogininfor logininfor) {
@@ -51,6 +53,7 @@ public class SysLogininforController {
      * @param response
      */
     @Log(title = "导出登录日志", businessType = BusinessType.EXPORT)
+    @PermName("登录日志-导出")
     @SaCheckPermission("monitor:logininfor:export")
     @PostMapping("/export")
     public void export(SysLogininfor logininfor, HttpServletResponse response) {
@@ -64,6 +67,7 @@ public class SysLogininforController {
      * @param infoIds
      * @return
      */
+    @PermName("登录日志-删除")
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "删除登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
@@ -75,6 +79,7 @@ public class SysLogininforController {
      * 清空系统访问记录
      * @return
      */
+    @PermName("登录日志-删除")
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "清空登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")

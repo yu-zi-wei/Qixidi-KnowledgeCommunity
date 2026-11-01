@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.light.core.core.domain.PageQuery;
@@ -34,6 +35,7 @@ public class NewsUserInfoController {
     /**
      * 查询用户消息记录列表（b_news_user_record，发送者/接收者昵称头像 + 类型/用户名筛选）
      */
+    @PermName("用户消息-列表")
     @SaCheckPermission("news:userInfo:list")
     @PostMapping("/record/list")
     public TableDataInfo<NewsUserRecordVo> recordList(@RequestBody NewsUserRecordBo bo) {
@@ -43,6 +45,7 @@ public class NewsUserInfoController {
     /**
      * 删除用户消息记录
      */
+    @PermName("用户消息-删除")
     @SaCheckPermission("news:userInfo:remove")
     @Log(title = "删除用户消息记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/record/{ids}")

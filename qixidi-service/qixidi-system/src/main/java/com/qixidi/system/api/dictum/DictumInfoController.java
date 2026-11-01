@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.service.dictum.IDictumInfoService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class DictumInfoController {
     /**
      * 查询随笔信息列表
      */
+    @PermName("随笔-列表")
     @SaCheckPermission("dictum:info:list")
     @PostMapping("/list")
     public TableDataInfo<DictumInfoVo> list(@Validated(QueryGroup.class) @RequestBody DictumInfoBo bo) {
@@ -50,6 +52,7 @@ public class DictumInfoController {
     /**
      * 导出随笔信息列表
      */
+    @PermName("随笔-导出")
     @SaCheckPermission("dictum:info:export")
     @Log(title = "导出随笔信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class DictumInfoController {
     /**
      * 获取随笔信息详细信息
      */
+    @PermName("随笔-查询")
     @SaCheckPermission("dictum:info:query")
     @GetMapping("/{id}")
     public DictumInfoVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class DictumInfoController {
     /**
      * 新增随笔信息
      */
+    @PermName("随笔-新增")
     @SaCheckPermission("dictum:info:add")
     @Log(title = "新增随笔信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class DictumInfoController {
     /**
      * 修改随笔信息
      */
+    @PermName("随笔-编辑")
     @SaCheckPermission("dictum:info:edit")
     @Log(title = "修改随笔信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class DictumInfoController {
     /**
      * 删除随笔信息
      */
+    @PermName("随笔-删除")
     @SaCheckPermission("dictum:info:remove")
     @Log(title = "删除随笔信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

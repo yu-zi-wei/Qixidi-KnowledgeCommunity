@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.comment.ArticleCommentBo;
 import com.qixidi.business.domain.vo.comment.ArticleCommentVo;
@@ -40,6 +41,7 @@ public class ArticleCommentController {
     /**
      * 查询文章评论列表（join 评论人/文章标题展示字段）
      */
+    @PermName("文章评论-查询")
     @SaCheckPermission("article:comment:query")
     @PostMapping("/list")
     public TableDataInfo<ArticleCommentVo> list(@Validated(QueryGroup.class) @RequestBody ArticleCommentBo bo) {
@@ -49,6 +51,7 @@ public class ArticleCommentController {
     /**
      * 导出文章评论列表
      */
+    @PermName("文章评论-导出")
     @SaCheckPermission("article:comment:export")
     @Log(title = "导出文章评论", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -63,6 +66,7 @@ public class ArticleCommentController {
      * @param id
      * @return
      */
+    @PermName("文章评论-查询")
     @SaCheckPermission("article:comment:query")
     @GetMapping("/{id}")
     public ArticleCommentVo getInfo(@PathVariable("id") Long id) {
@@ -76,6 +80,7 @@ public class ArticleCommentController {
      * @return
      * @throws Exception
      */
+    @PermName("文章评论-新增")
     @SaCheckPermission("article:comment:add")
     @Log(title = "新增文章评论", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -90,6 +95,7 @@ public class ArticleCommentController {
      * @param bo
      * @return
      */
+    @PermName("文章评论-编辑")
     @SaCheckPermission("article:comment:edit")
     @Log(title = "修改文章评论", businessType = BusinessType.UPDATE)
     @RepeatSubmit()

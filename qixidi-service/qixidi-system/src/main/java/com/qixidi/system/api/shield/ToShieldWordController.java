@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.shield.ToShieldWordBo;
 import com.qixidi.business.domain.vo.shield.ToShieldWordVo;
 import com.qixidi.business.service.shield.IToShieldWordService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -42,6 +43,7 @@ public class ToShieldWordController {
     /**
      * 查询屏蔽池库列表
      */
+    @PermName("屏蔽词-列表")
     @SaCheckPermission("shield:shieldWord:list")
     @PostMapping("/list")
     public TableDataInfo<ToShieldWordVo> list(@Validated(QueryGroup.class) @RequestBody ToShieldWordBo bo) {
@@ -52,6 +54,7 @@ public class ToShieldWordController {
     /**
      * 导出屏蔽词库列表
      */
+    @PermName("屏蔽词-导出")
     @SaCheckPermission("shield:shieldWord:export")
     @Log(title = "导出屏蔽词", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -63,6 +66,7 @@ public class ToShieldWordController {
     /**
      * 获取屏蔽词库详细信息
      */
+    @PermName("屏蔽词-查询")
     @SaCheckPermission("shield:shieldWord:query")
     @GetMapping("/{id}")
     public ToShieldWordVo getInfo(@PathVariable("id") Long id) {
@@ -72,6 +76,7 @@ public class ToShieldWordController {
     /**
      * 新增屏蔽词库
      */
+    @PermName("屏蔽词-新增")
     @SaCheckPermission("shield:shieldWord:add")
     @Log(title = "新增屏蔽词", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -83,6 +88,7 @@ public class ToShieldWordController {
     /**
      * 修改屏蔽池库
      */
+    @PermName("屏蔽词-编辑")
     @SaCheckPermission("shield:shieldWord:edit")
     @Log(title = "修改屏蔽词", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -94,6 +100,7 @@ public class ToShieldWordController {
     /**
      * 删除屏蔽词库
      */
+    @PermName("屏蔽词-删除")
     @SaCheckPermission("shield:shieldWord:remove")
     @Log(title = "删除屏蔽词", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

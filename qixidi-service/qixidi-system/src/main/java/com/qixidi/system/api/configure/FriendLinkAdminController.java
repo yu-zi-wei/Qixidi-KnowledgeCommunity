@@ -8,6 +8,7 @@ import com.light.core.core.validate.QueryGroup;
 import com.light.core.enums.BusinessType;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.FriendLinkBo;
 import com.qixidi.business.domain.vo.FriendLinkVo;
@@ -42,6 +43,7 @@ public class FriendLinkAdminController {
     /**
      * 友链分页列表（名称模糊 + 状态多选筛选）
      */
+    @PermName("友情链接-查询")
     @SaCheckPermission("friendLink:query")
     @PostMapping("/list")
     public TableDataInfo<FriendLinkVo> list(@Validated(QueryGroup.class) @RequestBody FriendLinkBo bo) {
@@ -51,6 +53,7 @@ public class FriendLinkAdminController {
     /**
      * 友链详情
      */
+    @PermName("友情链接-查询")
     @SaCheckPermission("friendLink:query")
     @GetMapping("/{id}")
     public FriendLinkVo getInfo(@PathVariable("id") Long id) {
@@ -60,6 +63,7 @@ public class FriendLinkAdminController {
     /**
      * 新增友链
      */
+    @PermName("友情链接-新增")
     @SaCheckPermission("friendLink:add")
     @Log(title = "新增友链", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -71,6 +75,7 @@ public class FriendLinkAdminController {
     /**
      * 修改友链
      */
+    @PermName("友情链接-编辑")
     @SaCheckPermission("friendLink:edit")
     @Log(title = "修改友链", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -82,6 +87,7 @@ public class FriendLinkAdminController {
     /**
      * 删除友链
      */
+    @PermName("友情链接-删除")
     @SaCheckPermission("friendLink:remove")
     @Log(title = "删除友链", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

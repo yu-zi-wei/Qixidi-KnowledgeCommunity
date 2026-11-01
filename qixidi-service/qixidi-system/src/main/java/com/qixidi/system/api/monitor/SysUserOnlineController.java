@@ -8,6 +8,7 @@ import com.light.core.core.domain.dto.UserOnlineDTO;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.system.domain.entity.SysUserOnline;
@@ -35,6 +36,7 @@ public class SysUserOnlineController {
      * @param userName
      * @return
      */
+    @PermName("在线用户-列表")
     @SaCheckPermission("monitor:online:list")
     @GetMapping("/list")
     public TableDataInfo<SysUserOnline> list(String ipaddr, String userName) {
@@ -72,6 +74,7 @@ public class SysUserOnlineController {
     /**
      * 强退用户
      */
+    @PermName("在线用户-强制下线")
     @SaCheckPermission("monitor:online:forceLogout")
     @Log(title = "强退在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")

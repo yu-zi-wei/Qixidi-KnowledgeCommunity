@@ -1,6 +1,7 @@
 package com.qixidi.system.api;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.system.config.PermissionScanner;
 import com.qixidi.system.domain.vo.PermGroupVo;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class SysPermController {
     /**
      * 按模块分组的权限码清单（角色管理勾选树数据源）
      */
+    @PermName("角色-查询")
     @SaCheckPermission("role:query")
     @GetMapping("/list")
     public List<PermGroupVo> list() {

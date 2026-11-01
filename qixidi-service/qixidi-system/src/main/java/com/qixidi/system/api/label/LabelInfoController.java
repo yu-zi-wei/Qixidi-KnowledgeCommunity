@@ -10,6 +10,7 @@ import com.light.core.enums.BusinessType;
 import com.light.excel.utils.ExcelUtil;
 import com.light.redission.annotation.RepeatSubmit;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.bo.label.LabelInfoBo;
 import com.qixidi.business.domain.bo.label.LabelMergeBo;
@@ -49,6 +50,7 @@ public class LabelInfoController {
     /**
      * 导出标签信息列表
      */
+    @PermName("标签-导出")
     @SaCheckPermission("labelInfo:export")
     @Log(title = "导出标签信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -60,6 +62,7 @@ public class LabelInfoController {
     /**
      * 获取标签信息详细信息
      */
+    @PermName("标签-查询")
     @SaCheckPermission("labelInfo:query")
     @GetMapping("/{id}")
     public LabelInfoVo getInfo(@PathVariable("id") Long id) {
@@ -69,6 +72,7 @@ public class LabelInfoController {
     /**
      * 新增标签信息
      */
+    @PermName("标签-新增")
     @SaCheckPermission("labelInfo:add")
     @Log(title = "新增标签信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -80,6 +84,7 @@ public class LabelInfoController {
     /**
      * 修改标签信息
      */
+    @PermName("标签-编辑")
     @SaCheckPermission("labelInfo:edit")
     @Log(title = "修改标签信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -91,6 +96,7 @@ public class LabelInfoController {
     /**
      * 合并标签：源标签的文章挂载与关注迁移至目标标签后删除源标签
      */
+    @PermName("标签-合并")
     @SaCheckPermission("labelInfo:merge")
     @Log(title = "合并标签信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -102,6 +108,7 @@ public class LabelInfoController {
     /**
      * 删除标签信息
      */
+    @PermName("标签-删除")
     @SaCheckPermission("labelInfo:remove")
     @Log(title = "删除标签信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

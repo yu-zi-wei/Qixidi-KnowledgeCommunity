@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.special.SpecialInformationBo;
 import com.qixidi.business.domain.vo.special.SpecialInformationVo;
 import com.qixidi.business.service.special.ISpecialInformationService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -62,6 +63,7 @@ public class SpecialInformationController {
     /**
      * 导出专栏信息列表
      */
+    @PermName("专栏-导出")
     @SaCheckPermission("special:information:export")
     @Log(title = "导出专栏信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -73,6 +75,7 @@ public class SpecialInformationController {
     /**
      * 获取专栏信息详细信息
      */
+    @PermName("专栏-查询")
     @SaCheckPermission("special:information:query")
     @GetMapping("/{id}")
     public SpecialInformationVo getInfo(@PathVariable("id") Long id) {

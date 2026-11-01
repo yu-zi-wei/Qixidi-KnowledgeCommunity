@@ -6,6 +6,7 @@ import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.vo.collection.CollectionInformationVo;
 import com.qixidi.business.service.collection.ICollectionInformationService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -42,6 +43,7 @@ public class CollectionInformationController {
     /**
      * 查询收藏夹信息列表
      */
+    @PermName("收藏-列表")
     @SaCheckPermission("collection:information:list")
     @PostMapping("/list")
     public TableDataInfo<CollectionInformationVo> list(@Validated(QueryGroup.class) @RequestBody CollectionInformationBo bo) {
@@ -51,6 +53,7 @@ public class CollectionInformationController {
     /**
      * 导出收藏夹信息列表
      */
+    @PermName("收藏-导出")
     @SaCheckPermission("collection:information:export")
     @Log(title = "导出收藏夹信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +65,7 @@ public class CollectionInformationController {
     /**
      * 获取收藏夹信息详细信息
      */
+    @PermName("收藏-查询")
     @SaCheckPermission("collection:information:query")
     @GetMapping("/{id}")
     public CollectionInformationVo getInfo(@PathVariable("id") Long id) {

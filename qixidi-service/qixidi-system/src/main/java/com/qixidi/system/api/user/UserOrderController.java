@@ -5,6 +5,7 @@ import com.qixidi.business.domain.bo.user.UserOrderBo;
 import com.qixidi.business.domain.vo.user.UserOrderVo;
 import com.qixidi.business.service.user.IUserOrderService;
 import com.qixidi.auth.annotation.Log;
+import com.qixidi.auth.annotation.PermName;
 import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
@@ -41,6 +42,7 @@ public class UserOrderController {
     /**
      * 查询用户订单列表
      */
+    @PermName("订单-列表")
     @SaCheckPermission("order:list")
     @PostMapping("/list")
     public TableDataInfo<UserOrderVo> list(@Validated(QueryGroup.class) @RequestBody UserOrderBo bo) {
@@ -50,6 +52,7 @@ public class UserOrderController {
     /**
      * 导出用户订单列表
      */
+    @PermName("订单-导出")
     @SaCheckPermission("order:export")
     @Log(title = "导出用户订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -61,6 +64,7 @@ public class UserOrderController {
     /**
      * 获取用户订单详细信息
      */
+    @PermName("订单-查询")
     @SaCheckPermission("order:query")
     @GetMapping("/{id}")
     public UserOrderVo getInfo(@PathVariable("id") Long id) {
@@ -70,6 +74,7 @@ public class UserOrderController {
     /**
      * 新增用户订单
      */
+    @PermName("订单-新增")
     @SaCheckPermission("order:add")
     @Log(title = "新增用户订单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -81,6 +86,7 @@ public class UserOrderController {
     /**
      * 修改用户订单
      */
+    @PermName("订单-编辑")
     @SaCheckPermission("order:edit")
     @Log(title = "修改用户订单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -92,6 +98,7 @@ public class UserOrderController {
     /**
      * 删除用户订单
      */
+    @PermName("订单-删除")
     @SaCheckPermission("order:remove")
     @Log(title = "删除用户订单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
