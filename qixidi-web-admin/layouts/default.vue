@@ -11,7 +11,7 @@
         @collapse="collapsed = true"
         @expand="collapsed = false"
       >
-        <div class="logo flex items-center justify-center gap-2" :style="{ height: '56px' }">
+        <div class="logo" :style="{ height: '56px' }">
           <AdminLogo :size="26" />
           <span v-if="!collapsed" class="font-bold text-base">栖息地后台</span>
         </div>
@@ -117,6 +117,7 @@ const handleUserAction = (key: string) => {
   --hairline: rgba(255, 255, 255, 0.08);
   --sider-bg: #131820;
   --logo-bg: #8FA9C4;
+  --logo-ink: #131820;
   --panel-bg: #1a1a1e;
   --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   --scrollbar-thumb: rgba(255, 255, 255, 0.18);
@@ -128,6 +129,7 @@ const handleUserAction = (key: string) => {
   --hairline: #E8E4D9;
   --sider-bg: #EDEAE1;
   --logo-bg: #3D5A80;
+  --logo-ink: #FAF9F6;
   --panel-bg: #ffffff;
   --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   --scrollbar-thumb: #b9c4d4;
@@ -142,7 +144,12 @@ const handleUserAction = (key: string) => {
   }
 }
 
+/* Tailwind 工具类在本项目未编译生效，flex/gap 必须这里手写 */
 .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   border-bottom: 1px solid var(--hairline);
 }
 
