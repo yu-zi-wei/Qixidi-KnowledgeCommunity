@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qixidi.business.mapper.comment.NewsUserRecordMapper">
+
+    <!-- 后台用户消息管理分页：发送者=target_uid、接收者=uid，筛选列必须带 nur 别名（join 两侧同名列歧义） -->
+    <select id="selectSystemPage" resultType="com.qixidi.business.domain.vo.news.NewsUserRecordVo">
+        SELECT nur.id,
+               nur.type,
+               nur.content,
+               nur.been_read,
+               nur.create_time,
+               us.nickname AS senderName,
+               us.avatar   AS senderAvatar,
+               ur.nickname AS recipientName,
+               ur.avatar   AS recipientAvatar
+        FROM b_news_user_record nur
+                 LEFT JOIN b_user_main us ON nur.target_uid = us.uuid
+                 LEFT JOIN b_user_main ur ON nur.uid = ur.uuid
+        ${ew.getCustomSqlSegment}
+    </select>
+</mapper>

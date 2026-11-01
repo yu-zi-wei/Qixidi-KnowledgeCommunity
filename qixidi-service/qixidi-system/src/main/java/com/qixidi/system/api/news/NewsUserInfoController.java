@@ -2,7 +2,9 @@ package com.qixidi.system.api.news;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
+import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
+import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.annotation.LogModule;
@@ -97,5 +99,24 @@ public class NewsUserInfoController {
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iNewsUserInfoService.deleteWithValidByIds(Arrays.asList(ids), true);
+    }
+
+    /**
+     * 查询用户消息记录列表（b_news_user_record，发送者/接收者昵称头像 + 类型/用户名筛选）
+     */
+    @SaCheckPermission("news:userInfo:list")
+    @PostMapping("/record/list")
+    public TableDataInfo<NewsUserRecordVo> recordList(@RequestBody NewsUserRecordBo bo) {
+        return iNewsUserInfoService.recordPage(bo, bo);
+    }
+
+    /**
+     * 删除用户消息记录
+     */
+    @SaCheckPermission("news:userInfo:remove")
+    @Log(title = "删除用户消息记录", businessType = BusinessType.DELETE)
+    @DeleteMapping("/record/{ids}")
+    public void removeRecord(@PathVariable Long[] ids) {
+        iNewsUserInfoService.deleteRecordByIds(Arrays.asList(ids));
     }
 }

@@ -3,6 +3,7 @@ package com.qixidi.business.service.impl.news;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -18,6 +19,7 @@ import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
+import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.entity.news.NewsSystemRead;
 import com.qixidi.business.domain.entity.news.NewsUserInfo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
@@ -28,6 +30,7 @@ import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
+import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
@@ -142,6 +145,33 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    /**
+     * 后台管理：用户消息记录分页（b_news_user_record join 发送者/接收者，筛选列必须带 nur 别名）
+     */
+    @Override
+    public TableDataInfo<NewsUserRecordVo> recordPage(NewsUserRecordBo bo, PageQuery pageQuery) {
+        QueryWrapper<NewsUserRecord> wrapper = Wrappers.query();
+        wrapper.in(CollectionUtils.isNotEmpty(bo.getTypes()), "nur.type", bo.getTypes());
+        if (StringUtils.isNotBlank(bo.getUsername())) {
+            String keyword = bo.getUsername().trim();
+            wrapper.and(w -> w.like("us.nickname", keyword)
+                .or().like("us.username", keyword)
+                .or().like("ur.nickname", keyword)
+                .or().like("ur.username", keyword));
+        }
+        wrapper.orderByDesc("nur.create_time");
+        IPage<NewsUserRecordVo> result = newsUserRecordMapper.selectSystemPage(pageQuery.build(), wrapper);
+        return TableDataInfo.build(result);
+    }
+
+    /**
+     * 后台管理：批量删除用户消息记录
+     */
+    @Override
+    public Boolean deleteRecordByIds(Collection<Long> ids) {
+        return newsUserRecordMapper.deleteBatchIds(ids) > 0;
     }
 
 

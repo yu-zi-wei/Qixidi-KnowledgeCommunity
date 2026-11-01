@@ -2,7 +2,12 @@ package com.qixidi.business.mapper.comment;
 
 import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -15,6 +20,12 @@ import java.util.List;
  */
 @Mapper
 public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
+
+    /**
+     * 后台管理分页（join b_user_main 取发送者/接收者昵称头像，筛选条件见 NewsUserRecordBo，列名须带 nur 别名）
+     */
+    IPage<NewsUserRecordVo> selectSystemPage(Page<NewsUserRecord> page, @Param(Constants.WRAPPER) QueryWrapper<NewsUserRecord> wrapper);
+
     @Select("SELECT type,been_read,news_id from b_news_user_record where been_read=0 and uid=#{uid}")
     List<NewsUserRecord> selectLists(String uid);
 

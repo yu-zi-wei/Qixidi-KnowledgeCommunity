@@ -3,10 +3,12 @@ package com.qixidi.business.service.news;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
+import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
 import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
+import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.light.core.core.domain.PageQuery;
@@ -53,6 +55,16 @@ public interface INewsUserInfoService {
      * 校验并批量删除用户消息信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 后台管理：用户消息记录分页（b_news_user_record，join 发送者/接收者昵称头像，支持类型多选与用户名搜索）
+     */
+    TableDataInfo<NewsUserRecordVo> recordPage(NewsUserRecordBo bo, PageQuery pageQuery);
+
+    /**
+     * 后台管理：批量删除用户消息记录
+     */
+    Boolean deleteRecordByIds(Collection<Long> ids);
 
     List<NewsUserSumVo> listSum();
 
