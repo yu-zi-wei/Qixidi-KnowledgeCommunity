@@ -22,6 +22,8 @@ import {
   Folders,
   Book2,
   Shield,
+  ShieldCheck,
+  BellRinging,
   IdBadge,
   Activity,
   History,
@@ -125,7 +127,9 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     children: [
       { label: '角色管理', key: '/system/role', icon: Shield, perm: 'role:query' },
       { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' },
-      { label: '系统任务', key: '/system/task', icon: Clock }
+      { label: '系统任务', key: '/system/task', icon: Clock },
+      { label: '系统消息', key: '/system/message', icon: BellRinging, perm: 'news:systemInfo:list' },
+      { label: '屏蔽词库', key: '/system/shield-word', icon: ShieldCheck, perm: 'shield:shieldWord:list' }
     ]
   }
 ];
