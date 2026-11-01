@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.light.core.constant.SystemConstant;
 import com.light.core.utils.DateUtils;
 import com.light.core.utils.email.MailUtils;
+import com.light.webSocket.utils.WebSocketUtils;
 import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
+import com.qixidi.business.domain.entity.collection.CollectionInformation;
 import com.qixidi.business.domain.entity.dictum.DictumAlbum;
 import com.qixidi.business.domain.entity.dictum.DictumGroup;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
@@ -16,6 +18,7 @@ import com.qixidi.business.domain.enums.article.ArticleAuditStateEnums;
 import com.qixidi.business.mapper.SystemTaskConfigMapper;
 import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
+import com.qixidi.business.mapper.collection.CollectionInformationMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
@@ -55,6 +58,8 @@ public class StatTask {
     private SystemTaskConfigMapper systemTaskConfigMapper;
     @Autowired
     private TimeNotesMapper timeNotesMapper;
+    @Autowired
+    private CollectionInformationMapper collectionInformationMapper;
 
     /**
      * 更新网站每日数据
@@ -72,6 +77,10 @@ public class StatTask {
             Long dictumAlbumCount = dictumAlbumMapper.selectCount(new LambdaQueryWrapper<DictumAlbum>().eq(DictumAlbum::getState, StatusEnums.NORMAL.getCode()));
             Long dictumInfoCount = dictumInfoMapper.selectCount(new LambdaQueryWrapper<DictumInfo>().eq(DictumInfo::getState, StatusEnums.NORMAL.getCode()));
             Long timeNotesCount = timeNotesMapper.selectCount(null);
+            // 收藏夹总数（正常状态）与在线用户总数——此前从不赋值导致这两列长期 NULL/0
+            Long favoritesCount = collectionInformationMapper.selectCount(new LambdaQueryWrapper<CollectionInformation>()
+                    .eq(CollectionInformation::getState, StatusEnums.NORMAL.getCode()));
+            Long onlineUserCount = (long) WebSocketUtils.getAllSession().size();
             StatDataInfo statDataInfo = new StatDataInfo()
                     .setArticleCount(articleCount)
                     .setUserCount(userCount)
@@ -80,7 +89,9 @@ public class StatTask {
                     .setDictumGroupCount(dictumGroupCount)
                     .setDictumAlbumCount(dictumAlbumCount)
                     .setTimeNotesCount(timeNotesCount)
-                    .setDictumCount(dictumInfoCount);
+                    .setDictumCount(dictumInfoCount)
+                    .setFavoritesCount(favoritesCount)
+                    .setOnlineUserCount(onlineUserCount);
             statDataInfoMapper.insertUpdate(statDataInfo);
             systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.UPDATE_WEBSITE_DAILY_DATA.getCode());
         } catch (Exception e) {
