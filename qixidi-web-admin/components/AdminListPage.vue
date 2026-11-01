@@ -9,6 +9,7 @@
           <n-input
             v-if="f.type === 'input'"
             v-model:value="formModel[f.key]"
+            size="small"
             :style="{ width: fieldWidth(f) }"
             clearable
             :placeholder="f.placeholder || `请输入${f.label}`"
@@ -17,6 +18,7 @@
           <n-select
             v-else-if="f.type === 'multiple'"
             v-model:value="formModel[f.key]"
+            size="small"
             :style="{ width: fieldWidth(f) }"
             clearable
             multiple
@@ -30,14 +32,15 @@
             v-else-if="f.type === 'daterange'"
             v-model:value="formModel[f.key]"
             type="daterange"
+            size="small"
             clearable
             :style="{ width: fieldWidth(f) }"
           />
         </div>
 
         <div class="alp-search-actions">
-          <n-button @click="resetSearch">重置</n-button>
-          <n-button type="primary" :loading="loading" @click="doSearch">
+          <n-button size="small" @click="resetSearch">重置</n-button>
+          <n-button size="small" type="primary" :loading="loading" @click="doSearch">
             <template #icon><n-icon><Search /></n-icon></template>
             查询
           </n-button>

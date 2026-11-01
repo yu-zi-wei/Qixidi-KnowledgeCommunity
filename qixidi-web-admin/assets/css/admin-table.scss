@@ -148,12 +148,16 @@
   white-space: nowrap;
 }
 
-// 操作列：文字链接按钮组（紧凑排布）
+// 操作列：文字链接按钮组（紧凑排布；字号压至 13px 弱化按钮感，与正文区分）
 .cell-btns {
   display: flex;
   align-items: center;
   gap: 10px;
   white-space: nowrap;
+
+  .n-button {
+    font-size: 13px;
+  }
 }
 
 // 等宽字体（IP/UID/参数键名等代码型字段的 render 与 teleport 场景共享）
