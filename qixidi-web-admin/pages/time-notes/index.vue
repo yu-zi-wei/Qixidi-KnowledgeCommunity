@@ -235,7 +235,7 @@ const columns: DataTableColumns<TimeNotesRow> = [
 
   // teleport 抽屉内主题变量不可用，用布局根注入的链接色变量兜底
   .detail-link {
-    color: var(--cell-link, #1e66c4);
+    color: var(--cell-link, #0363ff);
     font-size: 13px;
     text-decoration: none;
   }

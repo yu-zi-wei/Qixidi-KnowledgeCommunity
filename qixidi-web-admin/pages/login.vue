@@ -127,7 +127,7 @@ onMounted(loadCaptcha);
 .login-page {
   background: #FAF9F6;
   /* 不套布局（layout:false），logo 底色变量在此自注入（= 浅色主蓝） */
-  --logo-bg: #1E66C4;
+  --logo-bg: #0363FF;
 }
 
 .login-title {

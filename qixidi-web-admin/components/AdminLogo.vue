@@ -32,6 +32,6 @@ withDefaults(defineProps<{ size?: number }>(), { size: 26 });
 
 <style scoped>
 .logo-tree {
-  fill: var(--logo-bg, #1e66c4);
+  fill: var(--logo-bg, #0363ff);
 }
 </style>

@@ -20,16 +20,16 @@ const THEME_KEY = 'admin-theme';
 /**
  * 极简书签风（2026-11-01 三次修订）：暖纸底色系——内容区 #FAF9F6、侧栏米白 #EDEAE1
  * （布局根注入 --sider-bg），区块是白纸片卡片（细暖灰边框、无阴影）；
- * 正蓝 #1E66C4 只做交互点缀（链接/选中态/焦点/唯一主按钮），与暖纸底冷暖互补。
+ * 正蓝 #0363FF 只做交互点缀（链接/选中态/焦点/唯一主按钮），与暖纸底冷暖互补。
  * 深色模式保留黑白灰骨架。非 Naive 上下文的硬编码色（admin-table.scss 的 .is-link 等）
  * 用布局根注入的 --cell-link / --hairline 变量，与此处 primaryColor 保持同源。
  */
 const lightOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#1E66C4',
-    primaryColorHover: '#3D7AD9',
-    primaryColorPressed: '#17529E',
-    primaryColorSuppl: '#1E66C4',
+    primaryColor: '#0363FF',
+    primaryColorHover: '#2B82FF',
+    primaryColorPressed: '#024FCC',
+    primaryColorSuppl: '#0363FF',
     bodyColor: '#FAF9F6',
     cardColor: '#ffffff',
     borderColor: '#E8E4D9',
@@ -40,23 +40,23 @@ const lightOverrides: GlobalThemeOverrides = {
     thColor: '#ffffff',
     tdColor: '#ffffff',
     thColorHover: '#ffffff',
-    tdColorHover: '#EDF3FB',
+    tdColorHover: '#F0F6FF',
     borderColor: '#E8E4D9',
     thTextColor: 'rgba(30, 41, 59, 0.55)'
   },
   Menu: {
-    itemColorActive: '#DBE7F7',
-    itemColorActiveHover: '#CFDCF5',
+    itemColorActive: '#E1ECFF',
+    itemColorActiveHover: '#D6E5FF',
     itemColorHover: 'rgba(30, 41, 59, 0.05)'
   }
 };
 
 const darkOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#6EA8E8',
-    primaryColorHover: '#85B6EC',
-    primaryColorPressed: '#5891D4',
-    primaryColorSuppl: '#6EA8E8',
+    primaryColor: '#5C9AFF',
+    primaryColorHover: '#7BAFFF',
+    primaryColorPressed: '#4785E0',
+    primaryColorSuppl: '#5C9AFF',
     bodyColor: '#111113',
     cardColor: '#1a1a1e',
     modalColor: '#1e1e24',
