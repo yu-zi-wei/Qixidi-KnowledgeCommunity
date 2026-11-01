@@ -90,6 +90,17 @@ public class NewsSystemInfoController {
     }
 
     /**
+     * 失效/恢复系统消息（终审操作：只切 state，生效消息前台立即隐藏/恢复）
+     */
+    @SaCheckPermission("news:systemInfo:edit")
+    @Log(title = "失效或恢复系统消息", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PutMapping("/state")
+    public void updateState(@RequestBody NewsSystemInfoBo bo) {
+        iNewsSystemInfoService.updateState(bo.getId(), bo.getState());
+    }
+
+    /**
      * 删除系统消息
      */
     @SaCheckPermission("news:systemInfo:remove")

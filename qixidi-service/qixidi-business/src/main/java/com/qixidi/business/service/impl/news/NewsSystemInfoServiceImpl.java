@@ -9,6 +9,9 @@ import com.qixidi.business.service.news.INewsSystemInfoService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
+import com.light.webSocket.domain.enums.WebSocketEnum;
+import com.light.webSocket.selector.WebSocketSelector;
+import com.light.webSocket.utils.WebSocketUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -70,16 +73,18 @@ public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
 
     private LambdaQueryWrapper<NewsSystemInfo> buildQueryWrapper(NewsSystemInfoBo bo) {
         LambdaQueryWrapper<NewsSystemInfo> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getNewsTitle()), NewsSystemInfo::getNewsTitle, bo.getNewsTitle());
-        lqw.eq(StringUtils.isNotBlank(bo.getNewsContent()), NewsSystemInfo::getNewsContent, bo.getNewsContent());
-        lqw.eq(bo.getIsDetails() != null, NewsSystemInfo::getIsDetails, bo.getIsDetails());
-        lqw.eq(bo.getType() != null, NewsSystemInfo::getType, bo.getType());
-        lqw.eq(bo.getLapseTime() != null, NewsSystemInfo::getLapseTime, bo.getLapseTime());
+        lqw.like(StringUtils.isNotBlank(bo.getNewsTitle()), NewsSystemInfo::getNewsTitle, bo.getNewsTitle());
+        lqw.eq(bo.getIsMassAir() != null, NewsSystemInfo::getIsMassAir, bo.getIsMassAir());
+        lqw.eq(bo.getState() != null, NewsSystemInfo::getState, bo.getState());
+        lqw.orderByDesc(NewsSystemInfo::getCreateTime);
         return lqw;
     }
 
     /**
-     * 新增系统消息
+     * 新增系统消息（后台群发）
+     * <p>
+     * 前台消费链路只认 type=2 + is_mass_air=1（selectUid/selectBaseUid 的过滤条件），
+     * 这里统一固化；is_details 门户无消费固定 1。保存即对全体用户可见。
      *
      * @param bo 系统消息
      * @return 结果
@@ -87,17 +92,45 @@ public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
     @Override
     public Boolean insertByBo(NewsSystemInfoBo bo) {
         NewsSystemInfo add = BeanUtil.toBean(bo, NewsSystemInfo.class);
+        add.setType(2L);
+        add.setIsMassAir(1L);
+        add.setState(0L);
+        add.setUid(null);
+        if (add.getIsDetails() == null) {
+            add.setIsDetails(1L);
+        }
         add.setCreateTime(new Date());
-//        存入redis
-        depositNewsRedis(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
+            // 给所有在线用户推红点（未读消息数刷新），离线用户下次拉取自然可见
+            for (String uid : WebSocketUtils.getAllSession().keySet()) {
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uid);
+            }
         }
         return flag;
     }
-    public void depositNewsRedis(NewsSystemInfo newsSystemInfo) {
 
+    /**
+     * 失效/恢复系统消息（终审操作：只切 state，不触碰内容）
+     *
+     * @param id    系统消息主键
+     * @param state 目标状态（0：生效，1：失效）
+     * @return 结果
+     */
+    @Override
+    public Boolean updateState(Long id, Long state) {
+        NewsSystemInfo update = new NewsSystemInfo();
+        update.setId(id);
+        update.setState(state);
+        boolean flag = baseMapper.updateById(update) > 0;
+        if (flag) {
+            // 状态变化影响全员消息列表，在线用户推送刷新
+            for (String uid : WebSocketUtils.getAllSession().keySet()) {
+                WebSocketSelector.execute(WebSocketEnum.INSIDE_NOTICE).execute(uid);
+            }
+        }
+        return flag;
     }
 
     /**

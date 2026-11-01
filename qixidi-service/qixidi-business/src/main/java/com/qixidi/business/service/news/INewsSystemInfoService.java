@@ -57,6 +57,15 @@ public interface INewsSystemInfoService {
     Boolean updateByBo(NewsSystemInfoBo bo);
 
     /**
+     * 失效/恢复系统消息（终审操作：只切 state）
+     *
+     * @param id    系统消息主键
+     * @param state 目标状态（0：生效，1：失效）
+     * @return 结果
+     */
+    Boolean updateState(Long id, Long state);
+
+    /**
      * 校验并批量删除系统消息信息
      *
      * @param ids 需要删除的系统消息主键集合

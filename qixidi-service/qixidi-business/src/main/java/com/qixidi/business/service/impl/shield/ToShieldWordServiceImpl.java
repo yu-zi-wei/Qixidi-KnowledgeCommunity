@@ -94,6 +94,7 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
+            ShieldWordRefresh();
         }
         return flag;
     }
@@ -107,7 +108,11 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
     @Override
     public Boolean updateByBo(ToShieldWordBo bo) {
         ToShieldWord update = BeanUtil.toBean(bo, ToShieldWord.class);
-        return baseMapper.updateById(update) > 0;
+        boolean flag = baseMapper.updateById(update) > 0;
+        if (flag) {
+            ShieldWordRefresh();
+        }
+        return flag;
     }
 
     /**
@@ -118,7 +123,11 @@ public class ToShieldWordServiceImpl implements IToShieldWordService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return baseMapper.deleteBatchIds(ids) > 0;
+        boolean flag = baseMapper.deleteBatchIds(ids) > 0;
+        if (flag) {
+            ShieldWordRefresh();
+        }
+        return flag;
     }
 
     /**
