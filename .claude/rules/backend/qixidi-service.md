@@ -148,7 +148,7 @@ public interface DataMapper extends BaseMapperPlus<DataMapper, DataEntity, DataV
 - **join 列表（selectUserName/selectIndex 等自定义 XML）的 QueryWrapper 条件列必须带主表别名**（如 `si.state`）：join 两侧同名列（state/uid/create_time）裸写列名会歧义 500，且只在传该筛选条件时才炸
 - **用户统计走 `UserCountQueryHelper`**：新增统计字段三处同步——`CountUserWebsiteVo` 加字段 → Mapper 加 `selectXxxCountByUserIds`（XML）→ helper 加方法**并在 `allCounts()` 里 merge**
 - **`CensusVo` 是通用时间序列货币**（dateTimes/censusSum/title），趋势类接口直接复用
-- **本机 `mysql.exe` CLI 会挂起**：验证 SQL 用"`mvn clean compile` + 启动成功"代替（MyBatis 启动期绑定 XML，`Invalid bound statement` 起不来就是绑定失败）
+- **本机 `mysql.exe` CLI 会挂起**：验证 SQL 用 pymysql 脚本（库名 `qixidi_admin`），**连接必须 `autocommit=True`**——默认 False + REPEATABLE READ 下，HTTP 触发的落库在脚本旧事务快照里不可见（COUNT 静默 0，实证已读落库验证误报两次）；XML 绑定验证仍靠 "`mvn clean compile` + 启动成功"（`Invalid bound statement` 起不来就是绑定失败）
 
 ---
 
