@@ -17,10 +17,18 @@ export interface RoleRow {
   perms?: string[];
 }
 
+/** 权限码条目（code 勾选/提交用，label 后端按词根推导的中文展示名） */
+export interface PermItem {
+  code: string;
+  label: string;
+}
+
 /** 权限分组（GET /system/perm/list，后端启动扫描 @SaCheckPermission 产出） */
 export interface PermGroup {
   module: string;
-  perms: string[];
+  /** 分组中文标题（口径与侧栏菜单一致） */
+  moduleLabel: string;
+  perms: PermItem[];
 }
 
 export const ROLE_STATUS_MAP: Record<string, { label: string; type: 'success' | 'error' }> = {

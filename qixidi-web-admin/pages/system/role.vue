@@ -51,14 +51,16 @@
                 :indeterminate="isGroupInd(g)"
                 @update:checked="(v: boolean) => toggleGroup(g, v)"
               >
-                {{ g.module }}
+                {{ g.moduleLabel }}<span class="role-perm-module">{{ g.module }}</span>
               </n-checkbox>
               <n-checkbox-group
                 :value="form.perms"
                 class="role-perm-items"
                 @update:value="(v: Array<string | number>) => (form.perms = v.map(String))"
               >
-                <n-checkbox v-for="p in g.perms" :key="p" :value="p" :label="p" />
+                <n-checkbox v-for="p in g.perms" :key="p.code" :value="p.code">
+                  <span :title="p.code">{{ p.label }}</span>
+                </n-checkbox>
               </n-checkbox-group>
             </div>
             <n-empty v-if="!permLoading && !permGroups.length" description="暂无权限码（后端扫描 @SaCheckPermission 注册）" />
@@ -209,11 +211,11 @@ const rules: FormRules = {
 };
 
 /** 组内是否全选 / 半选 */
-const isGroupAll = (g: PermGroup) => g.perms.every((p) => form.perms.includes(p));
-const isGroupInd = (g: PermGroup) => !isGroupAll(g) && g.perms.some((p) => form.perms.includes(p));
+const isGroupAll = (g: PermGroup) => g.perms.every((p) => form.perms.includes(p.code));
+const isGroupInd = (g: PermGroup) => !isGroupAll(g) && g.perms.some((p) => form.perms.includes(p.code));
 const toggleGroup = (g: PermGroup, checked: boolean) => {
   const set = new Set(form.perms);
-  g.perms.forEach((p) => (checked ? set.add(p) : set.delete(p)));
+  g.perms.forEach((p) => (checked ? set.add(p.code) : set.delete(p.code)));
   form.perms = [...set];
 };
 
@@ -284,5 +286,12 @@ const handleSave = () => {
   flex-wrap: wrap;
   gap: 4px 18px;
   padding-left: 24px;
+}
+
+/* 分组标题旁的模块英文原码（弱化展示，便于与代码对照） */
+.role-perm-module {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: 0.4;
 }
 </style>
