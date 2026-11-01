@@ -42,6 +42,11 @@ public class ToNavigationBo extends BaseEntity {
     private String navigationIcon;
 
     /**
+     * 图标颜色
+     */
+    private String iconColor;
+
+    /**
      * 路由地址
      */
     @NotBlank(message = "路由地址不能为空", groups = {AddGroup.class, EditGroup.class})

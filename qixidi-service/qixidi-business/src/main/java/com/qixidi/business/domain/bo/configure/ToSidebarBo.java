@@ -42,6 +42,11 @@ public class ToSidebarBo extends BaseEntity {
     private String sidebarIcon;
 
     /**
+     * 图标颜色
+     */
+    private String iconColor;
+
+    /**
      * 排序
      */
     private Long order;

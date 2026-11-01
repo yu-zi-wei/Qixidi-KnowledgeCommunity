@@ -1,5 +1,6 @@
 package com.qixidi.business.domain.entity.configure;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -30,6 +31,7 @@ public class ToNavigation {
     /**
      * 父级路由地址
      */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Long parentId;
     /**
      * 导航栏名称
