@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-list-page">
+  <div class="admin-list-page" :class="{ 'admin-list-page--fill': fill }">
     <!-- 搜索区：书签纸片（--panel-bg + 暖灰细边框，--hairline 由布局根注入） -->
     <div class="alp-search-card">
       <div class="alp-search-form">
@@ -124,6 +124,8 @@ const props = withDefaults(
     defaultPageSize?: number;
     /** 挂载即加载 */
     immediate?: boolean;
+    /** 高度撑满父容器（嵌入 tab 等限高容器时用，替代默认的视口 calc） */
+    fill?: boolean;
   }>(),
   {
     rowKey: 'id',
@@ -132,7 +134,8 @@ const props = withDefaults(
     scrollX: undefined,
     pageSizes: () => [50, 100, 200],
     defaultPageSize: 50,
-    immediate: true
+    immediate: true,
+    fill: false
   }
 );
 
@@ -269,6 +272,11 @@ defineExpose({
   gap: 12px;
 }
 
+/* fill 模式：高度交给父容器（如 tab pane）分配 */
+.admin-list-page--fill {
+  height: 100%;
+}
+
 /* 搜索区：书签纸片（无边框，靠底色明度差 + 轻投影分层） */
 .alp-search-card {
   flex-shrink: 0;
@@ -366,6 +374,10 @@ defineExpose({
   .admin-list-page {
     height: auto;
     min-height: calc(100vh - 88px);
+  }
+
+  .admin-list-page--fill {
+    min-height: 0;
   }
 
   .alp-search-actions {

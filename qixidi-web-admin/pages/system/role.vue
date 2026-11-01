@@ -22,16 +22,21 @@
         <n-form-item label="权限字符" path="roleKey">
           <n-input v-model:value="form.roleKey" placeholder="请输入权限字符（英文标识，如 editor）" :maxlength="100" />
         </n-form-item>
+        <!-- n-grid 子节点必须是 n-gi（grid item）：直接放 n-form-item 会被静默丢弃不渲染 -->
         <n-grid :cols="2" :x-gap="16">
-          <n-form-item label="显示顺序" path="roleSort">
-            <n-input-number v-model:value="form.roleSort" :min="0" class="role-full" />
-          </n-form-item>
-          <n-form-item label="状态" path="status">
-            <n-radio-group v-model:value="form.status">
-              <n-radio value="0">正常</n-radio>
-              <n-radio value="1">停用</n-radio>
-            </n-radio-group>
-          </n-form-item>
+          <n-gi>
+            <n-form-item label="显示顺序" path="roleSort">
+              <n-input-number v-model:value="form.roleSort" :min="0" class="role-full" />
+            </n-form-item>
+          </n-gi>
+          <n-gi>
+            <n-form-item label="状态" path="status">
+              <n-radio-group v-model:value="form.status">
+                <n-radio value="0">正常</n-radio>
+                <n-radio value="1">停用</n-radio>
+              </n-radio-group>
+            </n-form-item>
+          </n-gi>
         </n-grid>
         <n-form-item label="备注" path="remark">
           <n-input v-model:value="form.remark" type="textarea" :rows="2" placeholder="请输入备注" />

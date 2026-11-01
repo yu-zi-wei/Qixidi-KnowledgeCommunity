@@ -33,7 +33,6 @@ import {
   Photo,
   Columns,
   Compass,
-  LayoutSidebar,
   Tool,
   Clock
 } from '@vicons/tabler';
@@ -105,8 +104,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     icon: Compass,
     children: [
       { label: '友链管理', key: '/friend-link', icon: Link, perm: 'friendLink:query' },
-      { label: '导航配置', key: '/navigation', icon: Compass },
-      { label: '侧边栏配置', key: '/sidebar', icon: LayoutSidebar },
+      { label: '导航与侧边栏', key: '/navigation', icon: Compass },
       { label: '工具管理', key: '/tool', icon: Tool, perm: 'toolInfo:list' }
     ]
   },

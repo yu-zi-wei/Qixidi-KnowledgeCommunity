@@ -42,34 +42,43 @@
         <n-form-item label="图标地址" path="icon">
           <n-input v-model:value="form.icon" placeholder="图标图片 URL（可选）" />
         </n-form-item>
+        <!-- n-grid 子节点必须是 n-gi（grid item）：直接放 n-form-item 会被静默丢弃不渲染 -->
         <n-grid :cols="2" :x-gap="16">
-          <n-form-item label="层级" path="isParent">
-            <n-radio-group v-model:value="form.isParent">
-              <n-radio :value="1">父级分组</n-radio>
-              <n-radio :value="2">子级工具</n-radio>
-            </n-radio-group>
-          </n-form-item>
-          <n-form-item label="父级分组" path="parentId">
-            <n-select
-              v-model:value="form.parentId"
-              :options="parentOptions"
-              :disabled="form.isParent === 1"
-              placeholder="父级分组（仅子级可选）"
-              clearable
-              class="tool-full"
-            />
-          </n-form-item>
+          <n-gi>
+            <n-form-item label="层级" path="isParent">
+              <n-radio-group v-model:value="form.isParent">
+                <n-radio :value="1">父级分组</n-radio>
+                <n-radio :value="2">子级工具</n-radio>
+              </n-radio-group>
+            </n-form-item>
+          </n-gi>
+          <n-gi>
+            <n-form-item label="父级分组" path="parentId">
+              <n-select
+                v-model:value="form.parentId"
+                :options="parentOptions"
+                :disabled="form.isParent === 1"
+                placeholder="父级分组（仅子级可选）"
+                clearable
+                class="tool-full"
+              />
+            </n-form-item>
+          </n-gi>
         </n-grid>
         <n-grid :cols="2" :x-gap="16">
-          <n-form-item label="排序" path="order">
-            <n-input-number v-model:value="form.order" :min="0" class="tool-full" />
-          </n-form-item>
-          <n-form-item label="状态" path="state">
-            <n-radio-group v-model:value="form.state">
-              <n-radio :value="0">正常</n-radio>
-              <n-radio :value="1">已失效</n-radio>
-            </n-radio-group>
-          </n-form-item>
+          <n-gi>
+            <n-form-item label="排序" path="order">
+              <n-input-number v-model:value="form.order" :min="0" class="tool-full" />
+            </n-form-item>
+          </n-gi>
+          <n-gi>
+            <n-form-item label="状态" path="state">
+              <n-radio-group v-model:value="form.state">
+                <n-radio :value="0">正常</n-radio>
+                <n-radio :value="1">已失效</n-radio>
+              </n-radio-group>
+            </n-form-item>
+          </n-gi>
         </n-grid>
       </n-form>
       <template #footer>
