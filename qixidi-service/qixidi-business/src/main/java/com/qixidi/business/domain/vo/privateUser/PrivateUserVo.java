@@ -25,6 +25,16 @@ public class PrivateUserVo extends PrivateUser {
     private Integer unreadCount = 0;
 
     /**
+     * 发起方用户名称（后台全站会话列表展示用）
+     */
+    private String uidName;
+
+    /**
+     * 发起方用户头像（后台全站会话列表展示用）
+     */
+    private String uidAvatar;
+
+    /**
      * 目标用户名称
      */
     private String targetName;

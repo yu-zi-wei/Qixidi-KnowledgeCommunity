@@ -1,5 +1,6 @@
 package com.qixidi.system.api.privateUser;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.qixidi.business.domain.bo.privateUser.PrivateNewsInfoBo;
 import com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo;
 import com.qixidi.business.service.privateUser.IPrivateNewsInfoService;
@@ -38,11 +39,12 @@ public class PrivateNewsInfoController {
     private final IPrivateNewsInfoService iPrivateNewsInfoService;
 
     /**
-     * 查询私信记录列表
+     * 查询私信消息列表（后台全站视角，双方昵称/头像 join 展示）
      */
+    @SaCheckPermission("private:news:query")
     @PostMapping("/list")
     public TableDataInfo<PrivateNewsInfoVo> list(@Validated(QueryGroup.class) @RequestBody PrivateNewsInfoBo bo) {
-        return iPrivateNewsInfoService.queryPageList(bo, bo);
+        return iPrivateNewsInfoService.adminQueryPageList(bo, bo);
     }
 
     /**
@@ -86,7 +88,8 @@ public class PrivateNewsInfoController {
     /**
      * 删除私信记录
      */
-    @Log(title = "删除私信记录", businessType = BusinessType.DELETE)
+    @SaCheckPermission("private:news:remove")
+    @Log(title = "删除私信消息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public void remove(@PathVariable Long[] ids) {
         iPrivateNewsInfoService.deleteWithValidByIds(Arrays.asList(ids), true);

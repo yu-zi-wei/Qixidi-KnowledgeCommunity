@@ -37,6 +37,11 @@ public class PrivateUserBo extends BaseEntity {
     @NotBlank(message = "目标用户id不能为空", groups = {AddGroup.class, EditGroup.class})
     private String targetUid;
 
+    /**
+     * 最后一条消息模糊筛选（后台列表页）
+     */
+    private String lastNewsLike;
+
 
 }
 

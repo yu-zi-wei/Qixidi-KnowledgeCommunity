@@ -119,7 +119,8 @@ public class SpecialInformationServiceImpl implements ISpecialInformationService
         lqw.like(StringUtils.isNotBlank(bo.getSpecialName()), "special_name", bo.getSpecialName());
         lqw.like(StringUtils.isNotBlank(bo.getUsername()), "um.nickname", bo.getUsername());
         lqw.eq(StringUtils.isNotBlank(bo.getSpecialIntroduce()), "special_introduce", bo.getSpecialIntroduce());
-        lqw.eq(bo.getState() != null, "state", bo.getState());
+        lqw.eq(bo.getState() != null, "si.state", bo.getState());
+        lqw.in(CollectionUtils.isNotEmpty(bo.getStates()), "si.state", bo.getStates());
         lqw.like(bo.getUid() != null, "uid", bo.getUid());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
                 "update_time", params.get("beginCreateTime"), params.get("endCreateTime"));

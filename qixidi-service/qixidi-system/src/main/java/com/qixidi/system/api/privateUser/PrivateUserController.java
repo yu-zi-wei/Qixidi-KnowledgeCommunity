@@ -39,11 +39,12 @@ public class PrivateUserController {
     private final IPrivateUserService iPrivateUserService;
 
     /**
-     * 查询私信记录列表
+     * 查询私信会话列表（后台全站视角，双方昵称/头像 join 展示）
      */
+    @SaCheckPermission("private:user:query")
     @PostMapping("/list")
     public TableDataInfo<PrivateUserVo> list(@Validated(QueryGroup.class) @RequestBody PrivateUserBo bo) {
-        return iPrivateUserService.queryPageList(bo, bo);
+        return iPrivateUserService.adminQueryPageList(bo, bo);
     }
 
     /**

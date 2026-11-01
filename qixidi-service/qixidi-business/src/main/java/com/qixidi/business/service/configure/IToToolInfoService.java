@@ -3,10 +3,10 @@ package com.qixidi.business.service.configure;
 import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
 import com.qixidi.business.domain.vo.configure.ToToolInfoVo;
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 工具信息Service接口
@@ -30,7 +30,7 @@ public interface IToToolInfoService {
      * @param bo 工具信息
      * @return 工具信息集合
      */
-    Map<String, Object> queryPageList(ToToolInfoBo bo, PageQuery pageQuery);
+    TableDataInfo<ToToolInfoVo> queryPageList(ToToolInfoBo bo, PageQuery pageQuery);
 
     /**
      * 查询工具信息列表

@@ -15,4 +15,13 @@ import com.qixidi.business.domain.entity.album.Album;
 @NoArgsConstructor
 public class AlbumVo extends Album {
 
+    /**
+     * 归属用户昵称（列表展示用）
+     */
+    private String nickname;
+
+    /**
+     * 归属用户头像（列表展示用）
+     */
+    private String avatar;
 }

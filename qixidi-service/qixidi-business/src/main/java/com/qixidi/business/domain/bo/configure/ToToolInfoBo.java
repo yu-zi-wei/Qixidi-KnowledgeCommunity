@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 
 
 /**
@@ -74,6 +75,16 @@ public class ToToolInfoBo extends BaseEntity {
      * 状态（0：正常，1：已失效）
      */
     private Integer state;
+
+    /**
+     * 状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> states;
+
+    /**
+     * 层级多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> isParents;
     /**
      * 创建人
      */

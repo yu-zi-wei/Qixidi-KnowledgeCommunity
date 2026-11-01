@@ -26,6 +26,15 @@ public class PrivateNewsInfoVo extends PrivateNewsInfo {
      */
     private String userAvatar;
 
+    /**
+     * 接收方用户名称（后台全站消息列表展示用）
+     */
+    private String targetName;
+    /**
+     * 接收方用户头像（后台全站消息列表展示用）
+     */
+    private String targetAvatar;
+
 
 }
 

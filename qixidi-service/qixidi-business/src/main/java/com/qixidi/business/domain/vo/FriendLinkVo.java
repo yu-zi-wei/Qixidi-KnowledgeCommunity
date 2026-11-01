@@ -34,6 +34,10 @@ public class FriendLinkVo {
      */
     private String linkUrl;
     /**
+     * 状态（0：上架，1：下架）
+     */
+    private Integer status;
+    /**
      * 加入时间
      */
     private Date createTime;

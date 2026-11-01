@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.configure.ToToolInfoBo;
@@ -41,21 +42,16 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
     }
 
     /**
-     * 查询工具信息列表
+     * 查询工具信息列表（后台平铺分页，父子层级由 isParent 字段区分）
      *
      * @param bo 工具信息
      * @return 工具信息
      */
     @Override
-    public Map<String, Object> queryPageList(ToToolInfoBo bo, PageQuery pageQuery) {
-        Map<String, Object> map = new HashMap();
+    public TableDataInfo<ToToolInfoVo> queryPageList(ToToolInfoBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<ToToolInfo> lqw = buildQueryWrapper(bo);
         Page<ToToolInfoVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        List<ToToolInfoVo> toToolInfoVos = baseMapper.selectVoList(new LambdaQueryWrapper<ToToolInfo>()
-                .eq(ToToolInfo::getIsParent, 1).eq(ToToolInfo::getState, 0));
-        map.put("parentFalse", result);
-        map.put("parentTrue", toToolInfoVos);
-        return map;
+        return TableDataInfo.build(result);
     }
 
     /**
@@ -80,6 +76,8 @@ public class ToToolInfoServiceImpl implements IToToolInfoService {
         lqw.eq(bo.getOrder() != null, ToToolInfo::getOrder, bo.getOrder());
         lqw.eq(bo.getType() != null, ToToolInfo::getType, bo.getType());
         lqw.eq(bo.getState() != null, ToToolInfo::getState, bo.getState());
+        lqw.in(bo.getStates() != null && !bo.getStates().isEmpty(), ToToolInfo::getState, bo.getStates());
+        lqw.in(bo.getIsParents() != null && !bo.getIsParents().isEmpty(), ToToolInfo::getIsParent, bo.getIsParents());
         lqw.orderByDesc(ToToolInfo::getCreateTime);
         return lqw;
     }

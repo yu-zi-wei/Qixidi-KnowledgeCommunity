@@ -21,6 +21,36 @@
         ORDER BY pni.create_time
     </select>
 
+    <!-- 后台全站私信消息分页：双方昵称/头像 join 展示，uid/replyTargetUid 可选，内容模糊 -->
+    <select id="selectAdminList" resultType="com.qixidi.business.domain.vo.privateUser.PrivateNewsInfoVo">
+        SELECT pni.id,
+               pni.uid,
+               pni.reply_target_uid,
+               pni.news_comment,
+               pni.been_read,
+               pni.time_mark,
+               pni.create_time,
+               u1.nickname   as nickname,
+               u1.avatar     as userAvatar,
+               u2.nickname   as targetName,
+               u2.avatar     as targetAvatar
+        FROM b_private_news_info AS pni
+                 LEFT JOIN b_user_main AS u1 ON pni.uid = u1.uuid
+                 LEFT JOIN b_user_main AS u2 ON pni.reply_target_uid = u2.uuid
+        <where>
+            <if test="bo.uid != null and bo.uid != ''">
+                AND pni.uid = #{bo.uid}
+            </if>
+            <if test="bo.replyTargetUid != null and bo.replyTargetUid != ''">
+                AND pni.reply_target_uid = #{bo.replyTargetUid}
+            </if>
+            <if test="bo.newsCommentLike != null and bo.newsCommentLike != ''">
+                AND pni.news_comment like concat('%', #{bo.newsCommentLike}, '%')
+            </if>
+        </where>
+        ORDER BY pni.create_time DESC
+    </select>
+
     <select id="selectRead" resultType="com.qixidi.business.domain.entity.news.NewsUserRecord">
         select id, been_read
         from b_private_news_info

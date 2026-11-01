@@ -107,6 +107,7 @@ public class ToNavigationServiceImpl implements IToNavigationService {
         lqw.eq(bo.getOrder() != null, ToNavigation::getOrder, bo.getOrder());
         lqw.eq(bo.getIsList() != null, ToNavigation::getIsList, bo.getIsList());
         lqw.eq(bo.getStatus() != null, ToNavigation::getStatus, bo.getStatus());
+        lqw.in(bo.getStatuses() != null && !bo.getStatuses().isEmpty(), ToNavigation::getStatus, bo.getStatuses());
         lqw.eq(bo.getType() != null, ToNavigation::getType, bo.getType());
         lqw.orderByAsc(ToNavigation::getOrder);
         return lqw;

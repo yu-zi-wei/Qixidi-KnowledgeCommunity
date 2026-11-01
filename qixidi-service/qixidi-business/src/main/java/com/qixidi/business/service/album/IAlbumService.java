@@ -51,4 +51,9 @@ public interface IAlbumService {
      * 存量回填：全量扫描时光小记内容重建相册，返回入库图片数
      */
     int backfillTimeNotes();
+
+    /**
+     * 后台批量删除相册图片（移出相册；来源内容再编辑/回填时按内容重新解析入库）
+     */
+    void adminDelete(List<Long> ids);
 }

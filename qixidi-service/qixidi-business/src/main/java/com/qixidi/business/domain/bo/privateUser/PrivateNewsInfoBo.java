@@ -47,5 +47,10 @@ public class PrivateNewsInfoBo extends BaseEntity {
      */
     private Integer beenRead;
 
+    /**
+     * 消息内容模糊筛选（后台列表页）
+     */
+    private String newsCommentLike;
+
 }
 

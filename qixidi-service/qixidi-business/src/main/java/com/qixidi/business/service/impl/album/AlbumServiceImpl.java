@@ -8,12 +8,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.page.TableDataInfo;
+import com.qixidi.auth.domain.entity.TripartiteUser;
 import com.qixidi.business.domain.bo.album.AlbumSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.entity.album.Album;
 import com.qixidi.business.domain.vo.album.AlbumMonthVo;
 import com.qixidi.business.domain.vo.album.AlbumVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
+import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.album.AlbumMapper;
 import com.qixidi.business.service.album.IAlbumService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +30,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 相册
@@ -70,20 +75,47 @@ public class AlbumServiceImpl implements IAlbumService {
 
     private final AlbumMapper albumMapper;
     private final TimeNotesMapper timeNotesMapper;
+    private final TripartiteUserMapper tripartiteUserMapper;
 
     @Override
     public TableDataInfo<AlbumVo> list(AlbumSearchBo bo) {
         LambdaQueryWrapper<Album> wrapper = new LambdaQueryWrapper<Album>()
-                .eq(StrUtil.isNotBlank(bo.getUid()), Album::getUid, bo.getUid());
+                .eq(StrUtil.isNotBlank(bo.getUid()), Album::getUid, bo.getUid())
+                .in(CollectionUtil.isNotEmpty(bo.getSources()), Album::getSource, bo.getSources());
         applyTimeFilter(bo.getMonth(), wrapper);
         Page<Album> page = albumMapper.selectPage(bo.build(),
                 wrapper.orderByDesc(Album::getSourceTime)
                         .orderByDesc(Album::getId));
+        List<AlbumVo> rows = BeanUtil.copyToList(page.getRecords(), AlbumVo.class);
+        fillUser(rows);
         TableDataInfo<AlbumVo> tableDataInfo = new TableDataInfo<>();
         tableDataInfo.setTotal(page.getTotal());
         tableDataInfo.setCode(HttpStatus.HTTP_OK);
-        tableDataInfo.setRows(BeanUtil.copyToList(page.getRecords(), AlbumVo.class));
+        tableDataInfo.setRows(rows);
         return tableDataInfo;
+    }
+
+    /**
+     * 批量填归属用户昵称/头像（uid 即 b_user_main 主键，selectBatchIds 一次取回）
+     */
+    private void fillUser(List<AlbumVo> rows) {
+        if (CollectionUtil.isEmpty(rows)) {
+            return;
+        }
+        Set<String> uids = rows.stream().map(AlbumVo::getUid)
+                .filter(StrUtil::isNotBlank).collect(Collectors.toSet());
+        if (CollectionUtil.isEmpty(uids)) {
+            return;
+        }
+        Map<String, TripartiteUser> userMap = tripartiteUserMapper.selectBatchIds(uids).stream()
+                .collect(Collectors.toMap(TripartiteUser::getUuid, Function.identity(), (a, b) -> a));
+        rows.forEach(item -> {
+            TripartiteUser user = userMap.get(item.getUid());
+            if (user != null) {
+                item.setNickname(user.getNickname());
+                item.setAvatar(user.getAvatar());
+            }
+        });
     }
 
     /**
@@ -184,6 +216,14 @@ public class AlbumServiceImpl implements IAlbumService {
         }
         log.info("【相册回填】扫描小记 {} 条，解析入库图片 {} 张", notes.size(), albums.size());
         return albums.size();
+    }
+
+    @Override
+    public void adminDelete(List<Long> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return;
+        }
+        albumMapper.deleteByIds(ids);
     }
 
     /**

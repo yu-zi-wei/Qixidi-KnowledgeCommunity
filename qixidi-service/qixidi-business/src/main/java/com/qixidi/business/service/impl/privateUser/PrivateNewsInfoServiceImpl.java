@@ -72,6 +72,15 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
     }
 
     /**
+     * 后台全站私信消息分页：走 selectAdminList（双方昵称/头像 join），不覆盖入参 uid
+     */
+    @Override
+    public TableDataInfo<PrivateNewsInfoVo> adminQueryPageList(PrivateNewsInfoBo bo, PageQuery pageQuery) {
+        Page<PrivateNewsInfoVo> result = baseMapper.selectAdminList(bo, pageQuery.build());
+        return TableDataInfo.build(result);
+    }
+
+    /**
      * 查询私信记录列表
      *
      * @param bo 私信记录

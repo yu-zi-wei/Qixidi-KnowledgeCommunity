@@ -33,6 +33,11 @@ public interface IPrivateNewsInfoService {
     TableDataInfo<PrivateNewsInfoVo> queryPageList(PrivateNewsInfoBo bo, PageQuery pageQuery);
 
     /**
+     * 后台全站私信消息分页（不绑定前台登录态，双方昵称/头像 join 展示）
+     */
+    TableDataInfo<PrivateNewsInfoVo> adminQueryPageList(PrivateNewsInfoBo bo, PageQuery pageQuery);
+
+    /**
      * 查询私信记录列表
      *
      * @param bo 私信记录

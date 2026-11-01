@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 
 
 /**
@@ -68,6 +69,11 @@ public class ToNavigationBo extends BaseEntity {
      */
     @NotNull(message = "状态（0：有效，1：失效）不能为空", groups = {AddGroup.class, EditGroup.class})
     private Integer status;
+
+    /**
+     * 状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> statuses;
     /**
      * 类型
      */

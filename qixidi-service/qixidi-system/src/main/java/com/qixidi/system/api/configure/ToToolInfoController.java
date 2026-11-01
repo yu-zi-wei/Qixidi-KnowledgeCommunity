@@ -9,6 +9,7 @@ import com.qixidi.auth.annotation.LogModule;
 import com.light.redission.annotation.RepeatSubmit;
 
 import com.light.core.core.domain.PageQuery;
+import com.light.core.core.page.TableDataInfo;
 import com.light.core.core.validate.AddGroup;
 import com.light.core.core.validate.EditGroup;
 import com.light.core.core.validate.QueryGroup;
@@ -42,7 +43,7 @@ public class ToToolInfoController {
      */
     @SaCheckPermission("toolInfo:list")
     @PostMapping("/list")
-    public Object list(@Validated(QueryGroup.class) @RequestBody ToToolInfoBo bo) {
+    public TableDataInfo<ToToolInfoVo> list(@Validated(QueryGroup.class) @RequestBody ToToolInfoBo bo) {
         return iToToolInfoService.queryPageList(bo, bo);
     }
 

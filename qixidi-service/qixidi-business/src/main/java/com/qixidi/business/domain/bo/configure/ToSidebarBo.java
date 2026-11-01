@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 
 
 /**
@@ -65,6 +66,11 @@ public class ToSidebarBo extends BaseEntity {
      * 状态（0：有效1：无效）
      */
     private Integer status;
+
+    /**
+     * 状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> statuses;
 
     /**
      * 类型

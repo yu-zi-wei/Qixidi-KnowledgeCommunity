@@ -23,6 +23,11 @@ public interface PrivateNewsInfoMapper extends BaseMapperPlus<PrivateNewsInfoMap
 
     Page<PrivateNewsInfoVo> selectListXml(@Param("bo") PrivateNewsInfoBo bo, Page<Object> build);
 
+    /**
+     * 后台全站私信消息分页（双方昵称/头像 join 展示，uid/replyTargetUid 可选筛选，内容模糊）
+     */
+    Page<PrivateNewsInfoVo> selectAdminList(@Param("bo") PrivateNewsInfoBo bo, Page<Object> build);
+
     List<NewsUserRecord> selectRead(@Param("uid") String uid);
 
     PrivateNewsInfoVo selectLast(@Param("uuid") String uuid, @Param("replyTargetUid") String replyTargetUid);

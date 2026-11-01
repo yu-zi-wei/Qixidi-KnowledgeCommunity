@@ -79,6 +79,7 @@ public class ToSidebarServiceImpl implements IToSidebarService {
         lqw.eq(StringUtils.isNotBlank(bo.getSidebarIcon()), ToSidebar::getSidebarIcon, bo.getSidebarIcon());
         lqw.eq(bo.getIsList() != null, ToSidebar::getIsList, bo.getIsList());
         lqw.eq(bo.getStatus() != null, ToSidebar::getStatus, bo.getStatus());
+        lqw.in(bo.getStatuses() != null && !bo.getStatuses().isEmpty(), ToSidebar::getStatus, bo.getStatuses());
         lqw.eq(bo.getType() != null, ToSidebar::getType, bo.getType());
         lqw.eq(StringUtils.isNotBlank(bo.getRoute()), ToSidebar::getRoute, bo.getRoute());
         lqw.orderByAsc(ToSidebar::getOrder);

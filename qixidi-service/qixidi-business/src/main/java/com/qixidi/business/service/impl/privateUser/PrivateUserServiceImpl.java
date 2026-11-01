@@ -79,6 +79,15 @@ public class PrivateUserServiceImpl implements IPrivateUserService {
     }
 
     /**
+     * 后台全站会话分页：走 selectAdminList（双方昵称/头像 join），不依赖前台登录态
+     */
+    @Override
+    public TableDataInfo<PrivateUserVo> adminQueryPageList(PrivateUserBo bo, PageQuery pageQuery) {
+        Page<PrivateUserVo> result = baseMapper.selectAdminList(bo, pageQuery.build());
+        return TableDataInfo.build(result);
+    }
+
+    /**
      * 查询私信记录列表
      *
      * @param bo 私信记录

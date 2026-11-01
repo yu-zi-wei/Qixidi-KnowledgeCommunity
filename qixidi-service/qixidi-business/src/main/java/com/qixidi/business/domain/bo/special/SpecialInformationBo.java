@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 
 /**
@@ -44,6 +45,11 @@ public class SpecialInformationBo extends BaseEntity {
      * 专栏状态（0：正常，1：未启用）
      */
     private Integer state;
+
+    /**
+     * 状态多选筛选（in 查询，后台列表页）
+     */
+    private List<Integer> states;
 
     /**
      * 用户id
