@@ -1,25 +1,7 @@
 /**
- * 私信管理 API（PrivateUserController /system/private/user + PrivateNewsInfoController /system/private/newsInfo）
- * 后台全站视角（adminQueryPageList），双方昵称/头像为 join 展示字段
+ * 私信管理 API（PrivateNewsInfoController /system/private/newsInfo）
+ * 后台全站视角，双方昵称/头像为 join 展示字段
  */
-
-/** 私信会话行（PrivateUserVo；双方昵称/头像为 join 产物） */
-export interface PrivateSessionRow {
-  id: number;
-  /** 发起方 uuid */
-  uid?: string;
-  uidName?: string;
-  uidAvatar?: string;
-  /** 接收方 uuid */
-  targetUid?: string;
-  targetName?: string;
-  targetAvatar?: string;
-  targetOccupation?: string;
-  /** 最后一条消息 */
-  lastNews?: string;
-  updateTime?: string;
-  createTime?: string;
-}
 
 /** 私信消息行（PrivateNewsInfoVo；双方昵称/头像为 join 产物） */
 export interface PrivateMessageRow {
@@ -48,13 +30,6 @@ export const usePrivateAdminApi = () => {
   const api = useApi();
 
   return {
-    // ---------- 会话（/system/private/user） ----------
-    getPrivateSessionList: (params: Record<string, any>) =>
-      api.postPage<PrivateSessionRow>('/system/private/user/list', params),
-
-    deletePrivateSessions: (ids: (number | string)[]) =>
-      api.request<void>(`/system/private/user/${ids.join(',')}`, { method: 'DELETE' }),
-
     // ---------- 消息（/system/private/newsInfo） ----------
     getPrivateMessageList: (params: Record<string, any>) =>
       api.postPage<PrivateMessageRow>('/system/private/newsInfo/list', params),

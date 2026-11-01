@@ -96,7 +96,6 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     key: 'private-mgmt',
     icon: Messages,
     children: [
-      { label: '私信会话', key: '/private', icon: Messages, perm: 'private:user:query' },
       { label: '私信消息', key: '/private/message', icon: Message2, perm: 'private:news:query' }
     ]
   },
