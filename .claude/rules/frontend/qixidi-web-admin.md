@@ -30,6 +30,10 @@ columns render 函数在 NDataTable 渲染上下文执行，**页面 scoped hash
 
 模板里写的元素（弹窗/抽屉内容）scoped 正常，不受此限。**列样式三首选顺序：内聚组件 → admin-table.scss 共享类 → 页面非 scoped 块。**
 
+## 🔴 双 tab 页（同构列表共用一个组件，如导航/侧边栏、目录/工具）
+
+**两个 n-tab-pane 必须各写 `display-directive="show"`，且只能写在 pane 上——写在 n-tabs 上静默无效**（源码只从 pane vNode props 解构该值）。不写时默认 if 语义：切 tab 两个 pane vNode 同类型同位置且无 key，被 Vue 就地复用，内层列表组件 fetch prop 换了但已拉取的数据不重拉——表格列换、数据不换、零请求。参考 `pages/navigation.vue`、`pages/tool.vue` 骨架（外层零滚动 + pane flex 撑满 + 768px 降级）。
+
 ## 🔴 页面骨架模式（AdminListPage 表格版，新列表页一律照抄）
 
 用户定版（M3）：**列表页 = 顶栏面包屑 + 多条件搜索卡片 + 表格卡片，外层零滚动条**。
