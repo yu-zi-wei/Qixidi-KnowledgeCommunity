@@ -1,8 +1,10 @@
 <template>
   <div class="menu-config-page">
-    <n-tabs v-model:value="activeTab" type="line" display-directive="show" class="menu-config-tabs">
+    <n-tabs v-model:value="activeTab" type="line" class="menu-config-tabs">
       <!-- 导航栏 tab -->
-      <n-tab-pane name="navigation" tab="导航栏">
+      <!-- display-directive 必须写在 n-tab-pane 上（写在 n-tabs 上无效）：两个 pane 常驻 v-show 切换，
+           各自 AdminListPage 实例独立；否则切 tab 时 pane 被无 key 就地复用，fetch prop 换了但数据不重拉 -->
+      <n-tab-pane name="navigation" tab="导航栏" display-directive="show">
         <AdminListPage
           ref="navListRef"
           v-model:checked-keys="navChecked"
@@ -33,7 +35,7 @@
       </n-tab-pane>
 
       <!-- 侧边栏 tab -->
-      <n-tab-pane name="sidebar" tab="侧边栏">
+      <n-tab-pane name="sidebar" tab="侧边栏" display-directive="show">
         <AdminListPage
           ref="sidebarListRef"
           v-model:checked-keys="sidebarChecked"
@@ -78,7 +80,7 @@
           <n-form-item label="图标（SVG 内容，可预览）" path="icon">
             <div class="menu-config-icon-row">
               <span class="menu-config-icon-preview" :title="form.icon ? '当前图标' : '无图标'">
-                <span v-if="form.icon" class="menu-config-icon-svg" v-html="form.icon"></span>
+                <span v-if="form.icon" class="menu-config-icon-svg" :style="{ color: form.iconColor || undefined }" v-html="form.icon"></span>
                 <span v-else class="menu-config-icon-empty">无</span>
               </span>
               <n-input
@@ -323,7 +325,13 @@ const baseColumns = (
       key: iconKey,
       width: 70,
       align: 'center',
-      render: (row) => ((row as any)[iconKey] ? '有' : h('span', { class: 'cell-dim' }, '—'))
+      // 直接渲染 SVG 全文，iconColor 绑在外层 color 上（无自带 fill 的图标即可着色）
+      render: (row) => {
+        const icon = (row as any)[iconKey] as string | null | undefined
+        return icon
+          ? h('span', { class: 'menu-config-icon-cell', style: { color: row.iconColor || undefined }, innerHTML: icon })
+          : h('span', { class: 'cell-dim' }, '—')
+      }
     },
     {
       title: '图标颜色',
@@ -530,6 +538,7 @@ const handleSave = () => {
 .menu-config-icon-svg :deep(svg) {
   width: 22px;
   height: 22px;
+  fill: currentColor;
 }
 
 .menu-config-icon-empty {
@@ -562,5 +571,18 @@ const handleSave = () => {
   font-size: 12px;
   color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 列 render 里的 SVG 图标（render 元素 scoped 选不中，走页面语义前缀全局类）；fill: currentColor 让无自带 fill 的图标继承 iconColor，path 级 fill 不受影响 */
+.menu-config-icon-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-config-icon-cell svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 </style>
