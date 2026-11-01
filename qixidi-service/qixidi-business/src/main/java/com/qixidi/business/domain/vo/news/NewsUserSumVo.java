@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * 用户消息视图对象 b_news_user_info
+ * 用户消息未读汇总视图对象 b_news_user_record
  *
  * @author aurora
  * @date 2022-11-03

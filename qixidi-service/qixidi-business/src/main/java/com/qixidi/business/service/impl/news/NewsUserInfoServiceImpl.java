@@ -1,15 +1,12 @@
 package com.qixidi.business.service.impl.news;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
@@ -18,10 +15,8 @@ import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
-import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.entity.news.NewsSystemRead;
-import com.qixidi.business.domain.entity.news.NewsUserInfo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
@@ -35,7 +30,6 @@ import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemReadMapper;
-import com.qixidi.business.mapper.news.NewsUserInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.service.news.INewsUserInfoService;
 import lombok.RequiredArgsConstructor;
@@ -54,98 +48,10 @@ import java.util.stream.Collectors;
 @Service
 public class NewsUserInfoServiceImpl implements INewsUserInfoService {
 
-    private final NewsUserInfoMapper baseMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
     private final NewsSystemReadMapper newsSystemReadMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final PrivateNewsInfoMapper privateNewsInfoMapper;
-
-    /**
-     * 查询用户消息
-     *
-     * @param id 用户消息主键
-     * @return 用户消息
-     */
-    @Override
-    public NewsUserInfoVo queryById(Long id) {
-        return baseMapper.selectVoById(id);
-    }
-
-    /**
-     * 查询用户消息列表
-     *
-     * @param bo 用户消息
-     * @return 用户消息
-     */
-    @Override
-    public TableDataInfo<NewsUserInfoVo> queryPageList(NewsUserInfoBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<NewsUserInfo> lqw = buildQueryWrapper(bo);
-        Page<NewsUserInfoVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        return TableDataInfo.build(result);
-    }
-
-    /**
-     * 查询用户消息列表
-     *
-     * @param bo 用户消息
-     * @return 用户消息
-     */
-    @Override
-    public List<NewsUserInfoVo> queryList(NewsUserInfoBo bo) {
-        LambdaQueryWrapper<NewsUserInfo> lqw = buildQueryWrapper(bo);
-        return baseMapper.selectVoList(lqw);
-    }
-
-    private LambdaQueryWrapper<NewsUserInfo> buildQueryWrapper(NewsUserInfoBo bo) {
-        Map<String, Object> params = bo.getParams();
-        LambdaQueryWrapper<NewsUserInfo> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getNewsContent()), NewsUserInfo::getNewsContent, bo.getNewsContent());
-        lqw.eq(bo.getType() != null, NewsUserInfo::getType, bo.getType());
-        lqw.eq(bo.getState() != null, NewsUserInfo::getState, bo.getState());
-        lqw.eq(bo.getBeenRead() != null, NewsUserInfo::getBeenRead, bo.getBeenRead());
-        lqw.eq(bo.getSenderId() != null, NewsUserInfo::getSenderId, bo.getSenderId());
-        lqw.eq(bo.getRecipientId() != null, NewsUserInfo::getRecipientId, bo.getRecipientId());
-        return lqw;
-    }
-
-    /**
-     * 新增用户消息
-     *
-     * @param bo 用户消息
-     * @return 结果
-     */
-    @Override
-    public Boolean insertByBo(NewsUserInfoBo bo) {
-        NewsUserInfo add = BeanUtil.toBean(bo, NewsUserInfo.class);
-        boolean flag = baseMapper.insert(add) > 0;
-        if (flag) {
-            bo.setId(add.getId());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改用户消息
-     *
-     * @param bo 用户消息
-     * @return 结果
-     */
-    @Override
-    public Boolean updateByBo(NewsUserInfoBo bo) {
-        NewsUserInfo update = BeanUtil.toBean(bo, NewsUserInfo.class);
-        return baseMapper.updateById(update) > 0;
-    }
-
-    /**
-     * 批量删除用户消息
-     *
-     * @param ids 需要删除的用户消息主键
-     * @return 结果
-     */
-    @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return baseMapper.deleteBatchIds(ids) > 0;
-    }
 
     /**
      * 后台管理：用户消息记录分页（b_news_user_record join 发送者/接收者，筛选列必须带 nur 别名）
@@ -271,35 +177,35 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     @Override
     public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<ArticleCommentNewsVo> page = baseMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), pageQuery.build());
+        IPage<ArticleCommentNewsVo> page = newsUserRecordMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), pageQuery.build());
         return TableDataInfo.build(page);
     }
 
     @Override
     public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<TimeNotesCommentNewsVo> page = baseMapper.selectTimeNotesCommentNews(uuid, NewsType.TIME_NOTES_COMMENT_NEWS.getCode(), pageQuery.build());
+        IPage<TimeNotesCommentNewsVo> page = newsUserRecordMapper.selectTimeNotesCommentNews(uuid, NewsType.TIME_NOTES_COMMENT_NEWS.getCode(), pageQuery.build());
         return TableDataInfo.build(page);
     }
 
     @Override
     public TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<DictumCommentNewsVo> page = baseMapper.selectDictumCommentNews(uuid, NewsType.DICTUM_COMMENT_NEWS.getCode(), pageQuery.build());
+        IPage<DictumCommentNewsVo> page = newsUserRecordMapper.selectDictumCommentNews(uuid, NewsType.DICTUM_COMMENT_NEWS.getCode(), pageQuery.build());
         return TableDataInfo.build(page);
     }
 
     @Override
     public TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = baseMapper.selectFabulousNews(uuid, NewsType.FABULOUS_NEWS.getCode(), pageQuery.build());
+        IPage<NewsUserInfoVo> page = newsUserRecordMapper.selectFabulousNews(uuid, NewsType.FABULOUS_NEWS.getCode(), pageQuery.build());
         return TableDataInfo.build(page);
     }
 
     @Override
     public TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<NewsUserInfoVo> page = baseMapper.selectFollowNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery.build());
+        IPage<NewsUserInfoVo> page = newsUserRecordMapper.selectFollowNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery.build());
         return TableDataInfo.build(page);
     }
 

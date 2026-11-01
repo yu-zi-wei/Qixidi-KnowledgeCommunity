@@ -1,7 +1,6 @@
 package com.qixidi.business.mapper.news;
 
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
-import com.qixidi.business.domain.entity.news.NewsUserInfo;
 import com.qixidi.business.domain.vo.news.NewsSystemInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.light.mybatisPlus.mapper.BaseMapperPlus;
@@ -24,7 +23,7 @@ public interface NewsSystemInfoMapper extends BaseMapperPlus<NewsSystemInfoMappe
 
     List<NewsSystemInfoVo> selectBaseUid(@Param("uid") String uid);
 
-    IPage<NewsUserInfoVo> selectUid(@Param("uid") String uid, Page<NewsUserInfo> build);
+    IPage<NewsUserInfoVo> selectUid(@Param("uid") String uid, Page<NewsSystemInfo> build);
 
     @Select("select id from b_news_system_info where state=0 and type=2")
     List<NewsSystemInfoVo> selectBase();

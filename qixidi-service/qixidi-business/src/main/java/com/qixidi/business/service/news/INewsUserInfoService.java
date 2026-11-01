@@ -1,8 +1,6 @@
 package com.qixidi.business.service.news;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.light.core.core.domain.vo.CensusVo;
-import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
@@ -13,7 +11,6 @@ import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,36 +22,6 @@ import java.util.List;
  * @date 2022-11-03
  */
 public interface INewsUserInfoService {
-
-    /**
-     * 查询用户消息
-     */
-    NewsUserInfoVo queryById(Long id);
-
-    /**
-     * 查询用户消息列表
-     */
-    TableDataInfo<NewsUserInfoVo> queryPageList(NewsUserInfoBo bo, PageQuery pageQuery);
-
-    /**
-     * 查询用户消息列表
-     */
-    List<NewsUserInfoVo> queryList(NewsUserInfoBo bo);
-
-    /**
-     * 新增用户消息
-     */
-    Boolean insertByBo(NewsUserInfoBo bo);
-
-    /**
-     * 修改用户消息
-     */
-    Boolean updateByBo(NewsUserInfoBo bo);
-
-    /**
-     * 校验并批量删除用户消息信息
-     */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     /**
      * 后台管理：用户消息记录分页（b_news_user_record，join 发送者/接收者昵称头像，支持类型多选与用户名搜索）

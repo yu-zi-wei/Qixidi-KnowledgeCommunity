@@ -2,7 +2,11 @@ package com.qixidi.business.mapper.comment;
 
 import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
+import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
+import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
+import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
+import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,6 +32,16 @@ public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
 
     @Select("SELECT type,been_read,news_id from b_news_user_record where been_read=0 and uid=#{uid}")
     List<NewsUserRecord> selectLists(String uid);
+
+    IPage<ArticleCommentNewsVo> selectArticleNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
+
+    IPage<TimeNotesCommentNewsVo> selectTimeNotesCommentNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
+
+    IPage<DictumCommentNewsVo> selectDictumCommentNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
+
+    IPage<NewsUserInfoVo> selectFollowNews(@Param("uid") String uuid, @Param("type") Integer type, Page<NewsUserRecord> build);
+
+    IPage<NewsUserInfoVo> selectFabulousNews(@Param("uid") String uuid, @Param("type") Integer type, Page<NewsUserRecord> build);
 
     /**
      * 按天统计互动趋势（title 区分序列：fabulous=获赞 comment=评论，评论子类型 6/7 并入评论）
