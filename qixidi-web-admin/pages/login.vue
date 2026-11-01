@@ -126,8 +126,8 @@ onMounted(loadCaptcha);
 /* 书签风：暖纸底 + 白纸片卡片（同内容区/纸片体系） */
 .login-page {
   background: #FAF9F6;
-  /* 不套布局（layout:false），logo 底色变量在此自注入（= 浅色主紫） */
-  --logo-bg: #534AB7;
+  /* 不套布局（layout:false），logo 底色变量在此自注入（= 浅色主蓝） */
+  --logo-bg: #1E66C4;
 }
 
 .login-title {

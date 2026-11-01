@@ -112,10 +112,10 @@ const handleUserAction = (key: string) => {
    与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度）。
    书签风浅色：侧栏米白 #EDEAE1 分层（内容区暖纸 #FAF9F6）、纸片 #FFFFFF + 暖灰 hairline */
 .theme-dark {
-  --cell-link: #968BEA;
+  --cell-link: #6EA8E8;
   --hairline: rgba(255, 255, 255, 0.08);
-  --sider-bg: #0F0D17;
-  --logo-bg: #968BEA;
+  --sider-bg: #0E1521;
+  --logo-bg: #6EA8E8;
   --panel-bg: #1a1a1e;
   --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   --scrollbar-thumb: rgba(255, 255, 255, 0.18);
@@ -123,14 +123,14 @@ const handleUserAction = (key: string) => {
 }
 
 .theme-light {
-  --cell-link: #534AB7;
+  --cell-link: #1E66C4;
   --hairline: #E8E4D9;
   --sider-bg: #EDEAE1;
-  --logo-bg: #534AB7;
+  --logo-bg: #1E66C4;
   --panel-bg: #ffffff;
-  --panel-shadow: 0 1px 3px rgba(150, 140, 190, 0.16);
-  --scrollbar-thumb: #b3aad6;
-  --scrollbar-thumb-hover: #9e94c9;
+  --panel-shadow: 0 1px 3px rgba(30, 102, 196, 0.12);
+  --scrollbar-thumb: #a9c0e3;
+  --scrollbar-thumb-hover: #8faed9;
 }
 
 .app-shell {
