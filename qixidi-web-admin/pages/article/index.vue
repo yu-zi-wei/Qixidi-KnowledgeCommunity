@@ -26,6 +26,9 @@
     </template>
   </AdminListPage>
 
+  <!-- 用户详情抽屉（作者列点击打开） -->
+  <UserDetailDrawer ref="userDrawerRef" />
+
   <!-- 文章详情抽屉：teleport 组件宽度必须 inline style -->
   <n-drawer v-model:show="detailVisible" :width="520" placement="right">
     <n-drawer-content :title="detail?.articleTitle || '文章详情'" closable>
@@ -68,6 +71,7 @@ import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
+import UserDetailDrawer from '~/components/UserDetailDrawer.vue';
 import { AUDIT_STATE_MAP, useArticleAdminApi, type ArticleRow, type GroupingRow } from '~/composables/useArticleAdminApi';
 import { useLabelAdminApi, type LabelRow } from '~/composables/useLabelAdminApi';
 import { useSpecialAdminApi, type SpecialRow } from '~/composables/useSpecialAdminApi';
@@ -135,6 +139,8 @@ onMounted(async () => {
 
 // ---------- 审核动作（独立 audit 接口，只传 ids + 结果，无需文章全字段） ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+// 用户详情抽屉（作者列点击打开）
+const userDrawerRef = ref<InstanceType<typeof UserDetailDrawer> | null>(null);
 const auditingId = ref<number | null>(null);
 
 // 操作列所有按钮执行前一律二次确认
@@ -259,7 +265,10 @@ const columns: DataTableColumns<ArticleRow> = [
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname || row.username, size: 24 }),
-        h('span', { class: 'cell-author-name' }, row.nickname || row.username || '—')
+        // 作者昵称可点开用户详情（无 userId 的行不可点）
+        row.userId
+          ? h('span', { class: 'cell-author-name is-link', onClick: () => userDrawerRef.value?.open(row.userId), title: '查看用户详情' }, row.nickname || row.username || '—')
+          : h('span', { class: 'cell-author-name' }, row.nickname || row.username || '—')
       ])
   },
   {

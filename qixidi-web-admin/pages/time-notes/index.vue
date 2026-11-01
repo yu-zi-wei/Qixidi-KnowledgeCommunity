@@ -23,6 +23,9 @@
     </template>
   </AdminListPage>
 
+  <!-- 用户详情抽屉（作者列点击打开） -->
+  <UserDetailDrawer ref="userDrawerRef" />
+
   <!-- 小记详情抽屉：一律调详情接口，先清空防残留（teleport 组件宽度必须 inline style） -->
   <n-drawer v-model:show="detailVisible" :width="480" placement="right">
     <n-drawer-content :title="detail?.title || '小记详情'" closable>
@@ -56,6 +59,7 @@ import { NButton } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
+import UserDetailDrawer from '~/components/UserDetailDrawer.vue';
 import { useTimeNotesAdminApi, type TimeNotesRow } from '~/composables/useTimeNotesAdminApi';
 
 definePageMeta({ layout: 'default' });
@@ -74,6 +78,8 @@ const fetch = (params: Record<string, any>) => getTimeNotesList(params);
 
 // ---------- 删除（逻辑删 + 相册图片清理；批量/单条共用） ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+// 用户详情抽屉（作者列点击打开）
+const userDrawerRef = ref<InstanceType<typeof UserDetailDrawer> | null>(null);
 const checkedKeys = ref<Array<string | number>>([]);
 const deletingId = ref<number | null>(null);
 const batchDeleting = ref(false);
@@ -163,7 +169,10 @@ const columns: DataTableColumns<TimeNotesRow> = [
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname, size: 24 }),
-        h('span', { class: 'cell-author-name' }, row.nickname || '—')
+        // 作者昵称可点开用户详情（无 uid 的行不可点）
+        row.uid
+          ? h('span', { class: 'cell-author-name is-link', onClick: () => userDrawerRef.value?.open(row.uid), title: '查看用户详情' }, row.nickname || '—')
+          : h('span', { class: 'cell-author-name' }, row.nickname || '—')
       ])
   },
   {
@@ -224,9 +233,9 @@ const columns: DataTableColumns<TimeNotesRow> = [
     margin-top: 16px;
   }
 
-  // teleport 抽屉内主题变量不可用，用布局根注入的链接色变量兜底中性蓝
+  // teleport 抽屉内主题变量不可用，用布局根注入的链接色变量兜底
   .detail-link {
-    color: var(--cell-link, #3d7a5c);
+    color: var(--cell-link, #534ab7);
     font-size: 13px;
     text-decoration: none;
   }

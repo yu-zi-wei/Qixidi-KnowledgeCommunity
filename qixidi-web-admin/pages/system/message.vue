@@ -61,6 +61,9 @@
       </n-tab-pane>
     </n-tabs>
 
+    <!-- 用户详情抽屉（用户消息 tab 发送者/接收者点击打开） -->
+    <UserDetailDrawer ref="userDrawerRef" />
+
     <!-- 详情弹窗：teleport 组件宽度必须 inline style -->
     <n-modal v-model:show="detailVisible" :style="{ width: '560px' }" preset="card" title="消息详情">
       <template v-if="detail">
@@ -135,6 +138,7 @@ import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
 import AdminAvatar from '~/components/AdminAvatar.vue';
+import UserDetailDrawer from '~/components/UserDetailDrawer.vue';
 import {
   MESSAGE_MASS_MAP,
   MESSAGE_STATE_MAP,
@@ -167,6 +171,8 @@ const activeTab = ref('system');
 
 // ==================== 系统消息 tab ====================
 const systemListRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+// 用户详情抽屉（用户消息 tab 发送者/接收者点击打开）
+const userDrawerRef = ref<InstanceType<typeof UserDetailDrawer> | null>(null);
 const systemChecked = ref<Array<string | number>>([]);
 
 // ---------- 搜索（接收人昵称：后端用户域查 uuid 集合后 in，指定人发消息才有效） ----------
@@ -588,10 +594,13 @@ const doDeleteUserBatch = () => {
   });
 };
 
-const renderUser = (name?: string, avatar?: string) =>
+// 用户列（uid 缺省时不可点，系统触发的消息无发送者）
+const renderUser = (name: string | undefined, avatar: string | undefined, uuid?: string) =>
   h('div', { class: 'cell-author' }, [
     h(AdminAvatar, { src: avatar, name: name || '?', size: 24 }),
-    h('span', { class: 'cell-author-name' }, name || '—')
+    uuid
+      ? h('span', { class: 'cell-author-name is-link', onClick: () => userDrawerRef.value?.open(uuid), title: '查看用户详情' }, name || '—')
+      : h('span', { class: 'cell-author-name' }, name || '—')
   ]);
 
 const userColumns: DataTableColumns<UserNewsRow> = [
@@ -599,13 +608,13 @@ const userColumns: DataTableColumns<UserNewsRow> = [
     title: '发送者',
     key: 'senderName',
     minWidth: 130,
-    render: (row) => renderUser(row.senderName, row.senderAvatar)
+    render: (row) => renderUser(row.senderName, row.senderAvatar, row.senderUid)
   },
   {
     title: '接收者',
     key: 'recipientName',
     minWidth: 130,
-    render: (row) => renderUser(row.recipientName, row.recipientAvatar)
+    render: (row) => renderUser(row.recipientName, row.recipientAvatar, row.recipientUid)
   },
   {
     title: '类型',

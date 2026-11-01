@@ -23,6 +23,9 @@
       </n-button>
     </template>
   </AdminListPage>
+
+  <!-- 用户详情抽屉（作者列点击打开） -->
+  <UserDetailDrawer ref="userDrawerRef" />
 </template>
 
 <script setup lang="ts">
@@ -32,6 +35,7 @@ import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
+import UserDetailDrawer from '~/components/UserDetailDrawer.vue';
 import {
   DICTUM_STATE_MAP,
   DICTUM_VISIBLE_MAP,
@@ -103,6 +107,8 @@ const fetch = (params: Record<string, any>) => getDictumList(params);
 
 // ---------- 删除（批量/单条共用） ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+// 用户详情抽屉（作者列点击打开）
+const userDrawerRef = ref<InstanceType<typeof UserDetailDrawer> | null>(null);
 const checkedKeys = ref<Array<string | number>>([]);
 const deletingId = ref<number | null>(null);
 const batchDeleting = ref(false);
@@ -188,7 +194,10 @@ const columns: DataTableColumns<DictumRow> = [
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.avatar, name: row.nickname, size: 24 }),
-        h('span', { class: 'cell-author-name' }, row.nickname || '—')
+        // 作者昵称可点开用户详情（无 uid 的行不可点）
+        row.uid
+          ? h('span', { class: 'cell-author-name is-link', onClick: () => userDrawerRef.value?.open(row.uid), title: '查看用户详情' }, row.nickname || '—')
+          : h('span', { class: 'cell-author-name' }, row.nickname || '—')
       ])
   },
   {

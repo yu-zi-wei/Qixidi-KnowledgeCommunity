@@ -23,6 +23,9 @@
     </template>
   </AdminListPage>
 
+  <!-- 用户详情抽屉（评论人列点击打开） -->
+  <UserDetailDrawer ref="userDrawerRef" />
+
   <!-- 评论详情抽屉：一律调详情接口，先清空防残留（teleport 组件宽度必须 inline style） -->
   <n-drawer v-model:show="detailVisible" :width="480" placement="right">
     <n-drawer-content :title="detail?.commentName || '评论详情'" closable>
@@ -55,6 +58,7 @@ import type { DataTableColumns } from 'naive-ui';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
+import UserDetailDrawer from '~/components/UserDetailDrawer.vue';
 import { COMMENT_STATE_MAP, useCommentAdminApi, type CommentRow } from '~/composables/useCommentAdminApi';
 import { getFullDateTime } from '~/utils/format';
 
@@ -84,6 +88,8 @@ const fetch = (params: Record<string, any>) =>
 
 // ---------- 删除（物理级联：子评论一并不可见；批量/单条共用） ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+// 用户详情抽屉（评论人列点击打开）
+const userDrawerRef = ref<InstanceType<typeof UserDetailDrawer> | null>(null);
 const checkedKeys = ref<Array<string | number>>([]);
 const deletingId = ref<number | null>(null);
 const batchDeleting = ref(false);
@@ -170,7 +176,10 @@ const columns: DataTableColumns<CommentRow> = [
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.commentAvatar, name: row.commentName, size: 24 }),
-        h('span', { class: 'cell-author-name' }, row.commentName || '—')
+        // 评论人昵称可点开用户详情（commentUid 才是评论人；uid 是所在文章作者，勿混用）
+        row.commentUid
+          ? h('span', { class: 'cell-author-name is-link', onClick: () => userDrawerRef.value?.open(row.commentUid), title: '查看用户详情' }, row.commentName || '—')
+          : h('span', { class: 'cell-author-name' }, row.commentName || '—')
       ])
   },
   {

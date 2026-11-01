@@ -79,9 +79,13 @@ export interface UserNewsRow {
   /** 发送者昵称/头像（target_uid join b_user_main） */
   senderName?: string;
   senderAvatar?: string;
+  /** 发送者 uuid（target_uid，点击打开用户详情用） */
+  senderUid?: string;
   /** 接收者昵称/头像（uid join b_user_main） */
   recipientName?: string;
   recipientAvatar?: string;
+  /** 接收者 uuid（uid，点击打开用户详情用） */
+  recipientUid?: string;
 }
 
 export const USER_NEWS_TYPE_MAP: Record<

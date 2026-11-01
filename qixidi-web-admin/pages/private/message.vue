@@ -22,6 +22,9 @@
       </n-button>
     </template>
   </AdminListPage>
+
+  <!-- 用户详情抽屉（发送方/接收方点击打开） -->
+  <UserDetailDrawer ref="userDrawerRef" />
 </template>
 
 <script setup lang="ts">
@@ -31,6 +34,7 @@ import type { DataTableColumns } from 'naive-ui';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
+import UserDetailDrawer from '~/components/UserDetailDrawer.vue';
 import {
   PRIVATE_READ_MAP,
   usePrivateAdminApi,
@@ -53,6 +57,8 @@ const searchFields: AdminSearchField[] = [
 
 // ---------- 删除 ----------
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);
+// 用户详情抽屉（发送方/接收方点击打开）
+const userDrawerRef = ref<InstanceType<typeof UserDetailDrawer> | null>(null);
 const checkedKeys = ref<Array<string | number>>([]);
 const deletingId = ref<number | null>(null);
 const batchDeleting = ref(false);
@@ -111,7 +117,10 @@ const columns: DataTableColumns<PrivateMessageRow> = [
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.userAvatar, name: row.nickname || row.uid || '?', size: 30 }),
-        h('span', { class: 'private-msg-name' }, row.nickname || row.uid || '—')
+        // 双方昵称均可点开用户详情（uid 缺省的行不可点）
+        row.uid
+          ? h('span', { class: 'private-msg-name is-link', onClick: () => userDrawerRef.value?.open(row.uid), title: '查看用户详情' }, row.nickname || row.uid || '—')
+          : h('span', { class: 'private-msg-name' }, row.nickname || row.uid || '—')
       ])
   },
   {
@@ -121,7 +130,9 @@ const columns: DataTableColumns<PrivateMessageRow> = [
     render: (row) =>
       h('div', { class: 'cell-author' }, [
         h(AdminAvatar, { src: row.targetAvatar, name: row.targetName || row.replyTargetUid || '?', size: 30 }),
-        h('span', { class: 'private-msg-name' }, row.targetName || row.replyTargetUid || '—')
+        row.replyTargetUid
+          ? h('span', { class: 'private-msg-name is-link', onClick: () => userDrawerRef.value?.open(row.replyTargetUid), title: '查看用户详情' }, row.targetName || row.replyTargetUid || '—')
+          : h('span', { class: 'private-msg-name' }, row.targetName || row.replyTargetUid || '—')
       ])
   },
   {
