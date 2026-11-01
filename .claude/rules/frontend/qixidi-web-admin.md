@@ -65,7 +65,9 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
-- **视觉体系（2026-10-31 极简书签风定版，取代 10-30 高级风）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏 #F3F1EA，区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 细边框 + `--panel-shadow` 轻投影浮起感，圆角 10px）；墨绿（纸墨意象，冷暖互补）只做交互点缀（浅 `#3D7A5C` / 深 `#6FBF9A`，非 Naive 上下文用布局根注入的 `--cell-link` 变量，与 app.vue primaryColor 同源）；全局 6px 暖灰细滚动条（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式保留黑白灰骨架（纸片 #1a1a1e），投影/滚动条变量随主题切换
+- **视觉体系（2026-11-01 修订：品牌紫 + 米白侧栏）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏米白 #EDEAE1（深一档分层），区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 暖灰细边框 + `--panel-shadow` 轻投影，圆角 10px）；品牌紫（栖鸟 logo 同源）只做交互点缀——浅 `#534AB7`（hover #6860D4 / pressed #423A9E）/ 深色亮紫 `#968BEA`，非 Naive 上下文用布局根注入的 `--cell-link`/`--logo-bg` 变量（与 app.vue primaryColor 同源）；菜单选中 #E3DFF5、滚动条 #b3aad6（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式骨架不变（纸片 #1a1a1e、侧栏紫黑 #0F0D17）
+- **栖鸟 logo**：AdminLogo 组件（内联 SVG，底色 `--logo-bg` 随主题）；favicon.ico 是同构位图（PIL 超采样脚本生成，改图形需两处同步）；login 页 layout:false 不套布局，页面根自注入 `--logo-bg`
+- **列表用户/作者列一律可点开用户详情**：挂 `<UserDetailDrawer ref="userDrawerRef" />`，昵称 `is-link` + `onClick: () => userDrawerRef.value?.open(uid)`；uid 缺省的行不可点（无 is-link）；**注意评论行 commentUid 才是评论人（uid 是被评内容作者）**
 - **前台地址展示**：文章前台 URL = `https://qixidi.top/articles/{id}`（门户路由 pages/articles/[id].vue）
 
 ## 组件库（components/）
@@ -76,6 +78,8 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 | **AdminBreadcrumb** | 顶栏面包屑（自动按路由生成） | 无 props，数据源 useAdminMenu |
 | AdminStateTag | 状态标签（圆点+文字） | `{value, map: Record<状态值, {label, type}>}` |
 | AdminAvatar | 头像/封面（裂图兜底首字） | `{src?, name?, size: number|[w,h], shape?: 'circle'|'square'}` |
+| AdminLogo | 栖鸟 logo（紫色圆角方块+白鸟） | `{size?: number}`，底色走 `--logo-bg` |
+| **UserDetailDrawer** | **用户详情抽屉（列表用户/作者列点击入口）** | defineExpose `open(uuid)`，内部调 `/system/tripartite/user/{uuid}` |
 
 AdminListPage 双 script 块（普通块 export 类型 + setup 块实现），页面 import 类型用 `import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue'`。
 
