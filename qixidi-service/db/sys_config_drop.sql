@@ -1,8 +1,7 @@
 -- ============================================================
 -- sys_config 参数配置表下线（2026-10-31）
 -- 背景：参数设置页不再开发（P1-2 取消），sys_config 全链路删除
--- 配置项迁移：
---   sys.account.captchaOnOff → application.yml captcha.enabled（现值 false）
+-- 配置项迁移：--   sys.account.captchaOnOff → application.yml captcha.enabled（现值 false）
 --   sys.account.registerUser → application.yml sys.register-enabled（现值 false）
 -- ============================================================
 
