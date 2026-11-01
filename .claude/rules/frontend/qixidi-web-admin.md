@@ -48,7 +48,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 ```
 
 - **菜单/面包屑单一数据源** `composables/useAdminMenu.ts`：`ADMIN_MENU` 树（叶子 key=路由路径）+ `useAdminBreadcrumbs()`；**新增菜单项改这里一处**，侧栏 n-menu 与面包屑同源自动更新；**侧栏一级菜单必须带子菜单（禁止纯一级叶子）**；数据看板无菜单入口——首页 `/` 即数据看板页面，面包屑「首页」直达
-- **AdminSearchField**：`{key, label, type: 'input'|'multiple', options?, placeholder?, defaultValue?}`（2026-10-31 定版：单选 select 已删，**下拉一律 multiple 多选**）；所有字段统一「label 前置 + 控件」结构；multiple 渲染 n-select 恒 multiple（maxTagCount responsive 折叠 tag）；**控件宽度一律走默认 200px，禁止配 width 单独覆盖**（页面各自配宽会破坏全站搜索控件等宽）；key 直接对应后端查询字段——multiple 的 key 用复数名（states/types/groupIds 等），后端 BO/实体加同名 `List<T>` 字段（实体直收的加 `@TableField(exist = false)`）+ wrapper `in` 条件，值类型跟单值字段（status string→List<String>，state Integer→List<Integer>）
+- **AdminSearchField**：`{key, label, type: 'input'|'multiple'|'daterange', options?, placeholder?, beginKey?, endKey?, defaultValue?}`（2026-10-31 定版：单选 select 已删，**下拉一律 multiple 多选**）；所有字段统一「label 前置 + 控件」结构；multiple 渲染 n-select 恒 multiple（filterable，maxTagCount responsive 折叠 tag）；daterange 渲染 n-date-picker 范围控件，查询快照拆 `beginKey`/`endKey`（默认 `${key}Begin/End`）两个 yyyy-MM-dd 参数，后端 BO 配两个 String 字段；**控件宽度一律走默认值（input/multiple 200px、daterange 260px），禁止配 width 单独覆盖**（页面各自配宽会破坏全站搜索控件等宽）；key 直接对应后端查询字段——multiple 的 key 用复数名（states/types/groupIds 等），后端 BO/实体加同名 `List<T>` 字段（实体直收的加 `@TableField(exist = false)`）+ wrapper `in` 条件，值类型跟单值字段（status string→List<String>，state Integer→List<Integer>）
 - **查询快照机制**：点「查询」才取条件快照，翻页沿用快照——输入框实时变化不影响已出结果；页面无需自建任何分页/条件状态
 - **🔴 列宽双轨制**（2026-10-31 定版）：值长度不可预估的内容列（标题/名称/账号/邮箱/URL/摘要/模块/地点/浏览器/角色等）一律 `minWidth`（自适应拉伸填满容器，无留白）；值域窄而稳定的列（状态/类型/方式/时间/统计数字/IP/序号/操作按钮）才 `width` 固定。**scroll-x 会把表格总宽钉死在列宽合计**——含 minWidth 列时 AdminListPage 自动不传 scroll-x（小屏保护由列 minWidth + 容器横滚承担，勿手动传 scrollX 覆盖）
 - **分页默认 50/页**，pageSizes `[50, 100, 200]`（AdminListPage 默认值，页面不传）
@@ -60,6 +60,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **行内主标题即详情入口**：标题 `is-link` 主色可点击开详情抽屉，不放独立"详情"按钮
 - **文字浓度/字重定版**：正文列（标题/摘要/统计/时间）与「共 N 条」一律正常浓度（opacity 1）不做浅色弱化（`.cell-dim` 仅旧页空值占位遗留）；表头 600、行内主标题 400（已固化在 AdminListPage/admin-table.scss，页面不再写）
 - **统计轻查询**：`{pageNum:1, pageSize:1, 筛选条件}` 取 `total`，不拉全量
+- **URL 条件注入（收录数等点击跳转到列表页带条件）**：页面读 `route.query` 初值（toId 转数字）→ searchFields 对应字段 `defaultValue` + 外层 `:key="listKey"`（query 变化即重建 AdminListPage，翻页状态归零属预期）——参考 `pages/article/index.vue`（labelId/groupingId/specialId）、`pages/dictum/index.vue`（groupId/albumId）
 - **行内操作 loading** 用 `operatingId === row.id` 匹配单行
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
