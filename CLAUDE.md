@@ -41,7 +41,7 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 |------|------|--------|------|
 | **qixidi-service** | 服务端 API | Spring Boot 4.0 + Java 17 | 活跃开发 |
 | **qixidi-web-nuxt3** | 门户网站 + 用户后台（SSR） | Nuxt 3 + Vue 3 + Naive UI | 活跃开发 |
-| **qixidi-web-admin** | 管理后台 2.0（八大功能域主体已就绪，需求见其 docs/开发需求与设计.md） | Nuxt 3 + TS + Naive UI（全 CSR） | 活跃开发 |
+| **qixidi-web-admin** | 管理后台（八大功能域主体已就绪，需求见其 docs/开发需求与设计.md） | Nuxt 3 + TS + Naive UI（全 CSR） | 活跃开发 |
 
 ### 业务功能
 
@@ -205,7 +205,7 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 | 规则文件 | 职责 |
 |---------|------|
 | `rules/frontend/qixidi-web-nuxt3.md` | 门户 Nuxt 3 开发规范（SSR） |
-| `rules/frontend/qixidi-web-admin.md` | 管理后台 2.0 规范（全 CSR、表格列 render 样式、页面骨架） |
+| `rules/frontend/qixidi-web-admin.md` | 管理后台规范（全 CSR、表格列 render 样式、页面骨架） |
 | `rules/frontend/global-component-management.md` | 全局组件状态管理 |
 
 ### 后端规则（Spring Boot）

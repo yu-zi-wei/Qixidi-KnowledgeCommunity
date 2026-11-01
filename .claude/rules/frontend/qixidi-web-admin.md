@@ -1,6 +1,6 @@
 # qixidi-web-admin 开发规范
 
-管理后台 2.0（Nuxt 3 + TS + Naive UI，全 CSR）。需求源：`qixidi-web-admin/docs/开发需求与设计.md`。
+管理后台（Nuxt 3 + TS + Naive UI，全 CSR）。需求源：`qixidi-web-admin/docs/开发需求与设计.md`。
 
 ---
 

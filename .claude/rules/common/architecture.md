@@ -35,7 +35,7 @@
 | 应用 | 渲染 | 职责 |
 |------|------|------|
 | qixidi-web-nuxt3 | SSR 为主（交互页按需 CSR） | 门户 + 用户后台 |
-| qixidi-web-admin | 全 CSR（routeRules 关闭 SSR） | 管理后台 2.0（八大功能域，AdminListPage 骨架） |
+| qixidi-web-admin | 全 CSR（routeRules 关闭 SSR） | 管理后台（八大功能域，AdminListPage 骨架） |
 
 ### 门户目录结构
 

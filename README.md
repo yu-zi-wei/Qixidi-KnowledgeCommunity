@@ -177,28 +177,28 @@ qixidi/
 
 <table>
 <tr>
-<td><img src="img/后台/后台首页.png" alt="后台首页" /></td>
+<td><img src="img/后台/数据看板.png" alt="数据看板" /></td>
+<td><img src="img/后台/文章列表.png" alt="文章列表" /></td>
+</tr>
+<tr>
+<td align="center">数据看板</td>
+<td align="center">文章管理</td>
+</tr>
+<tr>
+<td><img src="img/后台/文章审核.png" alt="文章审核" /></td>
 <td><img src="img/后台/用户管理.png" alt="用户管理" /></td>
 </tr>
 <tr>
-<td align="center">后台首页</td>
+<td align="center">文章审核（详情抽屉）</td>
 <td align="center">用户管理</td>
 </tr>
 <tr>
-<td><img src="img/后台/文章列为.png" alt="文章管理" /></td>
-<td><img src="img/后台/系统任务.png" alt="系统任务" /></td>
+<td><img src="img/后台/随笔管理.png" alt="随笔管理" /></td>
+<td><img src="img/后台/深色模式.png" alt="深色模式" /></td>
 </tr>
 <tr>
-<td align="center">文章管理</td>
-<td align="center">系统任务</td>
-</tr>
-<tr>
-<td><img src="img/后台/导航配置.png" alt="导航配置" /></td>
-<td></td>
-</tr>
-<tr>
-<td align="center">导航配置</td>
-<td></td>
+<td align="center">随笔管理</td>
+<td align="center">深色模式</td>
 </tr>
 </table>
 
