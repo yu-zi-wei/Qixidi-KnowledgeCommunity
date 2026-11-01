@@ -82,6 +82,10 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 - dao 是自定义 `SaTokenDaoRedisCompat`（兼容低版本 Redis 的 KEEPTTL），官方 dao 装配已 exclude，**勿删**
 - **新增存入 session 的自定义类型必须同步登记** `qixidi-auth/src/main/resources/META-INF/satoken/sa-json-type.list`（jackson3 反序列化类型白名单，每行一个类名）；登记时把**嵌套字段类型一并登记**（含集合元素类型，如 LoginUser.roles 的 RoleDTO——只登顶层类型，登录链路回读 session 时才炸 500）
 
+### 权限码中文名（PermissionScanner）
+
+- 权限码中文名唯一登记处是 `PermissionScanner`（qixidi-system/config）三字典：`ACTION_LABELS`（动作词根）/ `MODULE_LABELS`（模块标题，口径与 useAdminMenu.ts 菜单一致）/ `OBJECT_LABELS`（对象前缀）。新增 `@SaCheckPermission` 权限码时同步登记词根，未登记的角色权限树该项回退英文原段；权限清单刻意不落库，扫描器是唯一权威源
+
 ---
 
 ## 防刷限流（CurrentLimitingInterceptor）
