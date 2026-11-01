@@ -1,6 +1,7 @@
 package com.qixidi.business.service.impl.news;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -18,8 +19,11 @@ import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
+import com.qixidi.business.domain.entity.TimeNotes;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.comment.ArticleComment;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.entity.news.NewsSystemRead;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.entity.timeNotes.TimeNotesComment;
@@ -33,9 +37,12 @@ import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
+import com.qixidi.business.mapper.TimeNotesMapper;
+import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
+import com.qixidi.business.mapper.dictum.DictumInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemReadMapper;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
@@ -67,6 +74,9 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     private final ArticleCommentMapper articleCommentMapper;
     private final DictumCommentMapper dictumCommentMapper;
     private final TimeNotesCommentMapper timeNotesCommentMapper;
+    private final ArticleInformationMapper articleInformationMapper;
+    private final TimeNotesMapper timeNotesMapper;
+    private final DictumInfoMapper dictumInfoMapper;
     private final ITripartiteUserService tripartiteUserService;
 
     /**
@@ -314,7 +324,37 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     @Override
     public TableDataInfo<ArticleCommentNewsVo> commentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<ArticleCommentNewsVo> page = newsUserRecordMapper.selectArticleNews(uuid, NewsType.COMMENT_NEWS.getCode(), pageQuery.build());
+        // 原单条 SQL join 评论表/文章表改为单表查消息后批量查各域组装（SQL 不跨业务域连表）
+        List<NewsUserRecord> records = commentNewsRecords(uuid, NewsType.COMMENT_NEWS.getCode());
+        List<Long> newsIds = recordNewsIds(records);
+        Map<Long, ArticleComment> comments = newsIds.isEmpty() ? Collections.emptyMap()
+            : articleCommentMapper.selectBatchIds(newsIds).stream()
+                .filter(c -> c.getState() == 0)
+                .collect(Collectors.toMap(ArticleComment::getId, c -> c, (a, b) -> a));
+        List<Long> articleIds = comments.values().stream()
+            .map(ArticleComment::getArticleId).filter(Objects::nonNull).distinct().toList();
+        Map<Long, String> titles = articleIds.isEmpty() ? Collections.emptyMap()
+            : articleInformationMapper.selectBatchIds(articleIds).stream()
+                .collect(Collectors.toMap(ArticleInformation::getId, ArticleInformation::getArticleTitle, (a, b) -> a));
+        List<NewsUserRecord> valid = records.stream().filter(r -> comments.containsKey(r.getNewsId())).toList();
+        Page<ArticleCommentNewsVo> page = commentNewsPage(valid, pageQuery, nur -> {
+            ArticleComment c = comments.get(nur.getNewsId());
+            ArticleCommentNewsVo vo = new ArticleCommentNewsVo();
+            vo.setId(c.getId());
+            vo.setArticleId(c.getArticleId());
+            vo.setParentId(c.getParentId());
+            vo.setCommentGrade(c.getCommentGrade());
+            vo.setCommentUid(c.getCommentUid());
+            vo.setTargetId(c.getTargetId());
+            vo.setTargetUid(c.getTargetUid());
+            vo.setContent(c.getContent());
+            vo.setType(c.getType());
+            vo.setArticleTitle(titles.get(c.getArticleId()));
+            vo.setNewsId(nur.getId());
+            vo.setBeenRead(nur.getBeenRead());
+            vo.setCreateTime(nur.getCreateTime());
+            return vo;
+        });
         fillCommenterDisplay(page.getRecords(), ArticleCommentNewsVo::getCommentUid,
             (r, u) -> { r.setCommentName(u.getNickname()); r.setCommentAvatar(u.getAvatar()); });
         return TableDataInfo.build(page);
@@ -323,7 +363,36 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     @Override
     public TableDataInfo<TimeNotesCommentNewsVo> timeNotesCommentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<TimeNotesCommentNewsVo> page = newsUserRecordMapper.selectTimeNotesCommentNews(uuid, NewsType.TIME_NOTES_COMMENT_NEWS.getCode(), pageQuery.build());
+        List<NewsUserRecord> records = commentNewsRecords(uuid, NewsType.TIME_NOTES_COMMENT_NEWS.getCode());
+        List<Long> newsIds = recordNewsIds(records);
+        Map<Long, TimeNotesComment> comments = newsIds.isEmpty() ? Collections.emptyMap()
+            : timeNotesCommentMapper.selectBatchIds(newsIds).stream()
+                .filter(c -> c.getStatus() == 0)
+                .collect(Collectors.toMap(TimeNotesComment::getId, c -> c, (a, b) -> a));
+        List<Long> notesIds = comments.values().stream()
+            .map(TimeNotesComment::getTimeNotesId).filter(Objects::nonNull).distinct().toList();
+        Map<Long, String> titles = notesIds.isEmpty() ? Collections.emptyMap()
+            : timeNotesMapper.selectBatchIds(notesIds).stream()
+                .collect(Collectors.toMap(TimeNotes::getId, TimeNotes::getTitle, (a, b) -> a));
+        List<NewsUserRecord> valid = records.stream().filter(r -> comments.containsKey(r.getNewsId())).toList();
+        Page<TimeNotesCommentNewsVo> page = commentNewsPage(valid, pageQuery, nur -> {
+            TimeNotesComment c = comments.get(nur.getNewsId());
+            TimeNotesCommentNewsVo vo = new TimeNotesCommentNewsVo();
+            vo.setId(c.getId());
+            vo.setTimeNotesId(c.getTimeNotesId());
+            vo.setParentId(c.getParentId());
+            vo.setCommentGrade(c.getCommentGrade());
+            vo.setCommentUid(c.getCommentUid());
+            vo.setTargetId(c.getTargetId() == null ? null : String.valueOf(c.getTargetId()));
+            vo.setTargetUid(c.getTargetUid());
+            vo.setContent(c.getContent());
+            vo.setType(c.getType());
+            vo.setTitle(titles.get(c.getTimeNotesId()));
+            vo.setNewsId(nur.getId());
+            vo.setBeenRead(nur.getBeenRead());
+            vo.setCreateTime(nur.getCreateTime());
+            return vo;
+        });
         fillCommenterDisplay(page.getRecords(), TimeNotesCommentNewsVo::getCommentUid,
             (r, u) -> { r.setCommentName(u.getNickname()); r.setCommentAvatar(u.getAvatar()); });
         return TableDataInfo.build(page);
@@ -332,10 +401,65 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     @Override
     public TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
-        IPage<DictumCommentNewsVo> page = newsUserRecordMapper.selectDictumCommentNews(uuid, NewsType.DICTUM_COMMENT_NEWS.getCode(), pageQuery.build());
+        List<NewsUserRecord> records = commentNewsRecords(uuid, NewsType.DICTUM_COMMENT_NEWS.getCode());
+        List<Long> newsIds = recordNewsIds(records);
+        Map<Long, DictumComment> comments = newsIds.isEmpty() ? Collections.emptyMap()
+            : dictumCommentMapper.selectBatchIds(newsIds).stream()
+                .filter(c -> c.getStatus() == 0)
+                .collect(Collectors.toMap(DictumComment::getId, c -> c, (a, b) -> a));
+        List<Long> dictumIds = comments.values().stream()
+            .map(DictumComment::getDictumId).filter(Objects::nonNull).distinct().toList();
+        Map<Long, String> contents = dictumIds.isEmpty() ? Collections.emptyMap()
+            : dictumInfoMapper.selectBatchIds(dictumIds).stream()
+                .collect(Collectors.toMap(DictumInfo::getId, DictumInfo::getContent, (a, b) -> a));
+        List<NewsUserRecord> valid = records.stream().filter(r -> comments.containsKey(r.getNewsId())).toList();
+        Page<DictumCommentNewsVo> page = commentNewsPage(valid, pageQuery, nur -> {
+            DictumComment c = comments.get(nur.getNewsId());
+            DictumCommentNewsVo vo = new DictumCommentNewsVo();
+            vo.setId(c.getId());
+            vo.setDictumId(c.getDictumId());
+            vo.setParentId(c.getParentId());
+            vo.setCommentGrade(c.getCommentGrade());
+            vo.setCommentUid(c.getCommentUid());
+            vo.setTargetId(c.getTargetId());
+            vo.setTargetUid(c.getTargetUid());
+            vo.setContent(c.getContent());
+            vo.setType(c.getType());
+            vo.setWorksContent(contents.get(c.getDictumId()));
+            vo.setNewsId(nur.getId());
+            vo.setBeenRead(nur.getBeenRead());
+            vo.setCreateTime(nur.getCreateTime());
+            return vo;
+        });
         fillCommenterDisplay(page.getRecords(), DictumCommentNewsVo::getCommentUid,
             (r, u) -> { r.setCommentName(u.getNickname()); r.setCommentAvatar(u.getAvatar()); });
         return TableDataInfo.build(page);
+    }
+
+    /**
+     * 某用户某类型消息记录全量（create_time 倒序），供批量查评论域求交后内存分页
+     */
+    private List<NewsUserRecord> commentNewsRecords(String uuid, Integer type) {
+        return newsUserRecordMapper.selectList(new LambdaQueryWrapper<NewsUserRecord>()
+            .eq(NewsUserRecord::getUid, uuid)
+            .eq(NewsUserRecord::getType, type)
+            .orderByDesc(NewsUserRecord::getCreateTime));
+    }
+
+    private List<Long> recordNewsIds(List<NewsUserRecord> records) {
+        return records.stream().map(NewsUserRecord::getNewsId).filter(Objects::nonNull).distinct().toList();
+    }
+
+    /**
+     * 消息记录与有效评论求交后的手动分页（等价原 join + SQL 分页的 total/排序/分页语义）
+     */
+    private <V> Page<V> commentNewsPage(List<NewsUserRecord> valid, PageQuery pageQuery,
+                                        Function<NewsUserRecord, V> assembler) {
+        int fromIndex = (int) Math.min((long) (pageQuery.getPageNum() - 1) * pageQuery.getPageSize(), valid.size());
+        int toIndex = (int) Math.min((long) fromIndex + pageQuery.getPageSize(), valid.size());
+        Page<V> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize(), valid.size());
+        page.setRecords(valid.subList(fromIndex, toIndex).stream().map(assembler).toList());
+        return page;
     }
 
     @Override

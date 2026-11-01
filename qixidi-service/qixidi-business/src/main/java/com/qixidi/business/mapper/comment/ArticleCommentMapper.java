@@ -33,8 +33,6 @@ public interface ArticleCommentMapper extends BaseMapperPlus<ArticleCommentMappe
 
     List<CountUserWebsiteVo> selectCommentCountByUserIds(@Param("uuids") Collection<String> uuids);
 
-    List<CountUserWebsiteVo> selectFansCommentCountByUserIds(@Param("uuids") Collection<String> uuids);
-
     List<ArticleCountVo> selectCommentCountByArticleIds(@Param("articleIds") Collection<Long> articleIds);
 }
 

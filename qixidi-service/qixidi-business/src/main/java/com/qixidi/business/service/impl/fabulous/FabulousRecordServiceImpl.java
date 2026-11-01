@@ -15,6 +15,7 @@ import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.CommonStatusEnums;
@@ -23,6 +24,7 @@ import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
+import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
 import com.qixidi.business.service.ITripartiteUserService;
@@ -52,6 +54,7 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
     private final FabulousRecordMapper baseMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final ArticleInformationServiceImpl articleInformationService;
+    private final ArticleInformationMapper articleInformationMapper;
     private final ITripartiteUserService tripartiteUserService;
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
@@ -217,7 +220,34 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
 
     @Override
     public TableDataInfo<ArticleInformationVo> fabulousList(UserHomeBo bo, PageQuery pageQuery) {
-        IPage<ArticleInformationVo> page = baseMapper.fabulousArticleList(bo, pageQuery.build());
+        // 原单条 SQL join 文章表改为两步单表（SQL 不跨业务域连表）：查点赞记录后批量查有效文章内存组装
+        List<FabulousRecord> records = baseMapper.selectList(new LambdaQueryWrapper<FabulousRecord>()
+                .eq(FabulousRecord::getUid, bo.getUid())
+                .orderByDesc(FabulousRecord::getCreateTime));
+        if (records.isEmpty()) {
+            return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+        }
+        List<Long> typeIds = records.stream().map(FabulousRecord::getTypeId).filter(Objects::nonNull).distinct().toList();
+        Map<Long, ArticleInformation> articles = typeIds.isEmpty() ? Map.of()
+                : articleInformationMapper.selectBatchIds(typeIds).stream()
+                .filter(a -> a.getState() == 0 && a.getAuditState() == 2)
+                .collect(Collectors.toMap(ArticleInformation::getId, a -> a, (a, b) -> a));
+        // 原 DISTINCT 语义：一篇文章多条点赞记录折叠一行，展示时间取最新点赞时间（记录按时间倒序，首见即最新）
+        Map<Long, FabulousRecord> latestOfArticle = new LinkedHashMap<>();
+        records.forEach(r -> {
+            if (articles.containsKey(r.getTypeId())) {
+                latestOfArticle.putIfAbsent(r.getTypeId(), r);
+            }
+        });
+        List<FabulousRecord> valid = new ArrayList<>(latestOfArticle.values());
+        int fromIndex = (int) Math.min((long) (pageQuery.getPageNum() - 1) * pageQuery.getPageSize(), valid.size());
+        int toIndex = (int) Math.min((long) fromIndex + pageQuery.getPageSize(), valid.size());
+        Page<ArticleInformationVo> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize(), valid.size());
+        page.setRecords(valid.subList(fromIndex, toIndex).stream().map(r -> {
+            ArticleInformationVo vo = BeanUtil.toBean(articles.get(r.getTypeId()), ArticleInformationVo.class);
+            vo.setCreateTime(r.getCreateTime());
+            return vo;
+        }).toList());
         fillAuthorDisplay(page.getRecords());
         return TableDataInfo.build(page);
     }

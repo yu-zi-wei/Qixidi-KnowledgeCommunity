@@ -4,6 +4,7 @@ package com.qixidi.business.service.impl.stat;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.light.core.utils.DateUtils;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.label.LabelGroupingInfo;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.stat.StatDataInfo;
@@ -12,6 +13,7 @@ import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.domain.vo.stat.StatDataInfoVo;
 import com.qixidi.business.domain.vo.stat.StatReturnDataVo;
 import com.qixidi.business.domain.vo.stat.StatTheDataVo;
+import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.stat.StatDataInfoMapper;
@@ -24,8 +26,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 统计数据信息Service业务层处理
@@ -41,6 +45,7 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
     private final StatTheDataMapper statTheDataMapper;
     private final LabelInfoMapper labelInfoMapper;
     private final LabelGroupingInfoMapper labelGroupingInfoMapper;
+    private final ArticleInformationMapper articleInformationMapper;
 
     @Override
     public StatDataInfoVo queryPageList(StatDataInfoVo bo) {
@@ -83,7 +88,7 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
     @Override
     public Map<String, Object> labelDate(StatDataInfoVo bo) {
         Map<String, Object> map = new HashMap<>();
-        List<StatReturnDataVo> statReturnDataVos = labelGroupingInfoMapper.selectStatData(bo);
+        map.put("labelGroup", groupingArticleCounts());
         List<LabelInfoVo> list = labelInfoMapper.selectVoList(null);
         List<StatReturnDataVo> lists = new ArrayList<>();
         list.forEach(item -> {
@@ -95,9 +100,33 @@ public class StatDataInfoServiceImpl implements IStatDataInfoService {
                 lists.add(statReturnDataVo);
             }
         });
-        map.put("labelGroup", statReturnDataVos);
         map.put("label", lists);
         return map;
+    }
+
+    /**
+     * 各分组文章数（原单条 SQL join 文章表改为两步单表：查有效分组后批量查文章域按 grouping_id 内存计数；
+     * 保持原 GROUP BY grouping_name 的同名分组合并语义）
+     */
+    private List<StatReturnDataVo> groupingArticleCounts() {
+        List<LabelGroupingInfo> groupings = labelGroupingInfoMapper.selectList(
+                new LambdaQueryWrapper<LabelGroupingInfo>().eq(LabelGroupingInfo::getState, 0));
+        if (groupings.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Map<Long, Long> articleCounts = articleInformationMapper.selectList(
+                        new LambdaQueryWrapper<ArticleInformation>()
+                                .select(ArticleInformation::getId, ArticleInformation::getGroupingId)
+                                .in(ArticleInformation::getGroupingId,
+                                        groupings.stream().map(LabelGroupingInfo::getId).toList()))
+                .stream()
+                .filter(a -> a.getGroupingId() != null)
+                .collect(Collectors.groupingBy(ArticleInformation::getGroupingId, Collectors.counting()));
+        Map<String, Long> byName = new LinkedHashMap<>();
+        groupings.forEach(g -> byName.merge(g.getGroupingName(), articleCounts.getOrDefault(g.getId(), 0L), Long::sum));
+        return byName.entrySet().stream()
+                .map(e -> new StatReturnDataVo(e.getKey(), null, e.getValue()))
+                .toList();
     }
 
 }

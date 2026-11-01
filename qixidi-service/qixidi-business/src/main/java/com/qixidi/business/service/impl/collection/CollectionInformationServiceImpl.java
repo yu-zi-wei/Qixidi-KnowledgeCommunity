@@ -13,7 +13,6 @@ import com.light.core.core.domain.CensusEntity;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.domain.vo.CensusVo;
 import com.light.core.core.page.TableDataInfo;
-import com.light.core.utils.EscapeUtil;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
@@ -40,6 +39,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -235,8 +235,35 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
 
     @Override
     public Page<ArticleInformationVo> articleList(CollectionRecordBo bo, PageQuery pageQuery) {
-        bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
-        Page<ArticleInformationVo> page = baseMapper.articleList(bo, pageQuery.build());
+        // 原单条 SQL join 文章表改为两步单表查询（SQL 不跨业务域连表）：先查收藏记录，再批量查有效文章内存组装
+        List<CollectionRecord> records = collectionRecordMapper.selectList(new LambdaQueryWrapper<CollectionRecord>()
+                .eq(CollectionRecord::getState, 0)
+                .eq(bo.getCollectionId() != null, CollectionRecord::getCollectionId, bo.getCollectionId())
+                .orderByDesc(CollectionRecord::getCreateTime));
+        if (records.isEmpty()) {
+            return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+        }
+        List<Long> targetIds = records.stream().map(CollectionRecord::getTargetId).filter(Objects::nonNull).distinct().toList();
+        Map<Long, ArticleInformation> articles = targetIds.isEmpty() ? Map.of()
+                : articleInformationMapper.selectBatchIds(targetIds).stream()
+                .filter(a -> a.getState() == 0)
+                .filter(a -> StringUtils.isBlank(bo.getArticleTitle())
+                        || a.getArticleTitle().contains(bo.getArticleTitle()))
+                .collect(Collectors.toMap(ArticleInformation::getId, a -> a, (a, b) -> a));
+        // 保留收藏时间倒序；被删/筛掉的文章记录剔除（等价原 join 的 INNER 语义）
+        List<CollectionRecord> valid = records.stream()
+                .filter(r -> articles.containsKey(r.getTargetId()))
+                .toList();
+        int fromIndex = (int) Math.min((long) (pageQuery.getPageNum() - 1) * pageQuery.getPageSize(), valid.size());
+        int toIndex = (int) Math.min((long) fromIndex + pageQuery.getPageSize(), valid.size());
+        Page<ArticleInformationVo> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize(), valid.size());
+        page.setRecords(valid.subList(fromIndex, toIndex).stream().map(r -> {
+            ArticleInformationVo vo = BeanUtil.toBean(articles.get(r.getTargetId()), ArticleInformationVo.class);
+            vo.setCollectionId(r.getCollectionId());
+            vo.setCollectionRecordId(r.getId());
+            vo.setCreateTime(r.getCreateTime());
+            return vo;
+        }).toList());
         fillAuthorDisplay(page.getRecords());
         return page;
     }

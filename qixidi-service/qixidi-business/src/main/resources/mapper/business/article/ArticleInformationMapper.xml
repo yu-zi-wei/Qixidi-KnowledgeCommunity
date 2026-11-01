@@ -337,12 +337,10 @@
         GROUP BY user_id
     </select>
 
-    <!-- aliveUids=存活作者集合（Service 查用户域 state=0 传入，等价原 join um.state=0 过滤：冻结/注销作者的文章不展示）；
-         作者展示字段由 Service 层组装 -->
+    <!-- authorUids=关注且存活的作者集合（Service 查关注域 target_id 与用户域 state=0 求交传入，
+         等价原 join b_user_follow/b_user_main 过滤；作者展示字段由 Service 层组装） -->
     <select id="FollowArticleInfoList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
-        SELECT uf.uid,
-        uf.target_id,
-        ai.id,
+        SELECT ai.id,
         ai.user_id,
         ai.article_title,
         ai.article_abstract,
@@ -356,14 +354,10 @@
         ai.number_times,
         ai.audit_state,
         ai.audit_time
-        FROM b_user_follow AS uf
-        LEFT JOIN b_article_information AS ai ON ai.user_id = uf.target_id
-        WHERE uf.uid = #{bo.uid}
-        AND uf.type = 1
-        AND uf.state = 0
-        AND ai.state = 0
+        FROM b_article_information AS ai
+        WHERE ai.state = 0
         AND ai.user_id in
-        <foreach collection="aliveUids" item="aliveItem" open="(" separator="," close=")">#{aliveItem}</foreach>
+        <foreach collection="authorUids" item="authorItem" open="(" separator="," close=")">#{authorItem}</foreach>
         AND ai.audit_state = 2
         <if test="bo.sortType==1">
             order by ai.heat_weight desc

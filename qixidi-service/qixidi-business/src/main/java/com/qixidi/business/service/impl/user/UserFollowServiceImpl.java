@@ -2,16 +2,20 @@ package com.qixidi.business.service.impl.user;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.light.exception.ServiceException;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.user.UserFollowBo;
+import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.entity.user.UserFollow;
 import com.qixidi.business.domain.enums.UserFollowTypeEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
+import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
@@ -22,9 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -99,7 +107,7 @@ public class UserFollowServiceImpl implements IUserFollowService {
         if (type.equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注列表
             return baseMapper.followUserList(uid, type);
         } else if (type.equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) {//标签关注列表
-            return baseMapper.followLabelList(uid, type);
+            return followLabelList(uid, type);
         }
         return null;
     }
@@ -110,8 +118,38 @@ public class UserFollowServiceImpl implements IUserFollowService {
         if (type.equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注列表
             return baseMapper.followUserList(uid, type);
         } else if (type.equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) {//标签关注列表
-            return baseMapper.followLabelList(uid, type);
+            return followLabelList(uid, type);
         }
         return null;
+    }
+
+    /**
+     * 标签关注列表（原单条 SQL join 标签表改为两步单表：查关注记录后批量查标签域组装；
+     * LEFT JOIN 语义保留——标签已删的记录仍返回，标签字段为空，仅关注时间有值）
+     */
+    private List<LabelInfoVo> followLabelList(String uid, Integer type) {
+        List<UserFollow> follows = baseMapper.selectList(new LambdaQueryWrapper<UserFollow>()
+                .eq(UserFollow::getUid, uid)
+                .eq(UserFollow::getType, type)
+                .eq(UserFollow::getState, 0));
+        if (follows.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Long> labelIds = follows.stream()
+                .map(UserFollow::getTargetId)
+                .filter(StringUtils::isNotBlank)
+                .filter(s -> s.matches("\\d+"))
+                .distinct()
+                .map(Long::valueOf)
+                .toList();
+        Map<Long, LabelInfo> labels = labelIds.isEmpty() ? Collections.emptyMap()
+                : labelInfoMapper.selectBatchIds(labelIds).stream()
+                        .collect(Collectors.toMap(LabelInfo::getId, l -> l, (a, b) -> a));
+        return follows.stream().map(f -> {
+            LabelInfo label = labels.get(NumberUtil.isLong(f.getTargetId()) ? Long.valueOf(f.getTargetId()) : null);
+            LabelInfoVo vo = label == null ? new LabelInfoVo() : BeanUtil.toBean(label, LabelInfoVo.class);
+            vo.setCreateTime(f.getCreateTime());
+            return vo;
+        }).toList();
     }
 }

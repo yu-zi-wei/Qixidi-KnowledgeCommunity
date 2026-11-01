@@ -1,6 +1,9 @@
 package com.qixidi.business.service.count;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.qixidi.business.domain.entity.article.ArticleInformation;
+import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
@@ -59,8 +62,13 @@ public class UserCountQueryHelper {
 
     public Map<String, Integer> fansCommentCount(Collection<String> uuids) {
         if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
-        return toMap(commentMapper.selectFansCommentCountByUserIds(uuids),
-            CountUserWebsiteVo::getUuid, CountUserWebsiteVo::getFansCommentCount);
+        // 原 join 文章表语义：按文章作者统计其文章的有效评论数；两步单表（查作者文章→按文章数评论）+ 内存归并
+        Map<Long, String> articleOwner = articleOwnerMap(uuids);
+        if (articleOwner.isEmpty()) return Collections.emptyMap();
+        Map<String, Integer> result = new HashMap<>();
+        commentMapper.selectCommentCountByArticleIds(articleOwner.keySet())
+            .forEach(c -> result.merge(articleOwner.get(c.getArticleId()), c.getCount(), Integer::sum));
+        return result;
     }
 
     public Map<String, Integer> collectionCount(Collection<String> uuids) {
@@ -95,8 +103,28 @@ public class UserCountQueryHelper {
 
     public Map<String, Integer> fabulousCount(Collection<String> uuids) {
         if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
-        return toMap(fabulousMapper.selectFabulousCountByUserIds(uuids),
-            CountUserWebsiteVo::getUuid, CountUserWebsiteVo::getFabulousCount);
+        // 原 join 文章表语义：按文章作者统计其文章获得的点赞数（type=1 且 state=0）；两步单表 + 内存归并
+        Map<Long, String> articleOwner = articleOwnerMap(uuids);
+        if (articleOwner.isEmpty()) return Collections.emptyMap();
+        Map<String, Integer> result = new HashMap<>();
+        fabulousMapper.selectList(new LambdaQueryWrapper<FabulousRecord>()
+                .select(FabulousRecord::getTypeId)
+                .eq(FabulousRecord::getType, 1)
+                .eq(FabulousRecord::getState, 0)
+                .in(FabulousRecord::getTypeId, articleOwner.keySet()))
+            .forEach(f -> result.merge(articleOwner.get(f.getTypeId()), 1, Integer::sum));
+        return result;
+    }
+
+    /**
+     * 文章id→作者uuid（原 join 文章表按作者聚合的等价前置查询）
+     */
+    private Map<Long, String> articleOwnerMap(Collection<String> uuids) {
+        return articleMapper.selectList(new LambdaQueryWrapper<ArticleInformation>()
+                .select(ArticleInformation::getId, ArticleInformation::getUserId)
+                .in(ArticleInformation::getUserId, uuids))
+            .stream()
+            .collect(Collectors.toMap(ArticleInformation::getId, ArticleInformation::getUserId, (a, b) -> a));
     }
 
     public Map<String, Integer> viewCount(Collection<String> uuids) {

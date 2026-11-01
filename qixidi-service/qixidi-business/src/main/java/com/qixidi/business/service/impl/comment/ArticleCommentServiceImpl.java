@@ -122,6 +122,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     public TableDataInfo<ArticleCommentVo> adminQueryPageList(ArticleCommentBo bo, PageQuery pageQuery) {
         IPage<ArticleCommentVo> result = baseMapper.selectCommentIndex(pageQuery.build(), buildAdminQueryWrapper(bo));
         fillUserDisplay(result.getRecords());
+        fillArticleTitle(result.getRecords());
         return TableDataInfo.build(result);
     }
 
@@ -132,7 +133,28 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         wrapper.eq("ac.id", id);
         List<ArticleCommentVo> records = baseMapper.selectCommentIndex(new Page<>(1, 1), wrapper).getRecords();
         fillUserDisplay(records);
+        fillArticleTitle(records);
         return records.isEmpty() ? null : records.get(0);
+    }
+
+    /**
+     * 组装评论所在文章标题（键 articleId，原 SQL join 文章表的展示字段，跨业务域由 Service 层组装）
+     */
+    private void fillArticleTitle(List<ArticleCommentVo> records) {
+        if (CollectionUtils.isEmpty(records)) {
+            return;
+        }
+        List<Long> articleIds = records.stream()
+                .map(ArticleCommentVo::getArticleId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+        if (articleIds.isEmpty()) {
+            return;
+        }
+        Map<Long, String> titles = articleInformationMapper.selectBatchIds(articleIds).stream()
+                .collect(Collectors.toMap(ArticleInformation::getId, ArticleInformation::getArticleTitle, (a, b) -> a));
+        records.forEach(r -> r.setArticleName(titles.get(r.getArticleId())));
     }
 
     /**

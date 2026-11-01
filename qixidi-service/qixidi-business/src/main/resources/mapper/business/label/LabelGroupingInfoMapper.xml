@@ -23,12 +23,5 @@
         ORDER BY li.entries_number DESC
     </select>
 
-    <select id="selectStatData" resultType="com.qixidi.business.domain.vo.stat.StatReturnDataVo">
-        SELECT lgi.grouping_name as name,
-               count(ai.id)      as data
-        FROM b_label_grouping_info AS lgi
-                 LEFT JOIN b_article_information AS ai ON lgi.id = ai.grouping_id
-        WHERE lgi.state = 0
-        GROUP BY lgi.grouping_name
-    </select>
+    <!-- 分组文章数统计原 join 文章表的查询已下线：StatDataInfoServiceImpl 单表查分组后批量查文章域内存计数 -->
 </mapper>

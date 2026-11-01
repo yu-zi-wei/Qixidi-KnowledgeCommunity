@@ -5,13 +5,11 @@
 <mapper namespace="com.qixidi.business.mapper.comment.ArticleCommentMapper">
 
     <!-- 后台列表查询：评论人/被回复人昵称头像由 Service 层按 comment_uid/target_uid 调用户域接口组装（SQL 不跨用户域连表）；
-         所在文章标题 join 文章表 -->
+         所在文章标题由 Service 层按 article_id 批量查文章域组装 -->
     <sql id="ArticleCommentVo">
         select ac.id, ac.article_id, ac.uid, ac.parent_id, ac.comment_grade, ac.target_id, ac.target_uid,
-               ac.comment_uid, ac.content, ac.type, ac.state, ac.create_time, ac.update_time,
-               ai.article_title as articleName
+               ac.comment_uid, ac.content, ac.type, ac.state, ac.create_time, ac.update_time
         from b_article_comment as ac
-                 left join b_article_information as ai on ac.article_id = ai.id
     </sql>
 
     <select id="selectCommentIndex" resultType="com.qixidi.business.domain.vo.comment.ArticleCommentVo">
@@ -35,17 +33,7 @@
         GROUP BY comment_uid
     </select>
 
-    <select id="selectFansCommentCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        SELECT ai.user_id AS uuid, COUNT(*) AS fansCommentCount
-        FROM b_article_comment ac
-            INNER JOIN b_article_information ai ON ac.article_id = ai.id
-        WHERE ai.user_id IN
-        <foreach collection="uuids" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        AND ac.state = 0
-        GROUP BY ai.user_id
-    </select>
+    <!-- 按作者统计其文章的有效评论数原 join 文章表的查询已下线：UserCountQueryHelper 两步单表 + 内存归并 -->
 
     <select id="selectCommentCountByArticleIds" resultType="com.qixidi.business.domain.vo.article.ArticleCountVo">
         SELECT article_id AS articleId, COUNT(*) AS count

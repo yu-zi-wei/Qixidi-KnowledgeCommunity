@@ -3,20 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.user.UserFollowMapper">
-    <select id="followLabelList" resultType="com.qixidi.business.domain.vo.label.LabelInfoVo">
-        SELECT li.id,
-               li.label_name,
-               li.label_describe,
-               li.label_cover,
-               li.follow_number,
-               li.article_number,
-               uf.create_time
-        FROM b_user_follow AS uf
-                 LEFT JOIN b_label_info AS li ON uf.target_id = li.id
-        WHERE uf.type = #{type}
-          AND uf.state = 0
-          and uf.uid = #{uid}
-    </select>
+    <!-- 标签关注列表原 join 标签表的查询已下线：UserFollowServiceImpl 单表查关注记录后批量查标签域组装 -->
 
     <select id="followUserList" resultType="com.qixidi.business.domain.vo.user.TripartiteUserVo">
         SELECT um.uuid,

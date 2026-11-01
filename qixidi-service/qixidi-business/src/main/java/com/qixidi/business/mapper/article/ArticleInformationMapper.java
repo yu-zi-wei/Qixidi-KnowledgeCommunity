@@ -90,10 +90,11 @@ public interface ArticleInformationMapper extends BaseMapperPlus<ArticleInformat
     ArticleInformationVo selectAuditStatus(@Param("id") Long id);
 
     /**
-     * 关注文章流（aliveUids=存活作者集合，等价原 join um.state=0 过滤；作者展示字段由 Service 组装）
+     * 关注文章流（authorUids=关注且存活的作者集合，Service 求交传入，等价原 join b_user_follow/b_user_main 过滤；
+     * 作者展示字段由 Service 组装）
      */
     Page<ArticleInformationVo> FollowArticleInfoList(@Param("bo") SortTypeBo bo,
-                                                     @Param("aliveUids") List<String> aliveUids,
+                                                     @Param("authorUids") List<String> authorUids,
                                                      Page<ArticleInformation> build);
 
     /**

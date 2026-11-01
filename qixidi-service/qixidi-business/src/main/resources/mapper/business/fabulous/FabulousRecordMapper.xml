@@ -14,24 +14,7 @@
         <result property="uid" column="uid"/>
     </resultMap>
 
-    <!-- 作者昵称/头像/职业由 Service 层按 user_id 调用户域接口组装 -->
-    <select id="fabulousArticleList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
-        SELECT DISTINCT ai.id,
-                        ai.user_id,
-                        ai.article_title,
-                        ai.article_abstract,
-                        ai.article_cover,
-                        ai.type,
-                        ai.special_id,
-                        ai.number_times,
-                        fr.create_time
-        FROM b_fabulous_record AS fr
-                 LEFT JOIN b_article_information AS ai ON fr.type_id = ai.id
-        where ai.state = 0
-          and ai.audit_state = 2
-          and fr.uid = #{bo.uid}
-        order by fr.create_time desc
-    </select>
+    <!-- 点赞文章列表原 join 文章表的查询已下线：FabulousRecordServiceImpl 单表查点赞记录后批量查文章域组装 -->
 
     <select id="selectLikeCountByArticleIds" resultType="com.qixidi.business.domain.vo.article.ArticleCountVo">
         SELECT type_id AS articleId, COUNT(*) AS count
@@ -42,17 +25,5 @@
         </foreach>
         AND type = 1 AND state = 0
         GROUP BY type_id
-    </select>
-
-    <select id="selectFabulousCountByUserIds" resultType="com.qixidi.business.domain.vo.CountUserWebsiteVo">
-        SELECT ai.user_id AS uuid, COUNT(*) AS fabulousCount
-        FROM b_fabulous_record fr
-        LEFT JOIN b_article_information ai ON fr.type_id = ai.id
-        WHERE ai.user_id IN
-        <foreach collection="uuids" item="uuid" open="(" separator="," close=")">
-            #{uuid}
-        </foreach>
-        AND fr.type = 1 AND fr.state = 0
-        GROUP BY ai.user_id
     </select>
 </mapper>

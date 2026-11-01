@@ -789,17 +789,31 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
 
     /**
      * 关注/分组文章流：存活作者集合既作过滤参数（等价原 join um.state=0，冻结/注销作者的文章不展示）
-     * 也承载作者展示字段，免二次批量查
+     * 也承载作者展示字段，免二次批量查；关注流额外与关注域 target_id 求交（等价原 join b_user_follow）
      */
     private Page<ArticleInformationVo> listAliveAuthorPage(SortTypeBo bo, PageQuery pageQuery, boolean follow) {
         Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
         if (aliveUsers.isEmpty()) {
             return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
         }
-        List<String> aliveUids = new ArrayList<>(aliveUsers.keySet());
-        Page<ArticleInformationVo> page = follow
-                ? baseMapper.FollowArticleInfoList(bo, aliveUids, pageQuery.build())
-                : baseMapper.LabelGArticleInfoList(bo, aliveUids, pageQuery.build());
+        Page<ArticleInformationVo> page;
+        if (follow) {
+            List<String> followUids = userFollowMapper.selectList(new LambdaQueryWrapper<UserFollow>()
+                            .eq(UserFollow::getUid, bo.getUid())
+                            .eq(UserFollow::getType, UserFollowTypeEnums.b_user_follow.getCode())
+                            .eq(UserFollow::getState, StatusEnums.NORMAL.getCode()))
+                    .stream()
+                    .map(UserFollow::getTargetId)
+                    .filter(aliveUsers::containsKey)
+                    .distinct()
+                    .toList();
+            if (followUids.isEmpty()) {
+                return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+            }
+            page = baseMapper.FollowArticleInfoList(bo, followUids, pageQuery.build());
+        } else {
+            page = baseMapper.LabelGArticleInfoList(bo, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
+        }
         fillAuthorInfo(page.getRecords(), aliveUsers);
         enrichWithRealTimeCounts(page.getRecords());
         return page;

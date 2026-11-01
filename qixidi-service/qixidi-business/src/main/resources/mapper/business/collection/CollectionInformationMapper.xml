@@ -3,39 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qixidi.business.mapper.collection.CollectionInformationMapper">
-    <select id="articleList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
-        SELECT ai.id,
-        ai.user_id,
-        ai.article_title,
-        ai.article_cover,
-        ai.article_abstract,
-        ai.theme,
-        ai.`type`,
-        ai.`state`,
-        ai.create_time,
-        ai.special_id,
-        ai.label_id,
-        ai.grouping_id,
-        ai.number_times,
-        ai.audit_state,
-        ai.audit_time,
-        cr.collection_id,
-        cr.id as collectionRecordId,
-        cr.create_time
-        FROM b_collection_record AS cr
-        LEFT JOIN b_article_information AS ai ON cr.target_id = ai.id
-        <where>
-            cr.state=0
-            and ai.state=0
-            <if test="bo.articleTitle !='' and bo.articleTitle !=null">
-                and ai.article_title like concat('%',#{bo.articleTitle},'%')
-            </if>
-            <if test="bo.collectionId !='' and bo.collectionId !=null">
-                and cr.collection_id=#{bo.collectionId}
-            </if>
-        </where>
-        order by cr.create_time desc
-    </select>
+    <!-- 收藏文章列表原 join 文章表的查询已下线：CollectionInformationServiceImpl 单表查收藏记录后批量查文章域组装 -->
 
     <!-- 创建者昵称由 Service 层按 uid 调用户域接口组装 -->
     <select id="selectUserName" resultType="com.qixidi.business.domain.vo.collection.CollectionInformationVo">

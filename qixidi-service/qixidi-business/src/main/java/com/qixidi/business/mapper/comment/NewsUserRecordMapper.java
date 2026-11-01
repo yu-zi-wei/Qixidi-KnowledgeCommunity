@@ -2,11 +2,8 @@ package com.qixidi.business.mapper.comment;
 
 import com.light.core.core.domain.vo.CensusVo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
-import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
-import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
 import com.qixidi.business.domain.vo.news.NewsUserInfoVo;
 import com.qixidi.business.domain.vo.news.NewsUserRecordVo;
-import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -32,12 +29,6 @@ public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
 
     @Select("SELECT type,been_read,news_id from b_news_user_record where been_read=0 and uid=#{uid}")
     List<NewsUserRecord> selectLists(String uid);
-
-    IPage<ArticleCommentNewsVo> selectArticleNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
-
-    IPage<TimeNotesCommentNewsVo> selectTimeNotesCommentNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
-
-    IPage<DictumCommentNewsVo> selectDictumCommentNews(@Param("uid") String uuid, @Param("type") int type, Page<NewsUserRecord> build);
 
     /**
      * 关注消息分页（aliveUids=存活用户集合，等价原 join um.state=0 过滤；发送者展示字段由 Service 组装）

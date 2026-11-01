@@ -55,6 +55,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 ### MyBatis Plus 3.5.17
 
 - `ServiceImpl`/`IService` 已删除：Service 一律 `@RequiredArgsConstructor` + final mapper 构造注入；批量写用 `BaseMapperPlus.insertBatch`（配合 @Transactional）
+- **`selectBatchIds` 空集合无保护**：直接生成 `WHERE id IN ( )` 报 SQL 语法错（本版本不走官方空集合短路）——调用前必须判空（脏数据会让"上游列表非空但 id 全 null"发生，实证消息记录 newsId 全 null 的用户炸 500）
 - **清空表一律 `@Update("TRUNCATE TABLE 表名")` 自定义方法**：BlockAttackInnerInterceptor 拦所有无 WHERE 的 delete（含注解 SQL，与 SQL 来源无关），空 wrapper delete 与 `@Delete("DELETE FROM ...")` 都会报 Prohibition of full table deletion；TRUNCATE 是 DDL 不在其解析范围（注意隐式提交、自增重置）
 - **无 Sa-Token 请求上下文的线程（Filter 阶段/定时任务/异步线程）禁止实体写（insert/updateById）**：实体写触发 MetaObjectHandler 自动填充，填充器调 StpUtil 会抛「SaTokenContext 上下文尚未初始化」（Tomcat 线程复用时偶发）。这类场景一律 `update(null, Wrappers.lambdaUpdate().set(...))`——wrapper set 不走填充
 
@@ -130,10 +131,12 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 ### SQL 保持简单、禁止跨业务域连表
 
 - **Mapper 的 SQL 只查本域表**：跨业务域的展示字段（评论正文、目标标题、用户昵称/头像等）不在 SQL 里 join 他域表，由 Service 层批量查询（禁止循环查库）后组装——参考 `NewsUserInfoServiceImpl.fillCommentContent`
-- **用户表 b_user_main 已全量去 join（2026-11-01 定版，11 个 XML 20 条 SQL 改完）**：用户域唯一入口 `ITripartiteUserService.getUserByUid/getUserByUids`（批量收集 uid + toMap(uuid) + forEach set 的 fillXxx 组装模式）；原 join 的三类语义等价替换：
-  - 展示字段 → Service 层组装（如上）
-  - `um.state=0` 过滤 → `aliveUserMap()`（queryList state=0 → Map）传 Mapper `@Param("aliveUids")` foreach in；**aliveUids 为空必须先短路返回空页**（`TableDataInfo.build(new Page<>(pageNum, pageSize))`，禁止先分页后过滤）
-  - `um.nickname like` 搜索 → `uidsByNickname()`（queryList nickname like 取 uuid）→ wrapper `in("主表别名.uid", uuids)` + 空集合短路空页
+- **跨业务域 join 已全量清理（2026-11-01 定版：用户表 11 XML 20 SQL + 其他域 7 XML 同批）**：用户域唯一入口 `ITripartiteUserService.getUserByUid/getUserByUids`；原 join 的语义等价替换：
+  - 展示字段 → Service 层批量查后组装（收集 id + toMap + forEach set 的 fillXxx 模式）
+  - 他域过滤条件（如 `um.state=0`）→ Service 先查他域过滤集合（如 `aliveUserMap()`）→ wrapper `in` 或求交；**集合为空必须先短路返回空页**（`TableDataInfo.build(new Page<>(pageNum, pageSize))`，禁止先分页后过滤）
+  - 他域 join 主体数据（评论消息/收藏列表/点赞列表/关注流）→ 两步单表：主表全量（排序字段在主表）→ `selectBatchIds` 查他域筛状态 → 内存交集 + 手动分页（`Page.setTotal(有效数)` + `subList`），保 total/排序/分页等价——参考 `NewsUserInfoServiceImpl.commentNewsPage`、`FabulousRecordServiceImpl.fabulousList`
+  - 聚合统计（按作者数评论/获赞）→ 查作者文章（id→owner）→ 单表按文章聚合 → 内存归并到 owner——参考 `UserCountQueryHelper.articleOwnerMap`
+- 域内 join 允许（如 UserFollowMapper join b_user_main、TripartiteUserMapper join b_user_information 均在 user 域内）
 - 新增跨域展示需求一律 Service 组装，禁止新增跨域 join SQL
 
 ### Mapper 继承
