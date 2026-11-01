@@ -3,36 +3,6 @@
     <n-tabs v-model:value="activeTab" type="line" class="tool-config-tabs">
       <!-- display-directive 必须写在 n-tab-pane 上（写在 n-tabs 上无效）：两个 pane 常驻 v-show 切换，
            各自 AdminListPage 实例独立；否则切 tab 时 pane 被无 key 就地复用，fetch prop 换了但数据不重拉 -->
-      <n-tab-pane name="catalog" tab="工具目录" display-directive="show">
-        <AdminListPage
-          ref="catalogListRef"
-          v-model:checked-keys="catalogChecked"
-          :search-fields="catalogSearchFields"
-          :columns="catalogColumns"
-          :fetch="fetchCatalog"
-          row-key="id"
-          seq
-          selectable
-          fill
-        >
-          <template #toolbar-left>
-            <n-button
-              size="small"
-              type="error"
-              secondary
-              :disabled="!catalogChecked.length"
-              :loading="batchDeleting"
-              @click="doDeleteBatch"
-            >
-              删除所选（{{ catalogChecked.length }}）
-            </n-button>
-          </template>
-          <template #toolbar-right>
-            <n-button type="primary" @click="openCatalogForm()">新增目录</n-button>
-          </template>
-        </AdminListPage>
-      </n-tab-pane>
-
       <n-tab-pane name="tool" tab="工具" display-directive="show">
         <AdminListPage
           ref="toolListRef"
@@ -59,6 +29,36 @@
           </template>
           <template #toolbar-right>
             <n-button type="primary" @click="openToolForm()">新增工具</n-button>
+          </template>
+        </AdminListPage>
+      </n-tab-pane>
+
+      <n-tab-pane name="catalog" tab="工具目录" display-directive="show">
+        <AdminListPage
+          ref="catalogListRef"
+          v-model:checked-keys="catalogChecked"
+          :search-fields="catalogSearchFields"
+          :columns="catalogColumns"
+          :fetch="fetchCatalog"
+          row-key="id"
+          seq
+          selectable
+          fill
+        >
+          <template #toolbar-left>
+            <n-button
+              size="small"
+              type="error"
+              secondary
+              :disabled="!catalogChecked.length"
+              :loading="batchDeleting"
+              @click="doDeleteBatch"
+            >
+              删除所选（{{ catalogChecked.length }}）
+            </n-button>
+          </template>
+          <template #toolbar-right>
+            <n-button type="primary" @click="openCatalogForm()">新增目录</n-button>
           </template>
         </AdminListPage>
       </n-tab-pane>
@@ -163,7 +163,7 @@ const message = useMessage();
 const dialog = useDialog();
 const { getToolList, getTool, addTool, editTool, deleteTools } = useConfigureAdminApi();
 
-const activeTab = ref<'catalog' | 'tool'>('catalog');
+const activeTab = ref<'catalog' | 'tool'>('tool');
 
 // ---------- 目录全量（工具 tab 的所属目录下拉 + 父级名称映射；目录条目量小，一次拉取） ----------
 const catalogRows = ref<ToolRow[]>([]);

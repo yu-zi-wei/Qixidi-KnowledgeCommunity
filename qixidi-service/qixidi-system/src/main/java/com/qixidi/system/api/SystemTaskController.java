@@ -79,6 +79,17 @@ public class SystemTaskController {
     }
 
     /**
+     * 同步标签分组数据任务
+     *
+     * @return
+     */
+    @Log(title = "同步标签分组数据任务", businessType = BusinessType.OTHER)
+    @GetMapping("/synchronize_label_group_data")
+    public void synchronizeLabelGroupData() {
+        labelTask.syncLabelGroup();
+    }
+
+    /**
      * 更新网站每日数据任务
      *
      * @return

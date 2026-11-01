@@ -26,6 +26,7 @@ import { h, onMounted, ref } from 'vue';
 import { NButton } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useTaskAdminApi, type SystemTaskRow } from '~/composables/useTaskAdminApi';
+import { getFullDateTime } from '~/utils/format';
 
 definePageMeta({ layout: 'default' });
 
@@ -82,6 +83,12 @@ const columns: DataTableColumns<SystemTaskRow> = [
   { title: '任务名称', key: 'taskName', minWidth: 220, ellipsis: { tooltip: true } },
   { title: '执行时间', key: 'taskExecutionTime', minWidth: 160 },
   { title: '累计执行次数', key: 'taskExecutionSum', width: 120, align: 'center' },
+  {
+    title: '最新执行时间',
+    key: 'taskLastExecutionTime',
+    minWidth: 160,
+    render: (row) => getFullDateTime(row.taskLastExecutionTime) || '—'
+  },
   {
     title: '操作',
     key: 'actions',

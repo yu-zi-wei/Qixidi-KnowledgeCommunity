@@ -119,6 +119,8 @@ public class LabelTask {
                 }
             });
             labelGroupingInfoMapper.updateById(labelGroupingInfos);
+
+            systemTaskConfigMapper.addExecutionSum(SystemTaskEnums.SYNC_LABEL_GROUP_DATA.getCode());
         } catch (Exception e) {
             MailUtils.sendText(SystemConstant.getAdministratorMailboxList(), "同步标签分组文章数据（syncLabelGroup）任务异常", e.getMessage());
             log.error("同步标签分组文章数据异常：时间：{}", DateUtils.getTime());

@@ -10,6 +10,8 @@ export interface SystemTaskRow {
   taskExecutionTime?: string;
   /** 任务执行次数 */
   taskExecutionSum?: string;
+  /** 最新执行时间 */
+  taskLastExecutionTime?: string;
   /** 手动执行接口地址（相对路径） */
   taskUrl?: string;
 }
