@@ -18,18 +18,18 @@ import type {GlobalTheme, GlobalThemeOverrides} from 'naive-ui';
 const THEME_KEY = 'admin-theme';
 
 /**
- * 极简书签风（2026-10-31 定版）：暖纸底色系——内容区 #FAF9F6、侧栏 #F3F1EA
+ * 极简书签风（2026-11-01 二次修订）：暖纸底色系——内容区 #FAF9F6、侧栏米白 #EDEAE1
  * （布局根注入 --sider-bg），区块是白纸片卡片（细暖灰边框、无阴影）；
- * 墨绿（纸墨意象）只做交互点缀（链接/选中态/焦点/唯一主按钮），与暖纸底冷暖互补。
+ * 紫 #534AB7（栖鸟品牌色）只做交互点缀（链接/选中态/焦点/唯一主按钮），与暖纸底冷暖互补。
  * 深色模式保留黑白灰骨架。非 Naive 上下文的硬编码色（admin-table.scss 的 .is-link 等）
  * 用布局根注入的 --cell-link / --hairline 变量，与此处 primaryColor 保持同源。
  */
 const lightOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#3D7A5C',
-    primaryColorHover: '#4A9070',
-    primaryColorPressed: '#31624A',
-    primaryColorSuppl: '#3D7A5C',
+    primaryColor: '#534AB7',
+    primaryColorHover: '#6860D4',
+    primaryColorPressed: '#423A9E',
+    primaryColorSuppl: '#534AB7',
     bodyColor: '#FAF9F6',
     cardColor: '#ffffff',
     borderColor: '#E8E4D9',
@@ -40,23 +40,23 @@ const lightOverrides: GlobalThemeOverrides = {
     thColor: '#ffffff',
     tdColor: '#ffffff',
     thColorHover: '#ffffff',
-    tdColorHover: '#F6F4ED',
+    tdColorHover: '#EFEDF8',
     borderColor: '#E8E4D9',
-    thTextColor: 'rgba(60, 55, 45, 0.55)'
+    thTextColor: 'rgba(58, 52, 70, 0.55)'
   },
   Menu: {
-    itemColorActive: '#ECE8DD',
-    itemColorActiveHover: '#E6E1D3',
-    itemColorHover: 'rgba(60, 55, 45, 0.05)'
+    itemColorActive: '#E3DFF5',
+    itemColorActiveHover: '#D9D3F0',
+    itemColorHover: 'rgba(58, 52, 70, 0.05)'
   }
 };
 
 const darkOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#6FBF9A',
-    primaryColorHover: '#86D0AF',
-    primaryColorPressed: '#58A57F',
-    primaryColorSuppl: '#6FBF9A',
+    primaryColor: '#968BEA',
+    primaryColorHover: '#A79EF0',
+    primaryColorPressed: '#7F73DD',
+    primaryColorSuppl: '#968BEA',
     bodyColor: '#111113',
     cardColor: '#1a1a1e',
     modalColor: '#1e1e24',

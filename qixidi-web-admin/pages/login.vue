@@ -1,6 +1,12 @@
 <template>
   <div class="login-page h-screen flex items-center justify-center">
-    <n-card class="login-card" :style="{ width: '380px' }" title="栖息地 · 管理后台">
+    <n-card class="login-card" :style="{ width: '380px' }">
+      <template #header>
+        <div class="login-title">
+          <AdminLogo :size="30" />
+          <span>栖息地 · 管理后台</span>
+        </div>
+      </template>
       <n-form ref="formRef" :model="form" :rules="rules" label-placement="top">
         <n-form-item label="用户名" path="username">
           <n-input v-model:value="form.username" placeholder="请输入管理员账号" @keyup.enter="handleLogin" />
@@ -120,6 +126,15 @@ onMounted(loadCaptcha);
 /* 书签风：暖纸底 + 白纸片卡片（同内容区/纸片体系） */
 .login-page {
   background: #FAF9F6;
+  /* 不套布局（layout:false），logo 底色变量在此自注入（= 浅色主紫） */
+  --logo-bg: #534AB7;
+}
+
+.login-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .login-card {

@@ -63,10 +63,10 @@
   }
 }
 
-// 可点击主文本（开详情抽屉）：交互点缀墨绿 + hover 下划线
+// 可点击主文本（开详情抽屉）：交互点缀紫 + hover 下划线
 // （--cell-link 由布局根按主题注入，与 app.vue primaryColor 同源）
 .is-link {
-  color: var(--cell-link, #3D7A5C);
+  color: var(--cell-link, #534AB7);
   cursor: pointer;
 
   &:hover {
@@ -179,11 +179,11 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb, #c9c3b4);
+  background: var(--scrollbar-thumb, #b3aad6);
   border-radius: 3px;
 
   &:hover {
-    background: var(--scrollbar-thumb-hover, #b5ae9c);
+    background: var(--scrollbar-thumb-hover, #9e94c9);
   }
 }
 

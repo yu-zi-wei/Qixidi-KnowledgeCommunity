@@ -12,8 +12,8 @@
         @expand="collapsed = false"
       >
         <div class="logo flex items-center justify-center gap-2" :style="{ height: '56px' }">
+          <AdminLogo :size="26" />
           <span v-if="!collapsed" class="font-bold text-base">栖息地后台</span>
-          <span v-else class="font-bold">栖</span>
         </div>
         <n-menu
           :collapsed="collapsed"
@@ -110,11 +110,12 @@ const handleUserAction = (key: string) => {
 <style scoped lang="scss">
 /* 主题变量注入：非 Naive 上下文的硬编码色（admin-table.scss 等）统一取这里，
    与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度）。
-   书签风浅色：侧栏 #F3F1EA 分层、纸片 #FFFFFF + 暖灰 hairline */
+   书签风浅色：侧栏米白 #EDEAE1 分层（内容区暖纸 #FAF9F6）、纸片 #FFFFFF + 暖灰 hairline */
 .theme-dark {
-  --cell-link: #6FBF9A;
+  --cell-link: #968BEA;
   --hairline: rgba(255, 255, 255, 0.08);
-  --sider-bg: #0b0b0d;
+  --sider-bg: #0F0D17;
+  --logo-bg: #968BEA;
   --panel-bg: #1a1a1e;
   --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   --scrollbar-thumb: rgba(255, 255, 255, 0.18);
@@ -122,13 +123,14 @@ const handleUserAction = (key: string) => {
 }
 
 .theme-light {
-  --cell-link: #3D7A5C;
+  --cell-link: #534AB7;
   --hairline: #E8E4D9;
-  --sider-bg: #F3F1EA;
+  --sider-bg: #EDEAE1;
+  --logo-bg: #534AB7;
   --panel-bg: #ffffff;
-  --panel-shadow: 0 1px 3px rgba(180, 170, 150, 0.18);
-  --scrollbar-thumb: #c9c3b4;
-  --scrollbar-thumb-hover: #b5ae9c;
+  --panel-shadow: 0 1px 3px rgba(150, 140, 190, 0.16);
+  --scrollbar-thumb: #b3aad6;
+  --scrollbar-thumb-hover: #9e94c9;
 }
 
 .app-shell {
