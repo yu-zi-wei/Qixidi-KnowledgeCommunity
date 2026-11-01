@@ -66,7 +66,7 @@
 // 可点击主文本（开详情抽屉）：交互点缀蓝 + hover 下划线
 // （--cell-link 由布局根按主题注入，与 app.vue primaryColor 同源）
 .is-link {
-  color: var(--cell-link, #0363FF);
+  color: var(--cell-link, #3D5A80);
   cursor: pointer;
 
   &:hover {
@@ -179,11 +179,11 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb, #a2c0f2);
+  background: var(--scrollbar-thumb, #b9c4d4);
   border-radius: 3px;
 
   &:hover {
-    background: var(--scrollbar-thumb-hover, #86a9ea);
+    background: var(--scrollbar-thumb-hover, #a3b1c6);
   }
 }
 

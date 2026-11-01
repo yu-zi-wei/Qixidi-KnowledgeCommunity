@@ -1,6 +1,6 @@
 <template>
-  <!-- 站点 logo（前台同款树形，底色换品牌蓝随主题）：
-       树冠/根部圆点取布局根注入的 --logo-bg（与 app.vue primaryColor 同源，深色模式换亮蓝），
+  <!-- 站点 logo（前台同款树形，墨水蓝即品牌原色 #3D5A80，前后台同源）：
+       树冠/根部圆点取布局根注入的 --logo-bg（与 app.vue primaryColor 同源，深色模式换亮墨蓝），
        白色枝干为半透明装饰线。login 页不套布局，由页面根元素自行定义该变量。favicon.ico 是同图形位图版。 -->
   <svg
     :width="size"
@@ -32,6 +32,6 @@ withDefaults(defineProps<{ size?: number }>(), { size: 26 });
 
 <style scoped>
 .logo-tree {
-  fill: var(--logo-bg, #0363ff);
+  fill: var(--logo-bg, #3d5a80);
 }
 </style>

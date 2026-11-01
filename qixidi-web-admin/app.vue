@@ -18,18 +18,19 @@ import type {GlobalTheme, GlobalThemeOverrides} from 'naive-ui';
 const THEME_KEY = 'admin-theme';
 
 /**
- * 极简书签风（2026-11-01 三次修订）：暖纸底色系——内容区 #FAF9F6、侧栏米白 #EDEAE1
- * （布局根注入 --sider-bg），区块是白纸片卡片（细暖灰边框、无阴影）；
- * 正蓝 #0363FF 只做交互点缀（链接/选中态/焦点/唯一主按钮），与暖纸底冷暖互补。
- * 深色模式保留黑白灰骨架。非 Naive 上下文的硬编码色（admin-table.scss 的 .is-link 等）
- * 用布局根注入的 --cell-link / --hairline 变量，与此处 primaryColor 保持同源。
+ * 极简书签风·墨水与纸张（2026-11-02 定稿）：暖纸底色系——内容区 #FAF9F6、侧栏米白
+ * #EDEAE1（布局根注入 --sider-bg），区块是白纸片卡片（细暖灰边框、轻投影）。
+ * 品牌色是墨水蓝 #3D5A80（前台树形 logo 同源，前后台一体）：低饱和灰调与暖纸同族，
+ * 如墨水落在纸面，只做交互点缀（链接/选中态/焦点/唯一主按钮），拒绝高饱和鲜色。
+ * 深色模式：墨黑纸 + 亮墨蓝 #8FA9C4。非 Naive 上下文的硬编码色（admin-table.scss
+ * 的 .is-link 等）用布局根注入的 --cell-link / --hairline 变量，与此处同源。
  */
 const lightOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#0363FF',
-    primaryColorHover: '#2B82FF',
-    primaryColorPressed: '#024FCC',
-    primaryColorSuppl: '#0363FF',
+    primaryColor: '#3D5A80',
+    primaryColorHover: '#4E6E99',
+    primaryColorPressed: '#2E4560',
+    primaryColorSuppl: '#3D5A80',
     bodyColor: '#FAF9F6',
     cardColor: '#ffffff',
     borderColor: '#E8E4D9',
@@ -40,23 +41,23 @@ const lightOverrides: GlobalThemeOverrides = {
     thColor: '#ffffff',
     tdColor: '#ffffff',
     thColorHover: '#ffffff',
-    tdColorHover: '#F0F6FF',
+    tdColorHover: '#F0F3F7',
     borderColor: '#E8E4D9',
     thTextColor: 'rgba(30, 41, 59, 0.55)'
   },
   Menu: {
-    itemColorActive: '#E1ECFF',
-    itemColorActiveHover: '#D6E5FF',
+    itemColorActive: '#C9D4E2',
+    itemColorActiveHover: '#BCC9DA',
     itemColorHover: 'rgba(30, 41, 59, 0.05)'
   }
 };
 
 const darkOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#5C9AFF',
-    primaryColorHover: '#7BAFFF',
-    primaryColorPressed: '#4785E0',
-    primaryColorSuppl: '#5C9AFF',
+    primaryColor: '#8FA9C4',
+    primaryColorHover: '#A5BCD4',
+    primaryColorPressed: '#7590AC',
+    primaryColorSuppl: '#8FA9C4',
     bodyColor: '#111113',
     cardColor: '#1a1a1e',
     modalColor: '#1e1e24',

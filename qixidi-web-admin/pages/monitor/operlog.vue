@@ -333,7 +333,7 @@ const columns: DataTableColumns<OperLogRow> = [
   font-weight: 600;
   letter-spacing: 0.5px;
   border-radius: 4px;
-  color: var(--cell-link, #0363ff);
+  color: var(--cell-link, #3d5a80);
   background: rgba(127, 127, 127, 0.12);
 }
 </style>

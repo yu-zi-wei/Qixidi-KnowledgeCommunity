@@ -110,12 +110,13 @@ const handleUserAction = (key: string) => {
 <style scoped lang="scss">
 /* 主题变量注入：非 Naive 上下文的硬编码色（admin-table.scss 等）统一取这里，
    与 app.vue themeOverrides 的 primaryColor 同源（深色用亮变体保证对比度）。
-   书签风浅色：侧栏米白 #EDEAE1 分层（内容区暖纸 #FAF9F6）、纸片 #FFFFFF + 暖灰 hairline */
+   墨水与纸张：侧栏米白 #EDEAE1 分层（内容区暖纸 #FAF9F6）、纸片 #FFFFFF + 暖灰 hairline，
+   品牌墨水蓝 #3D5A80（前台 logo 同源） */
 .theme-dark {
-  --cell-link: #5C9AFF;
+  --cell-link: #8FA9C4;
   --hairline: rgba(255, 255, 255, 0.08);
-  --sider-bg: #0E1521;
-  --logo-bg: #5C9AFF;
+  --sider-bg: #131820;
+  --logo-bg: #8FA9C4;
   --panel-bg: #1a1a1e;
   --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   --scrollbar-thumb: rgba(255, 255, 255, 0.18);
@@ -123,14 +124,14 @@ const handleUserAction = (key: string) => {
 }
 
 .theme-light {
-  --cell-link: #0363FF;
+  --cell-link: #3D5A80;
   --hairline: #E8E4D9;
   --sider-bg: #EDEAE1;
-  --logo-bg: #0363FF;
+  --logo-bg: #3D5A80;
   --panel-bg: #ffffff;
-  --panel-shadow: 0 1px 3px rgba(3, 99, 255, 0.1);
-  --scrollbar-thumb: #a2c0f2;
-  --scrollbar-thumb-hover: #86a9ea;
+  --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --scrollbar-thumb: #b9c4d4;
+  --scrollbar-thumb-hover: #a3b1c6;
 }
 
 .app-shell {
