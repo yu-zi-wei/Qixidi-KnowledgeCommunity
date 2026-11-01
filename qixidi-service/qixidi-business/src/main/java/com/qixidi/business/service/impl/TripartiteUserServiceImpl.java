@@ -158,6 +158,32 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
     }
 
     /**
+     * 按昵称模糊查用户 uuid 集合（跨业务域"作者名称搜索"唯一入口，不分状态）
+     */
+    @Override
+    public List<String> getUidsByNickname(String nickname) {
+        if (StrUtil.isBlank(nickname)) {
+            return List.of();
+        }
+        TripartiteUserBo userBo = new TripartiteUserBo();
+        userBo.setNickname(nickname);
+        return queryList(userBo).stream()
+                .map(TripartiteUserVo::getUuid)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 查存活用户（state=0）uuid → 用户信息映射（跨业务域"存活作者过滤"唯一入口）
+     */
+    @Override
+    public Map<String, TripartiteUserVo> getAliveUserMap() {
+        TripartiteUserBo userBo = new TripartiteUserBo();
+        userBo.setState(0);
+        return queryList(userBo).stream()
+                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
+    }
+
+    /**
      * 组装用户各类内容统计（详情/主页查询共用）
      */
     private void fillUserCounts(TripartiteUserVo vo, String uuid) {
@@ -223,6 +249,11 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         lqw.eq(StringUtils.isNotBlank(bo.getSource()), TripartiteUser::getSource, bo.getSource());
         lqw.eq(bo.getState() != null, TripartiteUser::getState, bo.getState());
         lqw.in(CollUtil.isNotEmpty(bo.getStates()), TripartiteUser::getState, bo.getStates());
+        lqw.in(CollUtil.isNotEmpty(bo.getSources()), TripartiteUser::getSource, bo.getSources());
+        lqw.in(CollUtil.isNotEmpty(bo.getRoleIds()), TripartiteUser::getRoleId, bo.getRoleIds());
+        // 注册时间范围（String yyyy-MM-dd，起含当天零点、止补 23:59:59 保证闭区间）
+        lqw.ge(StrUtil.isNotBlank(bo.getBeginTime()), TripartiteUser::getCreateTime, bo.getBeginTime());
+        lqw.le(StrUtil.isNotBlank(bo.getEndTime()), TripartiteUser::getCreateTime, bo.getEndTime() + " 23:59:59");
         lqw.orderByDesc(TripartiteUser::getCreateTime);
         return lqw;
     }

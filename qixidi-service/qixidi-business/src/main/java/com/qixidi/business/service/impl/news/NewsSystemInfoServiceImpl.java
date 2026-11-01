@@ -63,6 +63,14 @@ public class NewsSystemInfoServiceImpl implements INewsSystemInfoService {
     @Override
     public TableDataInfo<NewsSystemInfoVo> queryPageList(NewsSystemInfoBo bo, PageQuery pageQuery) {
         QueryWrapper<NewsSystemInfo> wrapper = buildQueryWrapper(bo);
+        // 接收人昵称搜索：用户域查 uuid 集合后 in（空命中短路返回空页；群发行 uid 为空不会被 in 命中，指定人发场景才有效）
+        if (StringUtils.isNotBlank(bo.getRecipientNickname())) {
+            List<String> uids = tripartiteUserService.getUidsByNickname(bo.getRecipientNickname());
+            if (uids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            wrapper.in("nsi.uid", uids);
+        }
         IPage<NewsSystemInfoVo> result = baseMapper.selectSystemPage(pageQuery.build(), wrapper);
         fillRecipientDisplay(result.getRecords());
         return TableDataInfo.build(result);

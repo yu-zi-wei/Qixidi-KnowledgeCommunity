@@ -16,7 +16,6 @@ import com.light.core.core.page.TableDataInfo;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.collection.CollectionInformationBo;
 import com.qixidi.business.domain.bo.collection.CollectionRecordBo;
-import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
@@ -84,7 +83,7 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         QueryWrapper<CollectionInformation> lqw = buildQueryWrappers(bo);
         // 创建者昵称搜索：用户域查 uuid 后 in（等价原 join um.nickname like）
         if (StringUtils.isNotBlank(bo.getUsername())) {
-            List<String> uuids = uidsByNickname(bo.getUsername());
+            List<String> uuids = tripartiteUserService.getUidsByNickname(bo.getUsername());
             if (uuids.isEmpty()) {
                 return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
             }
@@ -94,17 +93,6 @@ public class CollectionInformationServiceImpl implements ICollectionInformationS
         fillOwnerDisplay(result.getRecords());
         enrichWithIncludedCount(result.getRecords());
         return TableDataInfo.build(result);
-    }
-
-    /**
-     * 按昵称查用户 uuid 集合（原 join um.nickname like 条件的等价替代，走用户域接口）
-     */
-    private List<String> uidsByNickname(String nickname) {
-        TripartiteUserBo userBo = new TripartiteUserBo();
-        userBo.setNickname(nickname);
-        return tripartiteUserService.queryList(userBo).stream()
-                .map(TripartiteUserVo::getUuid)
-                .collect(Collectors.toList());
     }
 
     /**

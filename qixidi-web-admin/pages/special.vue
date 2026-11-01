@@ -213,7 +213,18 @@ const columns: DataTableColumns<SpecialRow> = [
     minWidth: 130,
     render: (row) => row.username || row.uid || '—'
   },
-  { title: '收录文章', key: 'includedCount', width: 90, align: 'center', render: (row) => row.includedCount ?? 0 },
+  {
+    title: '收录文章',
+    key: 'includedCount',
+    width: 90,
+    align: 'center',
+    render: (row) =>
+      h(
+        'a',
+        { class: 'cell-stats is-link', title: '查看该专栏收录的文章', onClick: () => navigateTo({ path: '/article', query: { specialId: row.id } }) },
+        String(row.includedCount ?? 0)
+      )
+  },
   {
     title: '创建时间',
     key: 'createTime',

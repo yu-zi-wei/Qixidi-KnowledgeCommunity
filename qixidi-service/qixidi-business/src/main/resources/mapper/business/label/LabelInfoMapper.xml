@@ -51,10 +51,23 @@
             <if test="bo.labelGroupingId!=null">
                 and li.label_grouping_id=#{bo.labelGroupingId}
             </if>
+            <if test="bo.labelGroupingIds!=null and bo.labelGroupingIds.size()>0">
+                and li.label_grouping_id in
+                <foreach collection="bo.labelGroupingIds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="bo.groupingName!=null and bo.groupingName!=''">
                 and lgi.grouping_name like concat('%' ,#{bo.groupingName},'%')
             </if>
+            <if test="bo.states!=null and bo.states.size()>0">
+                and li.state in
+                <foreach collection="bo.states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
+        ORDER BY li.create_time DESC
     </select>
 
     <update id="updateTaskList">

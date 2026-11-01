@@ -44,10 +44,10 @@ const message = useMessage();
 const dialog = useDialog();
 const { getPrivateMessageList, deletePrivateMessages } = usePrivateAdminApi();
 
-// ---------- 搜索 ----------
+// ---------- 搜索（发送/接收方按昵称搜：后端用户域查 uuid 集合后 in） ----------
 const searchFields: AdminSearchField[] = [
-  { key: 'uid', label: '发送方 uuid', type: 'input', placeholder: '请输入发送方 uuid' },
-  { key: 'replyTargetUid', label: '接收方 uuid', type: 'input', placeholder: '请输入接收方 uuid' },
+  { key: 'senderNickname', label: '发送方', type: 'input', placeholder: '请输入发送方昵称' },
+  { key: 'recipientNickname', label: '接收方', type: 'input', placeholder: '请输入接收方昵称' },
   { key: 'newsCommentLike', label: '消息关键词', type: 'input', placeholder: '请输入消息内容关键词' }
 ];
 

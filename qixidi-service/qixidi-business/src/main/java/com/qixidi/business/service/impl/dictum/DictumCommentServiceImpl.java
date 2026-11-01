@@ -12,6 +12,7 @@ import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.dictum.DictumCommentService;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.utils.StringUtils;
@@ -25,6 +26,7 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,8 @@ public class DictumCommentServiceImpl implements DictumCommentService {
     private NewsUserRecordMapper newsUserRecordMapper;
     @Autowired
     private DictumInfoMapper dictumInfoMapper;
+    @Autowired
+    private ITripartiteUserService tripartiteUserService;
 
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
@@ -190,6 +194,14 @@ public class DictumCommentServiceImpl implements DictumCommentService {
 
     @Override
     public TableDataInfo<DictumCommentVo> adminQueryPageList(DictumCommentBo bo, PageQuery pageQuery) {
+        // 评论人昵称搜索：用户域查 uuid 集合后 in（空命中短路返回空页）
+        List<String> nicknameUids = null;
+        if (StringUtils.isNotBlank(bo.getNickname())) {
+            nicknameUids = tripartiteUserService.getUidsByNickname(bo.getNickname());
+            if (nicknameUids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+        }
         // 后台平铺全量（一级+二级都出），不筛 status 除非显式传条件
         IPage<DictumCommentVo> page = dictumCommentMapper.selectVoPage(pageQuery.build(),
             new LambdaQueryWrapper<DictumComment>()
@@ -197,6 +209,7 @@ public class DictumCommentServiceImpl implements DictumCommentService {
                 .like(StringUtils.isNotBlank(bo.getContent()), DictumComment::getContent, bo.getContent())
                 .eq(bo.getStatus() != null, DictumComment::getStatus, bo.getStatus())
                 .in(CollectionUtil.isNotEmpty(bo.getStatuses()), DictumComment::getStatus, bo.getStatuses())
+                .in(nicknameUids != null, DictumComment::getCommentUid, nicknameUids)
                 .orderByDesc(DictumComment::getCreateTime));
         List<DictumCommentVo> records = page.getRecords();
         if (CollectionUtil.isEmpty(records)) {

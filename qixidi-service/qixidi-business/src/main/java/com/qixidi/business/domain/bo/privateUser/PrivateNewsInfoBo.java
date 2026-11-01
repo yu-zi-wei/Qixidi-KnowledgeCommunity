@@ -52,5 +52,15 @@ public class PrivateNewsInfoBo extends BaseEntity {
      */
     private String newsCommentLike;
 
+    /**
+     * 发送方昵称模糊搜索（后台列表页：用户域查 uuid 集合后 in）
+     */
+    private String senderNickname;
+
+    /**
+     * 接收方昵称模糊搜索（后台列表页：用户域查 uuid 集合后 in）
+     */
+    private String recipientNickname;
+
 }
 

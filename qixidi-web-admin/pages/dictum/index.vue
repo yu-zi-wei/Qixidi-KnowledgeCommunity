@@ -75,6 +75,7 @@ const listKey = computed(() => `${route.query.groupId ?? ''}-${route.query.album
 // ---------- 搜索（后端 wrapper：groupIds/albumIds/dictumStates/states 均 in） ----------
 // computed 让分组/专辑 options 在异步拉取完成后响应更新（defaultValue 只在挂载初始化时生效）
 const searchFields = computed<AdminSearchField[]>(() => [
+  { key: 'nickname', label: '作者', type: 'input', placeholder: '请输入作者昵称' },
   { key: 'groupIds', label: '分组', type: 'multiple', defaultValue: initialGroupId != null ? [initialGroupId] : undefined, options: groupOptions.value },
   { key: 'albumIds', label: '专辑', type: 'multiple', defaultValue: initialAlbumId != null ? [initialAlbumId] : undefined, options: albumOptions.value },
   {

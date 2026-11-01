@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.MsgEnums;
+import com.light.core.utils.EscapeUtil;
 import com.light.core.utils.StringUtils;
 import com.light.core.utils.email.MailUtils;
 import com.light.core.utils.word.WordFilter;
@@ -120,7 +121,28 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
 
     @Override
     public TableDataInfo<ArticleCommentVo> adminQueryPageList(ArticleCommentBo bo, PageQuery pageQuery) {
-        IPage<ArticleCommentVo> result = baseMapper.selectCommentIndex(pageQuery.build(), buildAdminQueryWrapper(bo));
+        QueryWrapper<ArticleComment> wrapper = buildAdminQueryWrapper(bo);
+        // 文章标题搜索：文章域 like 查 id 集合后 in（空命中短路返回空页）
+        if (StringUtils.isNotBlank(bo.getArticleTitle())) {
+            bo.setArticleTitle(EscapeUtil.escapeChar(bo.getArticleTitle()));
+            List<Long> articleIds = articleInformationMapper.selectList(Wrappers.<ArticleInformation>lambdaQuery()
+                            .select(ArticleInformation::getId)
+                            .like(ArticleInformation::getArticleTitle, bo.getArticleTitle()))
+                    .stream().map(ArticleInformation::getId).toList();
+            if (articleIds.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            wrapper.in("ac.article_id", articleIds);
+        }
+        // 评论人昵称搜索：用户域查 uuid 集合后 in（空命中短路返回空页）
+        if (StringUtils.isNotBlank(bo.getNickname())) {
+            List<String> uids = tripartiteUserService.getUidsByNickname(bo.getNickname());
+            if (uids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+            wrapper.in("ac.comment_uid", uids);
+        }
+        IPage<ArticleCommentVo> result = baseMapper.selectCommentIndex(pageQuery.build(), wrapper);
         fillUserDisplay(result.getRecords());
         fillArticleTitle(result.getRecords());
         return TableDataInfo.build(result);

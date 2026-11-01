@@ -64,9 +64,10 @@ const message = useMessage();
 const dialog = useDialog();
 const { getTimeNotesList, getTimeNote, deleteTimeNotes } = useTimeNotesAdminApi();
 
-// ---------- 搜索（title 后端 like） ----------
+// ---------- 搜索（title/nickname 后端 like + 用户域 in） ----------
 const searchFields: AdminSearchField[] = [
-  { key: 'title', label: '标题', type: 'input', placeholder: '请输入关键词' }
+  { key: 'title', label: '标题', type: 'input', placeholder: '请输入关键词' },
+  { key: 'nickname', label: '作者', type: 'input', placeholder: '请输入作者昵称' }
 ];
 
 const fetch = (params: Record<string, any>) => getTimeNotesList(params);

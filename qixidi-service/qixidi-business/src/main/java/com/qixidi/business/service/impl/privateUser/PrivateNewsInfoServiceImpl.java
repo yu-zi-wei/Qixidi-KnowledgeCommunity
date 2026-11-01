@@ -81,7 +81,22 @@ public class PrivateNewsInfoServiceImpl implements IPrivateNewsInfoService {
      */
     @Override
     public TableDataInfo<PrivateNewsInfoVo> adminQueryPageList(PrivateNewsInfoBo bo, PageQuery pageQuery) {
-        Page<PrivateNewsInfoVo> result = baseMapper.selectAdminList(bo, pageQuery.build());
+        // 发送/接收方昵称搜索：用户域查 uuid 集合后 in（空命中短路返回空页）
+        List<String> senderUids = null;
+        if (StringUtils.isNotBlank(bo.getSenderNickname())) {
+            senderUids = tripartiteUserService.getUidsByNickname(bo.getSenderNickname());
+            if (senderUids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+        }
+        List<String> recipientUids = null;
+        if (StringUtils.isNotBlank(bo.getRecipientNickname())) {
+            recipientUids = tripartiteUserService.getUidsByNickname(bo.getRecipientNickname());
+            if (recipientUids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+        }
+        Page<PrivateNewsInfoVo> result = baseMapper.selectAdminList(bo, senderUids, recipientUids, pageQuery.build());
         fillUserDisplay(result.getRecords());
         return TableDataInfo.build(result);
     }

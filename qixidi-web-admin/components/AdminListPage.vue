@@ -15,15 +15,23 @@
             @keyup.enter="doSearch"
           />
           <n-select
-            v-else
+            v-else-if="f.type === 'multiple'"
             v-model:value="formModel[f.key]"
             :style="{ width: fieldWidth(f) }"
             clearable
             multiple
+            filterable
             max-tag-count="responsive"
             :options="f.options || []"
             :placeholder="f.placeholder || `请选择${f.label}`"
             @keyup.enter="doSearch"
+          />
+          <n-date-picker
+            v-else-if="f.type === 'daterange'"
+            v-model:value="formModel[f.key]"
+            type="daterange"
+            clearable
+            :style="{ width: fieldWidth(f) }"
           />
         </div>
 
@@ -82,14 +90,17 @@ export interface AdminSearchOption {
 }
 
 export interface AdminSearchField {
-  /** 查询参数名（原样并入 fetch 参数） */
+  /** 查询参数名（原样并入 fetch 参数；daterange 例外，拆 beginKey/endKey 两个参数） */
   key: string;
   label: string;
-  /** input 输入框 / multiple 多选下拉（GET 数组 key=a&key=b，后端 BO List 字段 + in 条件） */
-  type: 'input' | 'multiple';
+  /** input 输入框 / multiple 多选下拉（数组，后端 BO List 字段 + in 条件）/ daterange 日期范围（拆两个 yyyy-MM-dd 参数） */
+  type: 'input' | 'multiple' | 'daterange';
   options?: AdminSearchOption[];
   placeholder?: string;
-  /** 控件宽度（label 之外的部分）；不配则统一默认宽 160px */
+  /** daterange 传参名（默认 `${key}Begin` / `${key}End`） */
+  beginKey?: string;
+  endKey?: string;
+  /** 控件宽度（label 之外的部分）；不配则统一默认宽 */
   width?: number | string;
   defaultValue?: unknown;
 }
@@ -146,12 +157,16 @@ const checkedKeys = defineModel<Array<string | number>>('checkedKeys', { default
 
 // ---------- 搜索表单 ----------
 const formModel = reactive<Record<string, any>>(
-  Object.fromEntries(props.searchFields.map((f) => [f.key, f.defaultValue ?? (f.type === 'input' ? null : [])]))
+  Object.fromEntries(props.searchFields.map((f) => [f.key, f.defaultValue ?? (f.type === 'multiple' ? [] : null)]))
 );
 
-/** 控件统一默认宽度（不配 width 即等宽，需差异化时才在字段配置里覆盖） */
+/** 控件统一默认宽度（不配 width 即等宽，需差异化时才在字段配置里覆盖）；daterange 双日期面板需更宽 */
 const DEFAULT_FIELD_WIDTH = '200px';
-const fieldWidth = (f: AdminSearchField) => (typeof f.width === 'number' ? `${f.width}px` : f.width || DEFAULT_FIELD_WIDTH);
+const DEFAULT_DATERANGE_WIDTH = '260px';
+const fieldWidth = (f: AdminSearchField) => {
+  const def = f.type === 'daterange' ? DEFAULT_DATERANGE_WIDTH : DEFAULT_FIELD_WIDTH;
+  return typeof f.width === 'number' ? `${f.width}px` : f.width || def;
+};
 
 /** 查询条件快照：翻页沿用最近一次查询的值，输入框实时变化不影响已出结果 */
 let querySnapshot: Record<string, any> = {};
@@ -161,6 +176,12 @@ const takeSnapshot = () => {
   for (const f of props.searchFields) {
     const v = formModel[f.key];
     if (v === null || v === undefined || v === '' || (Array.isArray(v) && !v.length)) continue;
+    if (f.type === 'daterange' && Array.isArray(v)) {
+      // [起止时间戳] 拆成两个 yyyy-MM-dd 参数（后端 BO 两个 String 字段）
+      if (v[0] != null) querySnapshot[f.beginKey || `${f.key}Begin`] = formatDate(v[0]);
+      if (v[1] != null) querySnapshot[f.endKey || `${f.key}End`] = formatDate(v[1]);
+      continue;
+    }
     querySnapshot[f.key] = v;
   }
 };

@@ -48,6 +48,7 @@ const { getDictumCommentList, deleteDictumComments } = useDictumAdminApi();
 const searchFields: AdminSearchField[] = [
   { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
   { key: 'dictumId', label: '随笔 ID', type: 'input', placeholder: '请输入数字 ID' },
+  { key: 'nickname', label: '评论人', type: 'input', placeholder: '请输入评论人昵称' },
   {
     key: 'statuses',
     label: '状态',

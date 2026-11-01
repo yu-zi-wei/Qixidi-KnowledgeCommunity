@@ -20,6 +20,7 @@ import me.zhyd.oauth.request.AuthRequest;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 平台用户Service接口
@@ -52,6 +53,21 @@ public interface ITripartiteUserService {
      * @return 用户列表（uid 悬空的不在结果里）
      */
     List<TripartiteUserVo> getUserByUids(Collection<String> uids);
+
+    /**
+     * 按昵称模糊查用户 uuid 集合（跨业务域"作者名称搜索"唯一入口：先查 id 列表再带入业务表 in，不分状态）
+     *
+     * @param nickname 昵称关键词
+     * @return 命中用户的 uuid 列表（无命中返回空集合，调用方须短路返回空页）
+     */
+    List<String> getUidsByNickname(String nickname);
+
+    /**
+     * 查存活用户（state=0）uuid → 用户信息映射（跨业务域"存活作者过滤"唯一入口）
+     *
+     * @return uuid → TripartiteUserVo（空表/无存活用户返回空 Map，调用方须短路返回空页）
+     */
+    Map<String, TripartiteUserVo> getAliveUserMap();
 
     /**
      * 查询平台用户列表

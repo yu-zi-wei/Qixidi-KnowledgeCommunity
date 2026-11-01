@@ -18,7 +18,6 @@ import com.qixidi.auth.domain.enums.UserRoleEnums;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
-import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
@@ -37,7 +36,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -110,11 +108,19 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         bo.setContent(EscapeUtil.escapeChar(bo.getContent()));
         bo.setAlbumName(EscapeUtil.escapeChar(bo.getAlbumName()));
         // 存活作者过滤（等价原 join um.state=0）；作者展示字段由用户域数据组装
-        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        Map<String, TripartiteUserVo> aliveUsers = tripartiteUserService.getAliveUserMap();
         if (aliveUsers.isEmpty()) {
             return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
         }
-        IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
+        // 作者昵称搜索：用户域查 uuid 后与存活作者求交集（空交集短路返回空页）
+        List<String> authorUids = new ArrayList<>(aliveUsers.keySet());
+        if (StringUtils.isNotBlank(bo.getNickname())) {
+            authorUids.retainAll(tripartiteUserService.getUidsByNickname(bo.getNickname()));
+            if (authorUids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+        }
+        IPage<DictumInfoVo> result = baseMapper.selectVoPageXml(bo, authorUids, pageQuery.build());
         List<DictumInfoVo> records = result.getRecords();
         if (ObjectUtils.isEmpty(records)) return TableDataInfo.build();
         List<Long> ids = new ArrayList<>();
@@ -149,16 +155,6 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
             }
         });
         return TableDataInfo.build(result);
-    }
-
-    /**
-     * 存活用户 Map（键 uuid，等价原 SQL join um.state=0 的过滤集，兼作展示字段数据源）
-     */
-    private Map<String, TripartiteUserVo> aliveUserMap() {
-        TripartiteUserBo bo = new TripartiteUserBo();
-        bo.setState(0);
-        return tripartiteUserService.queryList(bo).stream()
-            .collect(Collectors.toMap(TripartiteUserVo::getUuid, Function.identity(), (a, b) -> a));
     }
 
     /**

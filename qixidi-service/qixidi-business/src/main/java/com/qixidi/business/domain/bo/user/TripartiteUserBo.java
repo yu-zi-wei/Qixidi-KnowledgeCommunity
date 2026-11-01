@@ -118,4 +118,24 @@ public class TripartiteUserBo extends BaseEntity {
      * 用户状态多选筛选（in 查询，后台列表页）
      */
     private List<Integer> states;
+
+    /**
+     * 来源多选筛选（in 查询，后台列表页）
+     */
+    private List<String> sources;
+
+    /**
+     * 角色多选筛选（in 查询，后台列表页）
+     */
+    private List<Long> roleIds;
+
+    /**
+     * 注册时间范围-起（yyyy-MM-dd，含当天 00:00:00）
+     */
+    private String beginTime;
+
+    /**
+     * 注册时间范围-止（yyyy-MM-dd，含当天 23:59:59）
+     */
+    private String endTime;
 }

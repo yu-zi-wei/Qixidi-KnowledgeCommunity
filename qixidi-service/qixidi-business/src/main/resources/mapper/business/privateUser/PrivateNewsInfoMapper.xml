@@ -35,6 +35,14 @@
             <if test="bo.replyTargetUid != null and bo.replyTargetUid != ''">
                 AND pni.reply_target_uid = #{bo.replyTargetUid}
             </if>
+            <if test="senderUids != null">
+                AND pni.uid in
+                <foreach collection="senderUids" item="item" open="(" separator="," close=")">#{item}</foreach>
+            </if>
+            <if test="recipientUids != null">
+                AND pni.reply_target_uid in
+                <foreach collection="recipientUids" item="item" open="(" separator="," close=")">#{item}</foreach>
+            </if>
             <if test="bo.newsCommentLike != null and bo.newsCommentLike != ''">
                 AND pni.news_comment like concat('%', #{bo.newsCommentLike}, '%')
             </if>

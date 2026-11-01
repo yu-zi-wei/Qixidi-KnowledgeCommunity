@@ -94,4 +94,14 @@ public class ArticleCommentBo extends BaseEntity {
      */
     private List<Integer> states;
 
+    /**
+     * 文章标题模糊搜索（后台列表页：文章域查 id 集合后 in）
+     */
+    private String articleTitle;
+
+    /**
+     * 评论人昵称模糊搜索（后台列表页：用户域查 uuid 集合后 in）
+     */
+    private String nickname;
+
 }

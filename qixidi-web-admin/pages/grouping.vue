@@ -259,7 +259,12 @@ const columns: DataTableColumns<GroupingRow> = [
     key: 'entriesNumber',
     width: 90,
     align: 'right',
-    render: (row) => h('span', { class: 'cell-stats' }, String(row.entriesNumber ?? 0))
+    render: (row) =>
+      h(
+        'a',
+        { class: 'cell-stats is-link', title: '查看该分类下的文章', onClick: () => navigateTo({ path: '/article', query: { groupingId: row.id } }) },
+        String(row.entriesNumber ?? 0)
+      )
   },
   {
     title: '分类描述',

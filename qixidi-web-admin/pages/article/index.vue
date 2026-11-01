@@ -2,6 +2,7 @@
   <AdminListPage
     ref="listRef"
     v-model:checked-keys="checkedKeys"
+    :key="listKey"
     :search-fields="searchFields"
     :columns="columns"
     :fetch="getArticles"
@@ -68,6 +69,8 @@ import AdminAvatar from '~/components/AdminAvatar.vue';
 import AdminListPage, { type AdminSearchField } from '~/components/AdminListPage.vue';
 import AdminStateTag from '~/components/AdminStateTag.vue';
 import { AUDIT_STATE_MAP, useArticleAdminApi, type ArticleRow, type GroupingRow } from '~/composables/useArticleAdminApi';
+import { useLabelAdminApi, type LabelRow } from '~/composables/useLabelAdminApi';
+import { useSpecialAdminApi, type SpecialRow } from '~/composables/useSpecialAdminApi';
 import { getFullDateTime } from '~/utils/format';
 
 definePageMeta({ layout: 'default' });
@@ -76,10 +79,24 @@ const message = useMessage();
 const dialog = useDialog();
 const { hasPerm } = usePerm();
 const { getArticles, getGroupings, getArticle, auditArticles, removeArticles } = useArticleAdminApi();
+const { getLabels } = useLabelAdminApi();
+const { getSpecialList } = useSpecialAdminApi();
+
+// ---------- URL 条件注入：标签/分类/专栏页收录数跳转带 query，作为对应下拉初始值 ----------
+// query 变化时 :key 重建 AdminListPage（defaultValue 重新生效，翻页状态归零属预期）
+const route = useRoute();
+const toId = (v: unknown) => (v != null && v !== '' && !Number.isNaN(Number(v)) ? Number(v) : null);
+const initialLabelId = toId(route.query.labelId);
+const initialGroupingId = toId(route.query.groupingId);
+const initialSpecialId = toId(route.query.specialId);
+const listKey = computed(() => `${route.query.labelId ?? ''}-${route.query.groupingId ?? ''}-${route.query.specialId ?? ''}`);
 
 // ---------- 搜索条件 ----------
 const groupingOptions = ref<Array<{ label: string; value: number }>>([]);
+const labelOptions = ref<Array<{ label: string; value: number }>>([]);
+const specialOptions = ref<Array<{ label: string; value: number }>>([]);
 
+// computed 让 options 在异步拉取完成后响应更新（defaultValue 只在挂载初始化时生效）
 const searchFields = computed<AdminSearchField[]>(() => [
   { key: 'articleTitle', label: '文章标题', type: 'input', placeholder: '请输入文章标题' },
   { key: 'nickname', label: '作者', type: 'input', placeholder: '请输入作者昵称' },
@@ -87,7 +104,9 @@ const searchFields = computed<AdminSearchField[]>(() => [
     { label: '原创', value: 1 },
     { label: '转载', value: 2 }
   ] },
-  { key: 'groupingIds', label: '分类', type: 'multiple', placeholder: '请选择分类', options: groupingOptions.value },
+  { key: 'groupingIds', label: '分类', type: 'multiple', placeholder: '请选择分类', defaultValue: initialGroupingId != null ? [initialGroupingId] : undefined, options: groupingOptions.value },
+  { key: 'labelIds', label: '标签', type: 'multiple', placeholder: '请选择标签', defaultValue: initialLabelId != null ? [initialLabelId] : undefined, options: labelOptions.value },
+  { key: 'specialIds', label: '专栏', type: 'multiple', placeholder: '请选择专栏', defaultValue: initialSpecialId != null ? [initialSpecialId] : undefined, options: specialOptions.value },
   { key: 'auditStates', label: '审核状态', type: 'multiple', options: [
     { label: '审核中', value: 1 },
     { label: '已通过', value: 2 },
@@ -97,11 +116,20 @@ const searchFields = computed<AdminSearchField[]>(() => [
 ]);
 
 onMounted(async () => {
-  try {
-    const res = await getGroupings();
-    groupingOptions.value = (res.rows || []).map((g: GroupingRow) => ({ label: g.groupingName, value: g.id }));
-  } catch {
-    /* useApi 已统一弹错，下拉留空即可 */
+  // 三个下拉互不依赖，并行拉取；单个失败不影响其余
+  const [groupingRes, labelRes, specialRes] = await Promise.all([
+    getGroupings().catch(() => null),
+    getLabels({ pageNum: 1, pageSize: 500, state: 0 }).catch(() => null),
+    getSpecialList({ pageNum: 1, pageSize: 500, states: [0] }).catch(() => null)
+  ]);
+  if (groupingRes?.rows) {
+    groupingOptions.value = groupingRes.rows.map((g: GroupingRow) => ({ label: g.groupingName || `分类 ${g.id}`, value: g.id }));
+  }
+  if (labelRes?.rows) {
+    labelOptions.value = labelRes.rows.map((l: LabelRow) => ({ label: l.labelName || `标签 ${l.id}`, value: l.id }));
+  }
+  if (specialRes?.rows) {
+    specialOptions.value = specialRes.rows.map((s: SpecialRow) => ({ label: s.specialName || `专栏 ${s.id}`, value: s.id }));
   }
 });
 

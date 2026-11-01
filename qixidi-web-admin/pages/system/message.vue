@@ -169,9 +169,10 @@ const activeTab = ref('system');
 const systemListRef = ref<InstanceType<typeof AdminListPage> | null>(null);
 const systemChecked = ref<Array<string | number>>([]);
 
-// ---------- 搜索 ----------
+// ---------- 搜索（接收人昵称：后端用户域查 uuid 集合后 in，指定人发消息才有效） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'newsTitle', label: '标题', type: 'input', placeholder: '请输入标题关键词' },
+  { key: 'recipientNickname', label: '接收人', type: 'input', placeholder: '请输入接收人昵称' },
   {
     key: 'isMassAirs',
     label: '发送方式',

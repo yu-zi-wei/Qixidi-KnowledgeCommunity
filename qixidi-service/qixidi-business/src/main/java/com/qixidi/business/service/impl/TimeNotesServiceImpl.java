@@ -22,6 +22,7 @@ import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
+import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.TimeNotesService;
 import com.qixidi.business.service.album.IAlbumService;
 import com.light.core.core.domain.PageQuery;
@@ -54,6 +55,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     private final TimeNotesMapper timeNotesMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
     private final IAlbumService albumService;
+    private final ITripartiteUserService tripartiteUserService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -212,11 +214,20 @@ public class TimeNotesServiceImpl implements TimeNotesService {
 
     @Override
     public TableDataInfo<TimeNotesAdminVo> adminQueryPageList(TimeNotesSearchBo bo, PageQuery pageQuery) {
+        // 作者昵称搜索：用户域查 uuid 集合后 in（空命中短路返回空页）
+        List<String> nicknameUids = null;
+        if (StrUtil.isNotBlank(bo.getNickname())) {
+            nicknameUids = tripartiteUserService.getUidsByNickname(bo.getNickname());
+            if (nicknameUids.isEmpty()) {
+                return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+            }
+        }
         // SearchBo.uid 是 Long 遗留类型，实际小记 uid 为 uuid 字符串，非空时转换匹配
         String uidCond = bo.getUid() != null ? String.valueOf(bo.getUid()) : null;
         Page<TimeNotes> page = timeNotesMapper.selectPage(pageQuery.build(), new LambdaQueryWrapper<TimeNotes>()
                 .like(StrUtil.isNotBlank(bo.getTitle()), TimeNotes::getTitle, bo.getTitle())
                 .eq(uidCond != null, TimeNotes::getUid, uidCond)
+                .in(nicknameUids != null, TimeNotes::getUid, nicknameUids)
                 .orderByDesc(TimeNotes::getRecordTime));
         List<TimeNotes> records = page.getRecords();
         TableDataInfo<TimeNotesAdminVo> tableDataInfo = new TableDataInfo<>();

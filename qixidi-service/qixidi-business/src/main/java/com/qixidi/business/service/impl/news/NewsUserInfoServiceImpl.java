@@ -199,16 +199,6 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     }
 
     /**
-     * 存活用户 Map（uuid -> 用户，state=0）
-     */
-    private Map<String, TripartiteUserVo> aliveUserMap() {
-        TripartiteUserBo bo = new TripartiteUserBo();
-        bo.setState(0);
-        return tripartiteUserService.queryList(bo).stream()
-            .collect(Collectors.toMap(TripartiteUserVo::getUuid, Function.identity(), (a, b) -> a));
-    }
-
-    /**
      * 用户展示字段 Map（uuid -> 用户），跨业务域展示字段组装统一走用户域 getUserByUids
      */
     private Map<String, TripartiteUserVo> userMap(Collection<String> uids) {
@@ -478,7 +468,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
      * 点赞/关注消息分页：存活用户集合既作过滤参数（等价原 join um.state=0，被冻结/注销用户的消息不展示）也承载发送者展示字段
      */
     private TableDataInfo<NewsUserInfoVo> listSenderNews(String uid, Integer type, PageQuery pageQuery) {
-        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        Map<String, TripartiteUserVo> aliveUsers = tripartiteUserService.getAliveUserMap();
         if (aliveUsers.isEmpty()) {
             return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
         }

@@ -287,7 +287,12 @@ const columns: DataTableColumns<LabelRow> = [
     key: 'articleNumber',
     width: 90,
     align: 'right',
-    render: (row) => h('span', { class: 'cell-stats' }, String(row.articleNumber ?? 0))
+    render: (row) =>
+      h(
+        'a',
+        { class: 'cell-stats is-link', title: '查看该标签下的文章', onClick: () => navigateTo({ path: '/article', query: { labelId: row.id } }) },
+        String(row.articleNumber ?? 0)
+      )
   },
   {
     title: '关注数',

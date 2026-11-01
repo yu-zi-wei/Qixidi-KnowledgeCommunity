@@ -19,4 +19,9 @@ public class TimeNotesSearchBo extends PageQuery {
      * uid
      */
     private Long uid;
+
+    /**
+     * 作者昵称模糊搜索（后台列表页：用户域查 uuid 集合后 in）
+     */
+    private String nickname;
 }

@@ -81,7 +81,9 @@ const message = useMessage();
 const dialog = useDialog();
 const { getUsers, getUser, updateUser } = useUserAdminApi();
 
-// ---------- 搜索（nickname/username 后端 like；states in） ----------
+// ---------- 搜索（nickname/username 后端 like；states/sources/roleIds in；注册时间范围拆 beginTime/endTime） ----------
+const roleOptions = Object.entries(USER_ROLE_MAP).map(([value, item]) => ({ label: item.label, value: Number(value) }));
+
 const searchFields: AdminSearchField[] = [
   { key: 'nickname', label: '昵称', type: 'input', placeholder: '请输入昵称关键词' },
   { key: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名关键词' },
@@ -89,7 +91,16 @@ const searchFields: AdminSearchField[] = [
     { label: '正常', value: 0 },
     { label: '已冻结', value: 1 },
     { label: '已删除', value: 2 }
-  ] }
+  ] },
+  { key: 'sources', label: '来源', type: 'multiple', placeholder: '请选择来源', options: [
+    { label: '平台注册', value: '平台注册' },
+    { label: 'GITEE', value: 'GITEE' },
+    { label: 'WEIBO', value: 'WEIBO' },
+    { label: 'BAIDU', value: 'BAIDU' },
+    { label: 'ZHIFUBAO', value: 'ZHIFUBAO' }
+  ] },
+  { key: 'roleIds', label: '角色', type: 'multiple', placeholder: '请选择角色', options: roleOptions },
+  { key: 'createTime', label: '注册时间', type: 'daterange', beginKey: 'beginTime', endKey: 'endTime' }
 ];
 
 const listRef = ref<InstanceType<typeof AdminListPage> | null>(null);

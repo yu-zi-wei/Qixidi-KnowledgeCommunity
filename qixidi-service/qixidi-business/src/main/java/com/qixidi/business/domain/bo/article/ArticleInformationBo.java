@@ -130,6 +130,16 @@ public class ArticleInformationBo extends BaseEntity {
     private List<Long> groupingIds;
 
     /**
+     * 标签 id 多选（后台列表筛选，label_id 逗号分隔串 FIND_IN_SET 任一命中）
+     */
+    private List<Long> labelIds;
+
+    /**
+     * 专栏 id 多选（后台列表筛选，in 查询）
+     */
+    private List<Long> specialIds;
+
+    /**
      * 审核时间
      */
     private Date auditTime;

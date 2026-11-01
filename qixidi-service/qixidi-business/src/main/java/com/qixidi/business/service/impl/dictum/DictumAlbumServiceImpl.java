@@ -10,7 +10,6 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.utils.StringUtils;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.dictum.DictumAlbumBo;
-import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoSearchBo;
 import com.qixidi.business.domain.entity.dictum.DictumAlbum;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.function.Function;
 import cn.hutool.core.collection.CollUtil;
 
 import java.util.List;
@@ -72,23 +70,13 @@ public class DictumAlbumServiceImpl implements IDictumAlbumService {
     @Override
     public TableDataInfo<DictumAlbumVo> queryPageList(DictumAlbumBo bo, PageQuery pageQuery) {
         // 存活作者过滤（等价原 join um.state=0）；原 SQL 的作者展示列无 VO 承接字段，无需组装
-        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        Map<String, TripartiteUserVo> aliveUsers = tripartiteUserService.getAliveUserMap();
         if (aliveUsers.isEmpty()) {
             return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
         }
         IPage<DictumAlbumVo> result = baseMapper.selectVoPageXml(bo, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
         enrichWithEmploySum(result.getRecords());
         return TableDataInfo.build(result);
-    }
-
-    /**
-     * 存活用户 Map（键 uuid，等价原 SQL join um.state=0 的过滤集）
-     */
-    private Map<String, TripartiteUserVo> aliveUserMap() {
-        TripartiteUserBo bo = new TripartiteUserBo();
-        bo.setState(0);
-        return tripartiteUserService.queryList(bo).stream()
-            .collect(Collectors.toMap(TripartiteUserVo::getUuid, Function.identity(), (a, b) -> a));
     }
 
     /**

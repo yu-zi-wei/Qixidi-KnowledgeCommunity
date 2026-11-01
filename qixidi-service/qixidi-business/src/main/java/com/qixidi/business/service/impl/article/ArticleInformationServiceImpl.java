@@ -189,7 +189,18 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         QueryWrapper<ArticleInformation> lqw = Wrappers.query();
         lqw.le("ai.type", 10);
         lqw.like(StringUtils.isNotBlank(bo.getArticleTitle()), "ai.article_title", bo.getArticleTitle());
-        lqw.like(StringUtils.isNotBlank(bo.getLabelId()), "ai.label_id", bo.getLabelId());
+        // 标签筛选：label_id 是逗号分隔 id 串，FIND_IN_SET 精确匹配（like 有 1↔12 误伤）；多值为任一命中
+        if (StringUtils.isNotBlank(bo.getLabelId())) {
+            lqw.apply("FIND_IN_SET({0}, ai.label_id) > 0", bo.getLabelId());
+        }
+        if (CollectionUtils.isNotEmpty(bo.getLabelIds())) {
+            String labelMatch = bo.getLabelIds().stream()
+                    .map(id -> "FIND_IN_SET(" + id + ", ai.label_id) > 0")
+                    .collect(Collectors.joining(" OR ", "(", ")"));
+            lqw.apply(labelMatch);
+        }
+        lqw.eq(bo.getSpecialId() != null, "ai.special_id", bo.getSpecialId());
+        lqw.in(CollectionUtils.isNotEmpty(bo.getSpecialIds()), "ai.special_id", bo.getSpecialIds());
         lqw.eq(bo.getGroupingId() != null, "ai.grouping_id", bo.getGroupingId());
         lqw.in(CollectionUtils.isNotEmpty(bo.getGroupingIds()), "ai.grouping_id", bo.getGroupingIds());
         lqw.eq(bo.getType() != null, "ai.type", bo.getType());
@@ -422,7 +433,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         QueryWrapper<ArticleInformation> wrapper = buildQueryWrapper(bo);
         // 作者昵称搜索：用户域查 uuid 后 in（等价原 join um.nickname like）
         if (StringUtils.isNotBlank(bo.getNickname())) {
-            List<String> uuids = uidsByNickname(bo.getNickname());
+            List<String> uuids = tripartiteUserService.getUidsByNickname(bo.getNickname());
             if (uuids.isEmpty()) {
                 return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
             }
@@ -658,7 +669,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         // 作者昵称搜索：用户域查 uuid 后 in（等价原 SQL 对 b_user_main 的子查询）
         List<String> nicknameUids = null;
         if (StringUtils.isNotBlank(bo.getNickname())) {
-            nicknameUids = uidsByNickname(bo.getNickname());
+            nicknameUids = tripartiteUserService.getUidsByNickname(bo.getNickname());
             if (nicknameUids.isEmpty()) {
                 return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
             }
@@ -792,7 +803,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      * 也承载作者展示字段，免二次批量查；关注流额外与关注域 target_id 求交（等价原 join b_user_follow）
      */
     private Page<ArticleInformationVo> listAliveAuthorPage(SortTypeBo bo, PageQuery pageQuery, boolean follow) {
-        Map<String, TripartiteUserVo> aliveUsers = aliveUserMap();
+        Map<String, TripartiteUserVo> aliveUsers = tripartiteUserService.getAliveUserMap();
         if (aliveUsers.isEmpty()) {
             return new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
         }
@@ -817,27 +828,6 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         fillAuthorInfo(page.getRecords(), aliveUsers);
         enrichWithRealTimeCounts(page.getRecords());
         return page;
-    }
-
-    /**
-     * 存活用户 Map（uuid -> 用户，state=0）
-     */
-    private Map<String, TripartiteUserVo> aliveUserMap() {
-        TripartiteUserBo userBo = new TripartiteUserBo();
-        userBo.setState(0);
-        return tripartiteUserService.queryList(userBo).stream()
-                .collect(Collectors.toMap(TripartiteUserVo::getUuid, u -> u, (a, b) -> a));
-    }
-
-    /**
-     * 按昵称查用户 uuid 集合（原 join/子查询 b_user_main nickname like 条件的等价替代，走用户域接口）
-     */
-    private List<String> uidsByNickname(String nickname) {
-        TripartiteUserBo userBo = new TripartiteUserBo();
-        userBo.setNickname(nickname);
-        return tripartiteUserService.queryList(userBo).stream()
-                .map(TripartiteUserVo::getUuid)
-                .collect(Collectors.toList());
     }
 
     /**

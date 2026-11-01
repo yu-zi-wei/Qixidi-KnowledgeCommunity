@@ -25,12 +25,10 @@
         di.content,
         di.group_id,
         di.label,
-        di.label,
         di.picture,
         di.author,
         di.works_name,
         di.dictum_state,
-        di.group_id,
         di.album_id,
         di.create_time,
         di.update_time,
@@ -42,7 +40,16 @@
         left join b_dictum_album as da
         on di.album_id=da.id
         <where>
-            di.state=0
+            <choose>
+                <!-- 状态多选搜索时按传入值查（含已删除）；默认只查正常 -->
+                <when test="bo.states!=null and bo.states.size()>0">
+                    and di.state in
+                    <foreach collection="bo.states" item="item" open="(" separator="," close=")">#{item}</foreach>
+                </when>
+                <otherwise>
+                    and di.state=0
+                </otherwise>
+            </choose>
             and di.uid in
             <foreach collection="aliveUids" item="aliveItem" open="(" separator="," close=")">#{aliveItem}</foreach>
             <if test="bo.uid!=null and bo.uid!=''">
@@ -50,6 +57,10 @@
             </if>
             <if test="bo.dictumState!=null and bo.dictumState!=''">
                 and di.dictum_state=#{bo.dictumState}
+            </if>
+            <if test="bo.dictumStates!=null and bo.dictumStates.size()>0">
+                and di.dictum_state in
+                <foreach collection="bo.dictumStates" item="item" open="(" separator="," close=")">#{item}</foreach>
             </if>
             <if test="bo.content!=null and bo.content!=''">
                 and di.content like concat('%' ,#{bo.content},'%')
@@ -60,8 +71,16 @@
             <if test="bo.albumId!=null and bo.albumId!=''">
                 and di.album_id=#{bo.albumId}
             </if>
+            <if test="bo.albumIds!=null and bo.albumIds.size()>0">
+                and di.album_id in
+                <foreach collection="bo.albumIds" item="item" open="(" separator="," close=")">#{item}</foreach>
+            </if>
             <if test="bo.groupId!=null and bo.groupId!=''">
                 and di.group_id=#{bo.groupId}
+            </if>
+            <if test="bo.groupIds!=null and bo.groupIds.size()>0">
+                and di.group_id in
+                <foreach collection="bo.groupIds" item="item" open="(" separator="," close=")">#{item}</foreach>
             </if>
             <if test="bo.author!=null and bo.author!=''">
                 and di.author=#{bo.author}

@@ -77,4 +77,9 @@ public class NewsSystemInfoBo extends BaseEntity {
      */
     private List<Long> states;
 
+    /**
+     * 接收人昵称模糊搜索（后台列表页：用户域查 uuid 集合后 in，指定人发消息的 uid）
+     */
+    private String recipientNickname;
+
 }

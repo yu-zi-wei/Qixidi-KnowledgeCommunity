@@ -64,10 +64,12 @@ const message = useMessage();
 const dialog = useDialog();
 const { getComments, getComment, deleteComments } = useCommentAdminApi();
 
-// ---------- 搜索（content 后端 like；articleId 输入是字符串，fetch 里转数字） ----------
+// ---------- 搜索（content/articleTitle 后端 like；articleId 输入是字符串，fetch 里转数字） ----------
 const searchFields: AdminSearchField[] = [
   { key: 'content', label: '评论内容', type: 'input', placeholder: '请输入关键词' },
+  { key: 'articleTitle', label: '文章标题', type: 'input', placeholder: '请输入文章标题' },
   { key: 'articleId', label: '文章 ID', type: 'input', placeholder: '请输入数字 ID' },
+  { key: 'nickname', label: '评论人', type: 'input', placeholder: '请输入评论人昵称' },
   { key: 'states', label: '状态', type: 'multiple', options: [
     { label: '正常', value: 0 },
     { label: '已删除', value: 1 }
