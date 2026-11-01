@@ -18,6 +18,7 @@ import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.news.NewsUserInfoBo;
+import com.qixidi.business.domain.entity.news.NewsSystemRead;
 import com.qixidi.business.domain.entity.news.NewsUserInfo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
@@ -30,6 +31,7 @@ import com.qixidi.business.domain.vo.news.NewsUserSumVo;
 import com.qixidi.business.domain.vo.news.TimeNotesCommentNewsVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
+import com.qixidi.business.mapper.news.NewsSystemReadMapper;
 import com.qixidi.business.mapper.news.NewsUserInfoMapper;
 import com.qixidi.business.mapper.privateUser.PrivateNewsInfoMapper;
 import com.qixidi.business.service.news.INewsUserInfoService;
@@ -51,6 +53,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
 
     private final NewsUserInfoMapper baseMapper;
     private final NewsSystemInfoMapper newsSystemInfoMapper;
+    private final NewsSystemReadMapper newsSystemReadMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final PrivateNewsInfoMapper privateNewsInfoMapper;
 
@@ -175,10 +178,20 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         List<NewsSystemInfoVo> newsSystemList = newsSystemInfoMapper.selectBaseUid(uid);
         String key = String.format(RedisBusinessKeyEnums.USER_SYSTEM_MESSAGES.getKey(), uid);
         Set<Long> cacheSet = RedisUtils.getCacheSet(key);
+        if (cacheSet.isEmpty()) {
+            // Redis 已读集为空（数据丢失或新用户）：从已读落库表回灌，库为权威源
+            List<Long> readIds = newsSystemReadMapper.selectNewsIdsByUid(uid);
+            if (!readIds.isEmpty()) {
+                cacheSet = new HashSet<>(readIds);
+                RedisUtils.setCacheSet(key, cacheSet);
+            }
+        }
+        // 回灌分支存在重赋值，lambda 引用需 final 变量承接
+        final Set<Long> readSet = cacheSet;
 
         List<NewsUserRecord> systemNewsList = new ArrayList<>();
         newsSystemList.forEach(item -> {
-            if (!cacheSet.contains(item.getId())) {
+            if (!readSet.contains(item.getId())) {
                 NewsUserRecord newsUserInfo = new NewsUserRecord();
                 newsUserInfo.setId(item.getId());
                 systemNewsList.add(newsUserInfo);
@@ -279,14 +292,22 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
             List<NewsSystemInfoVo> newsSystemList = newsSystemInfoMapper.selectBase();
             String key = String.format(RedisBusinessKeyEnums.USER_SYSTEM_MESSAGES.getKey(), uuid);
             Set<Long> cacheSet = RedisUtils.getCacheSet(key);
+            Date now = new Date();
+            List<NewsSystemRead> readRecords = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(newsSystemList)) {
                 newsSystemList.forEach(item -> {
                     if (!cacheSet.contains(item.getId())) {
                         cacheSet.add(item.getId());
+                        // 双写落库：Redis 丢失时的回灌数据源
+                        readRecords.add(new NewsSystemRead().setUid(uuid).setNewsId(item.getId()).setCreateTime(now));
                     }
                 });
             }
             RedisUtils.setCacheSet(key, cacheSet);
+            if (!readRecords.isEmpty()) {
+                // INSERT IGNORE + uk_uid_news：重复标记/并发下幂等
+                newsSystemReadMapper.insertIgnoreBatch(readRecords);
+            }
         }
         newsUserRecordMapper.update(new LambdaUpdateWrapper<NewsUserRecord>()
                 .set(NewsUserRecord::getBeenRead, bo.getBeenRead())
