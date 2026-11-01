@@ -13,6 +13,8 @@ import type { Component } from 'vue';
 import {
   FileText,
   MessageCircle,
+  Message2,
+  Messages,
   Users,
   Settings,
   Notebook,
@@ -26,7 +28,14 @@ import {
   ReportAnalytics,
   ShieldLock,
   Tags,
-  Bookmarks
+  Bookmarks,
+  Link,
+  Photo,
+  Columns,
+  Compass,
+  LayoutSidebar,
+  Tool,
+  Clock
 } from '@vicons/tabler';
 
 export interface AdminMenuItem {
@@ -48,7 +57,8 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       { label: '文章列表', key: '/article', icon: FileText, perm: 'article:information:query' },
       { label: '评论管理', key: '/comment', icon: MessageCircle, perm: 'article:comment:query' },
       { label: '标签管理', key: '/label', icon: Tags, perm: 'labelInfo:query' },
-      { label: '标签分类', key: '/grouping', icon: Bookmarks, perm: 'groupingInfo:query' }
+      { label: '标签分类', key: '/grouping', icon: Bookmarks, perm: 'groupingInfo:query' },
+      { label: '专栏列表', key: '/special', icon: Columns, perm: 'special:information:query' }
     ]
   },
   {
@@ -57,7 +67,8 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     icon: Notebook,
     children: [
       { label: '小记列表', key: '/time-notes', icon: Notebook, perm: 'timeNotes:query' },
-      { label: '小记评论', key: '/time-notes/comment', icon: MessageCircle, perm: 'timeNotes:comment:query' }
+      { label: '小记评论', key: '/time-notes/comment', icon: MessageCircle, perm: 'timeNotes:comment:query' },
+      { label: '时光相册', key: '/album', icon: Photo, perm: 'album:query' }
     ]
   },
   {
@@ -80,6 +91,26 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     ]
   },
   {
+    label: '私信管理',
+    key: 'private-mgmt',
+    icon: Messages,
+    children: [
+      { label: '私信会话', key: '/private', icon: Messages, perm: 'private:user:query' },
+      { label: '私信消息', key: '/private/message', icon: Message2, perm: 'private:news:query' }
+    ]
+  },
+  {
+    label: '站点配置',
+    key: 'site-config',
+    icon: Compass,
+    children: [
+      { label: '友链管理', key: '/friend-link', icon: Link, perm: 'friendLink:query' },
+      { label: '导航配置', key: '/navigation', icon: Compass },
+      { label: '侧边栏配置', key: '/sidebar', icon: LayoutSidebar },
+      { label: '工具管理', key: '/tool', icon: Tool, perm: 'toolInfo:list' }
+    ]
+  },
+  {
     label: '监控审计',
     key: 'monitor',
     icon: Activity,
@@ -95,7 +126,8 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     icon: Settings,
     children: [
       { label: '角色管理', key: '/system/role', icon: Shield, perm: 'role:query' },
-      { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' }
+      { label: '后台账号', key: '/system/account', icon: IdBadge, perm: 'user:query' },
+      { label: '系统任务', key: '/system/task', icon: Clock }
     ]
   }
 ];
