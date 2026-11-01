@@ -88,6 +88,9 @@ AdminListPage 双 script 块（普通块 export 类型 + setup 块实现），�
 - **无 `window.__vue_app__`（那是门户内嵌 admin 页的通道）**：登录态断言读 `JSON.parse(localStorage.admin).token`，页面导航一律 URL goto
 - 全 CSR 应用 URL goto 与客户端导航渲染等价，验证不必模拟菜单点击
 - 布局/视觉改动跑量测断言（getBoundingClientRect/裂图 naturalWidth/横向溢出），不要只截图
+- 双 tab 页两 pane 常驻 DOM（display-directive=show）：DOM 断言必须过滤 `offsetParent !== null`，否则隐藏 pane 同名元素（如表头「操作」列）造成假阳性
+- 统计表格数据行须按 `.n-data-table-tr` 内含 `.n-data-table-td` 区分：Naive UI 表头也是 tr，空结果时行数 1 实为表头
+- localStorage 注入登录态必须先 goto 到应用 origin 再 evaluate：about:blank 上访问 localStorage 报 SecurityError
 
 ---
 
