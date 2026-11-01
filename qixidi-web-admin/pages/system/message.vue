@@ -88,7 +88,7 @@
         </n-alert>
         <n-form ref="formRef" :model="form" :rules="rules" label-placement="top">
           <n-form-item label="发送方式" path="isMassAir">
-            <n-radio-group v-model:value="form.isMassAir">
+            <n-radio-group v-model:value="form.isMassAir" @update:value="onMassAirChange">
               <n-radio :value="1">群发（全体用户）</n-radio>
               <n-radio :value="2">指定用户</n-radio>
             </n-radio-group>
@@ -97,12 +97,10 @@
             <n-select
               v-model:value="form.uid"
               filterable
-              remote
               clearable
-              placeholder="输入用户名或昵称搜索"
+              placeholder="搜索昵称或用户名选择接收用户"
               :options="userOptions"
-              :loading="userSearching"
-              @search="searchUsers"
+              :loading="userLoading"
             />
           </n-form-item>
           <n-form-item label="标题" path="newsTitle">
@@ -411,44 +409,41 @@ const rules: FormRules = {
   }
 };
 
-// ---------- 接收用户远程搜索（用户名/昵称各搜一路合并去重） ----------
+// ---------- 接收用户候选（前台用户量小，一次拉全量本地过滤：点开即有完整候选，输入即过滤） ----------
 const userOptions = ref<Array<{ label: string; value: string }>>([]);
-const userSearching = ref(false);
-let searchSeq = 0;
+const userLoading = ref(false);
+let userOptionsPromise: Promise<void> | null = null;
 
-const searchUsers = async (keyword: string) => {
-  if (!keyword?.trim()) {
-    userOptions.value = [];
-    return;
+const loadUserOptions = () => {
+  if (!userOptionsPromise) {
+    userLoading.value = true;
+    userOptionsPromise = (async () => {
+      try {
+        const { rows } = await getUsers({ pageNum: 1, pageSize: 500 });
+        userOptions.value = (rows || [])
+          .filter((u) => u.state !== 2) // 已删除用户不可选
+          .map((u) => ({
+            label: `${u.nickname || u.username}（${u.username || '-'}）`,
+            value: u.uuid
+          }));
+      } catch {
+        userOptionsPromise = null; // 失败允许重试
+        /* useApi 已统一弹错 */
+      } finally {
+        userLoading.value = false;
+      }
+    })();
   }
-  const seq = ++searchSeq;
-  userSearching.value = true;
-  try {
-    const [byName, byNick] = await Promise.all([
-      getUsers({ username: keyword, pageNum: 1, pageSize: 20 }),
-      getUsers({ nickname: keyword, pageNum: 1, pageSize: 20 })
-    ]);
-    if (seq !== searchSeq) return; // 已有更新的搜索，丢弃过期响应
-    const merged = new Map<string, { label: string; value: string }>();
-    [...(byName.rows || []), ...(byNick.rows || [])].forEach((u) => {
-      if (u.state === 2) return; // 已删除用户不可选
-      merged.set(u.uuid, {
-        label: `${u.nickname || u.username}（${u.username || '-'}）`,
-        value: u.uuid
-      });
-    });
-    userOptions.value = [...merged.values()];
-  } catch {
-    /* useApi 已统一弹错 */
-  } finally {
-    if (seq === searchSeq) userSearching.value = false;
-  }
+  return userOptionsPromise;
+};
+
+const onMassAirChange = (value: number) => {
+  if (value === 2) loadUserOptions();
 };
 
 const openForm = async (row?: SystemMessageRow) => {
   editingId.value = row?.id ?? null;
   Object.assign(form, { newsTitle: '', newsContent: '', isMassAir: 1, uid: null });
-  userOptions.value = [];
   formVisible.value = true;
   if (row) {
     try {
@@ -460,8 +455,11 @@ const openForm = async (row?: SystemMessageRow) => {
         uid: d.isMassAir === 2 ? d.uid || null : null
       });
       if (form.uid) {
-        // 回填当前接收人，保证选择器直接显示昵称
-        userOptions.value = [{ label: d.recipientName || form.uid, value: form.uid }];
+        await loadUserOptions();
+        // 候选中无当前接收人（已注销/已删除）时补一项，保证选择器直接显示昵称
+        if (!userOptions.value.some((o) => o.value === form.uid)) {
+          userOptions.value = [{ label: d.recipientName || form.uid, value: form.uid }, ...userOptions.value];
+        }
       }
     } catch {
       /* useApi 已统一弹错 */
