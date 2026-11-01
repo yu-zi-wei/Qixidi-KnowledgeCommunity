@@ -41,15 +41,16 @@ qixidi（栖息地博客）项目的 AI 开发导航入口。
 |------|------|--------|------|
 | **qixidi-service** | 服务端 API | Spring Boot 4.0 + Java 17 | 活跃开发 |
 | **qixidi-web-nuxt3** | 门户网站 + 用户后台（SSR） | Nuxt 3 + Vue 3 + Naive UI | 活跃开发 |
-| **qixidi-web-admin** | 管理后台 2.0（重写中，需求见其 docs/开发需求与设计.md） | Nuxt 3 + TS + Naive UI（全 CSR） | 活跃开发 |
+| **qixidi-web-admin** | 管理后台 2.0（八大功能域主体已就绪，需求见其 docs/开发需求与设计.md） | Nuxt 3 + TS + Naive UI（全 CSR） | 活跃开发 |
 
 ### 业务功能
 
-- **文章管理**：Markdown 编辑、分类标签、版本管理
+- **内容创作**：文章（Markdown 编辑、标签/分类/专栏）、时光小记、随笔（分组/专辑）、时光相册
 - **用户系统**：注册登录、权限管理、个人主页
 - **内容展示**：文章列表、详情页、搜索、归档
-- **社交互动**：评论、点赞、关注、收藏
-- **后台管理**：内容审核、数据统计、系统配置
+- **社交互动**：评论、点赞、关注、收藏、私信
+- **AI 服务**：AI 对话与内容生成（qixidi-ai，Spring AI）、MCP Agent 工具开放（qixidi-mcp）
+- **后台管理**：数据看板（首页）+ 八大功能域（菜单单一数据源 `useAdminMenu`）——文章、小记、随笔三大内容域（列表/评论/标签分组专辑）、前台用户、私信监管、站点配置（友链/导航/工具）、监控审计（操作日志/登录日志/IP 黑名单）、系统管理（角色/账号/任务/消息/屏蔽词）
 
 ---
 
@@ -249,6 +250,7 @@ qixidi-service/
 ├── qixidi-system        # 系统模块（含后台管理 Controller，URL 统一 /system/*）
 ├── qixidi-auth         # 认证模块
 ├── qixidi-mcp          # MCP 服务模块（无状态 /mcp 端点 + API key 会话桥 + /agent 管理接口）
+├── qixidi-ai           # AI 模块（Spring AI，业务接 AI 的唯一入口：ChatClient 场景装配、多轮对话策略、无状态文本生成）
 ├── qixidi-business     # 业务模块（system 依赖 business；前台 Controller 平铺在 api/ 下，URL 含 /frontDesk/* 等原路径）
 │   ├── api            # 前台 Controller（按业务子目录平铺）
 │   ├── domain         # entity/bo/vo/enums
@@ -285,14 +287,12 @@ AI 开发时按以下优先级阅读：
 ```
 .claude/
 ├── rules/              # 全局规则
-│   ├── architecture.md
-│   ├── code-basics.md
-│   ├── qixidi-service.md
-│   └── qixidi-web-nuxt3.md
+│   ├── common/         # code-basics、architecture
+│   ├── frontend/       # 门户（SSR）、管理后台（CSR）、设计系统、数据获取、部署等
+│   └── backend/        # qixidi-service 开发规范
 ├── skills/             # 业务模块技能
-│   ├── INDEX.md
-│   ├── TEMPLATE.md
-│   └── rules-management.md
+│   ├── INDEX.md        # 根索引
+│   └── common|frontend|backend/  # 通用技能 + 按端按模块分域
 └── memory/             # 持久化记忆
     └── MEMORY.md
 ```
