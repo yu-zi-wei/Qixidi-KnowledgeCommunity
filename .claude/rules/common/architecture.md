@@ -16,19 +16,28 @@
 
 | 层级 | 技术选型 |
 |------|----------|
-| 前端 | Nuxt 3 + Vue 3 + Naive UI |
+| 门户前端 | qixidi-web-nuxt3 · Nuxt 3 + Vue 3 + Naive UI（SSR） |
+| 管理后台前端 | qixidi-web-admin · Nuxt 3 + TS + Naive UI（全 CSR） |
 | 状态管理 | Pinia |
 | 后端 | Spring Boot 4.0 + Java 17 |
 | ORM | MyBatis Plus |
 | 认证 | Sa-Token |
 | 缓存 | Redis |
+| AI | Spring AI 2.0（qixidi-ai）+ MCP 端点（qixidi-mcp） |
 | 存储 | MySQL + OSS |
 
 ---
 
 ## 前端架构
 
-### 目录结构
+### 双前端应用
+
+| 应用 | 渲染 | 职责 |
+|------|------|------|
+| qixidi-web-nuxt3 | SSR 为主（交互页按需 CSR） | 门户 + 用户后台 |
+| qixidi-web-admin | 全 CSR（routeRules 关闭 SSR） | 管理后台 2.0（八大功能域，AdminListPage 骨架） |
+
+### 门户目录结构
 
 ```
 qixidi-web-nuxt3/
@@ -68,10 +77,12 @@ qixidi-web-nuxt3/
 qixidi-service/
 ├── qixidi-startup    # 启动模块
 ├── framework         # 框架层
-├── qixidi-system     # 系统模块
+├── qixidi-system     # 系统模块（含后台管理 Controller，URL 统一 /system/*）
 ├── qixidi-auth      # 认证模块
-├── qixidi-business  # 业务模块
-│   ├── api/         # Controller（backstage/frontDesk）
+├── qixidi-mcp       # MCP 服务模块（无状态 /mcp 端点 + API key 会话桥）
+├── qixidi-ai        # AI 模块（Spring AI，业务接 AI 的唯一入口）
+├── qixidi-business  # 业务模块（system 依赖 business）
+│   ├── api/         # 前台 Controller（按业务子目录平铺）
 │   ├── domain/      # entity/bo/vo/enums
 │   ├── service/     # Service 层
 │   ├── mapper/      # Mapper 层
@@ -123,7 +134,7 @@ Controller（接收请求） → Service（业务逻辑） → Mapper（数据�
 - **SQL 注入防护**：MyBatis 参数绑定
 - **XSS 防护**：前端过滤 + 后端转义
 - **接口鉴权**：Token 验证
-- **限流**：Redis + 令牌桶
+- **限流**：IP 计数防刷拦截器（超频拉黑，黑名单仅内存）
 
 ---
 
@@ -138,7 +149,7 @@ Controller（接收请求） → Service（业务逻辑） → Mapper（数据�
 ### 后端
 - 数据库优化（索引、查询优化）
 - 缓存策略（Redis 多级缓存）
-- 异步处理（消息队列）
+- 异步处理（定时任务 task/）
 - 连接池（数据库、Redis）
 
 ---
