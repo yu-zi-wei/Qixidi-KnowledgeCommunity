@@ -141,7 +141,7 @@ qixidi/
 <table>
 <tr>
 <td><img src="img/前台/首页.png" alt="首页" /></td>
-<td><img src="img/前台/文章详情页.png" alt="文章详情页" /></td>
+<td><img src="img/前台/文章详情.png" alt="文章详情" /></td>
 </tr>
 <tr>
 <td align="center">首页</td>
