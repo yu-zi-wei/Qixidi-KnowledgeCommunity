@@ -261,7 +261,7 @@ const hydrateMermaidDiagrams = async () => {
       })
       .catch((err: Error) => {
         if (hydrateVersion !== currentVersion) return
-        htmlEl.innerHTML = `<p style="color:var(--color-danger);font-size:13px;">图表渲染失败: ${err.message}</p>`
+        htmlEl.innerHTML = `<p style="color:var(--color-danger);font-size: 14px;">图表渲染失败: ${err.message}</p>`
       })
   })
 }
@@ -304,7 +304,7 @@ const hydrateEchartsDiagrams = async () => {
         chart.dispose()
       })
     } catch (err: any) {
-      htmlEl.innerHTML = `<p style="color:var(--color-danger);font-size:13px;">图表渲染失败: ${err.message}</p>`
+      htmlEl.innerHTML = `<p style="color:var(--color-danger);font-size: 14px;">图表渲染失败: ${err.message}</p>`
     }
   })
 }
@@ -322,7 +322,7 @@ const closePreview = () => {
 
 <style scoped>
 .markdown-body {
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .markdown-body img {

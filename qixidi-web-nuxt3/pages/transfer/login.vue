@@ -178,7 +178,7 @@ onMounted(async () => {
 }
 
 .transfer-text {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--color-ink-light);
   margin: 0;
   text-align: center;

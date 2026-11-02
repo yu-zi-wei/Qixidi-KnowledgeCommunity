@@ -1,7 +1,7 @@
 <template>
   <div class="time-notes-page">
     <div class="tn-search">
-      <n-input v-model:value="searchKeyword" placeholder="搜索小记标题" clearable>
+      <n-input v-model:value="searchKeyword" placeholder="搜索小记标题" clearable size="large">
         <template #prefix>
           <n-icon><Search /></n-icon>
         </template>
@@ -141,7 +141,7 @@ onMounted(() => {
 
 .tn-search {
   flex-shrink: 0;
-  padding: 0 24px 12px;
+  padding: 16px 24px 12px;
 }
 
 .time-notes-page .loading-state,
@@ -200,6 +200,11 @@ onMounted(() => {
   gap: 12px;
   padding: 10px 16px;
   border-radius: var(--radius-sm);
+  transition: background var(--transition-base);
+}
+
+.tn-note-item:hover {
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .tn-note-date {
@@ -234,7 +239,6 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   padding: 12px 0 16px;
-  background: var(--color-surface-warm);
   border-top: 1px solid var(--color-border-light);
 }
 </style>

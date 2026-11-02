@@ -7,13 +7,14 @@
           v-model:value="searchKeyword"
           placeholder="搜索专辑名称..."
           clearable
+          size="large"
         >
           <template #prefix>
             <n-icon><Search /></n-icon>
           </template>
         </n-input>
       </div>
-      <n-button type="primary" @click="handleCreate">
+      <n-button type="primary" size="large" @click="handleCreate">
         <template #icon>
           <n-icon><Plus /></n-icon>
         </template>
@@ -54,7 +55,7 @@
               <img :src="special.cover" :alt="special.specialName" />
             </div>
             <div class="special-cover cover-placeholder" v-else>
-              <n-icon size="32"><Folder /></n-icon>
+              <n-icon size="28"><Folder /></n-icon>
             </div>
 
             <!-- 专辑信息 -->
@@ -405,32 +406,35 @@ onMounted(() => fetchSpecialList())
   background: var(--color-ink-muted);
 }
 
+/* 专辑列表 - 横向卡片行（对齐随笔专辑管理页） */
 .special-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* 专辑卡片 */
 .special-item {
   display: flex;
-  flex-direction: column;
-  background: var(--color-surface-warm);
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   transition: all var(--transition-base);
 }
 
 .special-item:hover {
+  border-color: var(--color-primary-light);
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 /* 封面图 */
 .special-cover {
-  width: 100%;
-  height: 180px;
+  width: 100px;
+  height: 72px;
+  border-radius: var(--radius-md);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .special-cover img {
@@ -455,7 +459,7 @@ onMounted(() => fetchSpecialList())
 /* 专辑信息 */
 .special-content {
   flex: 1;
-  padding: 14px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -496,8 +500,9 @@ onMounted(() => fetchSpecialList())
 /* 底部行：文章数 + 操作按钮 */
 .special-footer {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-top: auto;
   padding-top: 8px;
   border-top: 1px solid var(--color-border-light);
@@ -600,12 +605,5 @@ onMounted(() => fetchSpecialList())
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-}
-
-/* 响应式 */
-@media (max-width: 768px) {
-  .special-list {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

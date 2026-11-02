@@ -6,13 +6,13 @@
    ============================================ */
 
 @layer base {
-  /* html 元素背景 - 带网格效果 */
+  /* html 元素背景（方格线纹理已停用，仅保留纯色；恢复网格取消下方注释即可） */
   html {
-    background-color: var(--color-surface-warm) !important;
-    background-image:
+    background-color: var(--color-page-bg) !important;
+    /* background-image:
       linear-gradient(var(--grid-color) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-    background-size: var(--grid-size) var(--grid-size);
+    background-size: var(--grid-size) var(--grid-size); */
   }
 
   /* body 元素透明，让 html 背景显示 */

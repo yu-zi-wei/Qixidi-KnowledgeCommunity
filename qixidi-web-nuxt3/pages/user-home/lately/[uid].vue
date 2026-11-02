@@ -20,16 +20,18 @@
           class="history-item"
           @click="handleClick(item)"
         >
-          <div class="item-type-badge" :class="getTypeClass(item.targetType)">
-            {{ getTypeName(item.targetType) }}
-          </div>
           <div class="item-info">
-            <h3 class="item-title">{{ item.targetTitle }}</h3>
+            <div class="item-title-row">
+              <h3 class="item-title">{{ item.targetTitle }}</h3>
+              <span class="item-type-badge" :class="getTypeClass(item.targetType)">
+                {{ getTypeName(item.targetType) }}
+              </span>
+            </div>
             <span class="item-time" :title="getFullDateTime(item.createTime)">
               {{ formatTime(item.createTime) }}
             </span>
           </div>
-          <n-icon class="item-arrow"><ChevronRight /></n-icon>
+          <n-icon class="item-arrow"><ArrowRight /></n-icon>
         </NuxtLink>
       </div>
 
@@ -48,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronRight } from '@vicons/tabler'
+import { ArrowRight } from '@vicons/tabler'
 import type { BrowsingHistoryVo } from '~/composables/useBrowsingHistoryApi'
 
 definePageMeta({ layout: 'user-home' })
@@ -145,7 +147,6 @@ const getTypeClass = (type: number) => {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   padding-bottom: 12px;
 }
 
@@ -154,21 +155,31 @@ const getTypeClass = (type: number) => {
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: var(--color-surface);
   border-radius: var(--radius-md);
   cursor: pointer;
   text-decoration: none;
-  transition: all var(--transition-base);
+  transition: background var(--transition-base);
+}
+
+/* 条目间细分隔线（纸上排版线） */
+.history-item + .history-item {
+  border-top: 1px solid var(--color-border-light);
 }
 
 .history-item:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+}
+
+.item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
 .item-type-badge {
   flex-shrink: 0;
-  padding: 2px 10px;
+  padding: 1px 8px;
   font-size: 11px;
   font-weight: 500;
   border-radius: var(--radius-full);
@@ -197,6 +208,7 @@ const getTypeClass = (type: number) => {
   font-weight: 500;
   color: var(--color-ink);
   margin: 0;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

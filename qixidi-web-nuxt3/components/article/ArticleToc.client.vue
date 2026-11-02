@@ -229,11 +229,11 @@ onUnmounted(() => {
 .toc-item::before {
   content: '';
   position: absolute;
-  left: -30.5px; /* 微调：-31px + 0.5px */
+  left: -29.5px; /* 对齐竖线中心：竖线中心 -26.5，圆点半宽 3 → left -29.5 */
   top: 16px; /* 对齐第一行文字中心：padding-top(6) + 半行高(~10)；多行时圆点不会跑到行间 */
   transform: translateY(-50%);
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #d1d5db;
   border: none;
@@ -268,8 +268,8 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;   /* 超出部分显示省略号，完整标题靠 title 属性 hover 查看 */
   padding: 6px 0;
-  font-size: 13px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 21px;
   color: var(--color-ink-muted);
   text-decoration: none;
   transition: color 0.2s ease;

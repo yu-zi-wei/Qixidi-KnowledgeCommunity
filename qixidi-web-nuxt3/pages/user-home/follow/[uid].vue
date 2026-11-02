@@ -156,14 +156,15 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
   gap: 0;
 }
 
-/* 左侧菜单 */
+/* 左侧菜单（左右留白：选中框不贴纸缘，与内容拉开距离） */
 .follow-sidebar {
-  width: 140px;
+  width: 152px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding-right: 12px;
+  padding-left: 12px;
+  padding-right: 16px;
   border-right: 1px solid var(--color-border-light);
 }
 
@@ -210,7 +211,7 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
-  padding-left: 16px;
+  padding-left: 20px;
 }
 
 .follow-content::-webkit-scrollbar {
@@ -251,12 +252,11 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
   gap: 12px;
   padding: 12px;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
-  transition: all var(--transition-base);
+  transition: background var(--transition-base);
 }
 
 .follow-user-card:hover {
-  box-shadow: var(--shadow-sm);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .follow-user-avatar {
@@ -342,7 +342,7 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   padding: 1px 8px;
   border-radius: var(--radius-full);
   color: var(--color-primary);
@@ -353,7 +353,7 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
 }
 
@@ -370,14 +370,12 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
   gap: 10px;
   padding: 12px;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
   text-decoration: none;
-  transition: all var(--transition-base);
+  transition: background var(--transition-base);
 }
 
 .follow-tag-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .follow-tag-cover {
@@ -455,6 +453,7 @@ const pending = computed(() => pendingUsers.value || pendingTags.value)
     flex-direction: row;
     border-right: none;
     border-bottom: 1px solid var(--color-border-light);
+    padding-left: 0;
     padding-right: 0;
     padding-bottom: 8px;
   }

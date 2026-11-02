@@ -299,14 +299,17 @@ const handlePrivateMsg = async () => {
   height: 100%;
 }
 
+/* 左列整列一张纸：头部与内容连续展开，层次靠排版不走卡片 */
 .user-home-left {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
   height: 100%;
   overflow: hidden;
+  background: var(--color-paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .user-home-right {
@@ -314,12 +317,8 @@ const handlePrivateMsg = async () => {
   flex-shrink: 0;
 }
 
-/* ======== 用户头部 + 菜单合并卡片 ======== */
+/* ======== 用户头部 + 菜单（融入纸面） ======== */
 .user-header-card {
-  background: var(--user-card-bg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
   flex-shrink: 0;
 }
 
@@ -376,13 +375,13 @@ const handlePrivateMsg = async () => {
   bottom: 0;
   right: -4px;
   padding: 0 5px;
-  font-size: 10px;
-  line-height: 14px;
+  font-size: 11px;
+  line-height: 15px;
   color: #fff;
   background: var(--color-primary);
   border-radius: var(--radius-full);
-  /* 描边色跟随卡片背景，避免白色卡片上露灰边 */
-  border: 2px solid var(--user-card-bg);
+  /* 描边色跟随纸面背景，避免纸上露灰边 */
+  border: 2px solid var(--color-paper);
   font-weight: 500;
 }
 
@@ -429,7 +428,7 @@ const handlePrivateMsg = async () => {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   padding: 1px 8px;
   border-radius: var(--radius-full);
   color: var(--color-primary);
@@ -481,11 +480,11 @@ const handlePrivateMsg = async () => {
   padding-right: 4px;
 }
 
-/* ======== 右侧统计卡片 ======== */
+/* ======== 右侧统计（轻纸片：hairline 出形，不出阴影） ======== */
 .stats-card {
-  background: var(--color-surface);
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   padding: 18px;
   position: sticky;
   top: 16px;
@@ -515,7 +514,7 @@ const handlePrivateMsg = async () => {
 }
 
 .profile-stat:hover {
-  background: var(--color-surface-dim);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .stat-value {
@@ -526,7 +525,7 @@ const handlePrivateMsg = async () => {
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
 }
 
@@ -549,7 +548,7 @@ const handlePrivateMsg = async () => {
 }
 
 .user-stat-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
 }
 

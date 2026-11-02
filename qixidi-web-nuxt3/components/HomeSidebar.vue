@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar-scrollable">
     <!-- 站点数据 -->
-    <div v-if="siteStatsData" class="sidebar-card gray-card" style="--delay: 1">
+    <div v-if="siteStatsData" class="sidebar-card" style="--delay: 1">
       <div class="card-header">
         <svg class="fixed-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -39,7 +39,7 @@
     </div>
 
     <!-- 精选文章 -->
-    <div class="sidebar-card gray-card" style="--delay: 2">
+    <div class="sidebar-card" style="--delay: 2">
       <div class="card-header">
         <svg class="fixed-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -254,11 +254,10 @@ const runningRemainDays = computed(() => {
   }
 }
 
-/* 滚动容器 */
+/* 滚动容器：透明不铺底色，与文章列表同语言——层次靠排版与小面积点缀 */
 .sidebar-scrollable {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
@@ -272,29 +271,16 @@ const runningRemainDays = computed(() => {
   display: none;
 }
 
-/* 卡片通用样式 - 轻透风格，与文章卡片统一 */
+/* 区块样式：纸页内的栏目，细分隔线分隔（分隔线用 --color-border） */
 .sidebar-card {
-  background: var(--sidebar-card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  padding: 16px;
-  transition: all 0.2s ease;
+  padding: 18px 0 20px;
+  border-bottom: 1px solid var(--color-border);
   animation: sidebar-card-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
   opacity: 0;
 }
 
-.sidebar-card:hover {
-  background: var(--sidebar-card-bg-hover);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-}
-
-/* 暗色主题（背景由 token 翻转，这里只管边框和阴影） */
-:root.dark .sidebar-card {
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-:root.dark .sidebar-card:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+.sidebar-card:last-child {
+  border-bottom: none;
 }
 
 /* 卡片标题 */
@@ -302,7 +288,7 @@ const runningRemainDays = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-ink);
   margin-bottom: 14px;
@@ -371,14 +357,14 @@ const runningRemainDays = computed(() => {
 }
 
 .stat-num {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--color-ink);
   letter-spacing: -0.02em;
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-muted);
 }
 
@@ -415,7 +401,7 @@ const runningRemainDays = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.04);
@@ -455,7 +441,7 @@ const runningRemainDays = computed(() => {
 
 .rank-title {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   color: var(--color-ink-light);
   text-decoration: none;
@@ -471,20 +457,15 @@ const runningRemainDays = computed(() => {
 
 .sidebar-empty {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-faint);
   margin: 12px 0 0;
   padding: 16px 0;
 }
 
-/* 站点信息卡片 - 更轻 */
+/* 站点信息区块（末尾区块，无分隔线） */
 .site-info-card {
-  background: var(--site-card-bg);
-  padding: 14px;
-}
-
-.site-info-card:hover {
-  background: var(--site-card-bg-hover);
+  padding-top: 16px;
 }
 
 /* 品牌头部 */
@@ -496,12 +477,13 @@ const runningRemainDays = computed(() => {
 
 .brand-slogan {
   font-family: var(--font-logo);
-  font-size: 13px;
+  font-weight: 300;
+  font-size: 14px;
   color: var(--color-ink-light);
 }
 
 .running-badge {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--color-primary);
   background: var(--color-primary-light);
   padding: 2px 8px;
@@ -516,7 +498,7 @@ const runningRemainDays = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 12px;
 }
 
@@ -535,7 +517,7 @@ const runningRemainDays = computed(() => {
 }
 
 .ext-link {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
@@ -553,7 +535,7 @@ const runningRemainDays = computed(() => {
   align-items: center;
   gap: 5px;
   color: var(--color-ink-light);
-  font-size: 11px;
+  font-size: 12px;
   text-decoration: none;
   transition: color 0.2s;
   margin-top: 10px;
@@ -582,7 +564,7 @@ const runningRemainDays = computed(() => {
 
 .filing-link,
 .filing-text {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--color-ink-muted);
   text-decoration: none;
   line-height: 1.8;
@@ -601,7 +583,7 @@ const runningRemainDays = computed(() => {
   padding-top: 12px;
   margin-top: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--color-ink-faint);
 }
 

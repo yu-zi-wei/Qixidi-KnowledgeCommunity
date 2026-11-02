@@ -79,7 +79,7 @@ useHead({
 }
 
 .error-code {
-  font-size: 96px;
+  font-size: 97px;
   font-weight: 800;
   line-height: 1;
   color: var(--color-primary);
@@ -129,7 +129,7 @@ useHead({
   }
 
   .error-code {
-    font-size: 64px;
+    font-size: 65px;
   }
 
   .error-divider {

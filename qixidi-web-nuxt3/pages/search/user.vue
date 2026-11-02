@@ -191,7 +191,7 @@ onMounted(() => searchUsers())
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   padding: 1px 8px;
   border-radius: var(--radius-full);
   color: var(--color-primary);

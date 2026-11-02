@@ -33,19 +33,19 @@ const themeOverrides = computed<GlobalThemeOverrides>(() => ({
     primaryColorHover: colorMode.value === 'dark' ? '#7BA3C1' : '#4A6B94',
     primaryColorPressed: colorMode.value === 'dark' ? '#4A6B94' : '#2C4A66',
     primaryColorSuppl: colorMode.value === 'dark' ? '#6B95B5' : '#4A6B94',
-    borderRadius: '8px',
-    borderRadiusSmall: '4px'
+    borderRadius: '4px',
+    borderRadiusSmall: '3px'
   },
   Button: {
-    borderRadiusMedium: '8px',
-    borderRadiusSmall: '6px',
-    borderRadiusLarge: '10px'
+    borderRadiusMedium: '4px',
+    borderRadiusSmall: '4px',
+    borderRadiusLarge: '6px'
   },
   Input: {
-    borderRadius: '8px'
+    borderRadius: '4px'
   },
   Card: {
-    borderRadius: '12px'
+    borderRadius: '6px'
   }
 }))
 </script>

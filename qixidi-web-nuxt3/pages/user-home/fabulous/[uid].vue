@@ -111,14 +111,15 @@ onMounted(() => {
   min-height: 0;
 }
 
-/* 左侧菜单 */
+/* 左侧菜单（左右留白：选中框不贴纸缘，与内容拉开距离） */
 .fabulous-sidebar {
-  width: 140px;
+  width: 152px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding-right: 12px;
+  padding-left: 12px;
+  padding-right: 16px;
   border-right: 1px solid var(--color-border-light);
 }
 
@@ -156,7 +157,7 @@ onMounted(() => {
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
-  padding-left: 16px;
+  padding-left: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -204,6 +205,7 @@ onMounted(() => {
     flex-direction: row;
     border-right: none;
     border-bottom: 1px solid var(--color-border-light);
+    padding-left: 0;
     padding-right: 0;
     padding-bottom: 8px;
   }

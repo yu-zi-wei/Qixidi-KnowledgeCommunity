@@ -6,6 +6,7 @@
         v-model:value="searchKeyword"
         placeholder="搜索文章标题"
         clearable
+        size="large"
       >
         <template #prefix>
           <n-icon><Search /></n-icon>
@@ -127,7 +128,7 @@ onMounted(() => {
 
 .article-search {
   flex-shrink: 0;
-  padding: 0 24px 12px;
+  padding: 16px 24px 12px;
 }
 
 .article-page .loading-state,
@@ -143,7 +144,8 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   padding: 12px 0 16px;
-  background: var(--color-surface-warm);
+  /* 显式透明：压过 public/collection 页同名全局类的灰底 */
+  background: transparent;
   border-top: 1px solid var(--color-border-light);
 }
 </style>

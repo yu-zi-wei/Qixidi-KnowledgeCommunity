@@ -161,7 +161,7 @@ const formatNoteDate = (dateStr: string) => {
 }
 
 .list-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0;
@@ -179,7 +179,7 @@ const formatNoteDate = (dateStr: string) => {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-primary);
   background: var(--color-primary-light);
   padding: 3px 10px;
@@ -201,7 +201,7 @@ const formatNoteDate = (dateStr: string) => {
 }
 
 .list-count {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
 }
 
@@ -258,13 +258,13 @@ const formatNoteDate = (dateStr: string) => {
   align-items: center;
   gap: 4px;
   padding: 12px 20px 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--color-primary);
 }
 
 .month-count {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--color-ink-muted);
 }
@@ -298,14 +298,14 @@ const formatNoteDate = (dateStr: string) => {
 }
 
 .note-date {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-muted);
   flex-shrink: 0;
   min-width: 56px;
 }
 
 .note-title {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-ink);
   overflow: hidden;
   text-overflow: ellipsis;

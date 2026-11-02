@@ -418,9 +418,22 @@ const formatMonthTitle = (month: string) => {
   top: 78px;
   max-height: calc(100vh - 98px);
   overflow-y: auto;
-  padding-left: 12px;
-  border-left: 2px solid var(--color-border-light);
-  margin-left: 8px;
+  /* 竖线不用 border-left：骑线圆点左半落在 padding box 外会被 overflow 裁掉，
+     改为下方 ::before 画在 padding 区内（left 6），圆点完整可见；
+     padding 20 = 原 8 margin + 12 padding 的总占位 */
+  padding-left: 20px;
+}
+
+/* 时间线竖线（画在容器内，随滚动内容铺满全高） */
+.album-sidebar::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border-light);
+  pointer-events: none;
 }
 
 /* 细滚动条 */
@@ -451,7 +464,8 @@ const formatMonthTitle = (month: string) => {
 .album-year-row::before {
   content: '';
   position: absolute;
-  left: -13px;
+  /* 骑在竖线中心：竖线中心距行左缘 13px（padding 12 + 线宽半 1），圆点半宽 4 → left -17px */
+  left: -17px;
   top: 50%;
   transform: translateY(-50%);
   width: 8px;
@@ -599,7 +613,14 @@ const formatMonthTitle = (month: string) => {
 .album-item {
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-surface);
+  /* 便签面：比页底深一档的凹陷色块（与随笔卡同族），与页面背景拉开层次 */
+  background: var(--color-sunken);
+  transition: background-color var(--transition-base);
+}
+
+/* hover 墨染（sunken 容器同款语言） */
+.album-item:hover {
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-sunken));
 }
 
 /* 图片容器：裁剪悬停放大，防止向下延伸盖住 meta 行（卡片 overflow:hidden 裁不到容器内兄弟元素） */
@@ -686,10 +707,13 @@ const formatMonthTitle = (month: string) => {
     overflow-y: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    border-left: none;
     padding-left: 0;
     margin-left: 0;
     gap: 4px;
+  }
+
+  .album-sidebar::before {
+    display: none;
   }
 
   .album-sidebar::-webkit-scrollbar {

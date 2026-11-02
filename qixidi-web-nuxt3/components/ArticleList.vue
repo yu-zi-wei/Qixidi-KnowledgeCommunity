@@ -1,65 +1,66 @@
 <template>
-  <div class="article-list">
-    <div
+  <div class="feed-list">
+    <article
       v-for="(item, index) in articles"
       :key="item.id"
       :ref="el => setCardRef(el, index)"
-      class="article-card"
+      class="feed-row"
       :class="{ 'is-visible': visibleCards.has(index) }"
       :style="{ '--delay': Math.min(index, 8) }"
     >
-      <!-- 左侧装饰条 -->
-      <div class="card-accent"></div>
-      <div class="article-body">
-        <div class="article-meta">
-          <NuxtLink :to="`/user-home/article/${item.userId}`" target="_blank" class="meta-author">
-            <img
-              :src="item.avatar"
-              :alt="item.nickname"
-              class="meta-avatar"
-            />
-            {{ item.nickname }}
-          </NuxtLink>
-          <span class="meta-sep">&middot;</span>
-          <span class="meta-date" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</span>
-          <span v-if="item.groupingName" class="meta-tag">{{ item.groupingName }}</span>
+      <NuxtLink :to="`/articles/${item.id}`" class="feed-main">
+        <span class="feed-num">{{ String(index + 1).padStart(2, '0') }}</span>
+        <div class="feed-body">
+          <h3 class="feed-title">{{ item.articleTitle }}</h3>
+          <p v-if="item.articleAbstract" class="feed-excerpt">{{ item.articleAbstract }}</p>
         </div>
-        <h3 class="article-title">
-          <NuxtLink :to="`/articles/${item.id}`">
-            {{ item.articleTitle }}
-          </NuxtLink>
-        </h3>
-        <p class="article-excerpt" :style="{ WebkitLineClamp: excerptLines }">{{ item.articleAbstract }}</p>
-        <div class="article-stats">
-          <span class="article-stat">
-            <Eye class="stat-icon" />
+      </NuxtLink>
+      <div class="feed-meta">
+        <NuxtLink :to="`/user-home/article/${item.userId}`" target="_blank" class="feed-author">
+          <img
+            :src="item.avatar"
+            :alt="item.nickname"
+            class="feed-avatar"
+          />
+          <span>{{ item.nickname }}</span>
+        </NuxtLink>
+        <span class="feed-sep">&middot;</span>
+        <span class="feed-date" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</span>
+        <span v-if="item.groupingName" class="feed-tag">{{ item.groupingName }}</span>
+        <div class="feed-stats">
+          <span class="feed-stat">
+            <Eye class="feed-stat-icon" />
             {{ item.numberTimes || 0 }}
           </span>
-          <span class="article-stat">
-            <ThumbUp class="stat-icon" />
+          <span class="feed-stat">
+            <ThumbUp class="feed-stat-icon" />
             {{ item.likeTimes || 0 }}
           </span>
-          <span class="article-stat">
-            <MessageCircle class="stat-icon" />
+          <span class="feed-stat">
+            <MessageCircle class="feed-stat-icon" />
             {{ item.commentTimes || 0 }}
           </span>
         </div>
       </div>
-      <img
-        v-if="item.articleCover && !hideCover"
-        :src="item.articleCover"
-        :alt="item.articleTitle"
-        class="article-cover"
-      />
-    </div>
-  </div>
+      <!-- 封面缩略图：右列跨两行，与主链接同目标；无封面不渲染 -->
+      <NuxtLink v-if="item.articleCover" :to="`/articles/${item.id}`" class="feed-cover-link">
+        <img
+          :src="item.articleCover"
+          :alt="item.articleTitle"
+          class="feed-cover"
+          loading="lazy"
+          @error="onCoverError"
+        >
+      </NuxtLink>
+    </article>
 
-  <!-- 加载状态 -->
-  <!-- ⚠️ 必须用 v-show 不能用 v-if：onMounted 创建触底观察器时数据未到达，
-       v-if 会导致 loadTrigger 为 null、观察器永不创建，触底加载失效（2026-10-12 生产实例） -->
-  <div v-show="articles.length > 0" ref="loadTrigger" class="load-more">
-    <n-spin v-if="loading" :size="20" />
-    <span v-else-if="noMore" class="load-more-text">— 没有更多了 —</span>
+    <!-- 加载状态：置于纸页容器内，触底观察器 root 是 viewport，不受父级影响 -->
+    <!-- ⚠️ 必须用 v-show 不能用 v-if：onMounted 创建触底观察器时数据未到达，
+         v-if 会导致 loadTrigger 为 null、观察器永不创建，触底加载失效（2026-10-12 生产实例） -->
+    <div v-show="articles.length > 0" ref="loadTrigger" class="feed-load">
+      <n-spin v-if="loading" :size="20" />
+      <span v-else-if="noMore" class="feed-load-text">— 没有更多了 —</span>
+    </div>
   </div>
 </template>
 
@@ -69,15 +70,17 @@ import { Eye, ThumbUp, MessageCircle } from '@vicons/tabler'
 import type { ArticleInfo } from '~/types'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   articles: ArticleInfo[]
   loading: boolean
   noMore: boolean
-  hideCover?: boolean
-  excerptLines?: number
-}>(), {
-  excerptLines: 2
-})
+}>()
+
+// 封面加载失败时整块隐藏（裂图占位比缺图更难看）
+const onCoverError = (e: Event) => {
+  const link = (e.target as HTMLImageElement).parentElement
+  if (link) link.style.display = 'none'
+}
 
 const emit = defineEmits<{
   loadMore: []
@@ -157,14 +160,14 @@ watch(() => props.articles.length, () => {
 </script>
 
 <style scoped>
-.article-list {
+/* 整列透明：不铺底色不出块，层次交给排版（序号/墨阶/分隔线）与小面积点缀（tab/tag/hover） */
+.feed-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
-/* 卡片入场动画 */
-@keyframes card-fade-in {
+/* 条目入场动画 */
+@keyframes feed-fade-in {
   from {
     opacity: 0;
     transform: translateY(16px);
@@ -175,200 +178,197 @@ watch(() => props.articles.length, () => {
   }
 }
 
-/* 卡片设计 - 浅色背景无边框 */
-.article-card {
+/* 杂志式列表行：无卡片背景，细分隔线分隔；grid 左内容右封面 */
+.feed-row {
   position: relative;
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  padding-left: 20px;
-  background: var(--article-card-bg);
-  border: none;
-  border-radius: 10px;
-  transition: all 0.2s ease;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 18px;
+  align-items: center;
+  padding: 22px 16px;
+  /* 分隔线用 --color-border（border-light 与页面背景色差过小不可见） */
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-base);
   /* 初始状态：不可见 */
   opacity: 0;
   transform: translateY(12px);
 }
 
+/* 尾行（feed-load 是 div，article 用 of-type 匹配） */
+.feed-row:last-of-type {
+  border-bottom: none;
+}
+
 /* 可见状态：触发动画 */
-.article-card.is-visible {
-  animation: card-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
+.feed-row.is-visible {
+  animation: feed-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
 }
 
-/* 左侧装饰条 */
-.card-accent {
-  position: absolute;
-  left: 0;
-  top: 12px;
-  bottom: 12px;
-  width: 3px;
-  background: linear-gradient(
-    180deg,
-    var(--color-primary) 0%,
-    var(--color-accent) 100%
-  );
-  border-radius: 0 4px 4px 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+/* hover 沾墨：4% 墨色浸染（浅色压暗/深色提亮，双主题同式；surface-warm 与页底同色不可见） */
+.feed-row:hover {
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
-.article-card:hover {
-  background: var(--article-card-bg-hover);
+/* 主区域：序号 + 标题/摘要，整体可点（grid 左列） */
+.feed-main {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
 }
 
-.article-card:hover .card-accent {
-  opacity: 1;
+/* 大序号：Playfair Display italic 杂志风数字（自托管，回退 Noto Serif） */
+.feed-num {
+  font-family: 'Playfair Display', var(--font-display);
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  min-width: 40px;
+  /* faint 与 muted 之间偏淡取值（用户 2026-11-02 两轮校色定） */
+  color: color-mix(in srgb, var(--color-ink-muted) 45%, var(--color-ink-faint));
+  font-variant-numeric: tabular-nums;
+  transition: color var(--transition-base);
 }
 
-.article-body {
+.feed-row:hover .feed-num {
+  color: var(--color-primary);
+}
+
+.feed-body {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
 }
 
-/* 元数据 - 更紧凑 */
-.article-meta {
+/* 标题：与序号同族的衬线 display 字体（中文回落 Noto Serif，英文/数字用 Playfair） */
+.feed-title {
+  margin: 0;
+  font-family: 'Playfair Display', var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  transition: color var(--transition-fast);
+}
+
+.feed-row:hover .feed-title {
+  color: var(--color-primary);
+}
+
+/* 摘要：单行截断 */
+.feed-excerpt {
+  margin: 6px 0 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 封面缩略图：右列跨主区+元信息两行 */
+.feed-cover-link {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: block;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.feed-cover {
+  display: block;
+  width: 132px;
+  height: 88px;
+  object-fit: cover;
+  background: var(--color-surface-dim);
+  transition: transform var(--transition-slow);
+}
+
+.feed-row:hover .feed-cover {
+  transform: scale(1.04);
+}
+
+/* 深色模式压暗封面，避免过曝图在暗底上眩光 */
+:root.dark .feed-cover {
+  filter: brightness(0.85);
+}
+
+/* 元信息行：与标题左对齐（序号 40 + 间距 14） */
+.feed-meta {
+  grid-column: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--color-ink-muted);
-  margin-bottom: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding-left: 54px;
+  font-size: 13px;
+  color: var(--color-ink-muted);
 }
 
-.meta-author {
+.feed-author {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   text-decoration: none;
-  color: var(--color-ink);
+  color: var(--color-ink-light);
   font-weight: 500;
   transition: color var(--transition-fast);
 }
 
-.meta-author:hover {
+.feed-author:hover {
   color: var(--color-primary);
 }
 
-.meta-avatar {
-  width: 22px;
-  height: 22px;
+.feed-avatar {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   object-fit: cover;
   background: var(--color-surface-dim);
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
 }
 
-.meta-author:hover .meta-avatar {
-  transform: scale(1.08);
+.feed-sep {
+  opacity: 0.5;
 }
 
-.meta-sep {
-  opacity: 0.4;
-}
-
-.meta-tag {
-  padding: 3px 10px;
-  font-size: 11px;
+.feed-tag {
+  padding: 2px 9px;
+  font-size: 12px;
   background: var(--color-primary-light);
   color: var(--color-primary);
-  border-radius: 16px;
+  border-radius: 12px;
   font-weight: 500;
 }
 
-/* 标题 */
-.article-title {
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 8px;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  letter-spacing: -0.01em;
-}
-
-.article-title a {
-  color: var(--color-ink);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.article-title a:hover {
-  color: var(--color-primary);
-}
-
-/* 摘要 */
-.article-excerpt {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--color-ink-light);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 10px;
-  flex: 1;
-}
-
-/* 行内样式会覆盖 -webkit-line-clamp，此处保留默认值 */
-
-/* 互动数据 - 更紧凑 */
-.article-stats {
+/* 互动数据：右对齐 */
+.feed-stats {
   display: flex;
-  gap: 16px;
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid #eef0f2;
+  gap: 14px;
+  margin-left: auto;
 }
 
-:root.dark .article-stats {
-  border-top-color: #363a3e;
-}
-
-.article-stat {
+.feed-stat {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 12px;
+  gap: 4px;
+  font-size: 13px;
   color: var(--color-ink-muted);
-  transition: all 0.2s ease;
-  padding: 4px 8px;
-  margin: -4px -8px;
-  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
 }
 
-.article-stat:hover {
-  color: var(--color-primary);
-  background: var(--color-primary-light);
-}
-
-.stat-icon {
+.feed-stat-icon {
   width: 14px;
   height: 14px;
   stroke-width: 1.8;
   flex-shrink: 0;
 }
 
-/* 封面图片 */
-.article-cover {
-  width: 170px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
-  background: var(--color-surface-dim);
-  align-self: center;
-  transition: opacity 0.2s ease;
-}
-
-.article-card:hover .article-cover {
-  opacity: 0.9;
-}
-
-.load-more {
+.feed-load {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,69 +376,59 @@ watch(() => props.articles.length, () => {
   min-height: 60px;
 }
 
-.load-more-text {
-  font-size: 12px;
+.feed-load-text {
+  font-size: 13px;
   color: var(--color-ink-muted);
   letter-spacing: 1px;
 }
 
 /* 响应式 */
-@media (max-width: 1024px) {
-  .article-cover {
-    width: 140px;
-    height: 90px;
-  }
-}
-
 @media (max-width: 768px) {
-  .article-list {
-    padding: 12px;
-    border-radius: 8px;
+  .feed-row {
+    padding: 16px 12px;
+    column-gap: 12px;
   }
 
-  .article-card {
-    flex-direction: column;
-    gap: 12px;
-    padding: 14px;
-    padding-left: 14px;
-    border-radius: 8px;
+  .feed-main {
+    gap: 10px;
   }
 
-  .card-accent {
-    display: none;
+  .feed-num {
+    min-width: 28px;
+    font-size: 21px;
   }
 
-  .article-cover {
-    width: 100%;
-    height: 140px;
-    border-radius: 8px;
+  .feed-title {
+    font-size: 16.5px;
   }
 
-  .meta-tag {
-    margin-left: 0;
+  .feed-cover {
+    width: 104px;
+    height: 70px;
   }
 
-  .article-stats {
-    padding-top: 8px;
-    gap: 12px;
+  .feed-meta {
+    padding-left: 38px;
+    gap: 6px;
+  }
+
+  .feed-stats {
+    gap: 10px;
   }
 }
 
 @media (max-width: 480px) {
-  .article-list {
-    padding: 8px;
+  .feed-row {
+    padding: 14px 10px;
   }
 
-  .article-card {
-    padding: 12px;
+  .feed-title {
+    font-size: 16px;
   }
 
-  .article-title {
-    font-size: 15px;
-  }
-
-  .article-cover {
-    height: 120px;
+  .feed-cover {
+    width: 92px;
+    height: 62px;
   }
 }
 </style>

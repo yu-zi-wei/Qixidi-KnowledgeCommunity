@@ -206,7 +206,7 @@ const handleTabChange = (value: string) => {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-ink-muted);
   margin-bottom: 8px;
@@ -247,7 +247,7 @@ const handleTabChange = (value: string) => {
 }
 
 .follow-name {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-muted);
   max-width: 48px;
   overflow: hidden;
@@ -273,7 +273,7 @@ const handleTabChange = (value: string) => {
 
 .tab-button {
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-ink-light);
   background: transparent;

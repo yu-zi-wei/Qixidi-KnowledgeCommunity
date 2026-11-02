@@ -73,21 +73,21 @@ const { data: renderedHtml } = await useAsyncData(
 }
 
 .date-day {
-  font-size: 28px;
+  font-size: 29px;
   font-weight: 700;
   color: var(--color-primary);
   line-height: 1;
 }
 
 .date-month {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--color-ink-muted);
   text-transform: uppercase;
 }
 
 .date-year {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--color-ink-muted);
 }
@@ -97,13 +97,13 @@ const { data: renderedHtml } = await useAsyncData(
 }
 
 .create-by {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--color-ink-muted);
 }
 
 .detail-title {
-  font-size: 24px;
+  font-size: 25px;
   font-weight: 700;
   color: var(--color-ink);
   line-height: 1.4;
@@ -128,11 +128,11 @@ const { data: renderedHtml } = await useAsyncData(
   }
 
   .date-day {
-    font-size: 22px;
+    font-size: 23px;
   }
 
   .detail-title {
-    font-size: 20px;
+    font-size: 21px;
   }
 }
 </style>

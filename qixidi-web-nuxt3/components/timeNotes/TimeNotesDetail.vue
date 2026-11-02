@@ -66,24 +66,18 @@ const emit = defineEmits<{
   edit: [id: number]
 }>()
 
-const message = useMessage()
-
 // 编辑
 const handleEdit = () => {
   if (!props.detail) return
   emit('edit', props.detail.id)
 }
 
-// 复制分享链接
-const copyShareLink = async () => {
+// 分享小记（标题可为空 → 截取正文兜底）
+const { shareLink } = useShareLink()
+const copyShareLink = () => {
   if (!props.detail) return
-  const url = `${window.location.origin}/time-notes/${props.detail.id}`
-  try {
-    await navigator.clipboard.writeText(url)
-    message.success('链接已复制')
-  } catch {
-    message.error('复制失败')
-  }
+  const title = props.detail.title || props.detail.content?.substring(0, 50) || '时光小记'
+  shareLink(title, `/time-notes/${props.detail.id}`)
 }
 </script>
 

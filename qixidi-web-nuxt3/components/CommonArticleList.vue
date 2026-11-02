@@ -121,22 +121,25 @@ defineExpose({ restoreScroll, scrollAreaRef })
 .article-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   padding: 16px 0 12px;
 }
 
+/* 纸面条目：透明底，hover 墨色浸染 */
 .article-item {
   display: flex;
   gap: 16px;
   padding: 16px;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
-  transition: all var(--transition-base);
+  transition: background var(--transition-base);
+}
+
+/* 条目间细分隔线（纸上排版线） */
+.article-item + .article-item {
+  border-top: 1px solid var(--color-border-light);
 }
 
 .article-item:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .item-cover {

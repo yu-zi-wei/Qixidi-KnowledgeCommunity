@@ -98,13 +98,11 @@ onMounted(() => {
 }
 
 .reading-essays-card {
-  background: var(--color-block-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border-light);
-  border-radius: 14px;
+  /* 便签面：比页底深一档的凹陷色块（与评论输入卡同源），无框无 blur */
+  background: var(--color-sunken);
+  border-radius: var(--radius-sm);
   padding: 20px;
-  transition: all 0.25s ease;
+  transition: background var(--transition-base);
   break-inside: avoid;
   margin-bottom: 20px;
   display: inline-block;
@@ -121,9 +119,8 @@ onMounted(() => {
 }
 
 .reading-essays-card:hover {
-  background: var(--color-block-bg-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  /* hover 只做墨水反应：凹陷面沾墨，无位移无投影 */
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-sunken));
 }
 
 /* 随笔内容（点击打开详情，悬停显示与详情抽屉同款虚线下划线） */
@@ -187,13 +184,10 @@ onMounted(() => {
 .meta-badge {
   font-size: var(--text-xs);
   padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
+  /* 底色微浸墨，双主题同式 */
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  border-radius: var(--radius-sm);
   color: var(--color-ink-light);
-}
-
-.dark .meta-badge {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .meta-labels {
@@ -203,11 +197,11 @@ onMounted(() => {
 }
 
 .label-tag {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-primary);
   background: var(--color-primary-light);
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
 }
 
 /* 底部栏 */
@@ -216,11 +210,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.dark .reading-essays-footer {
-  border-top-color: rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .footer-left {

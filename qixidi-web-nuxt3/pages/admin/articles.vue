@@ -8,14 +8,15 @@
           v-model:value="searchKeyword"
           placeholder="搜索文章标题..."
           clearable
+          size="large"
           @keyup.enter="handleSearch"
         >
           <template #prefix>
             <n-icon><Search /></n-icon>
           </template>
         </n-input>
-        <n-button @click="handleSearch">搜索</n-button>
-        <n-button v-if="authStore.isCreator" type="primary" @click="handleCreate">
+        <n-button size="large" @click="handleSearch">搜索</n-button>
+        <n-button v-if="authStore.isCreator" type="primary" size="large" @click="handleCreate">
           <template #icon>
             <n-icon><Plus /></n-icon>
           </template>
@@ -497,7 +498,7 @@ onMounted(() => fetchArticles())
 }
 
 .admin-stat .n-icon {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* 底部行：元信息 + 操作按钮 */
@@ -520,7 +521,7 @@ onMounted(() => fetchArticles())
 }
 
 .meta-time .n-icon {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 /* 状态徽章 */
@@ -528,7 +529,7 @@ onMounted(() => fetchArticles())
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-full);
   white-space: nowrap;
@@ -562,7 +563,7 @@ onMounted(() => fetchArticles())
 }
 
 .article-actions .n-button {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* 分页 */

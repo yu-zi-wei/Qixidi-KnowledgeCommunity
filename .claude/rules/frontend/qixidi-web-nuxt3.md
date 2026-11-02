@@ -131,6 +131,7 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 - 所有新增样式支持浅色/深色双主题：颜色一律 CSS 变量（`--color-ink` 等），禁止硬编码色值；Tailwind 用 `dark:` variant
 - 设计 token（字体/间距/圆角/阴影/动画）见 [design-system.md](design-system.md)，禁止硬编码字号间距
 - 优先复用 `main.css` 全局样式（`.article-card`、`.tab-bar` 等），组件内只写特殊样式
+- 外链 webfont 的 `display` 一律 `swap`、禁 `optional`：optional 首屏窗口内未加载完会永久回退系统字体且会话内不切换，dev 频繁刷新/生产首访会出现「本地粗、生产细」的字体不一致假象
 
 ---
 
@@ -171,12 +172,12 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 
 1. **驱动**：`puppeteer-core` + 本机 Edge 无头（`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`）
 2. **登录态构造**（admin 页必经）：
-   - token 来源：Redis db1 `KEYS "Authorization:login:token-session:*"` 取 key 后缀（注意不是 `login:token:*`——那个的后缀是 loginId:device；本机 Redis 3.2.100 的 `--scan` 不返回结果，必须用 `KEYS`；**只读，token 值不得进日志**）；需当前用户信息时用该 token 调 `/oauth/getInfo`（header 带 `Bearer` 前缀）
+   - token 来源：Redis db1 `KEYS "Authorization:login:token-session:*"` 取 key 后缀（注意不是 `login:token:*`——那个的后缀是 loginId:device；本机 Redis 3.2.100 的 `--scan` 不返回结果，必须用 `KEYS`；**只读，token 值不得进日志**）；**key 多为失效残留（实测 23 个仅 4 个有效），须逐个带 `Bearer` 前缀 fetch `/oauth/getInfo` 探测**（响应 `{code, msg, data:{isLogin, user:{uuid, roleId}}}`），挑 `data.isLogin === true` 的用；进 `/admin/**` 还需 `roleId` 2/3（creator）
    - **注入方式必须是 `auth` cookie**：`document.cookie = 'auth=' + encodeURIComponent(JSON.stringify({token})) + '; path=/'`，注入后重载让 `auth-init.client.ts` 读到
    - 🔴 **不能往 localStorage 注入**：本项目 pinia persist 默认 storage 是 cookie（key=store id=`auth`）
-3. **页面导航**：admin 页用客户端导航模拟真实路径（`__vue_app__.config.globalProperties.$router.push(path)`）；已登录态 URL goto（刷新场景）也要测
-4. **断言**：量测（getBoundingClientRect、scrollHeight、getComputedStyle）+ 截图双确认；`page.on('pageerror')` 收集运行时错误
-5. **登录态断言用 pinia 内存态**（`$pinia.state.value.auth.token/user`），禁止 `body.innerText.includes('用户名')`（同名文章假阳性）
+3. **页面导航一律 URL goto**：`window.__vue_app__` 在当前 dev 已不暴露（2026-11-02 实证 hasVueApp:false），`$router.push` 客户端导航与 `$pinia` 内存态读取通道全部失效，别再按旧通道写脚本
+4. **断言**：量测（getBoundingClientRect、scrollHeight、getComputedStyle）+ 截图双确认；`page.on('pageerror')` 收集运行时错误；计算色（color-mix 等）computed 返回 `color(srgb ...)` 与 hex 变量不可直接比，用 canvas `fillStyle` 赋值读回归一化
+5. **登录态断言用 UI 信号**（pinia 内存态通道已失效）：creator 登录 = `a[href="/write/article"]` 存在 / 导航头像存在；禁止 `body.innerText.includes('用户名')`（同名文章假阳性）。admin 页 404 先怀疑登录态（creator 中间件 abort 表现即 404 页），别先查路由
 
 ---
 
@@ -186,7 +187,7 @@ Nuxt SSR 下 scoped CSS 注入顺序不稳定，**不同组件共用同一类名
 |----|------|
 | PowerShell 后台管道任务会被宿主会话回收（exit 9、无日志） | 长驻 dev 用独立进程：`Start-Process cmd.exe /c "npx nuxi dev > %TEMP%\xxx.log 2>&1"` |
 | dev 启动早于新页面文件创建 → 路由 watcher 失效，新页面 404 | 新建页面目录后 404，先比对 dev 启动时间 vs 文件创建时间，重启 dev |
-| Nuxt dev 路由是 Vite 虚拟模块不落盘 | 权威判据：浏览器里 `__vue_app__...$router.getRoutes()` 读真实路由表 |
+| Nuxt dev 路由是 Vite 虚拟模块不落盘 | `__vue_app__` 路由表判据已失效（dev 不再暴露），404 排查用「重启 dev 后 URL goto 复测」 |
 | 未登录直接 URL 访问 `/admin/**` 显示 404 错误页 | 属预期（路由守卫 abort），验证 admin 页须先构造登录态 |
 
 ---

@@ -111,14 +111,12 @@ const { data: collectionList, pending } = useAsyncData(
   gap: 12px;
   padding: 12px;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
   text-decoration: none;
-  transition: all var(--transition-base);
+  transition: background var(--transition-base);
 }
 
 .collection-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .collection-card-icon {

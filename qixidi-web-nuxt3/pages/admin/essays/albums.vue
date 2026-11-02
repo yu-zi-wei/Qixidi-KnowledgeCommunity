@@ -7,13 +7,14 @@
           v-model:value="searchKeyword"
           placeholder="搜索专辑名称..."
           clearable
+          size="large"
         >
           <template #prefix>
             <n-icon><Search /></n-icon>
           </template>
         </n-input>
       </div>
-      <n-button type="primary" @click="handleCreate">
+      <n-button type="primary" size="large" @click="handleCreate">
         <template #icon>
           <n-icon><Plus /></n-icon>
         </template>
@@ -496,7 +497,7 @@ onMounted(() => fetchList())
 
 .state-badge {
   padding: 1px 6px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-full);
 }

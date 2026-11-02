@@ -150,7 +150,7 @@ const handleReplace = () => {
 }
 
 .upload-icon {
-  font-size: 32px;
+  font-size: 33px;
   opacity: 0.6;
 }
 

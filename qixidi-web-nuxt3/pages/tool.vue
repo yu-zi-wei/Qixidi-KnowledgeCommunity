@@ -9,7 +9,7 @@
         <button
           v-for="cat in categories"
           :key="cat.id"
-          class="tool-tab-item"
+          class="bm-tab"
           :class="{ active: activeCategoryId === cat.id }"
           @click="selectCategory(cat.id)"
         >
@@ -33,16 +33,16 @@
           :href="tool.toolUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="tool-card"
+          class="bm-card"
         >
           <div class="tool-card-icon" v-if="tool.icon">
             <img :src="tool.icon" :alt="tool.toolName" />
           </div>
           <div class="tool-card-icon tool-card-placeholder" v-else>
-            <n-icon size="24"><Tool /></n-icon>
+            <n-icon size="20"><Tool /></n-icon>
           </div>
           <div class="tool-card-body">
-            <h3 class="tool-card-name">{{ tool.toolName }}</h3>
+            <h3 class="tool-card-name bm-card-name">{{ tool.toolName }}</h3>
             <p class="tool-card-desc" v-if="tool.describe">{{ tool.describe }}</p>
           </div>
         </a>
@@ -125,7 +125,7 @@ onMounted(() => {
   flex-direction: column;
 }
 
-/* 横向分类菜单 */
+/* 横向分类菜单（tab 样式走全局 .bm-tab 书签语言） */
 .tool-tab-bar {
   position: sticky;
   top: 66px;
@@ -141,56 +141,23 @@ onMounted(() => {
   scrollbar-width: none;
   -ms-overflow-style: none;
   background: transparent;
-  border-radius: 2px 2px 10px 10px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .tool-tab-bar::-webkit-scrollbar {
   display: none;
 }
 
+/* 吸顶 - 纸色+底部细线（与 ContentTabBar 一致，无磨玻璃无阴影） */
 .tool-tab-bar.is-sticky {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-:root.dark .tool-tab-bar.is-sticky {
-  background: rgba(13, 15, 17, 0.7);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: var(--color-page-bg);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tool-tab-loading {
   display: flex;
   align-items: center;
   padding: 4px 0;
-}
-
-.tool-tab-item {
-  padding: 7px 14px;
-  font-size: 13px;
-  color: var(--color-ink-light);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all var(--transition-fast);
-  font-family: var(--font-body);
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-.tool-tab-item:hover {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-}
-
-.tool-tab-item.active {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-  font-weight: 500;
 }
 
 /* 工具内容 */
@@ -206,36 +173,17 @@ onMounted(() => {
   padding: 80px 0;
 }
 
-/* 工具网格 */
+/* 工具网格：横向书签条（卡片形态走全局 .bm-card） */
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
-.tool-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 24px 16px;
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  text-decoration: none;
-  transition: all var(--transition-base);
-  border: 1px solid var(--color-border-light);
-}
-
-.tool-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--color-primary);
-}
-
 .tool-card-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -256,8 +204,8 @@ onMounted(() => {
 }
 
 .tool-card-body {
-  text-align: center;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .tool-card-name {
@@ -292,13 +240,7 @@ onMounted(() => {
     flex-wrap: wrap;
     padding: 10px 16px;
     margin-bottom: 0;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-
-  :root.dark .tool-tab-bar {
-    background: rgba(13, 15, 17, 0.7);
+    background: var(--color-page-bg);
   }
 
   .tool-content {

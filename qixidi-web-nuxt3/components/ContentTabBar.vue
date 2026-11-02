@@ -6,7 +6,7 @@
       <NuxtLink
         v-for="tab in fixedTabs"
         :key="tab.key"
-        class="content-tab"
+        class="bm-tab"
         :class="{ active: activeFixed === tab.key }"
         :to="tab.to"
       >
@@ -22,7 +22,7 @@
       <NuxtLink
         v-for="label in labels"
         :key="label.id"
-        class="content-tab"
+        class="bm-tab"
         :class="{ active: activeGroupingId === label.id }"
         :to="`/category/${label.id}`"
       >
@@ -69,7 +69,7 @@ const activeGroupingId = computed(() => {
 </script>
 
 <style scoped>
-/* ==================== 分类标签栏 ==================== */
+/* ==================== 分类标签栏（书签+极简：纯纸色+细线，无磨玻璃无阴影） ==================== */
 .tab-bar {
   position: sticky;
   top: 66px;
@@ -87,22 +87,14 @@ const activeGroupingId = computed(() => {
   -ms-overflow-style: none;
   /* 默认透明 */
   background: transparent;
-  border-radius: 2px 2px 10px 10px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-/* 吸顶状态 - 磨玻璃效果 */
+/* 吸顶状态 - 纸色 + 底部细线 + 悬垂影 */
 .tab-bar.is-sticky {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-/* 暗色主题吸顶 */
-:root.dark .tab-bar.is-sticky {
-  background: rgba(13, 15, 17, 0.7);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: var(--color-page-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-nav);
 }
 
 /* 移动端样式 */
@@ -118,13 +110,9 @@ const activeGroupingId = computed(() => {
     margin-top: 0;
     margin-bottom: 0;
     /* 移动端默认就显示背景（因为始终 fixed） */
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-
-  :root.dark .tab-bar {
-    background: rgba(13, 15, 17, 0.7);
+    background: var(--color-page-bg);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-nav);
   }
 }
 
@@ -138,33 +126,7 @@ const activeGroupingId = computed(() => {
   gap: var(--space-2);
 }
 
-.content-tab {
-  padding: 7px 14px;
-  font-size: 13px;
-  color: var(--color-ink-light);
-  background: transparent;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all var(--transition-fast);
-  font-family: var(--font-body);
-  text-decoration: none;
-  font-weight: 400;
-  line-height: 1.5;
-  display: inline-flex;
-  align-items: center;
-}
-
-.content-tab:hover {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-}
-
-.content-tab.active {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
-  font-weight: 500;
-}
+/* tab 样式统一走全局 .bm-tab 书签语言（main.css） */
 
 /* 分隔线 */
 .tab-divider {
@@ -177,7 +139,7 @@ const activeGroupingId = computed(() => {
 
 /* ==================== 移动端适配 ==================== */
 @media (max-width: 768px) {
-  .content-tab {
+  .bm-tab {
     white-space: normal;
   }
 

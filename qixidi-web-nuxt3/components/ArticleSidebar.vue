@@ -27,7 +27,13 @@
         </div>
       </div>
 
+      <!-- 作者是本人：前往主页；其他作者：关注按钮 -->
+      <NuxtLink v-if="isSelfAuthor" :to="`/user-home/article/${author.userId}`" class="follow-btn">
+        <Home2 class="icon" />
+        前往主页
+      </NuxtLink>
       <button
+        v-else
         class="follow-btn"
         :class="{ following: author.isFollow }"
         @click="toggleFollow"
@@ -38,14 +44,11 @@
       </button>
     </div>
 
-    <!-- 特殊卡片 - 平台介绍 -->
+    <!-- 特殊卡片 - 平台介绍（仅介绍页使用：站名 + 一句介绍，无 logo） -->
     <div v-else-if="specialCard?.type === 'platform'" class="sidebar-card platform-card">
       <div class="platform-header">
-        <img src="/images/logo.svg" alt="栖息地" class="platform-icon" />
-        <div class="platform-info">
-          <h4 class="platform-name">{{ siteName }}</h4>
-          <p class="platform-desc">专注分享，记录成长</p>
-        </div>
+        <h4 class="platform-name">{{ siteName }}</h4>
+        <p class="platform-desc">专注分享，记录成长</p>
       </div>
 
       <div class="platform-badges">
@@ -125,7 +128,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { UserPlus, UserCheck, BrandGithub, BrandGit, Mail, ExternalLink } from '@vicons/tabler'
+import { UserPlus, UserCheck, Home2, BrandGithub, BrandGit, Mail, ExternalLink } from '@vicons/tabler'
 
 const { siteName } = useRuntimeConfig().public
 
@@ -154,6 +157,12 @@ const sidebarData = useState('article-sidebar-data', () => ({
 const isReady = computed(() => sidebarData.value.author !== null || sidebarData.value.articleContent !== '')
 const author = computed(() => sidebarData.value.author)
 const articleContent = computed(() => sidebarData.value.articleContent)
+
+// 作者是当前登录人：展示前往主页而非关注（判定语义与 ArticleDetail.isAuthor 一致：uuid 对比）
+const isSelfAuthor = computed(() => {
+  const authStore = useAuthStore()
+  return authStore.isLoggedIn && !!authStore.user?.uuid && authStore.user.uuid === author.value?.userId
+})
 const showToc = computed(() => sidebarData.value.showToc)
 const specialCard = computed(() => sidebarData.value.specialCard)
 
@@ -252,15 +261,8 @@ onMounted(() => {
 }
 
 .skeleton-card {
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.dark .skeleton-card {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.06);
+  padding: 4px 4px 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .skeleton-header {
@@ -405,18 +407,10 @@ onMounted(() => {
   gap: 20px;
 }
 
-/* 作者信息 - 轻微背景 */
+/* 作者信息（书签+极简：无卡片底，细分隔线分隔） */
 .author-card {
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  margin-bottom: 20px;
-}
-
-.dark .author-card {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.06);
+  padding: 4px 4px 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .sidebar-author-link {
@@ -442,7 +436,7 @@ onMounted(() => {
 }
 
 .sidebar-author-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0 0 2px 0;
@@ -460,7 +454,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   margin: 0;
   white-space: nowrap;
@@ -492,13 +486,13 @@ onMounted(() => {
 }
 
 .author-stat-num {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--color-ink);
 }
 
 .author-stat-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-muted);
 }
 
@@ -513,10 +507,11 @@ onMounted(() => {
   justify-content: center;
   gap: 6px;
   padding: 8px 16px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-primary);
   background: transparent;
+  text-decoration: none; /* NuxtLink 复用按钮样式时去下划线 */
   border: 1px solid var(--color-primary);
   border-radius: 16px;
   cursor: pointer;
@@ -556,48 +551,25 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
-/* 平台介绍卡片 */
+/* 平台介绍（无卡片底，细分隔线分隔） */
 .platform-card {
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  margin-bottom: 20px;
-}
-
-.dark .platform-card {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.06);
+  padding: 4px 4px 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .platform-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 12px;
 }
 
-.platform-icon {
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  object-fit: contain;
-}
-
-.platform-info {
-  flex: 1;
-  min-width: 0;
-}
-
 .platform-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0 0 2px 0;
 }
 
 .platform-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   margin: 0;
 }
@@ -636,7 +608,7 @@ onMounted(() => {
   justify-content: center;
   gap: 6px;
   padding: 8px 16px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-primary);
   background: transparent;
@@ -657,18 +629,10 @@ onMounted(() => {
   opacity: 0.6;
 }
 
-/* 作者社交卡片 */
+/* 作者社交（无卡片底，细分隔线分隔） */
 .author-social-card {
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  margin-bottom: 20px;
-}
-
-.dark .author-social-card {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.06);
+  padding: 4px 4px 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .social-header {
@@ -692,14 +656,14 @@ onMounted(() => {
 }
 
 .social-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0 0 2px 0;
 }
 
 .social-motto {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   margin: 0;
   font-style: italic;
@@ -726,7 +690,7 @@ onMounted(() => {
   border-radius: 8px;
   text-decoration: none;
   color: var(--color-ink);
-  font-size: 13px;
+  font-size: 14px;
   transition: all 0.2s ease;
 }
 

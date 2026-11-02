@@ -429,7 +429,7 @@ const handleClose = () => {
 }
 
 .form-label {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--color-ink);
 }
@@ -480,7 +480,7 @@ const handleClose = () => {
 
 .chip {
   padding: 6px 14px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-ink);
   background: var(--color-surface-dim);
   border-radius: 999px;

@@ -7,13 +7,14 @@
           v-model:value="searchKeyword"
           placeholder="搜索收藏夹名称..."
           clearable
+          size="large"
         >
           <template #prefix>
             <n-icon><Search /></n-icon>
           </template>
         </n-input>
       </div>
-      <n-button type="primary" @click="handleCreate">
+      <n-button type="primary" size="large" @click="handleCreate">
         <template #icon>
           <n-icon><Plus /></n-icon>
         </template>
@@ -51,7 +52,7 @@
             >
               <!-- 收藏夹图标 -->
               <div class="collection-icon">
-                <n-icon size="32"><Folder /></n-icon>
+                <n-icon size="28"><Folder /></n-icon>
               </div>
 
               <!-- 收藏夹信息 -->
@@ -322,41 +323,46 @@ onMounted(() => fetchList())
   background: var(--color-ink-muted);
 }
 
+/* 收藏夹列表 - 横向卡片行（对齐随笔专辑管理页） */
 .collection-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* 收藏夹卡片 */
 .collection-item {
   display: flex;
-  flex-direction: column;
-  background: var(--color-surface-warm);
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   transition: all var(--transition-base);
 }
 
 .collection-item:hover {
+  border-color: var(--color-primary-light);
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 /* 图标区 */
 .collection-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 120px;
-  background: var(--color-surface-dim);
-  color: var(--color-ink-muted);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 /* 信息区 */
 .collection-content {
   flex: 1;
-  padding: var(--space-3);
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -397,8 +403,9 @@ onMounted(() => fetchList())
 /* 底部行 */
 .collection-footer {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-top: auto;
   padding-top: var(--space-2);
   border-top: 1px solid var(--color-border-light);
@@ -429,12 +436,5 @@ onMounted(() => fetchList())
   display: flex;
   justify-content: flex-end;
   gap: var(--space-3);
-}
-
-/* 响应式 */
-@media (max-width: 768px) {
-  .collection-list {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

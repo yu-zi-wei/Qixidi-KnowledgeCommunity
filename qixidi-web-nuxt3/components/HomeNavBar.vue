@@ -472,7 +472,7 @@ const renderNewsLabel = (text: string, count: number) => {
   return () => h('div', { style: 'display: flex; align-items: center; justify-content: space-between; min-width: 100px;' }, [
     h('span', text),
     count > 0 ? h('span', {
-      style: 'margin-left: 12px; padding: 1px 6px; font-size: 11px; font-weight: 600; color: #fff; background: var(--color-danger); border-radius: 9px; line-height: 1.4;'
+      style: 'margin-left: 12px; padding: 1px 6px; font-size: 12px; font-weight: 600; color: #fff; background: var(--color-danger); border-radius: 9px; line-height: 1.4;'
     }, count > 99 ? '99+' : String(count)) : null
   ])
 }
@@ -514,7 +514,7 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
   height: 32px;
 }
 
-/* 导航栏 */
+/* 导航栏（嵌在主内容列内的胶囊条） */
 .home-nav-bar {
   position: sticky;
   top: 0;
@@ -522,8 +522,9 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 24px;
-  padding: 14px 24px;
+  gap: 16px;
+  /* 28px 内边距避开胶囊弧线收窄区（radius 32px）；列距 16px 防中间列把登录态右侧功能区顶出边界 */
+  padding: 14px 28px;
   background: var(--nav-bar-bg);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -543,10 +544,10 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
 .nav-left { display: flex; align-items: center; flex-shrink: 0; }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; white-space: nowrap; }
 .logo-icon { width: 32px; height: 32px; flex-shrink: 0; object-fit: contain; transition: all 0.2s ease; }
-.logo-text { font-family: var(--font-logo); font-size: 20px; font-weight: 400; color: var(--color-ink); letter-spacing: 3px; line-height: 1; }
+.logo-text { font-family: var(--font-logo); font-size: 21px; font-weight: 300; color: var(--color-ink); letter-spacing: 3px; line-height: 1; }
 
 /* 中间区域 */
-.nav-center { display: flex; align-items: center; gap: 24px; max-width: max-content; }
+.nav-center { display: flex; align-items: center; gap: 16px; max-width: max-content; }
 
 /* 搜索框 */
 .search-wrapper { position: relative; min-width: 180px; max-width: 240px; }
@@ -555,22 +556,22 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
 .search-input-wrapper:hover { border-color: var(--color-primary); background: var(--color-surface-dim); }
 .search-input-wrapper.focused { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
 .search-icon { width: 16px; height: 16px; color: var(--color-ink-muted); stroke-width: 2; }
-.search-input { flex: 1; border: none; background: transparent; outline: none; font-size: 14px; color: var(--color-ink); min-width: 0; }
+.search-input { flex: 1; border: none; background: transparent; outline: none; font-size: 15px; color: var(--color-ink); min-width: 0; }
 .search-input::placeholder { color: var(--color-ink-faint); }
 
 /* 搜索下拉 */
 .search-dropdown { position: absolute; top: calc(100% + 8px); left: 0; z-index: 100; min-width: 280px; }
 .search-dropdown-content { background: var(--color-dropdown-bg); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid var(--color-border-light); box-shadow: var(--shadow-lg); padding: 16px; }
 .search-history-section { display: flex; flex-direction: column; gap: 12px; }
-.search-history-title { font-size: 13px; font-weight: 600; color: var(--color-ink-muted); }
+.search-history-title { font-size: 14px; font-weight: 600; color: var(--color-ink-muted); }
 .search-history-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.history-tag { padding: 6px 12px; font-size: 13px; color: var(--color-ink-light); background: var(--color-surface-dim); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; }
+.history-tag { padding: 6px 12px; font-size: 14px; color: var(--color-ink-light); background: var(--color-surface-dim); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; }
 .history-tag:hover { color: var(--color-primary); background: var(--color-primary-light); border-color: var(--color-primary); }
-.search-history-empty { padding: 24px; text-align: center; color: var(--color-ink-muted); font-size: 13px; }
+.search-history-empty { padding: 24px; text-align: center; color: var(--color-ink-muted); font-size: 14px; }
 
 /* 导航菜单 */
 .nav-menu { display: flex; align-items: center; gap: 2px; }
-.nav-link { padding: 7px 12px; font-size: 14px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
+.nav-link { padding: 7px 10px; font-size: 15px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
 .nav-link:hover { color: var(--color-ink); background: var(--color-surface-dim); }
 .nav-link.active { color: var(--color-primary); font-weight: 600; }
 .dropdown-icon { width: 14px; height: 14px; color: var(--color-ink-muted); }
@@ -585,7 +586,7 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
 .action-icon { width: 20px; height: 20px; stroke-width: 1.5; }
 .nav-avatar { flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease; }
 .nav-avatar:hover { transform: scale(1.08); }
-.login-btn { padding: 7px 18px; font-size: 13px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; white-space: nowrap; flex-shrink: 0; }
+.login-btn { padding: 7px 18px; font-size: 14px; font-weight: 500; color: var(--color-surface); background: var(--color-ink); border: none; border-radius: var(--radius-full); cursor: pointer; transition: all 0.25s ease; white-space: nowrap; flex-shrink: 0; }
 .login-btn:hover { background: var(--color-primary); transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* 汉堡菜单按钮 */
@@ -599,18 +600,18 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
 .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--color-border-light); }
 .mobile-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .mobile-logo-icon { width: 28px; height: 28px; object-fit: contain; }
-.mobile-logo-text { font-family: var(--font-logo); font-size: 18px; font-weight: 400; color: var(--color-ink); letter-spacing: 2px; }
+.mobile-logo-text { font-family: var(--font-logo); font-size: 19px; font-weight: 300; color: var(--color-ink); letter-spacing: 2px; }
 .close-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: none; background: transparent; color: var(--color-ink-light); border-radius: var(--radius-md); cursor: pointer; }
 .close-btn:hover { background: var(--color-surface-dim); color: var(--color-ink); }
 .close-btn svg { width: 20px; height: 20px; }
 .mobile-nav-list { flex: 1; overflow-y: auto; padding: 8px 0; }
-.mobile-nav-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; font-size: 15px; color: var(--color-ink); cursor: pointer; }
+.mobile-nav-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; font-size: 16px; color: var(--color-ink); cursor: pointer; }
 .mobile-nav-item:hover { background: var(--color-surface-dim); }
 .mobile-nav-dropdown-header { color: var(--color-ink-light); }
 .dropdown-arrow { width: 16px; height: 16px; color: var(--color-ink-muted); transition: transform 0.2s ease; }
 .dropdown-arrow.expanded { transform: rotate(180deg); }
 .mobile-nav-sublist { padding-left: 20px; background: var(--color-surface-dim); }
-.mobile-nav-subitem { padding: 12px 20px 12px 24px; font-size: 14px; color: var(--color-ink-light); cursor: pointer; }
+.mobile-nav-subitem { padding: 12px 20px 12px 24px; font-size: 15px; color: var(--color-ink-light); cursor: pointer; }
 .mobile-nav-subitem:hover { background: var(--color-surface); color: var(--color-ink); }
 
 /* 抽屉动画 */
@@ -630,9 +631,9 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  line-height: 16px;
+  line-height: 17px;
   text-align: center;
   color: #fff;
   background: var(--color-danger);
@@ -827,11 +828,15 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
   /* 导航项略微收紧 */
   .nav-link {
     padding: 7px 8px;
-    font-size: 13px;
+    font-size: 14px;
   }
-  .nav-center {
-    gap: 16px;
-  }
+}
+
+/* 窄屏再加一档收紧：中间列 min-content 大，不收紧会把右侧功能区顶出胶囊 */
+@media (max-width: 1100px) {
+  .home-nav-bar { gap: 12px; }
+  .nav-center { gap: 12px; }
+  .nav-link { padding: 6px 6px; font-size: 13.5px; }
 }
 
 @keyframes search-expand {

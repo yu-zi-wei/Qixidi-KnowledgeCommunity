@@ -208,11 +208,11 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   }
 }
 
-/* 滚动容器 */
+/* 滚动容器：透明，底色分块给到各分区 */
 .reading-essays-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-4);
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
@@ -226,19 +226,13 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   display: none;
 }
 
-/* 卡片通用样式 - 与首页侧边栏共用 token（main.css --sidebar-card-bg） */
+/* 区块样式：半透明纸页底分块成形，块间留隙（随笔侧边栏定版） */
 .sidebar-card {
-  background: var(--sidebar-card-bg);
-  border: none;
-  border-radius: 10px;
-  padding: 16px;
-  transition: all 0.2s ease;
+  padding: 18px 16px 20px;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
   animation: sidebar-card-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay, 0) * 0.04s) forwards;
   opacity: 0;
-}
-
-.sidebar-card:hover {
-  background: var(--sidebar-card-bg-hover);
 }
 
 /* 占位状态 */
@@ -251,7 +245,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 25%, rgba(0, 0, 0, 0.06) 50%, rgba(0, 0, 0, 0.04) 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 
 :root.dark .skeleton {
@@ -279,7 +273,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-ink);
   margin-bottom: 4px;
@@ -322,7 +316,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   padding: 8px;
   margin: 0 -8px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -379,7 +373,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 }
 
 .album-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
   line-height: 1.4;
@@ -389,7 +383,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 }
 
 .album-count {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-muted);
 }
 
@@ -412,7 +406,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
   margin-top: 2px;
   background: none;
   border: none;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-ink-muted);
   cursor: pointer;
@@ -431,12 +425,12 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 }
 
 .tag-cloud-item {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-light);
   background: rgba(0, 0, 0, 0.03);
   padding: 5px 10px;
   border: none;
-  border-radius: 20px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -462,7 +456,7 @@ const buildFilterLink = (overrides: { albumId?: number | null; label?: string | 
 
 .sidebar-empty {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-faint);
   margin: 8px 0 0;
   padding: 12px 0;

@@ -7,15 +7,16 @@
           v-model:value="searchKeyword"
           placeholder="搜索标题..."
           clearable
+          size="large"
           @keyup.enter="handleSearch"
         >
           <template #prefix>
             <n-icon><Search /></n-icon>
           </template>
         </n-input>
-        <n-button @click="handleSearch">搜索</n-button>
+        <n-button size="large" @click="handleSearch">搜索</n-button>
       </div>
-      <n-button v-if="authStore.isCreator" type="primary" @click="handleCreate">
+      <n-button v-if="authStore.isCreator" type="primary" size="large" @click="handleCreate">
         <template #icon>
           <n-icon><Plus /></n-icon>
         </template>

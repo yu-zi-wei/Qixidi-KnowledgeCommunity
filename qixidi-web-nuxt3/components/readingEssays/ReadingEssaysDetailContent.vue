@@ -107,7 +107,7 @@ const handleCommentAdded = () => {
 }
 
 .essay-content {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.9;
   color: var(--color-ink);
   margin-bottom: 28px;

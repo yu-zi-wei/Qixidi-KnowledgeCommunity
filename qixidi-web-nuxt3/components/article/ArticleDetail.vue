@@ -17,6 +17,11 @@
         <span class="count">{{ article.commentTimes || 0 }}</span>
       </button>
 
+      <!-- 分享：复制「标题 + 链接」 -->
+      <button class="action-btn-vertical" @click="handleShare" title="分享">
+        <Share class="icon" />
+      </button>
+
       <!-- 编辑按钮：只有文章作者可见且开启了编辑功能 -->
       <button v-if="isAuthor && showEdit" class="action-btn-vertical action-btn-edit" @click="$emit('edit')" title="编辑">
         <Edit class="icon" />
@@ -58,7 +63,7 @@
       <div v-if="showAbstract" class="abstract-panel-wrapper">
         <div class="abstract-panel-header" @click="abstractExpanded = !abstractExpanded">
           <div class="abstract-panel-title">
-            <n-icon class="abstract-panel-icon"><Robot /></n-icon>
+            <n-icon class="abstract-panel-icon"><Feather /></n-icon>
             <span>文章摘要</span>
           </div>
           <n-icon class="abstract-panel-toggle" :class="{ expanded: abstractExpanded }">
@@ -96,7 +101,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Eye, Heart, ThumbUp, MessageCircle, Edit, Hash, Robot, ChevronDown } from '@vicons/tabler'
+import { Eye, Heart, ThumbUp, MessageCircle, Edit, Hash, Feather, ChevronDown, Share } from '@vicons/tabler'
 import { formatTime, getFullDateTime } from '~/utils/formatTime'
 
 interface LabelInfo {
@@ -157,7 +162,7 @@ const props = withDefaults(defineProps<Props>(), {
   showAbstract: true
 })
 
-const abstractExpanded = ref(false)
+const abstractExpanded = ref(true)
 
 // 内部渲染 Markdown → HTML（SSR 输出完整 HTML）
 const { renderMarkdown } = useMarkdown()
@@ -183,6 +188,12 @@ const isAuthor = computed(() => {
   const authStore = useAuthStore()
   return authStore.isLoggedIn && authStore.user?.uuid === props.article.userId
 })
+
+// 分享文章：复制「标题 + 链接」
+const { shareLink } = useShareLink()
+const handleShare = () => {
+  shareLink(props.article.articleTitle, `/articles/${props.article.id}`)
+}
 
 // 动画相关
 const sidebarRef = ref<HTMLElement | null>(null)
@@ -311,21 +322,15 @@ const labelItems = computed(() => {
 }
 
 .action-btn-vertical .count {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
 }
 
-/* 右侧内容区 - 透明透气设计 */
+/* 右侧内容区 - 一张纸语言：正文透明无底色 */
 .article-main-content {
   margin-left: 62px; /* 60px 侧边栏 + 32px gap */
   padding: 0 10px 28px 32px;
   position: relative;
-  /* 更透明的背景，能隐约看到背景格子 */
-  background: var(--color-content-tint);
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
-  border-radius: 20px;
-  border: none;
 }
 
 .article-main-content.is-visible {
@@ -360,7 +365,7 @@ const labelItems = computed(() => {
 
 /* 文章标题 - 简洁大气 */
 .article-title {
-  font-size: 36px;
+  font-size: 37px;
   font-weight: 700;
   line-height: 1.25;
   color: var(--color-ink);
@@ -390,7 +395,7 @@ const labelItems = computed(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-light);
 }
 
@@ -460,7 +465,7 @@ const labelItems = computed(() => {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-muted);
   padding: 4px 8px;
   margin: -4px -8px;
@@ -478,11 +483,10 @@ const labelItems = computed(() => {
   height: 16px;
 }
 
-/* 文章摘要折叠面板 */
+/* 文章摘要折叠面板：凹陷面（与评论区输入卡同族），墨阶文字 */
 .abstract-panel-wrapper {
   margin-bottom: 32px;
-  background: rgba(68, 138, 255, 0.06);
-  border: 1px solid rgba(68, 138, 255, 0.15);
+  background: var(--color-sunken);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -498,7 +502,7 @@ const labelItems = computed(() => {
 }
 
 .abstract-panel-header:hover {
-  background: rgba(68, 138, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-sunken));
 }
 
 .abstract-panel-title {
@@ -507,16 +511,17 @@ const labelItems = computed(() => {
   gap: 6px;
   font-size: var(--text-sm);
   font-weight: 600;
-  color: #448aff;
+  color: var(--color-ink);
 }
 
 .abstract-panel-icon {
-  font-size: 16px;
+  font-size: 17px;
+  color: var(--color-ink-muted);
 }
 
 .abstract-panel-toggle {
-  font-size: 16px;
-  color: #448aff;
+  font-size: 17px;
+  color: var(--color-ink-muted);
   transition: transform var(--transition-base);
 }
 
@@ -561,7 +566,7 @@ const labelItems = computed(() => {
   display: inline-flex;
   align-items: center;
   padding: 5px 12px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-muted);
   background: transparent;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -591,7 +596,7 @@ const labelItems = computed(() => {
 
 .article-content :deep(p),
 .article-content :deep(li) {
-  line-height: 30px;
+  line-height: 31px;
 }
 
 /* 响应式 */
@@ -606,7 +611,7 @@ const labelItems = computed(() => {
   }
 
   .article-title {
-    font-size: 30px;
+    font-size: 31px;
   }
 }
 
@@ -648,7 +653,7 @@ const labelItems = computed(() => {
   }
 
   .article-title {
-    font-size: 24px;
+    font-size: 25px;
   }
 
   .article-abstract-wrapper {
@@ -669,7 +674,7 @@ const labelItems = computed(() => {
 
 @media (max-width: 480px) {
   .article-title {
-    font-size: 22px;
+    font-size: 23px;
   }
 
   .author-avatar {

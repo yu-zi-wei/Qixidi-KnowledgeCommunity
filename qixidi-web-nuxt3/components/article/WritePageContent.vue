@@ -590,14 +590,14 @@ const handleBack = () => {
 }
 
 .config-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0;
 }
 
 .back-link {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-light);
 }
 
@@ -619,7 +619,7 @@ const handleBack = () => {
 }
 
 .section-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
   margin-bottom: 0;
@@ -641,7 +641,7 @@ const handleBack = () => {
 }
 
 .section-hint {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   margin: 0;
   line-height: 1.4;
@@ -681,7 +681,7 @@ const handleBack = () => {
 
 .status-filters .n-button {
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: 14px;
   height: 26px;
 }
 
@@ -708,7 +708,7 @@ const handleBack = () => {
 }
 
 .article-title-text {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink);
   line-height: 1.4;
   margin-bottom: 4px;
@@ -720,7 +720,7 @@ const handleBack = () => {
 .article-meta {
   display: flex;
   gap: 12px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
 }
 
@@ -730,7 +730,7 @@ const handleBack = () => {
 
 /* AI 提示文字 */
 .ai-hint-text {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-primary);
   padding: 12px;
   background: var(--color-primary-light);
@@ -784,7 +784,7 @@ const handleBack = () => {
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-base);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink);
   user-select: none;
 }

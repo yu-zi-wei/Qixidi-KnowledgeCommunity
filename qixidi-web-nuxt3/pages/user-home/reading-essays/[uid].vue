@@ -1,7 +1,7 @@
 <template>
   <div class="reading-essays-page">
     <div class="re-search">
-      <n-input v-model:value="searchKeyword" placeholder="搜索随笔内容" clearable>
+      <n-input v-model:value="searchKeyword" placeholder="搜索随笔内容" clearable size="large">
         <template #prefix>
           <n-icon><Search /></n-icon>
         </template>
@@ -129,7 +129,7 @@ const handlePageChange = (page: number) => {
 
 .re-search {
   flex-shrink: 0;
-  padding: 0 24px 12px;
+  padding: 16px 24px 12px;
 }
 
 .reading-essays-page .loading-state,
@@ -167,19 +167,18 @@ const handlePageChange = (page: number) => {
   padding: 4px 0;
 }
 
+/* 纸面条目：透明底，hover 墨色浸染 */
 .essay-card {
   padding: 16px 20px;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: all var(--transition-base);
+  transition: background var(--transition-base);
 }
 
 .essay-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 .essay-content {
@@ -227,13 +226,9 @@ const handlePageChange = (page: number) => {
 .meta-badge {
   font-size: var(--text-xs);
   padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--color-sunken);
   border-radius: 12px;
   color: var(--color-ink-light);
-}
-
-.dark .meta-badge {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .meta-labels {
@@ -243,7 +238,7 @@ const handlePageChange = (page: number) => {
 }
 
 .label-tag {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-primary);
   background: var(--color-primary-light);
   padding: 4px 10px;
@@ -255,11 +250,7 @@ const handlePageChange = (page: number) => {
   align-items: center;
   justify-content: space-between;
   padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.dark .essay-footer {
-  border-top-color: rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .footer-left {
@@ -281,7 +272,6 @@ const handlePageChange = (page: number) => {
   display: flex;
   justify-content: center;
   padding: 12px 0 16px;
-  background: var(--color-surface-warm);
   border-top: 1px solid var(--color-border-light);
 }
 </style>

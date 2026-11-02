@@ -625,7 +625,7 @@ const handleCancelAccount = async () => {
   flex-shrink: 0;
   font-size: var(--text-sm);
   color: var(--color-ink-light);
-  line-height: 34px;
+  line-height: 35px;
   text-align: right;
 }
 
@@ -731,7 +731,7 @@ const handleCancelAccount = async () => {
   }
 
   .mobile-avatar-area .avatar-upload-btn .n-icon {
-    font-size: 20px;
+    font-size: 21px;
   }
 
   .form-row {

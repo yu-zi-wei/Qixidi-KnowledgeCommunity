@@ -470,7 +470,7 @@ defineExpose({
 }
 
 .bar-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-ink-muted);
 }
@@ -507,7 +507,7 @@ defineExpose({
   padding: var(--space-3);
   background: var(--color-surface-dim);
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
 }
 

@@ -46,7 +46,7 @@ const roleDesc = computed(() => {
   display: inline-flex;
   align-items: center;
   padding: 1px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-full);
   line-height: 1.6;

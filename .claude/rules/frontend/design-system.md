@@ -8,6 +8,13 @@
 
 **设计优先**：所有样式开发必须遵循统一的设计系统，使用设计 token，禁止硬编码样式值。
 
+## 版面语言：一张纸（2026-11-02 定版）
+
+**整页一张宣纸（`--color-page-bg` #F1ECDD），大面积内容容器一律透明**——不铺底色、不画边框/圆角/投影，半透明 blur 大面板已废弃（time-notes 首个迁移，其余页面照此）。层次只来自两处：
+
+- **排版**：字号/字重对比（衬线大序号是视觉锚点）、墨色四阶浓淡、细分隔线（hairline 是纸上的排版线，不是盒子轮廓）
+- **小面积点缀**：页签方块 / 标签 pill / hover 墨色浸染（`color-mix(in srgb, var(--color-ink) 3~5%, transparent)`，双主题同式）/ 输入控件纸片底
+
 ---
 
 ## CSS 变量系统
@@ -49,13 +56,13 @@
 --font-mono           /* 等宽字体 */
 
 /* 字体大小 */
---text-xs: 12px
---text-sm: 13px
---text-base: 15px
---text-lg: 16px
---text-xl: 18px
---text-2xl: 20px
---text-3xl: 24px
+--text-xs: 13px
+--text-sm: 15px
+--text-base: 17px
+--text-lg: 18px
+--text-xl: 20px
+--text-2xl: 23px
+--text-3xl: 29px
 
 /* 行高 */
 --leading-tight: 1.4
@@ -186,6 +193,8 @@
 - `.article-stats` - 互动数据
 - `.tab-bar` - 标签导航
 - `.tab-item` - 标签项
+- `.bm-tab` - 页签（激活 = 浅蓝纸底 + 墨蓝字的圆角方块）
+- `.bm-card` - 条目卡片（纸片底圆角方块，hover 只做墨水反应；标题加 `.bm-card-name` 联动变色）
 
 ### 2. 组件内只写特殊样式
 

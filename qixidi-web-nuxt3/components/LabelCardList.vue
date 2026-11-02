@@ -5,14 +5,14 @@
       :key="label.id"
       :to="`/public/label/${label.id}`"
       target="_blank"
-      class="label-card"
+      class="bm-card label-card"
     >
       <div class="label-card-cover" v-if="label.labelCover" v-html="label.labelCover" />
       <div class="label-card-cover label-card-placeholder" v-else>
         <n-icon size="20"><Tag /></n-icon>
       </div>
       <div class="label-card-body">
-        <h3 class="label-card-name">{{ label.labelName }}</h3>
+        <h3 class="label-card-name bm-card-name">{{ label.labelName }}</h3>
         <p class="label-card-desc" v-if="label.labelDescribe">{{ label.labelDescribe }}</p>
         <div class="label-card-meta">
           <span><n-icon><FileText /></n-icon>{{ label.articleNumber || 0 }} 篇</span>
@@ -90,19 +90,9 @@ const handleToggle = async (item: LabelItem) => {
   gap: 12px;
 }
 
+/* 卡片形态走全局 .bm-card 书签条（main.css），此处仅补充业务细节 */
 .label-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  text-decoration: none;
-  transition: all var(--transition-base);
-}
-
-.label-card:hover {
-  box-shadow: var(--shadow-sm);
+  min-width: 0;
 }
 
 .label-card-cover {

@@ -458,7 +458,7 @@ const handleGiteeLogin = async () => {
 }
 
 .aside-title {
-  font-size: 26px;
+  font-size: 27px;
   font-weight: 700;
   margin: 0;
   letter-spacing: 2px;
@@ -466,14 +466,14 @@ const handleGiteeLogin = async () => {
 }
 
 .aside-desc {
-  font-size: 14px;
+  font-size: 15px;
   opacity: 1;
   line-height: 1.6;
   margin: 0;
 }
 
 .aside-quote {
-  font-size: 13px;
+  font-size: 14px;
   opacity: 0.9;
   font-style: italic;
   margin: 0;
@@ -487,7 +487,7 @@ const handleGiteeLogin = async () => {
   top: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 20px;
+  font-size: 21px;
   opacity: 0.3;
 }
 
@@ -512,20 +512,20 @@ const handleGiteeLogin = async () => {
 }
 
 .form-title {
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 600;
   color: var(--color-ink);
   margin-bottom: 6px;
 }
 
 .form-subtitle {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-light);
   margin-bottom: 24px;
 }
 
 .input-icon {
-  font-size: 18px;
+  font-size: 19px;
   opacity: 0.6;
 }
 
@@ -542,7 +542,7 @@ const handleGiteeLogin = async () => {
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   transition: opacity 0.2s;
 }
 
@@ -568,7 +568,7 @@ const handleGiteeLogin = async () => {
   border: none;
   color: var(--color-ink-light);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   transition: color 0.2s;
 }
 
@@ -594,7 +594,7 @@ const handleGiteeLogin = async () => {
   align-items: center;
   text-align: center;
   color: var(--color-ink-faint);
-  font-size: 12px;
+  font-size: 13px;
   margin-bottom: 16px;
 }
 
@@ -621,7 +621,7 @@ const handleGiteeLogin = async () => {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-ink);
   transition: all 0.2s ease;
 }

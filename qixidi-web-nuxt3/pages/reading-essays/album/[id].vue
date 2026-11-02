@@ -413,7 +413,7 @@ useHead(() => ({
   font-size: var(--text-xs);
   padding: 4px 10px;
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   color: var(--color-ink-light);
 }
 
@@ -428,11 +428,11 @@ useHead(() => ({
 }
 
 .label-tag {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-primary);
   background: var(--color-primary-light);
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
 }
 
 /* 底部 */

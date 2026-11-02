@@ -375,21 +375,15 @@ onMounted(async () => {
   scrollbar-width: none;
   -ms-overflow-style: none;
   background: transparent;
-  border-radius: 32px;
-  transition: all 0.3s ease;
+  /* 只过渡背景色：border-bottom 不参与过渡，滚回顶部时细线瞬间移除（与首页同款，all 会让边线渐隐残留） */
+  transition: background-color 0.3s ease;
 }
 
 .category-nav.is-sticky {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border-radius: 2px;
-}
-
-.dark .category-nav.is-sticky {
-  background: rgba(13, 15, 17, 0.7);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  /* 吸顶与首页二级菜单（ContentTabBar）同款：不透明纸色 + 底部细线 + 悬垂影，无 blur */
+  background: var(--color-page-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-nav);
 }
 
 .category-nav::-webkit-scrollbar {
@@ -399,7 +393,7 @@ onMounted(async () => {
 .nav-item {
   flex-shrink: 0;
   padding: 7px 14px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-light);
   text-decoration: none;
   border-radius: var(--radius-sm);
@@ -411,13 +405,15 @@ onMounted(async () => {
 }
 
 .nav-item:hover {
-  background: var(--color-surface-dim);
+  /* 墨浸染，双主题同式 */
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
   color: var(--color-ink);
 }
 
 .nav-item.active {
-  background: var(--color-surface-dim);
-  color: var(--color-ink);
+  /* 书签语言：浅蓝纸底 + 墨蓝字（与首页书签 tab 同源） */
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   font-weight: 500;
 }
 
@@ -433,28 +429,22 @@ onMounted(async () => {
     padding: 10px 16px;
     margin-top: 0;
     margin-bottom: 0;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-
-  .dark .category-nav {
-    background: rgba(13, 15, 17, 0.7);
+    /* 始终 fixed：与首页 ContentTabBar 移动端同款（不透明纸色 + 底部细线 + 悬垂影） */
+    background: var(--color-page-bg);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-nav);
   }
 }
 
-/* 筛选状态 */
+/* 筛选状态：小面积纸片点缀，无框无 blur */
 .filter-status {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: var(--color-block-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border-light);
-  border-radius: 10px;
-  font-size: 13px;
+  background: var(--color-paper);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
 }
 
 .filter-label {
@@ -465,17 +455,17 @@ onMounted(async () => {
   padding: 5px 12px;
   background: var(--color-primary-light);
   color: var(--color-primary);
-  border-radius: 20px;
-  font-size: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
   font-weight: 500;
 }
 
 .btn-clear {
   padding: 5px 12px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
-  font-size: 12px;
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
   color: var(--color-ink-muted);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -483,13 +473,7 @@ onMounted(async () => {
 
 .btn-clear:hover {
   background: var(--color-primary-light);
-  border-color: var(--color-primary);
   color: var(--color-primary);
-}
-
-.dark .btn-clear {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* ==================== 抽屉样式 ==================== */
@@ -498,7 +482,7 @@ onMounted(async () => {
 }
 
 .essay-content {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.85;
   color: var(--color-ink);
   margin-bottom: 28px;
@@ -529,13 +513,9 @@ onMounted(async () => {
 .meta-badge {
   font-size: var(--text-sm);
   padding: 5px 12px;
-  background: rgba(0, 0, 0, 0.05);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
   border-radius: var(--radius-sm);
   color: var(--color-ink-light);
-}
-
-:global(.dark) .meta-badge {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .meta-time {
@@ -593,7 +573,7 @@ onMounted(async () => {
 }
 
 .drawer-title {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--color-ink);
 }

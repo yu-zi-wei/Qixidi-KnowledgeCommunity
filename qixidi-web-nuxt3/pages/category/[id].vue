@@ -25,7 +25,6 @@
         :articles="articles"
         :loading="loadingMore"
         :no-more="noMore"
-        hide-cover
         @load-more="loadMore"
       />
     </ClientOnly>
@@ -99,7 +98,7 @@ const handleTabChange = (value: string) => {
 
 .tab-button {
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-ink-light);
   background: transparent;

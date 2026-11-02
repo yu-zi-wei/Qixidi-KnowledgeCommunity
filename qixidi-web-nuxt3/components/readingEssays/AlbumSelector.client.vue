@@ -177,7 +177,7 @@ watch(() => props.show, (newVal) => {
   justify-content: center;
   min-height: 200px;
   color: var(--color-ink-muted);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* 专辑网格 */
@@ -209,7 +209,7 @@ watch(() => props.show, (newVal) => {
   gap: 12px;
   padding: 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background 0.2s ease;
   background: rgba(0, 0, 0, 0.03);
@@ -228,7 +228,7 @@ watch(() => props.show, (newVal) => {
   width: 64px;
   height: 64px;
   flex-shrink: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
@@ -261,7 +261,7 @@ watch(() => props.show, (newVal) => {
 }
 
 .album-grid-item .album-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--color-ink);
   overflow: hidden;
@@ -277,12 +277,12 @@ watch(() => props.show, (newVal) => {
 }
 
 .album-grid-item .album-count {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
 }
 
 .album-grid-item .album-intro {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   line-height: 1.5;
   overflow: hidden;

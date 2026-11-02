@@ -8,6 +8,7 @@
             v-model:value="searchKeyword"
             placeholder="搜索随笔内容..."
             clearable
+            size="large"
             @keyup.enter="handleSearch"
             @clear="handleSearch"
           >
@@ -16,7 +17,7 @@
             </template>
           </n-input>
         </div>
-        <n-button type="primary" @click="essayDrawerStore.open()">
+        <n-button type="primary" size="large" @click="essayDrawerStore.open()">
           <template #icon>
             <n-icon><Plus /></n-icon>
           </template>
@@ -490,7 +491,7 @@ onMounted(() => fetchList())
 
 .state-badge {
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-full);
 }
@@ -512,7 +513,7 @@ onMounted(() => fetchList())
 }
 
 .label-tag {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-primary);
   background: var(--color-primary-light);
   padding: 2px 8px;

@@ -262,23 +262,17 @@ if (urlId) {
   padding-top: 5px; /* 与导航栏保持 5px 间隙 */
 }
 
-/* 左侧：时间线列表 - 固定高度，sticky 定位 */
+/* 左侧：时间线列表 - 固定高度，sticky 定位；透明无框，层次靠排版线 */
 .time-list-section {
   flex: 1;
   min-width: 0;
   position: sticky;
   top: 71px; /* navHeight(66) + gap(5) */
   height: calc(100vh - 91px);
-  background: var(--color-block-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border-light);
-  border-right: none;
-  border-radius: 16px 0 0 16px;
   overflow: hidden;
 }
 
-/* 中间分隔线 */
+/* 中间分隔线（纸上的排版线，非盒子轮廓） */
 .time-list-section::after {
   content: '';
   position: absolute;
@@ -286,28 +280,19 @@ if (urlId) {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--color-border-light);
 }
 
-.dark .time-list-section::after {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-/* 右侧：详情 - 不固定高度，随内容增长 */
+/* 右侧：详情 - 不固定高度，随内容增长；透明无框 */
 .time-detail-section {
   flex: 2;
   min-width: 0;
-  background: var(--color-block-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border-light);
-  border-left: none;
-  border-radius: 0 16px 16px 0;
   overflow: visible;
 }
 
 .detail-comment-section {
-  margin: 0 var(--space-4) var(--space-4);
+  /* 与详情内容 padding(32px) 左右对齐，评论区与正文共一条中轴线 */
+  margin: 0 var(--space-8) var(--space-4);
 }
 
 /* 移动端：只展示列表 */
@@ -316,12 +301,6 @@ if (urlId) {
     position: static;
     height: auto;
     max-height: none;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-  }
-
-  .dark .time-list-section {
-    border-color: rgba(255, 255, 255, 0.06);
   }
 
   .time-list-section::after {

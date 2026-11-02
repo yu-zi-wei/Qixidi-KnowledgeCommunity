@@ -531,10 +531,11 @@ defineExpose({
   color: var(--color-primary);
 }
 
-/* 评论输入框 */
+/* 评论输入框：容器透明（textarea 自带纸片底+边线），不加深色衬底 */
 .tcs-input-card {
   padding: var(--space-4);
-  background: var(--color-surface-dim);
+  /* 凹陷面：比页底深一档的输入区底色（全站评论区统一语言），列表保持透明 */
+  background: var(--color-sunken);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-6);
 }
@@ -645,11 +646,11 @@ defineExpose({
 
 .tcs-emoji-btn:hover {
   color: var(--color-primary);
-  background: var(--color-surface-dim);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
 }
 
 .tcs-emoji-trigger {
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1;
 }
 
@@ -692,14 +693,14 @@ defineExpose({
   justify-content: center;
   width: 32px;
   height: 32px;
-  font-size: 18px;
+  font-size: 19px;
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
 .tcs-emoji-item:hover {
-  background: var(--color-surface-dim);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
   transform: scale(1.15);
 }
 
@@ -814,13 +815,13 @@ defineExpose({
   word-break: break-word;
 }
 
-/* 回复列表 */
+/* 回复列表：沾墨微沉（3% 墨浸染，双主题同式），不再用深色衬底 */
 .tcs-reply-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-3);
-  background: var(--color-surface-dim);
+  background: color-mix(in srgb, var(--color-ink) 3%, transparent);
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-2);
 }

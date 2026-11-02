@@ -179,14 +179,14 @@ defineExpose({
 
 /* 标题输入 - 适中字号 */
 .title-input {
-  font-size: 28px;
+  font-size: 29px;
   font-weight: 600;
   line-height: 1.4;
   flex-shrink: 0; /* 不收缩 */
 }
 
 .title-input :deep(.n-input__input) {
-  font-size: 28px;
+  font-size: 29px;
   font-weight: 600;
   line-height: 1.4;
   padding: var(--space-3) 0 !important;
@@ -220,7 +220,7 @@ defineExpose({
 @media (max-width: 768px) {
   .title-input,
   .title-input :deep(.n-input__input) {
-    font-size: 24px;
+    font-size: 25px;
   }
 }
 </style>

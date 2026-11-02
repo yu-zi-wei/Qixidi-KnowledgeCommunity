@@ -22,7 +22,7 @@
                 <n-icon><Edit /></n-icon>
               </template>
             </n-button>
-            <n-button quaternary size="small" @click="copyShareLink" title="复制链接">
+            <n-button quaternary size="small" @click="copyShareLink" title="分享">
               <template #icon>
                 <n-icon><Share /></n-icon>
               </template>
@@ -60,7 +60,6 @@ const router = useRouter()
 const timeNotesApi = useTimeNotesApi()
 const timeNotesCommentApi = useTimeNotesCommentApi()
 const authStore = useAuthStore()
-const message = useMessage()
 
 const noteId = computed(() => route.params.id as string)
 
@@ -78,15 +77,12 @@ useHead({
   title: () => note.value?.title || note.value?.content?.substring(0, 50) || '时光小记详情'
 })
 
-const copyShareLink = async () => {
+// 分享小记（标题可为空 → 截取正文兜底，与 useHead 的标题语义一致）
+const { shareLink } = useShareLink()
+const copyShareLink = () => {
   if (!note.value) return
-  const url = `${window.location.origin}/time-notes/${note.value.id}`
-  try {
-    await navigator.clipboard.writeText(url)
-    message.success('链接已复制')
-  } catch {
-    message.error('复制失败')
-  }
+  const title = note.value.title || note.value.content?.substring(0, 50) || '时光小记'
+  shareLink(title, `/time-notes/${note.value.id}`)
 }
 
 const handleEdit = () => {
@@ -119,7 +115,8 @@ watch(() => route.params.id, async (newId, oldId) => {
 <style scoped>
 .time-notes-detail-page {
   min-height: 100vh;
-  background: var(--color-surface-warm);
+  /* 整页一张纸：交给全局 page-bg，页面自身不铺底 */
+  background: var(--color-page-bg);
 }
 
 /* 主内容区域 */
@@ -141,9 +138,9 @@ watch(() => route.params.id, async (newId, oldId) => {
 .detail-card {
   max-width: 800px;
   width: 100%;
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  /* 正文纸片：与评论纸片同语言（无投影，靠明度差浮起） */
+  background: var(--color-paper);
+  border-radius: var(--radius-md);
   overflow: hidden;
   position: relative;
 }

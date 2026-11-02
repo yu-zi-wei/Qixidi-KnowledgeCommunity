@@ -1,52 +1,50 @@
 /* ============================================
    筑与四叶 — 设计系统
-   主题：暖木书香（温暖米灰调 - 文艺舒适）
-   美学方向：温暖纸质 + 现代简洁
+   主题：纸与墨（中性冷灰调 - 简洁舒适）
+   美学方向：一张纸 + 现代简洁
    ============================================ */
 
 /* === 浅色主题（默认） === */
 :root {
-  /* 文字色阶 */
-  --color-ink: #1a1a2e;
-  --color-ink-light: #4a4a5c;
-  --color-ink-muted: #7a7a8c;
-  --color-ink-faint: #b8b8c4;
+  /* 文字色阶 - 冷墨（中性墨黑，落在冷灰纸上） */
+  --color-ink: #2e2f32;
+  --color-ink-light: #505258;
+  --color-ink-muted: #7a7d84;
+  --color-ink-faint: #b0b3ba;
 
-  /* 背景色阶 - 冷灰调 */
-  --color-surface: #f8f9fa;
-  --color-surface-warm: #f4f5f7;
-  --color-surface-dim: #eef0f2;
+  /* 背景色阶 - 中性冷灰三级纸面（纸桌最深 → 纸页居中 → 纸片最浅，层次靠明度差） */
+  --color-surface: #f9fafb;
+  --color-surface-warm: #f1f2f4;
+  --color-surface-dim: #e4e6ea;
+  /* 最浅纸片：书签卡、信息卡等需要从纸桌上浮起的卡片 */
+  --color-paper: #ffffff;
 
-  /* 顶部导航栏背景（微透白，配合毛玻璃模糊） */
+  /* 页面底色（整页一张纸：内容不铺底色不出块，html 背景专用） */
+  --color-page-bg: #f4f5f7;
+
+  /* 凹陷面：比页底深一档的块面（随笔便签卡、评论输入卡；hover 在其上沾墨） */
+  --color-sunken: #edeef0;
+
+  /* 顶部导航栏背景（微透纸页色，配合毛玻璃模糊） */
   --nav-bar-bg: rgba(255, 255, 255, 0.9);
-
-  /* 个人主页用户信息卡背景（纯白） */
-  --user-card-bg: #ffffff;
 
   /* 网格效果 - 冷色调 */
   --grid-color: rgba(61, 90, 128, 0.035);
   --grid-size: 40px;
 
-  /* 卡片背景 - 冷白 */
-  --card-bg: rgba(255, 255, 255, 0.6);
+  /* 卡片背景 - 纸页半透（侧边栏分块） */
+  --card-bg: rgba(255, 255, 255, 0.4);
 
-  /* 半透明卡片分层：文章卡 > 侧边栏卡 > 站点信息卡（改透明度统一在这里调） */
-  --article-card-bg: rgba(255, 255, 255, 0.5);
-  --article-card-bg-hover: rgba(255, 255, 255, 0.6);
-  --sidebar-card-bg: rgba(255, 255, 255, 0.35);
-  --sidebar-card-bg-hover: rgba(255, 255, 255, 0.5);
-  --site-card-bg: rgba(255, 255, 255, 0.25);
-  --site-card-bg-hover: rgba(255, 255, 255, 0.35);
-
-  /* 边框色 - 冷灰 */
-  --color-border: #e2e4e8;
-  --color-border-light: #eef0f2;
+  /* 边框色 - 中性灰细线（加深一档让面板出形） */
+  --color-border: #c8cbd0;
+  --color-border-light: #dcdfe3;
 
   /* 主色：冷蓝 */
   --color-primary: #3d5a80;
   --color-primary-dark: #2d4a70;
   --color-primary-hover: #4d6a90;
-  --color-primary-light: #e8f0f8;
+  /* 浅蓝降饱和偏青墨：落在泛黄纸上不飘 */
+  --color-primary-light: #e4ebf1;
 
   /* 强调色：深蓝 */
   --color-accent: #5a7fa8;
@@ -55,38 +53,39 @@
   /* 功能色 */
   --color-danger: #c44536;
 
-  --color-header-bg: rgba(248, 249, 250, 0.92);
+  --color-header-bg: rgba(244, 245, 247, 0.92);
   --color-code-bg: #eef0f2;
 
   /* 内容块背景（卡片、面板、下拉等，自动跟随主题） */
-  --color-block-bg: rgba(255, 255, 255, 0.75);
-  --color-block-bg-hover: rgba(255, 255, 255, 0.92);
-  --color-dropdown-bg: rgba(255, 255, 255, 0.85);
+  --color-block-bg: rgba(255, 255, 255, 0.88);
+  --color-block-bg-hover: rgba(255, 255, 255, 0.97);
+  --color-dropdown-bg: rgba(255, 255, 255, 0.97);
   --color-content-tint: rgba(255, 255, 255, 0.2);
 
   /* Markdown 代码块样式 */
   --md-code-bg: #eef0f2;
-  --md-code-border: #e2e4e8;
+  --md-code-border: #dcdfe3;
   --md-inline-code-bg: rgba(61, 90, 128, 0.08);
   --md-quote-border: #35B378;
   --md-quote-text: #6a737d;
   --md-link-color: #3b82f6;
-  --md-table-border: #e2e4e8;
+  --md-table-border: #dcdfe3;
 
   /* === 字体 === */
   --font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', Georgia, serif;
   --font-body: 'Noto Sans SC', 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  --font-logo: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+  /* 霞鹜文楷：细秀楷风（配 font-weight:300 命中 light 面），回退系统楷体 */
+  --font-logo: 'LXGW WenKai', 'STKaiti', 'KaiTi', serif;
 
   /* 字体大小层级 */
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 16px;
-  --text-lg: 17px;
-  --text-xl: 19px;
-  --text-2xl: 22px;
-  --text-3xl: 28px;
+  --text-xs: 13px;
+  --text-sm: 15px;
+  --text-base: 17px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 23px;
+  --text-3xl: 29px;
 
   /* 行高 */
   --leading-tight: 1.4;
@@ -107,17 +106,19 @@
   --max-width: 1200px;
   --content-max-width: 680px; /* 文章内容最佳阅读宽度 */
 
-  /* === 圆角 === */
+  /* === 圆角（标准档位） === */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 9999px;
 
-  /* === 阴影 === */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
-  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.12);
+  /* === 阴影（纸层影：纸张叠放的贴边影，比扩散投影锐利） === */
+  --shadow-sm: 0 1px 2px rgba(30, 31, 34, 0.08);
+  --shadow-md: 0 1px 2px rgba(30, 31, 34, 0.08), 0 2px 6px rgba(30, 31, 34, 0.06);
+  --shadow-lg: 0 2px 4px rgba(30, 31, 34, 0.08), 0 6px 14px rgba(30, 31, 34, 0.06);
+  --shadow-float: 0 4px 8px rgba(30, 31, 34, 0.1), 0 12px 28px rgba(30, 31, 34, 0.08);
+  /* 吸顶导航悬垂影：向下单侧投影（二级菜单吸顶态） */
+  --shadow-nav: 0 4px 12px rgba(30, 31, 34, 0.07);
 
   /* === 动画 === */
   --transition-fast: 0.15s ease;
@@ -145,25 +146,23 @@
   --color-surface-warm: #17171b;
   --color-surface-dim: #28282e;
 
+  /* 页面底色（深色保持墨黑） */
+  --color-page-bg: #17171b;
+
+  /* 凹陷面（dark：与纸片同值，微亮于页底） */
+  --color-sunken: #232329;
+
   /* 顶部导航栏背景（微透深灰） */
   --nav-bar-bg: rgba(30, 30, 34, 0.9);
 
-  /* 个人主页用户信息卡背景 */
-  --user-card-bg: #1e1e22;
+  /* 最浅纸片（dark 对应浅色 #FCFAF2：比 surface 略亮一档） */
+  --color-paper: #232329;
 
   /* 网格效果 */
   --grid-color: rgba(90, 127, 168, 0.08);
 
-  /* 卡片背景 - 冷灰 */
-  --card-bg: rgba(23, 23, 27, 0.5);
-
-  /* 半透明卡片分层（深色主题走白色低透明叠加） */
-  --article-card-bg: rgba(255, 255, 255, 0.03);
-  --article-card-bg-hover: rgba(255, 255, 255, 0.06);
-  --sidebar-card-bg: rgba(255, 255, 255, 0.03);
-  --sidebar-card-bg-hover: rgba(255, 255, 255, 0.06);
-  --site-card-bg: rgba(255, 255, 255, 0.02);
-  --site-card-bg-hover: rgba(255, 255, 255, 0.04);
+  /* 卡片背景 - 冷灰半透 */
+  --card-bg: rgba(23, 23, 27, 0.35);
 
   /* 边框色 - 冷灰 */
   --color-border: #38383e;
@@ -200,10 +199,10 @@
   --md-link-color: #60a5fa;
   --md-table-border: #363a3e;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.35);
-  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 10px rgba(0, 0, 0, 0.2);
+  --shadow-float: 0 4px 8px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.25);
 
   /* 图表色阶（深色主题） */
   --chart-level-1: #2d333b;
@@ -235,7 +234,7 @@ html {
 
 body {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -363,16 +362,15 @@ a:hover {
    文章卡片样式系统
    ============================================ */
 
-/* 文章卡片容器 */
+/* 文章卡片容器（书签+极简：hover 只做墨水反应，无位移无阴影） */
 .article-card {
   padding: var(--space-5);
   border-radius: var(--radius-md);
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-base);
 }
 
 .article-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: var(--color-block-bg);
 }
 
 /* 文章标题 */
@@ -508,6 +506,59 @@ a:hover {
 /* 深色主题标签导航 */
 .dark .tab-bar {
   background: var(--color-surface);
+}
+
+/* ============================================
+   tab 与卡片（圆角方块语言，全站选中/卡片态统一）
+   ============================================ */
+
+/* tab：默认墨水文字，激活 = 浅蓝纸底方块 + 墨蓝字 */
+.bm-tab {
+  padding: 7px 14px;
+  font-size: 14px;
+  color: var(--color-ink-light);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  font-family: var(--font-body);
+  text-decoration: none;
+  font-weight: 400;
+  line-height: 1.5;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bm-tab:hover {
+  color: var(--color-primary);
+}
+
+.bm-tab.active {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* 卡片：纸片底圆角方块，hover 只做墨水反应 */
+.bm-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-paper);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color var(--transition-base);
+}
+
+.bm-card:hover {
+  background: var(--color-primary-light);
+}
+
+.bm-card:hover .bm-card-name {
+  color: var(--color-primary);
 }
 
 /* ============================================
@@ -708,7 +759,7 @@ a:hover {
   position: relative;
   padding: 0;
   overflow: auto;
-  font-size: 14px;
+  font-size: 15px;
   line-height: var(--leading-normal);
   background-color: #282c34;
   border-radius: var(--radius-md);
@@ -722,7 +773,7 @@ a:hover {
   background-color: transparent;
   border: none;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
   color: #abb2bf;
 }
@@ -767,7 +818,7 @@ a:hover {
 
 /* 语言标签 */
 .markdown-body pre .code-block-lang {
-  font-size: 12px;
+  font-size: 13px;
   color: #636d83;
   font-family: var(--font-mono);
   text-transform: lowercase;
@@ -775,7 +826,7 @@ a:hover {
 
 /* 复制按钮 */
 .markdown-body pre .code-block-copy {
-  font-size: 12px;
+  font-size: 13px;
   color: #636d83;
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.1);

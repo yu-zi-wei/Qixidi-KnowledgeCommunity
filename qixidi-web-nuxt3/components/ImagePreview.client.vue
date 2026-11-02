@@ -419,7 +419,7 @@ onUnmounted(() => {
 .scale-text {
   min-width: 50px;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   color: #fff;
   font-weight: 500;
 }
@@ -430,7 +430,7 @@ onUnmounted(() => {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 12px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.4);
   white-space: nowrap;
   z-index: 20;

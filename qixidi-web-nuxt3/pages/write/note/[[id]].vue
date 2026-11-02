@@ -214,7 +214,7 @@ const handleBack = () => {
 }
 
 .config-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0;
@@ -224,7 +224,7 @@ const handleBack = () => {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-muted);
 }
 
@@ -254,13 +254,13 @@ const handleBack = () => {
 }
 
 .section-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
 }
 
 .section-hint {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   margin: 0;
 }
@@ -291,14 +291,14 @@ const handleBack = () => {
 }
 
 .tip-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-ink);
   margin: 0 0 2px;
 }
 
 .tip-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-light);
   margin: 0;
   line-height: 1.4;
