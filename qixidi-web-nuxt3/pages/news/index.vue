@@ -176,7 +176,6 @@
                 v-for="item in (newsList as ArticleCommentNewsVo[])"
                 :key="item.id"
                 class="news-item"
-                :class="{ unread: !item.beenRead }"
               >
                 <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-avatar-link">
                   <img :src="item.commentAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
@@ -190,10 +189,11 @@
                     <template v-else>
                       <span class="news-action">评论了你的文章</span>
                     </template>
-                    <NuxtLink :to="`/articles/${item.articleId}`" class="news-target">《{{ item.articleTitle }}》</NuxtLink>
+                    <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                    <span v-if="!item.beenRead" class="news-unread-dot"></span>
                   </div>
+                  <NuxtLink :to="`/articles/${item.articleId}`" class="news-target">《{{ item.articleTitle }}》</NuxtLink>
                   <div class="news-comment-content">{{ item.content }}</div>
-                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                 </div>
               </div>
             </template>
@@ -204,7 +204,6 @@
                 v-for="item in (newsList as TimeNotesCommentNewsVo[])"
                 :key="item.id"
                 class="news-item"
-                :class="{ unread: !item.beenRead }"
               >
                 <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-avatar-link">
                   <img :src="item.commentAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
@@ -218,10 +217,11 @@
                     <template v-else>
                       <span class="news-action">评论了你的小记</span>
                     </template>
-                    <NuxtLink :to="`/time-notes/${item.timeNotesId}`" class="news-target">《{{ item.title }}》</NuxtLink>
+                    <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                    <span v-if="!item.beenRead" class="news-unread-dot"></span>
                   </div>
+                  <NuxtLink :to="`/time-notes/${item.timeNotesId}`" class="news-target">《{{ item.title }}》</NuxtLink>
                   <div class="news-comment-content">{{ item.content }}</div>
-                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                 </div>
               </div>
             </template>
@@ -232,7 +232,6 @@
                 v-for="item in (newsList as DictumCommentNewsVo[])"
                 :key="item.id"
                 class="news-item"
-                :class="{ unread: !item.beenRead }"
               >
                 <NuxtLink :to="`/user-home/article/${item.commentUid}`" class="news-avatar-link">
                   <img :src="item.commentAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
@@ -246,10 +245,11 @@
                     <template v-else>
                       <span class="news-action">评论了你的随笔</span>
                     </template>
-                    <NuxtLink :to="`/reading-essays/${item.dictumId}`" class="news-target news-target-text">{{ truncateText(item.worksContent, 20) }}</NuxtLink>
+                    <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                    <span v-if="!item.beenRead" class="news-unread-dot"></span>
                   </div>
+                  <NuxtLink :to="`/reading-essays/${item.dictumId}`" class="news-target news-target-text">{{ truncateText(item.worksContent, 20) }}</NuxtLink>
                   <div class="news-comment-content">{{ item.content }}</div>
-                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                 </div>
               </div>
             </template>
@@ -260,7 +260,6 @@
                 v-for="item in (newsList as NewsUserInfoVo[])"
                 :key="item.newsId"
                 class="news-item"
-                :class="{ unread: !item.beenRead }"
               >
                 <NuxtLink :to="`/user-home/article/${item.senderId}`" class="news-avatar-link">
                   <img :src="item.senderAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
@@ -269,9 +268,10 @@
                   <div class="news-header">
                     <NuxtLink :to="`/user-home/article/${item.senderId}`" class="news-user">{{ item.senderName }}</NuxtLink>
                     <span class="news-action">赞了你的文章</span>
-                    <NuxtLink v-if="item.newsContent" :to="`/articles/${item.targetId}`" class="news-target">《{{ item.newsContent }}》</NuxtLink>
+                    <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                    <span v-if="!item.beenRead" class="news-unread-dot"></span>
                   </div>
-                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                  <NuxtLink v-if="item.newsContent" :to="`/articles/${item.targetId}`" class="news-target">《{{ item.newsContent }}》</NuxtLink>
                 </div>
               </div>
             </template>
@@ -282,7 +282,6 @@
                 v-for="item in (newsList as NewsUserInfoVo[])"
                 :key="item.newsId"
                 class="news-item"
-                :class="{ unread: !item.beenRead }"
               >
                 <NuxtLink :to="`/user-home/article/${item.senderId}`" class="news-avatar-link">
                   <img :src="item.senderAvatar || defaultAvatar" class="news-avatar" alt="" @error="onAvatarError" />
@@ -291,8 +290,9 @@
                   <div class="news-header">
                     <NuxtLink :to="`/user-home/article/${item.senderId}`" class="news-user">{{ item.senderName }}</NuxtLink>
                     <span class="news-action">关注了你</span>
+                    <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
+                    <span v-if="!item.beenRead" class="news-unread-dot"></span>
                   </div>
-                  <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                 </div>
               </div>
             </template>
@@ -312,7 +312,7 @@
                     <span class="news-title">{{ item.newsTitle }}</span>
                     <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                   </div>
-                  <div class="news-content">{{ item.newsContent }}</div>
+                  <div class="news-system-content">{{ item.newsContent }}</div>
                 </div>
               </div>
             </template>
@@ -732,7 +732,7 @@ useHead({
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-ink-light);
   text-decoration: none;
   border-radius: var(--radius-md);
@@ -772,7 +772,7 @@ useHead({
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1;
   color: #fff;
@@ -799,7 +799,7 @@ useHead({
   align-items: center;
   gap: 5px;
   padding: 8px 14px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink-muted);
   text-decoration: none;
   border-bottom: 2px solid transparent;
@@ -822,7 +822,7 @@ useHead({
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  font-size: 10px;
+  font-size: 11px;
   border-radius: 8px;
 }
 
@@ -848,39 +848,28 @@ useHead({
 .news-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* 消息卡片 */
+/* 消息卡片：白底纸片，hover 浮现边框线（透明占位边框，浮现时不跳布局） */
 .news-item {
   display: flex;
   gap: 14px;
-  padding: 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-light);
-  border-left: 3px solid transparent;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  padding: 14px 16px;
+  background: var(--color-paper);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-base);
 }
 
 .news-item:hover {
   border-color: var(--color-border);
-  box-shadow: var(--shadow-sm);
 }
 
-.news-item.unread {
-  border-left-color: var(--color-primary);
-  background: var(--color-primary-light);
-}
-
-.news-item.unread:hover {
-  background: color-mix(in srgb, var(--color-primary-light) 90%, var(--color-surface-dim));
-}
-
-/* 头像 */
+/* 头像（36px：消息动作行与正文都不重，头像过大压过内容） */
 .news-avatar {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-full);
   object-fit: cover;
   flex-shrink: 0;
@@ -890,10 +879,10 @@ useHead({
   flex-shrink: 0;
 }
 
-/* 系统消息图标 */
+/* 系统消息图标（与头像同步 36px，卡片节奏一致） */
 .system-icon {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -909,22 +898,26 @@ useHead({
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
+/* 首行：用户名 + 动作 + 时间（右侧）+ 未读圆点，单行 */
 .news-header {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 6px;
-  font-size: 14px;
+  gap: 6px;
+  min-width: 0;
+  font-size: 15px;
   line-height: 1.5;
 }
 
 .news-user {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-ink);
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .news-user:hover {
@@ -933,12 +926,22 @@ useHead({
 
 .news-action {
   color: var(--color-ink-muted);
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
+/* 目标标题独立一行（主色链接） */
 .news-target {
-  font-size: 14px;
+  align-self: flex-start;
+  max-width: 100%;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--color-primary);
   text-decoration: none;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .news-target:hover {
@@ -947,7 +950,7 @@ useHead({
 
 .news-title {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-ink);
   line-height: 1.5;
   flex: 1;
@@ -955,31 +958,49 @@ useHead({
 }
 
 .news-time {
-  font-size: 12px;
+  margin-left: auto;
+  font-size: 13px;
   color: var(--color-ink-faint);
   white-space: nowrap;
-  margin-top: 2px;
+  flex-shrink: 0;
 }
 
-.news-content {
-  font-size: 13px;
+/* 未读小圆点（替代原整卡浅蓝底） */
+.news-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-danger);
+  flex-shrink: 0;
+}
+
+/* 系统消息正文：引用竖线分层 + 三行截断（类名独立，避免与内容区容器 .news-content 撞名） */
+.news-system-content {
+  font-size: 14px;
   color: var(--color-ink-muted);
-  line-height: 1.6;
+  line-height: 1.7;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-border-light);
   overflow: hidden;
-  text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
-/* 评论内容：保留换行，与文章详情页格式一致 */
+/* 评论内容：引用竖线分层 + 三行截断，保留换行 */
 .news-comment-content {
   font-size: 14px;
-  color: var(--color-ink-light);
-  line-height: 1.6;
+  color: var(--color-ink-muted);
+  line-height: 1.7;
   white-space: pre-wrap;
   word-break: break-word;
   margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-border-light);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 /* 分页 */
@@ -1008,12 +1029,31 @@ useHead({
   overflow-y: auto;
 }
 
+/* 细滚动条（覆盖全局 16px 圆头粗滚动条；hover 保持原样不放大） */
+.chat-user-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-user-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border: none;
+}
+
+.chat-user-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
+}
+
 .chat-user-item {
   display: flex;
   gap: 10px;
   padding: 12px 14px;
   cursor: pointer;
   transition: background var(--transition-fast);
+}
+
+/* 用户之间 hairline 分隔（首条不画线） */
+.chat-user-item + .chat-user-item {
+  border-top: 1px solid var(--color-border-light);
 }
 
 .chat-user-item:hover {
@@ -1064,7 +1104,7 @@ useHead({
 }
 
 .chat-user-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--color-ink);
   overflow: hidden;
@@ -1073,7 +1113,7 @@ useHead({
 }
 
 .chat-user-time {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
   flex-shrink: 0;
 }
@@ -1086,7 +1126,7 @@ useHead({
 }
 
 .chat-user-last {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1098,9 +1138,9 @@ useHead({
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  line-height: 16px;
+  line-height: 17px;
   text-align: center;
   color: #fff;
   background: var(--color-danger);
@@ -1116,10 +1156,10 @@ useHead({
   right: 6px;
   width: 20px;
   height: 20px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1;
   color: var(--color-ink-faint);
-  background: var(--color-surface-dim);
+  background: var(--color-paper);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -1128,9 +1168,9 @@ useHead({
   transition: all var(--transition-fast);
 }
 
+/* 悬停只把图标变红，底色保持白 */
 .chat-user-delete:hover {
   color: var(--color-danger);
-  background: var(--color-surface);
 }
 
 .chat-user-item {
@@ -1169,7 +1209,7 @@ useHead({
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
   text-decoration: none;
@@ -1187,7 +1227,7 @@ useHead({
 }
 
 .chat-online-status {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-faint);
 }
 
@@ -1208,7 +1248,7 @@ useHead({
 /* 时间分隔 */
 .chat-time-divider {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
   padding: 12px 0 8px;
 }
@@ -1234,7 +1274,7 @@ useHead({
 .chat-msg-text {
   padding: 8px 12px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   word-break: break-word;
   white-space: pre-wrap;
@@ -1251,7 +1291,7 @@ useHead({
 }
 
 .chat-msg-time {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
   padding: 0 4px;
 }
@@ -1276,7 +1316,7 @@ useHead({
 .chat-textarea {
   width: 100%;
   padding: 0;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--color-ink);
   background: transparent;
@@ -1326,7 +1366,7 @@ useHead({
 }
 
 .emoji-trigger {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
 }
 
@@ -1348,7 +1388,7 @@ useHead({
 }
 
 .emoji-category-title {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--color-ink-muted);
   margin-bottom: 6px;
@@ -1368,7 +1408,7 @@ useHead({
   justify-content: center;
   width: 30px;
   height: 30px;
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
@@ -1380,13 +1420,13 @@ useHead({
 }
 
 .chat-input-hint {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-ink-faint);
 }
 
 .chat-send-btn {
   padding: 5px 16px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #fff;
   background: var(--color-primary);
@@ -1437,7 +1477,7 @@ useHead({
 
   .news-tab {
     padding: 6px 14px;
-    font-size: 13px;
+    font-size: 14px;
     border-left: none;
     border-bottom: 2px solid transparent;
     border-radius: var(--radius-sm);
@@ -1453,10 +1493,15 @@ useHead({
     gap: 12px;
   }
 
+  /* 窄屏动作文案较长，放不下时用户名/动作换行 */
+  .news-header {
+    flex-wrap: wrap;
+  }
+
   .news-avatar,
   .system-icon {
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
   }
 
   /* 移动端私信 */

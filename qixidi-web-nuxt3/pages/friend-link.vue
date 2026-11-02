@@ -3,14 +3,14 @@
     <!-- 简单 tab 切换 -->
     <div class="fl-tabs">
       <button
-        class="fl-tab-item"
+        class="bm-tab"
         :class="{ active: activeTab === 'list' }"
         @click="activeTab = 'list'"
       >
         友链列表
       </button>
       <button
-        class="fl-tab-item"
+        class="bm-tab"
         :class="{ active: activeTab === 'apply' }"
         @click="activeTab = 'apply'"
       >
@@ -52,14 +52,14 @@
           :href="link.linkUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="fl-card"
+          class="bm-card"
         >
           <div class="fl-card-avatar">
             <img v-if="link.linkAvatar" :src="link.linkAvatar" :alt="link.linkName" />
             <span v-else class="fl-card-avatar-placeholder">{{ link.linkName?.charAt(0) }}</span>
           </div>
           <div class="fl-card-body">
-            <h3 class="fl-card-name">{{ link.linkName }}</h3>
+            <h3 class="fl-card-name bm-card-name">{{ link.linkName }}</h3>
             <p class="fl-card-desc" v-if="link.linkIntro">{{ link.linkIntro }}</p>
           </div>
         </a>
@@ -183,37 +183,15 @@ watch(activeTab, (tab) => {
   padding-top: 10px;
 }
 
-/* 简单 tab 切换 */
+/* 简单 tab 切换（tab 样式走全局 .bm-tab 书签语言） */
 .fl-tabs {
   display: flex;
   gap: var(--space-2);
   padding-top: 16px;
+  /* 方块与底部 hairline 拉开距离，不贴线（用户三轮校距定值 6px） */
+  padding-bottom: 6px;
   margin-bottom: 15px;
-  margin-left: 82px;
   border-bottom: 1px solid var(--color-border-light);
-}
-
-.fl-tab-item {
-  padding: 6px 16px;
-  font-size: var(--text-sm);
-  color: var(--color-ink-muted);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  font-family: var(--font-body);
-  font-weight: 400;
-}
-
-.fl-tab-item:hover {
-  color: var(--color-ink);
-}
-
-.fl-tab-item.active {
-  color: var(--color-primary);
-  font-weight: 600;
-  background: var(--color-primary-light);
 }
 
 /* 加载/空状态 */
@@ -225,30 +203,11 @@ watch(activeTab, (tab) => {
   padding: 80px 0;
 }
 
-/* 友链卡片网格 */
+/* 友链卡片网格（卡片形态走全局 .bm-card 书签条） */
 .fl-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  margin-left: 92px;
-}
-
-.fl-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 20px;
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  text-decoration: none;
-  transition: all var(--transition-base);
-  border: 1px solid var(--color-border-light);
-}
-
-.fl-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--color-primary);
 }
 
 .fl-card-avatar {
@@ -305,14 +264,9 @@ watch(activeTab, (tab) => {
 }
 
 @media (max-width: 768px) {
-  .fl-tabs {
-    margin-left: 0;
-  }
-
   .fl-grid {
     grid-template-columns: 1fr;
     gap: 12px;
-    margin-left: 0;
   }
 }
 

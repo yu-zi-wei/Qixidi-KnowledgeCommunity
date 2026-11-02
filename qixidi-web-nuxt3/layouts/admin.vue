@@ -20,7 +20,7 @@
           />
           <div class="sidebar-user-info">
             <div class="sidebar-user-name">{{ authStore.user.nickname }}</div>
-            <div class="sidebar-user-meta"><UserRoleBadge /><span v-if="authStore.user.occupation" class="sidebar-user-desc">{{ authStore.user.occupation }}</span></div>
+            <div class="sidebar-user-meta"><UserRoleBadge /><span v-if="authStore.user.occupation" class="sidebar-user-desc" :title="authStore.user.occupation">{{ authStore.user.occupation }}</span></div>
           </div>
         </div>
         <n-menu
@@ -228,14 +228,22 @@ const handleApply = () => {
 }
 
 .sidebar-user-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-ink);
 }
 
+.sidebar-user-info {
+  flex: 1;
+  min-width: 0; /* flex 子项默认 min-width:auto，不断链职业省略号不生效 */
+}
+
 .sidebar-user-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* 职业只占一行，宽度不够省略号截断 */
 }
 
 .sidebar-user-meta {
@@ -243,6 +251,12 @@ const handleApply = () => {
   align-items: center;
   gap: 6px;
   margin-top: 4px;
+  min-width: 0;
+}
+
+/* 角色徽章经 n-tooltip 渲染，固定不被压缩 */
+.sidebar-user-meta :deep(.user-role-badge) {
+  flex-shrink: 0;
 }
 
 .admin-content {

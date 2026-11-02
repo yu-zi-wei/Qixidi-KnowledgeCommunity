@@ -1,16 +1,16 @@
 <template>
   <div class="archive-page">
-    <!-- 顶部 Tab 切换 -->
+    <!-- 顶部 Tab 切换（书签语言） -->
     <div class="archive-tab-bar">
       <button
-        class="archive-tab-item"
+        class="bm-tab"
         :class="{ active: activeTab === 'article' }"
         @click="switchTab('article')"
       >
         文章
       </button>
       <button
-        class="archive-tab-item"
+        class="bm-tab"
         :class="{ active: activeTab === 'notes' }"
         @click="switchTab('notes')"
       >
@@ -309,45 +309,15 @@ useHead({
   align-items: flex-start;
 }
 
-/* Tab 切换 */
+/* Tab 切换（tab 样式走全局 .bm-tab 书签语言） */
 .archive-tab-bar {
   width: 100%;
   display: flex;
-  gap: var(--space-1);
+  gap: var(--space-2);
   margin-bottom: var(--space-2);
+  /* 方块与底部 hairline 拉开距离，不贴线（用户三轮校距定值 6px） */
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--color-border-light);
-}
-
-.archive-tab-item {
-  padding: var(--space-2) var(--space-4);
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: var(--text-base);
-  color: var(--color-ink-muted);
-  transition: all var(--transition-fast);
-  position: relative;
-  font-weight: 400;
-}
-
-.archive-tab-item:hover {
-  color: var(--color-ink);
-}
-
-.archive-tab-item.active {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.archive-tab-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--color-primary);
-  border-radius: 1px;
 }
 
 /* 左侧年份目录 - 时间线 */
@@ -381,17 +351,18 @@ useHead({
   position: relative;
 }
 
+/* 年份节点 = 圆点：骑在竖线中心（竖线中心距按钮左缘 13px = padding 12 + 线宽半 1，圆点半宽 4 → left -17px） */
 .archive-year-btn::before {
   content: '';
   position: absolute;
-  left: -13px;
+  left: -17px;
   top: 50%;
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
-  border-radius: 50%;
   background: var(--color-border);
-  transition: all var(--transition-fast);
+  border-radius: 50%;
+  transition: background-color var(--transition-fast);
 }
 
 .archive-year-btn:hover {
@@ -409,7 +380,6 @@ useHead({
 
 .archive-year-btn.active::before {
   background: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
 /* 右侧内容 */
