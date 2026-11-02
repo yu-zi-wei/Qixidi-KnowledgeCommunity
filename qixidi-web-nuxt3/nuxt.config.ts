@@ -55,7 +55,22 @@ export default defineNuxtConfig({
         strict: true
     },
 
-    css: ['~/assets/css/tailwind.css', '~/assets/css/main.css'],
+    css: [
+        // 字体自托管（按 unicode-range 分片按需加载；替代 Google Fonts 外链，国内可达）
+        // logo 用 LXGW WenKai（霞鹜文楷，细秀楷风；light 300 为主，regular 400 兜底）
+        'lxgw-wenkai-webfont/lxgwwenkai-light.css',
+        'lxgw-wenkai-webfont/lxgwwenkai-regular.css',
+        // 文章列表大序号用 Playfair Display italic（杂志风优雅数字，衬线锚点）
+        '@fontsource/playfair-display/400-italic.css',
+        '@fontsource/playfair-display/600-italic.css',
+        '@fontsource/noto-serif-sc/400.css',
+        '@fontsource/noto-serif-sc/700.css',
+        '@fontsource/noto-sans-sc/400.css',
+        '@fontsource/noto-sans-sc/500.css',
+        '@fontsource/noto-sans-sc/700.css',
+        '~/assets/css/tailwind.css',
+        '~/assets/css/main.css'
+    ],
 
     runtimeConfig: {
         apiBase: 'http://127.0.0.1:9001',
@@ -88,11 +103,6 @@ export default defineNuxtConfig({
             ],
             link: [
                 {rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg'},
-                {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
-                {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
-                {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
-                {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
-                {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=optional'},
                 {rel: 'alternate', type: 'application/rss+xml', title: '栖息地 RSS', href: '/rss.xml'}
             ]
         }
