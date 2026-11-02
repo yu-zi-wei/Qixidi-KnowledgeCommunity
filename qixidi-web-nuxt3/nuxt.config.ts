@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from '@tailwindcss/vite'
+import { readdirSync, statSync, unlinkSync } from 'node:fs'
+import { join } from 'node:path'
 
 export default defineNuxtConfig({
     compatibilityDate: '2025-01-01',
@@ -56,18 +58,12 @@ export default defineNuxtConfig({
     },
 
     css: [
-        // 字体自托管（按 unicode-range 分片按需加载；替代 Google Fonts 外链，国内可达）
-        // logo 用 LXGW WenKai（霞鹜文楷，细秀楷风；light 300 为主，regular 400 兜底）
-        'lxgw-wenkai-webfont/lxgwwenkai-light.css',
-        'lxgw-wenkai-webfont/lxgwwenkai-regular.css',
-        // 文章列表大序号用 Playfair Display italic（杂志风优雅数字，衬线锚点）
+        // 字体策略：中文字体不自托管（全字重分片 ~23MB 全量进构建产物，部署包过大——用户定版），
+        // 走 main.css 字体栈的系统兜底：body PingFang/雅黑、display STSong/宋体、logo 楷体；
+        // 栈首保留 Noto/LXGW 等字体名，访客系统若装有同名字体则优先命中（表现更近原设计）。
+        // 例外：大序号 Playfair Display italic 是纯拉丁字体，两字重 woff2 仅 ~0.1MB，自托管保留
         '@fontsource/playfair-display/400-italic.css',
         '@fontsource/playfair-display/600-italic.css',
-        '@fontsource/noto-serif-sc/400.css',
-        '@fontsource/noto-serif-sc/700.css',
-        '@fontsource/noto-sans-sc/400.css',
-        '@fontsource/noto-sans-sc/500.css',
-        '@fontsource/noto-sans-sc/700.css',
         '~/assets/css/tailwind.css',
         '~/assets/css/main.css'
     ],
@@ -157,6 +153,33 @@ export default defineNuxtConfig({
             '/api': {
                 target: 'http://127.0.0.1:9001',
                 changeOrigin: true
+            }
+        }
+    },
+
+    hooks: {
+        // 构建产物清理：字体 css 均为 woff2 优先的多源引用（如 KaTeX 三源），
+        // woff/ttf 只是 2014 年前老浏览器的回退源，全量复制纯占部署体积。
+        // woff2 全现代浏览器支持；css 里的回退 url 保留无害（浏览器命中 woff2 不会发起回退请求）
+        close() {
+            const publicDir = join(process.cwd(), '.output', 'public')
+            let freed = 0
+            const walk = (dir: string) => {
+                for (const name of readdirSync(dir)) {
+                    const p = join(dir, name)
+                    const st = statSync(p)
+                    if (st.isDirectory()) walk(p)
+                    else if (/\.(woff|ttf)$/.test(name)) {
+                        freed += st.size
+                        unlinkSync(p)
+                    }
+                }
+            }
+            try {
+                walk(publicDir)
+                if (freed > 0) console.log(`[build] 已清理字体 woff/ttf 回退源 ${(freed / 1048576).toFixed(1)} MB`)
+            } catch {
+                // dev / generate 以外的场景无 .output/public，忽略
             }
         }
     }

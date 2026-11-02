@@ -218,7 +218,7 @@ watch(() => props.articles.length, () => {
   text-decoration: none;
 }
 
-/* 大序号：Playfair Display italic 杂志风数字（自托管，回退 Noto Serif） */
+/* 大序号：Playfair Display italic 杂志风数字（自托管仅 ~0.1MB，回退 Georgia/宋体族） */
 .feed-num {
   font-family: 'Playfair Display', var(--font-display);
   font-style: italic;
@@ -241,7 +241,7 @@ watch(() => props.articles.length, () => {
   min-width: 0;
 }
 
-/* 标题：与序号同族的衬线 display 字体（中文回落 Noto Serif，英文/数字用 Playfair） */
+/* 标题：与序号同族的衬线 display 字体（英文/数字 Playfair→Georgia，中文回落宋体族） */
 .feed-title {
   margin: 0;
   font-family: 'Playfair Display', var(--font-display);

@@ -71,11 +71,11 @@
   --md-link-color: #3b82f6;
   --md-table-border: #dcdfe3;
 
-  /* === 字体 === */
-  --font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', Georgia, serif;
+  /* === 字体（系统字体栈，不自托管；栈首字体名供装有同名字体的访客优先命中） === */
+  --font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', Georgia, 'SimSun', serif;
   --font-body: 'Noto Sans SC', 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  /* 霞鹜文楷：细秀楷风（配 font-weight:300 命中 light 面），回退系统楷体 */
+  /* logo 楷风：Mac 楷体 / Win 楷体（配 font-weight:300，未命中 light 面时浏览器合成细体） */
   --font-logo: 'LXGW WenKai', 'STKaiti', 'KaiTi', serif;
 
   /* 字体大小层级 */
