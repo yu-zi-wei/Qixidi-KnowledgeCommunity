@@ -312,7 +312,11 @@
                     <span class="news-title">{{ item.newsTitle }}</span>
                     <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                   </div>
-                  <div class="news-system-content">{{ item.newsContent }}</div>
+                  <!-- 公告按后台保存的换行排版（pre-wrap），默认折叠三行，长内容行内展开看全文 -->
+                  <div class="news-system-content" :class="{ expanded: expandedNews.has(idx) }">{{ item.newsContent }}</div>
+                  <button v-if="isNewsLong(item.newsContent)" class="news-expand-btn" @click="toggleNewsExpand(idx)">
+                    {{ expandedNews.has(idx) ? '收起' : '展开全文' }}
+                  </button>
                 </div>
               </div>
             </template>
@@ -486,12 +490,24 @@ const truncateText = (text: string, max: number) => {
   return text.length > max ? `${text.slice(0, max)}…` : text
 }
 
+// ==================== 系统消息展开（公告较长，默认折叠三行，行内展开看全文） ====================
+// 系统消息行无稳定 id（SQL 裸 id 列不匹配 VO 的 newsId），用行 idx 作 key；翻页/切 tab 重置
+const expandedNews = ref<Set<number>>(new Set())
+const toggleNewsExpand = (idx: number) => {
+  const next = new Set(expandedNews.value)
+  next.has(idx) ? next.delete(idx) : next.add(idx)
+  expandedNews.value = next
+}
+// 超过约三行才给展开入口（短通知完整显示，不需要按钮）
+const isNewsLong = (content?: string) => (content || '').length > 90
+
 // 从 URL 获取选中的聊天用户
 const chatTargetUid = computed(() => route.query.uid as string || '')
 
 // 切换 Tab / 评论子 tab 时重置页码
 watch(currentType, () => {
   currentPage.value = 1
+  expandedNews.value = new Set()
   markReadIfNeeded()
 })
 
@@ -503,6 +519,7 @@ watch(currentSub, () => {
 // 分页切换
 const handlePageChange = (page: number) => {
   currentPage.value = page
+  expandedNews.value = new Set()
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
@@ -974,17 +991,41 @@ useHead({
   flex-shrink: 0;
 }
 
-/* 系统消息正文：引用竖线分层 + 三行截断（类名独立，避免与内容区容器 .news-content 撞名） */
+/* 系统消息正文：引用竖线分层 + 保留后台保存的换行排版，默认三行截断（类名独立，避免与内容区容器 .news-content 撞名） */
 .news-system-content {
   font-size: 14px;
   color: var(--color-ink-muted);
   line-height: 1.7;
   padding-left: 10px;
   border-left: 2px solid var(--color-border-light);
+  white-space: pre-wrap;
+  word-break: break-word;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+
+/* 展开态：解除行数限制完整显示 */
+.news-system-content.expanded {
+  display: block;
+  -webkit-line-clamp: none;
+}
+
+/* 展开全文 / 收起（左缘与正文文字对齐：border 2px + padding 10px） */
+.news-expand-btn {
+  align-self: flex-start;
+  margin-left: 12px;
+  padding: 0;
+  font-size: 13px;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.news-expand-btn:hover {
+  text-decoration: underline;
 }
 
 /* 评论内容：引用竖线分层 + 三行截断，保留换行 */
