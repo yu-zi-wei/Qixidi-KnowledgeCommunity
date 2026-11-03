@@ -438,15 +438,24 @@ public class RedisUtils {
     }
 
     /**
-     * 获取 set数据，倒叙排列
+     * 获取 zset 数据，按分数倒序（LinkedHashSet 保持名次顺序，调用方可做名次加权）
      * @param key
-     * @param pageNum
-     * @param pageSize
+     * @param pageNum 偏移量（0 起）
+     * @param pageSize 取多少个（valueRangeReversed 是闭区间，末位 = pageNum + pageSize - 1）
      * @return
      */
     public static Set<Object> getZset(String key, int pageNum, int pageSize) {
         RScoredSortedSet<String> zset = CLIENT.getScoredSortedSet(key);
-        Set<Object> set = new HashSet<>(zset.valueRangeReversed(pageNum, pageSize));
+        Set<Object> set = new LinkedHashSet<>(zset.valueRangeReversed(pageNum, pageNum + pageSize - 1));
         return set;
+    }
+
+    /**
+     * 批量写入 zset 分数（重算/重建场景一次网络往返覆盖写；泛型通配以兼容 Map<String, Double> 等调用侧类型）
+     */
+    public static void zAddScoreBatch(String key, Map<?, Double> scoreMap) {
+        if (scoreMap == null || scoreMap.isEmpty()) return;
+        RScoredSortedSet<Object> zset = CLIENT.getScoredSortedSet(key);
+        zset.addAll(new HashMap<>(scoreMap));
     }
 }

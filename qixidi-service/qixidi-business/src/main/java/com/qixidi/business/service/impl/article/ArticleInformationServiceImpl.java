@@ -127,6 +127,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
      * @return 文章信息
      */
     @Override
+    public TableDataInfo<ArticleInformationVo> hotArticleList(PageQuery pageQuery) {
+        IPage<ArticleInformationVo> page = baseMapper.hotArticleList(pageQuery.build());
+        fillAuthorInfo(page.getRecords());
+        enrichWithRealTimeCounts(page.getRecords());
+        return TableDataInfo.build(page);
+    }
+
+    @Override
     public ArticleInformationVo queryById(Long id) {
         // 走列表同款 SQL：selectVoById 单表查询取不到分组名等关联展示字段（作者展示字段由 Service 组装）
         QueryWrapper<ArticleInformation> wrapper = Wrappers.query();
@@ -493,9 +501,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
                 searchRecordsMapper.insert(searchRecords);
             });
         }
-        Set<Object> labelSet = RedisUtils.getZset(String.format(RedisBusinessKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), 0, 10);
-        String result = StringUtils.join(labelSet, ", ");
-        IPage<ArticleInformationVo> page = baseMapper.articleRecommendList(bo, result, pageQuery.build());
+        // 兴趣标签按名次传入 SQL 做命中加权（未登录传空列表，退化为热度排序）
+        List<String> labels = new ArrayList<>();
+        if (uuid != null) {
+            RedisUtils.getZset(String.format(RedisBusinessKeyEnums.ARTICLE_INTIMACY.getKey(), uuid), 0, 10)
+                    .forEach(label -> labels.add(String.valueOf(label)));
+        }
+        IPage<ArticleInformationVo> page = baseMapper.articleRecommendList(bo, labels, pageQuery.build());
         fillAuthorInfo(page.getRecords());
         enrichWithRealTimeCounts(page.getRecords());
         return page;
@@ -594,10 +606,14 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         Map<Long, Integer> collectionCounts = articleCountQueryHelper.collectionCount(List.of(articleId));
         details.setCollectionTimes(collectionCounts.getOrDefault(articleId, 0));
 
-        // 获取作者统计（文章数、粉丝数、获赞数）
+        // 获取作者统计（文章数、小记数、随笔数、粉丝数、获赞数）
         String authorUuid = details.getUserId();
         Map<String, Integer> articleCounts = userCountQueryHelper.articleCount(List.of(authorUuid));
         details.setArticleCount(articleCounts.getOrDefault(authorUuid, 0));
+        Map<String, Integer> timeNotesCounts = userCountQueryHelper.timeNotesCount(List.of(authorUuid));
+        details.setTimeNotesCount(timeNotesCounts.getOrDefault(authorUuid, 0));
+        Map<String, Integer> dictumCounts = userCountQueryHelper.dictumCount(List.of(authorUuid));
+        details.setDictumCount(dictumCounts.getOrDefault(authorUuid, 0));
         Map<String, Integer> fansCounts = userCountQueryHelper.fansCount(List.of(authorUuid));
         details.setFansFollowCount(fansCounts.getOrDefault(authorUuid, 0));
         Map<String, Integer> fabulousCounts = userCountQueryHelper.fabulousCount(List.of(authorUuid));

@@ -43,6 +43,14 @@ public class ArticleFrontDeskController {
     }
 
     /**
+     * 热门文章列表（纯文章权重排序，不关联用户亲密度，所有访客同一榜单）
+     */
+    @PostMapping("/article/hot/list")
+    public TableDataInfo<ArticleInformationVo> hotArticleList(@Validated(QueryGroup.class) @RequestBody ArticleInformationBo bo) {
+        return iArticleInformationService.hotArticleList(bo);
+    }
+
+    /**
      * 查询文章信息列表
      */
     @PostMapping("/article/list")

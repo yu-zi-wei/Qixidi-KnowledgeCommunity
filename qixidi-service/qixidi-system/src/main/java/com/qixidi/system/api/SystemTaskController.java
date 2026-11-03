@@ -5,6 +5,7 @@ import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.annotation.LogModule;
 import com.qixidi.business.domain.vo.SystemTaskConfigVo;
 import com.qixidi.business.service.SystemTaskConfigService;
+import com.qixidi.business.task.ArticleIntimacyTask;
 import com.qixidi.business.task.ArticleTask;
 import com.qixidi.business.task.DictumTask;
 import com.qixidi.business.task.LabelTask;
@@ -30,6 +31,7 @@ public class SystemTaskController {
 
     private final SystemTaskConfigService systemTaskConfigService;
     private final ArticleTask articleTask;
+    private final ArticleIntimacyTask articleIntimacyTask;
     private final DictumTask dictumTask;
     private final LabelTask labelTask;
     private final StatTask statTask;
@@ -109,6 +111,17 @@ public class SystemTaskController {
     @GetMapping("/update_website_monthly_data")
     public void updateWebsiteMonthlyData() {
         statTask.StatTheInfoUpdate();
+    }
+
+    /**
+     * 重算文章标签亲密度任务（按 DB 全量行为重建 Redis 亲密度 zset，含时间衰减）
+     *
+     * @return
+     */
+    @Log(title = "重算文章标签亲密度任务", businessType = BusinessType.OTHER)
+    @GetMapping("/recalculate_article_intimacy")
+    public void recalculateArticleIntimacy() {
+        articleIntimacyTask.recalculateArticleIntimacy();
     }
 
 }

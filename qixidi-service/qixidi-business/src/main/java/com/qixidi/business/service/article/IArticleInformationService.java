@@ -35,6 +35,14 @@ public interface IArticleInformationService {
     ArticleInformationVo queryById(Long id);
 
     /**
+     * 热门文章列表（纯 heat_weight 排序，不关联用户亲密度）
+     *
+     * @param pageQuery 分页
+     * @return 文章信息分页
+     */
+    TableDataInfo<ArticleInformationVo> hotArticleList(PageQuery pageQuery);
+
+    /**
      * 查询文章信息列表
      *
      * @return 文章信息集合

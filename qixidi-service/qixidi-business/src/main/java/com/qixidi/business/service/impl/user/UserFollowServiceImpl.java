@@ -19,6 +19,7 @@ import com.qixidi.business.domain.vo.label.LabelInfoVo;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.user.UserFollowMapper;
+import com.qixidi.business.service.impl.article.ArticleInformationServiceImpl;
 import com.qixidi.business.service.user.IUserFollowService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,8 @@ public class UserFollowServiceImpl implements IUserFollowService {
     private final UserFollowMapper baseMapper;
     private final LabelInfoMapper labelInfoMapper;
     private final NewsUserRecordMapper newsUserRecordMapper;
+    // recordArticleIntimacy 声明在实现类上（跨 service 沿用 FabulousRecord/Collection 同款注入）
+    private final ArticleInformationServiceImpl articleInformationService;
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
 
@@ -76,12 +79,8 @@ public class UserFollowServiceImpl implements IUserFollowService {
             });
         } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注
             labelInfoMapper.updateAddFollow(bo.getTargetId());
-            Long aLong = baseMapper.selectCount(new LambdaQueryWrapper<UserFollow>()
-                    .eq(UserFollow::getTargetId, bo.getTargetId())
-                    .eq(UserFollow::getUid, bo.getUid())
-                    .eq(UserFollow::getType, UserFollowTypeEnums.LABEL_FOLLOW.getCode()));
-            log.error("关注异常，重复关注，target_id：uid：{}，type：{},具体业务：{}", bo.getTargetId(), bo.getUid(), UserFollowTypeEnums.LABEL_FOLLOW.getCode());
-            if (aLong > 0) return false;
+            // 记录标签亲密度（关注是强兴趣信号，分值高于浏览/点赞/收藏）
+            articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getTargetId(), 5D);
         }
         return baseMapper.insert(add) > 0;
     }
@@ -90,15 +89,15 @@ public class UserFollowServiceImpl implements IUserFollowService {
     @Override
     public boolean cancelFollow(UserFollowBo bo) {
         bo.setUid(LoginHelper.getTripartiteUuid());
-        if (bo.getType().equals(UserFollowTypeEnums.b_user_follow.getCode())) { //用户关注取消
-        } else if (bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注取消
-            labelInfoMapper.updateDeleteFollow(bo.getTargetId());
-        }
-
         int delete = baseMapper.delete(new LambdaQueryWrapper<UserFollow>()
                 .eq(UserFollow::getUid, bo.getUid())
                 .eq(UserFollow::getTargetId, bo.getTargetId())
                 .eq(UserFollow::getType, bo.getType()));
+        // 真正删到关注记录才回退计数与亲密度（原实现无条件回退，未关注时取消会把计数扣脏）
+        if (delete > 0 && bo.getType().equals(UserFollowTypeEnums.LABEL_FOLLOW.getCode())) { //标签关注取消
+            labelInfoMapper.updateDeleteFollow(bo.getTargetId());
+            articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getTargetId(), -5D);
+        }
         return delete > 0;
     }
 

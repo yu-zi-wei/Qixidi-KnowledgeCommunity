@@ -62,6 +62,18 @@
         </if>
     </select>
 
+    <!-- 热门文章：纯 heat_weight 排序，不关联用户亲密度（所有访客同一榜单，侧边栏「热门文章」数据源） -->
+    <select id="hotArticleList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
+        <include refid="ArticleInformationVo"/>
+        <where>
+            ai.state=0
+            and ai.platform_type =1
+            and ai.`audit_state`=2
+        </where>
+        order by ai.heat_weight desc,
+        ai.create_time desc
+    </select>
+
     <select id="articleList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         <include refid="ArticleInformationVo"/>
         <where>
@@ -86,6 +98,8 @@
         </where>
         order by ai.heat_weight desc, ai.create_time desc
     </select>
+    <!-- 精选：兴趣标签命中加权排序（第 1 兴趣命中 = 标签数分，名次每降一位减 1，未命中 0）
+         label_id 是逗号分隔多标签串，须 FIND_IN_SET 精确命中（like %id% 会误伤 1↔12） -->
     <select id="articleRecommendList" resultType="com.qixidi.business.domain.vo.article.ArticleInformationVo">
         <include refid="ArticleInformationVo"/>
         <where>
@@ -93,7 +107,16 @@
             and ai.platform_type =1
             and ai.`audit_state`=2
         </where>
-        order by #{labelResult} LIKE concat('%' ,label_id,'%') desc,
+        order by
+        <choose>
+            <when test="labels != null and labels.size() > 0">
+                (case
+                <foreach collection="labels" item="lb" index="idx" separator=" ">
+                    when FIND_IN_SET(#{lb}, ai.label_id) > 0 then ${labels.size() - idx}
+                </foreach>
+                else 0 end) desc,
+            </when>
+        </choose>
         ai.heat_weight desc,
         ai.create_time desc
     </select>

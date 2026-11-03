@@ -132,5 +132,7 @@ public class ArticleInformationVo extends ArticleInformation {
     private int specialColumnCount;
     private int fansSpecialColumn;
     private int circleCount;
+    private int timeNotesCount;
+    private int dictumCount;
 }
 

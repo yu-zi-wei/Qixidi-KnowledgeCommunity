@@ -20,6 +20,7 @@ public enum SystemTaskEnums {
     UPDATE_WEBSITE_MONTHLY_DATA(8, "更新网站每月数据任务"),
     SYNCING_USER_SITE_DATA(9, "用户网站数据同步任务"),
     SYNC_LABEL_GROUP_DATA(10, "同步标签分组数据任务"),
+    RECALCULATE_ARTICLE_INTIMACY(11, "重算文章标签亲密度任务"),
 
     ;
     private Integer code;
