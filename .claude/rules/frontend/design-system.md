@@ -8,12 +8,12 @@
 
 **设计优先**：所有样式开发必须遵循统一的设计系统，使用设计 token，禁止硬编码样式值。
 
-## 版面语言：一张纸（2026-11-02 定版）
+## 版面语言：一张纸（2026-11-02 定版；同日色温由宣纸暖调改为冷灰）
 
-**整页一张宣纸（`--color-page-bg` #F1ECDD），大面积内容容器一律透明**——不铺底色、不画边框/圆角/投影，半透明 blur 大面板已废弃（time-notes 首个迁移，其余页面照此）。层次只来自两处：
+**整页一张冷灰纸面（`--color-page-bg` #f4f5f7 / 深色 #17171b），大面积内容容器一律透明**——不铺底色、不画边框/圆角/投影，半透明 blur 大面板已废弃（time-notes 首个迁移，其余页面照此）。层次只来自两处：
 
-- **排版**：字号/字重对比（衬线大序号是视觉锚点）、墨色四阶浓淡、细分隔线（hairline 是纸上的排版线，不是盒子轮廓）
-- **小面积点缀**：页签方块 / 标签 pill / hover 墨色浸染（`color-mix(in srgb, var(--color-ink) 3~5%, transparent)`，双主题同式）/ 输入控件纸片底
+- **排版**：字号/字重对比（衬线大序号是视觉锚点，Playfair Display 自托管仅 0.1MB）、冷墨四阶浓淡（ink → ink-light → ink-muted → ink-faint）、细分隔线（hairline 是纸上的排版线，不是盒子轮廓）
+- **小面积点缀**：页签方块 / 标签 pill / hover 墨色浸染（`color-mix(in srgb, var(--color-ink) 2~4%, transparent)`，双主题同式；主色描边按钮类 hover 用 `color-mix(primary 16%)`）/ 输入控件纸片底
 
 ---
 
@@ -30,10 +30,13 @@
 --color-ink-muted     /* 辅助文字 */
 --color-ink-faint     /* 占位/禁用文字 */
 
-/* 背景颜色 */
---color-surface       /* 主背景 */
---color-surface-warm  /* 暖色背景 */
---color-surface-dim   /* 次级背景 */
+/* 背景颜色（中性冷灰三级纸面：纸片最浅 → 纸页居中 → 纸桌最深；warm 是历史命名，实为冷灰） */
+--color-page-bg       /* 整页纸面底（浅 #f4f5f7 / 深 #17171b） */
+--color-surface       /* 纸片（最浅一级） */
+--color-surface-warm  /* 纸页（居中一级，名遗留 warm 实为冷灰） */
+--color-surface-dim   /* 纸桌（最深一级） */
+--color-paper         /* 上浮白纸片（弹层/卡片叠纸） */
+--color-sunken        /* 凹陷面（输入控件底；hover 其上沾墨） */
 
 /* 边框颜色 */
 --color-border        /* 主边框 */
@@ -51,11 +54,13 @@
 
 ```css
 /* 字体族 */
---font-display        /* 标题字体（衬线） */
+--font-display        /* 标题字体（衬线；英文数字可叠 'Playfair Display'，自托管 italic 字面 ~0.1MB） */
 --font-body           /* 正文字体（无衬线） */
 --font-mono           /* 等宽字体 */
+--font-logo           /* Logo 楷风字体（LXGW WenKai / 楷体回落） */
 
 /* 字体大小 */
+--text-2xs: 12px
 --text-xs: 13px
 --text-sm: 15px
 --text-base: 17px
