@@ -17,6 +17,7 @@
 | 技能 | 文件 | 说明 |
 |------|------|------|
 | **规则管理** | `skills/common/rules-management.md` | 如何创建和维护规则 |
+| **发行版文案** | `skills/common/release-notes.md` | Release 标题与内容写作规范（git log 核对事实、禁形容词、结构模板） |
 
 ---
 
