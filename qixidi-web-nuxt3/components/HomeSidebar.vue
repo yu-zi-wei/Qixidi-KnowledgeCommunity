@@ -38,13 +38,13 @@
       </div>
     </div>
 
-    <!-- 精选文章 -->
+    <!-- 热门文章 -->
     <div class="sidebar-card" style="--delay: 2">
       <div class="card-header">
         <svg class="fixed-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
         </svg>
-        <span>精选文章</span>
+        <span>热门文章</span>
         <button class="refresh-btn" title="换一批" @click="handleRefresh">
           <svg class="fixed-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 2v6h-6"/>
@@ -62,7 +62,7 @@
           </NuxtLink>
         </li>
       </ol>
-      <p v-else class="sidebar-empty">暂无精选文章</p>
+      <p v-else class="sidebar-empty">暂无热门文章</p>
     </div>
 
     <!-- 站点信息 -->
@@ -158,7 +158,8 @@ const { data: recommendData, refresh: refreshRecommendData } = await useAsyncDat
   'home-sidebar-recommend',
   async () => {
     try {
-      return await articleApi.getRecommendList(recommendPage.value, 10)
+      // 热门榜单：纯权重排序的公共接口，与用户亲密度无关（所有访客同一榜单）
+      return await articleApi.getHotList(recommendPage.value, 10)
     } catch (e) {
       return { total: 0, rows: [] }
     }
@@ -368,7 +369,7 @@ const runningRemainDays = computed(() => {
   color: var(--color-ink-muted);
 }
 
-/* 精选文章列表 */
+/* 热门文章列表 */
 .rank-list {
   list-style: none;
   display: flex;

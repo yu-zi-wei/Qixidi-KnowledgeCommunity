@@ -88,6 +88,8 @@ watch(() => article.value, (newArticle) => {
         isFollow: newArticle.isFollow,
         // 统计数据
         articleCount: newArticle.articleCount,
+        timeNotesCount: newArticle.timeNotesCount,
+        dictumCount: newArticle.dictumCount,
         fansFollowCount: newArticle.fansFollowCount,
         fabulousCount: newArticle.fabulousCount
       },

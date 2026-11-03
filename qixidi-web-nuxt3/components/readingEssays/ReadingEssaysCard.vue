@@ -119,8 +119,8 @@ onMounted(() => {
 }
 
 .reading-essays-card:hover {
-  /* hover 只做墨水反应：凹陷面沾墨，无位移无投影 */
-  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-sunken));
+  /* hover 只做墨水反应：凹陷面沾墨，无位移无投影（浓度 2%：卡片面积大，hover 变色需克制） */
+  background: color-mix(in srgb, var(--color-ink) 2%, var(--color-sunken));
 }
 
 /* 随笔内容（点击打开详情，悬停显示与详情抽屉同款虚线下划线） */

@@ -10,6 +10,14 @@ export const useArticleApi = () => {
     )
   }
 
+  // 热门文章：纯文章权重排序，不关联用户亲密度（所有访客同一榜单）
+  const getHotList = (pageNum: number = 1, pageSize: number = 10) => {
+    return api.postPage<ArticleInfo>(
+      '/white/article/hot/list',
+      { pageNum, pageSize }
+    )
+  }
+
   const getSortList = (params: {
     pageNum?: number
     pageSize?: number
@@ -115,6 +123,7 @@ export const useArticleApi = () => {
 
   return {
     getRecommendList,
+    getHotList,
     getSortList,
     getCategoryList,
     getFollowList,

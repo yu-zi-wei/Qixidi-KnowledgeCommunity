@@ -15,6 +15,14 @@
           <span class="author-stat-num">{{ authorStats.articleCount || 0 }}</span>
           <span class="author-stat-label">文章</span>
         </div>
+        <div class="author-stat-item">
+          <span class="author-stat-num">{{ authorStats.timeNotesCount || 0 }}</span>
+          <span class="author-stat-label">小记</span>
+        </div>
+        <div class="author-stat-item">
+          <span class="author-stat-num">{{ authorStats.dictumCount || 0 }}</span>
+          <span class="author-stat-label">随笔</span>
+        </div>
         <div class="author-stat-divider"></div>
         <div class="author-stat-item">
           <span class="author-stat-num">{{ formatNumber(authorStats.fansFollowCount || 0) }}</span>
@@ -27,10 +35,10 @@
         </div>
       </div>
 
-      <!-- 作者是本人：前往主页；其他作者：关注按钮 -->
+      <!-- 作者是本人：主页入口；其他作者：关注按钮 -->
       <NuxtLink v-if="isSelfAuthor" :to="`/user-home/article/${author.userId}`" class="follow-btn">
-        <Home2 class="icon" />
-        前往主页
+        主页
+        <ChevronRight class="icon" />
       </NuxtLink>
       <button
         v-else
@@ -128,7 +136,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { UserPlus, UserCheck, Home2, BrandGithub, BrandGit, Mail, ExternalLink } from '@vicons/tabler'
+import { UserPlus, UserCheck, ChevronRight, BrandGithub, BrandGit, Mail, ExternalLink } from '@vicons/tabler'
 
 const { siteName } = useRuntimeConfig().public
 
@@ -169,6 +177,8 @@ const specialCard = computed(() => sidebarData.value.specialCard)
 // 作者统计数据
 const authorStats = computed(() => ({
   articleCount: author.value?.articleCount || 0,
+  timeNotesCount: author.value?.timeNotesCount || 0,
+  dictumCount: author.value?.dictumCount || 0,
   fansFollowCount: author.value?.fansFollowCount || 0,
   fabulousCount: author.value?.fabulousCount || 0
 }))
@@ -466,7 +476,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 20px;
+  gap: 14px; /* 五项（文章/小记/随笔/粉丝/获赞）单行均布 */
   padding: 12px 0;
   margin-bottom: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
@@ -519,8 +529,9 @@ onMounted(() => {
 }
 
 .follow-btn:hover {
-  background: var(--color-primary);
-  color: #fff;
+  /* 轻沾墨：主色 16% 浸染，不跳实底（与全站 hover 墨染语言一致，双主题同式） */
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  color: var(--color-primary);
 }
 
 .follow-btn.following {

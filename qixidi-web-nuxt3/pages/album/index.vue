@@ -546,13 +546,13 @@ const formatMonthTitle = (month: string) => {
   background: none;
   cursor: pointer;
   font-size: var(--text-sm);
-  color: var(--color-ink-light);
+  color: var(--color-ink-muted);
   transition: all var(--transition-fast);
   text-align: left;
 }
 
 .album-month-nav-item:hover {
-  color: var(--color-ink);
+  color: var(--color-ink-light);
 }
 
 .album-month-nav-item.active {
@@ -560,14 +560,29 @@ const formatMonthTitle = (month: string) => {
   font-weight: 600;
 }
 
+/* 右侧月份目录张数：紧跟月份文字（不推右端），比年份张数再小一档 */
 .album-month-nav-count {
-  font-size: var(--text-xs);
+  font-size: var(--text-2xs);
   color: var(--color-ink-faint);
+  white-space: nowrap;
 }
 
+/* 左侧年份目录张数：推到行右端与年份两端对齐（数字列纵向对齐） */
 .album-month-count {
+  margin-left: auto;
   font-size: var(--text-xs);
   color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+.album-month-nav-count::before,
+.album-month-count::before {
+  content: '「';
+}
+
+.album-month-nav-count::after,
+.album-month-count::after {
+  content: '」';
 }
 
 /* 右侧内容 */

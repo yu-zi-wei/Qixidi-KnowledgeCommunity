@@ -143,6 +143,16 @@ const updateActiveHeading = () => {
   })
 
   activeId.value = currentId
+
+  // 同步进度竖线高度：主色实线铺到当前项行中心（无激活项时归零）
+  nextTick(() => {
+    const list = document.querySelector('.toc-list')
+    const activeEl = list?.querySelector('.toc-item.active') as HTMLElement | null
+    if (list instanceof HTMLElement) {
+      const progress = activeEl ? `${activeEl.offsetTop + activeEl.offsetHeight / 2}px` : '0px'
+      list.style.setProperty('--toc-progress', progress)
+    }
+  })
 }
 
 onMounted(() => {
@@ -193,73 +203,34 @@ onUnmounted(() => {
 }
 
 /* 竖线放在 .toc-list 上（而非 .article-toc），跟随内容一起滚动，保证滚动后每个目录项旁都有竖线 */
+/* 底轨：全高均匀淡墨 hairline，是进度线之下的"未读"段 */
 .toc-list::before {
   content: '';
   position: absolute;
-  left: -27.5px; /* 对齐圆点中心：圆点相对 li left -30.5 + 半宽 4 = -26.5，竖线宽 2 中心取 -26.5 → left -27.5 */
+  left: -27.5px;
   top: 4px;
   bottom: 4px;
   width: 2px;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.08) 8%,
-    rgba(0, 0, 0, 0.08) 92%,
-    transparent 100%
-  );
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   border-radius: 1px;
 }
 
-.dark .toc-list::before {
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 8%,
-    rgba(255, 255, 255, 0.08) 92%,
-    transparent 100%
-  );
+/* 进度线：主色实线从顶铺到当前项行中心，高度由 --toc-progress 驱动（滚动高亮时 JS 同步） */
+.toc-list::after {
+  content: '';
+  position: absolute;
+  left: -27.5px;
+  top: 4px;
+  width: 2px;
+  height: var(--toc-progress, 0px);
+  background: var(--color-primary);
+  border-radius: 1px;
+  transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toc-item {
   position: relative;
   margin-bottom: 0;
-}
-
-/* 圆点指示器 - 对齐竖线中心，完全不透明避免颜色叠加 */
-.toc-item::before {
-  content: '';
-  position: absolute;
-  left: -29.5px; /* 对齐竖线中心：竖线中心 -26.5，圆点半宽 3 → left -29.5 */
-  top: 16px; /* 对齐第一行文字中心：padding-top(6) + 半行高(~10)；多行时圆点不会跑到行间 */
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #d1d5db;
-  border: none;
-  box-shadow: 0 0 0 3px #fff;
-  z-index: 1;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.dark .toc-item::before {
-  background: #4b5563;
-  box-shadow: 0 0 0 3px #1a1a1a;
-}
-
-/* 激活状态 - 品牌色 + 微光晕 */
-.toc-item.active::before {
-  background: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(154, 113, 88, 0.15);
-}
-
-/* 悬停状态 */
-.toc-item:hover::before {
-  background: rgba(154, 113, 88, 0.25);
-}
-
-.toc-item.active:hover::before {
-  background: var(--color-primary);
 }
 
 .toc-link {
@@ -275,8 +246,9 @@ onUnmounted(() => {
   transition: color 0.2s ease;
 }
 
+/* hover 用墨色预览即可，主色留给 active 态 */
 .toc-link:hover {
-  color: var(--color-primary);
+  color: var(--color-ink);
 }
 
 /* 层级缩进 */
@@ -292,9 +264,9 @@ onUnmounted(() => {
   padding-left: 32px;
 }
 
-/* 激活状态文字 */
+/* 激活状态文字：主色与进度线同源 */
 .toc-item.active .toc-link {
-  color: var(--color-ink);
+  color: var(--color-primary);
   font-weight: 500;
 }
 </style>

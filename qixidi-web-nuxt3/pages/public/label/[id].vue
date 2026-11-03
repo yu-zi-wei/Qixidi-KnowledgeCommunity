@@ -45,7 +45,7 @@
           v-model:value="searchKeyword"
           placeholder="搜索文章标题"
           clearable
-          size="small"
+          size="medium"
           class="lb-search"
         >
           <template #prefix>

@@ -79,6 +79,7 @@
   --font-logo: 'LXGW WenKai', 'STKaiti', 'KaiTi', serif;
 
   /* 字体大小层级 */
+  --text-2xs: 12px;
   --text-xs: 13px;
   --text-sm: 15px;
   --text-base: 17px;

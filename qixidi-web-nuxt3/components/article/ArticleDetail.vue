@@ -363,14 +363,15 @@ const labelItems = computed(() => {
   opacity: 1;
 }
 
-/* 文章标题 - 简洁大气 */
+/* 文章标题 - 衬线 display 字体，与首页列表大序号/标题同族（英文数字 Playfair，中文回落宋体族） */
 .article-title {
+  font-family: 'Playfair Display', var(--font-display);
   font-size: 37px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.25;
   color: var(--color-ink);
   margin: 0 0 24px 0;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
 }
 
 .article-title::after {
