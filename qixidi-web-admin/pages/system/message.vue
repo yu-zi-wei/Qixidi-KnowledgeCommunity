@@ -256,20 +256,8 @@ const operatingId = ref<number | null>(null);
 
 const doToggleState = (row: SystemMessageRow) => {
   const toFail = row.state === 0;
-  const confirm = toFail
-    ? dialog.warning({
-        title: '失效确认',
-        content: `失效后「${row.newsTitle}」立即从所有用户的消息列表隐藏，恢复后重新可见，确认失效？`,
-        positiveText: '失效',
-        negativeText: '取消'
-      })
-    : dialog.info({
-        title: '恢复确认',
-        content: `恢复后「${row.newsTitle}」重新对全体用户可见，确认恢复？`,
-        positiveText: '恢复',
-        negativeText: '取消'
-      });
-  confirm.onPositiveClick(async () => {
+  // onPositiveClick 必须写进配置对象——dialog.xxx() 返回对象上事后挂回调不生效（点确认直接关弹窗，不调接口）
+  const onPositive = async () => {
     operatingId.value = row.id!;
     try {
       await updateMessageState(row.id!, toFail ? 1 : 0);
@@ -280,7 +268,24 @@ const doToggleState = (row: SystemMessageRow) => {
     } finally {
       operatingId.value = null;
     }
-  });
+  };
+  if (toFail) {
+    dialog.warning({
+      title: '失效确认',
+      content: `失效后「${row.newsTitle}」立即从所有用户的消息列表隐藏，恢复后重新可见，确认失效？`,
+      positiveText: '失效',
+      negativeText: '取消',
+      onPositiveClick: onPositive
+    });
+  } else {
+    dialog.info({
+      title: '恢复确认',
+      content: `恢复后「${row.newsTitle}」重新对全体用户可见，确认恢复？`,
+      positiveText: '恢复',
+      negativeText: '取消',
+      onPositiveClick: onPositive
+    });
+  }
 };
 
 // ---------- 表格列 ----------

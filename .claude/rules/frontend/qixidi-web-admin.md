@@ -63,6 +63,7 @@ layouts/default.vue：header 左 <AdminBreadcrumb />（数据源 useAdminMenu）
 - **URL 条件注入（收录数等点击跳转到列表页带条件）**：页面读 `route.query` 初值（toId 转数字）→ searchFields 对应字段 `defaultValue` + 外层 `:key="listKey"`（query 变化即重建 AdminListPage，翻页状态归零属预期）——参考 `pages/article/index.vue`（labelId/groupingId/specialId）、`pages/dictum/index.vue`（groupId/albumId）
 - **行内操作 loading** 用 `operatingId === row.id` 匹配单行
 - **🔴 操作列所有按钮执行前一律二次确认**（用户定版，含通过/拒绝等状态操作）：正向操作 `dialog.info`、破坏性操作（拒绝/删除/冻结）`dialog.warning`，文案写明后果（如"通过后文章将对外可见""删除后不可恢复"）
+- **🔴 dialog 确认回调必须写进配置对象**：`dialog.warning/info()` 返回对象上事后赋值或调用 `onPositiveClick` 不生效——点确认直接关弹窗、不调接口且无编译错（实证 message.vue 失效按钮）；分支不同的两个弹窗抽公共回调函数分别传入 `onPositiveClick` 字段
 - **状态终审（审核/冻结）走专用接口**只传 ids+结果（如 `PUT /system/article/information/audit`），不走编辑 PUT；真正的整体编辑受 EditGroup 必填约束，列表行数据缺字段（如 articleContent）先调详情接口补全再提交；TripartiteUser 无 EditGroup 约束，冻结只传 `{uuid, state}`
 - teleport 组件（n-drawer/n-modal）宽度只能 inline `:style`，scoped 尺寸类选不中（同门户规则）
 - **视觉体系（2026-11-02 定稿：墨水与纸张）**：浅色默认（仅显式 dark 才深色，app.vue）；暖纸底色系——内容区 #FAF9F6 / 侧栏米白 #EDEAE1（深一档分层），区块是白纸片卡片（`--panel-bg` 白 + `--hairline` #E8E4D9 暖灰细边框 + `--panel-shadow` 中性轻投影，圆角 10px）；品牌墨水蓝 #3D5A80（前台树形 logo 同源，低饱和灰调与暖纸同族，如墨水落在纸面）只做交互点缀——浅 `#3D5A80`（hover #4E6E99 / pressed #2E4560）/ 深色亮墨蓝 `#8FA9C4`（hover #A5BCD4），非 Naive 上下文用布局根注入的 `--cell-link`/`--logo-bg` 变量（与 app.vue primaryColor 同源）；菜单选中墨水浸染 #C9D4E2（activeHover #BCC9DA）、td hover #F0F3F7、滚动条 #b9c4d4（`--scrollbar-thumb`，样式在 admin-table.scss）；深色模式骨架不变（纸片 #1a1a1e、侧栏墨黑 #131820）。拒绝高饱和鲜色/渐变紫——品牌色必须保持低饱和墨调
