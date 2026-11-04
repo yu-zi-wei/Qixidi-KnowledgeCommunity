@@ -30,6 +30,7 @@ AI 唯一入口是 `qixidi-ai` 模块（Spring AI），禁止再引入直调大�
 ## MCP Tool 开发规范（qixidi-mcp）
 
 - 注册一律 `@Tool`（spring-ai-model）走现有 ToolCallbackProvider 装配；不用 `@McpTool`（纯 MCP 注解装配，工具无法同时复用给 qixidi-ai ChatClient）
+- **新 tool 类必须同步在 `McpServerConfig.tools()` 的 toolObjects 显式登记**：@Component 不够，漏登记则工具对 /mcp 与 AI ChatClient 均不暴露，启动无任何报错（静默失效）
 - 工具名 snake_case 动词开头（create_xxx / update_xxx / list_xxx / get_xxx / delete_xxx）；description 三要素：干什么 + 入参取值来源（来自哪个工具的返回值）+ 副作用/状态流转（如"提交后进入审核 UNDER_REVIEW"）
 - 入参与 POJO 字段一律 `@ToolParam(description, required)`：可选参数必须显式 `required = false`——POJO 字段默认 required（SpringAiSchemaModule requiredByDefault=true），不标 required 数组会全量误导调用方；必填性随场景变化（create 必填/update 可选）时标 false、场景写进 description（参考 McpArticleBo）
 - description 写明真实约束：枚举值（type：1 原创 2 转载）、长度（摘要 ≤200 字）、格式（yyyy-MM-dd）、大小（图片 ≤10MB）；无依据的约束不编造

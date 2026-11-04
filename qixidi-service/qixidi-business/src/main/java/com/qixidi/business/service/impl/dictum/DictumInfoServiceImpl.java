@@ -282,5 +282,12 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     public boolean deleteWithValidById(Long id, Long groupId) {
         return baseMapper.deleteById(id) > 0;
     }
+
+    @Override
+    public DictumInfo getByUidAndId(String uid, Long id) {
+        return baseMapper.selectOne(Wrappers.<DictumInfo>lambdaQuery()
+                .eq(DictumInfo::getUid, uid)
+                .eq(DictumInfo::getId, id));
+    }
 }
 

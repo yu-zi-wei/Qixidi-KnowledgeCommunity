@@ -2,6 +2,7 @@ package com.qixidi.business.service.dictum;
 
 import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
@@ -75,5 +76,12 @@ public interface IDictumInfoService {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     boolean deleteWithValidById(Long id, Long groupId);
+
+    /**
+     * 按属主 uid + id 查随笔（单表，不存在或非本人返回 null）。
+     * MCP agent 更新/删除前校验属主用——updateByBo/deleteWithValidById 无属主校验，
+     * queryById 对不存在 id 会 NPE，均不适合直接复用。
+     */
+    DictumInfo getByUidAndId(String uid, Long id);
 }
 

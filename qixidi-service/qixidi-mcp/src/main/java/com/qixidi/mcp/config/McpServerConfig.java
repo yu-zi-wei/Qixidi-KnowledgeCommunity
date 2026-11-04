@@ -3,6 +3,7 @@ package com.qixidi.mcp.config;
 import com.qixidi.mcp.auth.McpApiKeyFilter;
 import com.qixidi.mcp.service.ApiKeyService;
 import com.qixidi.mcp.tools.ArticleTools;
+import com.qixidi.mcp.tools.DictumTools;
 import com.qixidi.mcp.tools.PingTool;
 import com.qixidi.mcp.tools.PublishContextTool;
 import com.qixidi.mcp.tools.SkillTool;
@@ -25,10 +26,11 @@ public class McpServerConfig {
     @Bean
     public ToolCallbackProvider tools(PingTool pingTool, PublishContextTool publishContextTool,
                                       ArticleTools articleTools, UploadImageTool uploadImageTool,
-                                      TimeNotesTool timeNotesTool, SkillTool skillTool) {
+                                      TimeNotesTool timeNotesTool, DictumTools dictumTools,
+                                      SkillTool skillTool) {
         return MethodToolCallbackProvider.builder()
             .toolObjects(pingTool, publishContextTool, articleTools, uploadImageTool,
-                timeNotesTool, skillTool)
+                timeNotesTool, dictumTools, skillTool)
             .build();
     }
 
