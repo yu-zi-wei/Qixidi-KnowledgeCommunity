@@ -36,6 +36,8 @@ GitHub：https://github.com/yu-zi-wei/Qixidi-KnowledgeCommunity
 ```text
 qixidi/
 │
+├── deploy  # 部署交付（初始化 SQL + 配置模板 + nginx 配置，后续补充 docker 部署脚本）
+│
 ├── qixidi-service  # 项目后端（Spring Boot 4 + Java 17）
 │   │
 │   ├── qixidi-startup  # 启动模块
@@ -54,7 +56,7 @@ qixidi/
 │   │
 │   ├── qixidi-common  # 公共模块
 │   │
-│   └── db  # sql文件（需要可加微信（请注明来意，sql是有偿的：169元/包售后）：zsh2978824265）
+│   └── db  # 数据库增量变更脚本（全量初始化脚本在 deploy/db/ 下）
 │
 ├── qixidi-web-nuxt3  # 门户 + 用户后台（Nuxt 3 SSR）
 │
@@ -219,9 +221,5 @@ qixidi/
 ---
 
 ## 最后
-
-问题咨询可以添加我的微信（请注明来意）：zsh2978824265
-
-![wx.png](img%2Fwx.png)
 
 ————帅哥美女们看到这了，点个 Star 再走吧！
