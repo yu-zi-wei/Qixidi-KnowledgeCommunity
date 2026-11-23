@@ -2,12 +2,6 @@ package com.qixidi.business.domain.enums;
 
 public enum RedisBusinessKeyEnums {
     /**
-     * 已退役：点赞时间戳（articleId:uid → timestamp，7 天窗口的周期点赞判断）。
-     * 单次点赞模型下已赞状态由 DB 记录判断，此 key 不再读写；Redis 中的残留 map 无消费方，可择机清理
-     */
-    @Deprecated
-    ARTICLE_LIKED_USER_KEY("ARTICLE_LIKED_USER_KEY", "点赞文章的用户列表"),
-    /**
      * 文章浏览
      */
     ARTICLE_GLANCE_OVER("ARTICLE_GLANCE_OVER:%s:%s", "文章浏览记录：文章id：ip"),
