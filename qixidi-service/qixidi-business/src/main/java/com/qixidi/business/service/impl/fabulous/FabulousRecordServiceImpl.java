@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
-import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
@@ -20,7 +19,6 @@ import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
-import com.qixidi.business.domain.enums.RedisBusinessKeyEnums;
 import com.qixidi.business.domain.enums.news.NewsType;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
@@ -200,10 +198,9 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
         record.setCreateTime(new Date());
         baseMapper.insert(record);
 
-        // 2. 文章专属：Redis 点赞时间戳（热度加权）+ 标签亲密度
+        // 2. 文章专属：标签亲密度（原 Redis 点赞时间戳是周期点赞的 7 天窗口判断用，
+        //    单次点赞模型下已由 DB 记录判断取代，时间戳不再写入）
         if (Objects.equals(bo.getType(), TYPE_ARTICLE)) {
-            String redisKey = RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey();
-            RedisUtils.setCacheMapValue(redisKey, bo.getTypeId() + ":" + bo.getUid(), System.currentTimeMillis());
             articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), 2D);
         }
 
@@ -240,10 +237,8 @@ public class FabulousRecordServiceImpl implements IFabulousRecordService {
                 .eq(FabulousRecord::getTypeId, bo.getTypeId())
                 .eq(FabulousRecord::getType, bo.getType()));
 
-        // 2. 文章专属：删 Redis 时间戳 + 回退亲密度
+        // 2. 文章专属：回退亲密度（Redis 时间戳已随单次点赞模型退役，不再维护）
         if (Objects.equals(bo.getType(), TYPE_ARTICLE)) {
-            String redisKey = RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey();
-            RedisUtils.delCacheMapValue(redisKey, bo.getTypeId() + ":" + bo.getUid());
             articleInformationService.recordArticleIntimacy(bo.getUid(), bo.getLabelId(), -2D);
         }
 

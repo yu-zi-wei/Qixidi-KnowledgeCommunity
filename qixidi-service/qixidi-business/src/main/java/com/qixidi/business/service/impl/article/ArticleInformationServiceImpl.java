@@ -43,6 +43,7 @@ import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.SearchRecords;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
 import com.qixidi.business.domain.entity.collection.CollectionRecord;
+import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.entity.label.LabelInfo;
 import com.qixidi.business.domain.entity.news.NewsSystemInfo;
 import com.qixidi.business.domain.entity.user.UserFollow;
@@ -58,6 +59,7 @@ import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.SearchRecordsMapper;
 import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.collection.CollectionRecordMapper;
+import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
 import com.qixidi.business.mapper.label.LabelGroupingInfoMapper;
 import com.qixidi.business.mapper.label.LabelInfoMapper;
 import com.qixidi.business.mapper.news.NewsSystemInfoMapper;
@@ -111,6 +113,7 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
     private final LabelInfoMapper labelInfoMapper;
     private final LabelGroupingInfoMapper labelGroupingInfoMapper;
     private final CollectionRecordMapper collectionRecordMapper;
+    private final FabulousRecordMapper fabulousRecordMapper;
     private final UserFollowMapper userFollowMapper;
     private final SearchRecordsMapper searchRecordsMapper;
     private final ToShieldWordMapper toShieldWordMapper;
@@ -620,14 +623,13 @@ public class ArticleInformationServiceImpl implements IArticleInformationService
         details.setFabulousCount(fabulousCounts.getOrDefault(authorUuid, 0));
 
         String uuid = LoginHelper.getTripartiteUuid();
-        // 获取当前用户点赞状态
+        // 获取当前用户点赞状态（单次点赞模型：DB 记录存在即已赞，与下方收藏判断对称；
+        // 原 Redis 时间戳 7 天窗口判断是周期点赞语义，单次模型下会造成"7 天后显示未赞但点赞点不动"）
         if (uuid != null) {
-            String redisKey = RedisBusinessKeyEnums.ARTICLE_LIKED_USER_KEY.getKey();
-            Object likeTimestamp = RedisUtils.getCacheMapValue(redisKey, articleId + ":" + uuid);
-            if (likeTimestamp != null) {
-                long ts = Long.parseLong(likeTimestamp.toString());
-                details.setIsFabulous((System.currentTimeMillis() - ts) < 7L * 24 * 60 * 60 * 1000);
-            }
+            details.setIsFabulous(fabulousRecordMapper.selectCount(new LambdaQueryWrapper<FabulousRecord>()
+                    .eq(FabulousRecord::getUid, uuid)
+                    .eq(FabulousRecord::getTypeId, articleId)
+                    .eq(FabulousRecord::getType, 1)) > 0);
         }
         if (ObjectUtils.isEmpty(uuid)) return details;
         //获取当前用户收藏状态
