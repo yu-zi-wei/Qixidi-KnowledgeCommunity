@@ -1,10 +1,11 @@
 <template>
   <Teleport to="body">
-    <Transition name="preview" @before-leave="onBeforeLeave" @after-leave="onAfterLeave">
+    <Transition name="preview" @before-leave="onBeforeLeave">
       <div
         v-if="visible"
         class="image-preview-overlay"
         @click.self="close"
+        @wheel.prevent
       >
         <!-- 关闭按钮 -->
         <button class="close-btn" @click="close">
@@ -254,50 +255,29 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
-// 锁定/恢复 body 滚动（标志位防止重复锁定）
-let scrollLocked = false
-const lockBodyScroll = () => {
-  if (scrollLocked) return
-  scrollLocked = true
-  document.documentElement.style.overflow = 'hidden'
-  document.body.style.overflow = 'hidden'
-}
-const restoreBodyScroll = () => {
-  if (!scrollLocked) return
-  scrollLocked = false
-  document.documentElement.style.overflow = ''
-  document.body.style.overflow = ''
-}
+// 滚动策略：不锁 html/body 的 overflow（锁过会触发滚动条宽度重排，
+// sticky 导航/侧栏偶发跳回文档顶部即「消失」；残留锁还会跨会话污染）——
+// 改为 overlay 上 @wheel.prevent 拦截滚轮穿透，遮罩下的页面自然滚不动，
+// 浏览器滚动条全程保留。
 
 // 离开动画开始前：让 overlay 透传触摸，页面立即恢复可交互
 const onBeforeLeave = (el: Element) => {
   ;(el as HTMLElement).style.pointerEvents = 'none'
 }
 
-// 离开动画结束后：恢复 body 滚动
-const onAfterLeave = () => {
-  restoreBodyScroll()
-}
-
 // 监听 visible 变化，重置状态
 watch(() => props.visible, (val) => {
   if (val) {
     reset()
-    lockBodyScroll()
   }
-  // 关闭时的恢复交给 @before-leave + @after-leave
 })
 
 onMounted(() => {
-  // 防止上次会话残留的 overflow 锁定
-  document.documentElement.style.overflow = ''
-  document.body.style.overflow = ''
   document.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
-  restoreBodyScroll()
 })
 </script>
 
