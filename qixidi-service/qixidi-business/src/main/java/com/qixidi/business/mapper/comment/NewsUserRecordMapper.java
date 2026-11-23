@@ -37,19 +37,19 @@ public interface NewsUserRecordMapper extends BaseMapper<NewsUserRecord> {
                                            @Param("aliveUids") List<String> aliveUids, Page<NewsUserRecord> build);
 
     /**
-     * 点赞消息分页（aliveUids=存活用户集合，等价原 join um.state=0 过滤；发送者展示字段由 Service 组装）
+     * 点赞消息分页（types=点赞主/子类型集合，文章 2 + 小记 8；aliveUids=存活用户集合，发送者展示字段由 Service 组装）
      */
-    IPage<NewsUserInfoVo> selectFabulousNews(@Param("uid") String uuid, @Param("type") Integer type,
+    IPage<NewsUserInfoVo> selectFabulousNews(@Param("uid") String uuid, @Param("types") List<Integer> types,
                                               @Param("aliveUids") List<String> aliveUids, Page<NewsUserRecord> build);
 
     /**
-     * 按天统计互动趋势（title 区分序列：fabulous=获赞 comment=评论，评论子类型 6/7 并入评论）
+     * 按天统计互动趋势（title 区分序列：fabulous=获赞 comment=评论，评论子类型 6/7 并入评论、点赞子类型 8/9 并入获赞）
      */
     @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') as dateTimes, " +
-        "CASE WHEN type = 2 THEN 'fabulous' ELSE 'comment' END as title, COUNT(*) as censusSum " +
+        "CASE WHEN type IN (2, 8, 9) THEN 'fabulous' ELSE 'comment' END as title, COUNT(*) as censusSum " +
         "FROM b_news_user_record " +
-        "WHERE uid = #{uid} AND type IN (1, 2, 6, 7) AND create_time >= #{time} " +
-        "GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d'), CASE WHEN type = 2 THEN 'fabulous' ELSE 'comment' END " +
+        "WHERE uid = #{uid} AND type IN (1, 2, 6, 7, 8, 9) AND create_time >= #{time} " +
+        "GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d'), CASE WHEN type IN (2, 8, 9) THEN 'fabulous' ELSE 'comment' END " +
         "ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
     List<CensusVo> selectInteractTrend(@Param("uid") String uid, @Param("time") String time);
 }

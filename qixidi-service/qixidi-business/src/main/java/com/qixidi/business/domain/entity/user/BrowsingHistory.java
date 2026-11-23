@@ -56,11 +56,22 @@ public class BrowsingHistory {
     @ExcelProperty(value = "目标uid")
     private String targetUid;
     /**
-     * 目标类型（1：文章，2：帖子）
+     * 目标类型（1：文章，2：小记，3：随笔）
      */
     @ExcelProperty(value = "目标类型", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "1=：文章，2：帖子")
+    @ExcelDictFormat(readConverterExp = "1=：文章，2=：小记，3=：随笔")
     private Integer targetType;
+
+    /**
+     * 行为类型（1：阅读，2：点赞，3：评论）——该足迹最近一次由什么行为产生
+     */
+    @ExcelDictFormat(readConverterExp = "1=：阅读，2=：点赞，3=：评论")
+    private Integer actionType;
+
+    /**
+     * 评论内容快照（仅评论行为写入；评论后续被删除不影响快照）
+     */
+    private String content;
 
     private Date createTime;
 

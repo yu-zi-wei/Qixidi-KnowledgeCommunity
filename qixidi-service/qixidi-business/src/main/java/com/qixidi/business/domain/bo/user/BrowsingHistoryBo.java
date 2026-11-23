@@ -52,11 +52,15 @@ public class BrowsingHistoryBo extends BaseEntity {
     private String targetUid;
 
     /**
-     * 目标类型（1：文章，2：帖子）
+     * 目标类型（1：文章，2：小记，3：随笔）
      */
-    @NotNull(message = "目标类型（1：文章，2：帖子）不能为空", groups = {AddGroup.class, EditGroup.class})
+    @NotNull(message = "目标类型（1：文章，2：小记，3：随笔）不能为空", groups = {AddGroup.class, EditGroup.class})
     private Integer targetType;
 
+    /**
+     * 行为类型（1：阅读，2：点赞，3：评论），可选，默认阅读
+     */
+    private Integer actionType;
 
 }
 

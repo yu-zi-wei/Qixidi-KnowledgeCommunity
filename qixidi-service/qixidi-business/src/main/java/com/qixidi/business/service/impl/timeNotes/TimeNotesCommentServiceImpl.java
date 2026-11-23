@@ -23,6 +23,7 @@ import com.qixidi.business.mapper.TimeNotesMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.timeNotes.TimeNotesCommentMapper;
+import com.qixidi.business.service.IBrowsingHistoryService;
 import com.qixidi.business.service.timeNotes.TimeNotesCommentService;
 import com.qixidi.common.domain.enums.StatusEnums;
 import jakarta.annotation.Resource;
@@ -63,6 +64,8 @@ public class TimeNotesCommentServiceImpl implements TimeNotesCommentService {
     private NewsUserRecordMapper newsUserRecordMapper;
     @Autowired
     private TimeNotesMapper timeNotesMapper;
+    @Autowired
+    private IBrowsingHistoryService browsingHistoryService;
 
     @Resource(name = "threadPoolInstance")
     private ExecutorService executorService;
@@ -83,6 +86,13 @@ public class TimeNotesCommentServiceImpl implements TimeNotesCommentService {
         int insert = timeNotesCommentMapper.insert(comment);
         if (insert < 0) {
             throw new ServiceException("添加失败");
+        }
+        // 记录用户足迹（评论过的小记，targetType=2；行为=评论，快照评论内容；标题缺省用日期兜底）
+        TimeNotes note = timeNotesMapper.selectById(bo.getTimeNotesId());
+        if (note != null) {
+            String noteTitle = StringUtils.isNotBlank(note.getTitle()) ? note.getTitle()
+                    : ("小记 " + note.getRecordTime());
+            browsingHistoryService.recordFootprint(note.getId(), noteTitle, note.getUid(), 2, 3, bo.getContent());
         }
         //通知被评论人（一级评论通知小记作者、回复通知被回复人），自己评论自己不发；异步落库 + WebSocket 推送
         if (!comment.getCommentUid().equals(bo.getTargetUid())) {

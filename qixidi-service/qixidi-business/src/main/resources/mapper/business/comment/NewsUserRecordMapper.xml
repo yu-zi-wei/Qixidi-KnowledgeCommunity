@@ -40,6 +40,7 @@
         ORDER BY nur.create_time DESC
     </select>
 
+    <!-- types=点赞主/子类型集合（文章 2 + 小记 8），type 随行返回供前端区分跳转 -->
     <select id="selectFabulousNews" resultType="com.qixidi.business.domain.vo.news.NewsUserInfoVo">
         SELECT nur.id          as newsId,
                nur.type        as type,
@@ -52,7 +53,8 @@
         from b_news_user_record AS nur
         where nur.target_uid in
         <foreach collection="aliveUids" item="item" open="(" separator="," close=")">#{item}</foreach>
-          and nur.type = #{type}
+          and nur.type in
+        <foreach collection="types" item="t" open="(" separator="," close=")">#{t}</foreach>
           and nur.uid = #{uid}
         ORDER BY nur.create_time DESC
     </select>

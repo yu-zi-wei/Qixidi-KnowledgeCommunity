@@ -1,6 +1,7 @@
 package com.qixidi.business.service.news;
 
 import com.light.core.core.domain.vo.CensusVo;
+import com.qixidi.business.domain.bo.news.NewsFabulousQueryBo;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
@@ -47,7 +48,7 @@ public interface INewsUserInfoService {
     TableDataInfo<DictumCommentNewsVo> dictumCommentList(PageQuery pageQuery);
 
     /** 点赞消息列表 */
-    TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery);
+    TableDataInfo<NewsUserInfoVo> fabulousList(NewsFabulousQueryBo bo);
 
     /** 关注消息列表 */
     TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery);

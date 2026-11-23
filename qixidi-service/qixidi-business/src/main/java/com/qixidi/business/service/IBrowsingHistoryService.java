@@ -93,6 +93,19 @@ public interface IBrowsingHistoryService {
     TableDataInfo<BrowsingHistoryVo> queryPageUidList(BrowsingHistoryBo bo, PageQuery pageQuery);
 
     /**
+     * 记录用户足迹（浏览/点赞/评论共用）：未登录静默跳过，同内容同天幂等合并（刷新 update_time 与最近行为类型）。
+     * 必须在请求线程调用（依赖 Sa-Token 登录上下文）。
+     *
+     * @param targetId   目标内容 id（文章 id / 小记 id）
+     * @param targetTitle 目标标题
+     * @param targetUid  目标作者 uid
+     * @param targetType 目标类型（1：文章，2：小记）
+     * @param actionType 行为类型（1：阅读，2：点赞，3：评论）
+     * @param content    评论内容快照（仅评论行为传；传 null 不覆盖已有快照——「最近」是快照，评论删除不影响）
+     */
+    void recordFootprint(Long targetId, String targetTitle, String targetUid, Integer targetType, Integer actionType, String content);
+
+    /**
      * 近30天我的内容浏览趋势（按天聚合）
      */
     List<CensusVo> browseTrend();

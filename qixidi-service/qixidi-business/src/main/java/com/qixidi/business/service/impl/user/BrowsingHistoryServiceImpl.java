@@ -13,6 +13,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.qixidi.auth.helper.LoginHelper;
 import com.light.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -101,6 +102,7 @@ public class BrowsingHistoryServiceImpl implements IBrowsingHistoryService {
         String uuid = LoginHelper.getTripartiteUuid();
         if (uuid == null) return true;
         add.setUid(uuid);
+        add.setActionType(bo.getActionType() != null ? bo.getActionType() : 1);
         String today = DateUtil.today();
         add.setCreateTime(DateUtil.parse(today, "yyyy-MM-dd"));
         add.setUpdateTime(new Date());
@@ -151,6 +153,54 @@ public class BrowsingHistoryServiceImpl implements IBrowsingHistoryService {
         String uuid = LoginHelper.getTripartiteUuid();
         String time = DateUtil.formatDate(DateUtil.offsetDay(new Date(), -30));
         return baseMapper.selectBrowseTrend(uuid, time);
+    }
+
+    /**
+     * 记录用户足迹（浏览/点赞/评论共用）：未登录静默跳过。
+     * 合并策略：近 30 天内已有同目标足迹则不新增记录，只把最近一条的时间刷新为当前
+     * （行为类型归本次；标题刷新为最新；评论快照仅评论行为覆盖，阅读/点赞不清除）。
+     * 窗口外插入新行（同天唯一键 + ON DUPLICATE 幂等兜底）。
+     * 必须在请求线程调用（依赖 Sa-Token 登录上下文）。
+     */
+    @Override
+    public void recordFootprint(Long targetId, String targetTitle, String targetUid, Integer targetType, Integer actionType, String content) {
+        String uuid = LoginHelper.getTripartiteUuid();
+        if (uuid == null || targetId == null) {
+            return;
+        }
+        Date now = new Date();
+        // 近 30 天内同目标的最近一条足迹
+        BrowsingHistory recent = baseMapper.selectOne(new LambdaQueryWrapper<BrowsingHistory>()
+                .eq(BrowsingHistory::getUid, uuid)
+                .eq(BrowsingHistory::getTargetId, targetId)
+                .eq(BrowsingHistory::getTargetType, targetType)
+                .ge(BrowsingHistory::getUpdateTime, DateUtil.offsetDay(now, -30))
+                .orderByDesc(BrowsingHistory::getUpdateTime)
+                .last("LIMIT 1"));
+        if (recent != null) {
+            baseMapper.update(null, new LambdaUpdateWrapper<BrowsingHistory>()
+                    .eq(BrowsingHistory::getId, recent.getId())
+                    .set(BrowsingHistory::getUpdateTime, now)
+                    .set(StringUtils.isNotBlank(targetTitle), BrowsingHistory::getTargetTitle, targetTitle)
+                    .set(BrowsingHistory::getActionType, actionType != null ? actionType : 1)
+                    .set(content != null, BrowsingHistory::getContent,
+                            content != null && content.length() > 500 ? content.substring(0, 500) : content));
+            return;
+        }
+        // 窗口外：插入新行
+        BrowsingHistory add = new BrowsingHistory();
+        add.setUid(uuid);
+        add.setTargetId(targetId);
+        add.setTargetTitle(targetTitle);
+        add.setTargetUid(targetUid);
+        add.setTargetType(targetType);
+        add.setActionType(actionType != null ? actionType : 1);
+        // 评论内容快照截断 500（列宽约束）
+        add.setContent(content != null && content.length() > 500 ? content.substring(0, 500) : content);
+        // create_time 规整为当天零点：与唯一键配合实现「同内容同天合并」
+        add.setCreateTime(DateUtil.parse(DateUtil.today(), "yyyy-MM-dd"));
+        add.setUpdateTime(now);
+        baseMapper.insertOrUpdates(add);
     }
 }
 

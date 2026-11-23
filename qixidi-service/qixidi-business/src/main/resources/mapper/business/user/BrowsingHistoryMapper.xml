@@ -10,16 +10,20 @@
         <result property="targetTitle" column="target_title"/>
         <result property="targetUid" column="target_uid"/>
         <result property="targetType" column="target_type"/>
+        <result property="actionType" column="action_type"/>
+        <result property="content" column="content"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <insert id="insertOrUpdates">
-        insert into b_browsing_history (uid, target_id, target_title, target_uid, target_type, create_time, update_time)
-        values (#{add.uid}, #{add.targetId}, #{add.targetTitle}, #{add.targetUid}, #{add.targetType}, #{add.createTime},
+        insert into b_browsing_history (uid, target_id, target_title, target_uid, target_type, action_type, content, create_time, update_time)
+        values (#{add.uid}, #{add.targetId}, #{add.targetTitle}, #{add.targetUid}, #{add.targetType}, #{add.actionType}, #{add.content}, #{add.createTime},
                 #{add.updateTime}) ON DUPLICATE KEY
         UPDATE update_time =
-        VALUES (update_time);
+        VALUES (update_time), action_type =
+        VALUES (action_type), content =
+        COALESCE(VALUES (content), content);
     </insert>
 
     <!-- 按天聚合我的内容浏览趋势：表按（uid+target）去重、重复访问仅刷新 update_time，故按 update_time 聚合 -->

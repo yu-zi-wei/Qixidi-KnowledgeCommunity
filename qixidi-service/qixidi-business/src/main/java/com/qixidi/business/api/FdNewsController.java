@@ -5,6 +5,7 @@ import com.light.core.core.page.TableDataInfo;
 import com.light.core.enums.BusinessType;
 import com.qixidi.auth.annotation.Log;
 import com.qixidi.auth.annotation.LogModule;
+import com.qixidi.business.domain.bo.news.NewsFabulousQueryBo;
 import com.qixidi.business.domain.entity.news.NewsUserRecord;
 import com.qixidi.business.domain.vo.news.ArticleCommentNewsVo;
 import com.qixidi.business.domain.vo.news.DictumCommentNewsVo;
@@ -68,11 +69,11 @@ public class FdNewsController {
     }
 
     /**
-     * 点赞消息列表
+     * 点赞消息列表（newsType 可选：2=文章点赞、8=小记点赞，缺省=全部混排）
      */
     @PostMapping("/fabulous/list")
-    public TableDataInfo<NewsUserInfoVo> fabulousList(@RequestBody PageQuery pageQuery) {
-        return iNewsUserInfoService.fabulousList(pageQuery);
+    public TableDataInfo<NewsUserInfoVo> fabulousList(@RequestBody NewsFabulousQueryBo bo) {
+        return iNewsUserInfoService.fabulousList(bo);
     }
 
     /**

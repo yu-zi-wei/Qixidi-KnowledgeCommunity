@@ -17,6 +17,7 @@ import com.light.redission.utils.RedisUtils;
 import com.light.webSocket.domain.enums.WebSocketEnum;
 import com.light.webSocket.selector.WebSocketSelector;
 import com.qixidi.auth.helper.LoginHelper;
+import com.qixidi.business.domain.bo.news.NewsFabulousQueryBo;
 import com.qixidi.business.domain.bo.news.NewsUserRecordBo;
 import com.qixidi.business.domain.bo.user.TripartiteUserBo;
 import com.qixidi.business.domain.entity.TimeNotes;
@@ -227,8 +228,8 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public List<NewsUserSumVo> listSums(String uid) {
         List<NewsUserSumVo> list = new ArrayList<>();
         for (NewsType value : NewsType.values()) {
-            if (isCommentSubType(value)) {
-                continue;//评论子类型（随笔/小记）不单独展示，未读数合并进"评论"
+            if (isCommentSubType(value) || isFabulousSubType(value)) {
+                continue;//子类型（随笔/小记评论、小记点赞）不单独展示，未读数合并进主类型
             }
             NewsUserSumVo newsUserSumVo = new NewsUserSumVo().setType(value.getCode()).setTypeInfo(value.getValue())
                     .setNewsSum(0).setRoute(value.getRoute());
@@ -289,6 +290,20 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
             commentRecords.addAll(timeNotesRecords);
         }
 
+        //小记/随笔点赞（8/9）是"点赞"的子类型：未读数合并进"点赞"
+        List<NewsUserRecord> timeNotesFabulousRecords = collect.remove(NewsType.TIME_NOTES_FABULOUS_NEWS.getCode());
+        List<NewsUserRecord> dictumFabulousRecords = collect.remove(NewsType.DICTUM_FABULOUS_NEWS.getCode());
+        List<NewsUserRecord> articleFabulousRecords = collect.get(NewsType.FABULOUS_NEWS.getCode());
+        int articleFabulousUnread = CollectionUtils.isEmpty(articleFabulousRecords) ? 0 : articleFabulousRecords.size();
+        int timeNotesFabulousUnread = CollectionUtils.isEmpty(timeNotesFabulousRecords) ? 0 : timeNotesFabulousRecords.size();
+        int dictumFabulousUnread = CollectionUtils.isEmpty(dictumFabulousRecords) ? 0 : dictumFabulousRecords.size();
+        if (CollectionUtils.isNotEmpty(timeNotesFabulousRecords)) {
+            collect.computeIfAbsent(NewsType.FABULOUS_NEWS.getCode(), k -> new ArrayList<>()).addAll(timeNotesFabulousRecords);
+        }
+        if (CollectionUtils.isNotEmpty(dictumFabulousRecords)) {
+            collect.computeIfAbsent(NewsType.FABULOUS_NEWS.getCode(), k -> new ArrayList<>()).addAll(dictumFabulousRecords);
+        }
+
         Map<Integer, List<NewsUserRecord>> finalCollect = collect;
         list.forEach(item -> {
             if (finalCollect.get(item.getType()) != null) {
@@ -307,6 +322,19 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
                                 .setNewsSum(timeNotesUnread).setRoute(item.getRoute()),
                         new NewsUserSumVo().setType(NewsType.DICTUM_COMMENT_NEWS.getCode()).setTypeInfo("随笔")
                                 .setNewsSum(dictumUnread).setRoute(item.getRoute())
+                )));
+
+        //点赞条目附加子类型分项（文章/小记/随笔各自未读数，前端二级 tab 红点用）
+        list.stream()
+                .filter(item -> NewsType.FABULOUS_NEWS.getCode().equals(item.getType()))
+                .findFirst()
+                .ifPresent(item -> item.setSubList(Arrays.asList(
+                        new NewsUserSumVo().setType(NewsType.FABULOUS_NEWS.getCode()).setTypeInfo("文章")
+                                .setNewsSum(articleFabulousUnread).setRoute(item.getRoute()),
+                        new NewsUserSumVo().setType(NewsType.TIME_NOTES_FABULOUS_NEWS.getCode()).setTypeInfo("小记")
+                                .setNewsSum(timeNotesFabulousUnread).setRoute(item.getRoute()),
+                        new NewsUserSumVo().setType(NewsType.DICTUM_FABULOUS_NEWS.getCode()).setTypeInfo("随笔")
+                                .setNewsSum(dictumFabulousUnread).setRoute(item.getRoute())
                 )));
         return list;
     }
@@ -453,15 +481,40 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     }
 
     @Override
-    public TableDataInfo<NewsUserInfoVo> fabulousList(PageQuery pageQuery) {
+    public TableDataInfo<NewsUserInfoVo> fabulousList(NewsFabulousQueryBo bo) {
         String uuid = LoginHelper.getTripartiteUuid();
-        return listSenderNews(uuid, NewsType.FABULOUS_NEWS.getCode(), pageQuery);
+        // newsType 过滤：2=文章、8=小记、9=随笔；缺省全部混排
+        List<Integer> types = bo.getNewsType() != null
+                ? List.of(bo.getNewsType())
+                : List.of(NewsType.FABULOUS_NEWS.getCode(), NewsType.TIME_NOTES_FABULOUS_NEWS.getCode(),
+                        NewsType.DICTUM_FABULOUS_NEWS.getCode());
+        return listFabulousNews(uuid, types, bo);
     }
 
     @Override
     public TableDataInfo<NewsUserInfoVo> followList(PageQuery pageQuery) {
         String uuid = LoginHelper.getTripartiteUuid();
         return listSenderNews(uuid, NewsType.FOLLOW_NEWS.getCode(), pageQuery);
+    }
+
+    /**
+     * 点赞消息分页（types 由调用方给：文章 2 / 小记 8 / 全部 [2,8]）
+     */
+    private TableDataInfo<NewsUserInfoVo> listFabulousNews(String uid, List<Integer> types, PageQuery pageQuery) {
+        Map<String, TripartiteUserVo> aliveUsers = tripartiteUserService.getAliveUserMap();
+        if (aliveUsers.isEmpty()) {
+            return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
+        }
+        IPage<NewsUserInfoVo> page = newsUserRecordMapper.selectFabulousNews(uid, types,
+                new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
+        page.getRecords().forEach(r -> {
+            TripartiteUserVo sender = aliveUsers.get(r.getSenderId());
+            if (sender != null) {
+                r.setSenderName(sender.getNickname());
+                r.setSenderAvatar(sender.getAvatar());
+            }
+        });
+        return TableDataInfo.build(page);
     }
 
     /**
@@ -472,9 +525,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         if (aliveUsers.isEmpty()) {
             return TableDataInfo.build(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()));
         }
-        IPage<NewsUserInfoVo> page = type.equals(NewsType.FABULOUS_NEWS.getCode())
-            ? newsUserRecordMapper.selectFabulousNews(uid, type, new ArrayList<>(aliveUsers.keySet()), pageQuery.build())
-            : newsUserRecordMapper.selectFollowNews(uid, type, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
+        IPage<NewsUserInfoVo> page = newsUserRecordMapper.selectFollowNews(uid, type, new ArrayList<>(aliveUsers.keySet()), pageQuery.build());
         page.getRecords().forEach(r -> {
             TripartiteUserVo sender = aliveUsers.get(r.getSenderId());
             if (sender != null) {
@@ -523,6 +574,7 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
         }
         newsUserRecordMapper.update(new LambdaUpdateWrapper<NewsUserRecord>()
                 .set(NewsUserRecord::getBeenRead, bo.getBeenRead())
+                // 精确匹配：前端按子 tab 自动标记（文章子 tab 传 2 只清文章点赞），不得波及子类型红点
                 .eq(NewsUserRecord::getType, bo.getType())
                 .eq(NewsUserRecord::getUid, uuid)
         );
@@ -535,8 +587,8 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     public List<NewsUserSumVo> listInfo() {
         List<NewsUserSumVo> list = new ArrayList<>();
         for (NewsType value : NewsType.values()) {
-            if (isCommentSubType(value)) {
-                continue;//评论子类型（随笔/小记）不单独展示
+            if (isCommentSubType(value) || isFabulousSubType(value)) {
+                continue;//子类型（随笔/小记评论、小记点赞）不单独展示
             }
             NewsUserSumVo newsUserSumVo = new NewsUserSumVo().setType(value.getCode()).setTypeInfo(value.getValue())
                     .setNewsSum(0).setRoute(value.getRoute());
@@ -551,6 +603,14 @@ public class NewsUserInfoServiceImpl implements INewsUserInfoService {
     private boolean isCommentSubType(NewsType type) {
         return NewsType.DICTUM_COMMENT_NEWS.getCode().equals(type.getCode())
                 || NewsType.TIME_NOTES_COMMENT_NEWS.getCode().equals(type.getCode());
+    }
+
+    /**
+     * 是否为点赞子类型（小记/随笔点赞，未读数归属"点赞"类型，不单独展示）
+     */
+    private boolean isFabulousSubType(NewsType type) {
+        return NewsType.TIME_NOTES_FABULOUS_NEWS.getCode().equals(type.getCode())
+                || NewsType.DICTUM_FABULOUS_NEWS.getCode().equals(type.getCode());
     }
 
     /**

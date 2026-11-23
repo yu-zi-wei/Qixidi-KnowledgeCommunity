@@ -37,6 +37,7 @@ import com.qixidi.business.mapper.article.ArticleInformationMapper;
 import com.qixidi.business.mapper.comment.ArticleCommentMapper;
 import com.qixidi.business.mapper.comment.NewsUserRecordMapper;
 import com.qixidi.business.mapper.shield.ToShieldWordMapper;
+import com.qixidi.business.service.IBrowsingHistoryService;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.comment.IArticleCommentService;
 import com.qixidi.common.domain.enums.StatusEnums;
@@ -68,6 +69,7 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     private final NewsUserRecordMapper newsUserRecordMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
     private final ITripartiteUserService tripartiteUserService;
+    private final IBrowsingHistoryService browsingHistoryService;
 
     /**
      * 查询文章评论
@@ -287,6 +289,9 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         if (flag) {
             bo.setId(add.getId());
         }
+        // 记录用户足迹（评论过的文章，targetType=1；行为=评论，快照评论内容）
+        browsingHistoryService.recordFootprint(articleInformation.getId(),
+                articleInformation.getArticleTitle(), articleInformation.getUserId(), 1, 3, bo.getContent());
         return add.getId();
     }
 
