@@ -46,6 +46,7 @@ definePageMeta({
 const route = useRoute()
 const articleApi = useArticleApi()
 const fabulousApi = useFabulousApi()
+const browsingHistoryApi = useBrowsingHistoryApi()
 const collectionApi = useCollectionApi()
 const authStore = useAuthStore()
 const authDialogStore = useAuthDialogStore()
@@ -74,6 +75,17 @@ const { data: article, pending, error, refresh } = await useAsyncData(
 watch(() => authStore.isLoggedIn, (val) => {
   if (val) refresh()
 })
+
+// 记录浏览足迹（登录用户；未登录后端也会静默跳过，双保险）
+watch(() => article.value, (newArticle) => {
+  if (!newArticle || !import.meta.client || !authStore.isLoggedIn) return
+  browsingHistoryApi.addBrowsing({
+    targetId: newArticle.id,
+    targetTitle: newArticle.articleTitle || '',
+    targetUid: newArticle.userId,
+    targetType: 1
+  }).catch(() => { /* 足迹记录失败不影响阅读 */ })
+}, { immediate: true })
 
 // 设置侧边栏数据（使用 watch 而不是 watchEffect，避免循环）
 watch(() => article.value, (newArticle) => {
@@ -167,8 +179,6 @@ const handleLike = async () => {
       targetId: article.value.id,
       targetUid: article.value.userId,
       type: 1,
-      state: 0,
-      fabulousSum: oldLikeTimes,
       targetTitle: article.value.articleTitle || '',
       labelId: article.value.labelNameList?.join(',') || ''
     }

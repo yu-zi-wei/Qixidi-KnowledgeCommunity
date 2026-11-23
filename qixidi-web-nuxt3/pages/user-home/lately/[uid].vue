@@ -22,11 +22,16 @@
         >
           <div class="item-info">
             <div class="item-title-row">
+              <span class="item-action-badge" :class="getActionClass(item.actionType)">
+                {{ getActionName(item.actionType) }}
+              </span>
               <h3 class="item-title">{{ item.targetTitle }}</h3>
               <span class="item-type-badge" :class="getTypeClass(item.targetType)">
                 {{ getTypeName(item.targetType) }}
               </span>
             </div>
+            <!-- 评论内容快照：评论删除后仍保留当时评的内容 -->
+            <p v-if="item.content" class="item-comment-snapshot">{{ item.content }}</p>
             <span class="item-time" :title="getFullDateTime(item.createTime)">
               {{ formatTime(item.createTime) }}
             </span>
@@ -103,6 +108,8 @@ const handleClick = (item: BrowsingHistoryVo) => {
 
 const getTargetLink = (item: BrowsingHistoryVo) => {
   if (item.targetType === 1) return `/articles/${item.targetId}`
+  if (item.targetType === 2) return `/time-notes/${item.targetId}`
+  if (item.targetType === 3) return `/reading-essays/${item.targetId}`
   return ''
 }
 
@@ -117,11 +124,20 @@ onMounted(() => {
 })
 
 const getTypeName = (type: number) => {
-  return type === 1 ? '文章' : '帖子'
+  return type === 1 ? '文章' : type === 2 ? '小记' : type === 3 ? '随笔' : '内容'
 }
 
 const getTypeClass = (type: number) => {
-  return type === 1 ? 'type-article' : 'type-post'
+  return type === 1 ? 'type-article' : type === 2 ? 'type-note' : type === 3 ? 'type-dictum' : 'type-post'
+}
+
+// 行为徽标：这条足迹由什么行为产生（点赞/评论会覆盖此前的阅读记录）
+const getActionName = (action: number) => {
+  return action === 2 ? '赞过' : action === 3 ? '评论过' : '阅读'
+}
+
+const getActionClass = (action: number) => {
+  return action === 2 ? 'action-like' : action === 3 ? 'action-comment' : 'action-read'
 }
 </script>
 
@@ -177,6 +193,17 @@ const getTypeClass = (type: number) => {
   min-width: 0;
 }
 
+/* 评论内容快照：引用式一行截断，淡墨 */
+.item-comment-snapshot {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--color-ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .item-type-badge {
   flex-shrink: 0;
   padding: 1px 8px;
@@ -185,9 +212,43 @@ const getTypeClass = (type: number) => {
   border-radius: var(--radius-full);
 }
 
+/* 行为徽标（阅读/赞过/评论过）：与类型徽标同形，色相区分 */
+.item-action-badge {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: var(--radius-full);
+}
+
+.action-read {
+  background: var(--color-surface-dim);
+  color: var(--color-ink-muted);
+}
+
+.action-like {
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  color: var(--color-danger);
+}
+
+.action-comment {
+  background: color-mix(in srgb, var(--tag-teal) 13%, transparent);
+  color: var(--tag-teal);
+}
+
 .type-article {
   background: var(--color-primary-light);
   color: var(--color-primary);
+}
+
+.type-note {
+  background: color-mix(in srgb, var(--tag-green) 13%, transparent);
+  color: var(--tag-green);
+}
+
+.type-dictum {
+  background: color-mix(in srgb, var(--tag-amber) 13%, transparent);
+  color: var(--tag-amber);
 }
 
 .type-post {

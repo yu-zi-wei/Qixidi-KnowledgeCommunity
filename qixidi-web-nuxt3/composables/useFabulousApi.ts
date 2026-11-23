@@ -32,9 +32,33 @@ export const useFabulousApi = () => {
     })
   }
 
+  /**
+   * 用户点赞小记列表（分页）
+   */
+  const getFabulousTimeNotesList = (uid: string, pageNum: number, pageSize: number) => {
+    return api.postPage<any>('/frontDesk/fabulous/fabulous/timeNotesList', {
+      uid,
+      pageNum,
+      pageSize
+    })
+  }
+
+  /**
+   * 用户点赞随笔列表（分页）
+   */
+  const getFabulousDictumList = (uid: string, pageNum: number, pageSize: number) => {
+    return api.postPage<any>('/frontDesk/fabulous/fabulous/dictumList', {
+      uid,
+      pageNum,
+      pageSize
+    })
+  }
+
   return {
     likeArticle,
     cancelLikeArticle,
-    getFabulousArticleList
+    getFabulousArticleList,
+    getFabulousTimeNotesList,
+    getFabulousDictumList
   }
 }

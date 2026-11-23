@@ -23,9 +23,9 @@ export const useNewsApi = () => {
     return api.postPage<DictumCommentNewsVo>('/frontDesk/news/comment/dictum/list', { pageNum, pageSize })
   }
 
-  /** 点赞消息列表 */
-  const getFabulousList = (pageNum: number = 1, pageSize: number = 20) => {
-    return api.postPage<NewsUserInfoVo>('/frontDesk/news/fabulous/list', { pageNum, pageSize })
+  /** 点赞消息列表（newsType 可选：2=文章点赞、8=小记点赞，缺省=全部混排） */
+  const getFabulousList = (pageNum: number = 1, pageSize: number = 20, newsType?: number) => {
+    return api.postPage<NewsUserInfoVo>('/frontDesk/news/fabulous/list', { pageNum, pageSize, newsType })
   }
 
   /** 关注消息列表 */

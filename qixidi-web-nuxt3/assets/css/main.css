@@ -50,6 +50,11 @@
   --color-accent: #5a7fa8;
   --color-accent-hover: #4a6f98;
 
+  /* 语义墨色（meta 标签等多色点缀：低饱和墨调，底色由 color-mix 派生，双主题只换墨色值） */
+  --tag-green: #3e7c62;
+  --tag-amber: #97774c;
+  --tag-teal: #4b7f8e;
+
   /* 功能色 */
   --color-danger: #c44536;
 
@@ -178,6 +183,11 @@
   /* 强调色 */
   --color-accent: #7ab0e4;
   --color-accent-hover: #8ac0f4;
+
+  /* 语义墨色（深色亮版） */
+  --tag-green: #7fbf9e;
+  --tag-amber: #c9a87a;
+  --tag-teal: #85bcc9;
 
   /* 功能色 */
   --color-danger: #e05545;

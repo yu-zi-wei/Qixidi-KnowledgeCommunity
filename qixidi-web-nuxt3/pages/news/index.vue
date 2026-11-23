@@ -140,12 +140,12 @@
 
       <!-- 消息列表 -->
       <template v-else>
-        <!-- 评论消息二级子 tab（文章/小记/随笔） -->
-        <div v-if="currentType === 1" class="news-sub-bar">
+        <!-- 消息二级子 tab（评论：文章/小记/随笔；点赞：文章/小记） -->
+        <div v-if="currentSubs.length" class="news-sub-bar">
           <NuxtLink
-            v-for="sub in commentSubs"
+            v-for="sub in currentSubs"
             :key="sub.key"
-            :to="{ path: '/news', query: sub.key === 'article' ? undefined : { sub: sub.key } }"
+            :to="{ path: '/news', query: buildSubQuery(sub.key) }"
             class="news-sub-tab"
             :class="{ active: currentSub === sub.key }"
             @click.prevent="switchCommentSub(sub.key)"
@@ -267,11 +267,15 @@
                 <div class="news-body">
                   <div class="news-header">
                     <NuxtLink :to="`/user-home/article/${item.senderId}`" class="news-user">{{ item.senderName }}</NuxtLink>
-                    <span class="news-action">赞了你的文章</span>
+                    <span class="news-action">{{ fabulousActionText(item.type) }}</span>
                     <time class="news-time" :title="getFullDateTime(item.createTime)">{{ formatTime(item.createTime) }}</time>
                     <span v-if="!item.beenRead" class="news-unread-dot"></span>
                   </div>
-                  <NuxtLink v-if="item.newsContent" :to="`/articles/${item.targetId}`" class="news-target">《{{ item.newsContent }}》</NuxtLink>
+                  <NuxtLink
+                    v-if="item.newsContent"
+                    :to="fabulousTargetLink(item)"
+                    class="news-target"
+                  >{{ item.type === 9 ? item.newsContent : `《${item.newsContent}》` }}</NuxtLink>
                 </div>
               </div>
             </template>
@@ -385,17 +389,27 @@ const commentSubs = [
   { key: 'dictum', type: 6, label: '随笔' }
 ]
 
+// 点赞消息二级子 tab（文章=2 / 小记=8 / 随笔=9）
+const fabulousSubs = [
+  { key: 'article', type: 2, label: '文章' },
+  { key: 'timeNotes', type: 8, label: '小记' },
+  { key: 'dictum', type: 9, label: '随笔' }
+]
+
 // 当前选中的 Tab 类型（默认评论）
 const currentType = computed(() => Number(route.query.type) || 1)
 
-// 当前评论子 tab（仅 currentType===1 生效，默认文章）
+// 当前 tab 的子 tab 集合（评论/点赞有二级切换）
+const currentSubs = computed(() => currentType.value === 1 ? commentSubs : currentType.value === 2 ? fabulousSubs : [])
+
+// 当前子 tab（仅评论/点赞生效，默认第一个）
 const currentSub = computed(() => {
-  const sub = commentSubs.find(s => s.key === route.query.sub)
-  return sub ? sub.key : 'article'
+  const sub = currentSubs.value.find(s => s.key === route.query.sub)
+  return sub ? sub.key : currentSubs.value[0]?.key || ''
 })
 
-// 当前评论子 tab 对应的消息类型（markRead 用）
-const currentSubType = computed(() => commentSubs.find(s => s.key === currentSub.value)!.type)
+// 当前子 tab 对应的消息类型（markRead 用）
+const currentSubType = computed(() => currentSubs.value.find(s => s.key === currentSub.value)?.type)
 
 // 移动端直接访问私信页时重定向到评论
 watch(isMobile, (mobile) => {
@@ -406,11 +420,9 @@ watch(isMobile, (mobile) => {
 
 const currentTabLabel = computed(() => {
   const label = tabs.find(t => t.type === currentType.value)?.label || ''
-  // 评论 tab 下细化到子类型（空状态文案用）
-  if (currentType.value === 1) {
-    return `${commentSubs.find(s => s.key === currentSub.value)?.label || ''}${label}`
-  }
-  return label
+  // 有二级子 tab 的（评论/点赞）细化到子类型（空状态文案用）
+  const subLabel = currentSubs.value.find(s => s.key === currentSub.value)?.label
+  return subLabel ? `${subLabel}${label}` : label
 })
 
 // 分页
@@ -453,7 +465,11 @@ const fetchNewsList = (): Promise<any> => {
     if (currentSub.value === 'dictum') return newsApi.getDictumCommentList(currentPage.value, pageSize)
     return newsApi.getCommentList(currentPage.value, pageSize)
   }
-  if (type === 2) return newsApi.getFabulousList(currentPage.value, pageSize)
+  if (type === 2) {
+    // 二级子 tab 按消息类型过滤（文章=2 / 小记=8）
+    const newsType = currentSubType.value
+    return newsApi.getFabulousList(currentPage.value, pageSize, newsType)
+  }
   if (type === 3) return newsApi.getFollowList(currentPage.value, pageSize)
   if (type === 5) return newsApi.getSystemList(currentPage.value, pageSize)
   return Promise.resolve({ rows: [], total: 0 })
@@ -474,14 +490,30 @@ const switchTab = (type: number) => {
   }
 }
 
-// 评论二级子 tab 切换
+// 二级子 tab 切换（评论/点赞通用：保留一级 type，默认子 tab 回到裸一级路由）
+const buildSubQuery = (key: string) => {
+  const query: Record<string, any> = {}
+  if (currentType.value !== 1) query.type = currentType.value
+  if (currentSubs.value[0]?.key !== key) query.sub = key
+  return query
+}
+
 const switchCommentSub = (key: string) => {
   currentPage.value = 1
-  if (key === 'article') {
-    navigateTo({ path: '/news' })
-  } else {
-    navigateTo({ path: '/news', query: { sub: key } })
-  }
+  navigateTo({ path: '/news', query: buildSubQuery(key) })
+}
+
+// 点赞消息文案/跳转（2=文章、8=小记、9=随笔；随笔无标题展示内容快照不加书名号）
+const fabulousActionText = (type: number) => {
+  if (type === 8) return '赞了你的小记'
+  if (type === 9) return '赞了你的随笔'
+  return '赞了你的文章'
+}
+
+const fabulousTargetLink = (item: NewsUserInfoVo) => {
+  if (item.type === 8) return `/time-notes/${item.targetId}`
+  if (item.type === 9) return `/reading-essays/${item.targetId}`
+  return `/articles/${item.targetId}`
 }
 
 // 文本截断（随笔无标题，用内容前缀展示）
@@ -527,13 +559,13 @@ const handlePageChange = (page: number) => {
 const markReadIfNeeded = async () => {
   const type = currentType.value
   if (type === 4) return
-  // 评论 tab 按二级子 tab 对应的类型标记（文章=1、小记=7、随笔=6）；
-  // 未读判断用一级类型（后端把 6/7 的未读合并进了"评论"总数）
-  const readType = type === 1 ? currentSubType.value : type
+  // 有二级子 tab 的（评论/点赞）按子 tab 对应类型标记（评论：文章1/小记7/随笔6；点赞：文章2/小记8）；
+  // 未读判断用一级类型（后端把子类型的未读合并进了主类型总数）
+  const readType = currentSubs.value.length > 0 && currentSubType.value ? currentSubType.value : type
   if (getUnreadCount(type) > 0) {
     try {
       await newsApi.markRead(readType)
-      //刷新汇总拿最新合并数与分项：不能本地把合并总数归零（评论只清了当前子类型的部分）
+      //刷新汇总拿最新合并数与分项：不能本地把合并总数归零（子 tab 只清了当前子类型的部分）
       await fetchUnreadSum(true)
     } catch {
       // useApi 统一处理错误

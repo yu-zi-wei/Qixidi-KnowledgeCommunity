@@ -88,7 +88,7 @@
             <Heart />
           </div>
           <div class="stat-content">
-            <div class="stat-value">{{ censusData?.fabulousCount || 0 }}</div>
+            <div class="stat-value">{{ censusData?.fansFabulousCount || 0 }}</div>
             <div class="stat-label">获赞</div>
           </div>
         </div>

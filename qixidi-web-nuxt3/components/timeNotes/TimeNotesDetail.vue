@@ -47,6 +47,11 @@
 
       <!-- 内容区域（使用独立组件） -->
       <TimeNotesDetailContent :note="detail" />
+
+      <!-- 底部操作行：点赞（与正文同轴线，评论区上方） -->
+      <div class="detail-footer-actions">
+        <TimeNotesLikeButton :note="detail" />
+      </div>
     </template>
   </div>
 </template>
@@ -113,6 +118,16 @@ const copyShareLink = () => {
   gap: 4px;
 }
 
+/* 底部点赞行：与正文 padding 同轴线（32px，移动端 16px），hairline 出形，点赞靠右 */
+.detail-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 32px;
+  border-top: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+}
+
 /* 次要按钮调淡 */
 .btn-secondary {
   color: var(--color-ink-muted) !important;
@@ -126,6 +141,10 @@ const copyShareLink = () => {
 @media (max-width: 768px) {
   .detail-actions {
     padding: 10px 12px;
+  }
+
+  .detail-footer-actions {
+    padding: 8px 16px;
   }
 }
 </style>

@@ -33,6 +33,8 @@
           {{ formatTime(readingEssay.createTime) }}
         </span>
       </div>
+      <!-- 点赞（未登录点击弹登录框） -->
+      <ReadingEssaysLikeButton :essay="readingEssay" />
     </div>
   </div>
 </template>

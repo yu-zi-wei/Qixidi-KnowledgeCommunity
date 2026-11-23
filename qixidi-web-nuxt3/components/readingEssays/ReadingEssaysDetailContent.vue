@@ -20,6 +20,11 @@
     <!-- 分割线 -->
     <div class="divider"></div>
 
+    <!-- 点赞行（评论区上方） -->
+    <div class="essay-like-row">
+      <ReadingEssaysLikeButton :essay="essay" />
+    </div>
+
     <!-- 元信息区 -->
     <div class="essay-meta-section">
       <!-- 左侧：分类和专辑 -->
@@ -148,6 +153,13 @@ const handleCommentAdded = () => {
   height: 1px;
   background: var(--color-border-light);
   margin-bottom: 20px;
+}
+
+/* 点赞行：分割线下右对齐 */
+.essay-like-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
 }
 
 /* 元信息区 */

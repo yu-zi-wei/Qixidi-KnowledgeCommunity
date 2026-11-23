@@ -1,5 +1,14 @@
 <template>
   <div class="tool-page">
+    <!-- 页头：衬线标题 + 工具数（一张纸排版） -->
+    <header class="tool-header">
+      <div class="tool-header-main">
+        <h1 class="tool-title">工具箱</h1>
+        <span v-if="tools.length" class="tool-count">共 {{ tools.length }} 个</span>
+      </div>
+      <p class="tool-lead">开发路上常用的工具与资源收藏</p>
+    </header>
+
     <!-- 横向分类菜单 -->
     <nav ref="tabBarRef" class="tool-tab-bar" :class="{ 'is-sticky': isSticky }">
       <div v-if="pendingCategories" class="tool-tab-loading">
@@ -33,18 +42,23 @@
           :href="tool.toolUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="bm-card"
+          class="bm-card tool-card"
         >
-          <div class="tool-card-icon" v-if="tool.icon">
-            <img :src="tool.icon" :alt="tool.toolName" />
-          </div>
-          <div class="tool-card-icon tool-card-placeholder" v-else>
-            <n-icon size="20"><Tool /></n-icon>
-          </div>
-          <div class="tool-card-body">
-            <h3 class="tool-card-name bm-card-name">{{ tool.toolName }}</h3>
-            <p class="tool-card-desc" v-if="tool.describe">{{ tool.describe }}</p>
-          </div>
+          <span class="tool-card-icon" :class="{ 'is-placeholder': !tool.icon || iconErrors.has(tool.id) }">
+            <img
+              v-if="tool.icon && !iconErrors.has(tool.id)"
+              :src="tool.icon"
+              :alt="tool.toolName"
+              loading="lazy"
+              @error="iconErrors.add(tool.id)"
+            />
+            <n-icon v-else size="20"><Tool /></n-icon>
+          </span>
+          <span class="tool-card-body">
+            <span class="tool-card-name bm-card-name">{{ tool.toolName }}</span>
+            <span class="tool-card-desc" v-if="tool.describe">{{ tool.describe }}</span>
+          </span>
+          <n-icon class="tool-card-link" size="14"><ExternalLink /></n-icon>
         </a>
       </div>
     </div>
@@ -52,12 +66,12 @@
 </template>
 
 <script setup lang="ts">
-import { Tool } from '@vicons/tabler'
+import { Tool, ExternalLink } from '@vicons/tabler'
 
 definePageMeta({ showTabBar: false })
 
 useHead({
-  title: '工具',
+  title: '工具箱',
   bodyAttrs: {
     class: 'page-tool'
   }
@@ -69,11 +83,19 @@ const tools = ref<any[]>([])
 const loadingTools = ref(false)
 const tabBarRef = ref<HTMLElement | null>(null)
 const isSticky = ref(false)
+// 外链图标加载失败的 id 集合（裂图兜底显示占位图标）
+const iconErrors = reactive(new Set<number>())
 
-// 加载分类列表
+// SSR 失败返回 null（勿 []，勿 default），水合后客户端自动重取
 const { data: categoriesData, pending: pendingCategories } = await useAsyncData(
   'tool-categories',
-  () => toolApi.getToolCategories()
+  async () => {
+    try {
+      return await toolApi.getToolCategories()
+    } catch {
+      return null
+    }
+  }
 )
 const categories = computed(() => categoriesData.value || [])
 const activeCategoryId = ref<number | null>(null)
@@ -123,6 +145,41 @@ onMounted(() => {
 .tool-page {
   display: flex;
   flex-direction: column;
+  padding-top: 24px;
+}
+
+/* ===== 页头（一张纸排版：衬线标题 + 浓淡对比） ===== */
+.tool-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 8px 16px;
+}
+
+.tool-header-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.tool-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--color-ink);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.tool-count {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+}
+
+.tool-lead {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+  margin: 0;
 }
 
 /* 横向分类菜单（tab 样式走全局 .bm-tab 书签语言） */
@@ -173,19 +230,34 @@ onMounted(() => {
   padding: 80px 0;
 }
 
-/* 工具网格：横向书签条（卡片形态走全局 .bm-card） */
+/* 工具网格：两列收录卡片（卡片底走全局 .bm-card） */
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* 单个卡片：垂直结构（图标在上），图标统一容器底 + 右上外链提示 */
+.tool-card {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 20px 20px 18px;
 }
 
 .tool-card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  color: var(--color-ink-muted);
   flex-shrink: 0;
+  overflow: hidden;
+  margin-bottom: 12px;
 }
 
 .tool-card-icon img {
@@ -195,38 +267,53 @@ onMounted(() => {
   display: block;
 }
 
-.tool-card-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.tool-card-icon.is-placeholder {
   background: var(--color-primary-light);
   color: var(--color-primary);
 }
 
 .tool-card-body {
-  flex: 1;
+  width: 100%;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .tool-card-name {
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--color-ink);
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-right: 20px;
 }
 
 .tool-card-desc {
   font-size: var(--text-xs);
   color: var(--color-ink-muted);
-  margin: 4px 0 0;
+  margin: 0;
   line-height: var(--leading-relaxed);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* 外链角标：默认隐淡，卡片 hover 时墨蓝浮现 */
+.tool-card-link {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  color: var(--color-ink-faint);
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.tool-card:hover .tool-card-link {
+  color: var(--color-primary);
 }
 
 /* 移动端 */
@@ -249,7 +336,7 @@ onMounted(() => {
 
   .tool-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
 }
 

@@ -126,7 +126,11 @@ const activeGroupingId = computed(() => {
   gap: var(--space-2);
 }
 
-/* tab 样式统一走全局 .bm-tab 书签语言（main.css） */
+/* tab 样式统一走全局 .bm-tab 书签语言（main.css）；
+   二级导航场景覆盖为胶囊圆角（hover/激活底色块更椭圆，区别于页内方形书签） */
+.tab-bar :deep(.bm-tab) {
+  border-radius: var(--radius-full);
+}
 
 /* 分隔线 */
 .tab-divider {

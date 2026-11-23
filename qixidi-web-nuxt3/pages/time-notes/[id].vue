@@ -29,6 +29,10 @@
             </n-button>
           </div>
           <TimeNotesDetailContent :note="note" />
+          <!-- 底部操作行：点赞（评论区上方，与正文同轴线） -->
+          <div class="detail-footer-actions">
+            <TimeNotesLikeButton :note="note" />
+          </div>
         </article>
 
         <!-- 评论区 -->
@@ -154,6 +158,15 @@ watch(() => route.params.id, async (newId, oldId) => {
   z-index: 10;
 }
 
+/* 底部点赞行：与正文 padding 同轴线（32px，移动端 16px），hairline 出形，点赞靠右 */
+.detail-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 32px;
+  border-top: 1px solid var(--color-border-light);
+}
+
 /* 加载/错误状态 */
 .loading-state,
 .error-state {
@@ -170,6 +183,10 @@ watch(() => route.params.id, async (newId, oldId) => {
 @media (max-width: 768px) {
   .detail-main {
     padding: 16px;
+  }
+
+  .detail-footer-actions {
+    padding: 8px 16px;
   }
 }
 </style>

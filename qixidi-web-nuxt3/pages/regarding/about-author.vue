@@ -110,12 +110,9 @@ const handleLike = async () => {
 
   if (!article.value) return
 
-  if (!article.value.fabulousUserSet || !(article.value.fabulousUserSet instanceof Set)) {
-    article.value.fabulousUserSet = new Set()
-  }
-
-  const userId = authStore.user?.uuid
-  const hasLiked = userId && article.value.fabulousUserSet.has(userId) || false
+  // 已赞判断与 ArticleDetail 高亮同源（isFabulous：后端 Redis 点赞时间戳）。
+  // 不用 fabulousUserSet——SSR 注水后客户端拿到的不是真 Set，has() 恒 false 会让点赞永远走"新赞"分支
+  const hasLiked = !!article.value.isFabulous
   const newState = !hasLiked
   const oldLikeTimes = article.value.likeTimes || 0
 
@@ -125,22 +122,16 @@ const handleLike = async () => {
       targetId: article.value.id,
       targetUid: article.value.userId,
       type: 1,
-      state: 0,
-      fabulousSum: oldLikeTimes,
       targetTitle: article.value.articleTitle || '',
       labelId: article.value.labelNameList?.join(',') || ''
     }
 
     if (newState) {
       await fabulousApi.likeArticle(requestData)
+      article.value.isFabulous = true
     } else {
       await fabulousApi.cancelLikeArticle(requestData)
-    }
-
-    if (newState && userId) {
-      article.value.fabulousUserSet.add(userId)
-    } else if (userId) {
-      article.value.fabulousUserSet.delete(userId)
+      article.value.isFabulous = false
     }
     article.value.likeTimes = oldLikeTimes + (newState ? 1 : -1)
   } catch (err) {

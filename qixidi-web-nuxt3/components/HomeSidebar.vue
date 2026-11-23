@@ -113,6 +113,11 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
           RSS
         </a>
+        <!-- 当前版本入口（右下角，点击进版本迭代页；数据来自 /api/changelog 的 Gitee 代理） -->
+        <NuxtLink v-if="currentVersion" to="/changelog" class="rss-link version-link" title="版本迭代">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3 12 12"/><path d="M15 3h6v6"/></svg>
+          {{ currentVersion }}
+        </NuxtLink>
       </div>
     </div>
   </aside>
@@ -150,6 +155,28 @@ const { data: siteInfoData, refresh: refreshSiteInfo } = await useAsyncData(
   },
   { default: () => null as any }
 )
+
+// 当前版本（Nitro /changelog-data 代理 Gitee 发行版，带 1h 内存缓存；SSR 失败返回 null 水合自动重取）
+const { data: changelogData, refresh: refreshVersion } = await useAsyncData(
+  'home-sidebar-version',
+  async () => {
+    try {
+      const r = await $fetch<{ current: string }>('/changelog-data')
+      return r.current || null
+    } catch (e) {
+      return null
+    }
+  }
+)
+
+const currentVersion = computed(() => changelogData.value || '')
+
+// 客户端兜底：SSR 拉取失败（Gitee 不可达且无缓存）时重试一次
+onMounted(async () => {
+  if (!changelogData.value) {
+    await refreshVersion()
+  }
+})
 
 const MAX_REFRESH_PAGE = 3
 const recommendPage = ref(1)
@@ -603,5 +630,11 @@ const runningRemainDays = computed(() => {
 
 .rss-link:hover {
   color: var(--color-primary);
+}
+
+/* 当前版本入口：footer 行内推到最右（右下角） */
+.version-link {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
 }
 </style>

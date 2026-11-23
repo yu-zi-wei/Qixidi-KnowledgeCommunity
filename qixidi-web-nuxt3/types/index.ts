@@ -353,14 +353,12 @@ export interface TimeNotesCommentBo extends CommentSubmitPayload {
 
 // 点赞/取消点赞请求
 export interface FabulousBo {
-  typeId: number          // 类型 id（同文章 id）
-  targetId: number         // 目标 id（文章 id）
-  targetUid: string        // 目标用户 id（文章作者 id）
-  type: number            // 类型：1=文章
-  state: number           // 状态：0=正常
-  fabulousSum: number     // 点赞总数
-  targetTitle: string     // 目标标题（文章标题）
-  labelId?: string        // 标签 id（可选，文章标签）
+  typeId: number          // 类型 id（文章 id / 小记 id）
+  targetId: number         // 目标 id（同 typeId）
+  targetUid: string        // 目标用户 id（内容作者 id）
+  type: number            // 类型：1=文章，2=小记
+  targetTitle: string     // 目标标题
+  labelId?: string        // 标签 id（可选，仅文章）
 }
 
 // ==================== 收藏相关 ====================
@@ -428,6 +426,8 @@ export interface ReadingEssaysInfo {
   roleId?: string          // 角色
   location?: string        // 位置
   helpSum?: number         // 点赞总数
+  likeTimes?: number       // 点赞数（实时聚合）
+  isFabulous?: boolean     // 当前用户是否已赞
   commentSum?: number      // 评论总数
   tripartiteUser?: unknown // 用户详情信息
 }
@@ -503,6 +503,8 @@ export interface TimeNotesVo {
 export interface TimeNotesInfo extends TimeNotes {
   isAuthor?: number         // 是否为作者（0=是，1=不是）
   createBy?: string         // 创建人名称
+  likeTimes?: number        // 点赞数
+  isLiked?: number          // 当前用户是否已赞（0=已赞，1=未赞；未登录恒为 1）
 }
 
 // 时光小记搜索请求

@@ -571,7 +571,7 @@ const { isSticky } = useStickyScroll('.home-nav-bar', 0)
 
 /* 导航菜单 */
 .nav-menu { display: flex; align-items: center; gap: 2px; }
-.nav-link { padding: 7px 10px; font-size: 15px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
+.nav-link { padding: 7px 12px; font-size: 15px; color: var(--color-ink-light); text-decoration: none; border-radius: var(--radius-full); cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 4px; }
 .nav-link:hover { color: var(--color-ink); background: var(--color-surface-dim); }
 .nav-link.active { color: var(--color-primary); font-weight: 600; }
 .dropdown-icon { width: 14px; height: 14px; color: var(--color-ink-muted); }

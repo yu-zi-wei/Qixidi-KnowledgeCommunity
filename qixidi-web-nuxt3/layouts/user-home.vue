@@ -28,10 +28,24 @@
                   <span v-if="userInfo.occupation" class="meta-tag">
                     <n-icon size="12"><Briefcase /></n-icon>{{ userInfo.occupation }}
                   </span>
-                  <span v-if="userInfo.location" class="meta-tag">
+                  <span v-if="userInfo.company" class="meta-tag tag-amber">
+                    <n-icon size="12"><Building /></n-icon>{{ userInfo.company }}
+                  </span>
+                  <a
+                    v-if="userInfo.homepage"
+                    :href="normalizeUrl(userInfo.homepage)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="meta-tag tag-green meta-link"
+                    :title="userInfo.homepage"
+                    @click.stop
+                  >
+                    <n-icon size="12"><Link /></n-icon>{{ urlHost(userInfo.homepage) }}
+                  </a>
+                  <span v-if="userInfo.location" class="meta-tag tag-teal">
                     <n-icon size="12"><MapPin /></n-icon>{{ userInfo.location }}
                   </span>
-                  <span v-if="userInfo.createTime" class="meta-tag" :title="getFullDateTime(userInfo.createTime)">
+                  <span v-if="userInfo.createTime" class="meta-tag tag-gray" :title="getFullDateTime(userInfo.createTime)">
                     <n-icon size="12"><Calendar /></n-icon>
                     {{ userInfo.createTime ? userInfo.createTime.substring(0, 10) : '' }}
                   </span>
@@ -143,6 +157,10 @@
                 <span class="stat-value">{{ userInfo.fansFollowCount || 0 }}</span>
                 <span class="stat-label">关注者</span>
               </div>
+              <div class="profile-stat">
+                <span class="stat-value">{{ userInfo.fansFabulousCount || 0 }}</span>
+                <span class="stat-label">获赞</span>
+              </div>
             </div>
           </div>
         </div>
@@ -152,7 +170,17 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeft, User, Briefcase, MapPin, Calendar } from '@vicons/tabler'
+import { ArrowLeft, User, Briefcase, MapPin, Calendar, Building, Link } from '@vicons/tabler'
+
+// 个人主页地址兜底补协议（用户可能只填了域名）
+const normalizeUrl = (url: string) => /^https?:\/\//i.test(url) ? url : `https://${url}`
+const urlHost = (url: string) => {
+  try {
+    return new URL(normalizeUrl(url)).hostname
+  } catch {
+    return url.length > 24 ? `${url.slice(0, 24)}…` : url
+  }
+}
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -435,6 +463,40 @@ const handlePrivateMsg = async () => {
   background: var(--color-primary-light);
 }
 
+/* 语义分色（低饱和墨调，底色由墨色派生，双主题自动跟随） */
+.meta-tag.tag-amber {
+  color: var(--tag-amber);
+  background: color-mix(in srgb, var(--tag-amber) 13%, transparent);
+}
+
+.meta-tag.tag-green {
+  color: var(--tag-green);
+  background: color-mix(in srgb, var(--tag-green) 13%, transparent);
+}
+
+.meta-tag.tag-teal {
+  color: var(--tag-teal);
+  background: color-mix(in srgb, var(--tag-teal) 13%, transparent);
+}
+
+.meta-tag.tag-gray {
+  color: var(--color-ink-muted);
+  background: var(--color-sunken);
+}
+
+/* 主页链接胶囊：可点击外链，超长域名截断 */
+.meta-link {
+  text-decoration: none;
+  max-width: 180px;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.meta-link:hover {
+  filter: brightness(0.96);
+}
+
 .user-header-actions {
   display: flex;
   justify-content: flex-end;
@@ -581,7 +643,7 @@ const handlePrivateMsg = async () => {
 
   .user-stats-row {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 4px;
     padding: 12px 20px;
     border-top: 1px solid var(--color-border-light);

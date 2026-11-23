@@ -705,13 +705,13 @@ defineExpose({
 }
 
 .tcs-hint {
-  font-size: var(--text-sm);
-  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+  color: var(--color-ink-faint);
 }
 
 .tcs-submit-btn {
-  padding: var(--space-2) var(--space-5);
-  font-size: var(--text-sm);
+  padding: 4px 14px;
+  font-size: var(--text-xs);
   font-weight: 500;
   color: #fff;
   background: var(--color-primary);
