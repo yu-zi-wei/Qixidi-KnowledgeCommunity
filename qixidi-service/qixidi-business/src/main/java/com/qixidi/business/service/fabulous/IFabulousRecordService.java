@@ -4,7 +4,9 @@ import com.light.core.core.domain.PageQuery;
 import com.light.core.core.page.TableDataInfo;
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
+import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.domain.vo.fabulous.FabulousRecordVo;
 
 import java.util.Collection;
@@ -72,5 +74,15 @@ public interface IFabulousRecordService {
     void cancelFabulous(FabulousRecordBo bo);
 
     TableDataInfo<ArticleInformationVo> fabulousList(UserHomeBo bo, PageQuery pageQuery);
+
+    /**
+     * 用户点赞的小记列表（b_fabulous_record type=2，按点赞时间倒序）
+     */
+    TableDataInfo<TimeNotesInfoVo> fabulousTimeNotesList(UserHomeBo bo, PageQuery pageQuery);
+
+    /**
+     * 用户点赞的随笔列表（b_fabulous_record type=5，按点赞时间倒序）
+     */
+    TableDataInfo<DictumInfoVo> fabulousDictumList(UserHomeBo bo, PageQuery pageQuery);
 
 }

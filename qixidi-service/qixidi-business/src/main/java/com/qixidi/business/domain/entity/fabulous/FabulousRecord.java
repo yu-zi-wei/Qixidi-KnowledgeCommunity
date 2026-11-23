@@ -1,14 +1,14 @@
 package com.qixidi.business.domain.entity.fabulous;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.light.core.annotation.ExcelDictFormat;
+import com.light.excel.convert.ExcelDictConvert;
 import lombok.Data;
 
 import java.util.Date;
-import com.light.excel.convert.ExcelDictConvert;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.light.core.annotation.ExcelDictFormat;
 
 
 /**
@@ -48,17 +48,10 @@ public class FabulousRecord {
      */
     private String targetUid;
     /**
-     * 点赞类型（1：文章，2：问答，3：回答，4：评论，5：回复）
+     * 点赞类型（1：文章，2：小记，3：文章评论，4：小记评论，5：随笔）
      */
-    @ExcelProperty(value = "点赞类型", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "1=：文章，2：问答，3：回答，4：评论，5：回复")
+    @ExcelDictFormat(readConverterExp = "1：文章，2：问答，3：回答，4：评论，5：回复")
     private Integer type;
-    /**
-     * 状态（0：点赞有效，1：取消点赞）
-     */
-    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(readConverterExp = "0=：点赞有效，1：取消点赞")
-    private Integer state;
 
     /**
      * 创建时间

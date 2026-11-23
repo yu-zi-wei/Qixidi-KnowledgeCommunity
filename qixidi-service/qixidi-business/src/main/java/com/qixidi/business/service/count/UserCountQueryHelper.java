@@ -2,7 +2,9 @@ package com.qixidi.business.service.count;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.qixidi.business.domain.entity.TimeNotes;
 import com.qixidi.business.domain.entity.article.ArticleInformation;
+import com.qixidi.business.domain.entity.dictum.DictumInfo;
 import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.vo.CountUserWebsiteVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
@@ -103,17 +105,33 @@ public class UserCountQueryHelper {
 
     public Map<String, Integer> fabulousCount(Collection<String> uuids) {
         if (CollUtil.isEmpty(uuids)) return Collections.emptyMap();
-        // 原 join 文章表语义：按文章作者统计其文章获得的点赞数（type=1 且 state=0）；两步单表 + 内存归并
-        Map<Long, String> articleOwner = articleOwnerMap(uuids);
-        if (articleOwner.isEmpty()) return Collections.emptyMap();
+        // 获赞 = 文章（type=1）+ 小记（type=2）+ 随笔（type=5）的点赞按各自内容作者归并；两步单表 + 内存归并
         Map<String, Integer> result = new HashMap<>();
+        Map<Long, String> articleOwner = articleOwnerMap(uuids);
+        mergeFabulousByOwner(result, 1, articleOwner);
+        Map<Long, String> timeNotesOwner = timeNotesMapper.selectList(new LambdaQueryWrapper<TimeNotes>()
+                        .select(TimeNotes::getId, TimeNotes::getUid)
+                        .in(TimeNotes::getUid, uuids)).stream()
+                .collect(Collectors.toMap(TimeNotes::getId, TimeNotes::getUid, (a, b) -> a));
+        mergeFabulousByOwner(result, 2, timeNotesOwner);
+        Map<Long, String> dictumOwner = dictumMapper.selectList(new LambdaQueryWrapper<DictumInfo>()
+                        .select(DictumInfo::getId, DictumInfo::getUid)
+                        .in(DictumInfo::getUid, uuids)).stream()
+                .collect(Collectors.toMap(DictumInfo::getId, DictumInfo::getUid, (a, b) -> a));
+        mergeFabulousByOwner(result, 5, dictumOwner);
+        return result;
+    }
+
+    /**
+     * 按内容 owner 归并某类型的获赞数
+     */
+    private void mergeFabulousByOwner(Map<String, Integer> result, int fabulousType, Map<Long, String> ownerMap) {
+        if (ownerMap.isEmpty()) return;
         fabulousMapper.selectList(new LambdaQueryWrapper<FabulousRecord>()
                 .select(FabulousRecord::getTypeId)
-                .eq(FabulousRecord::getType, 1)
-                .eq(FabulousRecord::getState, 0)
-                .in(FabulousRecord::getTypeId, articleOwner.keySet()))
-            .forEach(f -> result.merge(articleOwner.get(f.getTypeId()), 1, Integer::sum));
-        return result;
+                .eq(FabulousRecord::getType, fabulousType)
+                .in(FabulousRecord::getTypeId, ownerMap.keySet()))
+            .forEach(f -> result.merge(ownerMap.get(f.getTypeId()), 1, Integer::sum));
     }
 
     /**
@@ -148,7 +166,9 @@ public class UserCountQueryHelper {
         merge(result, albumCount(uuids), CountUserWebsiteVo::setAlbumCount);
         merge(result, dictumCount(uuids), CountUserWebsiteVo::setDictumCount);
         merge(result, timeNotesCount(uuids), CountUserWebsiteVo::setTimeNotesCount);
-        merge(result, fabulousCount(uuids), CountUserWebsiteVo::setFabulousCount);
+        // fabulousCount() 算的是「文章获赞数」（fans 语义），归位到被点赞数字段；
+        // fabulousCount（用户发出的点赞总数）暂无统计与消费方
+        merge(result, fabulousCount(uuids), CountUserWebsiteVo::setFansFabulousCount);
         merge(result, viewCount(uuids), CountUserWebsiteVo::setViewCount);
         return result;
     }

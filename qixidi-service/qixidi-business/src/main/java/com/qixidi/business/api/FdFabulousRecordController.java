@@ -9,7 +9,9 @@ import com.qixidi.auth.annotation.LogModule;
 
 import com.qixidi.business.domain.bo.fabulous.FabulousRecordBo;
 import com.qixidi.business.domain.bo.user.UserHomeBo;
+import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.article.ArticleInformationVo;
+import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.service.fabulous.IFabulousRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -28,9 +30,9 @@ public class FdFabulousRecordController {
     private final IFabulousRecordService iFabulousRecordService;
 
     /**
-     * 点赞
+     * 点赞（type：1=文章，2=小记）
      */
-    @Log(title = "点赞文章", businessType = BusinessType.INSERT)
+    @Log(title = "点赞内容", businessType = BusinessType.INSERT)
     @PostMapping("/spot")
     public Integer spotFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
         iFabulousRecordService.spotFabulous(bo);
@@ -40,7 +42,7 @@ public class FdFabulousRecordController {
     /**
      * 取消点赞
      */
-    @Log(title = "取消点赞", businessType = BusinessType.INSERT)
+    @Log(title = "取消点赞", businessType = BusinessType.DELETE)
     @PostMapping("/cancel")
     public Integer cancelFabulous(@Validated(AddGroup.class) @RequestBody FabulousRecordBo bo) {
         iFabulousRecordService.cancelFabulous(bo);
@@ -53,6 +55,22 @@ public class FdFabulousRecordController {
     @PostMapping("/fabulous/articleList")
     public TableDataInfo<ArticleInformationVo> fabulousArticleList(@Validated @RequestBody UserHomeBo bo) {
         return iFabulousRecordService.fabulousList(bo, bo);
+    }
+
+    /**
+     * 用户点赞小记列表
+     */
+    @PostMapping("/fabulous/timeNotesList")
+    public TableDataInfo<TimeNotesInfoVo> fabulousTimeNotesList(@Validated @RequestBody UserHomeBo bo) {
+        return iFabulousRecordService.fabulousTimeNotesList(bo, bo);
+    }
+
+    /**
+     * 用户点赞随笔列表
+     */
+    @PostMapping("/fabulous/dictumList")
+    public TableDataInfo<DictumInfoVo> fabulousDictumList(@Validated @RequestBody UserHomeBo bo) {
+        return iFabulousRecordService.fabulousDictumList(bo, bo);
     }
 
 }

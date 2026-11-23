@@ -83,6 +83,16 @@ public class DictumInfoVo extends DictumInfo {
     private Long helpSum;
 
     /**
+     * 点赞数（b_fabulous_record type=5 实时聚合）
+     */
+    private Long likeTimes = 0L;
+
+    /**
+     * 当前登录用户是否已点赞（true=已赞；未登录恒为 false）
+     */
+    private Boolean isFabulous = false;
+
+    /**
      * 评论总数
      */
     @ExcelProperty(value = "评论总数")

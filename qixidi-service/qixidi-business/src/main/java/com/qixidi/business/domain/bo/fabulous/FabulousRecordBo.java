@@ -48,19 +48,9 @@ public class FabulousRecordBo extends BaseEntity {
     private String targetUid;
 
     /**
-     * 点赞类型（1：文章，2：评论）
+     * 点赞类型（1：文章，2：小记，3：文章评论，4：小记评论，5：随笔）
      */
     @NotNull(message = "点赞类型不能为空", groups = {AddGroup.class, EditGroup.class})
     private Integer type;
-
-    /**
-     * 状态（0：点赞有效，1：取消点赞）
-     */
-    @NotNull(message = "状态不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Long state;
-    /**
-     * 文章点赞总数
-     */
-    private Integer fabulousSum;
 
 }

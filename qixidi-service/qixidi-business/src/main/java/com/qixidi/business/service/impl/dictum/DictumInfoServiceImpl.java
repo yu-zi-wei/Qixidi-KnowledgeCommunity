@@ -20,6 +20,7 @@ import com.qixidi.business.domain.bo.dictum.DictumBatchBo;
 import com.qixidi.business.domain.bo.dictum.DictumInfoBo;
 import com.qixidi.business.domain.entity.dictum.DictumComment;
 import com.qixidi.business.domain.entity.dictum.DictumInfo;
+import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.vo.dictum.DictumInfoVo;
 import com.qixidi.business.domain.vo.user.TripartiteUserVo;
 import com.qixidi.business.mapper.TripartiteUserMapper;
@@ -27,6 +28,7 @@ import com.qixidi.business.mapper.dictum.DictumAlbumMapper;
 import com.qixidi.business.mapper.dictum.DictumCommentMapper;
 import com.qixidi.business.mapper.dictum.DictumGroupMapper;
 import com.qixidi.business.mapper.dictum.DictumInfoMapper;
+import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.dictum.IDictumInfoService;
 import com.qixidi.common.domain.enums.StatusEnums;
@@ -53,6 +55,7 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
     private final DictumGroupMapper dictumGroupMapper;
     private final TripartiteUserMapper tripartiteUserMapper;
     private final ITripartiteUserService tripartiteUserService;
+    private final FabulousRecordMapper fabulousRecordMapper;
     @Autowired
     private DictumCommentMapper dictumCommentMapper;
 
@@ -93,7 +96,34 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
         if (sum != null) {
             dictumInfoVo.setCommentSum(sum);
         }
+        fillFabulous(List.of(dictumInfoVo));
         return dictumInfoVo;
+    }
+
+    /**
+     * 填充随笔点赞数（type=5 实时聚合）与当前登录用户是否已赞（批量，禁循环查库）
+     */
+    private void fillFabulous(List<DictumInfoVo> records) {
+        if (ObjectUtils.isEmpty(records)) return;
+        List<Long> ids = records.stream().map(DictumInfoVo::getId).filter(Objects::nonNull).toList();
+        if (ids.isEmpty()) return;
+        Map<Long, Long> likeMap = fabulousRecordMapper.selectList(new LambdaQueryWrapper<FabulousRecord>()
+                        .select(FabulousRecord::getTypeId)
+                        .eq(FabulousRecord::getType, 5)
+                        .in(FabulousRecord::getTypeId, ids)).stream()
+                .collect(Collectors.groupingBy(FabulousRecord::getTypeId, Collectors.counting()));
+        String uid = LoginHelper.getTripartiteUuid();
+        Set<Long> likedIds = uid == null ? Collections.emptySet()
+                : fabulousRecordMapper.selectList(new LambdaQueryWrapper<FabulousRecord>()
+                        .select(FabulousRecord::getTypeId)
+                        .eq(FabulousRecord::getType, 5)
+                        .eq(FabulousRecord::getUid, uid)
+                        .in(FabulousRecord::getTypeId, ids)).stream()
+                .map(FabulousRecord::getTypeId).collect(Collectors.toSet());
+        records.forEach(item -> {
+            item.setLikeTimes(likeMap.getOrDefault(item.getId(), 0L));
+            item.setIsFabulous(likedIds.contains(item.getId()));
+        });
     }
 
     /**
@@ -154,6 +184,7 @@ public class DictumInfoServiceImpl implements IDictumInfoService {
                 item.setCommentSum(sum);
             }
         });
+        fillFabulous(records);
         return TableDataInfo.build(result);
     }
 

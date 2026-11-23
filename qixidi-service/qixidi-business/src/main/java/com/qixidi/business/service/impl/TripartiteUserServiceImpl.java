@@ -198,6 +198,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         Map<String, Integer> albumCounts = userCountQueryHelper.albumCount(uuids);
         Map<String, Integer> dictumCounts = userCountQueryHelper.dictumCount(uuids);
         Map<String, Integer> timeNotesCounts = userCountQueryHelper.timeNotesCount(uuids);
+        Map<String, Integer> fansFabulousCounts = userCountQueryHelper.fabulousCount(uuids);
 
         vo.setArticleCount(articleCounts.getOrDefault(uuid, 0));
         vo.setFollowCount(followCounts.getOrDefault(uuid, 0));
@@ -209,6 +210,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
         vo.setAlbumCount(albumCounts.getOrDefault(uuid, 0));
         vo.setDictumCount(dictumCounts.getOrDefault(uuid, 0));
         vo.setTimeNotesCount(timeNotesCounts.getOrDefault(uuid, 0));
+        vo.setFansFabulousCount(fansFabulousCounts.getOrDefault(uuid, 0));
     }
 
     /**
@@ -873,6 +875,7 @@ public class TripartiteUserServiceImpl implements ITripartiteUserService, UserIn
                 tripartiteUserVo.setAlbumCount(counts.getAlbumCount());
                 tripartiteUserVo.setDictumCount(counts.getDictumCount());
                 tripartiteUserVo.setTimeNotesCount(counts.getTimeNotesCount());
+                tripartiteUserVo.setFansFabulousCount(counts.getFansFabulousCount());
             }
             UserInformation userInformation = userInformationMap.get(tripartiteUser.getUuid());
             if (userInformation != null) {

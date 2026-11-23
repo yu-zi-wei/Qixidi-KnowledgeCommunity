@@ -17,10 +17,12 @@ import com.qixidi.auth.helper.LoginHelper;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesBo;
 import com.qixidi.business.domain.bo.timeNotes.TimeNotesSearchBo;
 import com.qixidi.business.domain.entity.TimeNotes;
+import com.qixidi.business.domain.entity.fabulous.FabulousRecord;
 import com.qixidi.business.domain.vo.TimeNotesAdminVo;
 import com.qixidi.business.domain.vo.TimeNotesInfoVo;
 import com.qixidi.business.domain.vo.TimeNotesVo;
 import com.qixidi.business.mapper.TimeNotesMapper;
+import com.qixidi.business.mapper.fabulous.FabulousRecordMapper;
 import com.qixidi.business.mapper.TripartiteUserMapper;
 import com.qixidi.business.service.ITripartiteUserService;
 import com.qixidi.business.service.TimeNotesService;
@@ -56,6 +58,7 @@ public class TimeNotesServiceImpl implements TimeNotesService {
     private final TripartiteUserMapper tripartiteUserMapper;
     private final IAlbumService albumService;
     private final ITripartiteUserService tripartiteUserService;
+    private final FabulousRecordMapper fabulousRecordMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -178,6 +181,17 @@ public class TimeNotesServiceImpl implements TimeNotesService {
         TimeNotesInfoVo timeNotesInfoVo = BeanUtil.copyProperties(timeNotes, TimeNotesInfoVo.class);
         if (uid != null && uid.equals(timeNotes.getUid())) {
             timeNotesInfoVo.setIsAuthor(0);
+        }
+        // 点赞数（type=2 实时聚合）+ 当前用户是否已赞
+        timeNotesInfoVo.setLikeTimes(fabulousRecordMapper.selectCount(new LambdaQueryWrapper<FabulousRecord>()
+                .eq(FabulousRecord::getTypeId, id)
+                .eq(FabulousRecord::getType, 2)));
+        if (uid != null) {
+            Long liked = fabulousRecordMapper.selectCount(new LambdaQueryWrapper<FabulousRecord>()
+                    .eq(FabulousRecord::getTypeId, id)
+                    .eq(FabulousRecord::getType, 2)
+                    .eq(FabulousRecord::getUid, uid));
+            timeNotesInfoVo.setIsLiked(liked != null && liked > 0 ? 0 : 1);
         }
         return timeNotesInfoVo;
     }

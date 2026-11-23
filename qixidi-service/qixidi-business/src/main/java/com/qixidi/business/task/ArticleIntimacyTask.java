@@ -86,7 +86,6 @@ public class ArticleIntimacyTask {
             List<FabulousRecord> fabulous = fabulousRecordMapper.selectList(new LambdaQueryWrapper<FabulousRecord>()
                     .select(FabulousRecord::getUid, FabulousRecord::getTypeId, FabulousRecord::getCreateTime)
                     .eq(FabulousRecord::getType, 1)
-                    .eq(FabulousRecord::getState, 0)
                     .ge(FabulousRecord::getCreateTime, threshold));
             List<CollectionRecord> collections = collectionRecordMapper.selectList(new LambdaQueryWrapper<CollectionRecord>()
                     .select(CollectionRecord::getUid, CollectionRecord::getTargetId, CollectionRecord::getCreateTime)
